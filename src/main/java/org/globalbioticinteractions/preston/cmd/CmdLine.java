@@ -45,7 +45,7 @@ public class CmdLine {
         return JCommander.newBuilder()
                 .addObject(new CommandMain())
                 .addCommand("version", new CmdVersion())
-                .addCommand("list", new CmdList())
+                .addCommand("ls", new CmdList())
                 .build();
     }
 

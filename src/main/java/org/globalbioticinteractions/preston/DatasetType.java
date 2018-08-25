@@ -1,6 +1,9 @@
 package org.globalbioticinteractions.preston;
 
 public enum DatasetType {
-    DARWIN_CORE_ARCHIVE,
+    DWCA,
+    URI,
+    UUID,
+    GBIF_DATASETS_JSON,
     EML
 }
