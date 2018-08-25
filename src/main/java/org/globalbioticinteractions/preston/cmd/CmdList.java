@@ -1,37 +1,42 @@
 package org.globalbioticinteractions.preston.cmd;
 
 import com.beust.jcommander.Parameters;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.globalbioticinteractions.preston.CrawlerGBIF;
 import org.globalbioticinteractions.preston.Dataset;
-import org.globalbioticinteractions.preston.HashFactory;
-import org.globalbioticinteractions.preston.HashFactoryNull;
-import org.globalbioticinteractions.preston.Preston;
-import org.joda.time.format.ISODateTimeFormat;
+import org.globalbioticinteractions.preston.DatasetListener;
+import org.globalbioticinteractions.preston.DatasetType;
 
 import java.io.IOException;
-import java.util.Date;
 
 @Parameters(separators = "= ", commandDescription = "Show Version")
 public class CmdList implements Runnable {
 
+    private static final DatasetListener listener = new DatasetListenerCaching(new GBIFDatasetHandler(), new DatasetListenerLogging());
+
     @Override
     public void run() {
         try {
-            new CrawlerGBIF()
-                    .crawl(dataset -> {
-                        System.out.println(printDataset(dataset, new HashFactoryNull()));
-                    });
+            new CrawlerGBIF().crawl(listener);
         } catch (IOException e) {
-            throw new RuntimeException("failed to craw GBIF datasets", e);
+            throw new RuntimeException("failed to crawl GBIF datasets", e);
         }
-        System.out.println(Preston.getVersion());
     }
 
-    String printDataset(Dataset dataset, HashFactory hashFactory) {
-        String parentUUID = (dataset.getParent() == null ? "" : hashFactory.hashFor(dataset.getParent()));
-        String uuid = hashFactory.hashFor(dataset);
-        String accessedAt = ISODateTimeFormat.dateTime().withZoneUTC().print(new Date().getTime());
-        return (parentUUID + "\t" + uuid + "\t" + dataset.getLabel() + "\t" + dataset.getType().name() + "\t" + accessedAt);
-    }
+    private static class GBIFDatasetHandler implements DatasetListener {
+        private final static Log LOG = LogFactory.getLog(GBIFDatasetHandler.class);
 
+        @Override
+        public void onDataset(Dataset dataset) {
+            if (dataset.getType() == DatasetType.GBIF_DATASETS_JSON) {
+                try {
+                    CrawlerGBIF.parse(dataset.getData(), listener, dataset);
+                } catch (IOException e) {
+                    LOG.warn("failed to handle [" + dataset.getLabel() + "]", e);
+                }
+            }
+
+        }
+    }
 }

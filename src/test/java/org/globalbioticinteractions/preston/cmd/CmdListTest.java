@@ -6,7 +6,6 @@ import org.globalbioticinteractions.preston.DatasetListener;
 import org.globalbioticinteractions.preston.DatasetString;
 import org.globalbioticinteractions.preston.DatasetType;
 import org.globalbioticinteractions.preston.DatasetURI;
-import org.globalbioticinteractions.preston.HashFactory;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -26,35 +25,16 @@ public class CmdListTest {
         InputStream resourceAsStream = getClass().getResourceAsStream("gbifdatasets.json");
 
         final List<Dataset> datasets = new ArrayList<Dataset>();
-        DatasetListener listener = dataset -> {
-            System.out.println(new CmdList().printDataset(dataset, new HashFactory() {
+        DatasetListener listener = datasets::add;
 
-                @Override
-                public String hashFor(Dataset dataset) {
-                    return dataset.getLabel();
-                }
-            }));
-            datasets.add(dataset);
-        };
-
-        assertThat(CrawlerGBIF.parse(resourceAsStream, listener, new DatasetString(null, DatasetType.UUID, "description")), is(false));
-
-        HashFactory hashFactory = new HashFactory() {
-
-            @Override
-            public String hashFor(Dataset dataset) {
-                return dataset.getLabel();
-            }
-        };
+        CrawlerGBIF.parse(resourceAsStream, listener, new DatasetString(null, DatasetType.UUID, "description"));
 
         assertThat(datasets.size(), is(10));
         Dataset dataset = datasets.get(0);
-        assertThat(hashFactory.hashFor(dataset), is("a5359fd66338245a438e50d7889d8a242d6967ef0639e29d1ff3e6fd6c6a9d45"));
         assertThat(dataset.getType(), is(DatasetType.UUID));
         assertThat(dataset.getLabel(), is("6555005d-4594-4a3e-be33-c70e587b63d7"));
 
         Dataset lastDataset = datasets.get(3);
-        assertThat(hashFactory.hashFor(lastDataset), is("ded1c510d73b630c281753d6899f016bf1350308bcf522bd5661d19b696e58d8"));
         assertThat(lastDataset.getType(), is(DatasetType.URI));
         assertThat(lastDataset.getLabel(), is("http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06"));
 
@@ -64,16 +44,16 @@ public class CmdListTest {
     public void printDataset() {
         String uuid = "38011dd0-386f-4f29-b6f2-5aecedac3190";
         String parentUUID = "23011dd0-386f-4f29-b6f2-5aecedac3190";
-        DatasetString parent = new DatasetString(null, DatasetType.UUID, parentUUID);
-        HashFactory hashFactory = dataset -> "hashOf@" + dataset.getLabel();
-        String str = new CmdList().printDataset(new DatasetString(parent, DatasetType.URI, "http://example.com"), hashFactory);
-        assertThat(str, startsWith("hashOf@23011dd0-386f-4f29-b6f2-5aecedac3190\thashOf@http://example.com\thttp://example.com\tURI\t"));
+        Dataset parent = new DatasetCached(new DatasetString(null, DatasetType.UUID, parentUUID), "parent-id");
 
-        str = new CmdList().printDataset(new DatasetURI(parent, DatasetType.DWCA, URI.create("https://example.com/some/data.zip")), hashFactory);
-        assertThat(str, startsWith("hashOf@23011dd0-386f-4f29-b6f2-5aecedac3190\thashOf@data@https://example.com/some/data.zip\tdata@https://example.com/some/data.zip\tDWCA\t"));
+        String str = DatasetListenerLogging.printDataset(new DatasetCached(new DatasetString(parent, DatasetType.URI, "http://example.com"), "some-id"));
+        assertThat(str, startsWith("parent-id\tsome-id\thttp://example.com\tURI\t"));
 
-        str = new CmdList().printDataset(new DatasetString(parent, DatasetType.UUID, uuid), hashFactory);
-        assertThat(str, startsWith("hashOf@23011dd0-386f-4f29-b6f2-5aecedac3190\thashOf@38011dd0-386f-4f29-b6f2-5aecedac3190\t38011dd0-386f-4f29-b6f2-5aecedac3190\tUUID\t"));
+        str = DatasetListenerLogging.printDataset(new DatasetCached(new DatasetURI(parent, DatasetType.DWCA, URI.create("https://example.com/some/data.zip")), "some-other-id"));
+        assertThat(str, startsWith("parent-id\tsome-other-id\tdata@https://example.com/some/data.zip\tDWCA\t"));
+
+        str = DatasetListenerLogging.printDataset(new DatasetString(parent, DatasetType.UUID, uuid));
+        assertThat(str, startsWith("parent-id\t\t38011dd0-386f-4f29-b6f2-5aecedac3190\tUUID\t"));
     }
 
 

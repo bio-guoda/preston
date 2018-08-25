@@ -34,14 +34,26 @@ import java.util.Map;
 
 public class CrawlerGBIF implements Crawler {
 
-    private final Log LOG = LogFactory.getLog(CrawlerGBIF.class);
-
     public static final Map<String, DatasetType> TYPE_MAP = new HashMap<String, DatasetType>() {{
         put("DWC_ARCHIVE", DatasetType.DWCA);
         put("EML", DatasetType.EML);
     }};
 
-    public static boolean parse(InputStream resourceAsStream, DatasetListener listener, Dataset parent) throws IOException {
+    @Override
+    public void crawl(DatasetListener listener) throws IOException {
+        nextPage(null, 0, 2, listener);
+    }
+
+    private static Dataset nextPage(Dataset previousPage, int offset, int limit, DatasetListener listener) {
+        String uri = "https://api.gbif.org/v1/dataset?offset=" + offset + "&limit=" + limit;
+        Dataset currentPageURI = new DatasetString(previousPage, DatasetType.URI, uri);
+        listener.onDataset(currentPageURI);
+        DatasetURI datasetURI = new DatasetURI(currentPageURI, DatasetType.GBIF_DATASETS_JSON, URI.create(uri));
+        listener.onDataset(datasetURI);
+        return datasetURI;
+    }
+
+    public static void parse(InputStream resourceAsStream, DatasetListener listener, Dataset parent) throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(resourceAsStream);
         if (jsonNode != null && jsonNode.has("results")) {
             for (JsonNode result : jsonNode.get("results")) {
@@ -63,65 +75,15 @@ public class CrawlerGBIF implements Crawler {
                 }
             }
         }
-        return !jsonNode.has("endOfRecords") || jsonNode.get("endOfRecords").asBoolean(true);
-    }
 
-
-    public static String calcSHA256(String str) throws IOException {
-        return calcSHA256(IOUtils.toInputStream(str, StandardCharsets.UTF_8), new NullOutputStream());
-    }
-
-    public static String calcSHA256(InputStream is, OutputStream os) throws IOException {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            DigestInputStream digestInputStream = new DigestInputStream(is, md);
-            IOUtils.copy(digestInputStream, os);
-            digestInputStream.close();
-            return String.format("%064x", new BigInteger(1, md.digest()));
-        } catch (IOException | NoSuchAlgorithmException var9) {
-            throw new IOException("failed to cache dataset", var9);
+        boolean endOfRecords = !jsonNode.has("endOfRecords") || jsonNode.get("endOfRecords").asBoolean(true);
+        if (!endOfRecords && jsonNode.has("offset") && jsonNode.has("limit")) {
+            int offset = jsonNode.get("offset").asInt();
+            int limit = jsonNode.get("limit").asInt();
+            nextPage(parent, offset + limit, limit, listener);
         }
+
     }
 
-    public static String toPath(String hash) {
-        String u0 = hash.substring(0, 2);
-        String u1 = hash.substring(2, 4);
-        String u2 = hash.substring(4, 6);
-        return StringUtils.join(Arrays.asList(u0, u1, u2, hash), "/");
-    }
-
-    @Override
-    public void crawl(DatasetListener listener) throws IOException {
-        int offset = 0;
-        int limit = 50;
-        boolean endOfRecords = false;
-        Dataset previousPage = null;
-
-        while (!endOfRecords) {
-            Dataset currentPageURI = nextPage(previousPage, offset, limit, listener);
-            endOfRecords = crawlPage(listener, currentPageURI);
-            offset = offset + limit;
-            previousPage = currentPageURI;
-        }
-    }
-
-    private Dataset nextPage(Dataset previousPage, int offset, int limit, DatasetListener listener) {
-        String uri = "https://api.gbif.org/v1/dataset?offset=" + offset + "&limit=" + limit;
-        Dataset currentPageURI = new DatasetString(previousPage, DatasetType.URI, uri);
-        listener.onDataset(currentPageURI);
-        DatasetURI datasetURI = new DatasetURI(currentPageURI, DatasetType.GBIF_DATASETS_JSON, URI.create(uri));
-        listener.onDataset(datasetURI);
-        return datasetURI;
-    }
-
-    protected boolean crawlPage(DatasetListener listener, Dataset dataset) throws IOException {
-        boolean endOfRecords = true;
-        if (dataset.getType() == DatasetType.GBIF_DATASETS_JSON) {
-            ParserGBIF parser = new ParserGBIF(listener, dataset);
-            parser.handle(dataset.getData());
-            endOfRecords = parser.reachedEndOfRecords();
-        }
-        return endOfRecords;
-    }
 
 }

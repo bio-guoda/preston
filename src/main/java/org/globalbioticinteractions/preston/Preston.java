@@ -12,8 +12,6 @@ import org.globalbioticinteractions.preston.cmd.CmdLine;
 import static java.lang.System.exit;
 
 public class Preston {
-    private static final Log LOG = LogFactory.getLog(Preston.class);
-
     public static void main(String[] args) {
         try {
             CmdLine.run(args);
@@ -27,5 +25,4 @@ public class Preston {
         String version = Preston.class.getPackage().getImplementationVersion();
         return StringUtils.isBlank(version) ? "dev" : version;
     }
-
 }

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class DatasetString extends Dataset {
+public class DatasetString extends DatasetImpl {
     private final String data;
 
     public DatasetString(Dataset parent, DatasetType type, String data) {
@@ -23,15 +23,5 @@ public class DatasetString extends Dataset {
     public String getLabel() {
         return data;
     }
-
-    @Override
-    public String getId() {
-        try {
-            return CrawlerGBIF.calcSHA256(data);
-        } catch (IOException e) {
-            throw new IllegalStateException("unexpected failure of hashing of [" + data + "]", e);
-        }
-    }
-
 
 }
