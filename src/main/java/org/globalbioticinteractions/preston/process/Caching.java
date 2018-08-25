@@ -1,4 +1,4 @@
-package org.globalbioticinteractions.preston.cmd;
+package org.globalbioticinteractions.preston.process;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -7,8 +7,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.globalbioticinteractions.preston.Dataset;
-import org.globalbioticinteractions.preston.DatasetListener;
+import org.globalbioticinteractions.preston.cmd.CmdList;
+import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeCached;
 import org.joda.time.format.ISODateTimeFormat;
 
 import java.io.File;
@@ -24,51 +25,46 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
 
-public class DatasetListenerCaching implements DatasetListener {
+public class Caching extends RefNodeProcessor {
     private static Log LOG = LogFactory.getLog(CmdList.class);
-    private final DatasetListener[] next;
 
-    public DatasetListenerCaching(DatasetListener... next) {
-        this.next = next;
+    public Caching(RefNodeListener... listeners) {
+        super(listeners);
     }
 
-
     @Override
-    public void onDataset(Dataset dataset) {
+    public void on(RefNode refNode) {
         try {
-            Dataset cache = cache(dataset);
-            for (DatasetListener datasetListener : next) {
-                datasetListener.onDataset(cache);
-            }
+            emit(cache(refNode));
         } catch (IOException e) {
-            LOG.warn("failed to handle [" + dataset.getLabel() + "]", e);
+            LOG.warn("failed to handle [" + refNode.getLabel() + "]", e);
         }
     }
 
-    public static Dataset cache(Dataset dataset) throws IOException {
+    public static RefNode cache(RefNode refNode) throws IOException {
         File cacheDir = new File("cacheDir");
         FileUtils.forceMkdir(cacheDir);
         File cache = File.createTempFile("cacheFile", ".tmp", cacheDir);
-        final String id = calcSHA256(dataset.getData(), new FileOutputStream(cache));
-        DatasetCached datasetCached = new DatasetCached(dataset, id);
+        final String id = calcSHA256(refNode.getData(), new FileOutputStream(cache));
+        RefNodeCached datasetCached = new RefNodeCached(refNode, id);
         if (!getDataFile(id).exists()) {
             cacheFile(cache, datasetCached);
         }
-        return new DatasetCached(dataset, id, getDataFile(id));
+        return new RefNodeCached(refNode, id, getDataFile(id));
     }
 
-    private static void cacheFile(File dataFile, Dataset dataset) throws IOException {
-        File datasetPath = getDatasetDir(dataset.getId());
+    private static void cacheFile(File dataFile, RefNode refNode) throws IOException {
+        File datasetPath = getDatasetDir(refNode.getId());
         FileUtils.forceMkdir(datasetPath);
-        File destFile = getDataFile(dataset.getId());
+        File destFile = getDataFile(refNode.getId());
         FileUtils.moveFile(dataFile, destFile);
-        FileUtils.copyToFile(IOUtils.toInputStream(dataset.getId(), StandardCharsets.UTF_8), new File(datasetPath, "data.sha256"));
+        FileUtils.copyToFile(IOUtils.toInputStream(refNode.getId(), StandardCharsets.UTF_8), new File(datasetPath, "data.sha256"));
         ObjectNode node = new ObjectMapper().createObjectNode();
-        node.put("id", dataset.getId());
-        if (null != dataset.getParent()) {
-            node.put("parentId", dataset.getParent().getId());
+        node.put("id", refNode.getId());
+        if (null != refNode.getParent()) {
+            node.put("parentId", refNode.getParent().getId());
         }
-        node.put("type", dataset.getType().toString());
+        node.put("type", refNode.getType().toString());
         node.put("created", ISODateTimeFormat.dateTime().withZoneUTC().print(new Date().getTime()));
         FileUtils.copyToFile(IOUtils.toInputStream(node.toString(), StandardCharsets.UTF_8), new File(datasetPath, "meta.json"));
     }

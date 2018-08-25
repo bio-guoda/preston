@@ -1,6 +1,7 @@
 package org.globalbioticinteractions.preston.cmd;
 
 import org.apache.commons.io.IOUtils;
+import org.globalbioticinteractions.preston.process.Caching;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -10,11 +11,11 @@ import java.nio.charset.StandardCharsets;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
-public class DatasetListenerCachingTest {
+public class CachingTest {
 
     @Test
     public void testSHA256() throws IOException {
-        assertSHA(DatasetListenerCaching.calcSHA256(IOUtils.toInputStream("something", StandardCharsets.UTF_8), new ByteArrayOutputStream()));
+        assertSHA(Caching.calcSHA256(IOUtils.toInputStream("something", StandardCharsets.UTF_8), new ByteArrayOutputStream()));
     }
 
     private void assertSHA(String calculated) {
@@ -24,7 +25,7 @@ public class DatasetListenerCachingTest {
 
     @Test
     public void generatePathFromUUID() {
-        assertThat(DatasetListenerCaching.toPath("3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"),
+        assertThat(Caching.toPath("3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"),
                 is("3f/c9/b6/3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"));
     }
 

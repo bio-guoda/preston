@@ -1,7 +1,7 @@
 package org.globalbioticinteractions.preston;
 
 /*
-    Preston - a commandline tool to help discover, access and cache source occurrence data archives.
+    Preston - a commandline tool to help discover, access and archive the biodiversity data archives, identifiers and registries.
  */
 
 import org.apache.commons.lang3.StringUtils;

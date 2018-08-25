@@ -1,42 +1,33 @@
 package org.globalbioticinteractions.preston.cmd;
 
 import com.beust.jcommander.Parameters;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.globalbioticinteractions.preston.CrawlerGBIF;
-import org.globalbioticinteractions.preston.Dataset;
-import org.globalbioticinteractions.preston.DatasetListener;
-import org.globalbioticinteractions.preston.DatasetType;
+import org.globalbioticinteractions.preston.process.Caching;
+import org.globalbioticinteractions.preston.process.GBIFRegistry;
+import org.globalbioticinteractions.preston.process.Logging;
+import org.globalbioticinteractions.preston.Seeds;
+import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.process.RefNodeListener;
 
-import java.io.IOException;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Parameters(separators = "= ", commandDescription = "Show Version")
 public class CmdList implements Runnable {
 
-    private static final DatasetListener listener = new DatasetListenerCaching(new GBIFDatasetHandler(), new DatasetListenerLogging());
 
     @Override
     public void run() {
-        try {
-            new CrawlerGBIF().crawl(listener);
-        } catch (IOException e) {
-            throw new RuntimeException("failed to crawl GBIF datasets", e);
+        final Queue<RefNode> refNodes = new ConcurrentLinkedQueue<>();
+        refNodes.add(Seeds.SEED_NODE_GBIF);
+
+        final RefNodeListener listener = new Caching(
+                new GBIFRegistry(refNodes::add),
+                new Logging());
+
+        while(!refNodes.isEmpty()) {
+            listener.on(refNodes.poll());
         }
+
     }
 
-    private static class GBIFDatasetHandler implements DatasetListener {
-        private final static Log LOG = LogFactory.getLog(GBIFDatasetHandler.class);
-
-        @Override
-        public void onDataset(Dataset dataset) {
-            if (dataset.getType() == DatasetType.GBIF_DATASETS_JSON) {
-                try {
-                    CrawlerGBIF.parse(dataset.getData(), listener, dataset);
-                } catch (IOException e) {
-                    LOG.warn("failed to handle [" + dataset.getLabel() + "]", e);
-                }
-            }
-
-        }
-    }
 }

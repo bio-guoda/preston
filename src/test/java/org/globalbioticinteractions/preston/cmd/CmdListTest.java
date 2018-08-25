@@ -1,11 +1,12 @@
 package org.globalbioticinteractions.preston.cmd;
 
-import org.globalbioticinteractions.preston.CrawlerGBIF;
-import org.globalbioticinteractions.preston.Dataset;
-import org.globalbioticinteractions.preston.DatasetListener;
-import org.globalbioticinteractions.preston.DatasetString;
-import org.globalbioticinteractions.preston.DatasetType;
-import org.globalbioticinteractions.preston.DatasetURI;
+import org.globalbioticinteractions.preston.process.GBIFRegistry;
+import org.globalbioticinteractions.preston.process.Logging;
+import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeCached;
+import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefNodeType;
+import org.globalbioticinteractions.preston.model.RefNodeURI;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -24,19 +25,18 @@ public class CmdListTest {
     public void parseDatasets() throws IOException {
         InputStream resourceAsStream = getClass().getResourceAsStream("gbifdatasets.json");
 
-        final List<Dataset> datasets = new ArrayList<Dataset>();
-        DatasetListener listener = datasets::add;
+        final List<RefNode> refNodes = new ArrayList<>();
 
-        CrawlerGBIF.parse(resourceAsStream, listener, new DatasetString(null, DatasetType.UUID, "description"));
+        GBIFRegistry.parse(resourceAsStream, refNodes::add, new RefNodeString(null, RefNodeType.UUID, "description"));
 
-        assertThat(datasets.size(), is(10));
-        Dataset dataset = datasets.get(0);
-        assertThat(dataset.getType(), is(DatasetType.UUID));
-        assertThat(dataset.getLabel(), is("6555005d-4594-4a3e-be33-c70e587b63d7"));
+        assertThat(refNodes.size(), is(12));
+        RefNode refNode = refNodes.get(0);
+        assertThat(refNode.getType(), is(RefNodeType.UUID));
+        assertThat(refNode.getLabel(), is("6555005d-4594-4a3e-be33-c70e587b63d7"));
 
-        Dataset lastDataset = datasets.get(3);
-        assertThat(lastDataset.getType(), is(DatasetType.URI));
-        assertThat(lastDataset.getLabel(), is("http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06"));
+        RefNode lastRefNode = refNodes.get(3);
+        assertThat(lastRefNode.getType(), is(RefNodeType.URI));
+        assertThat(lastRefNode.getLabel(), is("http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06"));
 
     }
 
@@ -44,15 +44,15 @@ public class CmdListTest {
     public void printDataset() {
         String uuid = "38011dd0-386f-4f29-b6f2-5aecedac3190";
         String parentUUID = "23011dd0-386f-4f29-b6f2-5aecedac3190";
-        Dataset parent = new DatasetCached(new DatasetString(null, DatasetType.UUID, parentUUID), "parent-id");
+        RefNode parent = new RefNodeCached(new RefNodeString(null, RefNodeType.UUID, parentUUID), "parent-id");
 
-        String str = DatasetListenerLogging.printDataset(new DatasetCached(new DatasetString(parent, DatasetType.URI, "http://example.com"), "some-id"));
+        String str = Logging.printDataset(new RefNodeCached(new RefNodeString(parent, RefNodeType.URI, "http://example.com"), "some-id"));
         assertThat(str, startsWith("parent-id\tsome-id\thttp://example.com\tURI\t"));
 
-        str = DatasetListenerLogging.printDataset(new DatasetCached(new DatasetURI(parent, DatasetType.DWCA, URI.create("https://example.com/some/data.zip")), "some-other-id"));
+        str = Logging.printDataset(new RefNodeCached(new RefNodeURI(parent, RefNodeType.DWCA, URI.create("https://example.com/some/data.zip")), "some-other-id"));
         assertThat(str, startsWith("parent-id\tsome-other-id\tdata@https://example.com/some/data.zip\tDWCA\t"));
 
-        str = DatasetListenerLogging.printDataset(new DatasetString(parent, DatasetType.UUID, uuid));
+        str = Logging.printDataset(new RefNodeString(parent, RefNodeType.UUID, uuid));
         assertThat(str, startsWith("parent-id\t\t38011dd0-386f-4f29-b6f2-5aecedac3190\tUUID\t"));
     }
 

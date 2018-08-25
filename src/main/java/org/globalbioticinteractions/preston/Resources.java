@@ -16,17 +16,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
-public class DatasetURI extends DatasetImpl {
+public class Resources {
     private static CloseableHttpClient httpClient = null;
-    private final URI dataURI;
 
-    public DatasetURI(Dataset parent, DatasetType type, URI uri) {
-        super(parent, type);
-        this.dataURI = uri;
-    }
-
-    @Override
-    public InputStream getData() throws IOException {
+    public static InputStream asInputStream(URI dataURI) throws IOException {
         HttpGet get = new HttpGet(dataURI);
         get.setHeader("Accept", "application/json;charset=UTF-8");
         get.setHeader("Content-Type", "application/json;charset=UTF-8");
@@ -43,7 +36,7 @@ public class DatasetURI extends DatasetImpl {
         return entity.getContent();
     }
 
-    private CloseableHttpClient getHttpClient() {
+    private static CloseableHttpClient getHttpClient() {
         return httpClient == null ? initClient() : httpClient;
     }
 
@@ -52,10 +45,4 @@ public class DatasetURI extends DatasetImpl {
         RequestConfig config = RequestConfig.custom().setSocketTimeout(soTimeoutMs).setConnectTimeout(soTimeoutMs).build();
         return HttpClientBuilder.create().setRetryHandler(new DefaultHttpRequestRetryHandler(3, true)).setUserAgent("globalbioticinteractions/" + Preston.getVersion() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)").setDefaultRequestConfig(config).build();
     }
-
-    @Override
-    public String getLabel() {
-        return "data@" + dataURI.toString();
-    }
-
 }
