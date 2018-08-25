@@ -15,6 +15,8 @@ public interface RefNode {
 
     String getId();
 
+    Long getSize();
+
     boolean equivalentTo(RefNode node);
 }
 

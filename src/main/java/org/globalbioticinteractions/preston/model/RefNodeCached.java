@@ -37,6 +37,11 @@ public class RefNodeCached implements RefNode {
     }
 
     @Override
+    public Long getSize() {
+        return dataFile != null && dataFile.exists() ? dataFile.length() : null;
+    }
+
+    @Override
     public String getLabel() {
         return refNode.getLabel();
     }

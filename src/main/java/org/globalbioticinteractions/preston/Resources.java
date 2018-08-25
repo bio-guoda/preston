@@ -20,20 +20,27 @@ public class Resources {
     private static CloseableHttpClient httpClient = null;
 
     public static InputStream asInputStream(URI dataURI) throws IOException {
-        HttpGet get = new HttpGet(dataURI);
-        get.setHeader("Accept", "application/json;charset=UTF-8");
-        get.setHeader("Content-Type", "application/json;charset=UTF-8");
-        get.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
+        InputStream is;
+        if ("file".equals(dataURI.getScheme())) {
+            is = dataURI.toURL().openStream();
+        } else {
 
-        CloseableHttpResponse response = getHttpClient().execute(get);
+            HttpGet get = new HttpGet(dataURI);
+            get.setHeader("Accept", "application/json;charset=UTF-8");
+            get.setHeader("Content-Type", "application/json;charset=UTF-8");
+            get.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
 
-        StatusLine statusLine = response.getStatusLine();
-        HttpEntity entity = response.getEntity();
-        if (statusLine.getStatusCode() >= 300) {
-            EntityUtils.consume(entity);
-            throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
+            CloseableHttpResponse response = getHttpClient().execute(get);
+
+            StatusLine statusLine = response.getStatusLine();
+            HttpEntity entity = response.getEntity();
+            if (statusLine.getStatusCode() >= 300) {
+                EntityUtils.consume(entity);
+                throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
+            }
+            is = entity.getContent();
         }
-        return entity.getContent();
+        return is;
     }
 
     private static CloseableHttpClient getHttpClient() {

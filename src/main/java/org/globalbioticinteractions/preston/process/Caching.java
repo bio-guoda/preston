@@ -27,6 +27,8 @@ import java.util.Date;
 
 public class Caching extends RefNodeProcessor {
     private static Log LOG = LogFactory.getLog(CmdList.class);
+    private File tmpDir = FileUtils.getTempDirectory();
+    private File datasetDir = new File("datasets");
 
     public Caching(RefNodeListener... listeners) {
         super(listeners);
@@ -35,46 +37,52 @@ public class Caching extends RefNodeProcessor {
     @Override
     public void on(RefNode refNode) {
         try {
-            emit(cache(refNode));
+            emit(cache(refNode, getTmpDir(), getDatasetDir()));
         } catch (IOException e) {
             LOG.warn("failed to handle [" + refNode.getLabel() + "]", e);
         }
     }
 
-    public static RefNode cache(RefNode refNode) throws IOException {
-        File cacheDir = new File("cacheDir");
-        FileUtils.forceMkdir(cacheDir);
-        File cache = File.createTempFile("cacheFile", ".tmp", cacheDir);
+    public static RefNode cache(RefNode refNode, File tmpDir, File dataDir) throws IOException {
+        FileUtils.forceMkdir(tmpDir);
+        File cache = File.createTempFile("cacheFile", ".tmp", tmpDir);
         final String id = calcSHA256(refNode.getData(), new FileOutputStream(cache));
-        RefNodeCached datasetCached = new RefNodeCached(refNode, id);
-        if (!getDataFile(id).exists()) {
-            cacheFile(cache, datasetCached);
+        if (!getDataFile(id, dataDir).exists()) {
+            cacheFile(cache, new RefNodeCached(refNode, id), dataDir);
         }
-        return new RefNodeCached(refNode, id, getDataFile(id));
+        return new RefNodeCached(refNode, id, getDataFile(id, dataDir));
     }
 
-    private static void cacheFile(File dataFile, RefNode refNode) throws IOException {
-        File datasetPath = getDatasetDir(refNode.getId());
+    private static void cacheFile(File dataFile, RefNode refNode, File dataDir) throws IOException {
+        File datasetPath = getDatasetDir(refNode.getId(), dataDir);
         FileUtils.forceMkdir(datasetPath);
-        File destFile = getDataFile(refNode.getId());
+        File destFile = getDataFile(refNode.getId(), dataDir);
         FileUtils.moveFile(dataFile, destFile);
         FileUtils.copyToFile(IOUtils.toInputStream(refNode.getId(), StandardCharsets.UTF_8), new File(datasetPath, "data.sha256"));
+
+        writeMeta(refNode, datasetPath, destFile);
+    }
+
+    private static void writeMeta(RefNode refNode, File datasetPath, File destFile) throws IOException {
         ObjectNode node = new ObjectMapper().createObjectNode();
         node.put("id", refNode.getId());
         if (null != refNode.getParent()) {
             node.put("parentId", refNode.getParent().getId());
         }
         node.put("type", refNode.getType().toString());
+        if (destFile.exists()) {
+            node.put("size", destFile.length());
+        }
         node.put("created", ISODateTimeFormat.dateTime().withZoneUTC().print(new Date().getTime()));
         FileUtils.copyToFile(IOUtils.toInputStream(node.toString(), StandardCharsets.UTF_8), new File(datasetPath, "meta.json"));
     }
 
-    public static File getDataFile(String id) {
-        return new File(getDatasetDir(id), "data");
+    public static File getDataFile(String id, File dataDir) {
+        return new File(getDatasetDir(id, dataDir), "data");
     }
 
-    private static File getDatasetDir(String id) {
-        return new File("datasets/" + toPath(id));
+    private static File getDatasetDir(String id, File dataDir) {
+        return new File(dataDir, toPath(id));
     }
 
     public static String calcSHA256(InputStream is, OutputStream os) throws IOException {
@@ -102,4 +110,19 @@ public class Caching extends RefNodeProcessor {
     }
 
 
+    public File getTmpDir() {
+        return tmpDir;
+    }
+
+    public void setTmpDir(File tmpDir) {
+        this.tmpDir = tmpDir;
+    }
+
+    public File getDatasetDir() {
+        return datasetDir;
+    }
+
+    public void setDatasetDir(File datasetDir) {
+        this.datasetDir = datasetDir;
+    }
 }

@@ -27,10 +27,15 @@ public class RefNodeString extends RefNodeImpl {
     }
 
     @Override
+    public Long getSize() {
+        return data == null ? null : (long) data.getBytes().length;
+    }
+
+    @Override
     public boolean equivalentTo(RefNode other) {
         return other instanceof RefNodeString
                 && Objects.equals(getType(), other.getType())
-                && StringUtils.equals(data, ((RefNodeString)other).data);
+                && StringUtils.equals(data, ((RefNodeString) other).data);
     }
 
 }
