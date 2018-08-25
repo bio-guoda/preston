@@ -41,7 +41,7 @@ public class CrawlerGBIF implements Crawler {
 
     @Override
     public void crawl(DatasetListener listener) throws IOException {
-        nextPage(null, 0, 2, listener);
+        nextPage(null, 0, 25, listener);
     }
 
     private static Dataset nextPage(Dataset previousPage, int offset, int limit, DatasetListener listener) {
