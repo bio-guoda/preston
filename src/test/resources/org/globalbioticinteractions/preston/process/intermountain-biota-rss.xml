@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Consortium of Intermountain Herbaria Darwin Core Archive rss feed</title>
+        <link>http://intermountainbiota.org/portal/</link>
+        <description>Consortium of Intermountain Herbaria Darwin Core Archive rss feed</description>
+        <language>en-us</language>
+        <item collid="349">
+            <title>BLM-CFOBLM DwC-Archive</title>
+            <image>http://intermountainbiota.org/portal/content/collicon/cfoblm.png</image>
+            <description>Darwin Core Archive for Caliente Field Office, Bureau of Land Management</description>
+            <guid>http://intermountainbiota.org/portal/collections/misc/collprofiles.php?collid=349</guid>
+            <guid>b0cc75d7-8c89-4d2b-b651-f13ca0e866ba</guid>
+            <emllink>http://intermountainbiota.org/portal/content/dwca/BLM-CFOBLM_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://intermountainbiota.org/portal/content/dwca/BLM-CFOBLM_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:58:40</pubDate>
+        </item>
+        <item collid="342">
+            <title>EDOBLM DwC-Archive</title>
+            <image>http://intermountainbiota.org/portal/content/collicon/edoblm.png</image>
+            <description>Darwin Core Archive for Ely BLM Herbarium</description>
+            <guid>http://intermountainbiota.org/portal/collections/misc/collprofiles.php?collid=342</guid>
+            <guid>2e996ed6-6a93-4cfb-94bb-cc1d48fb7f31</guid>
+            <emllink>http://intermountainbiota.org/portal/content/dwca/EDOBLM_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://intermountainbiota.org/portal/content/dwca/EDOBLM_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:58:40</pubDate>
+        </item>
+        <item collid="120">
+            <title>ENLC DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/content/collicon/enlc.jpg</image>
+            <description>Darwin Core Archive for Eastern Nevada Landscape Coalition</description>
+            <guid>http://intermountainbiota.org/portal/collections/misc/collprofiles.php?collid=120</guid>
+            <guid>1429ff9f-7215-4677-bb70-60aa5afd31a7</guid>
+            <emllink>http://intermountainbiota.org/portal/content/dwca/ENLC_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://intermountainbiota.org/portal/content/dwca/ENLC_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:58:40</pubDate>
+        </item>
+        <item collid="108">
+            <title>EPHR DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/content/collicon/ephr.jpg</image>
+            <description>Darwin Core Archive for Snow College Herbarium</description>
+            <guid>http://intermountainbiota.org/portal/collections/misc/collprofiles.php?collid=108</guid>
+            <guid>1db18863-9ba2-4f50-912b-f4f9e9ec4dd4</guid>
+            <emllink>http://intermountainbiota.org/portal/content/dwca/EPHR_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://intermountainbiota.org/portal/content/dwca/EPHR_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:58:40</pubDate>
+        </item>
+        <item collid="356">
+            <title>NDOA DwC-Archive</title>
+            <image>http://intermountainbiota.org/portal/content/collicon/ndoa.jpg</image>
+            <description>Darwin Core Archive for Nevada Department of Agriculture Herbarium</description>
+            <guid>http://intermountainbiota.org/portal/collections/misc/collprofiles.php?collid=356</guid>
+            <guid>54a7f203-9710-4012-af0a-d2eacdead9ed</guid>
+            <emllink>http://intermountainbiota.org/portal/content/dwca/NDOA_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://intermountainbiota.org/portal/content/dwca/NDOA_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:58:40</pubDate>
+        </item>
+        <item collid="159">
+            <title>RENO-V DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/content/collicon/reno.jpg</image>
+            <description>Darwin Core Archive for University of Nevada Herbarium</description>
+            <guid>http://intermountainbiota.org/portal/collections/misc/collprofiles.php?collid=159</guid>
+            <guid>e17877f2-e68c-45be-aea2-7aaa09fce8be</guid>
+            <emllink>http://intermountainbiota.org/portal/content/dwca/RENO-V_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://intermountainbiota.org/portal/content/dwca/RENO-V_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:58:40</pubDate>
+        </item>
+        <item collid="121">
+            <title>SUU DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/content/collicon/suu.jpg</image>
+            <description>Darwin Core Archive for Southern Utah University</description>
+            <guid>http://intermountainbiota.org/portal/collections/misc/collprofiles.php?collid=121</guid>
+            <guid>fbd90cb8-8794-4fca-afc4-507b8991ecfc</guid>
+            <emllink>http://intermountainbiota.org/portal/content/dwca/SUU_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://intermountainbiota.org/portal/content/dwca/SUU_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:58:40</pubDate>
+        </item>
+        <item collid="125">
+            <title>SWANER DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/content/collicon/swaner.jpg</image>
+            <description>Darwin Core Archive for Swaner Preserve and EcoCenter</description>
+            <guid>http://intermountainbiota.org/portal/collections/misc/collprofiles.php?collid=125</guid>
+            <guid>74ee9b38-8265-4817-b29f-32f91790ce77</guid>
+            <emllink>http://intermountainbiota.org/portal/content/dwca/SWANER_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://intermountainbiota.org/portal/content/dwca/SWANER_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:58:40</pubDate>
+        </item>
+        <item collid="109">
+            <title>USU-PRI DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/content/collicon/pri.jpg</image>
+            <description>Darwin Core Archive for Utah State University Eastern</description>
+            <guid>http://intermountainbiota.org/portal/collections/misc/collprofiles.php?collid=109</guid>
+            <guid>fb1a9d4d-9203-4e2d-8012-2222d9b8c0a4</guid>
+            <emllink>http://intermountainbiota.org/portal/content/dwca/USU-PRI_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://intermountainbiota.org/portal/content/dwca/USU-PRI_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:58:40</pubDate>
+        </item>
+        <item collid="16">
+            <title>USU-UTC DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/content/collicon/utc.jpg</image>
+            <description>Darwin Core Archive for Intermountain Herbarium (Utah State University)</description>
+            <guid>http://intermountainbiota.org/portal/collections/misc/collprofiles.php?collid=16</guid>
+            <guid>06bf658d-f555-4c9c-ab93-fc2d7db7086e</guid>
+            <emllink>http://intermountainbiota.org/portal/content/dwca/USU-UTC_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://intermountainbiota.org/portal/content/dwca/USU-UTC_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:58:40</pubDate>
+        </item>
+        <item collid="117">
+            <title>USUUB DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/content/collicon/usuub.jpg</image>
+            <description>Darwin Core Archive for Utah State University Uintah Basin</description>
+            <guid>http://intermountainbiota.org/portal/collections/misc/collprofiles.php?collid=117</guid>
+            <guid>4215983c-e680-4a7b-b6d4-bde630306edd</guid>
+            <emllink>http://intermountainbiota.org/portal/content/dwca/USUUB_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://intermountainbiota.org/portal/content/dwca/USUUB_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:58:40</pubDate>
+        </item>
+        <item collid="179">
+            <title>UT-Botany DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/content/collicon/ut.png</image>
+            <description>Darwin Core Archive for Garrett Herbarium, Natural History Museum of Utah</description>
+            <guid>http://intermountainbiota.org/portal/collections/misc/collprofiles.php?collid=179</guid>
+            <guid>4e3bfe73-4507-4e83-a70e-eea1fe71f167</guid>
+            <emllink>http://intermountainbiota.org/portal/content/dwca/UT-Botany_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://intermountainbiota.org/portal/content/dwca/UT-Botany_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:58:40</pubDate>
+        </item>
+    </channel>
+</rss>

@@ -68,10 +68,6 @@ public class RegistryReaderIDigBioTest {
 
         RegistryReaderIDigBio.parseRssFeed(parent, emitter, is);
 
-        for (RefNode node : nodes) {
-            System.out.println(node.getLabel());
-        }
-
         assertThat(nodes.size(), is(20));
 
         List<String> labels = nodes.stream().limit(5).map(RefNode::getLabel).collect(Collectors.toList());
@@ -90,6 +86,39 @@ public class RegistryReaderIDigBioTest {
                 "fea81a47-2365-45cc-bef9-b6bbff7457e6",
                 "http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.zip")));
 
+    }
+
+    @Test
+    public void parseSymbiotaFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
+        RefNode parent = new RefNodeString(null, RefNodeType.URI, "http://example.org");
+        List<RefNode> nodes = new ArrayList<>();
+        RefNodeEmitter emitter = nodes::add;
+        InputStream is = getClass().getResourceAsStream("symbiota-rss.xml");
+
+        RegistryReaderIDigBio.parseRssFeed(parent, emitter, is);
+
+        assertThat(nodes.size(), is(135));
+
+        List<String> labels = nodes.stream().limit(5).map(RefNode::getLabel).collect(Collectors.toList());
+
+        assertThat(labels, is(Arrays.asList("4b9c73cc-d12d-4654-bdfb-081dce21729b", "http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.eml", "data@http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.eml", "http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.zip", "data@http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.zip")));
+
+        List<RefNodeType> types = nodes.stream().limit(5).map(RefNode::getType).collect(Collectors.toList());
+
+        assertThat(types, is(Arrays.asList("UUID", "URI", "EML", "URI", "DWCA")));
+
+    }
+
+    @Test
+    public void parseIntermountainFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
+        RefNode parent = new RefNodeString(null, RefNodeType.URI, "http://example.org");
+        List<RefNode> nodes = new ArrayList<>();
+        RefNodeEmitter emitter = nodes::add;
+        InputStream is = getClass().getResourceAsStream("intermountain-biota-rss.xml");
+
+        RegistryReaderIDigBio.parseRssFeed(parent, emitter, is);
+
+        assertThat(nodes.size(), is(60));
     }
 
 

@@ -89,15 +89,19 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
                     } catch (IllegalArgumentException ex) {
                         // ignore
                     }
-                } else if ("emllink".equals(itemName)) {
+                } else if (Arrays.asList("ipt_eml", "emllink").contains(itemName)) {
                     try {
-                        emlURI = URI.create(itemValue);
+                        if (emlURI == null) {
+                            emlURI = URI.create(itemValue);
+                        }
                     } catch (IllegalArgumentException ex) {
                         // ignore
                     }
-                } else if ("link".equals(itemName)) {
+                } else if (Arrays.asList("ipt_dwca", "link").contains(itemName)) {
                     try {
-                        archiveURI = URI.create(itemValue);
+                        if (archiveURI == null) {
+                            archiveURI = URI.create(itemValue);
+                        }
                     } catch (IllegalArgumentException ex) {
                         // ignore
                     }

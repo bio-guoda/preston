@@ -24,7 +24,7 @@ public class CmdList implements Runnable {
 
         final RefNodeListener listener = new BlobStoreWriter(
                 new RegistryReaderIDigBio(refNodes::add),
-                new RegistryReaderGBIF(refNodes::add),
+                //new RegistryReaderGBIF(refNodes::add),
                 new LogWriter());
 
         while(!refNodes.isEmpty()) {

@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Consortium of Midwest Herbaria Darwin Core Archive rss feed</title>
+        <link>http://midwestherbaria.org/portal/</link>
+        <description>Consortium of Midwest Herbaria Darwin Core Archive rss feed</description>
+        <language>en-us</language>
+        <item collid="201">
+            <title>ALBC DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/albc.jpg</image>
+            <description>Darwin Core Archive for Albion College</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=201</guid>
+            <guid>4b9c73cc-d12d-4654-bdfb-081dce21729b</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="240">
+            <title>BHO DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/bho.jpg</image>
+            <description>Darwin Core Archive for Ohio University, Bartley Herbarium</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=240</guid>
+            <guid>b01789b2-c5d7-11e4-b6af-00163e00498d</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/BHO_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/BHO_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="202">
+            <title>CALVIN DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/calvin.jpg</image>
+            <description>Darwin Core Archive for Calvin College</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=202</guid>
+            <guid>6b37021c-c849-4c34-a34c-503603aa0f93</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/CALVIN_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/CALVIN_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="191">
+            <title>CMC DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/cmc.jpg</image>
+            <description>Darwin Core Archive for Central Michigan University</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=191</guid>
+            <guid>9798472c-c2da-40b9-a636-cec2c61d4589</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/CMC_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/CMC_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="161">
+            <title>DEK DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/dek.gif</image>
+            <description>Darwin Core Archive for Northern Illinois University Herbarium</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=161</guid>
+            <guid>611fe4d6-8e33-4b97-9d2a-ba1c34d20dda</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/DEK_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/DEK_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="133">
+            <title>EIU DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/eiu.jpg</image>
+            <description>Darwin Core Archive for Stover-Ebinger Herbarium (Eastern Illinois University)</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=133</guid>
+            <guid>27dc3568-b638-4917-afcf-3dd7eac73cf9</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/EIU_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/EIU_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:42:37</pubDate>
+        </item>
+        <item collid="243">
+            <title>EMC DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/emc.jpg</image>
+            <description>Darwin Core Archive for Eastern Michigan University Herbarium</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=243</guid>
+            <guid>b0178bb0-c5d7-11e4-b6af-00163e00498d</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/EMC_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/EMC_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="199">
+            <title>GVSC DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/gvsc.jpg</image>
+            <description>Darwin Core Archive for Grand Valley State University</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=199</guid>
+            <guid>776500be-4131-4290-9c34-54e92e33682c</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/GVSC_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/GVSC_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="200">
+            <title>HCHM DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/hchm.jpg</image>
+            <description>Darwin Core Archive for Hope College</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=200</guid>
+            <guid>4f4a293b-2a76-4917-9cba-16760ffa774a</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/HCHM_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/HCHM_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="209">
+            <title>HLSD DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/hlsd.jpg</image>
+            <description>Darwin Core Archive for Hillsdale College Herbarium</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=209</guid>
+            <guid>7804ce54-7ae0-4bf2-a2f5-a0f4b869d81c</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/HLSD_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/HLSD_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="324">
+            <title>HUNT DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/content/collicon/hunt.jpg</image>
+            <description>Darwin Core Archive for Huntington University Herbarium</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=324</guid>
+            <guid>50213245-5fe2-43ca-8c37-e5af3f952de5</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/HUNT_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/HUNT_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="244">
+            <title>ILL DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/ill.jpg</image>
+            <description>Darwin Core Archive for University of Illinois Herbarium</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=244</guid>
+            <guid>b0178c00-c5d7-11e4-b6af-00163e00498d</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/ILL_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/ILL_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:42:37</pubDate>
+        </item>
+        <item collid="234">
+            <title>ILLS DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/ill.jpg</image>
+            <description>Darwin Core Archive for Illinois Natural History Survey</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=234</guid>
+            <guid>b01784c6-c5d7-11e4-b6af-00163e00498d</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/ILLS_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/ILLS_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="278">
+            <title>IND DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/content/collicon/ind.png</image>
+            <description>Darwin Core Archive for Indiana University Herbarium (Deam Herbarium)</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=278</guid>
+            <guid>28be2df2-5062-4277-a5d8-fdd890b9b10b</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/IND_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/IND_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="204">
+            <title>MICH DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/mich.jpg</image>
+            <description>Darwin Core Archive for University of Michigan Herbarium</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=204</guid>
+            <guid>530a6200-b385-4cbd-b184-d60dd25d37e2</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/MICH_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/MICH_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:42:37</pubDate>
+        </item>
+        <item collid="135">
+            <title>MIN DwC-Archive</title>
+            <image>http://geo.cbs.umn.edu/MIN.jpg</image>
+            <description>Darwin Core Archive for J. F. Bell Museum of Natural History Herbarium</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=135</guid>
+            <guid>339dc54f-86a1-4c37-876e-d9eb25f22596</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/MIN_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/MIN_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="178">
+            <title>MOR DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/mort.jpg</image>
+            <description>Darwin Core Archive for Morton Arboretum</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=178</guid>
+            <guid>e36f3789-218d-4afd-abbf-ab3f9df0122f</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/MOR_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/MOR_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="236">
+            <title>MSC DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/msc.jpg</image>
+            <description>Darwin Core Archive for Michigan State University</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=236</guid>
+            <guid>b0178778-c5d7-11e4-b6af-00163e00498d</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/MSC_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/MSC_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="238">
+            <title>MU DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/mu.jpg</image>
+            <description>Darwin Core Archive for Miami University, Willard Sherman Turrell Herbarium</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=238</guid>
+            <guid>b017884a-c5d7-11e4-b6af-00163e00498d</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/MU_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/MU_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="130">
+            <title>MWI DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/mwi.jpg</image>
+            <description>Darwin Core Archive for Western Illinois University, ​R. M. Myers Herbarium</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=130</guid>
+            <guid>5f887025-5ee0-453e-b25b-360c1f5e870a</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/MWI_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/MWI_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:44:29</pubDate>
+        </item>
+        <item collid="239">
+            <title>OS DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/os.jpg</image>
+            <description>Darwin Core Archive for Ohio State University Herbarium</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=239</guid>
+            <guid>b0178962-c5d7-11e4-b6af-00163e00498d</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/OS_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/OS_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:35:47</pubDate>
+        </item>
+        <item collid="203">
+            <title>SENEY DwC-Archive</title>
+            <image>http://midwestherbaria.org/portal/content/collicon/seney.png</image>
+            <description>Darwin Core Archive for Seney National Wildlife Refuge</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=203</guid>
+            <guid>eb44c1c6-9c18-4f15-b145-858063b7b661</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/SENEY_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/SENEY_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:42:37</pubDate>
+        </item>
+        <item collid="241">
+            <title>UWL DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/uwl.jpg</image>
+            <description>Darwin Core Archive for University of Wisconsin-LaCrosse</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=241</guid>
+            <guid>b0178a20-c5d7-11e4-b6af-00163e00498d</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/UWL_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/UWL_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:42:37</pubDate>
+        </item>
+        <item collid="232">
+            <title>UWM DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/uwm.jpg</image>
+            <description>Darwin Core Archive for University of Wisconsin-Milwaukee</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=232</guid>
+            <guid>13b6e3e2-e563-4975-bda3-7c72a40da3d2</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/UWM_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/UWM_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:42:37</pubDate>
+        </item>
+        <item collid="231">
+            <title>UWSP DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/uwsp.jpg</image>
+            <description>Darwin Core Archive for University of Wisconsin-Stevens Point, Robert W. Freckmann Herbarium
+            </description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=231</guid>
+            <guid>44b57a28-1eca-48c5-80ea-4179c6e735c0</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/UWSP_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/UWSP_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:42:37</pubDate>
+        </item>
+        <item collid="198">
+            <title>WIS DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/wis.gif</image>
+            <description>Darwin Core Archive for University of Wisconsin-Madison, Wisconsin State Herbarium
+            </description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=198</guid>
+            <guid>b20b8d91-3255-4926-93e6-af9c6ad60faf</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/WIS_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/WIS_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:42:37</pubDate>
+        </item>
+        <item collid="246">
+            <title>WMU DwC-Archive</title>
+            <image>http://sernecportal.org/portal/content/collicon/wmu.jpg</image>
+            <description>Darwin Core Archive for Western Michigan University</description>
+            <guid>http://midwestherbaria.org/portal/collections/misc/collprofiles.php?collid=246</guid>
+            <guid>b0178ce6-c5d7-11e4-b6af-00163e00498d</guid>
+            <emllink>http://midwestherbaria.org/portal/content/dwca/WMU_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://midwestherbaria.org/portal/content/dwca/WMU_DwC-A.zip</link>
+            <pubDate>Sun, 19 Aug 2018 11:42:37</pubDate>
+        </item>
+    </channel>
+</rss>
