@@ -2,8 +2,10 @@ package org.globalbioticinteractions.preston.process;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeCached;
 import org.globalbioticinteractions.preston.model.RefNodeString;
@@ -30,11 +32,11 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
-public class CachingTest {
+public class BlobStoreWriterTest {
 
     @Test
     public void testSHA256() throws IOException {
-        assertSHA(Caching.calcSHA256(IOUtils.toInputStream("something", StandardCharsets.UTF_8), new ByteArrayOutputStream()));
+        assertSHA(BlobStoreWriter.calcSHA256(IOUtils.toInputStream("something", StandardCharsets.UTF_8), new ByteArrayOutputStream()));
     }
 
     private void assertSHA(String calculated) {
@@ -44,7 +46,7 @@ public class CachingTest {
 
     @Test
     public void generatePathFromUUID() {
-        assertThat(Caching.toPath("3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"),
+        assertThat(BlobStoreWriter.toPath("3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"),
                 is("3f/c9/b6/3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"));
     }
 
@@ -54,10 +56,10 @@ public class CachingTest {
 
         ArrayList<RefNode> refNodes = new ArrayList<>();
 
-        Caching caching = new Caching(refNodes::add);
-        caching.setTmpDir(new File("target/"));
+        BlobStoreWriter blobStoreWriter = new BlobStoreWriter(refNodes::add);
+        blobStoreWriter.setTmpDir(new File("target/"));
         RefNodeString providedNode = new RefNodeString(null, RefNodeType.URI, "https://example.org");
-        caching.on(providedNode);
+        blobStoreWriter.on(providedNode);
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
 
@@ -78,12 +80,12 @@ public class CachingTest {
 
         ArrayList<RefNode> refNodes = new ArrayList<>();
 
-        Caching caching = new Caching(refNodes::add);
-        caching.setTmpDir(tempDir.toFile());
-        caching.setDatasetDir(datasetDir.toFile());
+        BlobStoreWriter blobStoreWriter = new BlobStoreWriter(refNodes::add);
+        blobStoreWriter.setTmpDir(tempDir.toFile());
+        blobStoreWriter.setDatasetDir(datasetDir.toFile());
         URI testURI = getClass().getResource("test.txt").toURI();
         RefNode providedNode = new RefNodeURI(null, RefNodeType.URI, testURI);
-        caching.on(providedNode);
+        blobStoreWriter.on(providedNode);
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
 

@@ -16,15 +16,15 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GBIFRegistry extends RefNodeProcessor {
+public class GBIFRegistryReader extends RefNodeProcessor {
     public static final Map<String, RefNodeType> TYPE_MAP = new HashMap<String, RefNodeType>() {{
         put("DWC_ARCHIVE", RefNodeType.DWCA);
         put("EML", RefNodeType.EML);
     }};
     public static final String GBIF_DATASET_API_ENDPOINT = "https://api.gbif.org/v1/dataset";
-    private final Log LOG = LogFactory.getLog(GBIFRegistry.class);
+    private final Log LOG = LogFactory.getLog(GBIFRegistryReader.class);
 
-    public GBIFRegistry(RefNodeListener listener) {
+    public GBIFRegistryReader(RefNodeListener listener) {
         super(listener);
     }
 
@@ -43,7 +43,8 @@ public class GBIFRegistry extends RefNodeProcessor {
             for (JsonNode result : jsonNode.get("results")) {
                 if (result.has("key") && result.has("endpoints")) {
                     String uuid = result.get("key").asText();
-                    emitter.emit(new RefNodeString(node, RefNodeType.UUID, uuid));
+                    RefNodeString datasetUUID = new RefNodeString(node, RefNodeType.UUID, uuid);
+                    emitter.emit(datasetUUID);
                     for (JsonNode endpoint : result.get("endpoints")) {
                         if (endpoint.has("url") && endpoint.has("type")) {
                             String urlString = endpoint.get("url").asText();
@@ -51,8 +52,8 @@ public class GBIFRegistry extends RefNodeProcessor {
                             String type = endpoint.get("type").asText();
                             RefNodeType refNodeType = TYPE_MAP.get(type);
                             if (refNodeType != null) {
-                                emitter.emit(new RefNodeString(node, RefNodeType.URI, urlString));
-                                emitter.emit(new RefNodeURI(node, refNodeType, url));
+                                emitter.emit(new RefNodeString(datasetUUID, RefNodeType.URI, urlString));
+                                emitter.emit(new RefNodeURI(datasetUUID, refNodeType, url));
                             }
                         }
                     }

@@ -1,7 +1,7 @@
 package org.globalbioticinteractions.preston.cmd;
 
-import org.globalbioticinteractions.preston.process.GBIFRegistry;
-import org.globalbioticinteractions.preston.process.Logging;
+import org.globalbioticinteractions.preston.process.GBIFRegistryReader;
+import org.globalbioticinteractions.preston.process.LogWriter;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeCached;
 import org.globalbioticinteractions.preston.model.RefNodeString;
@@ -27,7 +27,7 @@ public class CmdListTest {
 
         final List<RefNode> refNodes = new ArrayList<>();
 
-        GBIFRegistry.parse(resourceAsStream, refNodes::add, new RefNodeString(null, RefNodeType.UUID, "description"));
+        GBIFRegistryReader.parse(resourceAsStream, refNodes::add, new RefNodeString(null, RefNodeType.UUID, "description"));
 
         assertThat(refNodes.size(), is(12));
         RefNode refNode = refNodes.get(0);
@@ -46,13 +46,13 @@ public class CmdListTest {
         String parentUUID = "23011dd0-386f-4f29-b6f2-5aecedac3190";
         RefNode parent = new RefNodeCached(new RefNodeString(null, RefNodeType.UUID, parentUUID), "parent-id");
 
-        String str = Logging.printDataset(new RefNodeCached(new RefNodeString(parent, RefNodeType.URI, "http://example.com"), "some-id"));
+        String str = LogWriter.printDataset(new RefNodeCached(new RefNodeString(parent, RefNodeType.URI, "http://example.com"), "some-id"));
         assertThat(str, startsWith("parent-id\tsome-id\thttp://example.com\tURI\t"));
 
-        str = Logging.printDataset(new RefNodeCached(new RefNodeURI(parent, RefNodeType.DWCA, URI.create("https://example.com/some/data.zip")), "some-other-id"));
+        str = LogWriter.printDataset(new RefNodeCached(new RefNodeURI(parent, RefNodeType.DWCA, URI.create("https://example.com/some/data.zip")), "some-other-id"));
         assertThat(str, startsWith("parent-id\tsome-other-id\tdata@https://example.com/some/data.zip\tDWCA\t"));
 
-        str = Logging.printDataset(new RefNodeString(parent, RefNodeType.UUID, uuid));
+        str = LogWriter.printDataset(new RefNodeString(parent, RefNodeType.UUID, uuid));
         assertThat(str, startsWith("parent-id\t\t38011dd0-386f-4f29-b6f2-5aecedac3190\tUUID\t"));
     }
 

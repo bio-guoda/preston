@@ -9,7 +9,7 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import java.util.Date;
 
-public class Logging implements RefNodeListener {
+public class LogWriter implements RefNodeListener {
     private static Log LOG = LogFactory.getLog(CmdList.class);
 
     @Override

@@ -2,6 +2,7 @@ package org.globalbioticinteractions.preston.process;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,12 +26,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
 
-public class Caching extends RefNodeProcessor {
+public class BlobStoreWriter extends RefNodeProcessor {
     private static Log LOG = LogFactory.getLog(CmdList.class);
     private File tmpDir = FileUtils.getTempDirectory();
     private File datasetDir = new File("datasets");
 
-    public Caching(RefNodeListener... listeners) {
+    public BlobStoreWriter(RefNodeListener... listeners) {
         super(listeners);
     }
 
@@ -87,16 +88,21 @@ public class Caching extends RefNodeProcessor {
 
     public static String calcSHA256(InputStream is, OutputStream os) throws IOException {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            DigestInputStream digestInputStream = new DigestInputStream(is, md);
-            IOUtils.copy(digestInputStream, os);
-            digestInputStream.close();
-            os.flush();
-            os.close();
+            MessageDigest md = createDigest(is, os);
             return String.format("%064x", new BigInteger(1, md.digest()));
         } catch (IOException | NoSuchAlgorithmException var9) {
             throw new IOException("failed to cache dataset", var9);
         }
+    }
+
+    private static MessageDigest createDigest(InputStream is, OutputStream os) throws NoSuchAlgorithmException, IOException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        DigestInputStream digestInputStream = new DigestInputStream(is, md);
+        IOUtils.copy(digestInputStream, os);
+        digestInputStream.close();
+        os.flush();
+        os.close();
+        return md;
     }
 
     public static String toPath(String id) {
