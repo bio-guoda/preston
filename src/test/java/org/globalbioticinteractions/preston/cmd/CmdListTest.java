@@ -1,6 +1,6 @@
 package org.globalbioticinteractions.preston.cmd;
 
-import org.globalbioticinteractions.preston.process.GBIFRegistryReader;
+import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.process.LogWriter;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeProxyData;
@@ -22,39 +22,8 @@ import static org.hamcrest.core.StringStartsWith.startsWith;
 public class CmdListTest {
 
     @Test
-    public void parseDatasets() throws IOException {
-        InputStream resourceAsStream = getClass().getResourceAsStream("gbifdatasets.json");
-
-        final List<RefNode> refNodes = new ArrayList<>();
-
-        GBIFRegistryReader.parse(resourceAsStream, refNodes::add, new RefNodeString(null, RefNodeType.UUID, "description"));
-
-        assertThat(refNodes.size(), is(12));
-        RefNode refNode = refNodes.get(0);
-        assertThat(refNode.getType(), is(RefNodeType.UUID));
-        assertThat(refNode.getLabel(), is("6555005d-4594-4a3e-be33-c70e587b63d7"));
-
-        RefNode lastRefNode = refNodes.get(3);
-        assertThat(lastRefNode.getType(), is(RefNodeType.URI));
-        assertThat(lastRefNode.getLabel(), is("http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06"));
-
+    public void run() {
+        new CmdList().run();
     }
-
-    @Test
-    public void printDataset() {
-        String uuid = "38011dd0-386f-4f29-b6f2-5aecedac3190";
-        String parentUUID = "23011dd0-386f-4f29-b6f2-5aecedac3190";
-        RefNode parent = new RefNodeProxyData(new RefNodeString(null, RefNodeType.UUID, parentUUID), "parent-id");
-
-        String str = LogWriter.printDataset(new RefNodeProxyData(new RefNodeString(parent, RefNodeType.URI, "http://example.com"), "some-id"));
-        assertThat(str, startsWith("parent-id\tsome-id\thttp://example.com\tURI\t"));
-
-        str = LogWriter.printDataset(new RefNodeProxyData(new RefNodeURI(parent, RefNodeType.DWCA, URI.create("https://example.com/some/data.zip")), "some-other-id"));
-        assertThat(str, startsWith("parent-id\tsome-other-id\tdata@https://example.com/some/data.zip\tDWCA\t"));
-
-        str = LogWriter.printDataset(new RefNodeString(parent, RefNodeType.UUID, uuid));
-        assertThat(str, startsWith("parent-id\t\t38011dd0-386f-4f29-b6f2-5aecedac3190\tUUID\t"));
-    }
-
 
 }

@@ -16,16 +16,31 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GBIFRegistryReader extends RefNodeProcessor {
+public class RegistryReaderGBIF extends RefNodeProcessor {
     public static final Map<String, RefNodeType> TYPE_MAP = new HashMap<String, RefNodeType>() {{
         put("DWC_ARCHIVE", RefNodeType.DWCA);
         put("EML", RefNodeType.EML);
     }};
     public static final String GBIF_DATASET_API_ENDPOINT = "https://api.gbif.org/v1/dataset";
-    private final Log LOG = LogFactory.getLog(GBIFRegistryReader.class);
+    private final Log LOG = LogFactory.getLog(RegistryReaderGBIF.class);
 
-    public GBIFRegistryReader(RefNodeListener listener) {
+    public RegistryReaderGBIF(RefNodeListener listener) {
         super(listener);
+    }
+
+    @Override
+    public void on(RefNode refNode) {
+        if (refNode.equivalentTo(Seeds.SEED_NODE_GBIF)) {
+            RefNode refNodeRegistry = new RefNodeString(Seeds.SEED_NODE_GBIF, RefNodeType.URI, GBIF_DATASET_API_ENDPOINT);
+            emit(refNodeRegistry);
+            emit(new RefNodeURI(refNodeRegistry, RefNodeType.GBIF_DATASETS_JSON, URI.create(GBIF_DATASET_API_ENDPOINT)));
+        } else if (refNode.getType() == RefNodeType.GBIF_DATASETS_JSON) {
+            try {
+                parse(refNode.getData(), this, refNode);
+            } catch (IOException e) {
+                LOG.warn("failed to handle [" + refNode.getLabel() + "]", e);
+            }
+        }
     }
 
     private static RefNode nextPage(RefNode previousPage, int offset, int limit, RefNodeEmitter emitter) {
@@ -71,19 +86,4 @@ public class GBIFRegistryReader extends RefNodeProcessor {
 
     }
 
-    @Override
-    public void on(RefNode refNode) {
-        if (refNode.equivalentTo(Seeds.SEED_NODE_GBIF)) {
-            RefNode refNodeRegistry = new RefNodeString(Seeds.SEED_NODE_GBIF, RefNodeType.URI, GBIF_DATASET_API_ENDPOINT);
-            emit(refNodeRegistry);
-            emit(new RefNodeURI(refNodeRegistry, RefNodeType.GBIF_DATASETS_JSON, URI.create(GBIF_DATASET_API_ENDPOINT)));
-        } else if (refNode.getType() == RefNodeType.GBIF_DATASETS_JSON) {
-            try {
-                parse(refNode.getData(), this, refNode);
-            } catch (IOException e) {
-                LOG.warn("failed to handle [" + refNode.getLabel() + "]", e);
-            }
-        }
-
-    }
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+    <channel>
+        <title>TORCH Portal Darwin Core Archive rss feed</title>
+        <link>http://portal.torcherbaria.org/portal/</link>
+        <description>TORCH Portal Darwin Core Archive rss feed</description>
+        <language>en-us</language>
+        <item collid="370">
+            <title>BRIT DwC-Archive</title>
+            <image>http://portal.torcherbaria.org/portal/content/collicon/brit.png</image>
+            <description>Darwin Core Archive for BRIT Philecology Herbarium</description>
+            <guid>http://portal.torcherbaria.org/portal/collections/misc/collprofiles.php?collid=370</guid>
+            <guid>fea81a47-2365-45cc-bef9-b6bbff7457e6</guid>
+            <emllink>http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.zip</link>
+            <pubDate>Tue, 03 Jul 2018 14:58:10</pubDate>
+        </item>
+        <item collid="175">
+            <title>HPC DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/images/collicons/hpc.jpg</image>
+            <description>Darwin Core Archive for Howard Payne University Herbarium</description>
+            <guid>http://portal.torcherbaria.org/portal/collections/misc/collprofiles.php?collid=175</guid>
+            <guid>bee3f1bd-8944-4593-8c37-d64a7c9bc1e1</guid>
+            <emllink>http://portal.torcherbaria.org/portal/content/dwca/HPC_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://portal.torcherbaria.org/portal/content/dwca/HPC_DwC-A.zip</link>
+            <pubDate>Tue, 06 Jun 2017 14:22:41</pubDate>
+        </item>
+        <item collid="158">
+            <title>TAC DwC-Archive</title>
+            <image>http://swbiodiversity.org/seinet/content/collicon/tac.jpg</image>
+            <description>Darwin Core Archive for Tarleton State University Herbarium</description>
+            <guid>http://portal.torcherbaria.org/portal/collections/misc/collprofiles.php?collid=158</guid>
+            <guid>209b99f2-2075-4d24-ad13-1c87cabdb857</guid>
+            <emllink>http://portal.torcherbaria.org/portal/content/dwca/TAC_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://portal.torcherbaria.org/portal/content/dwca/TAC_DwC-A.zip</link>
+            <pubDate>Tue, 03 Jul 2018 15:38:52</pubDate>
+        </item>
+        <item collid="422">
+            <title>TLU-TLU DwC-Archive</title>
+            <image>http://portal.torcherbaria.org/portal/content/collicon/tlu-tlu.jpg</image>
+            <description>Darwin Core Archive for Texas Lutheran University Herbarium</description>
+            <guid>http://portal.torcherbaria.org/portal/collections/misc/collprofiles.php?collid=422</guid>
+            <guid>6ade07ee-25bf-49c8-ae19-f7c225f70422</guid>
+            <emllink>http://portal.torcherbaria.org/portal/content/dwca/TLU-TLU_DwC-A.eml</emllink>
+            <type>DWCA</type>
+            <recordType>DWCA</recordType>
+            <link>http://portal.torcherbaria.org/portal/content/dwca/TLU-TLU_DwC-A.zip</link>
+            <pubDate>Thu, 05 Jul 2018 11:51:57</pubDate>
+        </item>
+    </channel>
+</rss>
