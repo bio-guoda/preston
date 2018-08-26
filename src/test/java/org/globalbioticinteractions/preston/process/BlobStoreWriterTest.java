@@ -121,9 +121,6 @@ public class BlobStoreWriterTest {
         File data = new File(absCacheDir + "data");
         assertTrue(data.exists());
         assertThat(IOUtils.toString(data.toURI(), StandardCharsets.UTF_8), is("https://example.org"));
-        File sha = new File(absCacheDir + "data.sha256");
-        assertThat(IOUtils.toString(sha.toURI(), StandardCharsets.UTF_8), is(expectedSHA256));
-        assertTrue(sha.exists());
 
         FileUtils.deleteQuietly(tempDir.toFile());
     }

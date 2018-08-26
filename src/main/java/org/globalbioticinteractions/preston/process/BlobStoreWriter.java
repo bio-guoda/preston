@@ -59,8 +59,6 @@ public class BlobStoreWriter extends RefNodeProcessor {
         FileUtils.forceMkdir(datasetPath);
         File destFile = getDataFile(refNode.getId(), dataDir);
         FileUtils.moveFile(dataFile, destFile);
-        FileUtils.copyToFile(IOUtils.toInputStream(refNode.getId(), StandardCharsets.UTF_8), new File(datasetPath, "data.sha256"));
-
         writeMeta(refNode, datasetPath, destFile);
     }
 
