@@ -2,12 +2,10 @@ package org.globalbioticinteractions.preston.process;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.NullOutputStream;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefNodeCached;
+import org.globalbioticinteractions.preston.model.RefNodeProxyData;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefNodeType;
 import org.globalbioticinteractions.preston.model.RefNodeURI;
@@ -67,7 +65,7 @@ public class BlobStoreWriterTest {
         assertThat(cachedNode.getId(), is("50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
         assertThat(cachedNode.getLabel(), is("https://example.org"));
         assertThat(cachedNode.getType(), is(RefNodeType.URI));
-        assertThat(cachedNode, is(instanceOf(RefNodeCached.class)));
+        assertThat(cachedNode, is(instanceOf(RefNodeProxyData.class)));
         assertTrue(cachedNode.equivalentTo(providedNode));
 
         FileUtils.deleteQuietly(tempDir.toFile());
@@ -94,7 +92,7 @@ public class BlobStoreWriterTest {
         assertThat(cachedNode.getId(), is(expectedSHA256));
         assertThat(cachedNode.getSize(), is(19L));
         assertThat(cachedNode.getType(), is(RefNodeType.URI));
-        assertThat(cachedNode, is(instanceOf(RefNodeCached.class)));
+        assertThat(cachedNode, is(instanceOf(RefNodeProxyData.class)));
         assertTrue(cachedNode.equivalentTo(providedNode));
 
         String baseCacheDir = "/50/d7/a9/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b/";

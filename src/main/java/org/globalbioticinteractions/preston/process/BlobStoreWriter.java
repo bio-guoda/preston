@@ -2,7 +2,6 @@ package org.globalbioticinteractions.preston.process;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -10,7 +9,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globalbioticinteractions.preston.cmd.CmdList;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefNodeCached;
+import org.globalbioticinteractions.preston.model.RefNodeProxyData;
+import org.globalbioticinteractions.preston.model.RefNodeProxyParent;
 import org.joda.time.format.ISODateTimeFormat;
 
 import java.io.File;
@@ -38,7 +38,11 @@ public class BlobStoreWriter extends RefNodeProcessor {
     @Override
     public void on(RefNode refNode) {
         try {
-            emit(cache(refNode, getTmpDir(), getDatasetDir()));
+            RefNode parentCached = refNode.getParent() == null
+                    ? null
+                    : cache(refNode.getParent(), getTmpDir(), getDatasetDir());
+            RefNode refNodeWithCachedParent = new RefNodeProxyParent(parentCached, refNode);
+            emit(cache(refNodeWithCachedParent, getTmpDir(), getDatasetDir()));
         } catch (IOException e) {
             LOG.warn("failed to handle [" + refNode.getLabel() + "]", e);
         }
@@ -49,9 +53,9 @@ public class BlobStoreWriter extends RefNodeProcessor {
         File cache = File.createTempFile("cacheFile", ".tmp", tmpDir);
         final String id = calcSHA256(refNode.getData(), new FileOutputStream(cache));
         if (!getDataFile(id, dataDir).exists()) {
-            cacheFile(cache, new RefNodeCached(refNode, id), dataDir);
+            cacheFile(cache, new RefNodeProxyData(refNode, id), dataDir);
         }
-        return new RefNodeCached(refNode, id, getDataFile(id, dataDir));
+        return new RefNodeProxyData(refNode, id, getDataFile(id, dataDir));
     }
 
     private static void cacheFile(File dataFile, RefNode refNode, File dataDir) throws IOException {

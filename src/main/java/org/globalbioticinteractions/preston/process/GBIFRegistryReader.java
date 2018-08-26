@@ -52,8 +52,9 @@ public class GBIFRegistryReader extends RefNodeProcessor {
                             String type = endpoint.get("type").asText();
                             RefNodeType refNodeType = TYPE_MAP.get(type);
                             if (refNodeType != null) {
-                                emitter.emit(new RefNodeString(datasetUUID, RefNodeType.URI, urlString));
-                                emitter.emit(new RefNodeURI(datasetUUID, refNodeType, url));
+                                RefNodeString refNode = new RefNodeString(datasetUUID, RefNodeType.URI, urlString);
+                                emitter.emit(refNode);
+                                emitter.emit(new RefNodeURI(refNode, refNodeType, url));
                             }
                         }
                     }

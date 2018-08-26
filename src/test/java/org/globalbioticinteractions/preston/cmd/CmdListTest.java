@@ -3,7 +3,7 @@ package org.globalbioticinteractions.preston.cmd;
 import org.globalbioticinteractions.preston.process.GBIFRegistryReader;
 import org.globalbioticinteractions.preston.process.LogWriter;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefNodeCached;
+import org.globalbioticinteractions.preston.model.RefNodeProxyData;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefNodeType;
 import org.globalbioticinteractions.preston.model.RefNodeURI;
@@ -44,12 +44,12 @@ public class CmdListTest {
     public void printDataset() {
         String uuid = "38011dd0-386f-4f29-b6f2-5aecedac3190";
         String parentUUID = "23011dd0-386f-4f29-b6f2-5aecedac3190";
-        RefNode parent = new RefNodeCached(new RefNodeString(null, RefNodeType.UUID, parentUUID), "parent-id");
+        RefNode parent = new RefNodeProxyData(new RefNodeString(null, RefNodeType.UUID, parentUUID), "parent-id");
 
-        String str = LogWriter.printDataset(new RefNodeCached(new RefNodeString(parent, RefNodeType.URI, "http://example.com"), "some-id"));
+        String str = LogWriter.printDataset(new RefNodeProxyData(new RefNodeString(parent, RefNodeType.URI, "http://example.com"), "some-id"));
         assertThat(str, startsWith("parent-id\tsome-id\thttp://example.com\tURI\t"));
 
-        str = LogWriter.printDataset(new RefNodeCached(new RefNodeURI(parent, RefNodeType.DWCA, URI.create("https://example.com/some/data.zip")), "some-other-id"));
+        str = LogWriter.printDataset(new RefNodeProxyData(new RefNodeURI(parent, RefNodeType.DWCA, URI.create("https://example.com/some/data.zip")), "some-other-id"));
         assertThat(str, startsWith("parent-id\tsome-other-id\tdata@https://example.com/some/data.zip\tDWCA\t"));
 
         str = LogWriter.printDataset(new RefNodeString(parent, RefNodeType.UUID, uuid));
