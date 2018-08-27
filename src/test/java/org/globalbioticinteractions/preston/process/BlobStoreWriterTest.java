@@ -13,7 +13,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -28,19 +27,12 @@ import java.util.Iterator;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class BlobStoreWriterTest {
 
-    @Test
-    public void testSHA256() throws IOException {
-        assertSHA(BlobStoreWriter.calcSHA256(IOUtils.toInputStream("something", StandardCharsets.UTF_8), new ByteArrayOutputStream()));
-    }
-
-    private void assertSHA(String calculated) {
-        assertThat(calculated, is("3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"));
-        assertThat(calculated.length(), is(64));
-    }
 
     @Test
     public void generatePathFromUUID() {
@@ -82,10 +74,18 @@ public class BlobStoreWriterTest {
         blobStoreWriter.setTmpDir(tempDir.toFile());
         blobStoreWriter.setDatasetDir(datasetDir.toFile());
         URI testURI = getClass().getResource("test.txt").toURI();
-        RefNode providedNode = new RefNodeURI(null, RefNodeType.URI, testURI);
-        blobStoreWriter.on(providedNode);
+        RefNode providedNode = new RefNodeString(null, RefNodeType.URI, testURI.toString());
+        RefNode providedNodeBlob = new RefNodeURI(providedNode, RefNodeType.URI, testURI);
+        blobStoreWriter.on(providedNodeBlob);
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
+        assertThat(refNodes.size(), is(2));
+
+        RefNode linkNode = refNodes.get(1);
+        assertThat(linkNode, is(instanceOf(RefNodeRelation.class)));
+        assertThat(linkNode.getParent().getLabel(), is(providedNode.getLabel()));
+        assertThat(((RefNodeRelation)linkNode).getTarget().getLabel(), is(providedNodeBlob.getLabel()));
+        assertThat(((RefNodeRelation)linkNode).getRelationType().getLabel(), is(BlobStoreWriter.DEREFERENCE_OF.getLabel()));
 
         RefNode cachedNode = refNodes.get(0);
         String expectedSHA256 = "50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
@@ -93,7 +93,7 @@ public class BlobStoreWriterTest {
         assertThat(cachedNode.getSize(), is(19L));
         assertThat(cachedNode.getType(), is(RefNodeType.URI));
         assertThat(cachedNode, is(instanceOf(RefNodeProxyData.class)));
-        assertTrue(cachedNode.equivalentTo(providedNode));
+        assertTrue(cachedNode.equivalentTo(providedNodeBlob));
 
         String baseCacheDir = "/50/d7/a9/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b/";
         String absCacheDir = datasetDir.toAbsolutePath().toString() + baseCacheDir;
@@ -107,18 +107,20 @@ public class BlobStoreWriterTest {
             fields.next();
             count++;
         }
-        assertThat(count, is(4));
+        assertThat(count, is(5));
         assertThat(jsonNode.get("id").asText(), is(expectedSHA256));
         assertThat(jsonNode.get("size").asLong(), is(19L));
         assertTrue(jsonNode.has("created"));
         DateTime created = ISODateTimeFormat.dateTime().withZoneUTC().parseDateTime(jsonNode.get("created").asText());
         assertThat(created, is(notNullValue()));
-        assertFalse(jsonNode.has("parentId"));
+        assertTrue(jsonNode.has("parentId"));
 
 
         File data = new File(absCacheDir + "data");
         assertTrue(data.exists());
         assertThat(IOUtils.toString(data.toURI(), StandardCharsets.UTF_8), is("https://example.org"));
+
+
 
         FileUtils.deleteQuietly(tempDir.toFile());
     }

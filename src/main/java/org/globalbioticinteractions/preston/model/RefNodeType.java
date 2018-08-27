@@ -10,5 +10,6 @@ public enum RefNodeType {
     IDIGBIO_RSS,
     IDIGBIO_RSS_SYMBIOTA,
     IDIGBIO_PUBLISHERS_JSON,
+    RELATION,
     EML
 }

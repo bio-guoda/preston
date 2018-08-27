@@ -7,26 +7,24 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.cmd.CmdList;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeProxyData;
 import org.globalbioticinteractions.preston.model.RefNodeProxyParent;
+import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefNodeType;
 import org.joda.time.format.ISODateTimeFormat;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.security.DigestInputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
 
 public class BlobStoreWriter extends RefNodeProcessor {
+    public static final RefNodeString DEREFERENCE_OF = new RefNodeString(null, RefNodeType.URI, "http://example.org/dereferenceOf");
     private static Log LOG = LogFactory.getLog(CmdList.class);
     private File tmpDir = new File("tmp");
     private File datasetDir = new File("datasets");
@@ -42,7 +40,9 @@ public class BlobStoreWriter extends RefNodeProcessor {
                     ? null
                     : cache(refNode.getParent(), getTmpDir(), getDatasetDir());
             RefNode refNodeWithCachedParent = new RefNodeProxyParent(parentCached, refNode);
-            emit(cache(refNodeWithCachedParent, getTmpDir(), getDatasetDir()));
+            RefNode dereferencedNode = cache(refNodeWithCachedParent, getTmpDir(), getDatasetDir());
+            emit(dereferencedNode);
+            emit(new RefNodeRelation(parentCached, DEREFERENCE_OF, dereferencedNode));
         } catch (IOException e) {
             LOG.warn("failed to handle [" + refNode.getLabel() + "]", e);
         }
@@ -51,7 +51,7 @@ public class BlobStoreWriter extends RefNodeProcessor {
     public static RefNode cache(RefNode refNode, File tmpDir, File dataDir) throws IOException {
         FileUtils.forceMkdir(tmpDir);
         File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
-        final String id = calcSHA256(refNode.getData(), new FileOutputStream(tmpFile));
+        final String id = Hasher.calcSHA256(refNode.getData(), new FileOutputStream(tmpFile));
         if (!getDataFile(id, dataDir).exists()) {
             cacheFile(tmpFile, new RefNodeProxyData(refNode, id), dataDir);
         }
@@ -87,25 +87,6 @@ public class BlobStoreWriter extends RefNodeProcessor {
 
     private static File getDatasetDir(String id, File dataDir) {
         return new File(dataDir, toPath(id));
-    }
-
-    public static String calcSHA256(InputStream is, OutputStream os) throws IOException {
-        try {
-            MessageDigest md = createDigest(is, os);
-            return String.format("%064x", new BigInteger(1, md.digest()));
-        } catch (IOException | NoSuchAlgorithmException var9) {
-            throw new IOException("failed to cache dataset", var9);
-        }
-    }
-
-    private static MessageDigest createDigest(InputStream is, OutputStream os) throws NoSuchAlgorithmException, IOException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        DigestInputStream digestInputStream = new DigestInputStream(is, md);
-        IOUtils.copy(digestInputStream, os);
-        digestInputStream.close();
-        os.flush();
-        os.close();
-        return md;
     }
 
     public static String toPath(String id) {
