@@ -1,5 +1,6 @@
 package org.globalbioticinteractions.preston;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.StatusLine;
@@ -21,13 +22,10 @@ public class Resources {
 
     public static InputStream asInputStream(URI dataURI) throws IOException {
         InputStream is;
-        if ("file".equals(dataURI.getScheme())) {
+        if (StringUtils.equals("file", dataURI.getScheme())) {
             is = dataURI.toURL().openStream();
         } else {
-
             HttpGet get = new HttpGet(dataURI);
-            get.setHeader("Accept", "application/json;charset=UTF-8");
-            get.setHeader("Content-Type", "application/json;charset=UTF-8");
             get.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
 
             CloseableHttpResponse response = getHttpClient().execute(get);
