@@ -2,6 +2,8 @@ package org.globalbioticinteractions.preston.process;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globalbioticinteractions.preston.Seeds;
@@ -13,6 +15,7 @@ import org.globalbioticinteractions.preston.model.RefNodeURI;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,16 +43,28 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + refNode.getLabel() + "]", e);
             }
+        } else if (refNode.getType() == RefNodeType.URI) {
+            try {
+                String dataString = getDataString(refNode);
+                if (StringUtils.startsWith(dataString, GBIF_DATASET_API_ENDPOINT)) {
+                    RefNodeURI datasetURI = new RefNodeURI(refNode, RefNodeType.GBIF_DATASETS_JSON, URI.create(getDataString(refNode)));
+                    emit(datasetURI);
+                }
+            } catch (IOException e) {
+                LOG.warn("failed to handle [" + refNode.getLabel() + "]", e);
+            }
+
         }
     }
 
-    private static RefNode nextPage(RefNode previousPage, int offset, int limit, RefNodeEmitter emitter) {
+    private String getDataString(RefNode refNode) throws IOException {
+        return IOUtils.toString(refNode.getData(), StandardCharsets.UTF_8);
+    }
+
+    private static void emitNextPage(RefNode previousPage, int offset, int limit, RefNodeEmitter emitter) {
         String uri = GBIF_DATASET_API_ENDPOINT + "?offset=" + offset + "&limit=" + limit;
         RefNode currentPageURI = new RefNodeString(previousPage, RefNodeType.URI, uri);
         emitter.emit(currentPageURI);
-        RefNodeURI datasetURI = new RefNodeURI(currentPageURI, RefNodeType.GBIF_DATASETS_JSON, URI.create(uri));
-        emitter.emit(datasetURI);
-        return datasetURI;
     }
 
     public static void parse(InputStream resourceAsStream, RefNodeEmitter emitter, RefNode node) throws IOException {
@@ -81,7 +96,7 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
         if (!endOfRecords && jsonNode.has("offset") && jsonNode.has("limit")) {
             int offset = jsonNode.get("offset").asInt();
             int limit = jsonNode.get("limit").asInt();
-            nextPage(node, offset + limit, limit, emitter);
+            emitNextPage(node, offset + limit, limit, emitter);
         }
 
     }

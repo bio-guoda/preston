@@ -28,7 +28,7 @@ import java.util.Date;
 
 public class BlobStoreWriter extends RefNodeProcessor {
     private static Log LOG = LogFactory.getLog(CmdList.class);
-    private File tmpDir = FileUtils.getTempDirectory();
+    private File tmpDir = new File("tmp");
     private File datasetDir = new File("datasets");
 
     public BlobStoreWriter(RefNodeListener... listeners) {
@@ -50,19 +50,20 @@ public class BlobStoreWriter extends RefNodeProcessor {
 
     public static RefNode cache(RefNode refNode, File tmpDir, File dataDir) throws IOException {
         FileUtils.forceMkdir(tmpDir);
-        File cache = File.createTempFile("cacheFile", ".tmp", tmpDir);
-        final String id = calcSHA256(refNode.getData(), new FileOutputStream(cache));
+        File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
+        final String id = calcSHA256(refNode.getData(), new FileOutputStream(tmpFile));
         if (!getDataFile(id, dataDir).exists()) {
-            cacheFile(cache, new RefNodeProxyData(refNode, id), dataDir);
+            cacheFile(tmpFile, new RefNodeProxyData(refNode, id), dataDir);
         }
+        FileUtils.deleteQuietly(tmpFile);
         return new RefNodeProxyData(refNode, id, getDataFile(id, dataDir));
     }
 
-    private static void cacheFile(File dataFile, RefNode refNode, File dataDir) throws IOException {
+    private static void cacheFile(File tmpFile, RefNode refNode, File dataDir) throws IOException {
         File datasetPath = getDatasetDir(refNode.getId(), dataDir);
         FileUtils.forceMkdir(datasetPath);
         File destFile = getDataFile(refNode.getId(), dataDir);
-        FileUtils.moveFile(dataFile, destFile);
+        FileUtils.moveFile(tmpFile, destFile);
         writeMeta(refNode, datasetPath, destFile);
     }
 

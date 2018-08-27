@@ -24,14 +24,19 @@ public class RegistryReaderGBIFTest {
 
         RegistryReaderGBIF.parse(resourceAsStream, refNodes::add, new RefNodeString(null, RefNodeType.UUID, "description"));
 
-        assertThat(refNodes.size(), is(12));
+        assertThat(refNodes.size(), is(11));
+
         RefNode refNode = refNodes.get(0);
         assertThat(refNode.getType(), is(RefNodeType.UUID));
         assertThat(refNode.getLabel(), is("6555005d-4594-4a3e-be33-c70e587b63d7"));
 
-        RefNode lastRefNode = refNodes.get(3);
+        RefNode thirdRefNode = refNodes.get(3);
+        assertThat(thirdRefNode.getType(), is(RefNodeType.URI));
+        assertThat(thirdRefNode.getLabel(), is("http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06"));
+
+        RefNode lastRefNode = refNodes.get(refNodes.size() - 1);
         assertThat(lastRefNode.getType(), is(RefNodeType.URI));
-        assertThat(lastRefNode.getLabel(), is("http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06"));
+        assertThat(lastRefNode.getLabel(), is("https://api.gbif.org/v1/dataset?offset=2&limit=2"));
 
     }
 
