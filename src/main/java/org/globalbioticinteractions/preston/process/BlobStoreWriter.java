@@ -51,12 +51,15 @@ public class BlobStoreWriter extends RefNodeProcessor {
     public static RefNode cache(RefNode refNode, File tmpDir, File dataDir) throws IOException {
         FileUtils.forceMkdir(tmpDir);
         File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
-        final String id = Hasher.calcSHA256(refNode.getData(), new FileOutputStream(tmpFile));
-        if (!getDataFile(id, dataDir).exists()) {
-            cacheFile(tmpFile, new RefNodeProxyData(refNode, id), dataDir);
+        try {
+            final String id = Hasher.calcSHA256(refNode.getData(), new FileOutputStream(tmpFile));
+            if (!getDataFile(id, dataDir).exists()) {
+                cacheFile(tmpFile, new RefNodeProxyData(refNode, id), dataDir);
+            }
+            return new RefNodeProxyData(refNode, id, getDataFile(id, dataDir));
+        } finally {
+            FileUtils.deleteQuietly(tmpFile);
         }
-        FileUtils.deleteQuietly(tmpFile);
-        return new RefNodeProxyData(refNode, id, getDataFile(id, dataDir));
     }
 
     private static void cacheFile(File tmpFile, RefNode refNode, File dataDir) throws IOException {
