@@ -10,18 +10,17 @@ import org.joda.time.format.ISODateTimeFormat;
 import java.util.Date;
 
 public class LogWriter implements RefNodeListener {
-    private static Log LOG = LogFactory.getLog(CmdList.class);
-
     @Override
     public void on(RefNode refNode) {
-            System.out.println(printDataset(refNode));
+        System.out.println(printDataset(refNode));
     }
 
     public static String printDataset(RefNode refNode) {
         String accessedAt = ISODateTimeFormat.dateTime().withZoneUTC().print(new Date().getTime());
         String parentId = refNode.getParent() == null ? "" : StringUtils.defaultString(refNode.getParent().getId());
         String id = StringUtils.defaultString(refNode.getId());
-        return (parentId + "\t" + id + "\t" + refNode.getLabel() + "\t" + refNode.getType().name() + "\t" + accessedAt);
+        String size = refNode.getSize() == null ? "" : refNode.getSize().toString();
+        return (parentId + "\t" + id + "\t" + refNode.getLabel() + "\t" + refNode.getType().name() + "\t" + size + "\t" + accessedAt);
     }
 
 }
