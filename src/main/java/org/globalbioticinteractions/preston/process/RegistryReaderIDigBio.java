@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeRelation;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefNodeType;
 import org.globalbioticinteractions.preston.model.RefNodeURI;
@@ -31,7 +33,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.globalbioticinteractions.preston.RefNodeConstants.DEREFERENCE_OF;
 import static org.globalbioticinteractions.preston.model.RefNodeType.IDIGBIO_PUBLISHERS_JSON;
+import static org.globalbioticinteractions.preston.RefNodeConstants.PUBLISHER_REGISTRY_OF;
 
 public class RegistryReaderIDigBio extends RefNodeProcessor {
 
@@ -45,10 +49,11 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
     public void on(RefNode refNode) {
         if (refNode.equivalentTo(Seeds.SEED_NODE_IDIGBIO)) {
             String publishersURI = "https://search.idigbio.org/v2/search/publishers";
-            RefNode publishers = new RefNodeString(refNode, RefNodeType.URI, publishersURI);
-            RefNode publishersBlob = new RefNodeURI(publishers, IDIGBIO_PUBLISHERS_JSON, URI.create(publishersURI));
-            emit(publishers);
-            emit(publishersBlob);
+            RefNode publishers = new RefNodeString(RefNodeType.URI, publishersURI);
+            emit(new RefNodeRelation(refNode, PUBLISHER_REGISTRY_OF, publishers));
+
+            RefNodeURI refNode1 = new RefNodeURI(IDIGBIO_PUBLISHERS_JSON, URI.create(publishersURI));
+            emit(new RefNodeRelation(refNode, DEREFERENCE_OF, refNode1));
         } else if (IDIGBIO_PUBLISHERS_JSON == refNode.getType()) {
             parsePublishers(refNode);
         } else if (RSS_TYPE_MAP.values().contains(refNode.getType())) {
@@ -56,7 +61,16 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
         }
     }
 
-    public static final Map<String, RefNodeType> RSS_TYPE_MAP = new HashMap<String, RefNodeType>() {{
+
+    private void parse(RefNode refNode) {
+        try {
+            parseRssFeed(refNode, this, refNode.getData());
+        } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
+            LOG.warn("failed to parse [" + refNode.getLabel() + "] of type [" + refNode.getType() + "]");
+        }
+    }
+
+    private static final Map<String, RefNodeType> RSS_TYPE_MAP = new HashMap<String, RefNodeType>() {{
         put("feeder", RefNodeType.IDIGBIO_RSS_FEEDER);
         put("ipt", RefNodeType.IDIGBIO_RSS_IPT);
         put("rss", RefNodeType.IDIGBIO_RSS);
@@ -119,22 +133,24 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
 
             }
 
-            RefNode archiveParent = uuid == null ? parent : new RefNodeString(parent, RefNodeType.UUID, uuid.toString());
+            RefNode archiveParent = uuid == null ? parent : new RefNodeString(RefNodeType.UUID, uuid.toString());
             if (uuid != null) {
                 emitter.emit(archiveParent);
             }
 
             if (emlURI != null) {
-                RefNode uriNode = new RefNodeString(archiveParent, RefNodeType.URI, emlURI.toString());
-                emitter.emit(uriNode);
-                emitter.emit(new RefNodeURI(uriNode, RefNodeType.EML, emlURI));
+                RefNode uriNode = new RefNodeString(RefNodeType.URI, emlURI.toString());
+                RefNodeURI refNode = new RefNodeURI(RefNodeType.EML, emlURI);
+                emitter.emit(new RefNodeRelation(uriNode, DEREFERENCE_OF, refNode));
             }
 
             if (RefNodeType.DWCA == archiveType && archiveURI != null) {
-                RefNodeString refNodeDWCAUri = new RefNodeString(archiveParent, RefNodeType.URI, archiveURI.toString());
-                emitter.emit(refNodeDWCAUri);
-                emitter.emit(new RefNodeURI(refNodeDWCAUri, RefNodeType.DWCA, archiveURI));
+                RefNodeString refNodeDWCAUri = new RefNodeString(RefNodeType.URI, archiveURI.toString());
+                RefNodeURI refNode = new RefNodeURI(RefNodeType.DWCA, archiveURI);
+                emitter.emit(new RefNodeRelation(refNodeDWCAUri, DEREFERENCE_OF, refNode));
+
             }
+
         }
     }
 
@@ -143,18 +159,19 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
         if (r.has("items") && r.get("items").isArray()) {
             for (JsonNode item : r.get("items")) {
                 String publisherUUID = item.get("uuid").asText();
-                RefNodeString publisherUUIDNode = new RefNodeString(parent, RefNodeType.UUID, publisherUUID);
-                emitter.emit(publisherUUIDNode);
+                RefNodeString refNodePublisher = new RefNodeString(RefNodeType.UUID, publisherUUID);
+                emitter.emit(new RefNodeRelation(parent, RefNodeConstants.PART_OF, refNodePublisher));
                 JsonNode data = item.get("data");
                 if (item.has("data")) {
                     String rssFeedUrl = data.has("rss_url") ? data.get("rss_url").asText() : null;
                     if (StringUtils.isNotBlank(rssFeedUrl)) {
-                        RefNodeString refNode = new RefNodeString(publisherUUIDNode, RefNodeType.URI, rssFeedUrl);
+                        RefNodeString refNodeFeed = new RefNodeString(RefNodeType.URI, rssFeedUrl);
                         String publisherType = data.has("publisher_type") ? data.get("publisher_type").asText() : null;
-
                         RefNodeType type = RSS_TYPE_MAP.getOrDefault(publisherType, RefNodeType.IDIGBIO_RSS);
-                        emitter.emit(refNode);
-                        emitter.emit(new RefNodeURI(refNode, type, URI.create(rssFeedUrl)));
+                        emitter.emit(new RefNodeRelation(refNodePublisher, RefNodeConstants.FEED_OF, refNodeFeed));
+
+                        RefNodeURI refNode = new RefNodeURI(type, URI.create(rssFeedUrl));
+                        emitter.emit(new RefNodeRelation(refNodeFeed, RefNodeConstants.DEREFERENCE_OF, refNode));
                     }
                 }
             }
@@ -169,13 +186,4 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
         }
     }
 
-    private void parse(RefNode refNode) {
-        try {
-            parseRssFeed(refNode, this, refNode.getData());
-        } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
-            LOG.warn("failed to parse [" + refNode.getLabel() + "] of type [" + refNode.getType() + "]");
-        }
-
-
-    }
 }

@@ -1,26 +1,19 @@
 package org.globalbioticinteractions.preston.process;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.globalbioticinteractions.preston.cmd.CmdList;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeRelation;
+import org.globalbioticinteractions.preston.model.RefNodeType;
 import org.joda.time.format.ISODateTimeFormat;
 
 import java.util.Date;
 
-public class LogWriter implements RefNodeListener {
+public class RelationLogWriter implements RefNodeListener {
     @Override
     public void on(RefNode refNode) {
-        System.out.println(printDataset(refNode));
-    }
-
-    public static String printDataset(RefNode refNode) {
-        String accessedAt = ISODateTimeFormat.dateTime().withZoneUTC().print(new Date().getTime());
-        String id = StringUtils.defaultString(refNode.getId());
-        String size = refNode.getSize() == null ? "" : refNode.getSize().toString();
-        return (id + "\t" + refNode.getLabel() + "\t" + refNode.getType().name() + "\t" + size + "\t" + accessedAt);
+        if (refNode.getType() == RefNodeType.RELATION) {
+            System.out.println(printRelation((RefNodeRelation)refNode));
+        }
     }
 
     public static String printRelation(RefNodeRelation refNode) {

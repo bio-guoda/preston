@@ -14,8 +14,12 @@ import java.security.NoSuchAlgorithmException;
 
 public final class Hasher {
 
-    public static String calcSHA256(String str) throws IOException {
-        return calcSHA256(IOUtils.toInputStream(str, StandardCharsets.UTF_8), new NullOutputStream());
+    public static String calcSHA256(String str) {
+        try {
+            return calcSHA256(IOUtils.toInputStream(str, StandardCharsets.UTF_8), new NullOutputStream());
+        } catch (IOException e) {
+            throw new IllegalStateException("unexpected failure of hash calculation", e);
+        }
     }
 
     public static String calcSHA256(InputStream is, OutputStream os) throws IOException {

@@ -11,11 +11,6 @@ public class RefNodeProxy implements RefNode {
     }
 
     @Override
-    public RefNode getParent() {
-        return this.refNode.getParent();
-    }
-
-    @Override
     public RefNodeType getType() {
         return this.refNode.getType();
     }

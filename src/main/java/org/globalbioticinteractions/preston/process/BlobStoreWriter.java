@@ -10,10 +10,9 @@ import org.apache.commons.logging.LogFactory;
 import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.cmd.CmdList;
 import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeProxy;
 import org.globalbioticinteractions.preston.model.RefNodeProxyData;
-import org.globalbioticinteractions.preston.model.RefNodeProxyParent;
-import org.globalbioticinteractions.preston.model.RefNodeString;
-import org.globalbioticinteractions.preston.model.RefNodeType;
+import org.globalbioticinteractions.preston.model.RefNodeRelation;
 import org.joda.time.format.ISODateTimeFormat;
 
 import java.io.File;
@@ -24,7 +23,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class BlobStoreWriter extends RefNodeProcessor {
-    public static final RefNodeString DEREFERENCE_OF = new RefNodeString(null, RefNodeType.URI, "http://example.org/dereferenceOf");
+
     private static Log LOG = LogFactory.getLog(CmdList.class);
     private File tmpDir = new File("tmp");
     private File datasetDir = new File("datasets");
@@ -36,19 +35,33 @@ public class BlobStoreWriter extends RefNodeProcessor {
     @Override
     public void on(RefNode refNode) {
         try {
-            RefNode parentCached = refNode.getParent() == null
-                    ? null
-                    : cache(refNode.getParent(), getTmpDir(), getDatasetDir());
-            RefNode refNodeWithCachedParent = new RefNodeProxyParent(parentCached, refNode);
-            RefNode dereferencedNode = cache(refNodeWithCachedParent, getTmpDir(), getDatasetDir());
-            emit(dereferencedNode);
-            emit(new RefNodeRelation(parentCached, DEREFERENCE_OF, dereferencedNode));
+            if (refNode instanceof RefNodeRelation) {
+                RefNode source = ((RefNodeRelation) refNode).getSource();
+                RefNode relationType = ((RefNodeRelation) refNode).getRelationType();
+                RefNode target = ((RefNodeRelation) refNode).getTarget();
+                RefNode cachedSource = cache(source);
+                emit(cachedSource);
+                RefNode cachedRelationshipType = cache(relationType);
+                emit(cachedRelationshipType);
+                RefNode cachedTarget = cache(target);
+                emit(cachedTarget);
+
+                emit(cache(new RefNodeRelation(cachedSource, cachedRelationshipType, cachedTarget), false));
+            }
         } catch (IOException e) {
             LOG.warn("failed to handle [" + refNode.getLabel() + "]", e);
         }
     }
 
-    public static RefNode cache(RefNode refNode, File tmpDir, File dataDir) throws IOException {
+    private RefNode cache(RefNode refNode) throws IOException {
+        return cache(refNode, true);
+    }
+
+    private RefNode cache(RefNode refNode, boolean withProxy) throws IOException {
+        return cache(refNode, getTmpDir(), getDatasetDir(), withProxy);
+    }
+
+    public static RefNode cache(RefNode refNode, File tmpDir, File dataDir, boolean withProxy) throws IOException {
         FileUtils.forceMkdir(tmpDir);
         File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
         try {
@@ -56,7 +69,9 @@ public class BlobStoreWriter extends RefNodeProcessor {
             if (!getDataFile(id, dataDir).exists()) {
                 cacheFile(tmpFile, new RefNodeProxyData(refNode, id), dataDir);
             }
-            return new RefNodeProxyData(refNode, id, getDataFile(id, dataDir));
+            return withProxy
+                    ? new RefNodeProxyData(refNode, id, getDataFile(id, dataDir))
+                    : refNode;
         } finally {
             FileUtils.deleteQuietly(tmpFile);
         }
@@ -71,17 +86,21 @@ public class BlobStoreWriter extends RefNodeProcessor {
     }
 
     private static void writeMeta(RefNode refNode, File datasetPath, File destFile) throws IOException {
-        ObjectNode node = new ObjectMapper().createObjectNode();
-        node.put("id", refNode.getId());
-        if (null != refNode.getParent()) {
-            node.put("parentId", refNode.getParent().getId());
-        }
-        node.put("type", refNode.getType().toString());
+        ObjectNode node = asJson(refNode);
+
         if (destFile.exists()) {
             node.put("size", destFile.length());
         }
         node.put("created", ISODateTimeFormat.dateTime().withZoneUTC().print(new Date().getTime()));
+
         FileUtils.copyToFile(IOUtils.toInputStream(node.toString(), StandardCharsets.UTF_8), new File(datasetPath, "meta.json"));
+    }
+
+    private static ObjectNode asJson(RefNode refNode) {
+        ObjectNode node = new ObjectMapper().createObjectNode();
+        node.put("id", refNode.getId());
+        node.put("type", refNode.getType().toString());
+        return node;
     }
 
     public static File getDataFile(String id, File dataDir) {
@@ -103,19 +122,19 @@ public class BlobStoreWriter extends RefNodeProcessor {
     }
 
 
-    public File getTmpDir() {
+    private File getTmpDir() {
         return tmpDir;
     }
 
-    public void setTmpDir(File tmpDir) {
+    void setTmpDir(File tmpDir) {
         this.tmpDir = tmpDir;
     }
 
-    public File getDatasetDir() {
+    private File getDatasetDir() {
         return datasetDir;
     }
 
-    public void setDatasetDir(File datasetDir) {
+    void setDatasetDir(File datasetDir) {
         this.datasetDir = datasetDir;
     }
 }

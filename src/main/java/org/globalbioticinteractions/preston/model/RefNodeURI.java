@@ -10,8 +10,8 @@ import java.util.Objects;
 public class RefNodeURI extends RefNodeImpl {
     private final URI dataURI;
 
-    public RefNodeURI(RefNode parent, RefNodeType type, URI uri) {
-        super(parent, type);
+    public RefNodeURI(RefNodeType type, URI uri) {
+        super(type);
         this.dataURI = uri;
     }
 

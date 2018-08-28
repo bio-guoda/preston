@@ -2,8 +2,7 @@ package org.globalbioticinteractions.preston.model;
 
 public enum RefNodeType {
     DWCA,
-    URI,
-    UUID,
+    EML,
     GBIF_DATASETS_JSON,
     IDIGBIO_RSS_FEEDER,
     IDIGBIO_RSS_IPT,
@@ -11,5 +10,8 @@ public enum RefNodeType {
     IDIGBIO_RSS_SYMBIOTA,
     IDIGBIO_PUBLISHERS_JSON,
     RELATION,
-    EML
+    URI,
+    UUID;
 }
+
+

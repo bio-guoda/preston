@@ -5,8 +5,6 @@ import java.io.InputStream;
 
 public interface RefNode {
 
-    RefNode getParent();
-
     RefNodeType getType();
 
     InputStream getData() throws IOException;

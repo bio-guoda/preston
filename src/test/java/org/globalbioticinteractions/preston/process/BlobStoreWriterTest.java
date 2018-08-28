@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeProxyData;
+import org.globalbioticinteractions.preston.model.RefNodeRelation;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefNodeType;
 import org.globalbioticinteractions.preston.model.RefNodeURI;
@@ -48,7 +50,7 @@ public class BlobStoreWriterTest {
 
         BlobStoreWriter blobStoreWriter = new BlobStoreWriter(refNodes::add);
         blobStoreWriter.setTmpDir(new File("target/"));
-        RefNodeString providedNode = new RefNodeString(null, RefNodeType.URI, "https://example.org");
+        RefNodeString providedNode = new RefNodeString(RefNodeType.URI, "https://example.org");
         blobStoreWriter.on(providedNode);
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
@@ -74,26 +76,27 @@ public class BlobStoreWriterTest {
         blobStoreWriter.setTmpDir(tempDir.toFile());
         blobStoreWriter.setDatasetDir(datasetDir.toFile());
         URI testURI = getClass().getResource("test.txt").toURI();
-        RefNode providedNode = new RefNodeString(null, RefNodeType.URI, testURI.toString());
-        RefNode providedNodeBlob = new RefNodeURI(providedNode, RefNodeType.URI, testURI);
-        blobStoreWriter.on(providedNodeBlob);
+        RefNode providedNode = new RefNodeString(RefNodeType.URI, testURI.toString());
+        RefNode providedNodeBlob = new RefNodeURI(RefNodeType.URI, testURI);
+        RefNode relation = new RefNodeRelation(providedNode, RefNodeConstants.DEREFERENCE_OF, providedNodeBlob);
+
+        blobStoreWriter.on(relation);
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
-        assertThat(refNodes.size(), is(2));
+        assertThat(refNodes.size(), is(4));
 
-        RefNode linkNode = refNodes.get(1);
+        RefNode linkNode = refNodes.get(3);
         assertThat(linkNode, is(instanceOf(RefNodeRelation.class)));
-        assertThat(linkNode.getParent().getLabel(), is(providedNode.getLabel()));
         assertThat(((RefNodeRelation)linkNode).getTarget().getLabel(), is(providedNodeBlob.getLabel()));
-        assertThat(((RefNodeRelation)linkNode).getRelationType().getLabel(), is(BlobStoreWriter.DEREFERENCE_OF.getLabel()));
+        assertThat(((RefNodeRelation)linkNode).getRelationType().getLabel(), is(RefNodeConstants.DEREFERENCE_OF.getLabel()));
 
         RefNode cachedNode = refNodes.get(0);
-        String expectedSHA256 = "50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
+        String expectedSHA256 = "4be693a8d624f6905339ece8d714bd81a62136a4f738b24580462f6f5e85a5fb";
         assertThat(cachedNode.getId(), is(expectedSHA256));
-        assertThat(cachedNode.getSize(), is(19L));
+        assertThat(cachedNode.getSize(), is(109L));
         assertThat(cachedNode.getType(), is(RefNodeType.URI));
         assertThat(cachedNode, is(instanceOf(RefNodeProxyData.class)));
-        assertTrue(cachedNode.equivalentTo(providedNodeBlob));
+        assertTrue(cachedNode.equivalentTo(providedNode));
 
         String baseCacheDir = "/50/d7/a9/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b/";
         String absCacheDir = datasetDir.toAbsolutePath().toString() + baseCacheDir;
@@ -107,20 +110,19 @@ public class BlobStoreWriterTest {
             fields.next();
             count++;
         }
-        assertThat(count, is(5));
-        assertThat(jsonNode.get("id").asText(), is(expectedSHA256));
+        assertThat(count, is(4));
+        assertThat(jsonNode.get("id").asText(), is("50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
         assertThat(jsonNode.get("size").asLong(), is(19L));
         assertTrue(jsonNode.has("created"));
         DateTime created = ISODateTimeFormat.dateTime().withZoneUTC().parseDateTime(jsonNode.get("created").asText());
         assertThat(created, is(notNullValue()));
-        assertTrue(jsonNode.has("parentId"));
 
 
         File data = new File(absCacheDir + "data");
         assertTrue(data.exists());
         assertThat(IOUtils.toString(data.toURI(), StandardCharsets.UTF_8), is("https://example.org"));
 
-
+        System.out.println(absCacheDir);
 
         FileUtils.deleteQuietly(tempDir.toFile());
     }

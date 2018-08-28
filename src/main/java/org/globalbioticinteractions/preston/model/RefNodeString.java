@@ -2,6 +2,7 @@ package org.globalbioticinteractions.preston.model;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.globalbioticinteractions.preston.Hasher;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,9 +11,10 @@ import java.util.Objects;
 
 public class RefNodeString extends RefNodeImpl {
     private final String data;
+    private String id;
 
-    public RefNodeString(RefNode parent, RefNodeType type, String data) {
-        super(parent, type);
+    public RefNodeString(RefNodeType type, String data) {
+        super(type);
         this.data = data;
     }
 
@@ -29,6 +31,14 @@ public class RefNodeString extends RefNodeImpl {
     @Override
     public Long getSize() {
         return data == null ? null : (long) data.getBytes().length;
+    }
+
+    @Override
+    public String getId() {
+        if (id == null) {
+            id = Hasher.calcSHA256(data);
+        }
+        return id;
     }
 
     @Override

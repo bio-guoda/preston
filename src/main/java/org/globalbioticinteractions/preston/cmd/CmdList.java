@@ -2,19 +2,19 @@ package org.globalbioticinteractions.preston.cmd;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import org.globalbioticinteractions.preston.RefNodeConstants;
+import org.globalbioticinteractions.preston.model.RefNodeRelation;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefNodeType;
 import org.globalbioticinteractions.preston.process.BlobStoreWriter;
 import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
-import org.globalbioticinteractions.preston.process.LogWriter;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.process.RefNodeListener;
 import org.globalbioticinteractions.preston.process.RegistryReaderIDigBio;
+import org.globalbioticinteractions.preston.process.RelationLogWriter;
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -32,8 +32,11 @@ public class CmdList implements Runnable {
     @Override
     public void run() {
         final List<RefNode> seeds = seedUrls.stream()
-                .map(uriString -> new RefNodeString(null, RefNodeType.URI, uriString))
-                .collect(Collectors.toList());
+                .map(uriString -> {
+                    RefNodeString refNodeRoot = RefNodeConstants.SEED_ROOT;
+                    RefNodeString refNodeSeed = new RefNodeString(RefNodeType.URI, uriString);
+                    return new RefNodeRelation(refNodeRoot, RefNodeConstants.SEED_OF, refNodeSeed);
+                }).collect(Collectors.toList());
 
         final Queue<RefNode> refNodes =
                 new ConcurrentLinkedQueue<RefNode>() {{
@@ -43,7 +46,7 @@ public class CmdList implements Runnable {
         final RefNodeListener listener = new BlobStoreWriter(
                 new RegistryReaderIDigBio(refNodes::add),
                 new RegistryReaderGBIF(refNodes::add),
-                new LogWriter());
+                new RelationLogWriter());
 
         while (!refNodes.isEmpty()) {
             listener.on(refNodes.poll());
