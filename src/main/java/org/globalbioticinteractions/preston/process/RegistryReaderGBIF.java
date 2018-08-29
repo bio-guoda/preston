@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefNodeRelation;
+import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 
 import java.io.IOException;
@@ -31,11 +31,11 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
     }
 
     @Override
-    public void on(RefNodeRelation relation) {
+    public void on(RefStatement relation) {
         if (relation.getTarget().equivalentTo(Seeds.SEED_NODE_GBIF)) {
             RefNode refNodeRegistry = new RefNodeString(GBIF_DATASET_API_ENDPOINT);
-            emit(new RefNodeRelation(relation.getTarget(), DATASET_REGISTRY_OF, refNodeRegistry));
-            emit(new RefNodeRelation(refNodeRegistry, HAS_CONTENT, null));
+            emit(new RefStatement(relation.getTarget(), DATASET_REGISTRY_OF, refNodeRegistry));
+            emit(new RefStatement(refNodeRegistry, HAS_CONTENT, null));
 
         } else if (relation.getTarget() != null
                 && relation.getSource().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
@@ -47,7 +47,7 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
             }
         } else if (relation.getTarget() != null) {
             if (StringUtils.startsWith(relation.getTarget().getLabel(), GBIF_DATASET_API_ENDPOINT)) {
-                emit(new RefNodeRelation(relation.getTarget(), HAS_CONTENT, null));
+                emit(new RefStatement(relation.getTarget(), HAS_CONTENT, null));
             }
         }
     }
@@ -55,7 +55,7 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
     private static void emitNextPage(RefNode previousPage, int offset, int limit, RefNodeEmitter emitter) {
         String uri = GBIF_DATASET_API_ENDPOINT + "?offset=" + offset + "&limit=" + limit;
         RefNode nextPage = new RefNodeString(uri);
-        emitter.emit(new RefNodeRelation(previousPage, HAS_PART, nextPage));
+        emitter.emit(new RefStatement(previousPage, HAS_PART, nextPage));
 
     }
 
@@ -66,7 +66,7 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
                 if (result.has("key") && result.has("endpoints")) {
                     String uuid = result.get("key").asText();
                     RefNodeString datasetUUID = new RefNodeString(uuid);
-                    emitter.emit(new RefNodeRelation(dataset, RefNodeConstants.HAS_PART, datasetUUID));
+                    emitter.emit(new RefStatement(dataset, RefNodeConstants.HAS_PART, datasetUUID));
 
                     for (JsonNode endpoint : result.get("endpoints")) {
                         if (endpoint.has("url") && endpoint.has("type")) {
@@ -74,9 +74,9 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
                             String type = endpoint.get("type").asText();
                             if (SUPPORTED_ENDPOINT_TYPES.contains(type)) {
                                 RefNodeString dataArchive = new RefNodeString(urlString);
-                                emitter.emit(new RefNodeRelation(datasetUUID, RefNodeConstants.HAS_PART, dataArchive));
+                                emitter.emit(new RefStatement(datasetUUID, RefNodeConstants.HAS_PART, dataArchive));
 
-                                emitter.emit(new RefNodeRelation(dataArchive, RefNodeConstants.HAS_CONTENT, null));
+                                emitter.emit(new RefStatement(dataArchive, RefNodeConstants.HAS_CONTENT, null));
                             }
                         }
                     }

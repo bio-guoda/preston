@@ -8,14 +8,14 @@ import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
-public class RefNodeRelation {
+public class RefStatement {
 
     private final RefNode source;
     private final RefNode target;
     private final RefNode relationType;
     private URI id;
     
-    public RefNodeRelation(RefNode source, RefNode relationType, RefNode target) {
+    public RefStatement(RefNode source, RefNode relationType, RefNode target) {
         this.relationType = relationType;
         this.source = source;
         this.target = target;
@@ -43,7 +43,7 @@ public class RefNodeRelation {
         return "[" + getSource().getLabel() + "]-[:" + getRelationType().getLabel() + "]->[" + (getTarget() == null ? "?" : getTarget().getLabel()) + "]";
     }
 
-    public boolean equivalentTo(RefNodeRelation other) {
+    public boolean equivalentTo(RefStatement other) {
         return (getTarget().equivalentTo(other.getTarget()))
                 && (getRelationType().equivalentTo(other.getRelationType()))
                 && (getSource().equivalentTo(other.getSource()));

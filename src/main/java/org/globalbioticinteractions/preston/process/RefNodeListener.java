@@ -1,7 +1,7 @@
 package org.globalbioticinteractions.preston.process;
 
-import org.globalbioticinteractions.preston.model.RefNodeRelation;
+import org.globalbioticinteractions.preston.model.RefStatement;
 
 public interface RefNodeListener {
-    void on(RefNodeRelation relation);
+    void on(RefStatement relation);
 }

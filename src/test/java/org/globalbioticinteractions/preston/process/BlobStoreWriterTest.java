@@ -6,7 +6,7 @@ import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefNodeRelation;
+import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.AppendOnlyRelationStore;
@@ -63,15 +63,15 @@ public class BlobStoreWriterTest {
 
     @Test
     public void cacheString() throws IOException {
-        ArrayList<RefNodeRelation> refNodes = new ArrayList<>();
+        ArrayList<RefStatement> refNodes = new ArrayList<>();
 
         BlobStoreWriter blobStoreWriter = new BlobStoreWriter(this.blobStore, this.relationStore, refNodes::add);
         RefNodeString providedNode = new RefNodeString("https://example.org");
-        blobStoreWriter.on(new RefNodeRelation(providedNode, RefNodeConstants.HAS_PART, providedNode));
+        blobStoreWriter.on(new RefStatement(providedNode, RefNodeConstants.HAS_PART, providedNode));
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
 
-        RefNodeRelation cachedNode = refNodes.get(0);
+        RefStatement cachedNode = refNodes.get(0);
         assertThat(cachedNode.getSource().getId().toString(), is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
         assertThat(cachedNode.getSource().getLabel(), is("https://example.org"));
         assertTrue(cachedNode.getSource().equivalentTo(providedNode));
@@ -81,21 +81,21 @@ public class BlobStoreWriterTest {
 
     @Test
     public void cacheContent() throws IOException, URISyntaxException {
-        ArrayList<RefNodeRelation> refNodes = new ArrayList<>();
+        ArrayList<RefStatement> refNodes = new ArrayList<>();
 
         BlobStoreWriter blobStoreWriter = new BlobStoreWriter(this.blobStore, this.relationStore, refNodes::add);
 
 
         URI testURI = getClass().getResource("test.txt").toURI();
         RefNode providedNode = new RefNodeString(testURI.toString());
-        RefNodeRelation relation = new RefNodeRelation(providedNode, RefNodeConstants.HAS_CONTENT, null);
+        RefStatement relation = new RefStatement(providedNode, RefNodeConstants.HAS_CONTENT, null);
 
         blobStoreWriter.on(relation);
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
         assertThat(refNodes.size(), is(1));
 
-        RefNodeRelation cachedNode = refNodes.get(0);
+        RefStatement cachedNode = refNodes.get(0);
         String expectedSHA256 = "hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
         assertThat(cachedNode.getTarget().getId().toString(), is(expectedSHA256));
 
