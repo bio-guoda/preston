@@ -137,16 +137,18 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
 
             RefNode archiveParent = uuid == null ? parent : new RefNodeString(RefNodeType.UUID, uuid.toString());
             if (uuid != null) {
-                emitter.emit(new RefNodeRelation(archiveParent, HAS_PART, parent));
+                emitter.emit(new RefNodeRelation(parent, HAS_PART, archiveParent));
             }
 
             if (emlURI != null) {
                 RefNode uriNode = new RefNodeString(RefNodeType.URI, emlURI.toString());
+                emitter.emit(new RefNodeRelation(archiveParent, HAS_PART, uriNode));
                 emitter.emit(new RefNodeRelation(uriNode, HAS_CONTENT, null));
             }
 
             if (RefNodeType.DWCA == archiveType && archiveURI != null) {
                 RefNodeString refNodeDWCAUri = new RefNodeString(RefNodeType.URI, archiveURI.toString());
+                emitter.emit(new RefNodeRelation(archiveParent, HAS_PART, refNodeDWCAUri));
                 emitter.emit(new RefNodeRelation(refNodeDWCAUri, HAS_CONTENT, null));
 
             }
@@ -166,12 +168,8 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
                     String rssFeedUrl = data.has("rss_url") ? data.get("rss_url").asText() : null;
                     if (StringUtils.isNotBlank(rssFeedUrl)) {
                         RefNodeString refNodeFeed = new RefNodeString(RefNodeType.URI, rssFeedUrl);
-                        String publisherType = data.has("publisher_type") ? data.get("publisher_type").asText() : null;
-                        RefNodeType type = RSS_TYPE_MAP.getOrDefault(publisherType, RefNodeType.IDIGBIO_RSS);
-                        emitter.emit(new RefNodeRelation(refNodePublisher, RefNodeConstants.FEED_OF, refNodeFeed));
-
-                        RefNodeURI refNode = new RefNodeURI(type, URI.create(rssFeedUrl));
-                        emitter.emit(new RefNodeRelation(refNodeFeed, RefNodeConstants.DEREFERENCE_OF, refNode));
+                        emitter.emit(new RefNodeRelation(refNodePublisher, RefNodeConstants.HAS_FEED, refNodeFeed));
+                        emitter.emit(new RefNodeRelation(refNodeFeed, RefNodeConstants.HAS_CONTENT, null));
                     }
                 }
             }
