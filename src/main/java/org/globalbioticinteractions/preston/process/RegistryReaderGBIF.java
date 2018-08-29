@@ -41,7 +41,7 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
                 && relation.getSource().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
                 && relation.getRelationType().equals(RefNodeConstants.HAS_CONTENT)) {
             try {
-                parse(relation.getTarget().getData(), this, relation.getTarget());
+                parse(relation.getTarget().getContent(), this, relation.getTarget());
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + relation.getLabel() + "]", e);
             }

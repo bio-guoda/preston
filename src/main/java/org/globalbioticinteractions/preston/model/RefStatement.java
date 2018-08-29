@@ -26,9 +26,9 @@ public class RefStatement {
     }
 
     private String getDataString() {
-        String sourceId = getSource() == null ? "" : getSource().getId().toString();
-        String relationshipTypeId = getRelationType() == null ? "" : getRelationType().getId().toString();
-        String targetId = getTarget() == null ? "" : getTarget().getId().toString();
+        String sourceId = getSource() == null ? "" : getSource().getContentHash().toString();
+        String relationshipTypeId = getRelationType() == null ? "" : getRelationType().getContentHash().toString();
+        String targetId = getTarget() == null ? "" : getTarget().getContentHash().toString();
         return sourceId + relationshipTypeId + targetId;
     }
 

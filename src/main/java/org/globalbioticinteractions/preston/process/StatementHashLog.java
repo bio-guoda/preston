@@ -19,9 +19,9 @@ public class StatementHashLog implements RefNodeListener {
     }
 
     String printStatement(RefStatement statement) {
-        URI sourceId = statement.getSource().getId();
-        URI relationTypeId = statement.getRelationType().getId();
-        URI targetId = statement.getTarget().getId();
+        URI sourceId = statement.getSource().getContentHash();
+        URI relationTypeId = statement.getRelationType().getContentHash();
+        URI targetId = statement.getTarget().getContentHash();
         String relationId = statement.getId().toString();
         return relationId + "\t" + sourceId + "\t" + relationTypeId + "\t" + targetId;
     }

@@ -10,36 +10,36 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 public class RefNodeString implements RefNode {
-    private final String data;
-    private URI id;
+    private final String content;
+    private URI hash;
 
-    public RefNodeString(String data) {
+    public RefNodeString(String content) {
         super();
-        this.data = data;
+        this.content = content;
     }
 
     @Override
-    public InputStream getData() throws IOException {
-        return IOUtils.toInputStream(data, StandardCharsets.UTF_8);
+    public InputStream getContent() throws IOException {
+        return IOUtils.toInputStream(content, StandardCharsets.UTF_8);
     }
 
     @Override
     public String getLabel() {
-        return data;
+        return content;
     }
 
     @Override
-    public URI getId() {
-        if (id == null) {
-            id = Hasher.calcSHA256(data);
+    public URI getContentHash() {
+        if (hash == null) {
+            hash = Hasher.calcSHA256(content);
         }
-        return id;
+        return hash;
     }
 
     @Override
     public boolean equivalentTo(RefNode other) {
         return other instanceof RefNodeString
-                && StringUtils.equals(data, ((RefNodeString) other).data);
+                && StringUtils.equals(content, ((RefNodeString) other).content);
     }
 
 }

@@ -6,11 +6,11 @@ import java.net.URI;
 
 public interface RefNode {
 
-    InputStream getData() throws IOException;
+    InputStream getContent() throws IOException;
 
     String getLabel();
 
-    URI getId();
+    URI getContentHash();
 
     boolean equivalentTo(RefNode node);
 }

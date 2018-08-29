@@ -6,7 +6,7 @@
     <artifactId>preston</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Preston commandline tool</name>
-    <description>Discover, cache and check occurrence data</description>
+    <description>Discover, cache and check occurrence content</description>
 
     <dependencies>
         <dependency>

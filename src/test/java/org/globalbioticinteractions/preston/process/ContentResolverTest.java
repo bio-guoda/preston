@@ -32,7 +32,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class BlobStoreWriterTest {
+public class ContentResolverTest {
 
     private AppendOnlyBlobStore blobStore;
     private AppendOnlyRelationStore relationStore;
@@ -65,14 +65,14 @@ public class BlobStoreWriterTest {
     public void cacheString() throws IOException {
         ArrayList<RefStatement> refNodes = new ArrayList<>();
 
-        BlobStoreWriter blobStoreWriter = new BlobStoreWriter(this.blobStore, this.relationStore, refNodes::add);
+        ContentResolver contentResolver = new ContentResolver(this.blobStore, this.relationStore, refNodes::add);
         RefNodeString providedNode = new RefNodeString("https://example.org");
-        blobStoreWriter.on(new RefStatement(providedNode, RefNodeConstants.HAS_PART, providedNode));
+        contentResolver.on(new RefStatement(providedNode, RefNodeConstants.HAS_PART, providedNode));
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
 
         RefStatement cachedNode = refNodes.get(0);
-        assertThat(cachedNode.getSource().getId().toString(), is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
+        assertThat(cachedNode.getSource().getContentHash().toString(), is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
         assertThat(cachedNode.getSource().getLabel(), is("https://example.org"));
         assertTrue(cachedNode.getSource().equivalentTo(providedNode));
 
@@ -83,21 +83,21 @@ public class BlobStoreWriterTest {
     public void cacheContent() throws IOException, URISyntaxException {
         ArrayList<RefStatement> refNodes = new ArrayList<>();
 
-        BlobStoreWriter blobStoreWriter = new BlobStoreWriter(this.blobStore, this.relationStore, refNodes::add);
+        ContentResolver contentResolver = new ContentResolver(this.blobStore, this.relationStore, refNodes::add);
 
 
         URI testURI = getClass().getResource("test.txt").toURI();
         RefNode providedNode = new RefNodeString(testURI.toString());
         RefStatement relation = new RefStatement(providedNode, RefNodeConstants.HAS_CONTENT, null);
 
-        blobStoreWriter.on(relation);
+        contentResolver.on(relation);
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
         assertThat(refNodes.size(), is(1));
 
         RefStatement cachedNode = refNodes.get(0);
         String expectedSHA256 = "hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
-        assertThat(cachedNode.getTarget().getId().toString(), is(expectedSHA256));
+        assertThat(cachedNode.getTarget().getContentHash().toString(), is(expectedSHA256));
 
         String label = cachedNode.getTarget().getLabel();
         assertThat(label, is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
@@ -106,7 +106,7 @@ public class BlobStoreWriterTest {
 
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is("https://example.org"));
 
-        inputStream = cachedNode.getTarget().getData();
+        inputStream = cachedNode.getTarget().getContent();
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is("https://example.org"));
 
         String baseCacheDir = "/50/d7/a9/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b/";

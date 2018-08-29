@@ -6,7 +6,7 @@ import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.model.RefNodeString;
-import org.globalbioticinteractions.preston.process.BlobStoreWriter;
+import org.globalbioticinteractions.preston.process.ContentResolver;
 import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.process.RefNodeListener;
@@ -49,7 +49,7 @@ public class CmdList implements Runnable {
         AppendOnlyBlobStore blobStore = new AppendOnlyBlobStore(persistence);
         AppendOnlyRelationStore relationStore = new AppendOnlyRelationStore(blobStore, persistence, Resources::asInputStream);
 
-        final RefNodeListener listener = new BlobStoreWriter(blobStore, relationStore,
+        final RefNodeListener listener = new ContentResolver(blobStore, relationStore,
                 new RegistryReaderIDigBio(statements::add),
                 new RegistryReaderGBIF(statements::add),
                 new StatementLog());

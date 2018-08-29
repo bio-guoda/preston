@@ -62,7 +62,7 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
 
     private void parse(RefNode refNode) {
         try {
-            parseRssFeed(refNode, this, refNode.getData());
+            parseRssFeed(refNode, this, refNode.getContent());
         } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
             LOG.warn( "can't read [" + refNode.getLabel() + "]", e);
         }
@@ -160,7 +160,7 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
 
     private void parsePublishers(RefNode refNode) {
         try {
-            parsePublishers(refNode, this, refNode.getData());
+            parsePublishers(refNode, this, refNode.getContent());
         } catch (IOException e) {
             LOG.warn("failed to parse [" + refNode.getLabel() + "]", e);
         }

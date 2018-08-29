@@ -16,13 +16,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
-public class BlobStoreWriter extends RefNodeProcessor {
+public class ContentResolver extends RefNodeProcessor {
 
     private static Log LOG = LogFactory.getLog(CmdList.class);
     private final BlobStore store;
     private final RelationStore<URI> relationStore;
 
-    public BlobStoreWriter(BlobStore store, RelationStore<URI> relationStore, RefNodeListener... listeners) {
+    public ContentResolver(BlobStore store, RelationStore<URI> relationStore, RefNodeListener... listeners) {
         super(listeners);
         this.store = store;
         this.relationStore = relationStore;
@@ -47,24 +47,24 @@ public class BlobStoreWriter extends RefNodeProcessor {
                     RefNode resolvedContentNode = new RefNode() {
 
                         @Override
-                        public InputStream getData() throws IOException {
-                            return store.get(getId());
+                        public InputStream getContent() throws IOException {
+                            return store.get(getContentHash());
                         }
 
                         @Override
                         public String getLabel() {
-                            return getId().toString();
+                            return getContentHash().toString();
                         }
 
                         @Override
-                        public URI getId() {
+                        public URI getContentHash() {
                             return key;
                         }
 
                         @Override
                         public boolean equivalentTo(RefNode node) {
-                            URI id = getId();
-                            URI otherId = node == null ? null : node.getId();
+                            URI id = getContentHash();
+                            URI otherId = node == null ? null : node.getContentHash();
                             return id != null && id.equals(otherId);
                         }
                     };
