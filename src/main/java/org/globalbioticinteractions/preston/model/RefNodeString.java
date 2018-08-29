@@ -6,11 +6,12 @@ import org.globalbioticinteractions.preston.Hasher;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 public class RefNodeString implements RefNode {
     private final String data;
-    private String id;
+    private URI id;
 
     public RefNodeString(String data) {
         super();
@@ -28,7 +29,7 @@ public class RefNodeString implements RefNode {
     }
 
     @Override
-    public String getId() {
+    public URI getId() {
         if (id == null) {
             id = Hasher.calcSHA256(data);
         }

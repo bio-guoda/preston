@@ -2,6 +2,7 @@ package org.globalbioticinteractions.preston.process;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.model.RefNode;
@@ -56,7 +57,7 @@ public class BlobStoreWriterTest {
 
     @Test
     public void generatePathFromUUID() {
-        assertThat(BlobStoreWriter.toPath("3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"),
+        assertThat(FilePersistence.toPath("hash://sha256/3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"),
                 is("3f/c9/b6/3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"));
     }
 
@@ -71,7 +72,7 @@ public class BlobStoreWriterTest {
         assertFalse(refNodes.isEmpty());
 
         RefNodeRelation cachedNode = refNodes.get(0);
-        assertThat(cachedNode.getSource().getId(), is("50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
+        assertThat(cachedNode.getSource().getId().toString(), is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
         assertThat(cachedNode.getSource().getLabel(), is("https://example.org"));
         assertTrue(cachedNode.getSource().equivalentTo(providedNode));
 
@@ -94,14 +95,14 @@ public class BlobStoreWriterTest {
         assertFalse(refNodes.isEmpty());
         assertThat(refNodes.size(), is(1));
 
-        RefNodeRelation cachedNode = (RefNodeRelation)refNodes.get(0);
-        String expectedSHA256 = "50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
-        assertThat(cachedNode.getTarget().getId(), is(expectedSHA256));
+        RefNodeRelation cachedNode = refNodes.get(0);
+        String expectedSHA256 = "hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
+        assertThat(cachedNode.getTarget().getId().toString(), is(expectedSHA256));
 
         String label = cachedNode.getTarget().getLabel();
-        assertThat(label, is("preston:50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
+        assertThat(label, is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
 
-        InputStream inputStream = blobStore.get("preston:50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b");
+        InputStream inputStream = blobStore.get(Hasher.toHashURI("50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
 
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is("https://example.org"));
 

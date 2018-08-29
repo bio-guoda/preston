@@ -1,7 +1,6 @@
 package org.globalbioticinteractions.preston.store;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.globalbioticinteractions.preston.Hasher;
@@ -33,57 +32,59 @@ public class AppendOnlyRelationStore implements RelationStore<URI> {
         URI subj = statement.getLeft();
 
         if (Predicate.HAS_CONTENT.equals(predicate) && object == null) {
-            String mostRecentVersionId = findMostRecentVersion(subj);
+            URI mostRecentVersionId = findMostRecentVersion(subj);
 
-            String updatedId = null;
+            URI updatedId = null;
             if (getDereferencer() != null) {
                 InputStream data = getDereferencer().dereference(subj);
                 updatedId = blobStore.putBlob(data);
             }
 
-            if (StringUtils.isNotBlank(mostRecentVersionId) && !StringUtils.equals(mostRecentVersionId, updatedId)) {
-                put(Pair.of(URI.create("preston:" + mostRecentVersionId), Predicate.SUCCEEDED_BY), updatedId);
-                put(Pair.of(URI.create("preston:" + updatedId), Predicate.HAS_CONTENT_HASH), updatedId);
-            } else if (StringUtils.isNotBlank(updatedId)) {
+            if (null != mostRecentVersionId && !mostRecentVersionId.equals(updatedId)) {
+                put(Pair.of(mostRecentVersionId, Predicate.SUCCEEDED_BY), updatedId);
+                put(Pair.of(updatedId, Predicate.HAS_CONTENT_HASH), updatedId);
+            } else if (null != updatedId) {
                 put(Pair.of(subj, Predicate.HAS_CONTENT_HASH), updatedId);
             }
         } else if (object != null) {
-            String value = blobStore.putBlob(object);
+            URI value = blobStore.putBlob(object);
             put(Pair.of(subj, predicate), value);
         }
     }
-    
-    private String findMostRecentVersion(URI subj) throws IOException {
-        String existingId = findKey(Pair.of(subj, Predicate.HAS_CONTENT_HASH));
-        return StringUtils.isBlank(existingId) ? null : findLastVersionId(existingId);
+
+    private URI findMostRecentVersion(URI subj) throws IOException {
+        URI existingId = findKey(Pair.of(subj, Predicate.HAS_CONTENT_HASH));
+        return null == existingId ? null : findLastVersionId(existingId);
     }
 
-    private String findLastVersionId(String existingId) throws IOException {
-        String lastVersionId = existingId;
-        String newerVersionId;
-        while ((newerVersionId = findKey(Pair.of(URI.create("preston:" + lastVersionId), Predicate.SUCCEEDED_BY))) != null) {
+    private URI findLastVersionId(URI existingId) throws IOException {
+        URI lastVersionId = existingId;
+        URI newerVersionId;
+        while ((newerVersionId = findKey(Pair.of(lastVersionId, Predicate.SUCCEEDED_BY))) != null) {
             lastVersionId = newerVersionId;
         }
         return lastVersionId;
     }
 
     @Override
-    public void put(Pair<URI, URI> partialStatement, String value) throws IOException {
+    public void put(Pair<URI, URI> partialStatement, URI value) throws IOException {
         // write-once, read-many
-        String key = calculateKeyFor(partialStatement);
-        persistence.put(key, value);
+        URI key = calculateKeyFor(partialStatement);
+        persistence.put(key.toString(), value.toString());
     }
 
-    private String calculateKeyFor(Pair<URI, URI> unhashedKeyPair) {
-        String left = Hasher.calcSHA256(unhashedKeyPair.getLeft().toString());
-        String right = Hasher.calcSHA256(unhashedKeyPair.getRight().toString());
-        return Hasher.calcSHA256(left + right);
+    private URI calculateKeyFor(Pair<URI, URI> unhashedKeyPair) {
+        URI left = Hasher.calcSHA256(unhashedKeyPair.getLeft().toString());
+        URI right = Hasher.calcSHA256(unhashedKeyPair.getRight().toString());
+        return Hasher.calcSHA256(left.toString() + right.toString());
     }
 
     @Override
-    public String findKey(Pair<URI, URI> partialStatement) throws IOException {
-        InputStream inputStream = persistence.get(calculateKeyFor(partialStatement));
-        return inputStream == null ? null : IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+    public URI findKey(Pair<URI, URI> partialStatement) throws IOException {
+        InputStream inputStream = persistence.get(calculateKeyFor(partialStatement).toString());
+        return inputStream == null
+                ? null
+                : URI.create(IOUtils.toString(inputStream, StandardCharsets.UTF_8));
     }
 
 

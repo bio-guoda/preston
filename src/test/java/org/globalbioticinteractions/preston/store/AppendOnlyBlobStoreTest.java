@@ -20,7 +20,7 @@ public class AppendOnlyBlobStoreTest {
     @Test
     public void put() throws IOException {
         BlobStore blobStore = new AppendOnlyBlobStore(getTestPersistence());
-        String key = blobStore.putBlob(IOUtils.toInputStream("testing123", StandardCharsets.UTF_8));
+        URI key = blobStore.putBlob(IOUtils.toInputStream("testing123", StandardCharsets.UTF_8));
         InputStream inputStream = blobStore.get(key);
         assertThat(TestUtil.toUTF8(inputStream), is("testing123"));
     }
@@ -28,7 +28,7 @@ public class AppendOnlyBlobStoreTest {
     @Test
     public void putURI() throws IOException {
         BlobStore blobStore = new AppendOnlyBlobStore(getTestPersistence());
-        String key = blobStore.putBlob(URI.create("pesto:123"));
+        URI key = blobStore.putBlob(URI.create("pesto:123"));
         InputStream inputStream = blobStore.get(key);
         assertThat(TestUtil.toUTF8(inputStream), is("pesto:123"));
     }

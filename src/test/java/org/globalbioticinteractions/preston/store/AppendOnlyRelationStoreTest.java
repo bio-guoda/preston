@@ -31,9 +31,9 @@ public class AppendOnlyRelationStoreTest {
 
         blobStore.put(statement);
 
-        String key = blobStore.findKey(Pair.of(GBIF, Predicate.HAS_REGISTRY));
+        URI key = blobStore.findKey(Pair.of(GBIF, Predicate.HAS_REGISTRY));
 
-        assertThat(key, Is.is("809f41e24585d47dd30008e11d3848aec67065135042a28847b357af3ccf84e4"));
+        assertThat(key.toString(), Is.is("hash://sha256/809f41e24585d47dd30008e11d3848aec67065135042a28847b357af3ccf84e4"));
 
         InputStream URIString = blobStore1.get(key);
 
@@ -62,7 +62,7 @@ public class AppendOnlyRelationStoreTest {
 
         // dereference subject
 
-        String contentHash = relationStore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT_HASH));
+        URI contentHash = relationStore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT_HASH));
         InputStream content = blobStore.get(contentHash);
 
         assertNotNull(contentHash);
@@ -97,25 +97,25 @@ public class AppendOnlyRelationStoreTest {
         AppendOnlyRelationStore relationstore = getAppendOnlyRelationStore(dereferencer1, blogStore, TestUtil.getTestPersistence());
         relationstore.put(statement);
 
-        String contentHash = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT_HASH));
-        String content = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT));
+        URI contentHash = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT_HASH));
+        URI content = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT));
 
         Dereferencer dereferencer = new DereferenceTest("derefData2@");
         relationstore.setDereferencer(dereferencer);
         relationstore.put(statement);
 
-        String contentHash2 = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT_HASH));
-        String content2 = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT));
+        URI contentHash2 = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT_HASH));
+        URI content2 = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT));
 
 
         assertThat(contentHash, Is.is(contentHash2));
         assertThat(content, Is.is(content2));
 
-        String newContentHash = relationstore.findKey(Pair.of(URI.create("preston:" + contentHash), Predicate.SUCCEEDED_BY));
+        URI newContentHash = relationstore.findKey(Pair.of(contentHash, Predicate.SUCCEEDED_BY));
         InputStream newContent = blogStore.get(newContentHash);
 
         assertThat(contentHash, not(Is.is(newContentHash)));
-        assertThat(newContentHash, Is.is("960d96611c4048e05303f6f532590968fd5eb23d0035141c4b02653b436f568c"));
+        assertThat(newContentHash.toString(), Is.is("hash://sha256/960d96611c4048e05303f6f532590968fd5eb23d0035141c4b02653b436f568c"));
 
         assertThat(content, not(Is.is(newContent)));
         assertThat(toUTF8(newContent), Is.is("derefData2@http://some"));
@@ -123,10 +123,10 @@ public class AppendOnlyRelationStoreTest {
         relationstore.setDereferencer(new DereferenceTest("derefData3@"));
         relationstore.put(statement);
 
-        String newerContentHash = relationstore.findKey(Pair.of(URI.create("preston:" + newContentHash), Predicate.SUCCEEDED_BY));
+        URI newerContentHash = relationstore.findKey(Pair.of(newContentHash, Predicate.SUCCEEDED_BY));
         InputStream newerContent = blogStore.get(newerContentHash);
 
-        assertThat(newerContentHash, Is.is("7e66eac09d137afe06dd73614e966a417260a111208dabe7225b05f02ce380fd"));
+        assertThat(newerContentHash.toString(), Is.is("hash://sha256/7e66eac09d137afe06dd73614e966a417260a111208dabe7225b05f02ce380fd"));
         assertThat(toUTF8(newerContent), Is.is("derefData3@http://some"));
     }
 

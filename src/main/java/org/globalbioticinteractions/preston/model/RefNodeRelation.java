@@ -5,6 +5,7 @@ import org.globalbioticinteractions.preston.Hasher;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 public class RefNodeRelation {
@@ -12,7 +13,7 @@ public class RefNodeRelation {
     private final RefNode source;
     private final RefNode target;
     private final RefNode relationType;
-    private String id;
+    private URI id;
     
     public RefNodeRelation(RefNode source, RefNode relationType, RefNode target) {
         this.relationType = relationType;
@@ -25,13 +26,13 @@ public class RefNodeRelation {
     }
 
     private String getDataString() {
-        String sourceId = getSource().getId();
-        String relationshipTypeId = getRelationType().getId();
-        String targetId = getTarget().getId();
-        return sourceId + "<-[" + relationshipTypeId + "]-" + targetId;
+        String sourceId = getSource() == null ? "" : getSource().getId().toString();
+        String relationshipTypeId = getRelationType() == null ? "" : getRelationType().getId().toString();
+        String targetId = getTarget() == null ? "" : getTarget().getId().toString();
+        return sourceId + relationshipTypeId + targetId;
     }
 
-    public String getId() {
+    public URI getId() {
         if (this.id == null) {
             this.id = Hasher.calcSHA256(getDataString());
         }
