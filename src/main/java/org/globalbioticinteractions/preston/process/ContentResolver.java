@@ -16,13 +16,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
-public class ContentResolver extends RefNodeProcessor {
+public class ContentResolver extends RefStatementProcessor {
 
     private static Log LOG = LogFactory.getLog(CmdList.class);
     private final BlobStore store;
     private final StatementStore<URI> statementStore;
 
-    public ContentResolver(BlobStore store, StatementStore<URI> statementStore, RefNodeListener... listeners) {
+    public ContentResolver(BlobStore store, StatementStore<URI> statementStore, RefStatementListener... listeners) {
         super(listeners);
         this.store = store;
         this.statementStore = statementStore;
@@ -30,11 +30,11 @@ public class ContentResolver extends RefNodeProcessor {
     }
 
     @Override
-    public void on(RefStatement relation) {
+    public void on(RefStatement statement) {
         try {
-            RefNode source = relation.getSource();
-            RefNode relationType = relation.getRelationType();
-            RefNode target = relation.getTarget();
+            RefNode source = statement.getSource();
+            RefNode relationType = statement.getRelationType();
+            RefNode target = statement.getTarget();
 
             URI subject = getURI(source);
             URI predicate = getURI(relationType);
@@ -75,10 +75,10 @@ public class ContentResolver extends RefNodeProcessor {
 
                 }
             } else {
-                emit(relation);
+                emit(statement);
             }
         } catch (IOException e) {
-            LOG.warn("failed to handle [" + relation.getLabel() + "]", e);
+            LOG.warn("failed to handle [" + statement.getLabel() + "]", e);
         }
 
     }

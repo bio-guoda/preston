@@ -80,7 +80,7 @@ public class RegistryReaderIDigBioTest {
     public void parseFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
         RefNode parent = new RefNodeString("http://example.org");
         List<RefStatement> nodes = new ArrayList<>();
-        RefNodeEmitter emitter = nodes::add;
+        RefStatementEmitter emitter = nodes::add;
         InputStream is = getClass().getResourceAsStream("torch-portal-rss.xml");
 
         RegistryReaderIDigBio.parseRssFeed(parent, emitter, is);
@@ -102,7 +102,7 @@ public class RegistryReaderIDigBioTest {
     public void parseSymbiotaFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
         RefNode parent = new RefNodeString("http://example.org");
         List<RefStatement> nodes = new ArrayList<>();
-        RefNodeEmitter emitter = nodes::add;
+        RefStatementEmitter emitter = nodes::add;
         InputStream is = getClass().getResourceAsStream("symbiota-rss.xml");
 
         RegistryReaderIDigBio.parseRssFeed(parent, emitter, is);
@@ -125,7 +125,7 @@ public class RegistryReaderIDigBioTest {
     public void parseIntermountainFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
         RefNode parent = new RefNodeString("http://example.org");
         List<RefStatement> nodes = new ArrayList<>();
-        RefNodeEmitter emitter = nodes::add;
+        RefStatementEmitter emitter = nodes::add;
         InputStream is = getClass().getResourceAsStream("intermountain-biota-rss.xml");
 
         RegistryReaderIDigBio.parseRssFeed(parent, emitter, is);

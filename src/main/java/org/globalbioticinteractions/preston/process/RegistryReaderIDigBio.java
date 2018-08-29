@@ -33,29 +33,29 @@ import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_CONTENT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PART;
 import static org.globalbioticinteractions.preston.RefNodeConstants.PUBLISHER_REGISTRY_OF;
 
-public class RegistryReaderIDigBio extends RefNodeProcessor {
+public class RegistryReaderIDigBio extends RefStatementProcessor {
 
     private final static Log LOG = LogFactory.getLog(RegistryReaderIDigBio.class);
     public static final String PUBLISHERS_URI = "https://search.idigbio.org/v2/search/publishers";
     public static final RefNodeString REF_NODE_STRING = new RefNodeString(PUBLISHERS_URI);
 
-    public RegistryReaderIDigBio(RefNodeListener listener) {
+    public RegistryReaderIDigBio(RefStatementListener listener) {
         super(listener);
     }
 
     @Override
-    public void on(RefStatement relation) {
-        if (relation.getTarget().equivalentTo(Seeds.SEED_NODE_IDIGBIO)) {
+    public void on(RefStatement statement) {
+        if (statement.getTarget().equivalentTo(Seeds.SEED_NODE_IDIGBIO)) {
             RefNode publishers = REF_NODE_STRING;
-            emit(new RefStatement(relation.getTarget(), PUBLISHER_REGISTRY_OF, publishers));
+            emit(new RefStatement(statement.getTarget(), PUBLISHER_REGISTRY_OF, publishers));
 
             emit(new RefStatement(publishers, HAS_CONTENT, null));
-        } else if (relation.getTarget() != null
-                && relation.getSource().equivalentTo(REF_NODE_STRING)
-                && relation.getRelationType().equivalentTo(RefNodeConstants.HAS_CONTENT)) {
-            parsePublishers(relation.getTarget());
-        } else if (relation.getRelationType().equivalentTo(RefNodeConstants.HAS_CONTENT)) {
-            parse(relation.getTarget());
+        } else if (statement.getTarget() != null
+                && statement.getSource().equivalentTo(REF_NODE_STRING)
+                && statement.getRelationType().equivalentTo(RefNodeConstants.HAS_CONTENT)) {
+            parsePublishers(statement.getTarget());
+        } else if (statement.getRelationType().equivalentTo(RefNodeConstants.HAS_CONTENT)) {
+            parse(statement.getTarget());
         }
     }
 
@@ -68,7 +68,7 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
         }
     }
 
-    static void parseRssFeed(RefNode parent, RefNodeEmitter emitter, InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    static void parseRssFeed(RefNode parent, RefStatementEmitter emitter, InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(resourceAsStream);
@@ -138,7 +138,7 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
         }
     }
 
-    static void parsePublishers(RefNode parent, RefNodeEmitter emitter, InputStream is) throws IOException {
+    static void parsePublishers(RefNode parent, RefStatementEmitter emitter, InputStream is) throws IOException {
         JsonNode r = new ObjectMapper().readTree(is);
         if (r.has("items") && r.get("items").isArray()) {
             for (JsonNode item : r.get("items")) {

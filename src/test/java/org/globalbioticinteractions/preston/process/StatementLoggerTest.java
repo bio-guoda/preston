@@ -6,9 +6,8 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.StringStartsWith.startsWith;
 
-public class StatementLogTest {
+public class StatementLoggerTest {
 
     @Test
     public void relation() {
@@ -16,7 +15,7 @@ public class StatementLogTest {
         RefNodeString relation = new RefNodeString("relation");
         RefNodeString target = new RefNodeString("target");
 
-        String str = new StatementLog().printStatement(new RefStatement(source, relation, target));
+        String str = new StatementLogger().printStatement(new RefStatement(source, relation, target));
 
         assertThat(str, is("source\trelation\ttarget"));
     }

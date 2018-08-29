@@ -13,7 +13,7 @@ import java.net.URI;
 
 import static java.lang.System.exit;
 
-@Parameters(separators = "= ", commandDescription = "Prints Biodiversity Graph Node")
+@Parameters(separators = "= ", commandDescription = "get biodiversity node")
 public class CmdGet implements Runnable {
 
     @Parameter(description = "node id (e.g., [hash://sha256/8ed3110302c38077eace003a67bbfebefc0e2e2c9e67c8703ca49355514bdec9] )",

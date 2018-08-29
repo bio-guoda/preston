@@ -6,16 +6,16 @@ import org.joda.time.format.ISODateTimeFormat;
 import java.net.URI;
 import java.util.Date;
 
-public class StatementHashLog implements RefNodeListener {
+public class StatementHashLogger implements RefStatementListener {
 
     @Override
-    public void on(RefStatement relation) {
-        System.out.println(prependTime(printStatement(relation)));
+    public void on(RefStatement statement) {
+        System.out.println(prependTime(printStatement(statement)));
     }
 
     String prependTime(String entry) {
-        String accessedAt = ISODateTimeFormat.dateTime().withZoneUTC().print(new Date().getTime());
-        return accessedAt + "\t" + entry;
+        //String accessedAt = ISODateTimeFormat.dateTime().withZoneUTC().print(new Date().getTime());
+        return entry;
     }
 
     String printStatement(RefStatement statement) {

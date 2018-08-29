@@ -1,11 +1,8 @@
 package org.globalbioticinteractions.preston.process;
 
 import org.globalbioticinteractions.preston.model.RefStatement;
-import org.joda.time.format.ISODateTimeFormat;
 
-import java.util.Date;
-
-public class StatementLog extends StatementHashLog  {
+public class StatementLogger extends StatementHashLogger {
 
     @Override
     String printStatement(RefStatement statement) {

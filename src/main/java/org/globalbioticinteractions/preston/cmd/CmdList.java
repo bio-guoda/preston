@@ -6,17 +6,20 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
-import org.globalbioticinteractions.preston.model.RefStatement;
-import org.globalbioticinteractions.preston.model.RefNodeString;
-import org.globalbioticinteractions.preston.process.ContentResolver;
-import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.Seeds;
-import org.globalbioticinteractions.preston.process.RefNodeListener;
+import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefStatement;
+import org.globalbioticinteractions.preston.process.ContentResolver;
+import org.globalbioticinteractions.preston.process.RefStatementListener;
+import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.process.RegistryReaderIDigBio;
-import org.globalbioticinteractions.preston.process.StatementLog;
+import org.globalbioticinteractions.preston.process.StatementLogger;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.AppendOnlyStatementStore;
+import org.globalbioticinteractions.preston.store.BlobStore;
 import org.globalbioticinteractions.preston.store.FilePersistence;
+import org.globalbioticinteractions.preston.store.Persistence;
 import org.globalbioticinteractions.preston.store.StatementStore;
 
 import java.io.IOException;
@@ -27,10 +30,10 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
-@Parameters(separators = "= ", commandDescription = "List Biodiversity Graph Nodes")
+@Parameters(separators = "= ", commandDescription = "shows biodiversity graph")
 public class CmdList implements Runnable {
 
-    @Parameter(names = {"-u", "--seed-uris"}, description = "[URIs to start crawl (aka seed URIs)]", validateWith = URIValidator.class)
+    @Parameter(names = {"-u", "--seed-uris"}, description = "[starting points of graph crawl (aka seed URIs)]", validateWith = URIValidator.class)
     private List<String> seedUrls = new ArrayList<String>() {{
         add(Seeds.SEED_NODE_GBIF.getLabel());
         add(Seeds.SEED_NODE_IDIGBIO.getLabel());
@@ -39,12 +42,16 @@ public class CmdList implements Runnable {
     @Parameter(names = {"-o", "--offline"}, description = "lists nodes in biodiversity graph using a local archive")
     private boolean offline = false;
 
+    boolean isOffline() {
+        return offline;
+    }
+
     @Override
     public void run() {
         final List<RefStatement> seeds = seedUrls.stream()
                 .map(uriString -> {
-                    RefNodeString refNodeRoot = RefNodeConstants.SEED_ROOT;
-                    RefNodeString refNodeSeed = new RefNodeString(uriString);
+                    RefNode refNodeRoot = RefNodeConstants.SEED_ROOT;
+                    RefNode refNodeSeed = new RefNodeString(uriString);
                     return new RefStatement(refNodeRoot, RefNodeConstants.SEED_OF, refNodeSeed);
                 }).collect(Collectors.toList());
 
@@ -53,17 +60,17 @@ public class CmdList implements Runnable {
                     addAll(seeds);
                 }};
 
-        FilePersistence persistence = new FilePersistence();
-        AppendOnlyBlobStore blobStore = new AppendOnlyBlobStore(persistence);
+        Persistence persistence = new FilePersistence();
+        BlobStore blobStore = new AppendOnlyBlobStore(persistence);
 
-        StatementStore<URI> statementStore = offline
+        StatementStore<URI> statementStore = isOffline()
                 ? createOfflineStatementStore(persistence, blobStore)
                 : createOnlineStatementStore(persistence, blobStore);
 
-        final RefNodeListener listener = new ContentResolver(blobStore, statementStore,
+        final RefStatementListener listener = new ContentResolver(blobStore, statementStore,
                 new RegistryReaderIDigBio(statements::add),
                 new RegistryReaderGBIF(statements::add),
-                new StatementLog());
+                new StatementLogger());
 
         while (!statements.isEmpty()) {
             listener.on(statements.poll());
@@ -71,7 +78,7 @@ public class CmdList implements Runnable {
 
     }
 
-    private AppendOnlyStatementStore createOfflineStatementStore(FilePersistence persistence, AppendOnlyBlobStore blobStore) {
+    private StatementStore<URI> createOfflineStatementStore(Persistence persistence, BlobStore blobStore) {
         return new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream) {
 
             @Override
@@ -87,7 +94,7 @@ public class CmdList implements Runnable {
         };
     }
 
-   private AppendOnlyStatementStore createOnlineStatementStore(FilePersistence persistence, AppendOnlyBlobStore blobStore) {
+   private StatementStore<URI> createOnlineStatementStore(Persistence persistence, BlobStore blobStore) {
         return new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream);
     }
 

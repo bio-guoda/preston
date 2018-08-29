@@ -20,46 +20,46 @@ import static org.globalbioticinteractions.preston.RefNodeConstants.DATASET_REGI
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_CONTENT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PART;
 
-public class RegistryReaderGBIF extends RefNodeProcessor {
+public class RegistryReaderGBIF extends RefStatementProcessor {
     private static final List<String> SUPPORTED_ENDPOINT_TYPES = Arrays.asList("DWC_ARCHIVE","EML");
 
     private static final String GBIF_DATASET_API_ENDPOINT = "https://api.gbif.org/v1/dataset";
     private final Log LOG = LogFactory.getLog(RegistryReaderGBIF.class);
 
-    public RegistryReaderGBIF(RefNodeListener listener) {
+    public RegistryReaderGBIF(RefStatementListener listener) {
         super(listener);
     }
 
     @Override
-    public void on(RefStatement relation) {
-        if (relation.getTarget().equivalentTo(Seeds.SEED_NODE_GBIF)) {
+    public void on(RefStatement statement) {
+        if (statement.getTarget().equivalentTo(Seeds.SEED_NODE_GBIF)) {
             RefNode refNodeRegistry = new RefNodeString(GBIF_DATASET_API_ENDPOINT);
-            emit(new RefStatement(relation.getTarget(), DATASET_REGISTRY_OF, refNodeRegistry));
+            emit(new RefStatement(statement.getTarget(), DATASET_REGISTRY_OF, refNodeRegistry));
             emit(new RefStatement(refNodeRegistry, HAS_CONTENT, null));
 
-        } else if (relation.getTarget() != null
-                && relation.getSource().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
-                && relation.getRelationType().equals(RefNodeConstants.HAS_CONTENT)) {
+        } else if (statement.getTarget() != null
+                && statement.getSource().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
+                && statement.getRelationType().equals(RefNodeConstants.HAS_CONTENT)) {
             try {
-                parse(relation.getTarget().getContent(), this, relation.getTarget());
+                parse(statement.getTarget().getContent(), this, statement.getTarget());
             } catch (IOException e) {
-                LOG.warn("failed to handle [" + relation.getLabel() + "]", e);
+                LOG.warn("failed to handle [" + statement.getLabel() + "]", e);
             }
-        } else if (relation.getTarget() != null) {
-            if (StringUtils.startsWith(relation.getTarget().getLabel(), GBIF_DATASET_API_ENDPOINT)) {
-                emit(new RefStatement(relation.getTarget(), HAS_CONTENT, null));
+        } else if (statement.getTarget() != null) {
+            if (StringUtils.startsWith(statement.getTarget().getLabel(), GBIF_DATASET_API_ENDPOINT)) {
+                emit(new RefStatement(statement.getTarget(), HAS_CONTENT, null));
             }
         }
     }
 
-    private static void emitNextPage(RefNode previousPage, int offset, int limit, RefNodeEmitter emitter) {
+    private static void emitNextPage(RefNode previousPage, int offset, int limit, RefStatementEmitter emitter) {
         String uri = GBIF_DATASET_API_ENDPOINT + "?offset=" + offset + "&limit=" + limit;
         RefNode nextPage = new RefNodeString(uri);
         emitter.emit(new RefStatement(previousPage, HAS_PART, nextPage));
 
     }
 
-    public static void parse(InputStream resourceAsStream, RefNodeEmitter emitter, RefNode dataset) throws IOException {
+    public static void parse(InputStream resourceAsStream, RefStatementEmitter emitter, RefNode dataset) throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(resourceAsStream);
         if (jsonNode != null && jsonNode.has("results")) {
             for (JsonNode result : jsonNode.get("results")) {

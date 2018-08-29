@@ -24,13 +24,20 @@ public class CmdLine {
         try {
             jc.parse(args);
             CmdLine.run(jc.getCommands().get(jc.getParsedCommand()));
+        } catch (MissingCommandException ex) {
+            printUsage(jc);
+            throw ex;
         } catch (Throwable ex) {
             LOG.error("unexpected exception", ex);
-            StringBuilder out = new StringBuilder();
-            jc.usage(out);
-            System.err.append(out.toString());
+            printUsage(jc);
             throw ex;
         }
+    }
+
+    private static void printUsage(JCommander jc) {
+        StringBuilder out = new StringBuilder();
+        jc.usage(out);
+        System.err.append(out.toString());
     }
 
     public class CommandMain implements Runnable {
