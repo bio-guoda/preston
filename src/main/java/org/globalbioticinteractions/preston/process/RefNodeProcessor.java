@@ -1,6 +1,7 @@
 package org.globalbioticinteractions.preston.process;
 
 import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeRelation;
 
 public abstract class RefNodeProcessor implements RefNodeListener, RefNodeEmitter {
 
@@ -11,7 +12,7 @@ public abstract class RefNodeProcessor implements RefNodeListener, RefNodeEmitte
     }
 
     @Override
-    public void emit(RefNode refNode) {
+    public void emit(RefNodeRelation refNode) {
         for (RefNodeListener listener : listeners) {
             listener.on(refNode);
         }

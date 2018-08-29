@@ -10,10 +10,8 @@ import java.util.Date;
 
 public class RelationLogWriter implements RefNodeListener {
     @Override
-    public void on(RefNode refNode) {
-        if (refNode.getType() == RefNodeType.RELATION) {
-            System.out.println(printRelation((RefNodeRelation)refNode));
-        }
+    public void on(RefNodeRelation refNode) {
+        printRelation(refNode);
     }
 
     public static String printRelation(RefNodeRelation refNode) {

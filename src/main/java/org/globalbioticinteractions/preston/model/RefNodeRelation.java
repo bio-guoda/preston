@@ -19,17 +19,8 @@ public class RefNodeRelation extends RefNodeImpl {
     public RefNodeRelation(RefNode source, RefNode relationType, RefNode target) {
         super(RefNodeType.RELATION);
         this.relationType = relationType;
-        if (relationType == null) {
-            throw new IllegalArgumentException("null relation");
-        }
         this.source = source;
-        if (source == null) {
-            throw new IllegalArgumentException("null source");
-        }
         this.target = target;
-        if (target == null) {
-            throw new IllegalArgumentException("null target");
-        }
     }
 
     @Override
@@ -41,15 +32,6 @@ public class RefNodeRelation extends RefNodeImpl {
         String sourceId = getSource().getId();
         String relationshipTypeId = getRelationType().getId();
         String targetId = getTarget().getId();
-        if (sourceId == null) {
-            throw new IllegalArgumentException("null source for [" + getLabel() + "]");
-        }
-        if (relationshipTypeId == null) {
-            throw new IllegalArgumentException("null relation for [" + getLabel() + "]");
-        }
-        if (targetId == null) {
-            throw new IllegalArgumentException("null target for [" + getLabel() + "]");
-        }
         return sourceId + "<-[" + relationshipTypeId + "]-" + targetId;
     }
 
@@ -68,7 +50,7 @@ public class RefNodeRelation extends RefNodeImpl {
 
     @Override
     public String getLabel() {
-        return "[" + getSource().getLabel() + "]<-[:" + getRelationType().getLabel() + "]-[" + getTarget().getLabel() + "]";
+        return "[" + getSource().getLabel() + "]-[:" + getRelationType().getLabel() + "]->[" + (getTarget() == null ? "?" : getTarget().getLabel()) + "]";
     }
 
     @Override

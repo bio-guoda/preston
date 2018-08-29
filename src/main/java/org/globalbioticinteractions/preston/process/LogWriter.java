@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class LogWriter implements RefNodeListener {
     @Override
-    public void on(RefNode refNode) {
+    public void on(RefNodeRelation refNode) {
         System.out.println(printDataset(refNode));
     }
 

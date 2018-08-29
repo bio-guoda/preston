@@ -3,6 +3,7 @@ package org.globalbioticinteractions.preston.cmd;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.globalbioticinteractions.preston.RefNodeConstants;
+import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.model.RefNodeRelation;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefNodeType;
@@ -13,6 +14,9 @@ import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.process.RefNodeListener;
 import org.globalbioticinteractions.preston.process.RegistryReaderIDigBio;
 import org.globalbioticinteractions.preston.process.RelationLogWriter;
+import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
+import org.globalbioticinteractions.preston.store.AppendOnlyRelationStore;
+import org.globalbioticinteractions.preston.store.FilePersistence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,19 +35,23 @@ public class CmdList implements Runnable {
 
     @Override
     public void run() {
-        final List<RefNode> seeds = seedUrls.stream()
+        final List<RefNodeRelation> seeds = seedUrls.stream()
                 .map(uriString -> {
                     RefNodeString refNodeRoot = RefNodeConstants.SEED_ROOT;
                     RefNodeString refNodeSeed = new RefNodeString(RefNodeType.URI, uriString);
                     return new RefNodeRelation(refNodeRoot, RefNodeConstants.SEED_OF, refNodeSeed);
                 }).collect(Collectors.toList());
 
-        final Queue<RefNode> refNodes =
-                new ConcurrentLinkedQueue<RefNode>() {{
+        final Queue<RefNodeRelation> refNodes =
+                new ConcurrentLinkedQueue<RefNodeRelation>() {{
                     addAll(seeds);
                 }};
 
-        final RefNodeListener listener = new BlobStoreWriter(
+        FilePersistence persistence = new FilePersistence();
+        AppendOnlyBlobStore blobStore = new AppendOnlyBlobStore(persistence);
+        AppendOnlyRelationStore relationStore = new AppendOnlyRelationStore(blobStore, persistence, Resources::asInputStream);
+
+        final RefNodeListener listener = new BlobStoreWriter(blobStore, relationStore,
                 new RegistryReaderIDigBio(refNodes::add),
                 new RegistryReaderGBIF(refNodes::add),
                 new RelationLogWriter());

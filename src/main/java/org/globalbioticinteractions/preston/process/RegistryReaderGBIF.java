@@ -12,7 +12,6 @@ import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeRelation;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefNodeType;
-import org.globalbioticinteractions.preston.model.RefNodeURI;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,8 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.DATASET_REGISTRY_OF;
-import static org.globalbioticinteractions.preston.RefNodeConstants.DEREFERENCE_OF;
-import static org.globalbioticinteractions.preston.RefNodeConstants.PART_OF;
+import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_CONTENT;
+import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PART;
 
 public class RegistryReaderGBIF extends RefNodeProcessor {
     public static final Map<String, RefNodeType> TYPE_MAP = new HashMap<String, RefNodeType>() {{
@@ -38,12 +37,11 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
     }
 
     @Override
-    public void on(RefNode refNode) {
+    public void on(RefNodeRelation refNode) {
         if (refNode.equivalentTo(Seeds.SEED_NODE_GBIF)) {
             RefNode refNodeRegistry = new RefNodeString(RefNodeType.URI, GBIF_DATASET_API_ENDPOINT);
             emit(new RefNodeRelation(refNode, DATASET_REGISTRY_OF, refNodeRegistry));
-            RefNodeURI refNode1 = new RefNodeURI(RefNodeType.GBIF_DATASETS_JSON, URI.create(GBIF_DATASET_API_ENDPOINT));
-            emit(new RefNodeRelation(refNodeRegistry, DEREFERENCE_OF, refNode1));
+            emit(new RefNodeRelation(refNodeRegistry, HAS_CONTENT, null));
 
         } else if (refNode.getType() == RefNodeType.GBIF_DATASETS_JSON) {
             try {
@@ -55,8 +53,7 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
             try {
                 String dataString = getDataString(refNode);
                 if (StringUtils.startsWith(dataString, GBIF_DATASET_API_ENDPOINT)) {
-                    RefNodeURI datasetURI = new RefNodeURI(RefNodeType.GBIF_DATASETS_JSON, URI.create(getDataString(refNode)));
-                    emit(new RefNodeRelation(refNode, DEREFERENCE_OF, datasetURI));
+                    emit(new RefNodeRelation(refNode, HAS_CONTENT, null));
                 }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + refNode.getLabel() + "]", e);
@@ -72,7 +69,7 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
     private static void emitNextPage(RefNode previousPage, int offset, int limit, RefNodeEmitter emitter) {
         String uri = GBIF_DATASET_API_ENDPOINT + "?offset=" + offset + "&limit=" + limit;
         RefNode nextPage = new RefNodeString(RefNodeType.URI, uri);
-        emitter.emit(new RefNodeRelation(previousPage, PART_OF, nextPage));
+        emitter.emit(new RefNodeRelation(previousPage, HAS_PART, nextPage));
 
     }
 
@@ -83,7 +80,7 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
                 if (result.has("key") && result.has("endpoints")) {
                     String uuid = result.get("key").asText();
                     RefNodeString datasetUUID = new RefNodeString(RefNodeType.UUID, uuid);
-                    emitter.emit(new RefNodeRelation(dataset, RefNodeConstants.PART_OF, datasetUUID));
+                    emitter.emit(new RefNodeRelation(dataset, RefNodeConstants.HAS_PART, datasetUUID));
 
                     for (JsonNode endpoint : result.get("endpoints")) {
                         if (endpoint.has("url") && endpoint.has("type")) {
@@ -93,10 +90,9 @@ public class RegistryReaderGBIF extends RefNodeProcessor {
                             RefNodeType refNodeType = TYPE_MAP.get(type);
                             if (refNodeType != null) {
                                 RefNodeString dataArchive = new RefNodeString(RefNodeType.URI, urlString);
-                                emitter.emit(new RefNodeRelation(datasetUUID, RefNodeConstants.PART_OF, dataset));
+                                emitter.emit(new RefNodeRelation(datasetUUID, RefNodeConstants.HAS_PART, dataArchive));
 
-                                RefNodeURI dataArchiveBlob = new RefNodeURI(refNodeType, url);
-                                emitter.emit(new RefNodeRelation(dataArchive, RefNodeConstants.DEREFERENCE_OF, dataArchiveBlob));
+                                emitter.emit(new RefNodeRelation(dataArchive, RefNodeConstants.HAS_CONTENT, null));
                             }
                         }
                     }

@@ -1,22 +1,24 @@
 package org.globalbioticinteractions.preston.process;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.globalbioticinteractions.preston.RefNodeConstants;
+import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefNodeProxyData;
 import org.globalbioticinteractions.preston.model.RefNodeRelation;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefNodeType;
-import org.globalbioticinteractions.preston.model.RefNodeURI;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
+import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
+import org.globalbioticinteractions.preston.store.AppendOnlyRelationStore;
+import org.globalbioticinteractions.preston.store.FilePersistence;
+import org.globalbioticinteractions.preston.store.Persistence;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -24,16 +26,33 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class BlobStoreWriterTest {
+
+    private AppendOnlyBlobStore blobStore;
+    private AppendOnlyRelationStore relationStore;
+    private Path tempDir;
+    private Path datasetDir;
+
+    @Before
+    public void init() throws IOException {
+        tempDir = Files.createTempDirectory(Paths.get("target/"), "caching");
+        datasetDir = Files.createTempDirectory(Paths.get("target/"), "datasets");
+        Persistence persistence = new FilePersistence(tempDir.toFile(), datasetDir.toFile());
+        this.blobStore = new AppendOnlyBlobStore(persistence);
+        this.relationStore = new AppendOnlyRelationStore(blobStore, persistence, Resources::asInputStream);
+    }
+
+    @After
+    public void destroy() {
+        FileUtils.deleteQuietly(tempDir.toFile());
+        FileUtils.deleteQuietly(datasetDir.toFile());
+    }
 
 
     @Test
@@ -44,78 +63,51 @@ public class BlobStoreWriterTest {
 
     @Test
     public void cacheString() throws IOException {
-        Path tempDir = Files.createTempDirectory(Paths.get("target/"), "caching");
+        ArrayList<RefNodeRelation> refNodes = new ArrayList<>();
 
-        ArrayList<RefNode> refNodes = new ArrayList<>();
-
-        BlobStoreWriter blobStoreWriter = new BlobStoreWriter(refNodes::add);
-        blobStoreWriter.setTmpDir(new File("target/"));
+        BlobStoreWriter blobStoreWriter = new BlobStoreWriter(this.blobStore, this.relationStore, refNodes::add);
         RefNodeString providedNode = new RefNodeString(RefNodeType.URI, "https://example.org");
-        blobStoreWriter.on(providedNode);
+        blobStoreWriter.on(new RefNodeRelation(providedNode, RefNodeConstants.HAS_PART, providedNode));
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
 
-        RefNode cachedNode = refNodes.get(0);
-        assertThat(cachedNode.getId(), is("50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
-        assertThat(cachedNode.getLabel(), is("https://example.org"));
-        assertThat(cachedNode.getType(), is(RefNodeType.URI));
-        assertThat(cachedNode, is(instanceOf(RefNodeProxyData.class)));
-        assertTrue(cachedNode.equivalentTo(providedNode));
+        RefNodeRelation cachedNode = refNodes.get(0);
+        assertThat(cachedNode.getSource().getId(), is("50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
+        assertThat(cachedNode.getSource().getLabel(), is("https://example.org"));
+        assertTrue(cachedNode.getSource().equivalentTo(providedNode));
 
         FileUtils.deleteQuietly(tempDir.toFile());
     }
 
     @Test
     public void cacheContent() throws IOException, URISyntaxException {
-        Path tempDir = Files.createTempDirectory(Paths.get("target/"), "caching");
-        Path datasetDir = Files.createTempDirectory(Paths.get("target/"), "datasets");
-
         ArrayList<RefNode> refNodes = new ArrayList<>();
 
-        BlobStoreWriter blobStoreWriter = new BlobStoreWriter(refNodes::add);
-        blobStoreWriter.setTmpDir(tempDir.toFile());
-        blobStoreWriter.setDatasetDir(datasetDir.toFile());
+        BlobStoreWriter blobStoreWriter = new BlobStoreWriter(this.blobStore, this.relationStore, refNodes::add);
+
+
         URI testURI = getClass().getResource("test.txt").toURI();
         RefNode providedNode = new RefNodeString(RefNodeType.URI, testURI.toString());
-        RefNode providedNodeBlob = new RefNodeURI(RefNodeType.URI, testURI);
-        RefNode relation = new RefNodeRelation(providedNode, RefNodeConstants.DEREFERENCE_OF, providedNodeBlob);
+        RefNodeRelation relation = new RefNodeRelation(providedNode, RefNodeConstants.HAS_CONTENT, null);
 
         blobStoreWriter.on(relation);
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
-        assertThat(refNodes.size(), is(4));
+        assertThat(refNodes.size(), is(1));
 
-        RefNode linkNode = refNodes.get(3);
-        assertThat(linkNode, is(instanceOf(RefNodeRelation.class)));
-        assertThat(((RefNodeRelation)linkNode).getTarget().getLabel(), is(providedNodeBlob.getLabel()));
-        assertThat(((RefNodeRelation)linkNode).getRelationType().getLabel(), is(RefNodeConstants.DEREFERENCE_OF.getLabel()));
-
-        RefNode cachedNode = refNodes.get(0);
-        String expectedSHA256 = "4be693a8d624f6905339ece8d714bd81a62136a4f738b24580462f6f5e85a5fb";
+        RefNodeRelation cachedNode = (RefNodeRelation)refNodes.get(0);
+        String expectedSHA256 = "ba580f384b7717b50d2781ae848f6a0d388e74665b0f18b84b5909e428b02f56";
         assertThat(cachedNode.getId(), is(expectedSHA256));
-        assertThat(cachedNode.getSize(), is(109L));
-        assertThat(cachedNode.getType(), is(RefNodeType.URI));
-        assertThat(cachedNode, is(instanceOf(RefNodeProxyData.class)));
-        assertTrue(cachedNode.equivalentTo(providedNode));
+
+        String label = cachedNode.getTarget().getLabel();
+        assertThat(label, is("preston:50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
+
+        InputStream inputStream = blobStore.get("preston:50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b");
+
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is("https://example.org"));
 
         String baseCacheDir = "/50/d7/a9/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b/";
         String absCacheDir = datasetDir.toAbsolutePath().toString() + baseCacheDir;
-        File meta = new File(absCacheDir + "meta.json");
-        assertTrue("expected [" + meta.toString() + "] to exist", meta.exists());
-
-        JsonNode jsonNode = new ObjectMapper().readTree(meta);
-        Iterator<String> fields = jsonNode.fieldNames();
-        int count = 0;
-        while (fields.hasNext()) {
-            fields.next();
-            count++;
-        }
-        assertThat(count, is(4));
-        assertThat(jsonNode.get("id").asText(), is("50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
-        assertThat(jsonNode.get("size").asLong(), is(19L));
-        assertTrue(jsonNode.has("created"));
-        DateTime created = ISODateTimeFormat.dateTime().withZoneUTC().parseDateTime(jsonNode.get("created").asText());
-        assertThat(created, is(notNullValue()));
 
 
         File data = new File(absCacheDir + "data");

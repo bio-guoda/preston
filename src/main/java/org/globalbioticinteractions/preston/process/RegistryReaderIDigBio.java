@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.DEREFERENCE_OF;
+import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_CONTENT;
+import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PART;
 import static org.globalbioticinteractions.preston.model.RefNodeType.IDIGBIO_PUBLISHERS_JSON;
 import static org.globalbioticinteractions.preston.RefNodeConstants.PUBLISHER_REGISTRY_OF;
 
@@ -46,7 +48,7 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
     }
 
     @Override
-    public void on(RefNode refNode) {
+    public void on(RefNodeRelation refNode) {
         if (refNode.equivalentTo(Seeds.SEED_NODE_IDIGBIO)) {
             String publishersURI = "https://search.idigbio.org/v2/search/publishers";
             RefNode publishers = new RefNodeString(RefNodeType.URI, publishersURI);
@@ -135,19 +137,17 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
 
             RefNode archiveParent = uuid == null ? parent : new RefNodeString(RefNodeType.UUID, uuid.toString());
             if (uuid != null) {
-                emitter.emit(archiveParent);
+                emitter.emit(new RefNodeRelation(archiveParent, HAS_PART, parent));
             }
 
             if (emlURI != null) {
                 RefNode uriNode = new RefNodeString(RefNodeType.URI, emlURI.toString());
-                RefNodeURI refNode = new RefNodeURI(RefNodeType.EML, emlURI);
-                emitter.emit(new RefNodeRelation(uriNode, DEREFERENCE_OF, refNode));
+                emitter.emit(new RefNodeRelation(uriNode, HAS_CONTENT, null));
             }
 
             if (RefNodeType.DWCA == archiveType && archiveURI != null) {
                 RefNodeString refNodeDWCAUri = new RefNodeString(RefNodeType.URI, archiveURI.toString());
-                RefNodeURI refNode = new RefNodeURI(RefNodeType.DWCA, archiveURI);
-                emitter.emit(new RefNodeRelation(refNodeDWCAUri, DEREFERENCE_OF, refNode));
+                emitter.emit(new RefNodeRelation(refNodeDWCAUri, HAS_CONTENT, null));
 
             }
 
@@ -160,7 +160,7 @@ public class RegistryReaderIDigBio extends RefNodeProcessor {
             for (JsonNode item : r.get("items")) {
                 String publisherUUID = item.get("uuid").asText();
                 RefNodeString refNodePublisher = new RefNodeString(RefNodeType.UUID, publisherUUID);
-                emitter.emit(new RefNodeRelation(parent, RefNodeConstants.PART_OF, refNodePublisher));
+                emitter.emit(new RefNodeRelation(parent, RefNodeConstants.HAS_PART, refNodePublisher));
                 JsonNode data = item.get("data");
                 if (item.has("data")) {
                     String rssFeedUrl = data.has("rss_url") ? data.get("rss_url").asText() : null;
