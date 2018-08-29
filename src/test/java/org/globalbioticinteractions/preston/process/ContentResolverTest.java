@@ -9,7 +9,7 @@ import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
-import org.globalbioticinteractions.preston.store.AppendOnlyRelationStore;
+import org.globalbioticinteractions.preston.store.AppendOnlyStatementStore;
 import org.globalbioticinteractions.preston.store.FilePersistence;
 import org.globalbioticinteractions.preston.store.Persistence;
 import org.junit.After;
@@ -35,7 +35,7 @@ import static org.junit.Assert.assertTrue;
 public class ContentResolverTest {
 
     private AppendOnlyBlobStore blobStore;
-    private AppendOnlyRelationStore relationStore;
+    private AppendOnlyStatementStore relationStore;
     private Path tempDir;
     private Path datasetDir;
 
@@ -45,7 +45,7 @@ public class ContentResolverTest {
         datasetDir = Files.createTempDirectory(Paths.get("target/"), "datasets");
         Persistence persistence = new FilePersistence(tempDir.toFile(), datasetDir.toFile());
         this.blobStore = new AppendOnlyBlobStore(persistence);
-        this.relationStore = new AppendOnlyRelationStore(blobStore, persistence, Resources::asInputStream);
+        this.relationStore = new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream);
     }
 
     @After

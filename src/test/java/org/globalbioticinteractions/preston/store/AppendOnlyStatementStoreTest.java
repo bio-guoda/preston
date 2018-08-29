@@ -16,7 +16,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
 
-public class AppendOnlyRelationStoreTest {
+public class AppendOnlyStatementStoreTest {
 
     @Test
     public void putImmutableStatement() throws IOException {
@@ -27,7 +27,7 @@ public class AppendOnlyRelationStoreTest {
 
         Dereferencer dereferencer = new DereferenceTest("deref@");
         AppendOnlyBlobStore blobStore1 = new AppendOnlyBlobStore(TestUtil.getTestPersistence());
-        RelationStore<URI> blobStore = getAppendOnlyRelationStore(dereferencer, blobStore1, TestUtil.getTestPersistence());
+        StatementStore<URI> blobStore = getAppendOnlyRelationStore(dereferencer, blobStore1, TestUtil.getTestPersistence());
 
         blobStore.put(statement);
 
@@ -40,10 +40,6 @@ public class AppendOnlyRelationStoreTest {
         assertThat(toUTF8(URIString), Is.is("https://api.gbif.org/v1/registry"));
     }
 
-    private AppendOnlyBlobStore createBlogStore() {
-        return new AppendOnlyBlobStore(TestUtil.getTestPersistence());
-    }
-
     @Test
     public void putContentThatNeedsDownload() throws IOException {
         Triple<URI, URI, URI> statement
@@ -52,7 +48,7 @@ public class AppendOnlyRelationStoreTest {
 
         Dereferencer dereferencer = new DereferenceTest("derefData@");
         Persistence testPersistence = TestUtil.getTestPersistence();
-        AppendOnlyRelationStore relationStore = getAppendOnlyRelationStore(dereferencer,
+        AppendOnlyStatementStore relationStore = getAppendOnlyRelationStore(dereferencer,
                 new AppendOnlyBlobStore(testPersistence),
                 testPersistence);
 
@@ -77,8 +73,8 @@ public class AppendOnlyRelationStoreTest {
         assertThat(actualContent, Is.is(actualOtherContent));
     }
 
-    private AppendOnlyRelationStore getAppendOnlyRelationStore(Dereferencer dereferencer, BlobStore blobStore, Persistence testPersistencetence) {
-        return new AppendOnlyRelationStore(blobStore, testPersistencetence, dereferencer);
+    private AppendOnlyStatementStore getAppendOnlyRelationStore(Dereferencer dereferencer, BlobStore blobStore, Persistence testPersistencetence) {
+        return new AppendOnlyStatementStore(blobStore, testPersistencetence, dereferencer);
     }
 
     private String toUTF8(InputStream content) throws IOException {
@@ -94,7 +90,7 @@ public class AppendOnlyRelationStoreTest {
         String prefix = "derefData@";
         Dereferencer dereferencer1 = new DereferenceTest(prefix);
         BlobStore blogStore = new AppendOnlyBlobStore(TestUtil.getTestPersistence());
-        AppendOnlyRelationStore relationstore = getAppendOnlyRelationStore(dereferencer1, blogStore, TestUtil.getTestPersistence());
+        AppendOnlyStatementStore relationstore = getAppendOnlyRelationStore(dereferencer1, blogStore, TestUtil.getTestPersistence());
         relationstore.put(statement);
 
         URI contentHash = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT_HASH));

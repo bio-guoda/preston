@@ -11,7 +11,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 
-public class AppendOnlyRelationStore implements RelationStore<URI> {
+public class AppendOnlyStatementStore implements StatementStore<URI> {
 
     private BlobStore blobStore;
 
@@ -19,7 +19,7 @@ public class AppendOnlyRelationStore implements RelationStore<URI> {
 
     private Dereferencer dereferencer;
 
-    public AppendOnlyRelationStore(BlobStore blobStore, Persistence persistence, Dereferencer dereferencer) {
+    public AppendOnlyStatementStore(BlobStore blobStore, Persistence persistence, Dereferencer dereferencer) {
         this.blobStore = blobStore;
         this.persistence = persistence;
         this.dereferencer = dereferencer;
@@ -34,18 +34,17 @@ public class AppendOnlyRelationStore implements RelationStore<URI> {
         if (Predicate.HAS_CONTENT.equals(predicate) && object == null) {
             URI mostRecentVersionId = findMostRecentVersion(subj);
 
-            URI updatedId = null;
             if (getDereferencer() != null) {
                 InputStream data = getDereferencer().dereference(subj);
-                updatedId = blobStore.putBlob(data);
+                URI updatedId = blobStore.putBlob(data);
+                if (null != mostRecentVersionId && !mostRecentVersionId.equals(updatedId)) {
+                    put(Pair.of(mostRecentVersionId, Predicate.SUCCEEDED_BY), updatedId);
+                    put(Pair.of(updatedId, Predicate.HAS_CONTENT_HASH), updatedId);
+                } else if (null != updatedId) {
+                    put(Pair.of(subj, Predicate.HAS_CONTENT_HASH), updatedId);
+                }
             }
 
-            if (null != mostRecentVersionId && !mostRecentVersionId.equals(updatedId)) {
-                put(Pair.of(mostRecentVersionId, Predicate.SUCCEEDED_BY), updatedId);
-                put(Pair.of(updatedId, Predicate.HAS_CONTENT_HASH), updatedId);
-            } else if (null != updatedId) {
-                put(Pair.of(subj, Predicate.HAS_CONTENT_HASH), updatedId);
-            }
         } else if (object != null) {
             URI value = blobStore.putBlob(object);
             put(Pair.of(subj, predicate), value);

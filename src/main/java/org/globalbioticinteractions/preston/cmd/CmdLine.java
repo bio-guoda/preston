@@ -46,6 +46,7 @@ public class CmdLine {
                 .addObject(new CommandMain())
                 .addCommand("version", new CmdVersion())
                 .addCommand("ls", new CmdList())
+                .addCommand("get", new CmdGet())
                 .build();
     }
 

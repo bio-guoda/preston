@@ -10,7 +10,7 @@ import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.store.BlobStore;
 import org.globalbioticinteractions.preston.store.Predicate;
-import org.globalbioticinteractions.preston.store.RelationStore;
+import org.globalbioticinteractions.preston.store.StatementStore;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,12 +20,12 @@ public class ContentResolver extends RefNodeProcessor {
 
     private static Log LOG = LogFactory.getLog(CmdList.class);
     private final BlobStore store;
-    private final RelationStore<URI> relationStore;
+    private final StatementStore<URI> statementStore;
 
-    public ContentResolver(BlobStore store, RelationStore<URI> relationStore, RefNodeListener... listeners) {
+    public ContentResolver(BlobStore store, StatementStore<URI> statementStore, RefNodeListener... listeners) {
         super(listeners);
         this.store = store;
-        this.relationStore = relationStore;
+        this.statementStore = statementStore;
 
     }
 
@@ -39,9 +39,11 @@ public class ContentResolver extends RefNodeProcessor {
             URI subject = getURI(source);
             URI predicate = getURI(relationType);
             URI object = getURI(target);
-            relationStore.put(Triple.of(subject, predicate, object));
+
+            statementStore.put(Triple.of(subject, predicate, object));
+
             if (object == null) {
-                final URI key = relationStore.findKey(Pair.of(subject, Predicate.HAS_CONTENT_HASH));
+                final URI key = statementStore.findKey(Pair.of(subject, Predicate.HAS_CONTENT_HASH));
                 if (null != key) {
 
                     RefNode resolvedContentNode = new RefNode() {
