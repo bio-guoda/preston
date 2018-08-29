@@ -20,5 +20,5 @@ public class RefNodeStringTest {
         RefNode two = new RefNodeString("https://example.com");
         assertFalse(one.equivalentTo(two));
     }
-    
+
 }

@@ -27,7 +27,7 @@ public class CmdList implements Runnable {
 
     @Parameter(names = {"-u", "--seed-uris"}, description = "[URIs to start crawl (aka seed URIs)]", validateWith = URIValidator.class)
     private List<String> seedUrls = new ArrayList<String>() {{
-  //      add(Seeds.SEED_NODE_IDIGBIO.getLabel());
+        add(Seeds.SEED_NODE_IDIGBIO.getLabel());
         add(Seeds.SEED_NODE_GBIF.getLabel());
     }};
 

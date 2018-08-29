@@ -9,7 +9,7 @@ import java.util.Date;
 public class RelationLogWriter implements RefNodeListener {
     @Override
     public void on(RefNodeRelation relation) {
-        printRelation(relation);
+        System.out.println(printRelation(relation));
     }
 
     public static String printRelation(RefNodeRelation refNode) {
