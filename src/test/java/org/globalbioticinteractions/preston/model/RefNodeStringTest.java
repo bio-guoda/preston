@@ -20,12 +20,5 @@ public class RefNodeStringTest {
         RefNode two = new RefNodeString("https://example.com");
         assertFalse(one.equivalentTo(two));
     }
-
-    @Test
-    public void differentType() {
-        RefNode one = new RefNodeString("https://example.com");
-        RefNode two = new RefNodeString("https://example.com");
-        assertFalse(one.equivalentTo(two));
-    }
-
+    
 }
