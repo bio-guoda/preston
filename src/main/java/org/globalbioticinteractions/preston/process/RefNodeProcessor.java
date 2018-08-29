@@ -12,9 +12,9 @@ public abstract class RefNodeProcessor implements RefNodeListener, RefNodeEmitte
     }
 
     @Override
-    public void emit(RefNodeRelation refNode) {
+    public void emit(RefNodeRelation relation) {
         for (RefNodeListener listener : listeners) {
-            listener.on(refNode);
+            listener.on(relation);
         }
     }
 

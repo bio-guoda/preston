@@ -47,7 +47,7 @@ public class AppendOnlyRelationStore implements RelationStore<URI> {
             } else if (StringUtils.isNotBlank(updatedId)) {
                 put(Pair.of(subj, Predicate.HAS_CONTENT_HASH), updatedId);
             }
-        } else {
+        } else if (object != null) {
             String value = blobStore.putBlob(object);
             put(Pair.of(subj, predicate), value);
         }

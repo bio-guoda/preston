@@ -6,11 +6,9 @@ import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.model.RefNodeRelation;
 import org.globalbioticinteractions.preston.model.RefNodeString;
-import org.globalbioticinteractions.preston.model.RefNodeType;
 import org.globalbioticinteractions.preston.process.BlobStoreWriter;
 import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.Seeds;
-import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.process.RefNodeListener;
 import org.globalbioticinteractions.preston.process.RegistryReaderIDigBio;
 import org.globalbioticinteractions.preston.process.RelationLogWriter;
@@ -29,7 +27,7 @@ public class CmdList implements Runnable {
 
     @Parameter(names = {"-u", "--seed-uris"}, description = "[URIs to start crawl (aka seed URIs)]", validateWith = URIValidator.class)
     private List<String> seedUrls = new ArrayList<String>() {{
-        add(Seeds.SEED_NODE_IDIGBIO.getLabel());
+  //      add(Seeds.SEED_NODE_IDIGBIO.getLabel());
         add(Seeds.SEED_NODE_GBIF.getLabel());
     }};
 
@@ -38,7 +36,7 @@ public class CmdList implements Runnable {
         final List<RefNodeRelation> seeds = seedUrls.stream()
                 .map(uriString -> {
                     RefNodeString refNodeRoot = RefNodeConstants.SEED_ROOT;
-                    RefNodeString refNodeSeed = new RefNodeString(RefNodeType.URI, uriString);
+                    RefNodeString refNodeSeed = new RefNodeString(uriString);
                     return new RefNodeRelation(refNodeRoot, RefNodeConstants.SEED_OF, refNodeSeed);
                 }).collect(Collectors.toList());
 

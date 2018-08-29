@@ -6,22 +6,18 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.globalbioticinteractions.preston.Resources;
+import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.cmd.CmdList;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeRelation;
 import org.globalbioticinteractions.preston.model.RefNodeString;
-import org.globalbioticinteractions.preston.model.RefNodeType;
-import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
-import org.globalbioticinteractions.preston.store.AppendOnlyRelationStore;
 import org.globalbioticinteractions.preston.store.BlobStore;
-import org.globalbioticinteractions.preston.store.FilePersistence;
-import org.globalbioticinteractions.preston.store.Persistence;
 import org.globalbioticinteractions.preston.store.Predicate;
 import org.globalbioticinteractions.preston.store.RelationStore;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -40,34 +36,57 @@ public class BlobStoreWriter extends RefNodeProcessor {
     }
 
     @Override
-    public void on(RefNodeRelation refNode) {
+    public void on(RefNodeRelation relation) {
         try {
-            RefNode source = refNode.getSource();
-            RefNode relationType = refNode.getRelationType();
-            RefNode target = refNode.getTarget();
+            RefNode source = relation.getSource();
+            RefNode relationType = relation.getRelationType();
+            RefNode target = relation.getTarget();
 
             URI subject = getURI(source);
             URI predicate = getURI(relationType);
             URI object = getURI(target);
             relationStore.put(Triple.of(subject, predicate, object));
             if (object == null) {
-                String key = relationStore.findKey(Pair.of(subject, Predicate.HAS_CONTENT_HASH));
+                final String key = relationStore.findKey(Pair.of(subject, Predicate.HAS_CONTENT_HASH));
                 if (StringUtils.isNotBlank(key)) {
-                    RefNodeString target1 = new RefNodeString(RefNodeType.URI, "preston:" + key);
-                    emit(new RefNodeRelation(source, relationType, target1));
+
+                    RefNode resolvedContentNode = new RefNode() {
+
+                        @Override
+                        public InputStream getData() throws IOException {
+                            return store.get(getId());
+                        }
+
+                        @Override
+                        public String getLabel() {
+                            return "preston:" + getId();
+                        }
+
+                        @Override
+                        public String getId() {
+                            return key;
+                        }
+
+                        @Override
+                        public boolean equivalentTo(RefNode node) {
+                            return StringUtils.equals(node.getId(), getId());
+                        }
+                    };
+
+                    emit(new RefNodeRelation(source, RefNodeConstants.HAS_CONTENT, resolvedContentNode));
 
                 }
             } else {
-                emit(refNode);
+                emit(relation);
             }
         } catch (IOException e) {
-            LOG.warn("failed to handle [" + refNode.getLabel() + "]", e);
+            LOG.warn("failed to handle [" + relation.getLabel() + "]", e);
         }
 
     }
 
     private URI getURI(RefNode source) throws IOException {
-        String s = source == null || source.getData() == null ? null : IOUtils.toString(source.getData(), StandardCharsets.UTF_8);
+        String s = source == null || source.getLabel() == null ? null : source.getLabel();
         return s == null ? null : URI.create(s);
     }
 

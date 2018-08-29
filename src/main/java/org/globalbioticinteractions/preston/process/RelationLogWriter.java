@@ -1,17 +1,15 @@
 package org.globalbioticinteractions.preston.process;
 
 import org.apache.commons.lang3.StringUtils;
-import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeRelation;
-import org.globalbioticinteractions.preston.model.RefNodeType;
 import org.joda.time.format.ISODateTimeFormat;
 
 import java.util.Date;
 
 public class RelationLogWriter implements RefNodeListener {
     @Override
-    public void on(RefNodeRelation refNode) {
-        printRelation(refNode);
+    public void on(RefNodeRelation relation) {
+        printRelation(relation);
     }
 
     public static String printRelation(RefNodeRelation refNode) {

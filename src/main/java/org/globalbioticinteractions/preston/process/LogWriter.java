@@ -12,15 +12,8 @@ import java.util.Date;
 
 public class LogWriter implements RefNodeListener {
     @Override
-    public void on(RefNodeRelation refNode) {
-        System.out.println(printDataset(refNode));
-    }
-
-    public static String printDataset(RefNode refNode) {
-        String accessedAt = ISODateTimeFormat.dateTime().withZoneUTC().print(new Date().getTime());
-        String id = StringUtils.defaultString(refNode.getId());
-        String size = refNode.getSize() == null ? "" : refNode.getSize().toString();
-        return (id + "\t" + refNode.getLabel() + "\t" + refNode.getType().name() + "\t" + size + "\t" + accessedAt);
+    public void on(RefNodeRelation relation) {
+        System.out.println(printRelation(relation));
     }
 
     public static String printRelation(RefNodeRelation refNode) {

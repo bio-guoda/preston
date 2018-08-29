@@ -3,17 +3,16 @@ package org.globalbioticinteractions.preston.model;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
-import static com.sun.org.apache.xerces.internal.util.PropertyState.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class RefNodeRelationTest {
-    private RefNodeString source = new RefNodeString(RefNodeType.URI, "https://example.org");
-    private RefNodeString relation = new RefNodeString(RefNodeType.URI, "https://example.org/partOf");
-    private RefNodeString relation2 = new RefNodeString(RefNodeType.URI, "https://example.org/sortOf");
-    private RefNodeString target = new RefNodeString(RefNodeType.URI, "https://example.org/a");
-    private RefNodeString target2 = new RefNodeString(RefNodeType.URI, "https://example.org/b");
+    private RefNodeString source = new RefNodeString("https://example.org");
+    private RefNodeString relation = new RefNodeString("https://example.org/partOf");
+    private RefNodeString relation2 = new RefNodeString("https://example.org/sortOf");
+    private RefNodeString target = new RefNodeString("https://example.org/a");
+    private RefNodeString target2 = new RefNodeString("https://example.org/b");
 
     @Test
     public void equivalent() {

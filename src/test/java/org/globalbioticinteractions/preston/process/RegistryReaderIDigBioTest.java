@@ -1,9 +1,10 @@
 package org.globalbioticinteractions.preston.process;
 
 import com.sun.syndication.io.FeedException;
+import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeRelation;
 import org.globalbioticinteractions.preston.model.RefNodeString;
-import org.globalbioticinteractions.preston.model.RefNodeType;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -17,19 +18,34 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class RegistryReaderIDigBioTest {
 
     @Test
+    public void onSeed() {
+        ArrayList<RefNodeRelation> nodes = new ArrayList<>();
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(nodes::add);
+        RefNodeString bla = new RefNodeString("bla");
+        reader.on(new RefNodeRelation(bla, bla, Seeds.SEED_NODE_IDIGBIO));
+        assertThat(nodes.size(), is(2));
+    }
+
+    @Test
+    public void onRegistry() {
+        ArrayList<RefNodeRelation> nodes = new ArrayList<>();
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(nodes::add);
+        RefNodeString bla = new RefNodeString("bla");
+        reader.on(new RefNodeRelation(bla, bla, Seeds.SEED_NODE_IDIGBIO));
+        assertThat(nodes.size(), is(2));
+    }
+
+    @Test
     public void parsePublishers() throws IOException {
 
-        RefNode providedParent = new RefNodeString(RefNodeType.UUID, "someRegistryUUID");
-        final List<RefNode> nodes = new ArrayList<>();
+        RefNode providedParent = new RefNodeString("someRegistryUUID");
+        final List<RefNodeRelation> nodes = new ArrayList<>();
 
         InputStream is = getClass().getResourceAsStream("idigbio-publishers.json");
 
@@ -37,7 +53,7 @@ public class RegistryReaderIDigBioTest {
 
         assertThat(nodes.size(), is(234));
 
-        RefNode node = nodes.get(0);
+        RefNodeRelation node = nodes.get(0);
         assertThat(node.getLabel(), is("[someRegistryUUID]-[:http://example.org/hasPart]->[51290816-f682-4e38-a06c-03bf5df2442d]"));
 
         node = nodes.get(1);
@@ -62,8 +78,8 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void parseFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
-        RefNode parent = new RefNodeString(RefNodeType.URI, "http://example.org");
-        List<RefNode> nodes = new ArrayList<>();
+        RefNode parent = new RefNodeString("http://example.org");
+        List<RefNodeRelation> nodes = new ArrayList<>();
         RefNodeEmitter emitter = nodes::add;
         InputStream is = getClass().getResourceAsStream("torch-portal-rss.xml");
 
@@ -71,7 +87,7 @@ public class RegistryReaderIDigBioTest {
 
         assertThat(nodes.size(), is(20));
 
-        List<String> labels = nodes.stream().limit(7).map(RefNode::getLabel).collect(Collectors.toList());
+        List<String> labels = nodes.stream().limit(7).map(RefNodeRelation::getLabel).collect(Collectors.toList());
 
         assertThat(labels, is(Arrays.asList("[http://example.org]-[:http://example.org/hasPart]->[fea81a47-2365-45cc-bef9-b6bbff7457e6]",
                 "[fea81a47-2365-45cc-bef9-b6bbff7457e6]-[:http://example.org/hasPart]->[http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.eml]",
@@ -84,8 +100,8 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void parseSymbiotaFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
-        RefNode parent = new RefNodeString(RefNodeType.URI, "http://example.org");
-        List<RefNode> nodes = new ArrayList<>();
+        RefNode parent = new RefNodeString("http://example.org");
+        List<RefNodeRelation> nodes = new ArrayList<>();
         RefNodeEmitter emitter = nodes::add;
         InputStream is = getClass().getResourceAsStream("symbiota-rss.xml");
 
@@ -93,7 +109,7 @@ public class RegistryReaderIDigBioTest {
 
         assertThat(nodes.size(), is(135));
 
-        List<String> labels = nodes.stream().limit(6).map(RefNode::getLabel).collect(Collectors.toList());
+        List<String> labels = nodes.stream().limit(6).map(RefNodeRelation::getLabel).collect(Collectors.toList());
 
         assertThat(labels, is(Arrays.asList(
                 "[http://example.org]-[:http://example.org/hasPart]->[4b9c73cc-d12d-4654-bdfb-081dce21729b]",
@@ -107,8 +123,8 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void parseIntermountainFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
-        RefNode parent = new RefNodeString(RefNodeType.URI, "http://example.org");
-        List<RefNode> nodes = new ArrayList<>();
+        RefNode parent = new RefNodeString("http://example.org");
+        List<RefNodeRelation> nodes = new ArrayList<>();
         RefNodeEmitter emitter = nodes::add;
         InputStream is = getClass().getResourceAsStream("intermountain-biota-rss.xml");
 

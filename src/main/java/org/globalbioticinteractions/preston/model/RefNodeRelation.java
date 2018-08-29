@@ -3,13 +3,11 @@ package org.globalbioticinteractions.preston.model;
 import org.apache.commons.io.IOUtils;
 import org.globalbioticinteractions.preston.Hasher;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
-public class RefNodeRelation extends RefNodeImpl {
+public class RefNodeRelation {
 
     private final RefNode source;
     private final RefNode target;
@@ -17,13 +15,11 @@ public class RefNodeRelation extends RefNodeImpl {
     private String id;
     
     public RefNodeRelation(RefNode source, RefNode relationType, RefNode target) {
-        super(RefNodeType.RELATION);
         this.relationType = relationType;
         this.source = source;
         this.target = target;
     }
 
-    @Override
     public InputStream getData() throws IOException {
         return IOUtils.toInputStream(getDataString(), StandardCharsets.UTF_8);
     }
@@ -35,7 +31,6 @@ public class RefNodeRelation extends RefNodeImpl {
         return sourceId + "<-[" + relationshipTypeId + "]-" + targetId;
     }
 
-    @Override
     public String getId() {
         if (this.id == null) {
             this.id = Hasher.calcSHA256(getDataString());
@@ -43,23 +38,14 @@ public class RefNodeRelation extends RefNodeImpl {
         return id;
     }
 
-    @Override
-    public Long getSize() {
-        return (long) getDataString().getBytes(StandardCharsets.UTF_8).length;
-    }
-
-    @Override
     public String getLabel() {
         return "[" + getSource().getLabel() + "]-[:" + getRelationType().getLabel() + "]->[" + (getTarget() == null ? "?" : getTarget().getLabel()) + "]";
     }
 
-    @Override
-    public boolean equivalentTo(RefNode other) {
-        return other instanceof RefNodeRelation
-                && Objects.equals(getType(), other.getType())
-                && (getTarget().equivalentTo(((RefNodeRelation) other).getTarget()))
-                && (getRelationType().equivalentTo(((RefNodeRelation) other).getRelationType()))
-                && (getSource().equivalentTo(((RefNodeRelation) other).getSource()));
+    public boolean equivalentTo(RefNodeRelation other) {
+        return (getTarget().equivalentTo(other.getTarget()))
+                && (getRelationType().equivalentTo(other.getRelationType()))
+                && (getSource().equivalentTo(other.getSource()));
     }
 
     public RefNode getTarget() {
