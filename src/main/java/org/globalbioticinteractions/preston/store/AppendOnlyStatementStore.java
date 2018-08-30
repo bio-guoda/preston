@@ -3,7 +3,9 @@ package org.globalbioticinteractions.preston.store;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
+import org.globalbioticinteractions.preston.DateUtil;
 import org.globalbioticinteractions.preston.Hasher;
+import org.globalbioticinteractions.preston.model.RefNodeString;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +43,7 @@ public class AppendOnlyStatementStore implements StatementStore<URI> {
                 if (getDereferencer() != null) {
                     InputStream data = getDereferencer().dereference(object);
                     URI derivedSubject = blobStore.putBlob(data);
+                    recordGenerationTime(derivedSubject);
                     if (null != mostRecentDerivedSubject && !mostRecentDerivedSubject.equals(derivedSubject)) {
                         put(Pair.of(Predicate.WAS_REVISION_OF, mostRecentDerivedSubject), derivedSubject);
                     } else if (null != derivedSubject) {
@@ -53,6 +56,12 @@ public class AppendOnlyStatementStore implements StatementStore<URI> {
             URI value = blobStore.putBlob(subj);
             put(Pair.of(predicate, object), value);
         }
+    }
+
+    private void recordGenerationTime(URI derivedSubject) throws IOException {
+        String value = DateUtil.now() + "^^xsd:dateTime";
+        blobStore.putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
+        put(Pair.of(derivedSubject, Predicate.GENERATED_AT_TIME), Hasher.calcSHA256(value));
     }
 
     public boolean shouldResolveOnMissingOnly() {

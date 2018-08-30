@@ -38,7 +38,9 @@ public class RefNodeString implements RefNode {
 
     @Override
     public boolean equivalentTo(RefNode other) {
-        return other instanceof RefNodeString
+        return other != null
+                && other instanceof RefNodeString
+                && StringUtils.isNotBlank(content)
                 && StringUtils.equals(content, ((RefNodeString) other).content);
     }
 

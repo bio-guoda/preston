@@ -34,15 +34,6 @@ public class RegistryReaderIDigBioTest {
     }
 
     @Test
-    public void onRegistry() {
-        ArrayList<RefStatement> nodes = new ArrayList<>();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(nodes::add);
-        RefNodeString bla = new RefNodeString("bla");
-        reader.on(new RefStatement(bla, bla, Seeds.SEED_NODE_IDIGBIO));
-        assertThat(nodes.size(), is(3));
-    }
-
-    @Test
     public void parsePublishers() throws IOException {
 
         RefNode providedParent = new RefNodeString("someRegistryUUID");

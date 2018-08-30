@@ -2,7 +2,6 @@ package org.globalbioticinteractions.preston.process;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globalbioticinteractions.preston.MimeTypes;
@@ -17,9 +16,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.globalbioticinteractions.preston.RefNodeConstants.CONTINUED_AT;
+import static org.globalbioticinteractions.preston.RefNodeConstants.CONTINUATION_OF;
 import static org.globalbioticinteractions.preston.RefNodeConstants.DATASET_REGISTRY_OF;
+import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
+import static org.globalbioticinteractions.preston.RefNodeConstants.SEED_OF;
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
+import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_REVISION_OF;
 
 public class RegistryReaderGBIF extends RefStatementProcessor {
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
@@ -36,18 +38,17 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
 
     @Override
     public void on(RefStatement statement) {
-        if (statement.getSubject().equivalentTo(Seeds.SEED_NODE_GBIF)) {
+        if (Seeds.SEED_NODE_GBIF.equivalentTo(statement.getSubject())
+                && SEED_OF.equivalentTo(statement.getPredicate())) {
             RefNode refNodeRegistry = new RefNodeString(GBIF_DATASET_API_ENDPOINT);
-            emit(new RefStatement(refNodeRegistry, DATASET_REGISTRY_OF, statement.getObject()));
-            emit(new RefStatement(refNodeRegistry, RefNodeConstants.HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_JSON)));
-            emit(new RefStatement(null, WAS_DERIVED_FROM, refNodeRegistry));
-
+            emitPageRequest(this, refNodeRegistry);
         } else if (statement.getSubject() != null
                 && statement.getObject() != null
                 && statement.getObject().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
-                && statement.getPredicate().equals(RefNodeConstants.WAS_DERIVED_FROM)) {
+                && (WAS_DERIVED_FROM == statement.getPredicate()
+                || WAS_REVISION_OF == statement.getPredicate())) {
             try {
-                parse(statement.getSubject().getContent(), this, statement.getObject());
+                parse(statement.getSubject(), this, statement.getObject());
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.getLabel() + "]", e);
             }
@@ -57,18 +58,24 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
     private static void emitNextPage(RefNode previousPage, int offset, int limit, RefStatementEmitter emitter) {
         String uri = GBIF_DATASET_API_ENDPOINT + "?offset=" + offset + "&limit=" + limit;
         RefNode nextPage = new RefNodeString(uri);
-        emitter.emit(new RefStatement(previousPage, CONTINUED_AT, nextPage));
-
+        emitter.emit(new RefStatement(nextPage, CONTINUATION_OF, previousPage));
+        emitPageRequest(emitter, nextPage);
     }
 
-    public static void parse(InputStream resourceAsStream, RefStatementEmitter emitter, RefNode dataset) throws IOException {
-        JsonNode jsonNode = new ObjectMapper().readTree(resourceAsStream);
+    private static void emitPageRequest(RefStatementEmitter emitter, RefNode nextPage) {
+        emitter.emit(new RefStatement(nextPage, RefNodeConstants.HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_JSON)));
+        emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, nextPage));
+    }
+
+    public static void parse(RefNode currentPageContent, RefStatementEmitter emitter, RefNode currentPage) throws IOException {
+        emitter.emit(new RefStatement(Seeds.SEED_NODE_GBIF, HAD_MEMBER, currentPageContent));
+        JsonNode jsonNode = new ObjectMapper().readTree(currentPageContent.getContent());
         if (jsonNode != null && jsonNode.has("results")) {
             for (JsonNode result : jsonNode.get("results")) {
                 if (result.has("key") && result.has("endpoints")) {
                     String uuid = result.get("key").asText();
                     RefNodeString datasetUUID = new RefNodeString(uuid);
-                    emitter.emit(new RefStatement(dataset, RefNodeConstants.HAD_MEMBER, datasetUUID));
+                    emitter.emit(new RefStatement(currentPageContent, RefNodeConstants.HAD_MEMBER, datasetUUID));
 
                     for (JsonNode endpoint : result.get("endpoints")) {
                         if (endpoint.has("url") && endpoint.has("type")) {
@@ -91,7 +98,7 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
         if (!endOfRecords && jsonNode.has("offset") && jsonNode.has("limit")) {
             int offset = jsonNode.get("offset").asInt();
             int limit = jsonNode.get("limit").asInt();
-            emitNextPage(dataset, offset + limit, limit, emitter);
+            emitNextPage(currentPage, offset + limit, limit, emitter);
         }
 
     }

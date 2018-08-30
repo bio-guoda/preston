@@ -49,7 +49,7 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
     public void on(RefStatement statement) {
         if (statement.getSubject().equivalentTo(Seeds.SEED_NODE_IDIGBIO)) {
             RefNode publishers = PUBLISHERS;
-            emit(new RefStatement(statement.getObject(), PUBLISHER_REGISTRY_OF, publishers));
+            emit(new RefStatement(publishers, PUBLISHER_REGISTRY_OF, statement.getSubject()));
             emit(new RefStatement(publishers, RefNodeConstants.HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_JSON)));
             emit(new RefStatement(null, WAS_DERIVED_FROM, publishers));
         } else if (statement.getSubject() != null

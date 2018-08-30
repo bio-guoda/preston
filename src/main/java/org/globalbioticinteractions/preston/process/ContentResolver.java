@@ -45,33 +45,9 @@ public class ContentResolver extends RefStatementProcessor {
             if (subject == null && Predicate.WAS_DERIVED_FROM.equals(predicate)) {
                 final URI key = statementStore.findKey(Pair.of(Predicate.WAS_DERIVED_FROM, object));
                 if (null != key) {
-
-                    RefNode resolvedSubject = new RefNode() {
-
-                        @Override
-                        public InputStream getContent() throws IOException {
-                            return store.get(getContentHash());
-                        }
-
-                        @Override
-                        public String getLabel() {
-                            return getContentHash().toString();
-                        }
-
-                        @Override
-                        public URI getContentHash() {
-                            return key;
-                        }
-
-                        @Override
-                        public boolean equivalentTo(RefNode node) {
-                            URI id = getContentHash();
-                            URI otherId = node == null ? null : node.getContentHash();
-                            return id != null && id.equals(otherId);
-                        }
-                    };
-
-                    emit(new RefStatement(resolvedSubject, RefNodeConstants.WAS_DERIVED_FROM, o));
+                    RefNode contentNode = new RefNodeFromKey(key);
+                    emitGeneratedAtTime(contentNode);
+                    emit(new RefStatement(contentNode, RefNodeConstants.WAS_DERIVED_FROM, o));
 
                 }
             } else {
@@ -83,10 +59,47 @@ public class ContentResolver extends RefStatementProcessor {
 
     }
 
+    private void emitGeneratedAtTime(RefNode contentNode) throws IOException {
+        final URI generatedAtValue = statementStore.findKey(Pair.of(contentNode.getContentHash(), Predicate.GENERATED_AT_TIME));
+        if (null != generatedAtValue) {
+            emit(new RefStatement(contentNode, RefNodeConstants.GENERATED_AT_TIME, new RefNodeFromKey(generatedAtValue)));
+        }
+    }
+
     private URI getURI(RefNode source) throws IOException {
         String s = source == null || source.getLabel() == null ? null : source.getLabel();
         return s == null ? null : URI.create(s);
     }
 
 
+    private class RefNodeFromKey implements RefNode {
+
+        private final URI key;
+
+        public RefNodeFromKey(URI key) {
+            this.key = key;
+        }
+
+        @Override
+        public InputStream getContent() throws IOException {
+            return store.get(getContentHash());
+        }
+
+        @Override
+        public String getLabel() {
+            return getContentHash().toString();
+        }
+
+        @Override
+        public URI getContentHash() {
+            return key;
+        }
+
+        @Override
+        public boolean equivalentTo(RefNode node) {
+            URI id = getContentHash();
+            URI otherId = node == null ? null : node.getContentHash();
+            return id != null && id.equals(otherId);
+        }
+    }
 }

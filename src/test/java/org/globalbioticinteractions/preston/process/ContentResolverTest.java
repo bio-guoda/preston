@@ -2,6 +2,7 @@ package org.globalbioticinteractions.preston.process;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.globalbioticinteractions.preston.DateUtil;
 import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
@@ -27,8 +28,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -91,33 +95,56 @@ public class ContentResolverTest {
         RefStatement relation = new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, providedNode);
 
         contentResolver.on(relation);
+
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
-        assertThat(refNodes.size(), is(1));
+        assertThat(refNodes.size(), is(2));
 
-        RefStatement cachedNode = refNodes.get(0);
-        String expectedSHA256 = "hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
-        assertThat(cachedNode.getSubject().getContentHash().toString(), is(expectedSHA256));
+        String expectedHash = "50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
+        String expectedValue = "https://example.org";
 
-        String label = cachedNode.getSubject().getLabel();
-        assertThat(label, is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
+        RefStatement refStatement = refNodes.get(0);
+        assertThat(refStatement.getSubject().getLabel(), is("hash://sha256/" + expectedHash));
+        assertThat(refStatement.getPredicate().getLabel(), is(RefNodeConstants.GENERATED_AT_TIME.getLabel()));
 
-        InputStream inputStream = blobStore.get(Hasher.toHashURI("50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
+        InputStream datetimeContent = refStatement.getObject().getContent();
+        assertThat(datetimeContent, is(notNullValue()));
+        String s = IOUtils.toString(datetimeContent, StandardCharsets.UTF_8);
+        String dateTimeSuffix = "^^xsd:dateTime";
+        assertThat(s, endsWith(dateTimeSuffix));
+        assertNotNull(DateUtil.parse(s.replace(dateTimeSuffix, "")));
 
-        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is("https://example.org"));
-
-        inputStream = cachedNode.getObject().getContent();
+        RefStatement cachedNode = refNodes.get(1);
+        assertContentWith(cachedNode, expectedHash, expectedValue);
+        InputStream inputStream = cachedNode.getObject().getContent();
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is(testURI.toString()));
 
-        String baseCacheDir = "/50/d7/a9/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b/";
+        String baseCacheDir = "/50/d7/a9/" + expectedHash + "/";
         String absCacheDir = datasetDir.toAbsolutePath().toString() + baseCacheDir;
 
 
         File data = new File(absCacheDir + "data");
         assertTrue(data.exists());
-        assertThat(IOUtils.toString(data.toURI(), StandardCharsets.UTF_8), is("https://example.org"));
+        assertThat(IOUtils.toString(data.toURI(), StandardCharsets.UTF_8), is(expectedValue));
+
+
+        assertContentWith(refNodes.get(1), expectedHash, expectedValue);
+
 
         FileUtils.deleteQuietly(tempDir.toFile());
+    }
+
+    private void assertContentWith(RefStatement cachedNode, String expectedHash, String expectedValue) throws IOException {
+        String expectedSHA256 = "hash://sha256/" + expectedHash;
+        assertThat(cachedNode.getSubject().getContentHash().toString(), is(expectedSHA256));
+
+        String label = cachedNode.getSubject().getLabel();
+        assertThat(label, is("hash://sha256/" + expectedHash));
+
+        InputStream inputStream = blobStore.get(Hasher.toHashURI(expectedHash));
+
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is(expectedValue));
+
     }
 
 

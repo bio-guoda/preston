@@ -42,7 +42,7 @@ public class CmdList implements Runnable {
     }};
 
     @Parameter(names = {"-c", "--crawl", }, description = "select how to crawl the biodiversity graph", converter = CrawlModeConverter.class)
-    private CrawlMode crawlMode = CrawlMode.restart;
+    private CrawlMode crawlMode = CrawlMode.replay;
 
     @Parameter(names = {"-l", "--log", }, description = "select how to show the biodiversity graph", converter = LoggerConverter.class)
     private Logger logMode = Logger.tsv;
