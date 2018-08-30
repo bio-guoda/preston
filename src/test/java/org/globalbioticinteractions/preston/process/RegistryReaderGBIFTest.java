@@ -23,8 +23,7 @@ public class RegistryReaderGBIFTest {
         RefNodeString bla = new RefNodeString("bla");
         registryReaderGBIF.on(new RefStatement(bla, bla, Seeds.SEED_NODE_GBIF));
         Assert.assertThat(nodes.size(), is(2));
-    }
-
+    
 
     @Test
     public void parseDatasets() throws IOException {

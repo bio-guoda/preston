@@ -52,6 +52,7 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
             }
         } else if (statement.getSubject() != null) {
             if (StringUtils.startsWith(statement.getSubject().getLabel(), GBIF_DATASET_API_ENDPOINT)) {
+                emit(new RefStatement(statement.getSubject(), RefNodeConstants.HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_JSON)));
                 emit(new RefStatement(null, WAS_DERIVED_FROM, statement.getSubject()));
             }
         }

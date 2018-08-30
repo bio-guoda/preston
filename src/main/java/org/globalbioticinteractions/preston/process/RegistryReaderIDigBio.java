@@ -50,7 +50,7 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
         if (statement.getObject().equivalentTo(Seeds.SEED_NODE_IDIGBIO)) {
             RefNode publishers = PUBLISHERS;
             emit(new RefStatement(statement.getObject(), PUBLISHER_REGISTRY_OF, publishers));
-
+            emit(new RefStatement(publishers, RefNodeConstants.HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_JSON)));
             emit(new RefStatement(null, WAS_DERIVED_FROM, publishers));
         } else if (statement.getSubject() != null
                 && statement.getObject().equivalentTo(PUBLISHERS)
@@ -67,7 +67,7 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
         try {
             parseRssFeed(refNode, this, refNode.getContent());
         } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
-            LOG.warn( "can't read [" + refNode.getLabel() + "]", e);
+            // ignore - opportunistic parsing attempt
         }
     }
 
