@@ -13,4 +13,5 @@ public class RefNodeConstants {
     public static final RefNodeString HAS_CONTENT = new RefNodeString(Predicate.HAS_CONTENT.toString());
 
     public static final RefNodeString SEED_ROOT = new RefNodeString("https://preston.globalbioticinteractions.org");
+    public static final RefNodeString HAS_FORMAT = new RefNodeString("http://purl.org/dc/elements/1.1/format");
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
@@ -13,16 +14,18 @@ import org.globalbioticinteractions.preston.model.RefNodeString;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.CONTINUED_AT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.DATASET_REGISTRY_OF;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_CONTENT;
-import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PART;
 
 public class RegistryReaderGBIF extends RefStatementProcessor {
-    private static final List<String> SUPPORTED_ENDPOINT_TYPES = Arrays.asList("DWC_ARCHIVE","EML");
+    private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
+        put("DWC_ARCHIVE", MimeTypes.MIME_TYPE_DWCA);
+        put("EML", MimeTypes.MIME_TYPE_EML);
+    }};
 
     private static final String GBIF_DATASET_API_ENDPOINT = "https://api.gbif.org/v1/dataset";
     private final Log LOG = LogFactory.getLog(RegistryReaderGBIF.class);
@@ -73,10 +76,11 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
                         if (endpoint.has("url") && endpoint.has("type")) {
                             String urlString = endpoint.get("url").asText();
                             String type = endpoint.get("type").asText();
-                            if (SUPPORTED_ENDPOINT_TYPES.contains(type)) {
+
+                            if (SUPPORTED_ENDPOINT_TYPES.containsKey(type)) {
                                 RefNodeString dataArchive = new RefNodeString(urlString);
                                 emitter.emit(new RefStatement(datasetUUID, RefNodeConstants.HAS_PART, dataArchive));
-
+                                emitter.emit(new RefStatement(dataArchive, RefNodeConstants.HAS_FORMAT, new RefNodeString(SUPPORTED_ENDPOINT_TYPES.get(type))));
                                 emitter.emit(new RefStatement(dataArchive, RefNodeConstants.HAS_CONTENT, null));
                             }
                         }

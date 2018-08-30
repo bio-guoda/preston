@@ -34,7 +34,7 @@ public class RegistryReaderGBIFTest {
 
         RegistryReaderGBIF.parse(resourceAsStream, refNodes::add, new RefNodeString("description"));
 
-        assertThat(refNodes.size(), is(11));
+        assertThat(refNodes.size(), is(15));
 
         RefStatement refNode = refNodes.get(0);
         assertThat(refNode.getLabel(), is("[description]-[:http://example.org/hasPart]->[6555005d-4594-4a3e-be33-c70e587b63d7]"));
@@ -43,16 +43,22 @@ public class RegistryReaderGBIFTest {
         assertThat(refNode.getLabel(), is("[6555005d-4594-4a3e-be33-c70e587b63d7]-[:http://example.org/hasPart]->[http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]"));
 
         refNode = refNodes.get(2);
-        assertThat(refNode.getLabel(), is("[http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]-[:http://example.com/hasContent]->[?]"));
+        assertThat(refNode.getLabel(), is("[http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]-[:http://purl.org/dc/elements/1.1/format]->[application/zip+dwca]"));
 
         refNode = refNodes.get(3);
+        assertThat(refNode.getLabel(), is("[http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]-[:http://example.com/hasContent]->[?]"));
+
+        refNode = refNodes.get(4);
         assertThat(refNode.getLabel(), is("[6555005d-4594-4a3e-be33-c70e587b63d7]-[:http://example.org/hasPart]->[http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]"));
 
-        RefStatement thirdRefNode = refNodes.get(4);
-        assertThat(thirdRefNode.getLabel(), is("[http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]-[:http://example.com/hasContent]->[?]"));
+        refNode = refNodes.get(5);
+        assertThat(refNode.getLabel(), is("[http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]-[:http://purl.org/dc/elements/1.1/format]->[text/xml+eml]"));
 
-        thirdRefNode = refNodes.get(5);
-        assertThat(thirdRefNode.getLabel(), is("[description]-[:http://example.org/hasPart]->[d0df772d-78f4-4602-acf2-7d768798f632]"));
+        refNode = refNodes.get(6);
+        assertThat(refNode.getLabel(), is("[http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]-[:http://example.com/hasContent]->[?]"));
+
+        refNode = refNodes.get(7);
+        assertThat(refNode.getLabel(), is("[description]-[:http://example.org/hasPart]->[d0df772d-78f4-4602-acf2-7d768798f632]"));
 
         RefStatement lastRefNode = refNodes.get(refNodes.size() - 1);
         assertThat(lastRefNode.getLabel(), is("[description]-[:http://example.org/continuedAt]->[https://api.gbif.org/v1/dataset?offset=2&limit=2]"));

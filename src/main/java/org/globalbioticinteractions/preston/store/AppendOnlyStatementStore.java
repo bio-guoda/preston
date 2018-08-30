@@ -42,7 +42,7 @@ public class AppendOnlyStatementStore implements StatementStore<URI> {
                     InputStream data = getDereferencer().dereference(subj);
                     URI updatedId = blobStore.putBlob(data);
                     if (null != mostRecentVersionId && !mostRecentVersionId.equals(updatedId)) {
-                        put(Pair.of(mostRecentVersionId, Predicate.SUCCEEDED_BY), updatedId);
+                        put(Pair.of(mostRecentVersionId, Predicate.HAD_REVISION), updatedId);
                         put(Pair.of(updatedId, Predicate.HAS_CONTENT_HASH), updatedId);
                     } else if (null != updatedId) {
                         put(Pair.of(subj, Predicate.HAS_CONTENT_HASH), updatedId);
@@ -72,7 +72,7 @@ public class AppendOnlyStatementStore implements StatementStore<URI> {
     private URI findLastVersionId(URI existingId) throws IOException {
         URI lastVersionId = existingId;
         URI newerVersionId;
-        while ((newerVersionId = findKey(Pair.of(lastVersionId, Predicate.SUCCEEDED_BY))) != null) {
+        while ((newerVersionId = findKey(Pair.of(lastVersionId, Predicate.HAD_REVISION))) != null) {
             lastVersionId = newerVersionId;
         }
         return lastVersionId;

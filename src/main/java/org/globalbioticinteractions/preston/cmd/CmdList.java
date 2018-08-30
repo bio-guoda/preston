@@ -23,7 +23,6 @@ import org.globalbioticinteractions.preston.store.FilePersistence;
 import org.globalbioticinteractions.preston.store.Persistence;
 import org.globalbioticinteractions.preston.store.StatementStore;
 
-import java.beans.Statement;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-@Parameters(separators = "= ", commandDescription = "show biodiversity graph")
+@Parameters(separators = "= ", commandDescription = "list biodiversity graph")
 public class CmdList implements Runnable {
 
     @Parameter(names = {"-u", "--seed-uris"}, description = "[starting points of graph crawl (aka seed URIs)]", validateWith = URIValidator.class)
@@ -43,7 +42,7 @@ public class CmdList implements Runnable {
     }};
 
     @Parameter(names = {"-c", "--crawl", }, description = "select how to crawl the biodiversity graph", converter = CrawlModeConverter.class)
-    private CrawlMode crawlMode = CrawlMode.full;
+    private CrawlMode crawlMode = CrawlMode.restart;
 
     @Parameter(names = {"-l", "--log", }, description = "select how to show the biodiversity graph", converter = LoggerConverter.class)
     private Logger logMode = Logger.tsv;

@@ -107,7 +107,7 @@ public class AppendOnlyStatementStoreTest {
         assertThat(contentHash, Is.is(contentHash2));
         assertThat(content, Is.is(content2));
 
-        URI newContentHash = relationstore.findKey(Pair.of(contentHash, Predicate.SUCCEEDED_BY));
+        URI newContentHash = relationstore.findKey(Pair.of(contentHash, Predicate.HAD_REVISION));
         InputStream newContent = blogStore.get(newContentHash);
 
         assertThat(contentHash, not(Is.is(newContentHash)));
@@ -119,7 +119,7 @@ public class AppendOnlyStatementStoreTest {
         relationstore.setDereferencer(new DereferenceTest("derefData3@"));
         relationstore.put(statement);
 
-        URI newerContentHash = relationstore.findKey(Pair.of(newContentHash, Predicate.SUCCEEDED_BY));
+        URI newerContentHash = relationstore.findKey(Pair.of(newContentHash, Predicate.HAD_REVISION));
         InputStream newerContent = blogStore.get(newerContentHash);
 
         assertThat(newerContentHash.toString(), Is.is("hash://sha256/7e66eac09d137afe06dd73614e966a417260a111208dabe7225b05f02ce380fd"));

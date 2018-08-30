@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
@@ -30,6 +31,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_CONTENT;
+import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_FORMAT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PART;
 import static org.globalbioticinteractions.preston.RefNodeConstants.PUBLISHER_REGISTRY_OF;
 
@@ -125,12 +127,15 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
             if (emlURI != null) {
                 RefNode uriNode = new RefNodeString(emlURI.toString());
                 emitter.emit(new RefStatement(archiveParent, HAS_PART, uriNode));
+                emitter.emit(new RefStatement(uriNode, HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_EML)));
                 emitter.emit(new RefStatement(uriNode, HAS_CONTENT, null));
             }
 
             if (isDWCA && archiveURI != null) {
                 RefNodeString refNodeDWCAUri = new RefNodeString(archiveURI.toString());
                 emitter.emit(new RefStatement(archiveParent, HAS_PART, refNodeDWCAUri));
+
+                emitter.emit(new RefStatement(refNodeDWCAUri, HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_DWCA)));
                 emitter.emit(new RefStatement(refNodeDWCAUri, HAS_CONTENT, null));
 
             }
