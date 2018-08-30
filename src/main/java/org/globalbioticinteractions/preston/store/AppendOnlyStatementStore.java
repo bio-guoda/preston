@@ -5,7 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.globalbioticinteractions.preston.DateUtil;
 import org.globalbioticinteractions.preston.Hasher;
-import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.process.RefNodeUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,7 +59,7 @@ public class AppendOnlyStatementStore implements StatementStore<URI> {
     }
 
     private void recordGenerationTime(URI derivedSubject) throws IOException {
-        String value = DateUtil.now() + "^^xsd:dateTime";
+        String value = RefNodeUtil.toDateTime(DateUtil.now()).getLabel();
         blobStore.putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
         put(Pair.of(derivedSubject, Predicate.GENERATED_AT_TIME), Hasher.calcSHA256(value));
     }

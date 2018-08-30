@@ -7,14 +7,17 @@ import org.apache.commons.logging.LogFactory;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.cmd.CmdList;
 import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.store.BlobStore;
 import org.globalbioticinteractions.preston.store.Predicate;
 import org.globalbioticinteractions.preston.store.StatementStore;
+import sun.misc.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 public class ContentResolver extends RefStatementProcessor {
 
@@ -60,9 +63,12 @@ public class ContentResolver extends RefStatementProcessor {
     }
 
     private void emitGeneratedAtTime(RefNode contentNode) throws IOException {
-        final URI generatedAtValue = statementStore.findKey(Pair.of(contentNode.getContentHash(), Predicate.GENERATED_AT_TIME));
-        if (null != generatedAtValue) {
-            emit(new RefStatement(contentNode, RefNodeConstants.GENERATED_AT_TIME, new RefNodeFromKey(generatedAtValue)));
+        final URI generatedAtValueKey = statementStore.findKey(Pair.of(contentNode.getContentHash(), Predicate.GENERATED_AT_TIME));
+        if (null != generatedAtValueKey) {
+            InputStream inputStream = store.get(generatedAtValueKey);
+            if (inputStream != null) {
+                emit(new RefStatement(contentNode, RefNodeConstants.GENERATED_AT_TIME, new RefNodeString(org.apache.commons.io.IOUtils.toString(inputStream, StandardCharsets.UTF_8))));
+            }
         }
     }
 

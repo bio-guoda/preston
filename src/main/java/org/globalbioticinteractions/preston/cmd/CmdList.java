@@ -14,7 +14,6 @@ import org.globalbioticinteractions.preston.process.ContentResolver;
 import org.globalbioticinteractions.preston.process.RefStatementListener;
 import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.process.RegistryReaderIDigBio;
-import org.globalbioticinteractions.preston.process.StatementHashLogger;
 import org.globalbioticinteractions.preston.process.StatementLogger;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.AppendOnlyStatementStore;
@@ -37,8 +36,8 @@ public class CmdList implements Runnable {
 
     @Parameter(names = {"-u", "--seed-uris"}, description = "[starting points of graph crawl (aka seed URIs)]", validateWith = URIValidator.class)
     private List<String> seedUrls = new ArrayList<String>() {{
-        add(Seeds.SEED_NODE_GBIF.getLabel());
         add(Seeds.SEED_NODE_IDIGBIO.getLabel());
+        add(Seeds.SEED_NODE_GBIF.getLabel());
     }};
 
     @Parameter(names = {"-c", "--crawl", }, description = "select how to crawl the biodiversity graph", converter = CrawlModeConverter.class)
@@ -82,8 +81,6 @@ public class CmdList implements Runnable {
         RefStatementListener logger;
         if (Logger.tsv == logMode) {
             logger = new StatementLogger();
-        } else if (Logger.nquads == logMode) {
-            logger = new StatementHashLogger();
         } else {
             logger = new RefStatementListener() {
                 AtomicLong count = new AtomicLong(1);

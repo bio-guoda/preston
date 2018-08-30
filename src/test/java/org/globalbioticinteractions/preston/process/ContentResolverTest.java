@@ -110,9 +110,7 @@ public class ContentResolverTest {
         InputStream datetimeContent = refStatement.getObject().getContent();
         assertThat(datetimeContent, is(notNullValue()));
         String s = IOUtils.toString(datetimeContent, StandardCharsets.UTF_8);
-        String dateTimeSuffix = "^^xsd:dateTime";
-        assertThat(s, endsWith(dateTimeSuffix));
-        assertNotNull(DateUtil.parse(s.replace(dateTimeSuffix, "")));
+        assertNotNull(DateUtil.parse(s));
 
         RefStatement cachedNode = refNodes.get(1);
         assertContentWith(cachedNode, expectedHash, expectedValue);

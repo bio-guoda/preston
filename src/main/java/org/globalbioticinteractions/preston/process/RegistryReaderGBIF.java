@@ -12,12 +12,10 @@ import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefStatement;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.CONTINUATION_OF;
-import static org.globalbioticinteractions.preston.RefNodeConstants.DATASET_REGISTRY_OF;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
 import static org.globalbioticinteractions.preston.RefNodeConstants.SEED_OF;
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
@@ -63,7 +61,7 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
     }
 
     private static void emitPageRequest(RefStatementEmitter emitter, RefNode nextPage) {
-        emitter.emit(new RefStatement(nextPage, RefNodeConstants.HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_JSON)));
+        emitter.emit(new RefStatement(nextPage, RefNodeConstants.HAS_FORMAT, RefNodeUtil.toContentType(MimeTypes.MIME_TYPE_JSON)));
         emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, nextPage));
     }
 
@@ -74,7 +72,7 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
             for (JsonNode result : jsonNode.get("results")) {
                 if (result.has("key") && result.has("endpoints")) {
                     String uuid = result.get("key").asText();
-                    RefNodeString datasetUUID = new RefNodeString(uuid);
+                    RefNodeString datasetUUID = RefNodeUtil.toUUID(uuid);
                     emitter.emit(new RefStatement(currentPageContent, RefNodeConstants.HAD_MEMBER, datasetUUID));
 
                     for (JsonNode endpoint : result.get("endpoints")) {
@@ -85,7 +83,7 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
                             if (SUPPORTED_ENDPOINT_TYPES.containsKey(type)) {
                                 RefNodeString dataArchive = new RefNodeString(urlString);
                                 emitter.emit(new RefStatement(datasetUUID, RefNodeConstants.HAD_MEMBER, dataArchive));
-                                emitter.emit(new RefStatement(dataArchive, RefNodeConstants.HAS_FORMAT, new RefNodeString(SUPPORTED_ENDPOINT_TYPES.get(type))));
+                                emitter.emit(new RefStatement(dataArchive, RefNodeConstants.HAS_FORMAT, RefNodeUtil.toContentType(SUPPORTED_ENDPOINT_TYPES.get(type))));
                                 emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, dataArchive));
                             }
                         }
