@@ -1,5 +1,6 @@
 package org.globalbioticinteractions.preston;
 
+import jdk.internal.util.xml.impl.Input;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -20,11 +21,17 @@ import java.net.URI;
 public class Resources {
     private static CloseableHttpClient httpClient = null;
 
-    public static InputStream asInputStream(URI dataURI) throws IOException {
-        InputStream is;
+    public static InputStream asInputStreamOfflineOnly(URI dataURI) throws IOException {
+        InputStream is = null;
         if (StringUtils.equals("file", dataURI.getScheme())) {
             is = dataURI.toURL().openStream();
-        } else {
+        }
+        return is;
+    }
+
+    public static InputStream asInputStream(URI dataURI) throws IOException {
+        InputStream is = asInputStreamOfflineOnly(dataURI);
+        if (is == null) {
             HttpGet get = new HttpGet(dataURI);
             get.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
 

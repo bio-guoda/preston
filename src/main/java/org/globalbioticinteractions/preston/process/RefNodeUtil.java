@@ -2,6 +2,10 @@ package org.globalbioticinteractions.preston.process;
 
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefStatement;
+
+import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
+import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_REVISION_OF;
 
 public class RefNodeUtil {
 
@@ -15,5 +19,10 @@ public class RefNodeUtil {
 
     public static RefNode toDateTime(String dateTime) {
         return new RefNodeString(dateTime);
+    }
+
+    public static boolean isDerivedFrom(RefStatement statement) {
+        return WAS_DERIVED_FROM.equivalentTo(statement.getPredicate())
+        || WAS_REVISION_OF.equivalentTo(statement.getPredicate());
     }
 }

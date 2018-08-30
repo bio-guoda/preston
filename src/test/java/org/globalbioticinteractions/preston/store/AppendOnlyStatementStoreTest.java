@@ -4,7 +4,11 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.globalbioticinteractions.preston.Hasher;
+import org.globalbioticinteractions.preston.model.RefStatement;
+import org.globalbioticinteractions.preston.process.RefStatementEmitter;
+import org.globalbioticinteractions.preston.process.RefStatementListener;
 import org.hamcrest.core.Is;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -18,6 +22,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class AppendOnlyStatementStoreTest {
 
+    @Ignore("store only dereferenced content and timestamps for now")
     @Test
     public void putImmutableStatement() throws IOException {
         URI GBIF = URI.create("http://gbif.org");
@@ -43,14 +48,15 @@ public class AppendOnlyStatementStoreTest {
     @Test
     public void putContentThatNeedsDownload() throws IOException {
         Triple<URI, URI, URI> statement
-                = Triple.of(null , Predicate.WAS_DERIVED_FROM, URI.create("http://some"));
+                = Triple.of(null, Predicate.WAS_DERIVED_FROM, URI.create("http://some"));
 
 
         Dereferencer dereferencer = new DereferenceTest("derefData@");
         Persistence testPersistence = TestUtil.getTestPersistence();
-        AppendOnlyStatementStore relationStore = getAppendOnlyRelationStore(dereferencer,
+        AppendOnlyStatementStore relationStore = new AppendOnlyStatementStore(
                 new AppendOnlyBlobStore(testPersistence),
-                testPersistence);
+                testPersistence,
+                dereferencer);
 
         BlobStore blobStore = new AppendOnlyBlobStore(testPersistence);
 

@@ -18,8 +18,6 @@ import java.util.Map;
 import static org.globalbioticinteractions.preston.RefNodeConstants.CONTINUATION_OF;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
 import static org.globalbioticinteractions.preston.RefNodeConstants.SEED_OF;
-import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
-import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_REVISION_OF;
 
 public class RegistryReaderGBIF extends RefStatementProcessor {
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
@@ -43,8 +41,7 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
         } else if (statement.getSubject() != null
                 && statement.getObject() != null
                 && statement.getObject().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
-                && (WAS_DERIVED_FROM == statement.getPredicate()
-                || WAS_REVISION_OF == statement.getPredicate())) {
+                && RefNodeUtil.isDerivedFrom(statement)) {
             try {
                 parse(statement.getSubject(), this, statement.getObject());
             } catch (IOException e) {

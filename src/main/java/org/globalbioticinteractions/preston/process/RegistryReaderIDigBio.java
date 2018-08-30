@@ -54,10 +54,10 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
             emit(new RefStatement(null, WAS_DERIVED_FROM, publishers));
         } else if (statement.getSubject() != null
                 && statement.getObject().equivalentTo(PUBLISHERS)
-                && statement.getPredicate().equivalentTo(RefNodeConstants.WAS_DERIVED_FROM)) {
+                && RefNodeUtil.isDerivedFrom(statement)) {
             parsePublishers(statement.getSubject());
         } else if (statement.getSubject() != null
-                && statement.getPredicate().equivalentTo(RefNodeConstants.WAS_DERIVED_FROM)) {
+                && RefNodeUtil.isDerivedFrom(statement)) {
             parse(statement.getSubject());
         }
     }

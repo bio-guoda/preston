@@ -7,14 +7,15 @@ import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.AppendOnlyStatementStore;
 import org.globalbioticinteractions.preston.store.FilePersistence;
 import org.globalbioticinteractions.preston.store.Persistence;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -28,7 +29,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
@@ -39,17 +39,20 @@ import static org.junit.Assert.assertTrue;
 public class ContentResolverTest {
 
     private AppendOnlyBlobStore blobStore;
-    private AppendOnlyStatementStore relationStore;
     private Path tempDir;
     private Path datasetDir;
+    private FilePersistence persistence;
 
     @Before
     public void init() throws IOException {
         tempDir = Files.createTempDirectory(Paths.get("target/"), "caching");
         datasetDir = Files.createTempDirectory(Paths.get("target/"), "datasets");
-        Persistence persistence = new FilePersistence(tempDir.toFile(), datasetDir.toFile());
+        this.persistence = new FilePersistence(tempDir.toFile(), datasetDir.toFile());
         this.blobStore = new AppendOnlyBlobStore(persistence);
-        this.relationStore = new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream);
+    }
+
+    private AppendOnlyStatementStore createStatementStore(RefStatementListener... listeners) {
+        return new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream, listeners);
     }
 
     @After
@@ -65,11 +68,12 @@ public class ContentResolverTest {
                 is("3f/c9/b6/3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"));
     }
 
+    @Ignore("only store timestamps and dereferenced urls for now")
     @Test
     public void cacheString() throws IOException {
         ArrayList<RefStatement> refNodes = new ArrayList<>();
 
-        ContentResolver contentResolver = new ContentResolver(this.blobStore, this.relationStore, refNodes::add);
+        RefStatementListener contentResolver = createStatementStore(refNodes::add);
         RefNodeString providedNode = new RefNodeString("https://example.org");
         contentResolver.on(new RefStatement(providedNode, RefNodeConstants.HAD_MEMBER, providedNode));
         assertTrue(tempDir.toFile().exists());
@@ -77,7 +81,7 @@ public class ContentResolverTest {
 
         RefStatement cachedNode = refNodes.get(0);
         assertThat(cachedNode.getSubject().getContentHash().toString(), is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
-        assertThat(cachedNode.getSubject().getLabel(), is("https://example.org"));
+        assertThat(IOUtils.toString(cachedNode.getSubject().getContent(), StandardCharsets.UTF_8), is("https://example.org"));
         assertTrue(cachedNode.getSubject().equivalentTo(providedNode));
 
         FileUtils.deleteQuietly(tempDir.toFile());
@@ -87,14 +91,14 @@ public class ContentResolverTest {
     public void cacheContent() throws IOException, URISyntaxException {
         ArrayList<RefStatement> refNodes = new ArrayList<>();
 
-        ContentResolver contentResolver = new ContentResolver(this.blobStore, this.relationStore, refNodes::add);
+        RefStatementListener listener = createStatementStore(refNodes::add);
 
 
         URI testURI = getClass().getResource("test.txt").toURI();
         RefNode providedNode = new RefNodeString(testURI.toString());
         RefStatement relation = new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, providedNode);
 
-        contentResolver.on(relation);
+        listener.on(relation);
 
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
@@ -115,6 +119,7 @@ public class ContentResolverTest {
         RefStatement cachedNode = refNodes.get(1);
         assertContentWith(cachedNode, expectedHash, expectedValue);
         InputStream inputStream = cachedNode.getObject().getContent();
+        assertNotNull(inputStream);
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is(testURI.toString()));
 
         String baseCacheDir = "/50/d7/a9/" + expectedHash + "/";

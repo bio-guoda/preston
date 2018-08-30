@@ -10,7 +10,6 @@ import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefStatement;
-import org.globalbioticinteractions.preston.process.ContentResolver;
 import org.globalbioticinteractions.preston.process.RefStatementListener;
 import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.process.RegistryReaderIDigBio;
@@ -25,6 +24,7 @@ import org.globalbioticinteractions.preston.store.StatementStore;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -36,14 +36,14 @@ public class CmdList implements Runnable {
 
     @Parameter(names = {"-u", "--seed-uris"}, description = "[starting points of graph crawl (aka seed URIs)]", validateWith = URIValidator.class)
     private List<String> seedUrls = new ArrayList<String>() {{
-        add(Seeds.SEED_NODE_IDIGBIO.getLabel());
+        //add(Seeds.SEED_NODE_IDIGBIO.getLabel());
         add(Seeds.SEED_NODE_GBIF.getLabel());
     }};
 
-    @Parameter(names = {"-c", "--crawl", }, description = "select how to crawl the biodiversity graph", converter = CrawlModeConverter.class)
+    @Parameter(names = {"-c", "--crawl",}, description = "select how to crawl the biodiversity graph", converter = CrawlModeConverter.class)
     private CrawlMode crawlMode = CrawlMode.replay;
 
-    @Parameter(names = {"-l", "--log", }, description = "select how to show the biodiversity graph", converter = LoggerConverter.class)
+    @Parameter(names = {"-l", "--log",}, description = "select how to show the biodiversity graph", converter = LoggerConverter.class)
     private Logger logMode = Logger.tsv;
 
     @Override
@@ -62,17 +62,18 @@ public class CmdList implements Runnable {
         Persistence persistence = new FilePersistence();
         BlobStore blobStore = new AppendOnlyBlobStore(persistence);
 
-        StatementStore<URI> statementStore = CrawlMode.replay == crawlMode
-                ? createOfflineStatementStore(persistence, blobStore)
-                : createOnlineStatementStore(persistence, blobStore);
-
-        final RefStatementListener listener = new ContentResolver(blobStore, statementStore,
+        RefStatementListener listeners[] = {
                 new RegistryReaderIDigBio(statements::add),
                 new RegistryReaderGBIF(statements::add),
-                getStatementLogger());
+                getStatementLogger()
+        };
+
+        RefStatementListener statementStore = (CrawlMode.replay == crawlMode)
+                ? createOfflineStatementStore(persistence, blobStore, listeners)
+                : createOnlineStatementStore(persistence, blobStore, listeners);
 
         while (!statements.isEmpty()) {
-            listener.on(statements.poll());
+            statementStore.on(statements.poll());
         }
 
     }
@@ -84,6 +85,7 @@ public class CmdList implements Runnable {
         } else {
             logger = new RefStatementListener() {
                 AtomicLong count = new AtomicLong(1);
+
                 @Override
                 public void on(RefStatement statement) {
                     long index = count.getAndIncrement();
@@ -98,26 +100,22 @@ public class CmdList implements Runnable {
         return logger;
     }
 
-    private StatementStore<URI> createOfflineStatementStore(Persistence persistence, BlobStore blobStore) {
-        return new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream) {
+    private RefStatementListener createOfflineStatementStore(Persistence persistence, BlobStore blobStore, RefStatementListener listeners[]) {
+        return new AppendOnlyStatementStore(blobStore, persistence, null, listeners) {
 
             @Override
             public void put(Pair<URI, URI> partialStatement, URI value) throws IOException {
 
             }
 
-            @Override
-            public void put(Triple<URI, URI, URI> statement) throws IOException {
-
-            }
 
         };
     }
 
-   private StatementStore<URI> createOnlineStatementStore(Persistence persistence, BlobStore blobStore) {
-       AppendOnlyStatementStore appendOnlyStatementStore = new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream);
-       appendOnlyStatementStore.setResolveOnMissingOnly(CrawlMode.resume == crawlMode);
-       return appendOnlyStatementStore;
+    private RefStatementListener createOnlineStatementStore(Persistence persistence, BlobStore blobStore, RefStatementListener[] listener) {
+        AppendOnlyStatementStore appendOnlyStatementStore = new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream, listener);
+        appendOnlyStatementStore.setResolveOnMissingOnly(CrawlMode.resume == crawlMode);
+        return appendOnlyStatementStore;
     }
 
 }
