@@ -30,7 +30,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
-@Parameters(separators = "= ", commandDescription = "shows biodiversity graph")
+@Parameters(separators = "= ", commandDescription = "show biodiversity graph")
 public class CmdList implements Runnable {
 
     @Parameter(names = {"-u", "--seed-uris"}, description = "[starting points of graph crawl (aka seed URIs)]", validateWith = URIValidator.class)
@@ -39,12 +39,8 @@ public class CmdList implements Runnable {
         add(Seeds.SEED_NODE_IDIGBIO.getLabel());
     }};
 
-    @Parameter(names = {"-o", "--offline"}, description = "lists nodes in biodiversity graph using a local archive")
-    private boolean offline = false;
-
-    boolean isOffline() {
-        return offline;
-    }
+    @Parameter(names = {"-m", "--mode", }, description = "select how to crawl the biodiversity graph", converter = CrawlModeConverter.class)
+    private CrawlMode mode = CrawlMode.full;
 
     @Override
     public void run() {
@@ -63,7 +59,7 @@ public class CmdList implements Runnable {
         Persistence persistence = new FilePersistence();
         BlobStore blobStore = new AppendOnlyBlobStore(persistence);
 
-        StatementStore<URI> statementStore = isOffline()
+        StatementStore<URI> statementStore = CrawlMode.replay == mode
                 ? createOfflineStatementStore(persistence, blobStore)
                 : createOnlineStatementStore(persistence, blobStore);
 
@@ -95,7 +91,9 @@ public class CmdList implements Runnable {
     }
 
    private StatementStore<URI> createOnlineStatementStore(Persistence persistence, BlobStore blobStore) {
-        return new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream);
+       AppendOnlyStatementStore appendOnlyStatementStore = new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream);
+       appendOnlyStatementStore.setResolveOnMissingOnly(CrawlMode.resume == mode);
+       return appendOnlyStatementStore;
     }
 
 }

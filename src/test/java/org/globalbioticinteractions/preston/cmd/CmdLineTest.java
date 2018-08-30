@@ -10,6 +10,16 @@ public class CmdLineTest {
         CmdLine.run(new String[]{"version"});
     }
 
+    @Test
+    public void usage() throws Throwable {
+        CmdLine.run(new String[]{"usage"});
+    }
+
+    @Test
+    public void list() throws Throwable {
+        CmdLine.run(new String[]{"ls", "--mode", "replay"});
+    }
+
     @Test(expected = MissingCommandException.class)
     public void invalidCommand() throws Throwable {
         CmdLine.run(new String[]{"bla"});

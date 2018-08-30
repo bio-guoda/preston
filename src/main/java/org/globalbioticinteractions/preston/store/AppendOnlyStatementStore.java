@@ -19,6 +19,8 @@ public class AppendOnlyStatementStore implements StatementStore<URI> {
 
     private Dereferencer dereferencer;
 
+    private boolean resolveOnMissingOnly = false;
+
     public AppendOnlyStatementStore(BlobStore blobStore, Persistence persistence, Dereferencer dereferencer) {
         this.blobStore = blobStore;
         this.persistence = persistence;
@@ -33,15 +35,18 @@ public class AppendOnlyStatementStore implements StatementStore<URI> {
 
         if (Predicate.HAS_CONTENT.equals(predicate) && object == null) {
             URI mostRecentVersionId = findMostRecentVersion(subj);
-
-            if (getDereferencer() != null) {
-                InputStream data = getDereferencer().dereference(subj);
-                URI updatedId = blobStore.putBlob(data);
-                if (null != mostRecentVersionId && !mostRecentVersionId.equals(updatedId)) {
-                    put(Pair.of(mostRecentVersionId, Predicate.SUCCEEDED_BY), updatedId);
-                    put(Pair.of(updatedId, Predicate.HAS_CONTENT_HASH), updatedId);
-                } else if (null != updatedId) {
-                    put(Pair.of(subj, Predicate.HAS_CONTENT_HASH), updatedId);
+            if (mostRecentVersionId != null && shouldResolveOnMissingOnly()) {
+                put(Pair.of(subj, Predicate.HAS_CONTENT_HASH), mostRecentVersionId);
+            } else {
+                if (getDereferencer() != null) {
+                    InputStream data = getDereferencer().dereference(subj);
+                    URI updatedId = blobStore.putBlob(data);
+                    if (null != mostRecentVersionId && !mostRecentVersionId.equals(updatedId)) {
+                        put(Pair.of(mostRecentVersionId, Predicate.SUCCEEDED_BY), updatedId);
+                        put(Pair.of(updatedId, Predicate.HAS_CONTENT_HASH), updatedId);
+                    } else if (null != updatedId) {
+                        put(Pair.of(subj, Predicate.HAS_CONTENT_HASH), updatedId);
+                    }
                 }
             }
 
@@ -49,6 +54,14 @@ public class AppendOnlyStatementStore implements StatementStore<URI> {
             URI value = blobStore.putBlob(object);
             put(Pair.of(subj, predicate), value);
         }
+    }
+
+    public boolean shouldResolveOnMissingOnly() {
+        return resolveOnMissingOnly;
+    }
+
+    public void setResolveOnMissingOnly(boolean resolveOnMissingOnly) {
+        this.resolveOnMissingOnly = resolveOnMissingOnly;
     }
 
     private URI findMostRecentVersion(URI subj) throws IOException {
