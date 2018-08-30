@@ -156,7 +156,7 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
                     String rssFeedUrl = data.has("rss_url") ? data.get("rss_url").asText() : null;
                     if (StringUtils.isNotBlank(rssFeedUrl)) {
                         RefNodeString refNodeFeed = new RefNodeString(rssFeedUrl);
-                        emitter.emit(new RefStatement(refNodePublisher, RefNodeConstants.HAS_FEED, refNodeFeed));
+                        emitter.emit(new RefStatement(refNodePublisher, RefNodeConstants.HAD_MEMBER, refNodeFeed));
                         emitter.emit(new RefStatement(refNodeFeed, HAS_FORMAT, RefNodeUtil.toContentType(MimeTypes.MIME_TYPE_RSS)));
                         emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, refNodeFeed));
                     }

@@ -49,7 +49,7 @@ public class RegistryReaderIDigBioTest {
         assertThat(node.getLabel(), is("[someRegistryUUID]-[:http://www.w3.org/ns/prov#hadMember]->[51290816-f682-4e38-a06c-03bf5df2442d]"));
 
         node = nodes.get(1);
-        assertThat(node.getLabel(), is("[51290816-f682-4e38-a06c-03bf5df2442d]-[:http://example.org/hasFeed]->[https://www.morphosource.org/rss/ms.rss]"));
+        assertThat(node.getLabel(), is("[51290816-f682-4e38-a06c-03bf5df2442d]-[:http://www.w3.org/ns/prov#hadMember]->[https://www.morphosource.org/rss/ms.rss]"));
 
         node = nodes.get(2);
         assertThat(node.getLabel(), is("[https://www.morphosource.org/rss/ms.rss]-[:http://purl.org/dc/elements/1.1/format]->[application/rss+xml]"));
@@ -61,7 +61,7 @@ public class RegistryReaderIDigBioTest {
         assertThat(node.getLabel(), is("[someRegistryUUID]-[:http://www.w3.org/ns/prov#hadMember]->[a9684883-ce9b-4be1-9841-b063fc69e163]"));
 
         node = nodes.get(5);
-        assertThat(node.getLabel(), is("[a9684883-ce9b-4be1-9841-b063fc69e163]-[:http://example.org/hasFeed]->[http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml]"));
+        assertThat(node.getLabel(), is("[a9684883-ce9b-4be1-9841-b063fc69e163]-[:http://www.w3.org/ns/prov#hadMember]->[http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml]"));
 
         node = nodes.get(6);
         assertThat(node.getLabel(), is("[http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml]-[:http://purl.org/dc/elements/1.1/format]->[application/rss+xml]"));
