@@ -52,7 +52,7 @@ public class RegistryReaderIDigBioTest {
 
         RegistryReaderIDigBio.parsePublishers(providedParent, nodes::add, is);
 
-        assertThat(nodes.size(), is(234));
+        assertThat(nodes.size(), is(312));
 
         RefStatement node = nodes.get(0);
         assertThat(node.getLabel(), is("[someRegistryUUID]-[:http://www.w3.org/ns/prov#hadMember]->[51290816-f682-4e38-a06c-03bf5df2442d]"));
@@ -61,18 +61,24 @@ public class RegistryReaderIDigBioTest {
         assertThat(node.getLabel(), is("[51290816-f682-4e38-a06c-03bf5df2442d]-[:http://example.org/hasFeed]->[https://www.morphosource.org/rss/ms.rss]"));
 
         node = nodes.get(2);
-        assertThat(node.getLabel(), is("[https://www.morphosource.org/rss/ms.rss]-[:http://example.com/hasContent]->[?]"));
+        assertThat(node.getLabel(), is("[https://www.morphosource.org/rss/ms.rss]-[:http://purl.org/dc/elements/1.1/format]->[application/rss+xml]"));
 
         node = nodes.get(3);
-        assertThat(node.getLabel(), is("[someRegistryUUID]-[:http://www.w3.org/ns/prov#hadMember]->[a9684883-ce9b-4be1-9841-b063fc69e163]"));
+        assertThat(node.getLabel(), is("[?]-[:http://www.w3.org/ns/prov#wasDerivedFrom]->[https://www.morphosource.org/rss/ms.rss]"));
 
         node = nodes.get(4);
-        assertThat(node.getLabel(), is("[a9684883-ce9b-4be1-9841-b063fc69e163]-[:http://example.org/hasFeed]->[http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml]"));
+        assertThat(node.getLabel(), is("[someRegistryUUID]-[:http://www.w3.org/ns/prov#hadMember]->[a9684883-ce9b-4be1-9841-b063fc69e163]"));
 
         node = nodes.get(5);
-        assertThat(node.getLabel(), is("[http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml]-[:http://example.com/hasContent]->[?]"));
+        assertThat(node.getLabel(), is("[a9684883-ce9b-4be1-9841-b063fc69e163]-[:http://example.org/hasFeed]->[http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml]"));
 
         node = nodes.get(6);
+        assertThat(node.getLabel(), is("[http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml]-[:http://purl.org/dc/elements/1.1/format]->[application/rss+xml]"));
+
+        node = nodes.get(7);
+        assertThat(node.getLabel(), is("[?]-[:http://www.w3.org/ns/prov#wasDerivedFrom]->[http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml]"));
+
+        node = nodes.get(8);
         assertThat(node.getLabel(), is("[someRegistryUUID]-[:http://www.w3.org/ns/prov#hadMember]->[089a51fa-5f81-48e7-a1b7-9bc539555f29]"));
 
     }
@@ -92,11 +98,11 @@ public class RegistryReaderIDigBioTest {
 
         List<String> expected = Arrays.asList("[http://example.org]-[:http://www.w3.org/ns/prov#hadMember]->[fea81a47-2365-45cc-bef9-b6bbff7457e6]",
                 "[fea81a47-2365-45cc-bef9-b6bbff7457e6]-[:http://www.w3.org/ns/prov#hadMember]->[http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.eml]",
-                "[http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.eml]-[:http://purl.org/dc/elements/1.1/format]->[text/xml+eml]",
-                "[http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.eml]-[:http://example.com/hasContent]->[?]",
+                "[http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.eml]-[:http://purl.org/dc/elements/1.1/format]->[application/eml]",
+                "[?]-[:http://www.w3.org/ns/prov#wasDerivedFrom]->[http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.eml]",
                 "[fea81a47-2365-45cc-bef9-b6bbff7457e6]-[:http://www.w3.org/ns/prov#hadMember]->[http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.zip]",
-                "[http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.zip]-[:http://purl.org/dc/elements/1.1/format]->[application/zip+dwca]",
-                "[http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.zip]-[:http://example.com/hasContent]->[?]",
+                "[http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.zip]-[:http://purl.org/dc/elements/1.1/format]->[application/dwca]",
+                "[?]-[:http://www.w3.org/ns/prov#wasDerivedFrom]->[http://portal.torcherbaria.org/portal/content/dwca/BRIT_DwC-A.zip]",
                 "[http://example.org]-[:http://www.w3.org/ns/prov#hadMember]->[bee3f1bd-8944-4593-8c37-d64a7c9bc1e1]",
                 "[bee3f1bd-8944-4593-8c37-d64a7c9bc1e1]-[:http://www.w3.org/ns/prov#hadMember]->[http://portal.torcherbaria.org/portal/content/dwca/HPC_DwC-A.eml]");
         assertThat(actual.size(), is(expected.size()));
@@ -123,11 +129,11 @@ public class RegistryReaderIDigBioTest {
         assertThat(labels, is(Arrays.asList(
                 "[http://example.org]-[:http://www.w3.org/ns/prov#hadMember]->[4b9c73cc-d12d-4654-bdfb-081dce21729b]",
                 "[4b9c73cc-d12d-4654-bdfb-081dce21729b]-[:http://www.w3.org/ns/prov#hadMember]->[http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.eml]",
-                "[http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.eml]-[:http://purl.org/dc/elements/1.1/format]->[text/xml+eml]",
-                "[http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.eml]-[:http://example.com/hasContent]->[?]",
+                "[http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.eml]-[:http://purl.org/dc/elements/1.1/format]->[application/eml]",
+                "[?]-[:http://www.w3.org/ns/prov#wasDerivedFrom]->[http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.eml]",
                 "[4b9c73cc-d12d-4654-bdfb-081dce21729b]-[:http://www.w3.org/ns/prov#hadMember]->[http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.zip]",
-                "[http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.zip]-[:http://purl.org/dc/elements/1.1/format]->[application/zip+dwca]",
-                "[http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.zip]-[:http://example.com/hasContent]->[?]",
+                "[http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.zip]-[:http://purl.org/dc/elements/1.1/format]->[application/dwca]",
+                "[?]-[:http://www.w3.org/ns/prov#wasDerivedFrom]->[http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.zip]",
                 "[http://example.org]-[:http://www.w3.org/ns/prov#hadMember]->[b01789b2-c5d7-11e4-b6af-00163e00498d]")));
 
     }

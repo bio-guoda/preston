@@ -43,19 +43,19 @@ public class RegistryReaderGBIFTest {
         assertThat(refNode.getLabel(), is("[6555005d-4594-4a3e-be33-c70e587b63d7]-[:http://www.w3.org/ns/prov#hadMember]->[http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]"));
 
         refNode = refNodes.get(2);
-        assertThat(refNode.getLabel(), is("[http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]-[:http://purl.org/dc/elements/1.1/format]->[application/zip+dwca]"));
+        assertThat(refNode.getLabel(), is("[http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]-[:http://purl.org/dc/elements/1.1/format]->[application/dwca]"));
 
         refNode = refNodes.get(3);
-        assertThat(refNode.getLabel(), is("[http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]-[:http://example.com/hasContent]->[?]"));
+        assertThat(refNode.getLabel(), is("[?]-[:http://www.w3.org/ns/prov#wasDerivedFrom]->[http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]"));
 
         refNode = refNodes.get(4);
         assertThat(refNode.getLabel(), is("[6555005d-4594-4a3e-be33-c70e587b63d7]-[:http://www.w3.org/ns/prov#hadMember]->[http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]"));
 
         refNode = refNodes.get(5);
-        assertThat(refNode.getLabel(), is("[http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]-[:http://purl.org/dc/elements/1.1/format]->[text/xml+eml]"));
+        assertThat(refNode.getLabel(), is("[http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]-[:http://purl.org/dc/elements/1.1/format]->[application/eml]"));
 
         refNode = refNodes.get(6);
-        assertThat(refNode.getLabel(), is("[http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]-[:http://example.com/hasContent]->[?]"));
+        assertThat(refNode.getLabel(), is("[?]-[:http://www.w3.org/ns/prov#wasDerivedFrom]->[http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]"));
 
         refNode = refNodes.get(7);
         assertThat(refNode.getLabel(), is("[description]-[:http://www.w3.org/ns/prov#hadMember]->[d0df772d-78f4-4602-acf2-7d768798f632]"));

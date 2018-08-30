@@ -9,8 +9,8 @@ import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefStatement;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.CONTINUED_AT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.DATASET_REGISTRY_OF;
-import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_CONTENT;
+import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
 
 public class RegistryReaderGBIF extends RefStatementProcessor {
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
@@ -39,19 +39,20 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
         if (statement.getObject().equivalentTo(Seeds.SEED_NODE_GBIF)) {
             RefNode refNodeRegistry = new RefNodeString(GBIF_DATASET_API_ENDPOINT);
             emit(new RefStatement(statement.getObject(), DATASET_REGISTRY_OF, refNodeRegistry));
-            emit(new RefStatement(refNodeRegistry, HAS_CONTENT, null));
+            emit(new RefStatement(null, WAS_DERIVED_FROM, refNodeRegistry));
 
-        } else if (statement.getObject() != null
-                && statement.getSubject().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
-                && statement.getPredicate().equals(RefNodeConstants.HAS_CONTENT)) {
+        } else if (statement.getSubject() != null
+                && statement.getObject() != null
+                && statement.getObject().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
+                && statement.getPredicate().equals(RefNodeConstants.WAS_DERIVED_FROM)) {
             try {
-                parse(statement.getObject().getContent(), this, statement.getObject());
+                parse(statement.getSubject().getContent(), this, statement.getObject());
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.getLabel() + "]", e);
             }
-        } else if (statement.getObject() != null) {
-            if (StringUtils.startsWith(statement.getObject().getLabel(), GBIF_DATASET_API_ENDPOINT)) {
-                emit(new RefStatement(statement.getObject(), HAS_CONTENT, null));
+        } else if (statement.getSubject() != null) {
+            if (StringUtils.startsWith(statement.getSubject().getLabel(), GBIF_DATASET_API_ENDPOINT)) {
+                emit(new RefStatement(null, WAS_DERIVED_FROM, statement.getSubject()));
             }
         }
     }
@@ -81,7 +82,7 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
                                 RefNodeString dataArchive = new RefNodeString(urlString);
                                 emitter.emit(new RefStatement(datasetUUID, RefNodeConstants.HAD_MEMBER, dataArchive));
                                 emitter.emit(new RefStatement(dataArchive, RefNodeConstants.HAS_FORMAT, new RefNodeString(SUPPORTED_ENDPOINT_TYPES.get(type))));
-                                emitter.emit(new RefStatement(dataArchive, RefNodeConstants.HAS_CONTENT, null));
+                                emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, dataArchive));
                             }
                         }
                     }

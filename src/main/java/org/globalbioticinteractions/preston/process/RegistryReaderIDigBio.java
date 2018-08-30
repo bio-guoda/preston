@@ -9,8 +9,8 @@ import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefStatement;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -30,16 +30,16 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_CONTENT;
-import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_FORMAT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
+import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_FORMAT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.PUBLISHER_REGISTRY_OF;
+import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
 
 public class RegistryReaderIDigBio extends RefStatementProcessor {
 
     private final static Log LOG = LogFactory.getLog(RegistryReaderIDigBio.class);
     public static final String PUBLISHERS_URI = "https://search.idigbio.org/v2/search/publishers";
-    public static final RefNodeString REF_NODE_STRING = new RefNodeString(PUBLISHERS_URI);
+    public static final RefNodeString PUBLISHERS = new RefNodeString(PUBLISHERS_URI);
 
     public RegistryReaderIDigBio(RefStatementListener listener) {
         super(listener);
@@ -48,16 +48,17 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
     @Override
     public void on(RefStatement statement) {
         if (statement.getObject().equivalentTo(Seeds.SEED_NODE_IDIGBIO)) {
-            RefNode publishers = REF_NODE_STRING;
+            RefNode publishers = PUBLISHERS;
             emit(new RefStatement(statement.getObject(), PUBLISHER_REGISTRY_OF, publishers));
 
-            emit(new RefStatement(publishers, HAS_CONTENT, null));
-        } else if (statement.getObject() != null
-                && statement.getSubject().equivalentTo(REF_NODE_STRING)
-                && statement.getPredicate().equivalentTo(RefNodeConstants.HAS_CONTENT)) {
-            parsePublishers(statement.getObject());
-        } else if (statement.getPredicate().equivalentTo(RefNodeConstants.HAS_CONTENT)) {
-            parse(statement.getObject());
+            emit(new RefStatement(null, WAS_DERIVED_FROM, publishers));
+        } else if (statement.getSubject() != null
+                && statement.getObject().equivalentTo(PUBLISHERS)
+                && statement.getPredicate().equivalentTo(RefNodeConstants.WAS_DERIVED_FROM)) {
+            parsePublishers(statement.getSubject());
+        } else if (statement.getSubject() != null
+                && statement.getPredicate().equivalentTo(RefNodeConstants.WAS_DERIVED_FROM)) {
+            parse(statement.getSubject());
         }
     }
 
@@ -128,7 +129,7 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
                 RefNode uriNode = new RefNodeString(emlURI.toString());
                 emitter.emit(new RefStatement(archiveParent, HAD_MEMBER, uriNode));
                 emitter.emit(new RefStatement(uriNode, HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_EML)));
-                emitter.emit(new RefStatement(uriNode, HAS_CONTENT, null));
+                emitter.emit(new RefStatement(null, WAS_DERIVED_FROM, uriNode));
             }
 
             if (isDWCA && archiveURI != null) {
@@ -136,7 +137,7 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
                 emitter.emit(new RefStatement(archiveParent, HAD_MEMBER, refNodeDWCAUri));
 
                 emitter.emit(new RefStatement(refNodeDWCAUri, HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_DWCA)));
-                emitter.emit(new RefStatement(refNodeDWCAUri, HAS_CONTENT, null));
+                emitter.emit(new RefStatement(null, WAS_DERIVED_FROM, refNodeDWCAUri));
 
             }
 
@@ -156,7 +157,8 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
                     if (StringUtils.isNotBlank(rssFeedUrl)) {
                         RefNodeString refNodeFeed = new RefNodeString(rssFeedUrl);
                         emitter.emit(new RefStatement(refNodePublisher, RefNodeConstants.HAS_FEED, refNodeFeed));
-                        emitter.emit(new RefStatement(refNodeFeed, RefNodeConstants.HAS_CONTENT, null));
+                        emitter.emit(new RefStatement(refNodeFeed, HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_RSS)));
+                        emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, refNodeFeed));
                     }
                 }
             }

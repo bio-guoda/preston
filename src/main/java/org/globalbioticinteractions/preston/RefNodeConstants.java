@@ -12,7 +12,6 @@ public class RefNodeConstants {
     public static final RefNodeString CONTINUED_AT = new RefNodeString("http://example.org/continuedAt");
     public static final RefNodeString HAS_FEED = new RefNodeString("http://example.org/hasFeed");
     public static final RefNodeString SEED_OF = new RefNodeString("http://example.org/seedOf");
-    public static final RefNodeString HAS_CONTENT = new RefNodeString(Predicate.HAS_CONTENT.toString());
 
     public static final RefNodeString WAS_DERIVED_FROM = new RefNodeString(Predicate.WAS_DERIVED_FROM.toString());
 

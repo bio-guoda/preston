@@ -40,7 +40,7 @@ public class RefStatement {
     }
 
     public String getLabel() {
-        return "[" + getSubject().getLabel() + "]-[:" + getPredicate().getLabel() + "]->[" + (getObject() == null ? "?" : getObject().getLabel()) + "]";
+        return "[" + (getSubject() == null ? "?" : getSubject().getLabel()) + "]-[:" + getPredicate().getLabel() + "]->[" + (getObject() == null ? "?" : getObject().getLabel()) + "]";
     }
 
     public boolean equivalentTo(RefStatement other) {
