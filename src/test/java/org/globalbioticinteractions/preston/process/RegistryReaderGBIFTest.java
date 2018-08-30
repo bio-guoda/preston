@@ -55,7 +55,7 @@ public class RegistryReaderGBIFTest {
         assertThat(thirdRefNode.getLabel(), is("[description]-[:http://example.org/hasPart]->[d0df772d-78f4-4602-acf2-7d768798f632]"));
 
         RefStatement lastRefNode = refNodes.get(refNodes.size() - 1);
-        assertThat(lastRefNode.getLabel(), is("[description]-[:http://example.org/hasPart]->[https://api.gbif.org/v1/dataset?offset=2&limit=2]"));
+        assertThat(lastRefNode.getLabel(), is("[description]-[:http://example.org/continuedAt]->[https://api.gbif.org/v1/dataset?offset=2&limit=2]"));
 
     }
 

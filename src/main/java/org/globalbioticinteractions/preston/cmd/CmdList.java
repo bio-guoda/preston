@@ -14,6 +14,7 @@ import org.globalbioticinteractions.preston.process.ContentResolver;
 import org.globalbioticinteractions.preston.process.RefStatementListener;
 import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.process.RegistryReaderIDigBio;
+import org.globalbioticinteractions.preston.process.StatementHashLogger;
 import org.globalbioticinteractions.preston.process.StatementLogger;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.AppendOnlyStatementStore;
@@ -22,12 +23,14 @@ import org.globalbioticinteractions.preston.store.FilePersistence;
 import org.globalbioticinteractions.preston.store.Persistence;
 import org.globalbioticinteractions.preston.store.StatementStore;
 
+import java.beans.Statement;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Parameters(separators = "= ", commandDescription = "show biodiversity graph")
@@ -39,8 +42,11 @@ public class CmdList implements Runnable {
         add(Seeds.SEED_NODE_IDIGBIO.getLabel());
     }};
 
-    @Parameter(names = {"-m", "--mode", }, description = "select how to crawl the biodiversity graph", converter = CrawlModeConverter.class)
-    private CrawlMode mode = CrawlMode.full;
+    @Parameter(names = {"-c", "--crawl", }, description = "select how to crawl the biodiversity graph", converter = CrawlModeConverter.class)
+    private CrawlMode crawlMode = CrawlMode.full;
+
+    @Parameter(names = {"-l", "--log", }, description = "select how to show the biodiversity graph", converter = LoggerConverter.class)
+    private Logger logMode = Logger.tsv;
 
     @Override
     public void run() {
@@ -59,19 +65,42 @@ public class CmdList implements Runnable {
         Persistence persistence = new FilePersistence();
         BlobStore blobStore = new AppendOnlyBlobStore(persistence);
 
-        StatementStore<URI> statementStore = CrawlMode.replay == mode
+        StatementStore<URI> statementStore = CrawlMode.replay == crawlMode
                 ? createOfflineStatementStore(persistence, blobStore)
                 : createOnlineStatementStore(persistence, blobStore);
 
         final RefStatementListener listener = new ContentResolver(blobStore, statementStore,
                 new RegistryReaderIDigBio(statements::add),
                 new RegistryReaderGBIF(statements::add),
-                new StatementLogger());
+                getStatementLogger());
 
         while (!statements.isEmpty()) {
             listener.on(statements.poll());
         }
 
+    }
+
+    private RefStatementListener getStatementLogger() {
+        RefStatementListener logger;
+        if (Logger.tsv == logMode) {
+            logger = new StatementLogger();
+        } else if (Logger.nquads == logMode) {
+            logger = new StatementHashLogger();
+        } else {
+            logger = new RefStatementListener() {
+                AtomicLong count = new AtomicLong(1);
+                @Override
+                public void on(RefStatement statement) {
+                    long index = count.getAndIncrement();
+                    if ((index % 80) == 0) {
+                        System.out.println();
+                    } else {
+                        System.out.print(".");
+                    }
+                }
+            };
+        }
+        return logger;
     }
 
     private StatementStore<URI> createOfflineStatementStore(Persistence persistence, BlobStore blobStore) {
@@ -92,7 +121,7 @@ public class CmdList implements Runnable {
 
    private StatementStore<URI> createOnlineStatementStore(Persistence persistence, BlobStore blobStore) {
        AppendOnlyStatementStore appendOnlyStatementStore = new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream);
-       appendOnlyStatementStore.setResolveOnMissingOnly(CrawlMode.resume == mode);
+       appendOnlyStatementStore.setResolveOnMissingOnly(CrawlMode.resume == crawlMode);
        return appendOnlyStatementStore;
     }
 

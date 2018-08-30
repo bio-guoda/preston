@@ -5,7 +5,7 @@ import org.globalbioticinteractions.preston.model.RefStatement;
 public class StatementLogger extends StatementHashLogger {
 
     @Override
-    String printStatement(RefStatement statement) {
+    protected String printStatement(RefStatement statement) {
         return statement.getSource().getLabel() + "\t" + statement.getRelationType().getLabel() + "\t" + statement.getTarget().getLabel();
     }
 

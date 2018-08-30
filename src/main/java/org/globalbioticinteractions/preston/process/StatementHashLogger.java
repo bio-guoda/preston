@@ -18,12 +18,12 @@ public class StatementHashLogger implements RefStatementListener {
         return entry;
     }
 
-    String printStatement(RefStatement statement) {
+    protected String printStatement(RefStatement statement) {
         URI sourceId = statement.getSource().getContentHash();
         URI relationTypeId = statement.getRelationType().getContentHash();
         URI targetId = statement.getTarget().getContentHash();
         String relationId = statement.getId().toString();
-        return relationId + "\t" + sourceId + "\t" + relationTypeId + "\t" + targetId;
+        return "<" + sourceId + "> <" + relationTypeId + "> <" + targetId + "> .";
     }
 
 

@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.globalbioticinteractions.preston.RefNodeConstants.CONTINUED_AT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.DATASET_REGISTRY_OF;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_CONTENT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PART;
@@ -55,7 +56,7 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
     private static void emitNextPage(RefNode previousPage, int offset, int limit, RefStatementEmitter emitter) {
         String uri = GBIF_DATASET_API_ENDPOINT + "?offset=" + offset + "&limit=" + limit;
         RefNode nextPage = new RefNodeString(uri);
-        emitter.emit(new RefStatement(previousPage, HAS_PART, nextPage));
+        emitter.emit(new RefStatement(previousPage, CONTINUED_AT, nextPage));
 
     }
 
