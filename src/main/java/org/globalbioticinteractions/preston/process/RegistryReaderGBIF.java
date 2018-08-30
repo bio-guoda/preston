@@ -36,22 +36,22 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
 
     @Override
     public void on(RefStatement statement) {
-        if (statement.getTarget().equivalentTo(Seeds.SEED_NODE_GBIF)) {
+        if (statement.getObject().equivalentTo(Seeds.SEED_NODE_GBIF)) {
             RefNode refNodeRegistry = new RefNodeString(GBIF_DATASET_API_ENDPOINT);
-            emit(new RefStatement(statement.getTarget(), DATASET_REGISTRY_OF, refNodeRegistry));
+            emit(new RefStatement(statement.getObject(), DATASET_REGISTRY_OF, refNodeRegistry));
             emit(new RefStatement(refNodeRegistry, HAS_CONTENT, null));
 
-        } else if (statement.getTarget() != null
-                && statement.getSource().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
-                && statement.getRelationType().equals(RefNodeConstants.HAS_CONTENT)) {
+        } else if (statement.getObject() != null
+                && statement.getSubject().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
+                && statement.getPredicate().equals(RefNodeConstants.HAS_CONTENT)) {
             try {
-                parse(statement.getTarget().getContent(), this, statement.getTarget());
+                parse(statement.getObject().getContent(), this, statement.getObject());
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.getLabel() + "]", e);
             }
-        } else if (statement.getTarget() != null) {
-            if (StringUtils.startsWith(statement.getTarget().getLabel(), GBIF_DATASET_API_ENDPOINT)) {
-                emit(new RefStatement(statement.getTarget(), HAS_CONTENT, null));
+        } else if (statement.getObject() != null) {
+            if (StringUtils.startsWith(statement.getObject().getLabel(), GBIF_DATASET_API_ENDPOINT)) {
+                emit(new RefStatement(statement.getObject(), HAS_CONTENT, null));
             }
         }
     }
@@ -70,7 +70,7 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
                 if (result.has("key") && result.has("endpoints")) {
                     String uuid = result.get("key").asText();
                     RefNodeString datasetUUID = new RefNodeString(uuid);
-                    emitter.emit(new RefStatement(dataset, RefNodeConstants.HAS_PART, datasetUUID));
+                    emitter.emit(new RefStatement(dataset, RefNodeConstants.HAD_MEMBER, datasetUUID));
 
                     for (JsonNode endpoint : result.get("endpoints")) {
                         if (endpoint.has("url") && endpoint.has("type")) {
@@ -79,7 +79,7 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
 
                             if (SUPPORTED_ENDPOINT_TYPES.containsKey(type)) {
                                 RefNodeString dataArchive = new RefNodeString(urlString);
-                                emitter.emit(new RefStatement(datasetUUID, RefNodeConstants.HAS_PART, dataArchive));
+                                emitter.emit(new RefStatement(datasetUUID, RefNodeConstants.HAD_MEMBER, dataArchive));
                                 emitter.emit(new RefStatement(dataArchive, RefNodeConstants.HAS_FORMAT, new RefNodeString(SUPPORTED_ENDPOINT_TYPES.get(type))));
                                 emitter.emit(new RefStatement(dataArchive, RefNodeConstants.HAS_CONTENT, null));
                             }

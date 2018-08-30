@@ -1,10 +1,8 @@
 package org.globalbioticinteractions.preston.process;
 
 import org.globalbioticinteractions.preston.model.RefStatement;
-import org.joda.time.format.ISODateTimeFormat;
 
 import java.net.URI;
-import java.util.Date;
 
 public class StatementHashLogger implements RefStatementListener {
 
@@ -19,9 +17,9 @@ public class StatementHashLogger implements RefStatementListener {
     }
 
     protected String printStatement(RefStatement statement) {
-        URI sourceId = statement.getSource().getContentHash();
-        URI relationTypeId = statement.getRelationType().getContentHash();
-        URI targetId = statement.getTarget().getContentHash();
+        URI sourceId = statement.getSubject().getContentHash();
+        URI relationTypeId = statement.getPredicate().getContentHash();
+        URI targetId = statement.getObject().getContentHash();
         String relationId = statement.getId().toString();
         return "<" + sourceId + "> <" + relationTypeId + "> <" + targetId + "> .";
     }

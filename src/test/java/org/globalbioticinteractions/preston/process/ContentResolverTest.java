@@ -67,14 +67,14 @@ public class ContentResolverTest {
 
         ContentResolver contentResolver = new ContentResolver(this.blobStore, this.relationStore, refNodes::add);
         RefNodeString providedNode = new RefNodeString("https://example.org");
-        contentResolver.on(new RefStatement(providedNode, RefNodeConstants.HAS_PART, providedNode));
+        contentResolver.on(new RefStatement(providedNode, RefNodeConstants.HAD_MEMBER, providedNode));
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
 
         RefStatement cachedNode = refNodes.get(0);
-        assertThat(cachedNode.getSource().getContentHash().toString(), is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
-        assertThat(cachedNode.getSource().getLabel(), is("https://example.org"));
-        assertTrue(cachedNode.getSource().equivalentTo(providedNode));
+        assertThat(cachedNode.getSubject().getContentHash().toString(), is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
+        assertThat(cachedNode.getSubject().getLabel(), is("https://example.org"));
+        assertTrue(cachedNode.getSubject().equivalentTo(providedNode));
 
         FileUtils.deleteQuietly(tempDir.toFile());
     }
@@ -88,7 +88,7 @@ public class ContentResolverTest {
 
         URI testURI = getClass().getResource("test.txt").toURI();
         RefNode providedNode = new RefNodeString(testURI.toString());
-        RefStatement relation = new RefStatement(providedNode, RefNodeConstants.HAS_CONTENT, null);
+        RefStatement relation = new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, providedNode);
 
         contentResolver.on(relation);
         assertTrue(tempDir.toFile().exists());
@@ -97,17 +97,17 @@ public class ContentResolverTest {
 
         RefStatement cachedNode = refNodes.get(0);
         String expectedSHA256 = "hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
-        assertThat(cachedNode.getTarget().getContentHash().toString(), is(expectedSHA256));
+        assertThat(cachedNode.getSubject().getContentHash().toString(), is(expectedSHA256));
 
-        String label = cachedNode.getTarget().getLabel();
+        String label = cachedNode.getSubject().getLabel();
         assertThat(label, is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
 
         InputStream inputStream = blobStore.get(Hasher.toHashURI("50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
 
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is("https://example.org"));
 
-        inputStream = cachedNode.getTarget().getContent();
-        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is("https://example.org"));
+        inputStream = cachedNode.getObject().getContent();
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is(testURI.toString()));
 
         String baseCacheDir = "/50/d7/a9/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b/";
         String absCacheDir = datasetDir.toAbsolutePath().toString() + baseCacheDir;

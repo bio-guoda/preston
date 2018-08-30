@@ -32,21 +32,21 @@ public class ContentResolver extends RefStatementProcessor {
     @Override
     public void on(RefStatement statement) {
         try {
-            RefNode source = statement.getSource();
-            RefNode relationType = statement.getRelationType();
-            RefNode target = statement.getTarget();
+            RefNode s = statement.getSubject();
+            RefNode p = statement.getPredicate();
+            RefNode o = statement.getObject();
 
-            URI subject = getURI(source);
-            URI predicate = getURI(relationType);
-            URI object = getURI(target);
+            URI subject = getURI(s);
+            URI predicate = getURI(p);
+            URI object = getURI(o);
 
             statementStore.put(Triple.of(subject, predicate, object));
 
-            if (object == null) {
-                final URI key = statementStore.findKey(Pair.of(subject, Predicate.HAS_CONTENT_HASH));
+            if (subject == null && Predicate.WAS_DERIVED_FROM.equals(predicate)) {
+                final URI key = statementStore.findKey(Pair.of(Predicate.WAS_DERIVED_FROM, object));
                 if (null != key) {
 
-                    RefNode resolvedContentNode = new RefNode() {
+                    RefNode resolvedSubject = new RefNode() {
 
                         @Override
                         public InputStream getContent() throws IOException {
@@ -71,7 +71,7 @@ public class ContentResolver extends RefStatementProcessor {
                         }
                     };
 
-                    emit(new RefStatement(source, RefNodeConstants.HAS_CONTENT, resolvedContentNode));
+                    emit(new RefStatement(resolvedSubject, RefNodeConstants.WAS_DERIVED_FROM, o));
 
                 }
             } else {

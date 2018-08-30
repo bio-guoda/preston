@@ -29,30 +29,30 @@ public class AppendOnlyStatementStore implements StatementStore<URI> {
 
     @Override
     public void put(Triple<URI, URI, URI> statement) throws IOException {
-        URI object = statement.getRight();
-        URI predicate = statement.getMiddle();
         URI subj = statement.getLeft();
+        URI predicate = statement.getMiddle();
+        URI object = statement.getRight();
 
-        if (Predicate.HAS_CONTENT.equals(predicate) && object == null) {
-            URI mostRecentVersionId = findMostRecentVersion(subj);
-            if (mostRecentVersionId != null && shouldResolveOnMissingOnly()) {
-                put(Pair.of(subj, Predicate.HAS_CONTENT_HASH), mostRecentVersionId);
+        if (Predicate.WAS_DERIVED_FROM.equals(predicate) && subj == null && object != null) {
+            URI mostRecentDerivedSubject = findMostRecentDerivedSubject(object);
+            if (mostRecentDerivedSubject != null && shouldResolveOnMissingOnly()) {
+                put(Pair.of(Predicate.WAS_DERIVED_FROM, object), mostRecentDerivedSubject);
             } else {
                 if (getDereferencer() != null) {
-                    InputStream data = getDereferencer().dereference(subj);
-                    URI updatedId = blobStore.putBlob(data);
-                    if (null != mostRecentVersionId && !mostRecentVersionId.equals(updatedId)) {
-                        put(Pair.of(mostRecentVersionId, Predicate.HAD_REVISION), updatedId);
-                        put(Pair.of(updatedId, Predicate.HAS_CONTENT_HASH), updatedId);
-                    } else if (null != updatedId) {
-                        put(Pair.of(subj, Predicate.HAS_CONTENT_HASH), updatedId);
+                    InputStream data = getDereferencer().dereference(object);
+                    URI derivedSubject = blobStore.putBlob(data);
+                    if (null != mostRecentDerivedSubject && !mostRecentDerivedSubject.equals(derivedSubject)) {
+                        put(Pair.of(Predicate.WAS_REVISION_OF, mostRecentDerivedSubject), derivedSubject);
+                        put(Pair.of(Predicate.WAS_DERIVED_FROM, object), derivedSubject);
+                    } else if (null != derivedSubject) {
+                        put(Pair.of(Predicate.WAS_DERIVED_FROM, object), derivedSubject);
                     }
                 }
             }
 
-        } else if (object != null) {
-            URI value = blobStore.putBlob(object);
-            put(Pair.of(subj, predicate), value);
+        } else if (subj != null) {
+            URI value = blobStore.putBlob(subj);
+            put(Pair.of(predicate, object), value);
         }
     }
 
@@ -64,15 +64,15 @@ public class AppendOnlyStatementStore implements StatementStore<URI> {
         this.resolveOnMissingOnly = resolveOnMissingOnly;
     }
 
-    private URI findMostRecentVersion(URI subj) throws IOException {
-        URI existingId = findKey(Pair.of(subj, Predicate.HAS_CONTENT_HASH));
+    private URI findMostRecentDerivedSubject(URI obj) throws IOException {
+        URI existingId = findKey(Pair.of(Predicate.WAS_DERIVED_FROM, obj));
         return null == existingId ? null : findLastVersionId(existingId);
     }
 
     private URI findLastVersionId(URI existingId) throws IOException {
         URI lastVersionId = existingId;
         URI newerVersionId;
-        while ((newerVersionId = findKey(Pair.of(lastVersionId, Predicate.HAD_REVISION))) != null) {
+        while ((newerVersionId = findKey(Pair.of(Predicate.WAS_REVISION_OF, lastVersionId))) != null) {
             lastVersionId = newerVersionId;
         }
         return lastVersionId;

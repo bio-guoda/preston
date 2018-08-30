@@ -10,15 +10,15 @@ import java.nio.charset.StandardCharsets;
 
 public class RefStatement {
 
-    private final RefNode source;
-    private final RefNode target;
-    private final RefNode relationType;
+    private final RefNode subject;
+    private final RefNode predicate;
+    private final RefNode object;
     private URI id;
     
-    public RefStatement(RefNode source, RefNode relationType, RefNode target) {
-        this.relationType = relationType;
-        this.source = source;
-        this.target = target;
+    public RefStatement(RefNode subject, RefNode predicate, RefNode object) {
+        this.predicate = predicate;
+        this.subject = subject;
+        this.object = object;
     }
 
     public InputStream getData() throws IOException {
@@ -26,9 +26,9 @@ public class RefStatement {
     }
 
     private String getDataString() {
-        String sourceId = getSource() == null ? "" : getSource().getContentHash().toString();
-        String relationshipTypeId = getRelationType() == null ? "" : getRelationType().getContentHash().toString();
-        String targetId = getTarget() == null ? "" : getTarget().getContentHash().toString();
+        String sourceId = getSubject() == null ? "" : getSubject().getContentHash().toString();
+        String relationshipTypeId = getPredicate() == null ? "" : getPredicate().getContentHash().toString();
+        String targetId = getObject() == null ? "" : getObject().getContentHash().toString();
         return sourceId + relationshipTypeId + targetId;
     }
 
@@ -40,24 +40,24 @@ public class RefStatement {
     }
 
     public String getLabel() {
-        return "[" + getSource().getLabel() + "]-[:" + getRelationType().getLabel() + "]->[" + (getTarget() == null ? "?" : getTarget().getLabel()) + "]";
+        return "[" + getSubject().getLabel() + "]-[:" + getPredicate().getLabel() + "]->[" + (getObject() == null ? "?" : getObject().getLabel()) + "]";
     }
 
     public boolean equivalentTo(RefStatement other) {
-        return (getTarget().equivalentTo(other.getTarget()))
-                && (getRelationType().equivalentTo(other.getRelationType()))
-                && (getSource().equivalentTo(other.getSource()));
+        return (getObject().equivalentTo(other.getObject()))
+                && (getPredicate().equivalentTo(other.getPredicate()))
+                && (getSubject().equivalentTo(other.getSubject()));
     }
 
-    public RefNode getTarget() {
-        return target;
+    public RefNode getObject() {
+        return object;
     }
 
-    public RefNode getRelationType() {
-        return relationType;
+    public RefNode getPredicate() {
+        return predicate;
     }
 
-    public RefNode getSource() {
-        return source;
+    public RefNode getSubject() {
+        return subject;
     }
 }

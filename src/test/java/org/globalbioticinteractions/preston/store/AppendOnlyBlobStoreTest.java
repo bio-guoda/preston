@@ -46,7 +46,8 @@ public class AppendOnlyBlobStoreTest {
             public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 String key = keyGeneratingStream.generateKeyWhileStreaming(is, os);
-                lookup.putIfAbsent(key, TestUtil.toUTF8(new ByteArrayInputStream(os.toByteArray())));
+                String value = TestUtil.toUTF8(new ByteArrayInputStream(os.toByteArray()));
+                lookup.putIfAbsent(key, value);
                 return key;
             }
 

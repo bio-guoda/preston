@@ -32,7 +32,7 @@ import java.util.UUID;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_CONTENT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_FORMAT;
-import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PART;
+import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
 import static org.globalbioticinteractions.preston.RefNodeConstants.PUBLISHER_REGISTRY_OF;
 
 public class RegistryReaderIDigBio extends RefStatementProcessor {
@@ -47,17 +47,17 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
 
     @Override
     public void on(RefStatement statement) {
-        if (statement.getTarget().equivalentTo(Seeds.SEED_NODE_IDIGBIO)) {
+        if (statement.getObject().equivalentTo(Seeds.SEED_NODE_IDIGBIO)) {
             RefNode publishers = REF_NODE_STRING;
-            emit(new RefStatement(statement.getTarget(), PUBLISHER_REGISTRY_OF, publishers));
+            emit(new RefStatement(statement.getObject(), PUBLISHER_REGISTRY_OF, publishers));
 
             emit(new RefStatement(publishers, HAS_CONTENT, null));
-        } else if (statement.getTarget() != null
-                && statement.getSource().equivalentTo(REF_NODE_STRING)
-                && statement.getRelationType().equivalentTo(RefNodeConstants.HAS_CONTENT)) {
-            parsePublishers(statement.getTarget());
-        } else if (statement.getRelationType().equivalentTo(RefNodeConstants.HAS_CONTENT)) {
-            parse(statement.getTarget());
+        } else if (statement.getObject() != null
+                && statement.getSubject().equivalentTo(REF_NODE_STRING)
+                && statement.getPredicate().equivalentTo(RefNodeConstants.HAS_CONTENT)) {
+            parsePublishers(statement.getObject());
+        } else if (statement.getPredicate().equivalentTo(RefNodeConstants.HAS_CONTENT)) {
+            parse(statement.getObject());
         }
     }
 
@@ -121,19 +121,19 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
 
             RefNode archiveParent = uuid == null ? parent : new RefNodeString(uuid.toString());
             if (uuid != null) {
-                emitter.emit(new RefStatement(parent, HAS_PART, archiveParent));
+                emitter.emit(new RefStatement(parent, HAD_MEMBER, archiveParent));
             }
 
             if (emlURI != null) {
                 RefNode uriNode = new RefNodeString(emlURI.toString());
-                emitter.emit(new RefStatement(archiveParent, HAS_PART, uriNode));
+                emitter.emit(new RefStatement(archiveParent, HAD_MEMBER, uriNode));
                 emitter.emit(new RefStatement(uriNode, HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_EML)));
                 emitter.emit(new RefStatement(uriNode, HAS_CONTENT, null));
             }
 
             if (isDWCA && archiveURI != null) {
                 RefNodeString refNodeDWCAUri = new RefNodeString(archiveURI.toString());
-                emitter.emit(new RefStatement(archiveParent, HAS_PART, refNodeDWCAUri));
+                emitter.emit(new RefStatement(archiveParent, HAD_MEMBER, refNodeDWCAUri));
 
                 emitter.emit(new RefStatement(refNodeDWCAUri, HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_DWCA)));
                 emitter.emit(new RefStatement(refNodeDWCAUri, HAS_CONTENT, null));
@@ -149,7 +149,7 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
             for (JsonNode item : r.get("items")) {
                 String publisherUUID = item.get("uuid").asText();
                 RefNodeString refNodePublisher = new RefNodeString(publisherUUID);
-                emitter.emit(new RefStatement(parent, RefNodeConstants.HAS_PART, refNodePublisher));
+                emitter.emit(new RefStatement(parent, RefNodeConstants.HAD_MEMBER, refNodePublisher));
                 JsonNode data = item.get("data");
                 if (item.has("data")) {
                     String rssFeedUrl = data.has("rss_url") ? data.get("rss_url").asText() : null;

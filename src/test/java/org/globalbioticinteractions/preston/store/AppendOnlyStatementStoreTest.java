@@ -23,7 +23,7 @@ public class AppendOnlyStatementStoreTest {
         URI GBIF = URI.create("http://gbif.org");
         URI GBIF_REGISTRY = URI.create("https://api.gbif.org/v1/registry");
         Triple<URI, URI, URI> statement
-                = Triple.of(GBIF, Predicate.HAS_REGISTRY, GBIF_REGISTRY);
+                = Triple.of(GBIF_REGISTRY, Predicate.WAS_DERIVED_FROM, GBIF);
 
         Dereferencer dereferencer = new DereferenceTest("deref@");
         AppendOnlyBlobStore blobStore1 = new AppendOnlyBlobStore(TestUtil.getTestPersistence());
@@ -31,7 +31,7 @@ public class AppendOnlyStatementStoreTest {
 
         blobStore.put(statement);
 
-        URI key = blobStore.findKey(Pair.of(GBIF, Predicate.HAS_REGISTRY));
+        URI key = blobStore.findKey(Pair.of(Predicate.WAS_DERIVED_FROM, GBIF));
 
         assertThat(key.toString(), Is.is("hash://sha256/809f41e24585d47dd30008e11d3848aec67065135042a28847b357af3ccf84e4"));
 
@@ -43,7 +43,7 @@ public class AppendOnlyStatementStoreTest {
     @Test
     public void putContentThatNeedsDownload() throws IOException {
         Triple<URI, URI, URI> statement
-                = Triple.of(URI.create("http://some"), Predicate.HAS_CONTENT, null);
+                = Triple.of(null , Predicate.WAS_DERIVED_FROM, URI.create("http://some"));
 
 
         Dereferencer dereferencer = new DereferenceTest("derefData@");
@@ -52,13 +52,13 @@ public class AppendOnlyStatementStoreTest {
                 new AppendOnlyBlobStore(testPersistence),
                 testPersistence);
 
-        AppendOnlyBlobStore blobStore = new AppendOnlyBlobStore(testPersistence);
+        BlobStore blobStore = new AppendOnlyBlobStore(testPersistence);
 
         relationStore.put(statement);
 
         // dereference subject
 
-        URI contentHash = relationStore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT_HASH));
+        URI contentHash = relationStore.findKey(Pair.of(Predicate.WAS_DERIVED_FROM, URI.create("http://some")));
         InputStream content = blobStore.get(contentHash);
 
         assertNotNull(contentHash);
@@ -84,7 +84,7 @@ public class AppendOnlyStatementStoreTest {
     @Test
     public void putNewVersionOfContent() throws IOException {
         Triple<URI, URI, URI> statement
-                = Triple.of(URI.create("http://some"), Predicate.HAS_CONTENT, null);
+                = Triple.of(null, Predicate.WAS_DERIVED_FROM, URI.create("http://some"));
 
 
         String prefix = "derefData@";
@@ -93,33 +93,29 @@ public class AppendOnlyStatementStoreTest {
         AppendOnlyStatementStore relationstore = getAppendOnlyRelationStore(dereferencer1, blogStore, TestUtil.getTestPersistence());
         relationstore.put(statement);
 
-        URI contentHash = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT_HASH));
-        URI content = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT));
+        URI contentHash = relationstore.findKey(Pair.of(Predicate.WAS_DERIVED_FROM, URI.create("http://some")));
 
         Dereferencer dereferencer = new DereferenceTest("derefData2@");
         relationstore.setDereferencer(dereferencer);
         relationstore.put(statement);
 
-        URI contentHash2 = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT_HASH));
-        URI content2 = relationstore.findKey(Pair.of(URI.create("http://some"), Predicate.HAS_CONTENT));
+        URI contentHash2 = relationstore.findKey(Pair.of(Predicate.WAS_DERIVED_FROM, URI.create("http://some")));
 
 
         assertThat(contentHash, Is.is(contentHash2));
-        assertThat(content, Is.is(content2));
 
-        URI newContentHash = relationstore.findKey(Pair.of(contentHash, Predicate.HAD_REVISION));
+        URI newContentHash = relationstore.findKey(Pair.of(Predicate.WAS_REVISION_OF, contentHash));
         InputStream newContent = blogStore.get(newContentHash);
 
         assertThat(contentHash, not(Is.is(newContentHash)));
         assertThat(newContentHash.toString(), Is.is("hash://sha256/960d96611c4048e05303f6f532590968fd5eb23d0035141c4b02653b436f568c"));
 
-        assertThat(content, not(Is.is(newContent)));
         assertThat(toUTF8(newContent), Is.is("derefData2@http://some"));
 
         relationstore.setDereferencer(new DereferenceTest("derefData3@"));
         relationstore.put(statement);
 
-        URI newerContentHash = relationstore.findKey(Pair.of(newContentHash, Predicate.HAD_REVISION));
+        URI newerContentHash = relationstore.findKey(Pair.of(Predicate.WAS_REVISION_OF, newContentHash));
         InputStream newerContent = blogStore.get(newerContentHash);
 
         assertThat(newerContentHash.toString(), Is.is("hash://sha256/7e66eac09d137afe06dd73614e966a417260a111208dabe7225b05f02ce380fd"));
