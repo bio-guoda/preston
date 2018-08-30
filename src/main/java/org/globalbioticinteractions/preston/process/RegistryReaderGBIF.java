@@ -36,9 +36,10 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
 
     @Override
     public void on(RefStatement statement) {
-        if (statement.getObject().equivalentTo(Seeds.SEED_NODE_GBIF)) {
+        if (statement.getSubject().equivalentTo(Seeds.SEED_NODE_GBIF)) {
             RefNode refNodeRegistry = new RefNodeString(GBIF_DATASET_API_ENDPOINT);
-            emit(new RefStatement(statement.getObject(), DATASET_REGISTRY_OF, refNodeRegistry));
+            emit(new RefStatement(refNodeRegistry, DATASET_REGISTRY_OF, statement.getObject()));
+            emit(new RefStatement(refNodeRegistry, RefNodeConstants.HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_JSON)));
             emit(new RefStatement(null, WAS_DERIVED_FROM, refNodeRegistry));
 
         } else if (statement.getSubject() != null
@@ -49,11 +50,6 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
                 parse(statement.getSubject().getContent(), this, statement.getObject());
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.getLabel() + "]", e);
-            }
-        } else if (statement.getSubject() != null) {
-            if (StringUtils.startsWith(statement.getSubject().getLabel(), GBIF_DATASET_API_ENDPOINT)) {
-                emit(new RefStatement(statement.getSubject(), RefNodeConstants.HAS_FORMAT, new RefNodeString(MimeTypes.MIME_TYPE_JSON)));
-                emit(new RefStatement(null, WAS_DERIVED_FROM, statement.getSubject()));
             }
         }
     }

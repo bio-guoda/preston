@@ -43,7 +43,6 @@ public class AppendOnlyStatementStore implements StatementStore<URI> {
                     URI derivedSubject = blobStore.putBlob(data);
                     if (null != mostRecentDerivedSubject && !mostRecentDerivedSubject.equals(derivedSubject)) {
                         put(Pair.of(Predicate.WAS_REVISION_OF, mostRecentDerivedSubject), derivedSubject);
-                        put(Pair.of(Predicate.WAS_DERIVED_FROM, object), derivedSubject);
                     } else if (null != derivedSubject) {
                         put(Pair.of(Predicate.WAS_DERIVED_FROM, object), derivedSubject);
                     }

@@ -51,9 +51,8 @@ public class CmdList implements Runnable {
     public void run() {
         final List<RefStatement> seeds = seedUrls.stream()
                 .map(uriString -> {
-                    RefNode refNodeRoot = RefNodeConstants.SOFTWARE_AGENT;
                     RefNode refNodeSeed = new RefNodeString(uriString);
-                    return new RefStatement(refNodeRoot, RefNodeConstants.SEED_OF, refNodeSeed);
+                    return new RefStatement(refNodeSeed, RefNodeConstants.SEED_OF, RefNodeConstants.SOFTWARE_AGENT);
                 }).collect(Collectors.toList());
 
         final Queue<RefStatement> statements =

@@ -21,9 +21,9 @@ public class RegistryReaderGBIFTest {
         ArrayList<RefStatement> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(nodes::add);
         RefNodeString bla = new RefNodeString("bla");
-        registryReaderGBIF.on(new RefStatement(bla, bla, Seeds.SEED_NODE_GBIF));
-        Assert.assertThat(nodes.size(), is(2));
-    
+        registryReaderGBIF.on(new RefStatement(Seeds.SEED_NODE_GBIF, bla, bla));
+        Assert.assertThat(nodes.size(), is(3));
+    }
 
     @Test
     public void parseDatasets() throws IOException {

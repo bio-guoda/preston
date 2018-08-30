@@ -39,6 +39,9 @@ public class AppendOnlyBlobStoreTest {
 
             @Override
             public void put(String key, String value) throws IOException {
+                if (lookup.containsKey(key) && !value.equals(lookup.get(key))) {
+                    throw new IOException("can't overwrite with value [" + value + "]");
+                }
                 lookup.putIfAbsent(key, value);
             }
 
