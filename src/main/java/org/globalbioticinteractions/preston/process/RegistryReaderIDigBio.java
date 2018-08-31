@@ -11,19 +11,12 @@ import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefStatement;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -52,12 +45,10 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
             emit(new RefStatement(publishers, PUBLISHER_REGISTRY_OF, statement.getSubject()));
             emit(new RefStatement(publishers, RefNodeConstants.HAS_FORMAT, RefNodeUtil.toContentType(MimeTypes.MIME_TYPE_JSON)));
             emit(new RefStatement(null, WAS_DERIVED_FROM, publishers));
-        } else if (statement.getSubject() != null
-                && statement.getObject().equivalentTo(PUBLISHERS)
+        } else if (statement.getObject().equivalentTo(PUBLISHERS)
                 && RefNodeUtil.isDerivedFrom(statement)) {
             parsePublishers(statement.getSubject());
-        } else if (statement.getSubject() != null
-                && RefNodeUtil.isDerivedFrom(statement)) {
+        } else if (RefNodeUtil.isDerivedFrom(statement)) {
             parse(statement.getSubject());
         }
     }
@@ -71,77 +62,78 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
         }
     }
 
-    static void parseRssFeed(RefNode parent, RefStatementEmitter emitter, InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(resourceAsStream);
-        XPathFactory xPathfactory = XPathFactory.newInstance();
-        XPath xpath = xPathfactory.newXPath();
-        XPathExpression expr = xpath.compile("//item");
-        NodeList nl = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
-        for (int i = 0; i < nl.getLength(); i++) {
-            boolean isDWCA = false;
-            URI archiveURI = null;
-            URI emlURI = null;
-            UUID uuid = null;
-            Node item = nl.item(i);
-            NodeList childNodes = item.getChildNodes();
-            for (int j = 0; j < childNodes.getLength(); j++) {
-                Node child = childNodes.item(j);
-                String itemName = child.getNodeName();
-                String itemValue = child.getTextContent();
+    static void parseRssFeed(final RefNode parent1, RefStatementEmitter emitter, InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 
-                if ("guid".equals(itemName)) {
-                    try {
-                        uuid = UUID.fromString(itemValue);
-                    } catch (IllegalArgumentException ex) {
-                        // ignore
-                    }
-                } else if (Arrays.asList("ipt_eml", "emllink").contains(itemName)) {
-                    try {
-                        if (emlURI == null) {
-                            emlURI = URI.create(itemValue);
+        XPathHandler handler = new XPathHandler() {
+            @Override
+            public void evaluateXPath(RefStatementEmitter emitter, NodeList nodeList) throws XPathExpressionException {
+                for (int i = 0; i < nodeList.getLength(); i++) {
+                    boolean isDWCA = false;
+                    URI archiveURI = null;
+                    URI emlURI = null;
+                    UUID uuid = null;
+                    Node item = nodeList.item(i);
+                    NodeList childNodes = item.getChildNodes();
+                    for (int j = 0; j < childNodes.getLength(); j++) {
+                        Node child = childNodes.item(j);
+                        String itemName = child.getNodeName();
+                        String itemValue = child.getTextContent();
+
+                        if ("guid".equals(itemName)) {
+                            try {
+                                uuid = UUID.fromString(itemValue);
+                            } catch (IllegalArgumentException ex) {
+                                // ignore
+                            }
+                        } else if (Arrays.asList("ipt_eml", "emllink").contains(itemName)) {
+                            try {
+                                if (emlURI == null) {
+                                    emlURI = URI.create(itemValue);
+                                }
+                            } catch (IllegalArgumentException ex) {
+                                // ignore
+                            }
+                        } else if (Arrays.asList("ipt_dwca", "link").contains(itemName)) {
+                            try {
+                                if (archiveURI == null) {
+                                    archiveURI = URI.create(itemValue);
+                                }
+                            } catch (IllegalArgumentException ex) {
+                                // ignore
+                            }
+
+                        } else if (Arrays.asList("type", "archiveType").contains(itemName)) {
+                            isDWCA = StringUtils.equals(itemValue, "DWCA");
                         }
-                    } catch (IllegalArgumentException ex) {
-                        // ignore
-                    }
-                } else if (Arrays.asList("ipt_dwca", "link").contains(itemName)) {
-                    try {
-                        if (archiveURI == null) {
-                            archiveURI = URI.create(itemValue);
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        // ignore
+
                     }
 
-                } else if (Arrays.asList("type", "archiveType").contains(itemName)) {
-                    isDWCA = StringUtils.equals(itemValue, "DWCA");
+                    RefNode archiveParent = uuid == null ? parent1 : RefNodeUtil.toUUID(uuid.toString());
+                    if (uuid != null) {
+                        emitter.emit(new RefStatement(parent1, HAD_MEMBER, archiveParent));
+                    }
+
+                    if (emlURI != null) {
+                        RefNode uriNode = new RefNodeString(emlURI.toString());
+                        emitter.emit(new RefStatement(archiveParent, HAD_MEMBER, uriNode));
+                        emitter.emit(new RefStatement(uriNode, HAS_FORMAT, RefNodeUtil.toContentType(MimeTypes.MIME_TYPE_EML)));
+                        emitter.emit(new RefStatement(null, WAS_DERIVED_FROM, uriNode));
+                    }
+
+                    if (isDWCA && archiveURI != null) {
+                        RefNodeString refNodeDWCAUri = new RefNodeString(archiveURI.toString());
+                        emitter.emit(new RefStatement(archiveParent, HAD_MEMBER, refNodeDWCAUri));
+
+                        emitter.emit(new RefStatement(refNodeDWCAUri, HAS_FORMAT, RefNodeUtil.toContentType(MimeTypes.MIME_TYPE_DWCA)));
+                        emitter.emit(new RefStatement(null, WAS_DERIVED_FROM, refNodeDWCAUri));
+
+                    }
+
                 }
-
             }
+        };
 
-            RefNode archiveParent = uuid == null ? parent : RefNodeUtil.toUUID(uuid.toString());
-            if (uuid != null) {
-                emitter.emit(new RefStatement(parent, HAD_MEMBER, archiveParent));
-            }
-
-            if (emlURI != null) {
-                RefNode uriNode = new RefNodeString(emlURI.toString());
-                emitter.emit(new RefStatement(archiveParent, HAD_MEMBER, uriNode));
-                emitter.emit(new RefStatement(uriNode, HAS_FORMAT, RefNodeUtil.toContentType(MimeTypes.MIME_TYPE_EML)));
-                emitter.emit(new RefStatement(null, WAS_DERIVED_FROM, uriNode));
-            }
-
-            if (isDWCA && archiveURI != null) {
-                RefNodeString refNodeDWCAUri = new RefNodeString(archiveURI.toString());
-                emitter.emit(new RefStatement(archiveParent, HAD_MEMBER, refNodeDWCAUri));
-
-                emitter.emit(new RefStatement(refNodeDWCAUri, HAS_FORMAT, RefNodeUtil.toContentType(MimeTypes.MIME_TYPE_DWCA)));
-                emitter.emit(new RefStatement(null, WAS_DERIVED_FROM, refNodeDWCAUri));
-
-            }
-
-        }
+        XMLUtil.handleXPath("//item", handler, emitter, resourceAsStream);
     }
 
     static void parsePublishers(RefNode parent, RefStatementEmitter emitter, InputStream is) throws IOException {

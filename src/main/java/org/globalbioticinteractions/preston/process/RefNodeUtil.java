@@ -1,5 +1,6 @@
 package org.globalbioticinteractions.preston.process;
 
+import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefStatement;
@@ -22,7 +23,11 @@ public class RefNodeUtil {
     }
 
     public static boolean isDerivedFrom(RefStatement statement) {
-        return WAS_DERIVED_FROM.equivalentTo(statement.getPredicate())
-        || WAS_REVISION_OF.equivalentTo(statement.getPredicate());
+        return statement.getSubject() != null
+                && statement.getObject() != null
+                && statement.getPredicate() != null
+                && (WAS_DERIVED_FROM.equivalentTo(statement.getPredicate())
+                || WAS_REVISION_OF.equivalentTo(statement.getPredicate()));
     }
+
 }

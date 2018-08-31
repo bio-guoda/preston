@@ -39,7 +39,6 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
             RefNode refNodeRegistry = new RefNodeString(GBIF_DATASET_API_ENDPOINT);
             emitPageRequest(this, refNodeRegistry);
         } else if (statement.getSubject() != null
-                && statement.getObject() != null
                 && statement.getObject().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
                 && RefNodeUtil.isDerivedFrom(statement)) {
             try {

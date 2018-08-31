@@ -1,0 +1,569 @@
+[
+  {
+    "provider_datacenter": "Data Center BGBM",
+    "provider_shortname": "BGBM",
+    "provider_name": "Botanic Garden and Botanical Museum Berlin, Freie Universit\u00e4t Berlin",
+    "provider_url": "www.bgbm.org",
+    "biocase_url": "http:\/\/ww3.bgbm.org\/biocase\/",
+    "datasource": "GFBio_ColiFauna",
+    "dataset": "Coleoptera observations in orchards of South Western Germany"
+  },
+  {
+    "provider_datacenter": "Data Center BGBM",
+    "provider_shortname": "BGBM",
+    "provider_name": "Botanic Garden and Botanical Museum Berlin, Freie Universit\u00e4t Berlin",
+    "provider_url": "www.bgbm.org",
+    "biocase_url": "http:\/\/ww3.bgbm.org\/biocase\/",
+    "datasource": "GFBio_eXist-db",
+    "dataset": "Plants at Crater Road of Queen Elizabeth National Park, Uganda."
+  },
+  {
+    "provider_datacenter": "Data Center BGBM",
+    "provider_shortname": "BGBM",
+    "provider_name": "Botanic Garden and Botanical Museum Berlin, Freie Universit\u00e4t Berlin",
+    "provider_url": "www.bgbm.org",
+    "biocase_url": "http:\/\/ww3.bgbm.org\/biocase\/",
+    "datasource": "GFBio_eXist-db",
+    "dataset": "Digitisation \/ Cataloguing of non-textual objects: Development of a subject indexing system for collections of the north hemispherical flowering plant genus Campanula (DNA Sample Dataset)"
+  },
+  {
+    "provider_datacenter": "Data Center BGBM",
+    "provider_shortname": "BGBM",
+    "provider_name": "Botanic Garden and Botanical Museum Berlin, Freie Universit\u00e4t Berlin",
+    "provider_url": "www.bgbm.org",
+    "biocase_url": "http:\/\/ww3.bgbm.org\/biocase\/",
+    "datasource": "GFBio_eXist-db",
+    "dataset": "Digitisation \/ Cataloguing of non-textual objects: Development of a subject indexing system for collections of the north hemispherical flowering plant genus Campanula (Herbarium Specimens Dataset)"
+  },
+  {
+    "provider_datacenter": "Data Center BGBM",
+    "provider_shortname": "BGBM",
+    "provider_name": "Botanic Garden and Botanical Museum Berlin, Freie Universit\u00e4t Berlin",
+    "provider_url": "www.bgbm.org",
+    "biocase_url": "http:\/\/ww3.bgbm.org\/biocase\/",
+    "datasource": "GFBio_eXist-db",
+    "dataset": "Habitat use and population dynamics of small mammals in the grasslands of the Queen Elizabeth National Park, Uganda."
+  },
+  {
+    "provider_datacenter": "Data Center BGBM",
+    "provider_shortname": "BGBM",
+    "provider_name": "Botanic Garden and Botanical Museum Berlin, Freie Universit\u00e4t Berlin",
+    "provider_url": "www.bgbm.org",
+    "biocase_url": "http:\/\/ww3.bgbm.org\/biocase\/",
+    "datasource": "Herbar_GFBio_Asteraceae",
+    "dataset": "Herbarium Berolinense Asteraceae"
+  },
+  {
+    "provider_datacenter": "Data Center DSMZ",
+    "provider_shortname": "DSMZ",
+    "provider_name": "Leibniz Institute DSMZ \u2013 German Collection of Microorganisms and Cell Cultures, Braunschweig",
+    "provider_url": "www.dsmz.de",
+    "biocase_url": "http:\/\/biocase.dsmz.de\/wrappers\/biocase",
+    "datasource": "BacDive",
+    "dataset": "The Bacterial Diversity Metadatabase"
+  },
+  {
+    "provider_datacenter": "Data Center DSMZ",
+    "provider_shortname": "DSMZ",
+    "provider_name": "Leibniz Institute DSMZ \u2013 German Collection of Microorganisms and Cell Cultures, Braunschweig",
+    "provider_url": "www.dsmz.de",
+    "biocase_url": "http:\/\/biocase.dsmz.de\/wrappers\/biocase",
+    "datasource": "DSMZ_human_animal_cell_lines",
+    "dataset": "DSMZ Collection on human and animal cell cultures"
+  },
+  {
+    "provider_datacenter": "Data Center DSMZ",
+    "provider_shortname": "DSMZ",
+    "provider_name": "Leibniz Institute DSMZ \u2013 German Collection of Microorganisms and Cell Cultures, Braunschweig",
+    "provider_url": "www.dsmz.de",
+    "biocase_url": "http:\/\/biocase.dsmz.de\/wrappers\/biocase",
+    "datasource": "GBF_myxococcales",
+    "dataset": "HZI (GBF) Reichenbach Collection of Myxobacteria"
+  },
+  {
+    "provider_datacenter": "Data Center MfN",
+    "provider_shortname": "MfN",
+    "provider_name": "Museum f\u00fcr Naturkunde Berlin \u2013 Leibniz Institute for Research on Evolution and Biodiversity, Berlin",
+    "provider_url": "www.naturkundemuseum.berlin",
+    "biocase_url": "http:\/\/biocase.naturkundemuseum-berlin.de\/current",
+    "datasource": "EDIT_ATBI",
+    "dataset": "EDIT - ATBI in Spreewald (Germany)"
+  },
+  {
+    "provider_datacenter": "Data Center MfN",
+    "provider_shortname": "MfN",
+    "provider_name": "Museum f\u00fcr Naturkunde Berlin \u2013 Leibniz Institute for Research on Evolution and Biodiversity, Berlin",
+    "provider_url": "www.naturkundemuseum.berlin",
+    "biocase_url": "http:\/\/biocase.naturkundemuseum-berlin.de\/current",
+    "datasource": "mfn_Ehrenberg_D",
+    "dataset": "Ehrenberg Drawings"
+  },
+  {
+    "provider_datacenter": "Data Center MfN",
+    "provider_shortname": "MfN",
+    "provider_name": "Museum f\u00fcr Naturkunde Berlin \u2013 Leibniz Institute for Research on Evolution and Biodiversity, Berlin",
+    "provider_url": "www.naturkundemuseum.berlin",
+    "biocase_url": "http:\/\/biocase.naturkundemuseum-berlin.de\/current",
+    "datasource": "mfn_Mammalia",
+    "dataset": "Mammals (recent)"
+  },
+  {
+    "provider_datacenter": "Data Center MfN",
+    "provider_shortname": "MfN",
+    "provider_name": "Museum f\u00fcr Naturkunde Berlin \u2013 Leibniz Institute for Research on Evolution and Biodiversity, Berlin",
+    "provider_url": "www.naturkundemuseum.berlin",
+    "biocase_url": "http:\/\/biocase.naturkundemuseum-berlin.de\/current",
+    "datasource": "mfn_PAL",
+    "dataset": "MfN - Trace fossils"
+  },
+  {
+    "provider_datacenter": "Data Center MfN",
+    "provider_shortname": "MfN",
+    "provider_name": "Museum f\u00fcr Naturkunde Berlin \u2013 Leibniz Institute for Research on Evolution and Biodiversity, Berlin",
+    "provider_url": "www.naturkundemuseum.berlin",
+    "biocase_url": "http:\/\/biocase.naturkundemuseum-berlin.de\/current",
+    "datasource": "mfn_PAL",
+    "dataset": "MfN - Fossil invertebrates Ia"
+  },
+  {
+    "provider_datacenter": "Data Center MfN",
+    "provider_shortname": "MfN",
+    "provider_name": "Museum f\u00fcr Naturkunde Berlin \u2013 Leibniz Institute for Research on Evolution and Biodiversity, Berlin",
+    "provider_url": "www.naturkundemuseum.berlin",
+    "biocase_url": "http:\/\/biocase.naturkundemuseum-berlin.de\/current",
+    "datasource": "mfn_PAL",
+    "dataset": "MfN - Fossil vertebrates V"
+  },
+  {
+    "provider_datacenter": "Data Center MfN",
+    "provider_shortname": "MfN",
+    "provider_name": "Museum f\u00fcr Naturkunde Berlin \u2013 Leibniz Institute for Research on Evolution and Biodiversity, Berlin",
+    "provider_url": "www.naturkundemuseum.berlin",
+    "biocase_url": "http:\/\/biocase.naturkundemuseum-berlin.de\/current",
+    "datasource": "mfn_datapublications",
+    "dataset": "MB.R.999 Synchrotron and Neutron scan data"
+  },
+  {
+    "provider_datacenter": "Data Center MfN",
+    "provider_shortname": "MfN",
+    "provider_name": "Museum f\u00fcr Naturkunde Berlin \u2013 Leibniz Institute for Research on Evolution and Biodiversity, Berlin",
+    "provider_url": "www.naturkundemuseum.berlin",
+    "biocase_url": "http:\/\/biocase.naturkundemuseum-berlin.de\/current",
+    "datasource": "mfn_datapublications",
+    "dataset": "Ontogeny of Hemidactylus"
+  },
+  {
+    "provider_datacenter": "Data Center MfN",
+    "provider_shortname": "MfN",
+    "provider_name": "Museum f\u00fcr Naturkunde Berlin \u2013 Leibniz Institute for Research on Evolution and Biodiversity, Berlin",
+    "provider_url": "www.naturkundemuseum.berlin",
+    "biocase_url": "http:\/\/biocase.naturkundemuseum-berlin.de\/current",
+    "datasource": "tierstimmenarchiv",
+    "dataset": "Animal Sound Archive"
+  },
+  {
+    "provider_datacenter": "Data Center SGN",
+    "provider_shortname": "SGN",
+    "provider_name": "Senckenberg Gesellschaft f\u00fcr Naturforschung \u2013 Leibniz Institute, Frankfurt",
+    "provider_url": "www.senckenberg.de",
+    "biocase_url": "http:\/\/biocase.senckenberg.de",
+    "datasource": "coll_amphibia_SMF",
+    "dataset": "Collection Amphibia SMF"
+  },
+  {
+    "provider_datacenter": "Data Center SGN",
+    "provider_shortname": "SGN",
+    "provider_name": "Senckenberg Gesellschaft f\u00fcr Naturforschung \u2013 Leibniz Institute, Frankfurt",
+    "provider_url": "www.senckenberg.de",
+    "biocase_url": "http:\/\/biocase.senckenberg.de",
+    "datasource": "coll_orib_SMF",
+    "dataset": "Collection Oribatida SMF"
+  },
+  {
+    "provider_datacenter": "Data Center SGN",
+    "provider_shortname": "SGN",
+    "provider_name": "Senckenberg Gesellschaft f\u00fcr Naturforschung \u2013 Leibniz Institute, Frankfurt",
+    "provider_url": "www.senckenberg.de",
+    "biocase_url": "http:\/\/biocase.senckenberg.de",
+    "datasource": "coll_thys_SMF",
+    "dataset": "Collection Thysanoptera SMF"
+  },
+  {
+    "provider_datacenter": "Data Center SGN",
+    "provider_shortname": "SGN",
+    "provider_name": "Senckenberg Gesellschaft f\u00fcr Naturforschung \u2013 Leibniz Institute, Frankfurt",
+    "provider_url": "www.senckenberg.de",
+    "biocase_url": "http:\/\/biocase.senckenberg.de",
+    "datasource": "coll_trich_SMF",
+    "dataset": "Collection Trichoptera SMF"
+  },
+  {
+    "provider_datacenter": "Data Center SGN",
+    "provider_shortname": "SGN",
+    "provider_name": "Senckenberg Gesellschaft f\u00fcr Naturforschung \u2013 Leibniz Institute, Frankfurt",
+    "provider_url": "www.senckenberg.de",
+    "biocase_url": "http:\/\/biocase.senckenberg.de",
+    "datasource": "coll_voigt_bryozoa",
+    "dataset": "Sammlung Voigt (Bryozoa SMF)"
+  },
+  {
+    "provider_datacenter": "Data Center SGN",
+    "provider_shortname": "SGN",
+    "provider_name": "Senckenberg Gesellschaft f\u00fcr Naturforschung \u2013 Leibniz Institute, Frankfurt",
+    "provider_url": "www.senckenberg.de",
+    "biocase_url": "http:\/\/biocase.senckenberg.de",
+    "datasource": "sgn_africanplants",
+    "dataset": "African Plants - a photo guide"
+  },
+  {
+    "provider_datacenter": "Data Center SGN",
+    "provider_shortname": "SGN",
+    "provider_name": "Senckenberg Gesellschaft f\u00fcr Naturforschung \u2013 Leibniz Institute, Frankfurt",
+    "provider_url": "www.senckenberg.de",
+    "biocase_url": "http:\/\/biocase.senckenberg.de",
+    "datasource": "sgn_bestikri",
+    "dataset": "Help to better understand determination-critical taxa of the German flora."
+  },
+  {
+    "provider_datacenter": "Data Center SGN",
+    "provider_shortname": "SGN",
+    "provider_name": "Senckenberg Gesellschaft f\u00fcr Naturforschung \u2013 Leibniz Institute, Frankfurt",
+    "provider_url": "www.senckenberg.de",
+    "biocase_url": "http:\/\/biocase.senckenberg.de",
+    "datasource": "sgn_digi_blattnerv",
+    "dataset": "Senckenberg leaf venation images"
+  },
+  {
+    "provider_datacenter": "Data Center SGN",
+    "provider_shortname": "SGN",
+    "provider_name": "Senckenberg Gesellschaft f\u00fcr Naturforschung \u2013 Leibniz Institute, Frankfurt",
+    "provider_url": "www.senckenberg.de",
+    "biocase_url": "http:\/\/biocase.senckenberg.de",
+    "datasource": "sgn_digi_rhoen_flad",
+    "dataset": "Digitization of plant specimens from Rhoen and Vogelsberg (FLAD)"
+  },
+  {
+    "provider_datacenter": "Data Center SGN",
+    "provider_shortname": "SGN",
+    "provider_name": "Senckenberg Gesellschaft f\u00fcr Naturforschung \u2013 Leibniz Institute, Frankfurt",
+    "provider_url": "www.senckenberg.de",
+    "biocase_url": "http:\/\/biocase.senckenberg.de",
+    "datasource": "sgn_digi_rhoen_fr",
+    "dataset": "Digitization of plant specimens from Rhoen and Vogelsberg (FR)"
+  },
+  {
+    "provider_datacenter": "Data Center SGN",
+    "provider_shortname": "SGN",
+    "provider_name": "Senckenberg Gesellschaft f\u00fcr Naturforschung \u2013 Leibniz Institute, Frankfurt",
+    "provider_url": "www.senckenberg.de",
+    "biocase_url": "http:\/\/biocase.senckenberg.de",
+    "datasource": "sgn_digi_rhoen_fuld",
+    "dataset": "Digitization of plant specimens from Rhoen and Vogelsberg (FULD)"
+  },
+  {
+    "provider_datacenter": "Data Center SGN",
+    "provider_shortname": "SGN",
+    "provider_name": "Senckenberg Gesellschaft f\u00fcr Naturforschung \u2013 Leibniz Institute, Frankfurt",
+    "provider_url": "www.senckenberg.de",
+    "biocase_url": "http:\/\/biocase.senckenberg.de",
+    "datasource": "sgn_digi_unionida",
+    "dataset": "Digitalisierung und taxonomische \u00dcberarbeitung der Unionida-Sammlung (Collection Mollusca SMF)"
+  },
+  {
+    "provider_datacenter": "Data Center SMNS",
+    "provider_shortname": "SMNS",
+    "provider_name": "State Museum of Natural History, Stuttgart",
+    "provider_url": "www.naturkundemuseum-bw.de\t",
+    "biocase_url": "http:\/\/b36.smns-bw.org",
+    "datasource": "ecuadorianliverwortscoll",
+    "dataset": "Collection tropical liverworts serving as vectors for symbiotic fungi at the Staatliches Museum f\u00fcr Naturkunde Stuttgart"
+  },
+  {
+    "provider_datacenter": "Data Center SMNS",
+    "provider_shortname": "SMNS",
+    "provider_name": "State Museum of Natural History, Stuttgart",
+    "provider_url": "www.naturkundemuseum-bw.de\t",
+    "biocase_url": "http:\/\/b36.smns-bw.org",
+    "datasource": "goldenwaspscoll",
+    "dataset": "The Golden wasps collection at the Staatliches Museum f\u00fcr Naturkunde Stuttgart"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "BFLportal01coll",
+    "dataset": "Occurrence Data of Vascular Plants collected or compiled for the Flora of Bavaria"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "BSMeryscoll",
+    "dataset": "The Erysiphales Collection at the Botanische Staatssammlung M\u00fcnchen"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "BSMfungicoll",
+    "dataset": "The Fungal Collection at the Botanische Staatssammlung M\u00fcnchen"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "BSMlichenscoll",
+    "dataset": "The Lichen Collection at the Botanische Staatssammlung M\u00fcnchen"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "BSMmyxmaincoll",
+    "dataset": "The Myxomycetes Collections at the Botanische Staatssammlung M\u00fcnchen - Main Collection"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "BSMvplantscoll",
+    "dataset": "The Vascular Plant Collection at the Botanische Staatssammlung M\u00fcnchen"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "BSPGpiscescoll",
+    "dataset": "The Fossil Fish Collection at the Bayerische Staatssammlung f\u00fcr Pal\u00e4ontologie und Geologie"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "GOETvplantscoll",
+    "dataset": "The Vascular Plants Collection of the University of Goettingen"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "IBFfungicoll",
+    "dataset": "IBF Monitoring of Fungi"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "IBFlichenscoll",
+    "dataset": "IBF Monitoring of Lichens"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "IBForthopteracoll",
+    "dataset": "IBF Monitoring of Orthoptera"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "IBFplantscoll",
+    "dataset": "IBF Monitoring of Vascular Plants"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "JMEpiscescoll",
+    "dataset": "The Fossil Fish Collection at the Jura-Museum Eichst\u00e4tt"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "MBcoll",
+    "dataset": "The Fungal, Lichen and Plant Collections at the Herbarium Marburgense"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "MSBvplantscoll",
+    "dataset": "The Vascular Plant Collection at the Herbarium MSB, Universit\u00e4t M\u00fcnchen"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "SAPMmammaliacoll",
+    "dataset": "The Mammalia Collection at the Staatssammlung f\u00fcr Anthropologie und Pal\u00e4oanatomie M\u00fcnchen"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "SAPMpiscescoll",
+    "dataset": "The Pisces Collection at the Staatssammlung f\u00fcr Anthropologie und Pal\u00e4oanatomie M\u00fcnchen"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "SMNKspidercoll",
+    "dataset": "The Spider Collection at the Staatliches Museum f\u00fcr Naturkunde Karlsruhe"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "SMNKspiderstudcoll",
+    "dataset": "The Environmental Sample Collection of Spiders at the Staatliches Museum f\u00fcr Naturkunde Karlsruhe"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "SMNS-E-araneaecoll",
+    "dataset": "The Spider Collection at the Staatliches Museum f\u00fcr Naturkunde Stuttgart"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "SMNS-Z-herpcoll",
+    "dataset": "The Herpetology Collection at the Staatliches Museum f\u00fcr Naturkunde Stuttgart"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "ZSMarthrovariacoll",
+    "dataset": "The Arthropoda Varia Collection at the Zoologische Staatssammlung M\u00fcnchen"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "ZSMbfbcoll",
+    "dataset": "The Barcoding Fauna Bavarica Project at the Zoologische Staatssammlung M\u00fcnchen"
+  },
+  {
+    "provider_datacenter": "Data Center SNSB",
+    "provider_shortname": "SNSB",
+    "provider_name": "Staatliche Naturwissenschaftliche Sammlungen Bayerns \u2013 SNSB IT Center, M\u00fcnchen",
+    "provider_url": "www.snsb.info",
+    "biocase_url": "http:\/\/biocase.snsb.info\/wrapper",
+    "datasource": "ZSMpiscescoll",
+    "dataset": "The Fish Collection at the Zoologische Staatssammlung M\u00fcnchen"
+  },
+  {
+    "provider_datacenter": "Data Center ZFMK",
+    "provider_shortname": "ZFMK",
+    "provider_name": "Zoological Research Museum Alexander Koenig \u2013 Leibniz Institute for Animal Biodiversity, Bonn",
+    "provider_url": "www.zfmk.de",
+    "biocase_url": "https:\/\/biocase.zfmk.de\/biocase\/",
+    "datasource": "GFBio-v2",
+    "dataset": "Collection specimens used for phylogenetic analysis in Dipterans (Animalia)"
+  },
+  {
+    "provider_datacenter": "Data Center ZFMK",
+    "provider_shortname": "ZFMK",
+    "provider_name": "Zoological Research Museum Alexander Koenig \u2013 Leibniz Institute for Animal Biodiversity, Bonn",
+    "provider_url": "www.zfmk.de",
+    "biocase_url": "https:\/\/biocase.zfmk.de\/biocase\/",
+    "datasource": "GFBio-v2",
+    "dataset": "Southeast Asian pholcid spiders: diversity and phylogenetic relationships and multiple convergent shifts among microhabitats"
+  },
+  {
+    "provider_datacenter": "Data Center ZFMK",
+    "provider_shortname": "ZFMK",
+    "provider_name": "Zoological Research Museum Alexander Koenig \u2013 Leibniz Institute for Animal Biodiversity, Bonn",
+    "provider_url": "www.zfmk.de",
+    "biocase_url": "https:\/\/biocase.zfmk.de\/biocase\/",
+    "datasource": "ZFMK-Amibio",
+    "dataset": "Automatic acoustic Monitoring and Inventoring of BIODiversity"
+  },
+  {
+    "provider_datacenter": "Data Center ZFMK",
+    "provider_shortname": "ZFMK",
+    "provider_name": "Zoological Research Museum Alexander Koenig \u2013 Leibniz Institute for Animal Biodiversity, Bonn",
+    "provider_url": "www.zfmk.de",
+    "biocase_url": "https:\/\/biocase.zfmk.de\/biocase\/",
+    "datasource": "ZFMK-Collections-v2",
+    "dataset": "ZFMK Diptera collection"
+  },
+  {
+    "provider_datacenter": "Data Center ZFMK",
+    "provider_shortname": "ZFMK",
+    "provider_name": "Zoological Research Museum Alexander Koenig \u2013 Leibniz Institute for Animal Biodiversity, Bonn",
+    "provider_url": "www.zfmk.de",
+    "biocase_url": "https:\/\/biocase.zfmk.de\/biocase\/",
+    "datasource": "ZFMK-Collections-v2",
+    "dataset": "ZFMK Araneae collection"
+  },
+  {
+    "provider_datacenter": "Data Center ZFMK",
+    "provider_shortname": "ZFMK",
+    "provider_name": "Zoological Research Museum Alexander Koenig \u2013 Leibniz Institute for Animal Biodiversity, Bonn",
+    "provider_url": "www.zfmk.de",
+    "biocase_url": "https:\/\/biocase.zfmk.de\/biocase\/",
+    "datasource": "ZFMK-Collections-v2",
+    "dataset": "ZFMK Coleoptera Oberthuer collection"
+  },
+  {
+    "provider_datacenter": "Data Center ZFMK",
+    "provider_shortname": "ZFMK",
+    "provider_name": "Zoological Research Museum Alexander Koenig \u2013 Leibniz Institute for Animal Biodiversity, Bonn",
+    "provider_url": "www.zfmk.de",
+    "biocase_url": "https:\/\/biocase.zfmk.de\/biocase\/",
+    "datasource": "ZFMK-Collections-v2",
+    "dataset": "ZFMK Ichthyology collection"
+  }
+]

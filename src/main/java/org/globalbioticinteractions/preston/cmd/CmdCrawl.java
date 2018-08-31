@@ -10,6 +10,7 @@ import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.process.RefStatementListener;
+import org.globalbioticinteractions.preston.process.RegistryReaderBioCASE;
 import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.process.RegistryReaderIDigBio;
 import org.globalbioticinteractions.preston.process.StatementLogger;
@@ -34,6 +35,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
     private List<String> seedUrls = new ArrayList<String>() {{
         add(Seeds.SEED_NODE_IDIGBIO.getLabel());
         add(Seeds.SEED_NODE_GBIF.getLabel());
+        add(Seeds.SEED_NODE_BIOCASE.getLabel());
     }};
 
     @Parameter(names = {"-l", "--log",}, description = "select how to show the biodiversity graph", converter = LoggerConverter.class)
@@ -62,6 +64,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         RefStatementListener listeners[] = {
                 new RegistryReaderIDigBio(statements::add),
                 new RegistryReaderGBIF(statements::add),
+                new RegistryReaderBioCASE(statements::add),
                 getStatementLogger()
         };
 

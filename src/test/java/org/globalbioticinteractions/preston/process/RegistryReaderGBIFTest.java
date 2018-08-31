@@ -9,8 +9,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,10 +62,10 @@ public class RegistryReaderGBIFTest {
         assertThat(refNodes.size(), is(18));
 
         RefStatement refNode = refNodes.get(0);
-        assertThat(refNode.getLabel(), is("[https://gbif.org]-[:http://www.w3.org/ns/prov#hadMember]->[some label]"));
+        assertThat(refNode.getLabel(), is("[https://gbif.org]-[:http://www.w3.org/ns/prov#hadMember]->[label@gbifdatasets.json]"));
 
         refNode = refNodes.get(1);
-        assertThat(refNode.getLabel(), is("[some label]-[:http://www.w3.org/ns/prov#hadMember]->[6555005d-4594-4a3e-be33-c70e587b63d7]"));
+        assertThat(refNode.getLabel(), is("[label@gbifdatasets.json]-[:http://www.w3.org/ns/prov#hadMember]->[6555005d-4594-4a3e-be33-c70e587b63d7]"));
 
         refNode = refNodes.get(2);
         assertThat(refNode.getLabel(), is("[6555005d-4594-4a3e-be33-c70e587b63d7]-[:http://www.w3.org/ns/prov#hadMember]->[http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]"));
@@ -88,7 +86,7 @@ public class RegistryReaderGBIFTest {
         assertThat(refNode.getLabel(), is("[?]-[:http://www.w3.org/ns/prov#wasDerivedFrom]->[http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06]"));
 
         refNode = refNodes.get(8);
-        assertThat(refNode.getLabel(), is("[some label]-[:http://www.w3.org/ns/prov#hadMember]->[d0df772d-78f4-4602-acf2-7d768798f632]"));
+        assertThat(refNode.getLabel(), is("[label@gbifdatasets.json]-[:http://www.w3.org/ns/prov#hadMember]->[d0df772d-78f4-4602-acf2-7d768798f632]"));
 
         RefStatement lastRefNode = refNodes.get(refNodes.size() - 3);
         assertThat(lastRefNode.getLabel(), is("[https://api.gbif.org/v1/dataset?offset=2&limit=2]-[:http://example.org/continuationOf]->[description]"));
@@ -102,27 +100,7 @@ public class RegistryReaderGBIFTest {
     }
 
     private RefNode createTestNode() {
-        return new RefNode() {
-            @Override
-            public InputStream getContent() throws IOException {
-                return RegistryReaderGBIFTest.this.getClass().getResourceAsStream("gbifdatasets.json");
-            }
-
-            @Override
-            public String getLabel() {
-                return "some label";
-            }
-
-            @Override
-            public URI getContentHash() {
-                return URI.create("hash://some");
-            }
-
-            @Override
-            public boolean equivalentTo(RefNode node) {
-                return false;
-            }
-        };
+        return new RefNodeFromResource();
     }
 
 
