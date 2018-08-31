@@ -1,6 +1,5 @@
 package org.globalbioticinteractions.preston;
 
-import jdk.internal.util.xml.impl.Input;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -53,7 +52,7 @@ public class Resources {
     }
 
     private static CloseableHttpClient initClient() {
-        int soTimeoutMs = 300000;
+        int soTimeoutMs = 5000;
         RequestConfig config = RequestConfig.custom().setSocketTimeout(soTimeoutMs).setConnectTimeout(soTimeoutMs).build();
         return HttpClientBuilder.create().setRetryHandler(new DefaultHttpRequestRetryHandler(3, true)).setUserAgent("globalbioticinteractions/" + Preston.getVersion() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)").setDefaultRequestConfig(config).build();
     }

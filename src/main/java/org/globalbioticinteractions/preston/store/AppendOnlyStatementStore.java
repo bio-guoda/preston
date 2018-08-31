@@ -61,7 +61,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
 
             put(Triple.of(subject, predicate, object));
 
-        } catch (IOException e) {
+        } catch (Throwable e) {
             LOG.warn("failed to handle [" + statement.getLabel() + "]", e);
         }
 
@@ -83,25 +83,10 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
             URI mostRecent = findMostRecent(object);
             if (mostRecent == null || !shouldResolveOnMissingOnly()) {
                 if (getDereferencer() != null) {
-                    InputStream data = getDereferencer().dereference(object);
-                    URI derivedSubject = blobStore.putBlob(data);
-                    if (null != mostRecent && !mostRecent.equals(derivedSubject)) {
-                        recordGenerationTime(derivedSubject);
-                        put(Pair.of(Predicate.WAS_REVISION_OF, mostRecent), derivedSubject);
-                        Triple<URI, URI, URI> of = Triple.of(derivedSubject, Predicate.WAS_REVISION_OF, mostRecent);
-                        emit(new RefStatement(new RefNodeFromKey(blobStore, of.getLeft()),
-                                new RefNodeString(of.getMiddle().toString()),
-                                new RefNodeFromKey(blobStore, of.getRight())));
-
-                    } else if (null == mostRecent) {
-                        recordGenerationTime(derivedSubject);
-                        put(Pair.of(Predicate.WAS_DERIVED_FROM, object), derivedSubject);
-                        Triple<URI, URI, URI> of = Triple.of(derivedSubject, Predicate.WAS_DERIVED_FROM, object);
-                        emit(new RefStatement(new RefNodeFromKey(blobStore, of.getLeft()),
-                                new RefNodeString(of.getMiddle().toString()),
-                                new RefNodeString(of.getRight().toString())));
-                    } else {
-
+                    try {
+                        attemptUpdate(object, mostRecent);
+                    } catch (IOException e) {
+                        LOG.warn("failed to update [" + object.toString() + "]", e);
                     }
                 }
             }
@@ -110,6 +95,27 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
                     new RefNodeString(predicate.toString()),
                     new RefNodeString(object.toString())));
 
+        }
+    }
+
+    private void attemptUpdate(URI object, URI mostRecent) throws IOException {
+        InputStream data = getDereferencer().dereference(object);
+        URI derivedSubject = blobStore.putBlob(data);
+        if (null != mostRecent && !mostRecent.equals(derivedSubject)) {
+            recordGenerationTime(derivedSubject);
+            put(Pair.of(Predicate.WAS_REVISION_OF, mostRecent), derivedSubject);
+            Triple<URI, URI, URI> of = Triple.of(derivedSubject, Predicate.WAS_REVISION_OF, mostRecent);
+            emit(new RefStatement(new RefNodeFromKey(blobStore, of.getLeft()),
+                    new RefNodeString(of.getMiddle().toString()),
+                    new RefNodeFromKey(blobStore, of.getRight())));
+
+        } else if (null == mostRecent) {
+            recordGenerationTime(derivedSubject);
+            put(Pair.of(Predicate.WAS_DERIVED_FROM, object), derivedSubject);
+            Triple<URI, URI, URI> of = Triple.of(derivedSubject, Predicate.WAS_DERIVED_FROM, object);
+            emit(new RefStatement(new RefNodeFromKey(blobStore, of.getLeft()),
+                    new RefNodeString(of.getMiddle().toString()),
+                    new RefNodeString(of.getRight().toString())));
         }
     }
 
