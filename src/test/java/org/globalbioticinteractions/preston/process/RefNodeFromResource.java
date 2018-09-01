@@ -2,8 +2,6 @@ package org.globalbioticinteractions.preston.process;
 
 import org.globalbioticinteractions.preston.model.RefNode;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 
 public class RefNodeFromResource implements RefNode {
@@ -18,11 +16,6 @@ public class RefNodeFromResource implements RefNode {
 
     public RefNodeFromResource(String resourceName) {
         this.resourceName = resourceName;
-    }
-
-    @Override
-    public InputStream getContent() throws IOException {
-        return getClass().getResourceAsStream(resourceName);
     }
 
     @Override

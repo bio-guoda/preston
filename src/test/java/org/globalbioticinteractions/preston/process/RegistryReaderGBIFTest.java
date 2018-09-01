@@ -3,12 +3,15 @@ package org.globalbioticinteractions.preston.process;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefStatement;
+import org.globalbioticinteractions.preston.store.TestUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +20,12 @@ import static org.hamcrest.core.Is.is;
 
 public class RegistryReaderGBIFTest {
 
+    public static final String GBIFDATASETS_JSON = "gbifdatasets.json";
+
     @Test
     public void onSeed() {
         ArrayList<RefStatement> nodes = new ArrayList<>();
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
         RefNodeString bla = new RefNodeString("bla");
         registryReaderGBIF.on(new RefStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.SEED_OF, bla));
         Assert.assertThat(nodes.size(), is(2));
@@ -30,7 +35,7 @@ public class RegistryReaderGBIFTest {
     @Test
     public void onNotSeed() {
         ArrayList<RefStatement> nodes = new ArrayList<>();
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
         RefNodeString bla = new RefNodeString("bla");
         registryReaderGBIF.on(new RefStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.HAD_MEMBER, bla));
         assertThat(nodes.size(), is(0));
@@ -39,7 +44,14 @@ public class RegistryReaderGBIFTest {
     @Test
     public void onContinuation() {
         ArrayList<RefStatement> nodes = new ArrayList<>();
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(nodes::add);
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(URI key) throws IOException {
+                return getClass().getResourceAsStream(GBIFDATASETS_JSON);
+            }
+        };
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+
 
         RefStatement firstPage = new RefStatement(createTestNode(), RefNodeConstants.WAS_DERIVED_FROM, new RefNodeString("https://api.gbif.org/v1/dataset"));
 
@@ -57,7 +69,7 @@ public class RegistryReaderGBIFTest {
 
         RefNode testNode = createTestNode();
 
-        RegistryReaderGBIF.parse(testNode, refNodes::add, new RefNodeString("description"));
+        RegistryReaderGBIF.parse(testNode, refNodes::add, new RefNodeString("description"), getClass().getResourceAsStream(GBIFDATASETS_JSON));
 
         assertThat(refNodes.size(), is(18));
 

@@ -4,6 +4,7 @@ import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefStatement;
+import org.globalbioticinteractions.preston.store.TestUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,7 @@ public class RegistryReaderBioCASETest {
     @Before
     public void init() {
         nodes = new ArrayList<>();
-        registryReader = new RegistryReaderBioCASE(nodes::add);
+        registryReader = new RegistryReaderBioCASE(TestUtil.getTestBlobStore(), nodes::add);
     }
 
     @Test
@@ -74,6 +75,14 @@ public class RegistryReaderBioCASETest {
     public void handleProviders() throws IOException {
         RefNodeFromResource refNode = new RefNodeFromResource("biocase-providers.json");
 
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+
+            @Override
+            public InputStream get(URI key) throws IOException {
+                return getClass().getResourceAsStream("biocase-providers.json");
+            }
+        };
+        registryReader = new RegistryReaderBioCASE(blobStore, nodes::add);
         registryReader.on(new RefStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, new RefNodeString(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT)));
 
         assertFalse(nodes.isEmpty());
@@ -94,6 +103,12 @@ public class RegistryReaderBioCASETest {
     @Test
     public void handleDatasets() throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
         RefNodeFromResource refNode = new RefNodeFromResource("biocase-datasets.xml");
+        registryReader = new RegistryReaderBioCASE(new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(URI key) throws IOException {
+                return getClass().getResourceAsStream("biocase-datasets.xml");
+            }
+        }, nodes::add);
 
         registryReader.on(new RefStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, new RefNodeString("http://something/pywrapper.cgi?dsa=")));
 

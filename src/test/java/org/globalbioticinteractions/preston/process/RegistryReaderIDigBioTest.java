@@ -1,11 +1,11 @@
 package org.globalbioticinteractions.preston.process;
 
 import com.sun.syndication.io.FeedException;
-import org.apache.commons.lang3.StringUtils;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefStatement;
+import org.globalbioticinteractions.preston.store.TestUtil;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -27,7 +27,7 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void onSeed() {
         ArrayList<RefStatement> nodes = new ArrayList<>();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(nodes::add);
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), nodes::add);
         RefNodeString bla = new RefNodeString("bla");
         reader.on(new RefStatement(Seeds.SEED_NODE_IDIGBIO, bla, bla));
         assertThat(nodes.size(), is(3));

@@ -81,7 +81,7 @@ public class ContentResolverTest {
 
         RefStatement cachedNode = refNodes.get(0);
         assertThat(cachedNode.getSubject().getContentHash().toString(), is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
-        assertThat(IOUtils.toString(cachedNode.getSubject().getContent(), StandardCharsets.UTF_8), is("https://example.org"));
+        assertThat(IOUtils.toString(blobStore.get(cachedNode.getSubject().getContentHash()), StandardCharsets.UTF_8), is("https://example.org"));
         assertTrue(cachedNode.getSubject().equivalentTo(providedNode));
 
         FileUtils.deleteQuietly(tempDir.toFile());
@@ -111,16 +111,16 @@ public class ContentResolverTest {
         assertThat(refStatement.getSubject().getLabel(), is("hash://sha256/" + expectedHash));
         assertThat(refStatement.getPredicate().getLabel(), is(RefNodeConstants.GENERATED_AT_TIME.getLabel()));
 
-        InputStream datetimeContent = refStatement.getObject().getContent();
+        InputStream datetimeContent = blobStore.get(refStatement.getObject().getContentHash());
         assertThat(datetimeContent, is(notNullValue()));
         String s = IOUtils.toString(datetimeContent, StandardCharsets.UTF_8);
         assertNotNull(DateUtil.parse(s));
 
         RefStatement cachedNode = refNodes.get(1);
         assertContentWith(cachedNode, expectedHash, expectedValue);
-        InputStream inputStream = cachedNode.getObject().getContent();
+        InputStream inputStream = blobStore.get(cachedNode.getSubject().getContentHash());
         assertNotNull(inputStream);
-        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is(testURI.toString()));
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is("https://example.org"));
 
         String baseCacheDir = "/50/d7/a9/" + expectedHash + "/";
         String absCacheDir = datasetDir.toAbsolutePath().toString() + baseCacheDir;

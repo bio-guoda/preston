@@ -35,10 +35,4 @@ public class RefStatementTest {
         assertFalse(link.equivalentTo(link2));
     }
 
-    @Test
-    public void some() {
-        RefStatement link = new RefStatement(source, relation, target);
-        assertThat(link.getId().toString(), Is.is("hash://sha256/4cb8deba3876d36c1b217a472c045d2d9a81ee59424f7fc37102a9bb13d543c7"));
-    }
-
 }

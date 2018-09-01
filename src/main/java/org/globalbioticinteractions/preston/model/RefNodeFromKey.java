@@ -1,10 +1,7 @@
-package org.globalbioticinteractions.preston.process;
+package org.globalbioticinteractions.preston.model;
 
-import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.store.BlobStore;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 
 public class RefNodeFromKey implements RefNode {
@@ -15,11 +12,6 @@ public class RefNodeFromKey implements RefNode {
     public RefNodeFromKey(BlobStore blobStore, URI key) {
         this.store = blobStore;
         this.key = key;
-    }
-
-    @Override
-    public InputStream getContent() throws IOException {
-        return store.get(getContentHash());
     }
 
     @Override

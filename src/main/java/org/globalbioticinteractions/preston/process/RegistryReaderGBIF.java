@@ -12,6 +12,7 @@ import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefStatement;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ import static org.globalbioticinteractions.preston.RefNodeConstants.CONTINUATION
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
 import static org.globalbioticinteractions.preston.RefNodeConstants.SEED_OF;
 
-public class RegistryReaderGBIF extends RefStatementProcessor {
+public class RegistryReaderGBIF extends ProcessorReadOnly {
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
         put("DWC_ARCHIVE", MimeTypes.MIME_TYPE_DWCA);
         put("EML", MimeTypes.MIME_TYPE_EML);
@@ -28,8 +29,8 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
     private static final String GBIF_DATASET_API_ENDPOINT = "https://api.gbif.org/v1/dataset";
     private final Log LOG = LogFactory.getLog(RegistryReaderGBIF.class);
 
-    public RegistryReaderGBIF(RefStatementListener listener) {
-        super(listener);
+    public RegistryReaderGBIF(BlobStoreReadOnly blobStoreReadOnly, RefStatementListener listener) {
+        super(blobStoreReadOnly, listener);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
                 && statement.getObject().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
                 && RefNodeUtil.isDerivedFrom(statement)) {
             try {
-                parse(statement.getSubject(), this, statement.getObject());
+                parse(statement.getSubject(), this, statement.getObject(), get(statement.getSubject().getContentHash()));
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.getLabel() + "]", e);
             }
@@ -61,9 +62,9 @@ public class RegistryReaderGBIF extends RefStatementProcessor {
         emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, nextPage));
     }
 
-    public static void parse(RefNode currentPageContent, RefStatementEmitter emitter, RefNode currentPage) throws IOException {
+    public static void parse(RefNode currentPageContent, RefStatementEmitter emitter, RefNode currentPage, InputStream in) throws IOException {
         emitter.emit(new RefStatement(Seeds.SEED_NODE_GBIF, HAD_MEMBER, currentPageContent));
-        JsonNode jsonNode = new ObjectMapper().readTree(currentPageContent.getContent());
+        JsonNode jsonNode = new ObjectMapper().readTree(in);
         if (jsonNode != null && jsonNode.has("results")) {
             for (JsonNode result : jsonNode.get("results")) {
                 if (result.has("key") && result.has("endpoints")) {

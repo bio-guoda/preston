@@ -20,6 +20,7 @@ import org.globalbioticinteractions.preston.store.BlobStore;
 import org.globalbioticinteractions.preston.store.FilePersistence;
 import org.globalbioticinteractions.preston.store.Persistence;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -58,19 +59,24 @@ public abstract class CmdCrawl implements Runnable, Crawler {
                     addAll(seeds);
                 }};
 
-        Persistence persistence = new FilePersistence();
-        BlobStore blobStore = new AppendOnlyBlobStore(persistence);
+        File dataDir = new File("data");
+        File tmpDir = new File(dataDir, "tmp");
+        Persistence blobPersistence = new FilePersistence(
+                tmpDir,
+                new File(dataDir, "blob"));
+        BlobStore blobStore = new AppendOnlyBlobStore(blobPersistence);
 
         RefStatementListener listeners[] = {
-                new RegistryReaderIDigBio(statements::add),
-                new RegistryReaderGBIF(statements::add),
-                new RegistryReaderBioCASE(statements::add),
+                new RegistryReaderIDigBio(blobStore, statements::add),
+                new RegistryReaderGBIF(blobStore, statements::add),
+                new RegistryReaderBioCASE(blobStore, statements::add),
                 getStatementLogger()
         };
 
+        Persistence statementPersistence = new FilePersistence(tmpDir, new File(dataDir, "statement"));
         RefStatementListener statementStore = (CrawlMode.replay == crawlMode)
-                ? createOfflineStatementStore(persistence, blobStore, listeners)
-                : createOnlineStatementStore(persistence, blobStore, listeners, crawlMode);
+                ? createOfflineStatementStore(statementPersistence, blobStore, listeners)
+                : createOnlineStatementStore(statementPersistence, blobStore, listeners, crawlMode);
 
         while (!statements.isEmpty()) {
             statementStore.on(statements.poll());

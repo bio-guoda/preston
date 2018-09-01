@@ -11,7 +11,7 @@ import org.globalbioticinteractions.preston.cmd.CmdList;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefStatement;
-import org.globalbioticinteractions.preston.process.RefNodeFromKey;
+import org.globalbioticinteractions.preston.model.RefNodeFromKey;
 import org.globalbioticinteractions.preston.process.RefNodeUtil;
 import org.globalbioticinteractions.preston.process.RefStatementListener;
 import org.globalbioticinteractions.preston.process.RefStatementProcessor;

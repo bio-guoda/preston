@@ -25,19 +25,19 @@ import java.util.Map;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.SEED_OF;
 
-public class RegistryReaderBioCASE extends RefStatementProcessor {
+public class RegistryReaderBioCASE extends ProcessorReadOnly {
     private static final Log LOG = LogFactory.getLog(RegistryReaderBioCASE.class);
 
-    public static final String BIOCASE_REGISTRY_ENDPOINT = "https://bms.gfbio.org/services/data-sources/";
-    public static final RefNode REF_NODE_REGISTRY = new RefNodeString(BIOCASE_REGISTRY_ENDPOINT);
+    static final String BIOCASE_REGISTRY_ENDPOINT = "https://bms.gfbio.org/services/data-sources/";
+    private static final RefNode REF_NODE_REGISTRY = new RefNodeString(BIOCASE_REGISTRY_ENDPOINT);
 
     // https://wiki.bgbm.org/bps/index.php/Archiving
     // http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=Herbar&inventory=1
     // https://bms.gfbio.org/services/data-sources/
 
 
-    public RegistryReaderBioCASE(RefStatementListener listener) {
-        super(listener);
+    public RegistryReaderBioCASE(BlobStoreReadOnly blobStoreReadOnly, RefStatementListener listener) {
+        super(blobStoreReadOnly, listener);
     }
 
 
@@ -133,7 +133,7 @@ public class RegistryReaderBioCASE extends RefStatementProcessor {
                     parse = RegistryReaderBioCASE::parseDatasetInventory;
                 }
                 if (parse != null) {
-                    InputStream content = statement.getSubject().getContent();
+                    InputStream content = get(statement.getSubject().getContentHash());
                     if (content != null) {
                         parse.parse(content, this);
                     }
@@ -146,4 +146,5 @@ public class RegistryReaderBioCASE extends RefStatementProcessor {
         }
 
     }
+
 }

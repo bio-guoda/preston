@@ -1,6 +1,7 @@
 package org.globalbioticinteractions.preston.store;
 
 import org.apache.commons.io.IOUtils;
+import org.globalbioticinteractions.preston.process.BlobStoreReadOnly;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,5 +14,9 @@ public class TestUtil {
 
     public static Persistence getTestPersistence() {
         return AppendOnlyBlobStoreTest.getTestPersistence();
+    }
+
+    public static BlobStoreReadOnly getTestBlobStore() {
+        return new AppendOnlyBlobStore(getTestPersistence());
     }
 }

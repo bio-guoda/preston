@@ -28,14 +28,14 @@ import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_FORMAT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.PUBLISHER_REGISTRY_OF;
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
 
-public class RegistryReaderIDigBio extends RefStatementProcessor {
+public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     private final static Log LOG = LogFactory.getLog(RegistryReaderIDigBio.class);
     public static final String PUBLISHERS_URI = "https://search.idigbio.org/v2/search/publishers";
     public static final RefNodeString PUBLISHERS = new RefNodeString(PUBLISHERS_URI);
 
-    public RegistryReaderIDigBio(RefStatementListener listener) {
-        super(listener);
+    public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, RefStatementListener listener) {
+        super(blobStore, listener);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
 
     private void parse(RefNode refNode) {
         try {
-            parseRssFeed(refNode, this, refNode.getContent());
+            parseRssFeed(refNode, this, get(refNode.getContentHash()));
         } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
             // ignore - opportunistic parsing attempt
         }
@@ -159,7 +159,7 @@ public class RegistryReaderIDigBio extends RefStatementProcessor {
 
     private void parsePublishers(RefNode refNode) {
         try {
-            parsePublishers(refNode, this, refNode.getContent());
+            parsePublishers(refNode, this, get(refNode.getContentHash()));
         } catch (IOException e) {
             LOG.warn("failed to parse [" + refNode.getLabel() + "]", e);
         }
