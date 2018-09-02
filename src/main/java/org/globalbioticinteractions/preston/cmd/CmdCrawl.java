@@ -39,7 +39,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         add(Seeds.SEED_NODE_BIOCASE.getIRIString());
     }};
 
-    @Parameter(names = {"-l", "--log",}, description = "select how toLiteral show the biodiversity graph", converter = LoggerConverter.class)
+    @Parameter(names = {"-l", "--log",}, description = "select how to show the biodiversity graph", converter = LoggerConverter.class)
     private Logger logMode = Logger.tsv;
 
     @Override

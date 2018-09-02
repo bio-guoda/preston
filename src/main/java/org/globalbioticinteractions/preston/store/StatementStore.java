@@ -12,6 +12,6 @@ public interface StatementStore {
 
     void put(Triple statement) throws IOException;
 
-    IRI findKey(Pair<RDFTerm, RDFTerm> partialStatement) throws IOException;
+    IRI get(Pair<RDFTerm, RDFTerm> partialStatement) throws IOException;
 
 }

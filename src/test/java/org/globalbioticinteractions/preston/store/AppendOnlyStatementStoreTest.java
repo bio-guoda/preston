@@ -8,7 +8,6 @@ import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.hamcrest.core.Is;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,44 +15,56 @@ import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 public class AppendOnlyStatementStoreTest {
 
-    public static final IRI SOME_IRI = RefNodeFactory.toIRI(URI.create("http://some"));
+    private static final IRI SOME_IRI = RefNodeFactory.toIRI(URI.create("http://some"));
 
-    @Ignore("store only dereferenced content and timestamps for now")
     @Test
-    public void putImmutableStatement() throws IOException {
-        IRI GBIF = RefNodeFactory.toIRI(URI.create("http://gbif.org"));
-        IRI GBIF_REGISTRY = RefNodeFactory.toIRI(URI.create("https://api.gbif.org/v1/registry"));
+    public void putContentThatFailsToDownload() throws IOException {
+        BlankNode blank = RefNodeFactory.toBlank();
         Triple statement
-                = RefNodeFactory.toStatement(GBIF_REGISTRY, Predicate.WAS_DERIVED_FROM, GBIF);
+                = RefNodeFactory.toStatement(blank,
+                Predicate.WAS_DERIVED_FROM,
+                RefNodeFactory.toIRI(URI.create("http://some")));
 
-        Dereferencer dereferencer = new DereferenceTest("deref@");
-        AppendOnlyBlobStore blobStore1 = new AppendOnlyBlobStore(TestUtil.getTestPersistence());
-        StatementStore blobStore = getAppendOnlyRelationStore(dereferencer, blobStore1, TestUtil.getTestPersistence());
+        Dereferencer dereferencer = uri -> {
+            throw new IOException("fails to dereference");
+        };
 
-        blobStore.put(statement);
+        Persistence testPersistence = TestUtil.getTestPersistence();
 
-        IRI key = blobStore.findKey(Pair.of(Predicate.WAS_DERIVED_FROM, GBIF));
+        AppendOnlyStatementStore relationStore = new AppendOnlyStatementStore(
+                new AppendOnlyBlobStore(testPersistence),
+                testPersistence,
+                dereferencer);
 
-        assertThat(key.toString(), Is.is("hash://sha256/809f41e24585d47dd30008e11d3848aec67065135042a28847b357af3ccf84e4"));
+        relationStore.put(statement);
 
-        InputStream URIString = blobStore1.get(key);
+        // dereference subject
 
-        assertThat(toUTF8(URIString), Is.is("https://api.gbif.org/v1/registry"));
+        IRI contentHash = relationStore.get(
+                Pair.of(Predicate.WAS_DERIVED_FROM,
+                        RefNodeFactory.toIRI(URI.create("http://some"))));
+
+        assertTrue(RefNodeFactory.isBlankOrSkolemizedBlank(contentHash));
     }
 
     @Test
     public void putContentThatNeedsDownload() throws IOException {
+        BlankNode blank = RefNodeFactory.toBlank();
         Triple statement
-                = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, RefNodeFactory.toIRI(URI.create("http://some")));
+                = RefNodeFactory.toStatement(blank,
+                Predicate.WAS_DERIVED_FROM,
+                RefNodeFactory.toIRI(URI.create("http://some")));
 
         Dereferencer dereferencer = new DereferenceTest("derefData@");
         Persistence testPersistence = TestUtil.getTestPersistence();
+
         AppendOnlyStatementStore relationStore = new AppendOnlyStatementStore(
                 new AppendOnlyBlobStore(testPersistence),
                 testPersistence,
@@ -65,19 +76,17 @@ public class AppendOnlyStatementStoreTest {
 
         // dereference subject
 
-        IRI contentHash = relationStore.findKey(Pair.of(Predicate.WAS_DERIVED_FROM, RefNodeFactory.toIRI(URI.create("http://some"))));
+        IRI contentHash = relationStore.get(
+                Pair.of(Predicate.WAS_DERIVED_FROM,
+                        RefNodeFactory.toIRI(URI.create("http://some"))));
         InputStream content = blobStore.get(contentHash);
-
         assertNotNull(contentHash);
-        InputStream otherContent = blobStore.get(contentHash);
-        String actualOtherContent = toUTF8(otherContent);
 
         String expectedContent = "derefData@http://some";
 
         String actualContent = toUTF8(content);
         assertThat(actualContent, Is.is(expectedContent));
         assertThat(contentHash, Is.is(Hasher.calcSHA256(expectedContent)));
-        assertThat(actualContent, Is.is(actualOtherContent));
     }
 
     private AppendOnlyStatementStore getAppendOnlyRelationStore(Dereferencer dereferencer, BlobStore blobStore, Persistence testPersistencetence) {
@@ -105,19 +114,19 @@ public class AppendOnlyStatementStoreTest {
 
         relationstore.put(statement);
 
-        IRI contentHash = relationstore.findKey(Pair.of(Predicate.WAS_DERIVED_FROM, SOME_IRI));
+        IRI contentHash = relationstore.get(Pair.of(Predicate.WAS_DERIVED_FROM, SOME_IRI));
         assertNotNull(contentHash);
 
         Dereferencer dereferencer = new DereferenceTest("derefData2@");
         relationstore.setDereferencer(dereferencer);
         relationstore.put(statement);
 
-        IRI contentHash2 = relationstore.findKey(Pair.of(Predicate.WAS_DERIVED_FROM, SOME_IRI));
+        IRI contentHash2 = relationstore.get(Pair.of(Predicate.WAS_DERIVED_FROM, SOME_IRI));
 
 
         assertThat(contentHash, Is.is(contentHash2));
 
-        IRI newContentHash = relationstore.findKey(Pair.of(Predicate.WAS_REVISION_OF, contentHash));
+        IRI newContentHash = relationstore.get(Pair.of(Predicate.WAS_REVISION_OF, contentHash));
         InputStream newContent = blogStore.get(newContentHash);
 
         assertThat(contentHash, not(Is.is(newContentHash)));
@@ -128,7 +137,7 @@ public class AppendOnlyStatementStoreTest {
         relationstore.setDereferencer(new DereferenceTest("derefData3@"));
         relationstore.put(statement);
 
-        IRI newerContentHash = relationstore.findKey(Pair.of(Predicate.WAS_REVISION_OF, newContentHash));
+        IRI newerContentHash = relationstore.get(Pair.of(Predicate.WAS_REVISION_OF, newContentHash));
         InputStream newerContent = blogStore.get(newerContentHash);
 
         assertThat(newerContentHash.getIRIString(), Is.is("hash://sha256/7e66eac09d137afe06dd73614e966a417260a111208dabe7225b05f02ce380fd"));
