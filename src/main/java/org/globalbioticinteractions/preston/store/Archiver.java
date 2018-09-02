@@ -13,7 +13,7 @@ import org.globalbioticinteractions.preston.DateUtil;
 import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.cmd.CmdList;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
-import org.globalbioticinteractions.preston.process.RefStatementListener;
+import org.globalbioticinteractions.preston.process.StatementListener;
 import org.globalbioticinteractions.preston.process.StatementProcessor;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_REVISION_OF;
 
 
-public class IRIInflater extends StatementProcessor {
+public class Archiver extends StatementProcessor {
     private static Log LOG = LogFactory.getLog(CmdList.class);
 
     private BlobStore blobStore;
@@ -38,14 +38,14 @@ public class IRIInflater extends StatementProcessor {
 
     private final StatementStore statementStore;
 
-    public IRIInflater(BlobStore blobStore, Dereferencer dereferencer, StatementStore statementStore, RefStatementListener... listener) {
+    public Archiver(BlobStore blobStore, Dereferencer dereferencer, StatementStore statementStore, StatementListener... listener) {
         super(listener);
         this.blobStore = blobStore;
         this.statementStore = statementStore;
         this.dereferencer = dereferencer;
     }
 
-    public IRIInflater(BlobStore blobStore, Dereferencer dereferencer, StatementStoreImpl statementStore) {
+    public Archiver(BlobStore blobStore, Dereferencer dereferencer, StatementStoreImpl statementStore) {
         this.blobStore = blobStore;
         this.statementStore = statementStore;
         this.dereferencer = dereferencer;

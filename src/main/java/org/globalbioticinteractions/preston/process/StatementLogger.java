@@ -2,7 +2,7 @@ package org.globalbioticinteractions.preston.process;
 
 import org.apache.commons.rdf.api.Triple;
 
-public class StatementLogger implements RefStatementListener {
+public class StatementLogger implements StatementListener {
 
     protected String printStatement(Triple statement) {
         return statement.toString();

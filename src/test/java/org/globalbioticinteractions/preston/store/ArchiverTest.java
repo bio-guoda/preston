@@ -33,7 +33,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-public class IRIInflaterTest {
+public class ArchiverTest {
 
     private static final IRI SOME_IRI = toIRI(URI.create("http://some"));
 
@@ -51,7 +51,7 @@ public class IRIInflaterTest {
 
         Persistence testPersistence = TestUtil.getTestPersistence();
 
-        IRIInflater relationStore = new IRIInflater(
+        Archiver relationStore = new Archiver(
                 new AppendOnlyBlobStore(testPersistence),
                 dereferencer, new StatementStoreImpl(testPersistence));
 
@@ -82,7 +82,7 @@ public class IRIInflaterTest {
 
         List<Triple> nodes = new ArrayList<>();
 
-        IRIInflater relationStore = new IRIInflater(
+        Archiver relationStore = new Archiver(
                 new AppendOnlyBlobStore(testPersistence),
                 dereferencer, new StatementStoreImpl(testPersistence),
                 nodes::add);
@@ -110,7 +110,7 @@ public class IRIInflaterTest {
         Dereferencer dereferencer = new DereferenceTest("derefData@");
         Persistence testPersistence = TestUtil.getTestPersistence();
 
-        IRIInflater relationStore = new IRIInflater(
+        Archiver relationStore = new Archiver(
                 new AppendOnlyBlobStore(testPersistence),
                 dereferencer, new StatementStoreImpl(testPersistence));
 
@@ -133,8 +133,8 @@ public class IRIInflaterTest {
         assertThat(contentHash, Is.is(Hasher.calcSHA256(expectedContent)));
     }
 
-    private IRIInflater getAppendOnlyRelationStore(Dereferencer dereferencer, BlobStore blobStore, Persistence testPersistencetence) {
-        return new IRIInflater(blobStore, dereferencer, new StatementStoreImpl(testPersistencetence));
+    private Archiver getAppendOnlyRelationStore(Dereferencer dereferencer, BlobStore blobStore, Persistence testPersistencetence) {
+        return new Archiver(blobStore, dereferencer, new StatementStoreImpl(testPersistencetence));
     }
 
     private String toUTF8(InputStream content) throws IOException {
@@ -152,7 +152,7 @@ public class IRIInflaterTest {
 
         BlobStore blogStore = new AppendOnlyBlobStore(TestUtil.getTestPersistence());
 
-        IRIInflater relationstore = getAppendOnlyRelationStore(dereferencer1,
+        Archiver relationstore = getAppendOnlyRelationStore(dereferencer1,
                 blogStore,
                 TestUtil.getTestPersistence());
 
@@ -214,7 +214,7 @@ public class IRIInflaterTest {
     public void assertRewrite(Dereferencer explodingDereferencer, boolean resolveOnMissingOnly) throws IOException {
         BlobStore blogStore = new AppendOnlyBlobStore(TestUtil.getTestPersistence());
 
-        IRIInflater relationstore = getAppendOnlyRelationStore(explodingDereferencer,
+        Archiver relationstore = getAppendOnlyRelationStore(explodingDereferencer,
                 blogStore,
                 TestUtil.getTestPersistence());
         relationstore.setResolveOnMissingOnly(resolveOnMissingOnly);

@@ -28,7 +28,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     private final Log LOG = LogFactory.getLog(RegistryReaderGBIF.class);
     public static final IRI API_ENTRY_POINT = RefNodeFactory.toIRI(GBIF_DATASET_API_ENDPOINT);
 
-    public RegistryReaderGBIF(BlobStoreReadOnly blobStoreReadOnly, RefStatementListener listener) {
+    public RegistryReaderGBIF(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
         super(blobStoreReadOnly, listener);
     }
 
@@ -49,18 +49,18 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         }
     }
 
-    private static void emitNextPage(int offset, int limit, RefStatementEmitter emitter) {
+    private static void emitNextPage(int offset, int limit, StatementEmitter emitter) {
         String uri = GBIF_DATASET_API_ENDPOINT + "?offset=" + offset + "&limit=" + limit;
         IRI nextPage = RefNodeFactory.toIRI(uri);
         emitPageRequest(emitter, nextPage);
     }
 
-    private static void emitPageRequest(RefStatementEmitter emitter, IRI nextPage) {
+    private static void emitPageRequest(StatementEmitter emitter, IRI nextPage) {
         emitter.emit(RefNodeFactory.toStatement(nextPage, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
         emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, nextPage));
     }
 
-    public static void parse(IRI currentPage, RefStatementEmitter emitter, InputStream in) throws IOException {
+    public static void parse(IRI currentPage, StatementEmitter emitter, InputStream in) throws IOException {
         emitter.emit(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, HAD_MEMBER, currentPage));
         JsonNode jsonNode = new ObjectMapper().readTree(in);
         if (jsonNode != null && jsonNode.has("results")) {

@@ -4,5 +4,5 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public interface EmittingParser {
-    void parse(InputStream is, RefStatementEmitter emitter) throws IOException;
+    void parse(InputStream is, StatementEmitter emitter) throws IOException;
 }

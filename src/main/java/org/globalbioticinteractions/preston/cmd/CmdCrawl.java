@@ -9,13 +9,13 @@ import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
-import org.globalbioticinteractions.preston.process.RefStatementListener;
+import org.globalbioticinteractions.preston.process.StatementListener;
 import org.globalbioticinteractions.preston.process.RegistryReaderBioCASE;
 import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.process.RegistryReaderIDigBio;
 import org.globalbioticinteractions.preston.process.StatementLogger;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
-import org.globalbioticinteractions.preston.store.IRIInflater;
+import org.globalbioticinteractions.preston.store.Archiver;
 import org.globalbioticinteractions.preston.store.BlobStore;
 import org.globalbioticinteractions.preston.store.FilePersistence;
 import org.globalbioticinteractions.preston.store.Persistence;
@@ -66,7 +66,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
                 new File(dataDir, "blob"));
         BlobStore blobStore = new AppendOnlyBlobStore(blobPersistence);
 
-        RefStatementListener listeners[] = {
+        StatementListener listeners[] = {
                 new RegistryReaderIDigBio(blobStore, statements::add),
                 new RegistryReaderGBIF(blobStore, statements::add),
                 new RegistryReaderBioCASE(blobStore, statements::add),
@@ -74,21 +74,21 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         };
 
         Persistence statementPersistence = new FilePersistence(tmpDir, new File(dataDir, "statement"));
-        RefStatementListener statementStore = (CrawlMode.replay == crawlMode)
-                ? createOfflineStatementStore(statementPersistence, blobStore, listeners)
-                : createOnlineStatementStore(statementPersistence, blobStore, listeners, crawlMode);
+        StatementListener archive = (CrawlMode.replay == crawlMode)
+                ? createOfflineArchive(statementPersistence, blobStore, listeners)
+                : createOnlineArchive(statementPersistence, blobStore, listeners, crawlMode);
 
         while (!statements.isEmpty()) {
-            statementStore.on(statements.poll());
+            archive.on(statements.poll());
         }
     }
 
-    private RefStatementListener getStatementLogger() {
-        RefStatementListener logger;
+    private StatementListener getStatementLogger() {
+        StatementListener logger;
         if (Logger.tsv == logMode) {
             logger = new StatementLogger();
         } else {
-            logger = new RefStatementListener() {
+            logger = new StatementListener() {
                 AtomicLong count = new AtomicLong(1);
 
                 @Override
@@ -105,19 +105,19 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         return logger;
     }
 
-    private RefStatementListener createOfflineStatementStore(Persistence persistence, BlobStore blobStore, RefStatementListener listeners[]) {
+    private StatementListener createOfflineArchive(Persistence persistence, BlobStore blobStore, StatementListener listeners[]) {
         StatementStoreImpl statementStore = new StatementStoreImpl(persistence) {
             @Override
             public void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException {
             }
         };
-        return new IRIInflater(blobStore, null, statementStore, listeners);
+        return new Archiver(blobStore, null, statementStore, listeners);
     }
 
-    private RefStatementListener createOnlineStatementStore(Persistence persistence, BlobStore blobStore, RefStatementListener[] listener, CrawlMode crawlMode) {
-        IRIInflater IRIInflater = new IRIInflater(blobStore, Resources::asInputStream, new StatementStoreImpl(persistence), listener);
-        IRIInflater.setResolveOnMissingOnly(CrawlMode.resume == crawlMode);
-        return IRIInflater;
+    private StatementListener createOnlineArchive(Persistence persistence, BlobStore blobStore, StatementListener[] listener, CrawlMode crawlMode) {
+        Archiver Archiver = new Archiver(blobStore, Resources::asInputStream, new StatementStoreImpl(persistence), listener);
+        Archiver.setResolveOnMissingOnly(CrawlMode.resume == crawlMode);
+        return Archiver;
     }
 
 }

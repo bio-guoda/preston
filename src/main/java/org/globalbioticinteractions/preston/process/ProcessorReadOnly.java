@@ -10,7 +10,7 @@ public abstract class ProcessorReadOnly extends StatementProcessor {
 
     private final BlobStoreReadOnly blobStoreReadOnly;
 
-    public ProcessorReadOnly(BlobStoreReadOnly blobStoreReadOnly, RefStatementListener... listeners) {
+    public ProcessorReadOnly(BlobStoreReadOnly blobStoreReadOnly, StatementListener... listeners) {
         super(listeners);
         Objects.requireNonNull(blobStoreReadOnly);
         this.blobStoreReadOnly = blobStoreReadOnly;

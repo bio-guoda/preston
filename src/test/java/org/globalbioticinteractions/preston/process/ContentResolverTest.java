@@ -9,7 +9,7 @@ import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
-import org.globalbioticinteractions.preston.store.IRIInflater;
+import org.globalbioticinteractions.preston.store.Archiver;
 import org.globalbioticinteractions.preston.store.FilePersistence;
 import org.globalbioticinteractions.preston.store.StatementStoreImpl;
 import org.junit.After;
@@ -48,8 +48,8 @@ public class ContentResolverTest {
         this.blobStore = new AppendOnlyBlobStore(persistence);
     }
 
-    private IRIInflater createStatementStore(RefStatementListener... listeners) {
-        return new IRIInflater(blobStore, Resources::asInputStream, new StatementStoreImpl(persistence), listeners);
+    private Archiver createStatementStore(StatementListener... listeners) {
+        return new Archiver(blobStore, Resources::asInputStream, new StatementStoreImpl(persistence), listeners);
     }
 
     @After
@@ -69,7 +69,7 @@ public class ContentResolverTest {
     public void cacheContent() throws IOException, URISyntaxException {
         ArrayList<Triple> refNodes = new ArrayList<>();
 
-        RefStatementListener listener = createStatementStore(refNodes::add);
+        StatementListener listener = createStatementStore(refNodes::add);
 
 
         URI testURI = getClass().getResource("test.txt").toURI();

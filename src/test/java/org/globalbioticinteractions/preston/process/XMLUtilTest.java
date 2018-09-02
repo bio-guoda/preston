@@ -1,6 +1,5 @@
 package org.globalbioticinteractions.preston.process;
 
-import org.apache.commons.rdf.api.Triple;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.NodeList;
@@ -19,7 +18,7 @@ public class XMLUtilTest {
     public void feedNonXMLErrorPage() throws IOException {
         XMLUtil.handleXPath("//", new XPathHandler() {
             @Override
-            public void evaluateXPath(RefStatementEmitter emitter, NodeList evaluate) throws XPathExpressionException {
+            public void evaluateXPath(StatementEmitter emitter, NodeList evaluate) throws XPathExpressionException {
 
             }
         }, statement -> {

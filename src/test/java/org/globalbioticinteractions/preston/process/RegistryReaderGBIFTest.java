@@ -29,7 +29,6 @@ public class RegistryReaderGBIFTest {
     public void onSeed() {
         ArrayList<Triple> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
-        RDFTerm bla = RefNodeFactory.toLiteral("bla");
         registryReaderGBIF.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.HAD_MEMBER, RefNodeConstants.SOFTWARE_AGENT));
         Assert.assertThat(nodes.size(), is(2));
         assertThat(nodes.get(1).getObject().toString(), is("<https://api.gbif.org/v1/dataset>"));

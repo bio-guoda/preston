@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class XMLUtil {
 
-    public static void handleXPath(String expression, XPathHandler handler, RefStatementEmitter emitter, InputStream resourceAsStream) throws IOException {
+    public static void handleXPath(String expression, XPathHandler handler, StatementEmitter emitter, InputStream resourceAsStream) throws IOException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);

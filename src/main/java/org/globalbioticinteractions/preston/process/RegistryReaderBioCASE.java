@@ -35,12 +35,12 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     // https://bms.gfbio.org/services/data-sources/
 
 
-    public RegistryReaderBioCASE(BlobStoreReadOnly blobStoreReadOnly, RefStatementListener listener) {
+    public RegistryReaderBioCASE(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
         super(blobStoreReadOnly, listener);
     }
 
 
-    public static void parseProviders(InputStream providers, RefStatementEmitter emitter) throws IOException {
+    public static void parseProviders(InputStream providers, StatementEmitter emitter) throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(providers);
         if (jsonNode.isArray()) {
             for (JsonNode provider : jsonNode) {
@@ -73,10 +73,10 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
         return uri;
     }
 
-    public static void parseDatasetInventory(InputStream datasets, RefStatementEmitter emitter) throws IOException {
+    public static void parseDatasetInventory(InputStream datasets, StatementEmitter emitter) throws IOException {
         XMLUtil.handleXPath("//dsi:archive", new XPathHandler() {
             @Override
-            public void evaluateXPath(RefStatementEmitter emitter, NodeList nodeList) throws XPathExpressionException {
+            public void evaluateXPath(StatementEmitter emitter, NodeList nodeList) throws XPathExpressionException {
 
                 Map<String, String> mapping = new HashMap<String, String>() {{
                     put("http://www.tdwg.org/schemas/abcd/2.06", MimeTypes.MIME_TYPE_ABCDA);

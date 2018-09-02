@@ -27,7 +27,7 @@ import static org.junit.Assert.assertNull;
 public class RegistryReaderBioCASETest {
 
     private ArrayList<Triple> nodes;
-    private RefStatementListener registryReader;
+    private StatementListener registryReader;
 
     @Before
     public void init() {

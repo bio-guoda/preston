@@ -33,7 +33,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     public static final String PUBLISHERS_URI = "https://search.idigbio.org/v2/search/publishers";
     public static final IRI PUBLISHERS = RefNodeFactory.toIRI(URI.create(PUBLISHERS_URI));
 
-    public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, RefStatementListener listener) {
+    public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, StatementListener listener) {
         super(blobStore, listener);
     }
 
@@ -69,11 +69,11 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         }
     }
 
-    static void parseRssFeed(final IRI parent1, RefStatementEmitter emitter, InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    static void parseRssFeed(final IRI parent1, StatementEmitter emitter, InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 
         XPathHandler handler = new XPathHandler() {
             @Override
-            public void evaluateXPath(RefStatementEmitter emitter, NodeList nodeList) throws XPathExpressionException {
+            public void evaluateXPath(StatementEmitter emitter, NodeList nodeList) throws XPathExpressionException {
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     boolean isDWCA = false;
                     URI archiveURI = null;
@@ -143,7 +143,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         XMLUtil.handleXPath("//item", handler, emitter, resourceAsStream);
     }
 
-    static void parsePublishers(IRI parent, RefStatementEmitter emitter, InputStream is) throws IOException {
+    static void parsePublishers(IRI parent, StatementEmitter emitter, InputStream is) throws IOException {
         JsonNode r = new ObjectMapper().readTree(is);
         if (r.has("items") && r.get("items").isArray()) {
             for (JsonNode item : r.get("items")) {
