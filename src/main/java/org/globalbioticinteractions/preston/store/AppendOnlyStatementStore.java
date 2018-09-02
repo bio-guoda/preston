@@ -54,7 +54,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
         try {
             put(statement);
         } catch (Throwable e) {
-            LOG.warn("failed toLiteral handle [" + statement.toString() + "]", e);
+            LOG.warn("failed to handle [" + statement.toString() + "]", e);
         }
 
     }
@@ -76,7 +76,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
                     try {
                         attemptUpdate((IRI) object, mostRecent);
                     } catch (IOException e) {
-                        LOG.warn("failed toLiteral update [" + object.toString() + "]", e);
+                        LOG.warn("failed to update [" + object.toString() + "]", e);
                     }
                 }
             }

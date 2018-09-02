@@ -2,6 +2,7 @@ package org.globalbioticinteractions.preston.process;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -60,6 +61,9 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     private void parse(IRI iri) {
         try {
+            // first parse document to check whether it is valid
+            new XmlMapper().readTree(get(iri));
+            /// then parse
             parseRssFeed(iri, this, get(iri));
         } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
             // ignore - opportunistic parsing attempt
@@ -165,7 +169,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         try {
             parsePublishers(refNode, this, get(refNode));
         } catch (IOException e) {
-            LOG.warn("failed toLiteral parse [" + refNode.toString() + "]", e);
+            LOG.warn("failed to parse [" + refNode.toString() + "]", e);
         }
     }
 

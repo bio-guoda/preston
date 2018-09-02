@@ -1,5 +1,6 @@
 package org.globalbioticinteractions.preston.model;
 
+import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
@@ -53,11 +54,11 @@ public class RefNodeFactory {
         return rdf.createTriple(subject, predicate, object);
     }
 
-    public static BlankNodeOrIRI toBlank(String name) {
+    public static BlankNode toBlank(String name) {
         return rdf.createBlankNode(name);
     }
 
-    public static BlankNodeOrIRI toBlank() {
+    public static BlankNode toBlank() {
         return rdf.createBlankNode();
     }
 

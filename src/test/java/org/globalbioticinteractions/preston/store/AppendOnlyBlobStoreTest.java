@@ -1,6 +1,8 @@
 package org.globalbioticinteractions.preston.store;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.rdf.api.BlankNode;
+import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.junit.Test;
@@ -33,6 +35,16 @@ public class AppendOnlyBlobStoreTest {
         IRI key = blobStore.putBlob(RefNodeFactory.toIRI("pesto:123"));
         InputStream inputStream = blobStore.get(key);
         assertThat(TestUtil.toUTF8(inputStream), is("pesto:123"));
+    }
+
+    @Test
+    public void putBlank() throws IOException {
+        BlobStore blobStore = new AppendOnlyBlobStore(getTestPersistence());
+        BlankNode entity = RefNodeFactory.toBlank();
+        IRI key = blobStore.putBlob(entity);
+        InputStream inputStream = blobStore.get(key);
+        entity.uniqueReference();
+        assertThat(TestUtil.toUTF8(inputStream), is("_:" + entity.uniqueReference()));
     }
 
     public static Persistence getTestPersistence() {

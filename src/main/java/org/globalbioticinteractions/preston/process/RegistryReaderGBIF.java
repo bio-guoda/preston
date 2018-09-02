@@ -47,7 +47,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
             try {
                 parse((IRI) statement.getSubject(), this, (IRI)statement.getObject(), get((IRI) statement.getSubject()));
             } catch (IOException e) {
-                LOG.warn("failed toLiteral handle [" + statement.toString() + "]", e);
+                LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
         }
     }

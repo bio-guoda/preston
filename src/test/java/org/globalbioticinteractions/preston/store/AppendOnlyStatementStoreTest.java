@@ -2,6 +2,7 @@ package org.globalbioticinteractions.preston.store;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.Hasher;
