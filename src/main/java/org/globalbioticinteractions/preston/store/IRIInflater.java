@@ -64,7 +64,7 @@ public class IRIInflater extends StatementProcessor {
             } else {
                 handleVersion(statement, (BlankNode) version);
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);
         }
 

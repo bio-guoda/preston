@@ -15,10 +15,10 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
-import static junit.framework.TestCase.fail;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
@@ -30,6 +30,7 @@ import static org.globalbioticinteractions.preston.model.RefNodeFactory.toSkolem
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 public class IRIInflaterTest {
@@ -189,22 +190,25 @@ public class IRIInflaterTest {
 
     @Test
     public void rewriteFromExistingDerivedFrom() throws IOException {
-
+        AtomicBoolean deref = new AtomicBoolean(false);
         Dereferencer explodingDereferencer = uri -> {
-            fail("should not attempt to dereference");
+            deref.set(true);
             throw new IOException("boom!");
         };
+        assertFalse(deref.get());
         assertRewrite(explodingDereferencer, true);
     }
 
     @Test
     public void rewriteFromExistingDerivedWithRefresh() throws IOException {
 
+        AtomicBoolean deref = new AtomicBoolean(false);
         Dereferencer explodingDereferencer = uri -> {
-            fail("should not attempt to dereference");
+            deref.set(true);
             throw new IOException("boom!");
         };
         assertRewrite(explodingDereferencer, false);
+        assertTrue(deref.get());
     }
 
     public void assertRewrite(Dereferencer explodingDereferencer, boolean resolveOnMissingOnly) throws IOException {
