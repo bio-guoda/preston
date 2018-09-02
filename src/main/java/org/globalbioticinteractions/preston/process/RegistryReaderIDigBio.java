@@ -45,7 +45,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
             emit(RefNodeFactory.toStatement(publishers, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
             emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, publishers));
         } else if (RefNodeFactory.hasDerivedContentAvailable(statement)) {
-            parse(statement, (IRI) statement.getSubject());
+            parse(statement, (IRI) RefNodeFactory.getVersion(statement));
         }
     }
 

@@ -106,12 +106,12 @@ public class IRIInflater extends StatementProcessor {
 
     private IRI dereference(IRI versionSource) throws IOException {
         InputStream data = getDereferencer().dereference(versionSource);
-        return blobStore.putBlob(data);
+        return getBlobStore().putBlob(data);
     }
 
     private void recordGenerationTime(BlankNodeOrIRI derivedSubject) throws IOException {
         String value = RefNodeFactory.toDateTime(DateUtil.now()).getLexicalForm();
-        blobStore.putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
+        getBlobStore().putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
         IRI value1 = Hasher.calcSHA256(value);
 
         Pair<RDFTerm, RDFTerm> of = Pair.of(derivedSubject, GENERATED_AT_TIME);
@@ -120,6 +120,10 @@ public class IRIInflater extends StatementProcessor {
                 GENERATED_AT_TIME,
                 RefNodeFactory.toDateTime(value)));
 
+    }
+
+    private BlobStore getBlobStore() {
+        return blobStore;
     }
 
     public boolean shouldResolveOnMissingOnly() {
@@ -149,7 +153,6 @@ public class IRIInflater extends StatementProcessor {
 
             // migrate
             migrateVersions(mostRecentVersion);
-
             mostRecentVersion = findLastVersion(mostRecentVersion);
         }
         return mostRecentVersion;
@@ -188,7 +191,7 @@ public class IRIInflater extends StatementProcessor {
     private void emitExistingVersion(IRI subj, IRI predicate, RDFTerm obj) throws IOException {
         IRI timeKey = getStatementStore().get(Pair.of(subj, GENERATED_AT_TIME));
         if (timeKey != null) {
-            InputStream input = blobStore.get(timeKey);
+            InputStream input = getBlobStore().get(timeKey);
             if (input != null) {
                 emit(RefNodeFactory.toStatement(subj,
                         GENERATED_AT_TIME,

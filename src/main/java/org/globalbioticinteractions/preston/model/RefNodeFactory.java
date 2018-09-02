@@ -116,6 +116,6 @@ public class RefNodeFactory {
 
     public static boolean hasDerivedContentAvailable(Triple statement) {
         return hasVersionOrIsDerivedFrom(statement)
-                && !isBlankOrSkolemizedBlank(statement.getSubject());
+                && !isBlankOrSkolemizedBlank(getVersion(statement));
     }
 }
