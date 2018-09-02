@@ -10,7 +10,6 @@ import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
-import org.globalbioticinteractions.preston.store.Predicate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,7 +56,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
 
     private static void emitPageRequest(RefStatementEmitter emitter, IRI nextPage) {
         emitter.emit(RefNodeFactory.toStatement(nextPage, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
-        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, nextPage));
+        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, nextPage));
     }
 
     public static void parse(IRI currentPageContent, RefStatementEmitter emitter, IRI currentPage, InputStream in) throws IOException {
@@ -79,7 +78,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                                 IRI dataArchive = RefNodeFactory.toIRI(urlString);
                                 emitter.emit(RefNodeFactory.toStatement(datasetUUID, RefNodeConstants.HAD_MEMBER, dataArchive));
                                 emitter.emit(RefNodeFactory.toStatement(dataArchive, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(SUPPORTED_ENDPOINT_TYPES.get(type))));
-                                emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, dataArchive));
+                                emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, dataArchive));
                             }
                         }
                     }

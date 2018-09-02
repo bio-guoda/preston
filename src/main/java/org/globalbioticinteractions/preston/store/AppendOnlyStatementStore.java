@@ -12,6 +12,7 @@ import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.DateUtil;
 import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.RDFUtil;
+import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.cmd.CmdList;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.process.RefStatementListener;
@@ -21,8 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-
-import static org.globalbioticinteractions.preston.RefNodeConstants.GENERATED_AT_TIME;
 
 
 public class AppendOnlyStatementStore extends RefStatementProcessor implements StatementStore {
@@ -65,7 +64,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
         IRI predicate = statement.getPredicate();
         RDFTerm object = statement.getObject();
 
-        if (Predicate.WAS_DERIVED_FROM.equals(predicate)
+        if (RefNodeConstants.WAS_DERIVED_FROM.equals(predicate)
                 && !RefNodeFactory.isSkolemizedBlank(subj)
                 && subj instanceof BlankNode
                 && object != null
@@ -99,14 +98,14 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
     private void recordUpdate(IRI object, IRI keyForMostRecent, BlankNodeOrIRI derivedSubject) throws IOException {
         if (null != keyForMostRecent && !keyForMostRecent.equals(derivedSubject)) {
             recordGenerationTime(derivedSubject);
-            put(Pair.of(Predicate.WAS_REVISION_OF, keyForMostRecent), derivedSubject);
-            Triple of = RefNodeFactory.toStatement(derivedSubject, Predicate.WAS_REVISION_OF, keyForMostRecent);
+            put(Pair.of(RefNodeConstants.WAS_REVISION_OF, keyForMostRecent), derivedSubject);
+            Triple of = RefNodeFactory.toStatement(derivedSubject, RefNodeConstants.WAS_REVISION_OF, keyForMostRecent);
             emit(of);
 
         } else if (null == keyForMostRecent) {
             recordGenerationTime(derivedSubject);
-            put(Pair.of(Predicate.WAS_DERIVED_FROM, object), derivedSubject);
-            emit(RefNodeFactory.toStatement(derivedSubject, Predicate.WAS_DERIVED_FROM, object));
+            put(Pair.of(RefNodeConstants.WAS_DERIVED_FROM, object), derivedSubject);
+            emit(RefNodeFactory.toStatement(derivedSubject, RefNodeConstants.WAS_DERIVED_FROM, object));
         }
     }
 
@@ -120,10 +119,10 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
         blobStore.putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
         IRI value1 = Hasher.calcSHA256(value);
 
-        Pair<RDFTerm, RDFTerm> of = Pair.of(derivedSubject, Predicate.GENERATED_AT_TIME);
+        Pair<RDFTerm, RDFTerm> of = Pair.of(derivedSubject, RefNodeConstants.GENERATED_AT_TIME);
         put(of, value1);
         emit(RefNodeFactory.toStatement(derivedSubject,
-                GENERATED_AT_TIME,
+                RefNodeConstants.GENERATED_AT_TIME,
                 RefNodeFactory.toDateTime(value)));
 
     }
@@ -137,10 +136,10 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
     }
 
     private IRI findMostRecent(IRI obj) throws IOException {
-        IRI existingId = get(Pair.of(Predicate.WAS_DERIVED_FROM, obj));
+        IRI existingId = get(Pair.of(RefNodeConstants.WAS_DERIVED_FROM, obj));
 
         if (existingId != null) {
-            emitExistingVersion(existingId, Predicate.WAS_DERIVED_FROM, obj);
+            emitExistingVersion(existingId, RefNodeConstants.WAS_DERIVED_FROM, obj);
             existingId = findLastVersionId(existingId);
         }
         return existingId;
@@ -149,20 +148,20 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
     private IRI findLastVersionId(IRI existingId) throws IOException {
         IRI lastVersionId = existingId;
         IRI newerVersionId;
-        while ((newerVersionId = get(Pair.of(Predicate.WAS_REVISION_OF, lastVersionId))) != null) {
-            emitExistingVersion(newerVersionId, Predicate.WAS_REVISION_OF, lastVersionId);
+        while ((newerVersionId = get(Pair.of(RefNodeConstants.WAS_REVISION_OF, lastVersionId))) != null) {
+            emitExistingVersion(newerVersionId, RefNodeConstants.WAS_REVISION_OF, lastVersionId);
             lastVersionId = newerVersionId;
         }
         return lastVersionId;
     }
 
     private void emitExistingVersion(IRI subj, IRI predicate, RDFTerm obj) throws IOException {
-        IRI timeKey = get(Pair.of(subj, Predicate.GENERATED_AT_TIME));
+        IRI timeKey = get(Pair.of(subj, RefNodeConstants.GENERATED_AT_TIME));
         if (timeKey != null) {
             InputStream input = blobStore.get(timeKey);
             if (input != null) {
                 emit(RefNodeFactory.toStatement(subj,
-                        GENERATED_AT_TIME,
+                        RefNodeConstants.GENERATED_AT_TIME,
                         RefNodeFactory.toLiteral(IOUtils.toString(input, StandardCharsets.UTF_8))));
             }
         }

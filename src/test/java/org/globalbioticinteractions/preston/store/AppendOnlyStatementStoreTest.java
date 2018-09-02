@@ -6,6 +6,7 @@ import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.Hasher;
+import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.hamcrest.core.Is;
 import org.junit.Test;
@@ -32,7 +33,7 @@ public class AppendOnlyStatementStoreTest {
         BlankNode blank = RefNodeFactory.toBlank();
         Triple statement
                 = RefNodeFactory.toStatement(blank,
-                Predicate.WAS_DERIVED_FROM,
+                RefNodeConstants.WAS_DERIVED_FROM,
                 RefNodeFactory.toIRI(URI.create("http://some")));
 
         Dereferencer dereferencer = uri -> {
@@ -51,7 +52,7 @@ public class AppendOnlyStatementStoreTest {
         // dereference subject
 
         IRI contentHash = relationStore.get(
-                Pair.of(Predicate.WAS_DERIVED_FROM,
+                Pair.of(RefNodeConstants.WAS_DERIVED_FROM,
                         RefNodeFactory.toIRI(URI.create("http://some"))));
 
         assertTrue(RefNodeFactory.isBlankOrSkolemizedBlank(contentHash));
@@ -62,7 +63,7 @@ public class AppendOnlyStatementStoreTest {
         IRI skolemizedBlank = RefNodeFactory.toSkolemizedBlank(RefNodeFactory.toBlank());
         Triple statement
                 = RefNodeFactory.toStatement(skolemizedBlank,
-                Predicate.WAS_DERIVED_FROM,
+                RefNodeConstants.WAS_DERIVED_FROM,
                 RefNodeFactory.toIRI(URI.create("http://some")));
 
         Dereferencer dereferencer = uri -> {
@@ -85,7 +86,7 @@ public class AppendOnlyStatementStoreTest {
 
         // dereference subject
         IRI contentHash = relationStore.get(
-                Pair.of(Predicate.WAS_DERIVED_FROM,
+                Pair.of(RefNodeConstants.WAS_DERIVED_FROM,
                         RefNodeFactory.toIRI(URI.create("http://some"))));
 
         assertNull(contentHash);
@@ -96,7 +97,7 @@ public class AppendOnlyStatementStoreTest {
         BlankNode blank = RefNodeFactory.toBlank();
         Triple statement
                 = RefNodeFactory.toStatement(blank,
-                Predicate.WAS_DERIVED_FROM,
+                RefNodeConstants.WAS_DERIVED_FROM,
                 RefNodeFactory.toIRI(URI.create("http://some")));
 
         Dereferencer dereferencer = new DereferenceTest("derefData@");
@@ -114,7 +115,7 @@ public class AppendOnlyStatementStoreTest {
         // dereference subject
 
         IRI contentHash = relationStore.get(
-                Pair.of(Predicate.WAS_DERIVED_FROM,
+                Pair.of(RefNodeConstants.WAS_DERIVED_FROM,
                         RefNodeFactory.toIRI(URI.create("http://some"))));
         InputStream content = blobStore.get(contentHash);
         assertNotNull(contentHash);
@@ -137,7 +138,7 @@ public class AppendOnlyStatementStoreTest {
     @Test
     public void putNewVersionOfContent() throws IOException {
         Triple statement
-                = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, SOME_IRI);
+                = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, SOME_IRI);
 
 
         String prefix = "derefData@";
@@ -151,19 +152,19 @@ public class AppendOnlyStatementStoreTest {
 
         relationstore.put(statement);
 
-        IRI contentHash = relationstore.get(Pair.of(Predicate.WAS_DERIVED_FROM, SOME_IRI));
+        IRI contentHash = relationstore.get(Pair.of(RefNodeConstants.WAS_DERIVED_FROM, SOME_IRI));
         assertNotNull(contentHash);
 
         Dereferencer dereferencer = new DereferenceTest("derefData2@");
         relationstore.setDereferencer(dereferencer);
         relationstore.put(statement);
 
-        IRI contentHash2 = relationstore.get(Pair.of(Predicate.WAS_DERIVED_FROM, SOME_IRI));
+        IRI contentHash2 = relationstore.get(Pair.of(RefNodeConstants.WAS_DERIVED_FROM, SOME_IRI));
 
 
         assertThat(contentHash, Is.is(contentHash2));
 
-        IRI newContentHash = relationstore.get(Pair.of(Predicate.WAS_REVISION_OF, contentHash));
+        IRI newContentHash = relationstore.get(Pair.of(RefNodeConstants.WAS_REVISION_OF, contentHash));
         InputStream newContent = blogStore.get(newContentHash);
 
         assertThat(contentHash, not(Is.is(newContentHash)));
@@ -174,7 +175,7 @@ public class AppendOnlyStatementStoreTest {
         relationstore.setDereferencer(new DereferenceTest("derefData3@"));
         relationstore.put(statement);
 
-        IRI newerContentHash = relationstore.get(Pair.of(Predicate.WAS_REVISION_OF, newContentHash));
+        IRI newerContentHash = relationstore.get(Pair.of(RefNodeConstants.WAS_REVISION_OF, newContentHash));
         InputStream newerContent = blogStore.get(newerContentHash);
 
         assertThat(newerContentHash.getIRIString(), Is.is("hash://sha256/7e66eac09d137afe06dd73614e966a417260a111208dabe7225b05f02ce380fd"));

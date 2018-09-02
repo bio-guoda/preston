@@ -5,12 +5,12 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.Hasher;
+import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.AppendOnlyStatementStore;
 import org.globalbioticinteractions.preston.store.FilePersistence;
-import org.globalbioticinteractions.preston.store.Predicate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,7 +73,7 @@ public class ContentResolverTest {
 
         URI testURI = getClass().getResource("test.txt").toURI();
         IRI providedNode = RefNodeFactory.toIRI(testURI);
-        Triple relation = RefNodeFactory.toStatement(RefNodeFactory.toBlank("test"), Predicate.WAS_DERIVED_FROM, providedNode);
+        Triple relation = RefNodeFactory.toStatement(RefNodeFactory.toBlank("test"), RefNodeConstants.WAS_DERIVED_FROM, providedNode);
 
         listener.on(relation);
 

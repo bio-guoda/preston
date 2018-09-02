@@ -6,7 +6,6 @@ import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
-import org.globalbioticinteractions.preston.store.Predicate;
 import org.globalbioticinteractions.preston.store.TestUtil;
 import org.junit.Assert;
 import org.junit.Before;
@@ -84,7 +83,7 @@ public class RegistryReaderBioCASETest {
             }
         };
         registryReader = new RegistryReaderBioCASE(blobStore, nodes::add);
-        registryReader.on(RefNodeFactory.toStatement(refNode, Predicate.WAS_DERIVED_FROM, RefNodeFactory.toIRI(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT)));
+        registryReader.on(RefNodeFactory.toStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toIRI(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT)));
 
         assertFalse(nodes.isEmpty());
         assertThat(nodes.get(1).getObject().toString(), is("<http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=GFBio_ColiFauna&inventory=1>"));
@@ -111,7 +110,7 @@ public class RegistryReaderBioCASETest {
             }
         }, nodes::add);
 
-        registryReader.on(RefNodeFactory.toStatement(refNode, Predicate.WAS_DERIVED_FROM, RefNodeFactory.toIRI("http://something/pywrapper.cgi?dsa=")));
+        registryReader.on(RefNodeFactory.toStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toIRI("http://something/pywrapper.cgi?dsa=")));
 
         assertThat(nodes.size(), is(2));
         assertThat(((IRI)nodes.get(1).getObject()).getIRIString(), is("http://ww3.bgbm.org/biocase/downloads/GFBio_ColiFauna/Coleoptera%20observations%20in%20orchards%20of%20South%20Western%20Germany.ABCD_2.06.zip"));

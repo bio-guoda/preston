@@ -12,7 +12,6 @@ import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
-import org.globalbioticinteractions.preston.store.Predicate;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -44,7 +43,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
             IRI publishers = PUBLISHERS;
             emit(RefNodeFactory.toStatement(publishers, HAD_MEMBER, statement.getSubject()));
             emit(RefNodeFactory.toStatement(publishers, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
-            emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, publishers));
+            emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, publishers));
         } else if (RefNodeFactory.hasDerivedContentAvailable(statement)) {
             parse(statement, (IRI) statement.getSubject());
         }
@@ -127,7 +126,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                         IRI uriNode = RefNodeFactory.toIRI(emlURI);
                         emitter.emit(RefNodeFactory.toStatement(archiveParent, HAD_MEMBER, uriNode));
                         emitter.emit(RefNodeFactory.toStatement(uriNode, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_EML)));
-                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, uriNode));
+                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, uriNode));
                     }
 
                     if (isDWCA && archiveURI != null) {
@@ -135,7 +134,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                         emitter.emit(RefNodeFactory.toStatement(archiveParent, HAD_MEMBER, refNodeDWCAUri));
 
                         emitter.emit(RefNodeFactory.toStatement(refNodeDWCAUri, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_DWCA)));
-                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, refNodeDWCAUri));
+                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, refNodeDWCAUri));
 
                     }
 
@@ -160,7 +159,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                         IRI refNodeFeed = RefNodeFactory.toIRI(rssFeedUrl);
                         emitter.emit(RefNodeFactory.toStatement(refNodePublisher, RefNodeConstants.HAD_MEMBER, refNodeFeed));
                         emitter.emit(RefNodeFactory.toStatement(refNodeFeed, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_RSS)));
-                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, refNodeFeed));
+                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, refNodeFeed));
                     }
                 }
             }

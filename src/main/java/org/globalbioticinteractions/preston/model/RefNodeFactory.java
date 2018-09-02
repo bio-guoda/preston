@@ -9,14 +9,14 @@ import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.simple.SimpleRDF;
 import org.apache.commons.rdf.simple.Types;
-import org.globalbioticinteractions.preston.store.Predicate;
+import org.globalbioticinteractions.preston.RefNodeConstants;
 
 import java.net.URI;
 
 public class RefNodeFactory {
 
     private static final RDF rdf = new SimpleRDF();
-
+    public static final String SKOLEMIZATION_PATH = ".well-known/genid/";
 
     public static IRI toUUID(String publisherUUID) {
         return toIRI(publisherUUID);
@@ -46,8 +46,8 @@ public class RefNodeFactory {
         return statement.getSubject() != null
                 && statement.getObject() != null
                 && statement.getPredicate() != null
-                && (Predicate.WAS_DERIVED_FROM.equals(statement.getPredicate())
-                || Predicate.WAS_REVISION_OF.equals(statement.getPredicate()));
+                && (RefNodeConstants.WAS_DERIVED_FROM.equals(statement.getPredicate())
+                || RefNodeConstants.WAS_REVISION_OF.equals(statement.getPredicate()));
     }
 
     public static Triple toStatement(BlankNodeOrIRI subject, IRI predicate, RDFTerm object) {
@@ -70,12 +70,12 @@ public class RefNodeFactory {
 
     public static boolean isSkolemizedBlank(BlankNodeOrIRI iri) {
         //see https://www.w3.org/TR/rdf11-concepts/#section-skolemization
-        return iri.toString().contains("/.well-known/genid/");
+        return iri.toString().contains(SKOLEMIZATION_PATH);
     }
 
     public static IRI toSkolemizedBlank(BlankNode subj) {
         // see https://www.w3.org/TR/rdf11-concepts/#section-skolemization
-        return toIRI("https://deeplinker.bio/.well-known/genid/" + subj.uniqueReference());
+        return toIRI("https://deeplinker.bio/" + SKOLEMIZATION_PATH + subj.uniqueReference());
     }
 
     public static boolean hasDerivedContentAvailable(Triple statement) {

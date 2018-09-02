@@ -11,7 +11,6 @@ import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
-import org.globalbioticinteractions.preston.store.Predicate;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -52,7 +51,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
                         if (uri != null) {
                             IRI refNode = RefNodeFactory.toIRI(uri);
                             emitter.emit(RefNodeFactory.toStatement(refNode, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral(MimeTypes.XML)));
-                            emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, refNode));
+                            emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, refNode));
                         }
                     }
                 }
@@ -92,7 +91,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
                     if (StringUtils.isNotBlank(url) && StringUtils.isNotBlank(type)) {
                         IRI object = RefNodeFactory.toIRI(url);
                         emitter.emit(RefNodeFactory.toStatement(object, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral(type)));
-                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, object));
+                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, object));
                     }
 
                 }
@@ -121,7 +120,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
         if (Seeds.SEED_NODE_BIOCASE.equals(statement.getSubject())
                 && RefNodeConstants.HAD_MEMBER.equals(statement.getPredicate())) {
             emit(RefNodeFactory.toStatement(REF_NODE_REGISTRY, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
-            emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, REF_NODE_REGISTRY));
+            emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, REF_NODE_REGISTRY));
         } else if (RefNodeFactory.hasDerivedContentAvailable(statement)) {
             try {
                 EmittingParser parse = null;

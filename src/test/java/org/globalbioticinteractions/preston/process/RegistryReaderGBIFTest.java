@@ -6,7 +6,6 @@ import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
-import org.globalbioticinteractions.preston.store.Predicate;
 import org.globalbioticinteractions.preston.store.TestUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -57,7 +56,7 @@ public class RegistryReaderGBIFTest {
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
 
 
-        Triple firstPage = RefNodeFactory.toStatement(createTestNode(), Predicate.WAS_DERIVED_FROM, RefNodeFactory.toIRI("https://api.gbif.org/v1/dataset"));
+        Triple firstPage = RefNodeFactory.toStatement(createTestNode(), RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toIRI("https://api.gbif.org/v1/dataset"));
 
         registryReaderGBIF.on(firstPage);
 
