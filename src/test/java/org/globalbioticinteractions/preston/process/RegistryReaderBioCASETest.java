@@ -40,7 +40,7 @@ public class RegistryReaderBioCASETest {
     @Test
     public void onSeed() {
         RefNode bla = RefNodeFactory.toLiteral("bla");
-        registryReader.on(new RefStatement(Seeds.SEED_NODE_BIOCASE, RefNodeConstants.SEED_OF, bla));
+        registryReader.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_BIOCASE, RefNodeConstants.SEED_OF, bla));
         Assert.assertThat(nodes.size(), is(2));
         assertThat(nodes.get(1).getObject().getLabel(), is(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT));
     }
@@ -85,7 +85,7 @@ public class RegistryReaderBioCASETest {
             }
         };
         registryReader = new RegistryReaderBioCASE(blobStore, nodes::add);
-        registryReader.on(new RefStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toURI(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT)));
+        registryReader.on(RefNodeFactory.toStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toURI(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT)));
 
         assertFalse(nodes.isEmpty());
         assertThat(nodes.get(1).getObject().getLabel(), is("http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=GFBio_ColiFauna&inventory=1"));
@@ -112,7 +112,7 @@ public class RegistryReaderBioCASETest {
             }
         }, nodes::add);
 
-        registryReader.on(new RefStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toURI("http://something/pywrapper.cgi?dsa=")));
+        registryReader.on(RefNodeFactory.toStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toURI("http://something/pywrapper.cgi?dsa=")));
 
         assertThat(nodes.size(), is(2));
         assertThat(nodes.get(1).getObject().getLabel(), is("http://ww3.bgbm.org/biocase/downloads/GFBio_ColiFauna/Coleoptera%20observations%20in%20orchards%20of%20South%20Western%20Germany.ABCD_2.06.zip"));

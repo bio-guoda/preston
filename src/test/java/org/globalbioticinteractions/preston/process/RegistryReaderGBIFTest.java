@@ -27,7 +27,7 @@ public class RegistryReaderGBIFTest {
         ArrayList<RefStatement> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
         RefNode bla = RefNodeFactory.toLiteral("bla");
-        registryReaderGBIF.on(new RefStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.SEED_OF, bla));
+        registryReaderGBIF.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.SEED_OF, bla));
         Assert.assertThat(nodes.size(), is(2));
         assertThat(nodes.get(1).getObject().getLabel(), is("https://api.gbif.org/v1/dataset"));
     }
@@ -37,7 +37,7 @@ public class RegistryReaderGBIFTest {
         ArrayList<RefStatement> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
         RefNode bla = RefNodeFactory.toLiteral("bla");
-        registryReaderGBIF.on(new RefStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.HAD_MEMBER, bla));
+        registryReaderGBIF.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.HAD_MEMBER, bla));
         assertThat(nodes.size(), is(0));
     }
 
@@ -53,7 +53,7 @@ public class RegistryReaderGBIFTest {
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
 
 
-        RefStatement firstPage = new RefStatement(createTestNode(), RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toURI("https://api.gbif.org/v1/dataset"));
+        RefStatement firstPage = RefNodeFactory.toStatement(createTestNode(), RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toURI("https://api.gbif.org/v1/dataset"));
 
         registryReaderGBIF.on(firstPage);
 

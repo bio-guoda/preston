@@ -16,7 +16,7 @@ public class StatementLoggerTest {
         RefNode relation = RefNodeFactory.toLiteral("relation");
         RefNode target = RefNodeFactory.toLiteral("target");
 
-        String str = new StatementLogger().printStatement(new RefStatement(source, relation, target));
+        String str = new StatementLogger().printStatement(RefNodeFactory.toStatement(source, relation, target));
 
         assertThat(str, is("source\trelation\ttarget"));
     }

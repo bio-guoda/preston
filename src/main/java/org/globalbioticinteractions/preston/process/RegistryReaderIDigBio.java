@@ -43,9 +43,9 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     public void on(RefStatement statement) {
         if (statement.getSubject().equivalentTo(Seeds.SEED_NODE_IDIGBIO)) {
             RefNode publishers = PUBLISHERS;
-            emit(new RefStatement(publishers, PUBLISHER_REGISTRY_OF, statement.getSubject()));
-            emit(new RefStatement(publishers, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
-            emit(new RefStatement(null, WAS_DERIVED_FROM, publishers));
+            emit(RefNodeFactory.toStatement(publishers, PUBLISHER_REGISTRY_OF, statement.getSubject()));
+            emit(RefNodeFactory.toStatement(publishers, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
+            emit(RefNodeFactory.toStatement(null, WAS_DERIVED_FROM, publishers));
         } else if (statement.getObject().equivalentTo(PUBLISHERS)
                 && RefNodeFactory.isDerivedFrom(statement)) {
             parsePublishers(statement.getSubject());
@@ -111,22 +111,22 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
                     RefNode archiveParent = uuid == null ? parent1 : RefNodeFactory.toUUID(uuid.toString());
                     if (uuid != null) {
-                        emitter.emit(new RefStatement(parent1, HAD_MEMBER, archiveParent));
+                        emitter.emit(RefNodeFactory.toStatement(parent1, HAD_MEMBER, archiveParent));
                     }
 
                     if (emlURI != null) {
                         RefNode uriNode = RefNodeFactory.toURI(emlURI);
-                        emitter.emit(new RefStatement(archiveParent, HAD_MEMBER, uriNode));
-                        emitter.emit(new RefStatement(uriNode, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_EML)));
-                        emitter.emit(new RefStatement(null, WAS_DERIVED_FROM, uriNode));
+                        emitter.emit(RefNodeFactory.toStatement(archiveParent, HAD_MEMBER, uriNode));
+                        emitter.emit(RefNodeFactory.toStatement(uriNode, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_EML)));
+                        emitter.emit(RefNodeFactory.toStatement(null, WAS_DERIVED_FROM, uriNode));
                     }
 
                     if (isDWCA && archiveURI != null) {
                         RefNode refNodeDWCAUri = RefNodeFactory.toURI(archiveURI.toString());
-                        emitter.emit(new RefStatement(archiveParent, HAD_MEMBER, refNodeDWCAUri));
+                        emitter.emit(RefNodeFactory.toStatement(archiveParent, HAD_MEMBER, refNodeDWCAUri));
 
-                        emitter.emit(new RefStatement(refNodeDWCAUri, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_DWCA)));
-                        emitter.emit(new RefStatement(null, WAS_DERIVED_FROM, refNodeDWCAUri));
+                        emitter.emit(RefNodeFactory.toStatement(refNodeDWCAUri, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_DWCA)));
+                        emitter.emit(RefNodeFactory.toStatement(null, WAS_DERIVED_FROM, refNodeDWCAUri));
 
                     }
 
@@ -143,15 +143,15 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
             for (JsonNode item : r.get("items")) {
                 String publisherUUID = item.get("uuid").asText();
                 RefNode refNodePublisher = RefNodeFactory.toUUID(publisherUUID);
-                emitter.emit(new RefStatement(parent, RefNodeConstants.HAD_MEMBER, refNodePublisher));
+                emitter.emit(RefNodeFactory.toStatement(parent, RefNodeConstants.HAD_MEMBER, refNodePublisher));
                 JsonNode data = item.get("data");
                 if (item.has("data")) {
                     String rssFeedUrl = data.has("rss_url") ? data.get("rss_url").asText() : null;
                     if (StringUtils.isNotBlank(rssFeedUrl)) {
                         RefNode refNodeFeed = RefNodeFactory.toURI(rssFeedUrl);
-                        emitter.emit(new RefStatement(refNodePublisher, RefNodeConstants.HAD_MEMBER, refNodeFeed));
-                        emitter.emit(new RefStatement(refNodeFeed, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_RSS)));
-                        emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, refNodeFeed));
+                        emitter.emit(RefNodeFactory.toStatement(refNodePublisher, RefNodeConstants.HAD_MEMBER, refNodeFeed));
+                        emitter.emit(RefNodeFactory.toStatement(refNodeFeed, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_RSS)));
+                        emitter.emit(RefNodeFactory.toStatement(null, RefNodeConstants.WAS_DERIVED_FROM, refNodeFeed));
                     }
                 }
             }

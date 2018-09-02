@@ -1,15 +1,12 @@
 package org.globalbioticinteractions.preston.model;
 
-import java.net.URI;
-
 public class RefStatement {
 
     private final RefNode subject;
     private final RefNode predicate;
     private final RefNode object;
-    private URI id;
 
-    public RefStatement(RefNode subject, RefNode predicate, RefNode object) {
+    RefStatement(RefNode subject, RefNode predicate, RefNode object) {
         this.predicate = predicate;
         this.subject = subject;
         this.object = object;

@@ -52,8 +52,8 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
                         URI uri = generateDataSourceAccessUrl(url, datasource);
                         if (uri != null) {
                             RefNode refNode = RefNodeFactory.toURI(uri);
-                            emitter.emit(new RefStatement(refNode, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral(MimeTypes.XML)));
-                            emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, refNode));
+                            emitter.emit(RefNodeFactory.toStatement(refNode, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral(MimeTypes.XML)));
+                            emitter.emit(RefNodeFactory.toStatement(null, RefNodeConstants.WAS_DERIVED_FROM, refNode));
                         }
                     }
                 }
@@ -92,8 +92,8 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
 
                     if (StringUtils.isNotBlank(url) && StringUtils.isNotBlank(type)) {
                         RefNode object = RefNodeFactory.toURI(url);
-                        emitter.emit(new RefStatement(object, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral(type)));
-                        emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, object));
+                        emitter.emit(RefNodeFactory.toStatement(object, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral(type)));
+                        emitter.emit(RefNodeFactory.toStatement(null, RefNodeConstants.WAS_DERIVED_FROM, object));
                     }
 
                 }
@@ -121,8 +121,8 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     public void on(RefStatement statement) {
         if (Seeds.SEED_NODE_BIOCASE.equivalentTo(statement.getSubject())
                 && SEED_OF.equivalentTo(statement.getPredicate())) {
-            emit(new RefStatement(REF_NODE_REGISTRY, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
-            emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, REF_NODE_REGISTRY));
+            emit(RefNodeFactory.toStatement(REF_NODE_REGISTRY, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
+            emit(RefNodeFactory.toStatement(null, RefNodeConstants.WAS_DERIVED_FROM, REF_NODE_REGISTRY));
         } else if (RefNodeFactory.isDerivedFrom(statement)) {
             try {
                 EmittingParser parse = null;

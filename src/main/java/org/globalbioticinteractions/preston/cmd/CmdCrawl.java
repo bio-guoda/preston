@@ -52,7 +52,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         final List<RefStatement> seeds = seedUrls.stream()
                 .map(uriString -> {
                     RefNode refNodeSeed = RefNodeFactory.toURI(uriString);
-                    return new RefStatement(refNodeSeed, RefNodeConstants.SEED_OF, RefNodeConstants.SOFTWARE_AGENT);
+                    return RefNodeFactory.toStatement(refNodeSeed, RefNodeConstants.SEED_OF, RefNodeConstants.SOFTWARE_AGENT);
                 }).collect(Collectors.toList());
 
         final Queue<RefStatement> statements =

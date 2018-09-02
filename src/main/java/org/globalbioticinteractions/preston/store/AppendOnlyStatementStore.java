@@ -90,7 +90,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
                 }
             }
         } else if (subj != null && predicate != null && object != null) {
-            emit(new RefStatement(RefNodeFactory.toURI(subj),
+            emit(RefNodeFactory.toStatement(RefNodeFactory.toURI(subj),
                     RefNodeFactory.toURI(predicate),
                     RefNodeFactory.toURI(object.toString())));
 
@@ -104,7 +104,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
             recordGenerationTime(derivedSubject);
             put(Pair.of(Predicate.WAS_REVISION_OF, mostRecent), derivedSubject);
             Triple<URI, URI, URI> of = Triple.of(derivedSubject, Predicate.WAS_REVISION_OF, mostRecent);
-            emit(new RefStatement(RefNodeFactory.toURI(of.getLeft()),
+            emit(RefNodeFactory.toStatement(RefNodeFactory.toURI(of.getLeft()),
                     RefNodeFactory.toURI(of.getMiddle()),
                     RefNodeFactory.toURI(of.getRight())));
 
@@ -112,7 +112,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
             recordGenerationTime(derivedSubject);
             put(Pair.of(Predicate.WAS_DERIVED_FROM, object), derivedSubject);
             Triple<URI, URI, URI> of = Triple.of(derivedSubject, Predicate.WAS_DERIVED_FROM, object);
-            emit(new RefStatement(RefNodeFactory.toURI(of.getLeft()),
+            emit(RefNodeFactory.toStatement(RefNodeFactory.toURI(of.getLeft()),
                     RefNodeFactory.toURI(of.getMiddle()),
                     RefNodeFactory.toURI(of.getRight())));
         }
@@ -123,7 +123,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
         blobStore.putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
         URI value1 = Hasher.calcSHA256(value);
         put(Pair.of(derivedSubject, Predicate.GENERATED_AT_TIME), value1);
-        emit(new RefStatement(RefNodeFactory.toURI(derivedSubject),
+        emit(RefNodeFactory.toStatement(RefNodeFactory.toURI(derivedSubject),
                 GENERATED_AT_TIME,
                 RefNodeFactory.toLiteral(value)));
 
@@ -162,12 +162,12 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
         if (timeKey != null) {
             InputStream input = blobStore.get(timeKey);
             if (input != null) {
-                emit(new RefStatement(RefNodeFactory.toURI(subj),
+                emit(RefNodeFactory.toStatement(RefNodeFactory.toURI(subj),
                         GENERATED_AT_TIME,
                         RefNodeFactory.toLiteral(IOUtils.toString(input, StandardCharsets.UTF_8))));
             }
         }
-        emit(new RefStatement(RefNodeFactory.toURI(subj),
+        emit(RefNodeFactory.toStatement(RefNodeFactory.toURI(subj),
                 RefNodeFactory.toURI(predicate),
                 obj));
     }

@@ -77,7 +77,7 @@ public class ContentResolverTest {
 
         RefStatementListener contentResolver = createStatementStore(refNodes::add);
         RefNode providedNode = RefNodeFactory.toURI("https://example.org");
-        contentResolver.on(new RefStatement(providedNode, RefNodeConstants.HAD_MEMBER, providedNode));
+        contentResolver.on(RefNodeFactory.toStatement(providedNode, RefNodeConstants.HAD_MEMBER, providedNode));
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
 
@@ -98,7 +98,7 @@ public class ContentResolverTest {
 
         URI testURI = getClass().getResource("test.txt").toURI();
         RefNode providedNode = RefNodeFactory.toURI(testURI);
-        RefStatement relation = new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, providedNode);
+        RefStatement relation = RefNodeFactory.toStatement(null, RefNodeConstants.WAS_DERIVED_FROM, providedNode);
 
         listener.on(relation);
 

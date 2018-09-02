@@ -30,7 +30,7 @@ public class RegistryReaderIDigBioTest {
         ArrayList<RefStatement> nodes = new ArrayList<>();
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), nodes::add);
         RefNode bla = RefNodeFactory.toLiteral("bla");
-        reader.on(new RefStatement(Seeds.SEED_NODE_IDIGBIO, bla, bla));
+        reader.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_IDIGBIO, bla, bla));
         assertThat(nodes.size(), is(3));
     }
 

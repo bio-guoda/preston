@@ -16,22 +16,22 @@ public class RefStatementTest {
 
     @Test
     public void equivalent() {
-        RefStatement link = new RefStatement(source, relation, target);
-        RefStatement link2 = new RefStatement(source, relation, target);
+        RefStatement link = RefNodeFactory.toStatement(source, relation, target);
+        RefStatement link2 = RefNodeFactory.toStatement(source, relation, target);
         assertTrue(link.equivalentTo(link2));
     }
 
     @Test
     public void notEquivalent() {
-        RefStatement link = new RefStatement(source, relation, target);
-        RefStatement link2 = new RefStatement(source, relation, target2);
+        RefStatement link = RefNodeFactory.toStatement(source, relation, target);
+        RefStatement link2 = RefNodeFactory.toStatement(source, relation, target2);
         assertFalse(link.equivalentTo(link2));
     }
 
     @Test
     public void notEquivalent2() {
-        RefStatement link = new RefStatement(source, relation, target);
-        RefStatement link2 = new RefStatement(source, relation2, target);
+        RefStatement link = RefNodeFactory.toStatement(source, relation, target);
+        RefStatement link2 = RefNodeFactory.toStatement(source, relation2, target);
         assertFalse(link.equivalentTo(link2));
     }
 

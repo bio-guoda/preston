@@ -39,4 +39,7 @@ public class RefNodeFactory {
                 || WAS_REVISION_OF.equivalentTo(statement.getPredicate()));
     }
 
+    public static RefStatement toStatement(RefNode subject, RefNode predicate, RefNode object) {
+        return new RefStatement(subject, predicate, object);
+    }
 }
