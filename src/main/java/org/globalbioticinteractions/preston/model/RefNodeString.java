@@ -9,7 +9,7 @@ public class RefNodeString implements RefNode {
     private final String content;
     private URI hash;
 
-    public RefNodeString(String content) {
+    RefNodeString(String content) {
         super();
         this.content = content;
     }

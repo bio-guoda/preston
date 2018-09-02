@@ -1,7 +1,8 @@
 package org.globalbioticinteractions.preston.process;
 
+import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.model.RefStatement;
-import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -11,9 +12,9 @@ public class StatementLoggerTest {
 
     @Test
     public void relation() {
-        RefNodeString source = new RefNodeString("source");
-        RefNodeString relation = new RefNodeString("relation");
-        RefNodeString target = new RefNodeString("target");
+        RefNode source = RefNodeFactory.toLiteral("source");
+        RefNode relation = RefNodeFactory.toLiteral("relation");
+        RefNode target = RefNodeFactory.toLiteral("target");
 
         String str = new StatementLogger().printStatement(new RefStatement(source, relation, target));
 

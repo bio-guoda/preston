@@ -7,6 +7,7 @@ import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.process.RefStatementListener;
@@ -39,7 +40,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         add(Seeds.SEED_NODE_BIOCASE.getLabel());
     }};
 
-    @Parameter(names = {"-l", "--log",}, description = "select how to show the biodiversity graph", converter = LoggerConverter.class)
+    @Parameter(names = {"-l", "--log",}, description = "select how toLiteral show the biodiversity graph", converter = LoggerConverter.class)
     private Logger logMode = Logger.tsv;
 
     @Override
@@ -50,7 +51,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
     protected void crawl(CrawlMode crawlMode) {
         final List<RefStatement> seeds = seedUrls.stream()
                 .map(uriString -> {
-                    RefNode refNodeSeed = new RefNodeString(uriString);
+                    RefNode refNodeSeed = RefNodeFactory.toURI(uriString);
                     return new RefStatement(refNodeSeed, RefNodeConstants.SEED_OF, RefNodeConstants.SOFTWARE_AGENT);
                 }).collect(Collectors.toList());
 

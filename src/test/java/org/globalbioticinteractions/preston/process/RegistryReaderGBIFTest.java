@@ -3,7 +3,7 @@ package org.globalbioticinteractions.preston.process;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.store.TestUtil;
 import org.junit.Assert;
@@ -26,7 +26,7 @@ public class RegistryReaderGBIFTest {
     public void onSeed() {
         ArrayList<RefStatement> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
-        RefNodeString bla = new RefNodeString("bla");
+        RefNode bla = RefNodeFactory.toLiteral("bla");
         registryReaderGBIF.on(new RefStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.SEED_OF, bla));
         Assert.assertThat(nodes.size(), is(2));
         assertThat(nodes.get(1).getObject().getLabel(), is("https://api.gbif.org/v1/dataset"));
@@ -36,7 +36,7 @@ public class RegistryReaderGBIFTest {
     public void onNotSeed() {
         ArrayList<RefStatement> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
-        RefNodeString bla = new RefNodeString("bla");
+        RefNode bla = RefNodeFactory.toLiteral("bla");
         registryReaderGBIF.on(new RefStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.HAD_MEMBER, bla));
         assertThat(nodes.size(), is(0));
     }
@@ -53,7 +53,7 @@ public class RegistryReaderGBIFTest {
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
 
 
-        RefStatement firstPage = new RefStatement(createTestNode(), RefNodeConstants.WAS_DERIVED_FROM, new RefNodeString("https://api.gbif.org/v1/dataset"));
+        RefStatement firstPage = new RefStatement(createTestNode(), RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toURI("https://api.gbif.org/v1/dataset"));
 
         registryReaderGBIF.on(firstPage);
 
@@ -69,7 +69,7 @@ public class RegistryReaderGBIFTest {
 
         RefNode testNode = createTestNode();
 
-        RegistryReaderGBIF.parse(testNode, refNodes::add, new RefNodeString("description"), getClass().getResourceAsStream(GBIFDATASETS_JSON));
+        RegistryReaderGBIF.parse(testNode, refNodes::add, RefNodeFactory.toLiteral("description"), getClass().getResourceAsStream(GBIFDATASETS_JSON));
 
         assertThat(refNodes.size(), is(18));
 

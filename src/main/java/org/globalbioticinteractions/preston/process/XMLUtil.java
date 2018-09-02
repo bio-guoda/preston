@@ -34,7 +34,7 @@ public class XMLUtil {
             XPathExpression expr = xpath.compile(expression);
             handler.evaluateXPath(emitter, (NodeList) expr.evaluate(doc, XPathConstants.NODESET));
         } catch (XPathExpressionException | ParserConfigurationException | IOException | SAXException e) {
-            throw new IOException("failed to handle xpath", e);
+            throw new IOException("failed toLiteral handle xpath", e);
         }
     }
 

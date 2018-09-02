@@ -9,6 +9,7 @@ import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.model.RefStatement;
 
 import java.io.IOException;
@@ -37,28 +38,28 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     public void on(RefStatement statement) {
         if (Seeds.SEED_NODE_GBIF.equivalentTo(statement.getSubject())
                 && SEED_OF.equivalentTo(statement.getPredicate())) {
-            RefNode refNodeRegistry = new RefNodeString(GBIF_DATASET_API_ENDPOINT);
+            RefNode refNodeRegistry = RefNodeFactory.toURI(GBIF_DATASET_API_ENDPOINT);
             emitPageRequest(this, refNodeRegistry);
         } else if (statement.getSubject() != null
                 && statement.getObject().getLabel().startsWith(GBIF_DATASET_API_ENDPOINT)
-                && RefNodeUtil.isDerivedFrom(statement)) {
+                && RefNodeFactory.isDerivedFrom(statement)) {
             try {
                 parse(statement.getSubject(), this, statement.getObject(), get(statement.getSubject().getContentHash()));
             } catch (IOException e) {
-                LOG.warn("failed to handle [" + statement.getLabel() + "]", e);
+                LOG.warn("failed toLiteral handle [" + statement.getLabel() + "]", e);
             }
         }
     }
 
     private static void emitNextPage(RefNode previousPage, int offset, int limit, RefStatementEmitter emitter) {
         String uri = GBIF_DATASET_API_ENDPOINT + "?offset=" + offset + "&limit=" + limit;
-        RefNode nextPage = new RefNodeString(uri);
+        RefNode nextPage = RefNodeFactory.toURI(uri);
         emitter.emit(new RefStatement(nextPage, CONTINUATION_OF, previousPage));
         emitPageRequest(emitter, nextPage);
     }
 
     private static void emitPageRequest(RefStatementEmitter emitter, RefNode nextPage) {
-        emitter.emit(new RefStatement(nextPage, RefNodeConstants.HAS_FORMAT, RefNodeUtil.toContentType(MimeTypes.MIME_TYPE_JSON)));
+        emitter.emit(new RefStatement(nextPage, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
         emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, nextPage));
     }
 
@@ -69,7 +70,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
             for (JsonNode result : jsonNode.get("results")) {
                 if (result.has("key") && result.has("endpoints")) {
                     String uuid = result.get("key").asText();
-                    RefNodeString datasetUUID = RefNodeUtil.toUUID(uuid);
+                    RefNode datasetUUID = RefNodeFactory.toUUID(uuid);
                     emitter.emit(new RefStatement(currentPageContent, RefNodeConstants.HAD_MEMBER, datasetUUID));
 
                     for (JsonNode endpoint : result.get("endpoints")) {
@@ -78,9 +79,9 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                             String type = endpoint.get("type").asText();
 
                             if (SUPPORTED_ENDPOINT_TYPES.containsKey(type)) {
-                                RefNodeString dataArchive = new RefNodeString(urlString);
+                                RefNode dataArchive = RefNodeFactory.toURI(urlString);
                                 emitter.emit(new RefStatement(datasetUUID, RefNodeConstants.HAD_MEMBER, dataArchive));
-                                emitter.emit(new RefStatement(dataArchive, RefNodeConstants.HAS_FORMAT, RefNodeUtil.toContentType(SUPPORTED_ENDPOINT_TYPES.get(type))));
+                                emitter.emit(new RefStatement(dataArchive, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(SUPPORTED_ENDPOINT_TYPES.get(type))));
                                 emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, dataArchive));
                             }
                         }

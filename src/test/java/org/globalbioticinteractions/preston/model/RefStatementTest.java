@@ -1,18 +1,18 @@
 package org.globalbioticinteractions.preston.model;
 
-import org.hamcrest.core.Is;
 import org.junit.Test;
 
+import java.net.URI;
+
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class RefStatementTest {
-    private RefNodeString source = new RefNodeString("https://example.org");
-    private RefNodeString relation = new RefNodeString("https://example.org/partOf");
-    private RefNodeString relation2 = new RefNodeString("https://example.org/sortOf");
-    private RefNodeString target = new RefNodeString("https://example.org/a");
-    private RefNodeString target2 = new RefNodeString("https://example.org/b");
+    private RefNode source = new RefNodeURI(URI.create("https://example.org"));
+    private RefNode relation = new RefNodeURI(URI.create("https://example.org/partOf"));
+    private RefNode relation2 = new RefNodeURI(URI.create("https://example.org/sortOf"));
+    private RefNode target = new RefNodeURI(URI.create("https://example.org/a"));
+    private RefNode target2 = new RefNodeURI(URI.create("https://example.org/b"));
 
     @Test
     public void equivalent() {

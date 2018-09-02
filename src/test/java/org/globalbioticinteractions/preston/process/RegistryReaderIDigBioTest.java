@@ -4,6 +4,7 @@ import com.sun.syndication.io.FeedException;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.store.TestUtil;
 import org.junit.Test;
@@ -28,7 +29,7 @@ public class RegistryReaderIDigBioTest {
     public void onSeed() {
         ArrayList<RefStatement> nodes = new ArrayList<>();
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), nodes::add);
-        RefNodeString bla = new RefNodeString("bla");
+        RefNode bla = RefNodeFactory.toLiteral("bla");
         reader.on(new RefStatement(Seeds.SEED_NODE_IDIGBIO, bla, bla));
         assertThat(nodes.size(), is(3));
     }
@@ -36,7 +37,7 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void parsePublishers() throws IOException {
 
-        RefNode providedParent = new RefNodeString("someRegistryUUID");
+        RefNode providedParent = RefNodeFactory.toUUID("someRegistryUUID");
         final List<RefStatement> nodes = new ArrayList<>();
 
         InputStream is = getClass().getResourceAsStream("idigbio-publishers.json");
@@ -76,7 +77,7 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void parseFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
-        RefNode parent = new RefNodeString("http://example.org");
+        RefNode parent = RefNodeFactory.toURI("http://example.org");
         List<RefStatement> nodes = new ArrayList<>();
         RefStatementEmitter emitter = nodes::add;
         InputStream is = getClass().getResourceAsStream("torch-portal-rss.xml");
@@ -106,7 +107,7 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void parseSymbiotaFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
-        RefNode parent = new RefNodeString("http://example.org");
+        RefNode parent = RefNodeFactory.toURI("http://example.org");
         List<RefStatement> nodes = new ArrayList<>();
         RefStatementEmitter emitter = nodes::add;
         InputStream is = getClass().getResourceAsStream("symbiota-rss.xml");
@@ -131,7 +132,7 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void parseIntermountainFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
-        RefNode parent = new RefNodeString("http://example.org");
+        RefNode parent = RefNodeFactory.toURI("http://example.org");
         List<RefStatement> nodes = new ArrayList<>();
         RefStatementEmitter emitter = nodes::add;
         InputStream is = getClass().getResourceAsStream("intermountain-biota-rss.xml");

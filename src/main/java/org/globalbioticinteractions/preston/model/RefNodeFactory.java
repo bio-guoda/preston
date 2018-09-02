@@ -1,17 +1,26 @@
-package org.globalbioticinteractions.preston.process;
+package org.globalbioticinteractions.preston.model;
 
-import org.globalbioticinteractions.preston.RefNodeConstants;
-import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefNodeString;
-import org.globalbioticinteractions.preston.model.RefStatement;
+import java.net.URI;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_REVISION_OF;
 
-public class RefNodeUtil {
+public class RefNodeFactory {
 
-    public static RefNodeString toUUID(String publisherUUID) {
+    public static RefNode toUUID(String publisherUUID) {
         return new RefNodeString(publisherUUID);
+    }
+
+    public static RefNode toURI(String urlString) {
+        return new RefNodeURI(URI.create(urlString));
+    }
+
+    public static RefNode toURI(URI uri) {
+        return new RefNodeURI(uri);
+    }
+
+    public static RefNode toLiteral(String bla) {
+        return new RefNodeString(bla);
     }
 
     public static RefNode toContentType(String contentType) {

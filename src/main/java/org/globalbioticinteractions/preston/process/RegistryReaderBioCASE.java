@@ -9,7 +9,7 @@ import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNode;
-import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.model.RefStatement;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -29,7 +29,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     private static final Log LOG = LogFactory.getLog(RegistryReaderBioCASE.class);
 
     static final String BIOCASE_REGISTRY_ENDPOINT = "https://bms.gfbio.org/services/data-sources/";
-    private static final RefNode REF_NODE_REGISTRY = new RefNodeString(BIOCASE_REGISTRY_ENDPOINT);
+    private static final RefNode REF_NODE_REGISTRY = RefNodeFactory.toURI(BIOCASE_REGISTRY_ENDPOINT);
 
     // https://wiki.bgbm.org/bps/index.php/Archiving
     // http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=Herbar&inventory=1
@@ -51,8 +51,8 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
                     if (StringUtils.isNotBlank(url) && StringUtils.isNotBlank(datasource)) {
                         URI uri = generateDataSourceAccessUrl(url, datasource);
                         if (uri != null) {
-                            RefNodeString refNode = new RefNodeString(uri.toString());
-                            emitter.emit(new RefStatement(refNode, RefNodeConstants.HAS_FORMAT, new RefNodeString(MimeTypes.XML)));
+                            RefNode refNode = RefNodeFactory.toURI(uri);
+                            emitter.emit(new RefStatement(refNode, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral(MimeTypes.XML)));
                             emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, refNode));
                         }
                     }
@@ -86,13 +86,13 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     Node item = nodeList.item(i);
                     NamedNodeMap attributes = item.getAttributes();
-                    String textContent = item.getTextContent();
+                    String url = item.getTextContent();
 
                     String type = resolveType(mapping, item, attributes);
 
-                    if (StringUtils.isNotBlank(textContent) && StringUtils.isNotBlank(type)) {
-                        RefNodeString object = new RefNodeString(textContent);
-                        emitter.emit(new RefStatement(object, RefNodeConstants.HAS_FORMAT, new RefNodeString(type)));
+                    if (StringUtils.isNotBlank(url) && StringUtils.isNotBlank(type)) {
+                        RefNode object = RefNodeFactory.toURI(url);
+                        emitter.emit(new RefStatement(object, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral(type)));
                         emitter.emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, object));
                     }
 
@@ -121,9 +121,9 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     public void on(RefStatement statement) {
         if (Seeds.SEED_NODE_BIOCASE.equivalentTo(statement.getSubject())
                 && SEED_OF.equivalentTo(statement.getPredicate())) {
-            emit(new RefStatement(REF_NODE_REGISTRY, RefNodeConstants.HAS_FORMAT, RefNodeUtil.toContentType(MimeTypes.MIME_TYPE_JSON)));
+            emit(new RefStatement(REF_NODE_REGISTRY, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
             emit(new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, REF_NODE_REGISTRY));
-        } else if (RefNodeUtil.isDerivedFrom(statement)) {
+        } else if (RefNodeFactory.isDerivedFrom(statement)) {
             try {
                 EmittingParser parse = null;
                 if (REF_NODE_REGISTRY.equivalentTo(statement.getObject())) {
@@ -141,7 +141,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
 
 
             } catch (IOException e) {
-                LOG.warn("failed to read from [" + statement.getSubject().getLabel() + "]", e);
+                LOG.warn("failed toLiteral read from [" + statement.getSubject().getLabel() + "]", e);
             }
         }
 

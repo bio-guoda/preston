@@ -1,16 +1,12 @@
 package org.globalbioticinteractions.preston.model;
 
-import org.globalbioticinteractions.preston.store.BlobStore;
-
 import java.net.URI;
 
-public class RefNodeFromKey implements RefNode {
+public class RefNodeURI implements RefNode {
 
-    private BlobStore store;
     private final URI key;
 
-    public RefNodeFromKey(BlobStore blobStore, URI key) {
-        this.store = blobStore;
+    RefNodeURI(URI key) {
         this.key = key;
     }
 

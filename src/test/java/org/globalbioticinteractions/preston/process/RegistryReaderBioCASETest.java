@@ -2,6 +2,8 @@ package org.globalbioticinteractions.preston.process;
 
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
+import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.store.TestUtil;
@@ -37,7 +39,7 @@ public class RegistryReaderBioCASETest {
 
     @Test
     public void onSeed() {
-        RefNodeString bla = new RefNodeString("bla");
+        RefNode bla = RefNodeFactory.toLiteral("bla");
         registryReader.on(new RefStatement(Seeds.SEED_NODE_BIOCASE, RefNodeConstants.SEED_OF, bla));
         Assert.assertThat(nodes.size(), is(2));
         assertThat(nodes.get(1).getObject().getLabel(), is(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT));
@@ -83,7 +85,7 @@ public class RegistryReaderBioCASETest {
             }
         };
         registryReader = new RegistryReaderBioCASE(blobStore, nodes::add);
-        registryReader.on(new RefStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, new RefNodeString(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT)));
+        registryReader.on(new RefStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toURI(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT)));
 
         assertFalse(nodes.isEmpty());
         assertThat(nodes.get(1).getObject().getLabel(), is("http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=GFBio_ColiFauna&inventory=1"));
@@ -110,7 +112,7 @@ public class RegistryReaderBioCASETest {
             }
         }, nodes::add);
 
-        registryReader.on(new RefStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, new RefNodeString("http://something/pywrapper.cgi?dsa=")));
+        registryReader.on(new RefStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toURI("http://something/pywrapper.cgi?dsa=")));
 
         assertThat(nodes.size(), is(2));
         assertThat(nodes.get(1).getObject().getLabel(), is("http://ww3.bgbm.org/biocase/downloads/GFBio_ColiFauna/Coleoptera%20observations%20in%20orchards%20of%20South%20Western%20Germany.ABCD_2.06.zip"));

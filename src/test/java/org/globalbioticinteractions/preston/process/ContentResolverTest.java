@@ -7,7 +7,9 @@ import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.model.RefNodeString;
+import org.globalbioticinteractions.preston.model.RefNodeURI;
 import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.AppendOnlyStatementStore;
@@ -74,7 +76,7 @@ public class ContentResolverTest {
         ArrayList<RefStatement> refNodes = new ArrayList<>();
 
         RefStatementListener contentResolver = createStatementStore(refNodes::add);
-        RefNodeString providedNode = new RefNodeString("https://example.org");
+        RefNode providedNode = RefNodeFactory.toURI("https://example.org");
         contentResolver.on(new RefStatement(providedNode, RefNodeConstants.HAD_MEMBER, providedNode));
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
@@ -95,7 +97,7 @@ public class ContentResolverTest {
 
 
         URI testURI = getClass().getResource("test.txt").toURI();
-        RefNode providedNode = new RefNodeString(testURI.toString());
+        RefNode providedNode = RefNodeFactory.toURI(testURI);
         RefStatement relation = new RefStatement(null, RefNodeConstants.WAS_DERIVED_FROM, providedNode);
 
         listener.on(relation);

@@ -29,7 +29,7 @@ public final class Hasher {
             String format = String.format("%064x", new BigInteger(1, md.digest()));
             return toHashURI(format);
         } catch (IOException | NoSuchAlgorithmException var9) {
-            throw new IOException("failed to cache dataset", var9);
+            throw new IOException("failed toLiteral cache dataset", var9);
         }
     }
 

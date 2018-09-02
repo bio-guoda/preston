@@ -9,10 +9,9 @@ import org.globalbioticinteractions.preston.DateUtil;
 import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.cmd.CmdList;
 import org.globalbioticinteractions.preston.model.RefNode;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.model.RefNodeString;
 import org.globalbioticinteractions.preston.model.RefStatement;
-import org.globalbioticinteractions.preston.model.RefNodeFromKey;
-import org.globalbioticinteractions.preston.process.RefNodeUtil;
 import org.globalbioticinteractions.preston.process.RefStatementListener;
 import org.globalbioticinteractions.preston.process.RefStatementProcessor;
 
@@ -62,7 +61,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
             put(Triple.of(subject, predicate, object));
 
         } catch (Throwable e) {
-            LOG.warn("failed to handle [" + statement.getLabel() + "]", e);
+            LOG.warn("failed toLiteral handle [" + statement.getLabel() + "]", e);
         }
 
     }
@@ -86,14 +85,14 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
                     try {
                         attemptUpdate(object, mostRecent);
                     } catch (IOException e) {
-                        LOG.warn("failed to update [" + object.toString() + "]", e);
+                        LOG.warn("failed toLiteral update [" + object.toString() + "]", e);
                     }
                 }
             }
         } else if (subj != null && predicate != null && object != null) {
-            emit(new RefStatement(new RefNodeString(subj.toString()),
-                    new RefNodeString(predicate.toString()),
-                    new RefNodeString(object.toString())));
+            emit(new RefStatement(RefNodeFactory.toURI(subj),
+                    RefNodeFactory.toURI(predicate),
+                    RefNodeFactory.toURI(object.toString())));
 
         }
     }
@@ -105,28 +104,28 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
             recordGenerationTime(derivedSubject);
             put(Pair.of(Predicate.WAS_REVISION_OF, mostRecent), derivedSubject);
             Triple<URI, URI, URI> of = Triple.of(derivedSubject, Predicate.WAS_REVISION_OF, mostRecent);
-            emit(new RefStatement(new RefNodeFromKey(blobStore, of.getLeft()),
-                    new RefNodeString(of.getMiddle().toString()),
-                    new RefNodeFromKey(blobStore, of.getRight())));
+            emit(new RefStatement(RefNodeFactory.toURI(of.getLeft()),
+                    RefNodeFactory.toURI(of.getMiddle()),
+                    RefNodeFactory.toURI(of.getRight())));
 
         } else if (null == mostRecent) {
             recordGenerationTime(derivedSubject);
             put(Pair.of(Predicate.WAS_DERIVED_FROM, object), derivedSubject);
             Triple<URI, URI, URI> of = Triple.of(derivedSubject, Predicate.WAS_DERIVED_FROM, object);
-            emit(new RefStatement(new RefNodeFromKey(blobStore, of.getLeft()),
-                    new RefNodeString(of.getMiddle().toString()),
-                    new RefNodeString(of.getRight().toString())));
+            emit(new RefStatement(RefNodeFactory.toURI(of.getLeft()),
+                    RefNodeFactory.toURI(of.getMiddle()),
+                    RefNodeFactory.toURI(of.getRight())));
         }
     }
 
     private void recordGenerationTime(URI derivedSubject) throws IOException {
-        String value = RefNodeUtil.toDateTime(DateUtil.now()).getLabel();
+        String value = RefNodeFactory.toDateTime(DateUtil.now()).getLabel();
         blobStore.putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
         URI value1 = Hasher.calcSHA256(value);
         put(Pair.of(derivedSubject, Predicate.GENERATED_AT_TIME), value1);
-        emit(new RefStatement(new RefNodeFromKey(blobStore, derivedSubject),
+        emit(new RefStatement(RefNodeFactory.toURI(derivedSubject),
                 GENERATED_AT_TIME,
-                new RefNodeString(value)));
+                RefNodeFactory.toLiteral(value)));
 
     }
 
@@ -142,7 +141,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
         URI existingId = findKey(Pair.of(Predicate.WAS_DERIVED_FROM, obj));
 
         if (existingId != null) {
-            emitExistingVersion(existingId, Predicate.WAS_DERIVED_FROM, new RefNodeString(obj.toString()));
+            emitExistingVersion(existingId, Predicate.WAS_DERIVED_FROM, RefNodeFactory.toURI(obj));
             existingId = findLastVersionId(existingId);
         }
         return existingId;
@@ -152,7 +151,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
         URI lastVersionId = existingId;
         URI newerVersionId;
         while ((newerVersionId = findKey(Pair.of(Predicate.WAS_REVISION_OF, lastVersionId))) != null) {
-            emitExistingVersion(newerVersionId, Predicate.WAS_REVISION_OF, new RefNodeFromKey(blobStore, lastVersionId));
+            emitExistingVersion(newerVersionId, Predicate.WAS_REVISION_OF, RefNodeFactory.toURI(lastVersionId));
             lastVersionId = newerVersionId;
         }
         return lastVersionId;
@@ -163,13 +162,13 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
         if (timeKey != null) {
             InputStream input = blobStore.get(timeKey);
             if (input != null) {
-                emit(new RefStatement(new RefNodeFromKey(blobStore, subj),
+                emit(new RefStatement(RefNodeFactory.toURI(subj),
                         GENERATED_AT_TIME,
-                        new RefNodeString(IOUtils.toString(input, StandardCharsets.UTF_8))));
+                        RefNodeFactory.toLiteral(IOUtils.toString(input, StandardCharsets.UTF_8))));
             }
         }
-        emit(new RefStatement(new RefNodeFromKey(blobStore, subj),
-                new RefNodeString(predicate.toString()),
+        emit(new RefStatement(RefNodeFactory.toURI(subj),
+                RefNodeFactory.toURI(predicate),
                 obj));
     }
 
