@@ -22,7 +22,6 @@ import org.globalbioticinteractions.preston.store.Persistence;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -51,7 +50,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         final List<Triple> seeds = seedUrls.stream()
                 .map(uriString -> {
                     IRI refNodeSeed = RefNodeFactory.toIRI(uriString);
-                    return RefNodeFactory.toStatement(refNodeSeed, RefNodeConstants.SEED_OF, RefNodeConstants.SOFTWARE_AGENT);
+                    return RefNodeFactory.toStatement(refNodeSeed, RefNodeConstants.HAD_MEMBER, RefNodeConstants.SOFTWARE_AGENT);
                 }).collect(Collectors.toList());
 
         final Queue<Triple> statements =

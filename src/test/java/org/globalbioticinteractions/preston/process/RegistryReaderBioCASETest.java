@@ -39,7 +39,7 @@ public class RegistryReaderBioCASETest {
     @Test
     public void onSeed() {
         RDFTerm bla = RefNodeFactory.toLiteral("bla");
-        registryReader.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_BIOCASE, RefNodeConstants.SEED_OF, bla));
+        registryReader.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_BIOCASE, RefNodeConstants.HAD_MEMBER, bla));
         Assert.assertThat(nodes.size(), is(2));
         assertThat(((IRI)nodes.get(1).getObject()).getIRIString(), is(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT));
     }

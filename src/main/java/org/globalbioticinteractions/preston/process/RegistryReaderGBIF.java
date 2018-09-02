@@ -17,9 +17,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.globalbioticinteractions.preston.RefNodeConstants.CONTINUATION_OF;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
-import static org.globalbioticinteractions.preston.RefNodeConstants.SEED_OF;
 
 public class RegistryReaderGBIF extends ProcessorReadOnly {
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
@@ -37,15 +35,14 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     @Override
     public void on(Triple statement) {
         if (Seeds.SEED_NODE_GBIF.equals(statement.getSubject())
-                && SEED_OF.equals(statement.getPredicate())) {
+                && HAD_MEMBER.equals(statement.getPredicate())) {
             IRI refNodeRegistry = RefNodeFactory.toIRI(GBIF_DATASET_API_ENDPOINT);
             emitPageRequest(this, refNodeRegistry);
-        } else if (statement.getSubject() instanceof IRI
+        } else if (RefNodeFactory.hasDerivedContentAvailable(statement)
                 && statement.getObject() instanceof IRI
-                && statement.getObject().toString().startsWith("<" + GBIF_DATASET_API_ENDPOINT)
-                && RefNodeFactory.isDerivedFrom(statement)) {
+                && statement.getObject().toString().startsWith("<" + GBIF_DATASET_API_ENDPOINT)) {
             try {
-                parse((IRI) statement.getSubject(), this, (IRI)statement.getObject(), get((IRI) statement.getSubject()));
+                parse((IRI) statement.getSubject(), this, (IRI) statement.getObject(), get((IRI) statement.getSubject()));
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
@@ -55,7 +52,6 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     private static void emitNextPage(IRI previousPage, int offset, int limit, RefStatementEmitter emitter) {
         String uri = GBIF_DATASET_API_ENDPOINT + "?offset=" + offset + "&limit=" + limit;
         IRI nextPage = RefNodeFactory.toIRI(uri);
-        emitter.emit(RefNodeFactory.toStatement(nextPage, CONTINUATION_OF, previousPage));
         emitPageRequest(emitter, nextPage);
     }
 

@@ -1,6 +1,5 @@
 package org.globalbioticinteractions.preston.model;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
@@ -65,8 +64,22 @@ public class RefNodeFactory {
 
     public static boolean isBlankOrSkolemizedBlank(BlankNodeOrIRI iri) {
         //see https://www.w3.org/TR/rdf11-concepts/#section-skolemization
-        return iri instanceof BlankNode
-                || iri.toString().contains("/.well-known/genid/");
+        return iri != null &&
+                (iri instanceof BlankNode || isSkolemizedBlank(iri));
     }
 
+    public static boolean isSkolemizedBlank(BlankNodeOrIRI iri) {
+        //see https://www.w3.org/TR/rdf11-concepts/#section-skolemization
+        return iri.toString().contains("/.well-known/genid/");
+    }
+
+    public static IRI toSkolemizedBlank(BlankNode subj) {
+        // see https://www.w3.org/TR/rdf11-concepts/#section-skolemization
+        return toIRI("https://deeplinker.bio/.well-known/genid/" + subj.uniqueReference());
+    }
+
+    public static boolean hasDerivedContentAvailable(Triple statement) {
+        return isDerivedFrom(statement)
+                && !isBlankOrSkolemizedBlank(statement.getSubject());
+    }
 }

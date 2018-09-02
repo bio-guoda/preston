@@ -14,7 +14,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
+import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -52,6 +55,40 @@ public class AppendOnlyStatementStoreTest {
                         RefNodeFactory.toIRI(URI.create("http://some"))));
 
         assertTrue(RefNodeFactory.isBlankOrSkolemizedBlank(contentHash));
+    }
+
+    @Test
+    public void doNotEmitSkolemizedBlanks() throws IOException {
+        IRI skolemizedBlank = RefNodeFactory.toSkolemizedBlank(RefNodeFactory.toBlank());
+        Triple statement
+                = RefNodeFactory.toStatement(skolemizedBlank,
+                Predicate.WAS_DERIVED_FROM,
+                RefNodeFactory.toIRI(URI.create("http://some")));
+
+        Dereferencer dereferencer = uri -> {
+            throw new IOException("fails to dereference");
+        };
+
+        Persistence testPersistence = TestUtil.getTestPersistence();
+
+        List<Triple> nodes = new ArrayList<>();
+
+        AppendOnlyStatementStore relationStore = new AppendOnlyStatementStore(
+                new AppendOnlyBlobStore(testPersistence),
+                testPersistence,
+                dereferencer,
+                nodes::add);
+
+        relationStore.put(statement);
+
+        assertThat(nodes.size(), Is.is(1));
+
+        // dereference subject
+        IRI contentHash = relationStore.get(
+                Pair.of(Predicate.WAS_DERIVED_FROM,
+                        RefNodeFactory.toIRI(URI.create("http://some"))));
+
+        assertNull(contentHash);
     }
 
     @Test

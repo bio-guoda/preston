@@ -27,7 +27,6 @@ import java.util.UUID;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_FORMAT;
-import static org.globalbioticinteractions.preston.RefNodeConstants.PUBLISHER_REGISTRY_OF;
 
 public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
@@ -43,18 +42,21 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     public void on(Triple statement) {
         if (statement.getSubject().equals(Seeds.SEED_NODE_IDIGBIO)) {
             IRI publishers = PUBLISHERS;
-            emit(RefNodeFactory.toStatement(publishers, PUBLISHER_REGISTRY_OF, statement.getSubject()));
+            emit(RefNodeFactory.toStatement(publishers, HAD_MEMBER, statement.getSubject()));
             emit(RefNodeFactory.toStatement(publishers, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
             emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, publishers));
-        } else if (statement.getObject().equals(PUBLISHERS)
-                && RefNodeFactory.isDerivedFrom(statement)) {
-            if (statement.getSubject() instanceof IRI) {
-                parsePublishers((IRI) statement.getSubject());
+        } else if (RefNodeFactory.hasDerivedContentAvailable(statement)) {
+            parse(statement, (IRI) statement.getSubject());
+        }
+    }
+
+    public void parse(Triple statement, IRI toBeParsed) {
+        if (statement.getObject().equals(PUBLISHERS)) {
+            if (!RefNodeFactory.isBlankOrSkolemizedBlank(statement.getSubject())) {
+                parsePublishers(toBeParsed);
             }
-        } else if (RefNodeFactory.isDerivedFrom(statement)) {
-            if (statement.getSubject() instanceof IRI) {
-                parse((IRI) statement.getSubject());
-            }
+        } else {
+            parse(toBeParsed);
         }
     }
 

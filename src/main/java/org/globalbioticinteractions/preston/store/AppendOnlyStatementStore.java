@@ -36,7 +36,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
 
     private boolean resolveOnMissingOnly = false;
 
-    public AppendOnlyStatementStore(BlobStore blobStore, Persistence persistence, Dereferencer dereferencer, RefStatementListener[] listener) {
+    public AppendOnlyStatementStore(BlobStore blobStore, Persistence persistence, Dereferencer dereferencer, RefStatementListener... listener) {
         super(listener);
         this.blobStore = blobStore;
         this.persistence = persistence;
@@ -66,6 +66,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
         RDFTerm object = statement.getObject();
 
         if (Predicate.WAS_DERIVED_FROM.equals(predicate)
+                && !RefNodeFactory.isSkolemizedBlank(subj)
                 && subj instanceof BlankNode
                 && object != null
                 && object instanceof IRI) {
@@ -80,24 +81,19 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
                         LOG.warn("failed to update [" + object.toString() + "]", e);
                     } finally {
                         if (derivedSubject == null) {
-                            derivedSubject = toSkolemizedBlank((BlankNode) subj);
+                            derivedSubject = RefNodeFactory.toSkolemizedBlank((BlankNode) subj);
                         }
                         recordUpdate((IRI) object, keyForMostRecent, derivedSubject);
                     }
                 }
             }
-        } else if (subj != null && predicate != null && object != null) {
+        } else {
             emit(RefNodeFactory.toStatement(
                     subj,
                     predicate,
                     object));
 
         }
-    }
-
-    public static IRI toSkolemizedBlank(BlankNode subj) {
-        // see https://www.w3.org/TR/rdf11-concepts/#section-skolemization
-        return RefNodeFactory.toIRI("https://deeplinker.bio/.well-known/genid/" + subj.uniqueReference());
     }
 
     private void recordUpdate(IRI object, IRI keyForMostRecent, BlankNodeOrIRI derivedSubject) throws IOException {
@@ -180,7 +176,7 @@ public class AppendOnlyStatementStore extends RefStatementProcessor implements S
     public void put(Pair<RDFTerm, RDFTerm> partialStatement, RDFTerm value) throws IOException {
         // write-once, read-many
         IRI key = calculateKeyFor(partialStatement);
-        persistence.put(key.getIRIString(), value instanceof IRI ? ((IRI)value).getIRIString() : value.toString());
+        persistence.put(key.getIRIString(), value instanceof IRI ? ((IRI) value).getIRIString() : value.toString());
     }
 
     private IRI calculateKeyFor(Pair<RDFTerm, RDFTerm> unhashedKeyPair) {

@@ -31,7 +31,7 @@ public class RegistryReaderGBIFTest {
         ArrayList<Triple> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = RefNodeFactory.toLiteral("bla");
-        registryReaderGBIF.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.SEED_OF, bla));
+        registryReaderGBIF.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.HAD_MEMBER, bla));
         Assert.assertThat(nodes.size(), is(2));
         assertThat(nodes.get(1).getObject().toString(), is("<https://api.gbif.org/v1/dataset>"));
     }
@@ -41,7 +41,7 @@ public class RegistryReaderGBIFTest {
         ArrayList<Triple> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = RefNodeFactory.toLiteral("bla");
-        registryReaderGBIF.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.HAD_MEMBER, bla));
+        registryReaderGBIF.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, RefNodeFactory.toIRI("http://example.org"), bla));
         assertThat(nodes.size(), is(0));
     }
 
@@ -61,7 +61,7 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(18));
+        Assert.assertThat(nodes.size(), is(17));
         Triple secondPage = nodes.get(nodes.size() - 1);
         assertThat(secondPage.getObject().toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2>"));
     }
@@ -75,7 +75,7 @@ public class RegistryReaderGBIFTest {
 
         RegistryReaderGBIF.parse(testNode, refNodes::add, RefNodeFactory.toIRI("description"), getClass().getResourceAsStream(GBIFDATASETS_JSON));
 
-        assertThat(refNodes.size(), is(18));
+        assertThat(refNodes.size(), is(17));
 
         Triple refNode = refNodes.get(0);
         assertThat(refNode.toString(), startsWith("<https://gbif.org> <http://www.w3.org/ns/prov#hadMember> "));
@@ -104,10 +104,7 @@ public class RegistryReaderGBIFTest {
         refNode = refNodes.get(8);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <d0df772d-78f4-4602-acf2-7d768798f632> ."));
 
-        Triple lastRefNode = refNodes.get(refNodes.size() - 3);
-        assertThat(lastRefNode.toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2> <http://example.org/continuationOf> <description> ."));
-
-        lastRefNode = refNodes.get(refNodes.size() - 2);
+        Triple lastRefNode = refNodes.get(refNodes.size() - 2);
         assertThat(lastRefNode.toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
 
         lastRefNode = refNodes.get(refNodes.size() - 1);

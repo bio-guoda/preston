@@ -24,8 +24,6 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.globalbioticinteractions.preston.RefNodeConstants.SEED_OF;
-
 public class RegistryReaderBioCASE extends ProcessorReadOnly {
     private static final Log LOG = LogFactory.getLog(RegistryReaderBioCASE.class);
 
@@ -121,10 +119,10 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     @Override
     public void on(Triple statement) {
         if (Seeds.SEED_NODE_BIOCASE.equals(statement.getSubject())
-                && SEED_OF.equals(statement.getPredicate())) {
+                && RefNodeConstants.HAD_MEMBER.equals(statement.getPredicate())) {
             emit(RefNodeFactory.toStatement(REF_NODE_REGISTRY, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
             emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, REF_NODE_REGISTRY));
-        } else if (RefNodeFactory.isDerivedFrom(statement)) {
+        } else if (RefNodeFactory.hasDerivedContentAvailable(statement)) {
             try {
                 EmittingParser parse = null;
                 if (REF_NODE_REGISTRY.equals(statement.getObject())) {
