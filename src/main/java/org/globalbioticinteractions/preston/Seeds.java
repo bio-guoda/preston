@@ -1,7 +1,6 @@
 package org.globalbioticinteractions.preston;
 
 import org.apache.commons.rdf.api.IRI;
-import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 
 public final class Seeds {

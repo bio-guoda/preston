@@ -13,7 +13,6 @@ import org.globalbioticinteractions.preston.DateUtil;
 import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.RDFUtil;
 import org.globalbioticinteractions.preston.cmd.CmdList;
-import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.process.RefStatementListener;
 import org.globalbioticinteractions.preston.process.RefStatementProcessor;

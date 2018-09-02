@@ -2,9 +2,7 @@ package org.globalbioticinteractions.preston.process;
 
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
-import org.globalbioticinteractions.preston.model.RefStatement;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
