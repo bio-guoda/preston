@@ -42,12 +42,48 @@ public class RefNodeFactory {
         return rdf.createLiteral(dateTime, Types.XSD_DATETIME);
     }
 
-    public static boolean isDerivedFrom(Triple statement) {
-        return statement.getSubject() != null
-                && statement.getObject() != null
-                && statement.getPredicate() != null
-                && (RefNodeConstants.WAS_DERIVED_FROM.equals(statement.getPredicate())
-                || RefNodeConstants.WAS_REVISION_OF.equals(statement.getPredicate()));
+    public static boolean hasVersionOrIsDerivedFrom(Triple statement) {
+        return hasVersionStatement(statement);
+    }
+
+    private static boolean hasVersionStatement(Triple statement) {
+        return RefNodeConstants.WAS_DERIVED_FROM.equals(statement.getPredicate())
+                || RefNodeConstants.HAS_VERSION.equals(statement.getPredicate())
+                || RefNodeConstants.WAS_REVISION_OF.equals(statement.getPredicate())
+                || RefNodeConstants.HAS_PREVIOUS_VERSION.equals(statement.getPredicate());
+    }
+
+    public static boolean hasNoBlanks(Triple statement) {
+        return statement.getObject() instanceof IRI && statement.getSubject() instanceof IRI;
+    }
+
+    public static boolean isNotSkolemized(Triple statement) {
+        return !RefNodeFactory.isBlankOrSkolemizedBlank((IRI) statement.getObject())
+                && !RefNodeFactory.isBlankOrSkolemizedBlank(statement.getSubject());
+    }
+
+    public static IRI getVersionSource(Triple statement) {
+        IRI versionSource = null;
+        if (hasVersionOrIsDerivedFrom(statement)) {
+            if (RefNodeConstants.WAS_DERIVED_FROM.equals(statement.getPredicate())) {
+                versionSource = (IRI) statement.getObject();
+            } else {
+                versionSource = (IRI) statement.getSubject();
+            }
+        }
+        return versionSource;
+    }
+
+    public static BlankNodeOrIRI getVersion(Triple statement) {
+        BlankNodeOrIRI version = null;
+        if (hasVersionStatement(statement)) {
+            if (RefNodeConstants.WAS_DERIVED_FROM.equals(statement.getPredicate())) {
+                version = statement.getSubject();
+            } else {
+                version = (BlankNodeOrIRI) statement.getObject();
+            }
+        }
+        return version;
     }
 
     public static Triple toStatement(BlankNodeOrIRI subject, IRI predicate, RDFTerm object) {
@@ -79,7 +115,7 @@ public class RefNodeFactory {
     }
 
     public static boolean hasDerivedContentAvailable(Triple statement) {
-        return isDerivedFrom(statement)
+        return hasVersionOrIsDerivedFrom(statement)
                 && !isBlankOrSkolemizedBlank(statement.getSubject());
     }
 }

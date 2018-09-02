@@ -4,10 +4,9 @@ import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.Objects;
 
-public abstract class ProcessorReadOnly extends RefStatementProcessor {
+public abstract class ProcessorReadOnly extends StatementProcessor {
 
     private final BlobStoreReadOnly blobStoreReadOnly;
 

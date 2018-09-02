@@ -2,7 +2,6 @@ package org.globalbioticinteractions.preston;
 
 import org.apache.commons.rdf.api.IRI;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
-import org.globalbioticinteractions.preston.store.Predicate;
 
 import java.net.URI;
 
@@ -19,6 +18,10 @@ public class RefNodeConstants {
 
 
     public static final IRI WAS_REVISION_OF = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasRevisionOf"));
+    public static final IRI HAS_PREVIOUS_VERSION = RefNodeFactory.toIRI(URI.create("http://purl.org/pav/previousVersion"));
+
     public static final IRI WAS_DERIVED_FROM = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasDerivedFrom"));
+    public static final IRI HAS_VERSION = RefNodeFactory.toIRI(URI.create("http://purl.org/pav/hasVersion"));
+
     public static final IRI GENERATED_AT_TIME = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#generatedAtTime"));
 }

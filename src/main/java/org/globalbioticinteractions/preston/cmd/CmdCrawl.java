@@ -15,10 +15,11 @@ import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.process.RegistryReaderIDigBio;
 import org.globalbioticinteractions.preston.process.StatementLogger;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
-import org.globalbioticinteractions.preston.store.AppendOnlyStatementStore;
+import org.globalbioticinteractions.preston.store.IRIInflater;
 import org.globalbioticinteractions.preston.store.BlobStore;
 import org.globalbioticinteractions.preston.store.FilePersistence;
 import org.globalbioticinteractions.preston.store.Persistence;
+import org.globalbioticinteractions.preston.store.StatementStoreImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -105,21 +106,18 @@ public abstract class CmdCrawl implements Runnable, Crawler {
     }
 
     private RefStatementListener createOfflineStatementStore(Persistence persistence, BlobStore blobStore, RefStatementListener listeners[]) {
-        return new AppendOnlyStatementStore(blobStore, persistence, null, listeners) {
-
+        StatementStoreImpl statementStore = new StatementStoreImpl(persistence) {
             @Override
-            public void put(Pair<RDFTerm, RDFTerm> partialStatement, RDFTerm value) throws IOException {
-
+            public void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException {
             }
-
-
         };
+        return new IRIInflater(blobStore, null, statementStore, listeners);
     }
 
     private RefStatementListener createOnlineStatementStore(Persistence persistence, BlobStore blobStore, RefStatementListener[] listener, CrawlMode crawlMode) {
-        AppendOnlyStatementStore appendOnlyStatementStore = new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream, listener);
-        appendOnlyStatementStore.setResolveOnMissingOnly(CrawlMode.resume == crawlMode);
-        return appendOnlyStatementStore;
+        IRIInflater IRIInflater = new IRIInflater(blobStore, Resources::asInputStream, new StatementStoreImpl(persistence), listener);
+        IRIInflater.setResolveOnMissingOnly(CrawlMode.resume == crawlMode);
+        return IRIInflater;
     }
 
 }

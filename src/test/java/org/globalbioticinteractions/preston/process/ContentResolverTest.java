@@ -9,8 +9,9 @@ import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
-import org.globalbioticinteractions.preston.store.AppendOnlyStatementStore;
+import org.globalbioticinteractions.preston.store.IRIInflater;
 import org.globalbioticinteractions.preston.store.FilePersistence;
+import org.globalbioticinteractions.preston.store.StatementStoreImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,8 +48,8 @@ public class ContentResolverTest {
         this.blobStore = new AppendOnlyBlobStore(persistence);
     }
 
-    private AppendOnlyStatementStore createStatementStore(RefStatementListener... listeners) {
-        return new AppendOnlyStatementStore(blobStore, persistence, Resources::asInputStream, listeners);
+    private IRIInflater createStatementStore(RefStatementListener... listeners) {
+        return new IRIInflater(blobStore, Resources::asInputStream, new StatementStoreImpl(persistence), listeners);
     }
 
     @After

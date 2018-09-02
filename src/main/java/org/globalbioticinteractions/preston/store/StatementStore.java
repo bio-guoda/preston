@@ -8,10 +8,9 @@ import org.apache.commons.rdf.api.Triple;
 import java.io.IOException;
 
 public interface StatementStore {
-    void put(Pair<RDFTerm, RDFTerm> partialStatement, RDFTerm value) throws IOException;
 
-    void put(Triple statement) throws IOException;
+    void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException;
 
-    IRI get(Pair<RDFTerm, RDFTerm> partialStatement) throws IOException;
+    IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException;
 
 }

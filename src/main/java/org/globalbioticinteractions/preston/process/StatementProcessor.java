@@ -3,11 +3,11 @@ package org.globalbioticinteractions.preston.process;
 
 import org.apache.commons.rdf.api.Triple;
 
-public abstract class RefStatementProcessor implements RefStatementListener, RefStatementEmitter {
+public abstract class StatementProcessor implements RefStatementListener, RefStatementEmitter {
 
     private final RefStatementListener[] listeners;
 
-    public RefStatementProcessor(RefStatementListener... listeners) {
+    public StatementProcessor(RefStatementListener... listeners) {
         this.listeners = listeners;
     }
 
