@@ -1,7 +1,7 @@
 package org.globalbioticinteractions.preston.process;
 
-import org.globalbioticinteractions.preston.model.RefStatement;
+import org.apache.commons.rdf.api.Triple;
 
 public interface RefStatementListener {
-    void on(RefStatement statement);
+    void on(Triple statement);
 }

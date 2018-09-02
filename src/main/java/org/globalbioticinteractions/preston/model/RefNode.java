@@ -4,10 +4,10 @@ import java.net.URI;
 
 public interface RefNode {
 
-    String getLabel();
+    String toString();
 
     URI getContentHash();
 
-    boolean equivalentTo(RefNode node);
+    boolean equals(RefNode node);
 }
 

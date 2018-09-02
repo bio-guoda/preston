@@ -19,7 +19,7 @@ public class RefNodeFromResource implements RefNode {
     }
 
     @Override
-    public String getLabel() {
+    public String toString() {
         return "label@" + resourceName;
     }
 
@@ -29,7 +29,7 @@ public class RefNodeFromResource implements RefNode {
     }
 
     @Override
-    public boolean equivalentTo(RefNode node) {
+    public boolean equals(RefNode node) {
         return false;
     }
 }

@@ -1,7 +1,11 @@
 package org.globalbioticinteractions.preston.store;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.RDFTerm;
 import org.globalbioticinteractions.preston.Hasher;
+import org.globalbioticinteractions.preston.RDFUtil;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,21 +24,22 @@ public class AppendOnlyBlobStore implements BlobStore {
     // write-once, read-many
 
     @Override
-    public URI putBlob(InputStream is) throws IOException {
-        return URI.create(persistence.put((is1, os1)-> {
-            URI key = Hasher.calcSHA256(is1, os1);
-            return key.toString();
-        }, is));
+    public IRI putBlob(InputStream is) throws IOException {
+        return RefNodeFactory.toIRI(URI.create(persistence.put((is1, os1)-> {
+            IRI key = Hasher.calcSHA256(is1, os1);
+            return key.getIRIString();
+        }, is)));
     }
 
     @Override
-    public URI putBlob(URI entity) throws IOException {
-        return putBlob(IOUtils.toInputStream(entity.toString(), StandardCharsets.UTF_8));
+    public IRI putBlob(RDFTerm entity) throws IOException {
+        String value = RDFUtil.getValueFor(entity);
+        return putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
     }
 
     @Override
-    public InputStream get(URI key) throws IOException {
-        return key == null ? null : persistence.get(key.toString());
+    public InputStream get(IRI key) throws IOException {
+        return key == null ? null : persistence.get(key.getIRIString());
     }
 
 }

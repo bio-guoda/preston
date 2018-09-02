@@ -1,15 +1,14 @@
 package org.globalbioticinteractions.preston.cmd;
 
 import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.RDFTerm;
+import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.Seeds;
-import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
-import org.globalbioticinteractions.preston.model.RefNodeString;
-import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.process.RefStatementListener;
 import org.globalbioticinteractions.preston.process.RegistryReaderBioCASE;
 import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
@@ -35,9 +34,9 @@ public abstract class CmdCrawl implements Runnable, Crawler {
 
     @Parameter(names = {"-u", "--seed-uris"}, description = "[starting points of graph crawl (aka seed URIs)]", validateWith = URIValidator.class)
     private List<String> seedUrls = new ArrayList<String>() {{
-        add(Seeds.SEED_NODE_IDIGBIO.getLabel());
-        add(Seeds.SEED_NODE_GBIF.getLabel());
-        add(Seeds.SEED_NODE_BIOCASE.getLabel());
+        add(Seeds.SEED_NODE_IDIGBIO.getIRIString());
+        add(Seeds.SEED_NODE_GBIF.getIRIString());
+        add(Seeds.SEED_NODE_BIOCASE.getIRIString());
     }};
 
     @Parameter(names = {"-l", "--log",}, description = "select how toLiteral show the biodiversity graph", converter = LoggerConverter.class)
@@ -49,14 +48,14 @@ public abstract class CmdCrawl implements Runnable, Crawler {
     }
 
     protected void crawl(CrawlMode crawlMode) {
-        final List<RefStatement> seeds = seedUrls.stream()
+        final List<Triple> seeds = seedUrls.stream()
                 .map(uriString -> {
-                    RefNode refNodeSeed = RefNodeFactory.toURI(uriString);
+                    IRI refNodeSeed = RefNodeFactory.toIRI(uriString);
                     return RefNodeFactory.toStatement(refNodeSeed, RefNodeConstants.SEED_OF, RefNodeConstants.SOFTWARE_AGENT);
                 }).collect(Collectors.toList());
 
-        final Queue<RefStatement> statements =
-                new ConcurrentLinkedQueue<RefStatement>() {{
+        final Queue<Triple> statements =
+                new ConcurrentLinkedQueue<Triple>() {{
                     addAll(seeds);
                 }};
 
@@ -93,7 +92,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
                 AtomicLong count = new AtomicLong(1);
 
                 @Override
-                public void on(RefStatement statement) {
+                public void on(Triple statement) {
                     long index = count.getAndIncrement();
                     if ((index % 80) == 0) {
                         System.out.println();
@@ -110,7 +109,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         return new AppendOnlyStatementStore(blobStore, persistence, null, listeners) {
 
             @Override
-            public void put(Pair<URI, URI> partialStatement, URI value) throws IOException {
+            public void put(Pair<RDFTerm, RDFTerm> partialStatement, RDFTerm value) throws IOException {
 
             }
 

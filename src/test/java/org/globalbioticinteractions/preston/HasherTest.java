@@ -1,6 +1,7 @@
 package org.globalbioticinteractions.preston;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -23,8 +24,8 @@ public class HasherTest {
         assertSHA(Hasher.calcSHA256("something"));
     }
 
-    private void assertSHA(URI calculated) {
-        assertThat(calculated.toString(), is("hash://sha256/3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"));
+    private void assertSHA(IRI calculated) {
+        assertThat(calculated.getIRIString(), is("hash://sha256/3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"));
     }
 
 }

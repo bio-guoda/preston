@@ -1,6 +1,8 @@
 package org.globalbioticinteractions.preston.store;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.rdf.api.IRI;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -20,7 +22,7 @@ public class AppendOnlyBlobStoreTest {
     @Test
     public void put() throws IOException {
         BlobStore blobStore = new AppendOnlyBlobStore(getTestPersistence());
-        URI key = blobStore.putBlob(IOUtils.toInputStream("testing123", StandardCharsets.UTF_8));
+        IRI key = blobStore.putBlob(IOUtils.toInputStream("testing123", StandardCharsets.UTF_8));
         InputStream inputStream = blobStore.get(key);
         assertThat(TestUtil.toUTF8(inputStream), is("testing123"));
     }
@@ -28,7 +30,7 @@ public class AppendOnlyBlobStoreTest {
     @Test
     public void putURI() throws IOException {
         BlobStore blobStore = new AppendOnlyBlobStore(getTestPersistence());
-        URI key = blobStore.putBlob(URI.create("pesto:123"));
+        IRI key = blobStore.putBlob(RefNodeFactory.toIRI("pesto:123"));
         InputStream inputStream = blobStore.get(key);
         assertThat(TestUtil.toUTF8(inputStream), is("pesto:123"));
     }

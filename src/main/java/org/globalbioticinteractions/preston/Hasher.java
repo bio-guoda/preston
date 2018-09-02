@@ -2,6 +2,8 @@ package org.globalbioticinteractions.preston;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
+import org.apache.commons.rdf.api.IRI;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +17,7 @@ import java.security.NoSuchAlgorithmException;
 
 public final class Hasher {
 
-    public static URI calcSHA256(String content) {
+    public static IRI calcSHA256(String content) {
         try {
             return calcSHA256(IOUtils.toInputStream(content, StandardCharsets.UTF_8), new NullOutputStream());
         } catch (IOException e) {
@@ -23,7 +25,7 @@ public final class Hasher {
         }
     }
 
-    public static URI calcSHA256(InputStream is, OutputStream os) throws IOException {
+    public static IRI calcSHA256(InputStream is, OutputStream os) throws IOException {
         try {
             MessageDigest md = createDigest(is, os);
             String format = String.format("%064x", new BigInteger(1, md.digest()));
@@ -43,8 +45,8 @@ public final class Hasher {
         return md;
     }
 
-    public static URI toHashURI(String sha256Hash) {
-        return URI.create(getHashPrefix() + sha256Hash);
+    public static IRI toHashURI(String sha256Hash) {
+        return RefNodeFactory.toIRI(URI.create(getHashPrefix() + sha256Hash));
     }
 
     public static String getHashPrefix() {

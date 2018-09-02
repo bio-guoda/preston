@@ -1,6 +1,7 @@
 package org.globalbioticinteractions.preston;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.StatusLine;
@@ -20,18 +21,19 @@ import java.net.URI;
 public class Resources {
     private static CloseableHttpClient httpClient = null;
 
-    public static InputStream asInputStreamOfflineOnly(URI dataURI) throws IOException {
+    public static InputStream asInputStreamOfflineOnly(IRI dataIRI) throws IOException {
         InputStream is = null;
-        if (StringUtils.equals("file", dataURI.getScheme())) {
-            is = dataURI.toURL().openStream();
+        URI uri = URI.create(dataIRI.getIRIString());
+        if (StringUtils.equals("file", uri.getScheme())) {
+            is = uri.toURL().openStream();
         }
         return is;
     }
 
-    public static InputStream asInputStream(URI dataURI) throws IOException {
+    public static InputStream asInputStream(IRI dataURI) throws IOException {
         InputStream is = asInputStreamOfflineOnly(dataURI);
         if (is == null) {
-            HttpGet get = new HttpGet(dataURI);
+            HttpGet get = new HttpGet(URI.create(dataURI.getIRIString()));
             get.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
 
             CloseableHttpResponse response = getHttpClient().execute(get);

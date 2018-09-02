@@ -4,6 +4,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.converters.URIConverter;
 import org.apache.commons.io.IOUtils;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.FilePersistence;
 
@@ -28,7 +29,7 @@ public class CmdGet implements Runnable {
         AppendOnlyBlobStore blobStore = new AppendOnlyBlobStore(persistence);
 
         try {
-            InputStream input = blobStore.get(URI.create(contentHashString));
+            InputStream input = blobStore.get(RefNodeFactory.toIRI(contentHashString));
             if (input == null) {
                 System.err.println("no found: [" + contentHashString + "]");
                 exit(1);

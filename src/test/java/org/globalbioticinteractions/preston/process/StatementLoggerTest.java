@@ -1,5 +1,7 @@
 package org.globalbioticinteractions.preston.process;
 
+import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.RDFTerm;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.model.RefStatement;
@@ -12,13 +14,13 @@ public class StatementLoggerTest {
 
     @Test
     public void relation() {
-        RefNode source = RefNodeFactory.toLiteral("source");
-        RefNode relation = RefNodeFactory.toLiteral("relation");
-        RefNode target = RefNodeFactory.toLiteral("target");
+        IRI source = RefNodeFactory.toIRI("source");
+        IRI relation = RefNodeFactory.toIRI("relation");
+        RDFTerm target = RefNodeFactory.toLiteral("target");
 
         String str = new StatementLogger().printStatement(RefNodeFactory.toStatement(source, relation, target));
 
-        assertThat(str, is("source\trelation\ttarget"));
+        assertThat(str, is("<source> <relation> \"target\" ."));
     }
 
 

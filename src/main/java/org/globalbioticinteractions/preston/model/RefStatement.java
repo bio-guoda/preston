@@ -13,7 +13,7 @@ public class RefStatement {
     }
 
     public String getLabel() {
-        return "[" + (getSubject() == null ? "?" : getSubject().getLabel()) + "]-[:" + getPredicate().getLabel() + "]->[" + (getObject() == null ? "?" : getObject().getLabel()) + "]";
+        return "[" + (getSubject() == null ? "?" : getSubject().toString()) + "]-[:" + getPredicate().toString() + "]->[" + (getObject() == null ? "?" : getObject().toString()) + "]";
     }
 
     public boolean equivalentTo(RefStatement that) {
@@ -26,15 +26,15 @@ public class RefStatement {
     }
 
     private boolean equivalentObject(RefStatement that) {
-        return that.getObject() == getObject() || (getObject() != null && getObject().equivalentTo(that.getObject()));
+        return that.getObject() == getObject() || (getObject() != null && getObject().equals(that.getObject()));
     }
 
     private boolean equivalentSubject(RefStatement that) {
-        return that.getSubject() == getSubject() || (getSubject() != null && getSubject().equivalentTo(that.getSubject()));
+        return that.getSubject() == getSubject() || (getSubject() != null && getSubject().equals(that.getSubject()));
     }
 
     private boolean equivalentPredicate(RefStatement that) {
-        return that.getPredicate() == getPredicate() || (getPredicate() != null && getPredicate().equivalentTo(that.getPredicate()));
+        return that.getPredicate() == getPredicate() || (getPredicate() != null && getPredicate().equals(that.getPredicate()));
     }
 
     public RefNode getObject() {

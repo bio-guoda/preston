@@ -1,5 +1,7 @@
 package org.globalbioticinteractions.preston.process;
 
+import org.apache.commons.rdf.api.IRI;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -15,7 +17,7 @@ public abstract class ProcessorReadOnly extends RefStatementProcessor {
         this.blobStoreReadOnly = blobStoreReadOnly;
     }
 
-    protected InputStream get(URI uri) throws IOException {
+    protected InputStream get(IRI uri) throws IOException {
         return blobStoreReadOnly.get(uri);
     }
 

@@ -11,7 +11,7 @@ public class RefNodeURI implements RefNode {
     }
 
     @Override
-    public String getLabel() {
+    public String toString() {
         return getContentHash().toString();
     }
 
@@ -21,7 +21,7 @@ public class RefNodeURI implements RefNode {
     }
 
     @Override
-    public boolean equivalentTo(RefNode node) {
+    public boolean equals(RefNode node) {
         URI id = getContentHash();
         URI otherId = node == null ? null : node.getContentHash();
         return id != null && id.equals(otherId);

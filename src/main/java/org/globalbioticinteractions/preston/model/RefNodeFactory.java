@@ -1,45 +1,64 @@
 package org.globalbioticinteractions.preston.model;
 
-import java.net.URI;
+import org.apache.commons.rdf.api.BlankNodeOrIRI;
+import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Literal;
+import org.apache.commons.rdf.api.RDF;
+import org.apache.commons.rdf.api.RDFTerm;
+import org.apache.commons.rdf.api.Triple;
+import org.apache.commons.rdf.simple.SimpleRDF;
+import org.apache.commons.rdf.simple.Types;
+import org.globalbioticinteractions.preston.store.Predicate;
 
-import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
-import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_REVISION_OF;
+import java.net.URI;
 
 public class RefNodeFactory {
 
-    public static RefNode toUUID(String publisherUUID) {
-        return new RefNodeString(publisherUUID);
+    private static final RDF rdf = new SimpleRDF();
+
+
+    public static IRI toUUID(String publisherUUID) {
+        return toIRI(publisherUUID);
     }
 
-    public static RefNode toURI(String urlString) {
-        return new RefNodeURI(URI.create(urlString));
+    public static IRI toIRI(String urlString) {
+        return rdf.createIRI(urlString);
     }
 
-    public static RefNode toURI(URI uri) {
-        return new RefNodeURI(uri);
+    public static IRI toIRI(URI uri) {
+        return rdf.createIRI(uri.toString());
     }
 
-    public static RefNode toLiteral(String bla) {
-        return new RefNodeString(bla);
+    public static Literal toLiteral(String bla) {
+        return rdf.createLiteral(bla);
     }
 
-    public static RefNode toContentType(String contentType) {
-        return new RefNodeString(contentType);
+    public static Literal toContentType(String contentType) {
+        return RefNodeFactory.toLiteral(contentType);
     }
 
-    public static RefNode toDateTime(String dateTime) {
-        return new RefNodeString(dateTime);
+    public static Literal toDateTime(String dateTime) {
+        return rdf.createLiteral(dateTime, Types.XSD_DATETIME);
     }
 
-    public static boolean isDerivedFrom(RefStatement statement) {
+    public static boolean isDerivedFrom(Triple statement) {
         return statement.getSubject() != null
                 && statement.getObject() != null
                 && statement.getPredicate() != null
-                && (WAS_DERIVED_FROM.equivalentTo(statement.getPredicate())
-                || WAS_REVISION_OF.equivalentTo(statement.getPredicate()));
+                && (Predicate.WAS_DERIVED_FROM.equals(statement.getPredicate())
+                || Predicate.WAS_REVISION_OF.equals(statement.getPredicate()));
     }
 
-    public static RefStatement toStatement(RefNode subject, RefNode predicate, RefNode object) {
-        return new RefStatement(subject, predicate, object);
+    public static Triple toStatement(BlankNodeOrIRI subject, IRI predicate, RDFTerm object) {
+        return rdf.createTriple(subject, predicate, object);
     }
+
+    public static BlankNodeOrIRI toBlank(String name) {
+        return rdf.createBlankNode(name);
+    }
+
+    public static BlankNodeOrIRI toBlank() {
+        return rdf.createBlankNode();
+    }
+
 }

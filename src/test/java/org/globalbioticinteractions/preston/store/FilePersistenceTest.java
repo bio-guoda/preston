@@ -2,6 +2,7 @@ package org.globalbioticinteractions.preston.store;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.rdf.api.IRI;
 import org.globalbioticinteractions.preston.Hasher;
 import org.junit.After;
 import org.junit.Before;
@@ -38,9 +39,9 @@ public class FilePersistenceTest {
 
     @Test
     public void toPath() {
-        URI hash = Hasher.calcSHA256("bla");
-        assertThat(hash.toString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
-        String actual = FilePersistence.toPath(hash.toString());
+        IRI hash = Hasher.calcSHA256("bla");
+        assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+        String actual = FilePersistence.toPath(hash.getIRIString());
         assertThat(actual, is("4d/f3/c3/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
     }
 

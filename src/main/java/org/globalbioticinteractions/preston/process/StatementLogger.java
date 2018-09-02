@@ -1,15 +1,15 @@
 package org.globalbioticinteractions.preston.process;
 
-import org.globalbioticinteractions.preston.model.RefStatement;
+import org.apache.commons.rdf.api.Triple;
 
 public class StatementLogger implements RefStatementListener {
 
-    protected String printStatement(RefStatement statement) {
-        return statement.getSubject().getLabel() + "\t" + statement.getPredicate().getLabel() + "\t" + statement.getObject().getLabel();
+    protected String printStatement(Triple statement) {
+        return statement.toString();
     }
 
     @Override
-    public void on(RefStatement statement) {
+    public void on(Triple statement) {
         System.out.println(printStatement(statement));
     }
 

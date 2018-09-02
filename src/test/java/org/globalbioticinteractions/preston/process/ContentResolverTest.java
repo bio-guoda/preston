@@ -2,19 +2,19 @@ package org.globalbioticinteractions.preston.process;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.DateUtil;
 import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
-import org.globalbioticinteractions.preston.model.RefNodeString;
-import org.globalbioticinteractions.preston.model.RefNodeURI;
 import org.globalbioticinteractions.preston.model.RefStatement;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.AppendOnlyStatementStore;
 import org.globalbioticinteractions.preston.store.FilePersistence;
-import org.globalbioticinteractions.preston.store.Persistence;
+import org.globalbioticinteractions.preston.store.Predicate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -70,35 +70,16 @@ public class ContentResolverTest {
                 is("3f/c9/b6/3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"));
     }
 
-    @Ignore("only store timestamps and dereferenced urls for now")
-    @Test
-    public void cacheString() throws IOException {
-        ArrayList<RefStatement> refNodes = new ArrayList<>();
-
-        RefStatementListener contentResolver = createStatementStore(refNodes::add);
-        RefNode providedNode = RefNodeFactory.toURI("https://example.org");
-        contentResolver.on(RefNodeFactory.toStatement(providedNode, RefNodeConstants.HAD_MEMBER, providedNode));
-        assertTrue(tempDir.toFile().exists());
-        assertFalse(refNodes.isEmpty());
-
-        RefStatement cachedNode = refNodes.get(0);
-        assertThat(cachedNode.getSubject().getContentHash().toString(), is("hash://sha256/50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b"));
-        assertThat(IOUtils.toString(blobStore.get(cachedNode.getSubject().getContentHash()), StandardCharsets.UTF_8), is("https://example.org"));
-        assertTrue(cachedNode.getSubject().equivalentTo(providedNode));
-
-        FileUtils.deleteQuietly(tempDir.toFile());
-    }
-
     @Test
     public void cacheContent() throws IOException, URISyntaxException {
-        ArrayList<RefStatement> refNodes = new ArrayList<>();
+        ArrayList<Triple> refNodes = new ArrayList<>();
 
         RefStatementListener listener = createStatementStore(refNodes::add);
 
 
         URI testURI = getClass().getResource("test.txt").toURI();
-        RefNode providedNode = RefNodeFactory.toURI(testURI);
-        RefStatement relation = RefNodeFactory.toStatement(null, RefNodeConstants.WAS_DERIVED_FROM, providedNode);
+        IRI providedNode = RefNodeFactory.toIRI(testURI);
+        Triple relation = RefNodeFactory.toStatement(RefNodeFactory.toBlank("test"), Predicate.WAS_DERIVED_FROM, providedNode);
 
         listener.on(relation);
 
@@ -109,18 +90,9 @@ public class ContentResolverTest {
         String expectedHash = "50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
         String expectedValue = "https://example.org";
 
-        RefStatement refStatement = refNodes.get(0);
-        assertThat(refStatement.getSubject().getLabel(), is("hash://sha256/" + expectedHash));
-        assertThat(refStatement.getPredicate().getLabel(), is(RefNodeConstants.GENERATED_AT_TIME.getLabel()));
-
-        InputStream datetimeContent = blobStore.get(refStatement.getObject().getContentHash());
-        assertThat(datetimeContent, is(notNullValue()));
-        String s = IOUtils.toString(datetimeContent, StandardCharsets.UTF_8);
-        assertNotNull(DateUtil.parse(s));
-
-        RefStatement cachedNode = refNodes.get(1);
+        Triple cachedNode = refNodes.get(1);
         assertContentWith(cachedNode, expectedHash, expectedValue);
-        InputStream inputStream = blobStore.get(cachedNode.getSubject().getContentHash());
+        InputStream inputStream = blobStore.get((IRI) cachedNode.getSubject());
         assertNotNull(inputStream);
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is("https://example.org"));
 
@@ -139,12 +111,12 @@ public class ContentResolverTest {
         FileUtils.deleteQuietly(tempDir.toFile());
     }
 
-    private void assertContentWith(RefStatement cachedNode, String expectedHash, String expectedValue) throws IOException {
+    private void assertContentWith(Triple cachedNode, String expectedHash, String expectedValue) throws IOException {
         String expectedSHA256 = "hash://sha256/" + expectedHash;
-        assertThat(cachedNode.getSubject().getContentHash().toString(), is(expectedSHA256));
+        assertThat(((IRI)cachedNode.getSubject()).getIRIString(), is(expectedSHA256));
 
-        String label = cachedNode.getSubject().getLabel();
-        assertThat(label, is("hash://sha256/" + expectedHash));
+        String label = cachedNode.getSubject().toString();
+        assertThat(label, is("<hash://sha256/" + expectedHash + ">"));
 
         InputStream inputStream = blobStore.get(Hasher.toHashURI(expectedHash));
 

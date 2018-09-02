@@ -1,6 +1,7 @@
 package org.globalbioticinteractions.preston.process;
 
-import org.globalbioticinteractions.preston.model.RefStatement;
+
+import org.apache.commons.rdf.api.Triple;
 
 public abstract class RefStatementProcessor implements RefStatementListener, RefStatementEmitter {
 
@@ -11,7 +12,7 @@ public abstract class RefStatementProcessor implements RefStatementListener, Ref
     }
 
     @Override
-    public void emit(RefStatement statement) {
+    public void emit(Triple statement) {
         for (RefStatementListener listener : listeners) {
             listener.on(statement);
         }

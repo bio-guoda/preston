@@ -5,13 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
-import org.globalbioticinteractions.preston.model.RefNode;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
-import org.globalbioticinteractions.preston.model.RefNodeString;
-import org.globalbioticinteractions.preston.model.RefStatement;
+import org.globalbioticinteractions.preston.store.Predicate;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -27,43 +27,46 @@ import java.util.UUID;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_FORMAT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.PUBLISHER_REGISTRY_OF;
-import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
 
 public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     private final static Log LOG = LogFactory.getLog(RegistryReaderIDigBio.class);
     public static final String PUBLISHERS_URI = "https://search.idigbio.org/v2/search/publishers";
-    public static final RefNode PUBLISHERS = RefNodeFactory.toURI(URI.create(PUBLISHERS_URI));
+    public static final IRI PUBLISHERS = RefNodeFactory.toIRI(URI.create(PUBLISHERS_URI));
 
     public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, RefStatementListener listener) {
         super(blobStore, listener);
     }
 
     @Override
-    public void on(RefStatement statement) {
-        if (statement.getSubject().equivalentTo(Seeds.SEED_NODE_IDIGBIO)) {
-            RefNode publishers = PUBLISHERS;
+    public void on(Triple statement) {
+        if (statement.getSubject().equals(Seeds.SEED_NODE_IDIGBIO)) {
+            IRI publishers = PUBLISHERS;
             emit(RefNodeFactory.toStatement(publishers, PUBLISHER_REGISTRY_OF, statement.getSubject()));
             emit(RefNodeFactory.toStatement(publishers, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
-            emit(RefNodeFactory.toStatement(null, WAS_DERIVED_FROM, publishers));
-        } else if (statement.getObject().equivalentTo(PUBLISHERS)
+            emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, publishers));
+        } else if (statement.getObject().equals(PUBLISHERS)
                 && RefNodeFactory.isDerivedFrom(statement)) {
-            parsePublishers(statement.getSubject());
+            if (statement.getSubject() instanceof IRI) {
+                parsePublishers((IRI) statement.getSubject());
+            }
         } else if (RefNodeFactory.isDerivedFrom(statement)) {
-            parse(statement.getSubject());
+            if (statement.getSubject() instanceof IRI) {
+                parse((IRI) statement.getSubject());
+            }
         }
     }
 
 
-    private void parse(RefNode refNode) {
+    private void parse(IRI iri) {
         try {
-            parseRssFeed(refNode, this, get(refNode.getContentHash()));
+            parseRssFeed(iri, this, get(iri));
         } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
             // ignore - opportunistic parsing attempt
         }
     }
 
-    static void parseRssFeed(final RefNode parent1, RefStatementEmitter emitter, InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    static void parseRssFeed(final IRI parent1, RefStatementEmitter emitter, InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 
         XPathHandler handler = new XPathHandler() {
             @Override
@@ -109,24 +112,24 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
                     }
 
-                    RefNode archiveParent = uuid == null ? parent1 : RefNodeFactory.toUUID(uuid.toString());
+                    IRI archiveParent = uuid == null ? parent1 : RefNodeFactory.toUUID(uuid.toString());
                     if (uuid != null) {
                         emitter.emit(RefNodeFactory.toStatement(parent1, HAD_MEMBER, archiveParent));
                     }
 
                     if (emlURI != null) {
-                        RefNode uriNode = RefNodeFactory.toURI(emlURI);
+                        IRI uriNode = RefNodeFactory.toIRI(emlURI);
                         emitter.emit(RefNodeFactory.toStatement(archiveParent, HAD_MEMBER, uriNode));
                         emitter.emit(RefNodeFactory.toStatement(uriNode, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_EML)));
-                        emitter.emit(RefNodeFactory.toStatement(null, WAS_DERIVED_FROM, uriNode));
+                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, uriNode));
                     }
 
                     if (isDWCA && archiveURI != null) {
-                        RefNode refNodeDWCAUri = RefNodeFactory.toURI(archiveURI.toString());
+                        IRI refNodeDWCAUri = RefNodeFactory.toIRI(archiveURI.toString());
                         emitter.emit(RefNodeFactory.toStatement(archiveParent, HAD_MEMBER, refNodeDWCAUri));
 
                         emitter.emit(RefNodeFactory.toStatement(refNodeDWCAUri, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_DWCA)));
-                        emitter.emit(RefNodeFactory.toStatement(null, WAS_DERIVED_FROM, refNodeDWCAUri));
+                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, refNodeDWCAUri));
 
                     }
 
@@ -137,32 +140,32 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         XMLUtil.handleXPath("//item", handler, emitter, resourceAsStream);
     }
 
-    static void parsePublishers(RefNode parent, RefStatementEmitter emitter, InputStream is) throws IOException {
+    static void parsePublishers(IRI parent, RefStatementEmitter emitter, InputStream is) throws IOException {
         JsonNode r = new ObjectMapper().readTree(is);
         if (r.has("items") && r.get("items").isArray()) {
             for (JsonNode item : r.get("items")) {
                 String publisherUUID = item.get("uuid").asText();
-                RefNode refNodePublisher = RefNodeFactory.toUUID(publisherUUID);
+                IRI refNodePublisher = RefNodeFactory.toUUID(publisherUUID);
                 emitter.emit(RefNodeFactory.toStatement(parent, RefNodeConstants.HAD_MEMBER, refNodePublisher));
                 JsonNode data = item.get("data");
                 if (item.has("data")) {
                     String rssFeedUrl = data.has("rss_url") ? data.get("rss_url").asText() : null;
                     if (StringUtils.isNotBlank(rssFeedUrl)) {
-                        RefNode refNodeFeed = RefNodeFactory.toURI(rssFeedUrl);
+                        IRI refNodeFeed = RefNodeFactory.toIRI(rssFeedUrl);
                         emitter.emit(RefNodeFactory.toStatement(refNodePublisher, RefNodeConstants.HAD_MEMBER, refNodeFeed));
                         emitter.emit(RefNodeFactory.toStatement(refNodeFeed, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_RSS)));
-                        emitter.emit(RefNodeFactory.toStatement(null, RefNodeConstants.WAS_DERIVED_FROM, refNodeFeed));
+                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), Predicate.WAS_DERIVED_FROM, refNodeFeed));
                     }
                 }
             }
         }
     }
 
-    private void parsePublishers(RefNode refNode) {
+    private void parsePublishers(IRI refNode) {
         try {
-            parsePublishers(refNode, this, get(refNode.getContentHash()));
+            parsePublishers(refNode, this, get(refNode));
         } catch (IOException e) {
-            LOG.warn("failed toLiteral parse [" + refNode.getLabel() + "]", e);
+            LOG.warn("failed toLiteral parse [" + refNode.toString() + "]", e);
         }
     }
 
