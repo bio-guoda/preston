@@ -72,7 +72,7 @@ public class RegistryReaderGBIFTest {
 
         IRI testNode = createTestNode();
 
-        RegistryReaderGBIF.parse(testNode, refNodes::add, RefNodeFactory.toIRI("description"), getClass().getResourceAsStream(GBIFDATASETS_JSON));
+        RegistryReaderGBIF.parse(testNode, refNodes::add, getClass().getResourceAsStream(GBIFDATASETS_JSON));
 
         assertThat(refNodes.size(), is(17));
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.MimeTypes;
@@ -124,15 +125,16 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
         } else if (RefNodeFactory.hasDerivedContentAvailable(statement)) {
             try {
                 EmittingParser parse = null;
-                if (REF_NODE_REGISTRY.equals(statement.getObject())) {
+                if (REF_NODE_REGISTRY.equals(RefNodeFactory.getVersionSource(statement))) {
                     parse = RegistryReaderBioCASE::parseProviders;
 
-                } else if (StringUtils.contains(statement.getObject().toString(), "pywrapper.cgi?dsa=")) {
+                } else if (StringUtils.contains(RefNodeFactory.getVersionSource(statement).toString(), "pywrapper.cgi?dsa=")) {
                     parse = RegistryReaderBioCASE::parseDatasetInventory;
                 }
                 if (parse != null) {
-                    if (statement.getSubject() instanceof IRI) {
-                        InputStream content = get((IRI) statement.getSubject());
+                    BlankNodeOrIRI version = RefNodeFactory.getVersion(statement);
+                    if (version instanceof IRI) {
+                        InputStream content = get((IRI) version);
                         if (content != null) {
                             parse.parse(content, this);
                         }

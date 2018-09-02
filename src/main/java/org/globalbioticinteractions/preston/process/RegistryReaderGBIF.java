@@ -38,17 +38,16 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
             IRI refNodeRegistry = RefNodeFactory.toIRI(GBIF_DATASET_API_ENDPOINT);
             emitPageRequest(this, refNodeRegistry);
         } else if (RefNodeFactory.hasDerivedContentAvailable(statement)
-                && statement.getObject() instanceof IRI
-                && statement.getObject().toString().startsWith("<" + GBIF_DATASET_API_ENDPOINT)) {
+                && RefNodeFactory.getVersionSource(statement).toString().startsWith("<" + GBIF_DATASET_API_ENDPOINT)) {
             try {
-                parse((IRI) statement.getSubject(), this, (IRI) statement.getObject(), get((IRI) statement.getSubject()));
+                parse((IRI) RefNodeFactory.getVersion(statement), this, get((IRI) statement.getSubject()));
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
         }
     }
 
-    private static void emitNextPage(IRI previousPage, int offset, int limit, RefStatementEmitter emitter) {
+    private static void emitNextPage(int offset, int limit, RefStatementEmitter emitter) {
         String uri = GBIF_DATASET_API_ENDPOINT + "?offset=" + offset + "&limit=" + limit;
         IRI nextPage = RefNodeFactory.toIRI(uri);
         emitPageRequest(emitter, nextPage);
@@ -59,7 +58,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, nextPage));
     }
 
-    public static void parse(IRI currentPageContent, RefStatementEmitter emitter, IRI currentPage, InputStream in) throws IOException {
+    public static void parse(IRI currentPageContent, RefStatementEmitter emitter, InputStream in) throws IOException {
         emitter.emit(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, HAD_MEMBER, currentPageContent));
         JsonNode jsonNode = new ObjectMapper().readTree(in);
         if (jsonNode != null && jsonNode.has("results")) {
@@ -90,7 +89,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         if (!endOfRecords && jsonNode.has("offset") && jsonNode.has("limit")) {
             int offset = jsonNode.get("offset").asInt();
             int limit = jsonNode.get("limit").asInt();
-            emitNextPage(currentPage, offset + limit, limit, emitter);
+            emitNextPage(offset + limit, limit, emitter);
         }
 
     }

@@ -51,9 +51,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     public void parse(Triple statement, IRI toBeParsed) {
         if (statement.getObject().equals(PUBLISHERS)) {
-            if (!RefNodeFactory.isBlankOrSkolemizedBlank(statement.getSubject())) {
-                parsePublishers(toBeParsed);
-            }
+            parsePublishers(toBeParsed);
         } else {
             parse(toBeParsed);
         }
