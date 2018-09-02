@@ -26,6 +26,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
 
     private static final String GBIF_DATASET_API_ENDPOINT = "https://api.gbif.org/v1/dataset";
     private final Log LOG = LogFactory.getLog(RegistryReaderGBIF.class);
+    public static final IRI API_ENTRY_POINT = RefNodeFactory.toIRI(GBIF_DATASET_API_ENDPOINT);
 
     public RegistryReaderGBIF(BlobStoreReadOnly blobStoreReadOnly, RefStatementListener listener) {
         super(blobStoreReadOnly, listener);
@@ -34,13 +35,14 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     @Override
     public void on(Triple statement) {
         if (Seeds.SEED_NODE_GBIF.equals(statement.getSubject())
-                && HAD_MEMBER.equals(statement.getPredicate())) {
-            IRI refNodeRegistry = RefNodeFactory.toIRI(GBIF_DATASET_API_ENDPOINT);
-            emitPageRequest(this, refNodeRegistry);
+                && HAD_MEMBER.equals(statement.getPredicate())
+                && statement.getObject().equals(RefNodeConstants.SOFTWARE_AGENT)) {
+            emitPageRequest(this, API_ENTRY_POINT);
         } else if (RefNodeFactory.hasDerivedContentAvailable(statement)
                 && RefNodeFactory.getVersionSource(statement).toString().startsWith("<" + GBIF_DATASET_API_ENDPOINT)) {
             try {
-                parse((IRI) RefNodeFactory.getVersion(statement), this, get((IRI) statement.getSubject()));
+                IRI currentPage = (IRI) RefNodeFactory.getVersion(statement);
+                parse(currentPage, this, get(currentPage));
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
@@ -58,15 +60,15 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, nextPage));
     }
 
-    public static void parse(IRI currentPageContent, RefStatementEmitter emitter, InputStream in) throws IOException {
-        emitter.emit(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, HAD_MEMBER, currentPageContent));
+    public static void parse(IRI currentPage, RefStatementEmitter emitter, InputStream in) throws IOException {
+        emitter.emit(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, HAD_MEMBER, currentPage));
         JsonNode jsonNode = new ObjectMapper().readTree(in);
         if (jsonNode != null && jsonNode.has("results")) {
             for (JsonNode result : jsonNode.get("results")) {
                 if (result.has("key") && result.has("endpoints")) {
                     String uuid = result.get("key").asText();
                     IRI datasetUUID = RefNodeFactory.toUUID(uuid);
-                    emitter.emit(RefNodeFactory.toStatement(currentPageContent, RefNodeConstants.HAD_MEMBER, datasetUUID));
+                    emitter.emit(RefNodeFactory.toStatement(currentPage, RefNodeConstants.HAD_MEMBER, datasetUUID));
 
                     for (JsonNode endpoint : result.get("endpoints")) {
                         if (endpoint.has("url") && endpoint.has("type")) {

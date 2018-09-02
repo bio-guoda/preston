@@ -36,6 +36,18 @@ public class RegistryReaderGBIFTest {
     }
 
     @Test
+    public void onPage() {
+        ArrayList<Triple> nodes = new ArrayList<>();
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
+
+        registryReaderGBIF.on(RefNodeFactory.toStatement(RefNodeFactory.toIRI("https://api.gbif.org/v1/dataset"),
+                RefNodeConstants.HAS_VERSION,
+                RefNodeFactory.toIRI("https://some")));
+        assertThat(nodes.size(), is(1));
+        assertThat(nodes.get(0).getObject().toString(), is("<https://some>"));
+    }
+
+    @Test
     public void onNotSeed() {
         ArrayList<Triple> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
