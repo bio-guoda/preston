@@ -15,13 +15,13 @@ import static org.junit.Assert.assertThat;
 public class CmdCrawlTest {
 
     @Test
-    public void crawlInfo() {
+    public void findCrawlInfo() {
 
         IRI someCrawlActivity = toIRI("http://example.org/crawl");
         IRI someGraph = toIRI("http://example.org/graph");
         IRI someArchive = toIRI("http://example.org/archive");
 
-        List<Triple> crawlInfo = CmdCrawl.createCrawlInfo(someCrawlActivity, someGraph, someArchive);
+        List<Triple> crawlInfo = CmdCrawl.findCrawlInfo(someCrawlActivity, someGraph, someArchive);
 
         crawlInfo.forEach(System.out::println);
     }

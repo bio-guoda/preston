@@ -4,6 +4,7 @@ import com.sun.syndication.io.FeedException;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
+import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.store.TestUtil;
@@ -20,9 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.globalbioticinteractions.preston.RefNodeConstants.*;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.junit.Assert.assertThat;
 
 public class RegistryReaderIDigBioTest {
@@ -30,10 +31,19 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void onSeed() {
         ArrayList<Triple> nodes = new ArrayList<>();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), nodes::add);
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtil.getTestCrawlContext(), nodes::add);
         RDFTerm bla = RefNodeFactory.toLiteral("bla");
-        reader.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_IDIGBIO, RefNodeFactory.toIRI("https://example.org/bla"), bla));
-        assertThat(nodes.size(), is(3));
+        reader.on(RefNodeFactory.toStatement(Seeds.IDIGBIO, WAS_ASSOCIATED_WITH, bla));
+        assertThat(nodes.size(), is(5));
+    }
+
+    @Test
+    public void onNotSeed() {
+        ArrayList<Triple> nodes = new ArrayList<>();
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtil.getTestCrawlContext(), nodes::add);
+        RDFTerm bla = RefNodeFactory.toLiteral("bla");
+        reader.on(RefNodeFactory.toStatement(Seeds.IDIGBIO, RefNodeFactory.toIRI("https://example.org/bla"), bla));
+        assertThat(nodes.size(), is(0));
     }
 
     @Test

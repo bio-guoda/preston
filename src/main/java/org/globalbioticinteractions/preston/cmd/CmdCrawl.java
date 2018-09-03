@@ -5,7 +5,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
-import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
@@ -33,34 +32,21 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
+import static org.globalbioticinteractions.preston.RefNodeConstants.*;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toEnglishLiteral;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toIRI;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
-import static org.globalbioticinteractions.preston.model.RefNodeFactory.toUUID;
 
 public abstract class CmdCrawl implements Runnable, Crawler {
 
     public static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
     public static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
-    public static final IRI AGENT = toIRI("http://www.w3.org/ns/prov#Agent");
-    public static final IRI SOFTWARE_AGENT = toIRI("http://www.w3.org/ns/prov#SoftwareAgent");
-    public static final IRI DESCRIPTION = toIRI("http://purl.org/dc/terms/description");
-    public static final IRI GENERATED_BY = toIRI("http://www.w3.org/ns/prov#wasGeneratedBy");
-    public static final IRI COLLECTION = toIRI("http://www.w3.org/ns/prov#Collection");
-    public static final IRI ORGANIZATION = toIRI("http://www.w3.org/ns/prov#Organization");
-    public static final IRI WAS_ASSOCIATED_WITH = toIRI("http://www.w3.org/ns/prov#wasAssociatedWith");
-
-    public static final IRI GRAPH_COLLECTION_IRI = toUUID(RefNodeConstants.GRAPH_COLLECTION.toString());
-    public static final IRI ARCHIVE_COLLECTION_IRI = toUUID(RefNodeConstants.ARCHIVE_COLLECTION.toString());
-
-    public static final IRI IS_A = toIRI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-    public static final IRI CREATED_BY = toIRI("http://purl.org/pav/createdBy");
 
     @Parameter(names = {"-u", "--seed-uris"}, description = "[starting points of graph crawl (aka seed URIs)]", validateWith = URIValidator.class)
     private List<String> seedUrls = new ArrayList<String>() {{
-        add(Seeds.SEED_NODE_IDIGBIO.getIRIString());
-        add(Seeds.SEED_NODE_GBIF.getIRIString());
-        add(Seeds.SEED_NODE_BIOCASE.getIRIString());
+        add(Seeds.IDIGBIO.getIRIString());
+        add(Seeds.GBIF.getIRIString());
+        add(Seeds.BIOCASE.getIRIString());
     }};
 
     @Parameter(names = {"-l", "--log",}, description = "select how to show the biodiversity graph", converter = LoggerConverter.class)
@@ -73,14 +59,33 @@ public abstract class CmdCrawl implements Runnable, Crawler {
 
     protected void crawl(CrawlMode crawlMode) {
 
-        final IRI crawlActivity = toIRI(UUID.randomUUID());
-        final IRI biodiversityGraph = toIRI(UUID.randomUUID());
-        final IRI biodiversityArchive = toIRI(UUID.randomUUID());
+
+        CrawlContext ctx = new CrawlContext() {
+            private final IRI crawlActivity = toIRI(UUID.randomUUID());
+            private final IRI biodiversityGraph = toIRI(UUID.randomUUID());
+            private final IRI biodiversityArchive = toIRI(UUID.randomUUID());
+
+            @Override
+            public IRI getActivity() {
+                return crawlActivity;
+            }
+
+            @Override
+            public IRI getArchive() {
+                return biodiversityArchive;
+            }
+
+            @Override
+            public IRI getGraph() {
+                return biodiversityGraph;
+            }
+
+        };
 
         final Queue<Triple> statementQueue =
                 new ConcurrentLinkedQueue<Triple>() {{
-                    addAll(createCrawlInfo(crawlActivity, biodiversityGraph, biodiversityArchive));
-                    addAll(generateSeeds(crawlActivity));
+                    addAll(findCrawlInfo(ctx.getActivity(), ctx.getGraph(), ctx.getArchive()));
+                    addAll(generateSeeds(ctx.getActivity()));
                 }};
 
         File dataDir = new File("data");
@@ -91,9 +96,9 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         BlobStore blobStore = new AppendOnlyBlobStore(blobPersistence);
 
         StatementListener listeners[] = {
-                new RegistryReaderIDigBio(blobStore, statementQueue::add),
-                new RegistryReaderGBIF(blobStore, statementQueue::add),
-                new RegistryReaderBioCASE(blobStore, statementQueue::add),
+                new RegistryReaderIDigBio(blobStore, ctx, statementQueue::add),
+                new RegistryReaderGBIF(blobStore, ctx, statementQueue::add),
+                new RegistryReaderBioCASE(blobStore, ctx, statementQueue::add),
                 getStatementLogger()
         };
 
@@ -105,53 +110,36 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         while (!statementQueue.isEmpty()) {
             archive.on(statementQueue.poll());
         }
+
+        // wrapping up
+        archive.on(toStatement(ctx.getActivity(), toIRI("http://www.w3.org/ns/prov#endedAtTime"), RefNodeFactory.nowLiteral()));
     }
 
-    private List<Triple> generateSeeds(IRI crawlActivity) {
+    private List<Triple> generateSeeds(final IRI crawlActivity) {
         return seedUrls.stream()
-                .map(uriString -> {
-                    IRI seed = toIRI(uriString);
-                    return toStatement(seed, RefNodeConstants.USED_BY, crawlActivity);
-                }).collect(Collectors.toList());
+                .map((String uriString) -> toStatement(toIRI(uriString), WAS_ASSOCIATED_WITH, crawlActivity))
+                .collect(Collectors.toList());
     }
 
-    static List<Triple> createCrawlInfo(IRI crawlActivity, IRI biodiversityGraph, IRI biodiversityArchive) {
+    static List<Triple> findCrawlInfo(IRI crawlActivity, IRI biodiversityGraph, IRI biodiversityArchive) {
         // new crawl activity created for each crawl
 
         IRI biodiversityGraphCollection = GRAPH_COLLECTION_IRI;
 
         IRI biodiversityArchiveCollection = ARCHIVE_COLLECTION_IRI;
 
-        IRI crawler = RefNodeConstants.PRESTON;
+        IRI crawler = PRESTON;
 
         return Arrays.asList(
                 toStatement(crawler, IS_A, SOFTWARE_AGENT),
                 toStatement(crawler, IS_A, AGENT),
                 toStatement(crawler, DESCRIPTION, toEnglishLiteral("Preston is a software program that finds, archives and provides access to biodiversity datasets.")),
 
-                toStatement(Seeds.SEED_NODE_GBIF, IS_A, ORGANIZATION),
-                toStatement(RegistryReaderGBIF.GBIF_DATASET_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of Darwin Core archives, and EML descriptors.")),
-                toStatement(RegistryReaderGBIF.GBIF_DATASET_REGISTRY, CREATED_BY, Seeds.SEED_NODE_GBIF),
-
-                toStatement(Seeds.SEED_NODE_IDIGBIO, IS_A, ORGANIZATION),
-                toStatement(Seeds.SEED_NODE_IDIGBIO, DESCRIPTION, toEnglishLiteral("Provides a registry of Darwin Core archives, and EML descriptors. ")),
-
-                toStatement(RegistryReaderIDigBio.PUBLISHERS, DESCRIPTION, toEnglishLiteral("Provides a registry of RSS Feeds that point to publishers of Darwin Core archives, and EML descriptors.")),
-                toStatement(RegistryReaderIDigBio.PUBLISHERS, CREATED_BY, Seeds.SEED_NODE_IDIGBIO),
-
-
-                toStatement(Seeds.SEED_NODE_BIOCASE, IS_A, ORGANIZATION),
-                toStatement(Seeds.SEED_NODE_BIOCASE, DESCRIPTION, toEnglishLiteral("Provides a registry of ABCD archives, Darwin Core archives and EML files.")),
-
-                toStatement(RegistryReaderBioCASE.REF_NODE_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of RSS Feeds that point to publishers of Darwin Core archives, and EML descriptors.")),
-                toStatement(RegistryReaderBioCASE.REF_NODE_REGISTRY, CREATED_BY, Seeds.SEED_NODE_BIOCASE),
-
 
                 toStatement(crawlActivity, IS_A, ACTIVITY),
                 toStatement(crawlActivity, DESCRIPTION, toEnglishLiteral("A crawl event is an activity that discovers biodiversity archives.")),
                 toStatement(crawlActivity, toIRI("http://www.w3.org/ns/prov#startedAtTime"), RefNodeFactory.nowLiteral()),
-                toStatement(crawlActivity, toIRI("http://www.w3.org/ns/prov#endedAtTime"), RefNodeFactory.nowLiteral()),
-                toStatement(crawlActivity, WAS_ASSOCIATED_WITH, crawler),
+                toStatement(crawlActivity, toIRI("http://www.w3.org/ns/prov#wasStartedBy"), crawler),
 
                 toStatement(biodiversityGraphCollection, IS_A, ENTITY),
                 toStatement(biodiversityGraphCollection, IS_A, COLLECTION),
@@ -175,7 +163,9 @@ public abstract class CmdCrawl implements Runnable, Crawler {
 
 
         );
-    };
+    }
+
+    ;
 
     private StatementListener getStatementLogger() {
         StatementListener logger;

@@ -9,19 +9,27 @@ import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
+import org.globalbioticinteractions.preston.cmd.CrawlContext;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
+import static org.globalbioticinteractions.preston.RefNodeConstants.CREATED_BY;
+import static org.globalbioticinteractions.preston.RefNodeConstants.DESCRIPTION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
+import static org.globalbioticinteractions.preston.RefNodeConstants.IS_A;
+import static org.globalbioticinteractions.preston.RefNodeConstants.ORGANIZATION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.USED_BY;
+import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersion;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersionSource;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.hasVersionAvailable;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toBlank;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toContentType;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toEnglishLiteral;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toIRI;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toUUID;
@@ -34,17 +42,22 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
 
     public static final String GBIF_DATASET_REGISTRY_STRING = "https://api.gbif.org/v1/dataset";
     private final Log LOG = LogFactory.getLog(RegistryReaderGBIF.class);
-    public static final IRI GBIF_DATASET_REGISTRY = toIRI(GBIF_DATASET_REGISTRY_STRING);
+    public static final IRI GBIF_REGISTRY = toIRI(GBIF_DATASET_REGISTRY_STRING);
 
-    public RegistryReaderGBIF(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
-        super(blobStoreReadOnly, listener);
+    public RegistryReaderGBIF(BlobStoreReadOnly blobStoreReadOnly, CrawlContext context, StatementListener listener) {
+        super(blobStoreReadOnly, context, listener);
     }
 
     @Override
     public void on(Triple statement) {
-        if (Seeds.SEED_NODE_GBIF.equals(statement.getSubject())
-                && USED_BY.equals(statement.getPredicate())) {
-            emitPageRequest(this, GBIF_DATASET_REGISTRY);
+        if (Seeds.GBIF.equals(statement.getSubject())
+                && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
+            Stream.of(
+                    toStatement(Seeds.GBIF, IS_A, ORGANIZATION),
+                    toStatement(RegistryReaderGBIF.GBIF_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of Darwin Core archives, and EML descriptors.")),
+                    toStatement(RegistryReaderGBIF.GBIF_REGISTRY, CREATED_BY, Seeds.GBIF))
+                    .forEach(this::emit);
+            emitPageRequest(this, GBIF_REGISTRY);
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().startsWith("<" + GBIF_DATASET_REGISTRY_STRING)) {
             try {
@@ -63,12 +76,13 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     }
 
     private static void emitPageRequest(StatementEmitter emitter, IRI nextPage) {
-        emitter.emit(toStatement(nextPage, RefNodeConstants.HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
-        emitter.emit(toStatement(nextPage, RefNodeConstants.HAS_VERSION,  toBlank()));
+        Stream.of(
+                toStatement(nextPage, RefNodeConstants.HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
+                toStatement(nextPage, RefNodeConstants.HAS_VERSION, toBlank()))
+                .forEach(emitter::emit);
     }
 
     public static void parse(IRI currentPage, StatementEmitter emitter, InputStream in) throws IOException {
-        emitter.emit(toStatement(Seeds.SEED_NODE_GBIF, HAD_MEMBER, currentPage));
         JsonNode jsonNode = new ObjectMapper().readTree(in);
         if (jsonNode != null && jsonNode.has("results")) {
             for (JsonNode result : jsonNode.get("results")) {

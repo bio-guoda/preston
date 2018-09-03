@@ -10,6 +10,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.Seeds;
+import org.globalbioticinteractions.preston.cmd.CrawlContext;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -21,6 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.*;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.*;
@@ -29,15 +31,52 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     private static final Log LOG = LogFactory.getLog(RegistryReaderBioCASE.class);
 
     static final String BIOCASE_REGISTRY_ENDPOINT = "https://bms.gfbio.org/services/data-sources/";
-    public static final IRI REF_NODE_REGISTRY = toIRI(BIOCASE_REGISTRY_ENDPOINT);
+    public static final IRI BIO_CASE_REGISTRY = toIRI(BIOCASE_REGISTRY_ENDPOINT);
 
     // https://wiki.bgbm.org/bps/index.php/Archiving
     // http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=Herbar&inventory=1
     // https://bms.gfbio.org/services/data-sources/
 
 
-    public RegistryReaderBioCASE(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
-        super(blobStoreReadOnly, listener);
+    public RegistryReaderBioCASE(BlobStoreReadOnly blobStoreReadOnly, CrawlContext context, StatementListener listener) {
+        super(blobStoreReadOnly, context, listener);
+    }
+
+    @Override
+    public void on(Triple statement) {
+        if (Seeds.BIOCASE.equals(statement.getSubject())
+                && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
+            Stream.of(
+                    toStatement(RegistryReaderBioCASE.BIO_CASE_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of RSS Feeds that point to publishers of Darwin Core archives, and EML descriptors.")),
+                    toStatement(RegistryReaderBioCASE.BIO_CASE_REGISTRY, CREATED_BY, Seeds.BIOCASE),
+                    toStatement(BIO_CASE_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
+                    toStatement(BIO_CASE_REGISTRY, HAS_VERSION, toBlank())).forEach(this::emit);
+
+        } else if (hasVersionAvailable(statement)) {
+            try {
+                EmittingParser parse = null;
+                if (BIO_CASE_REGISTRY.equals(getVersionSource(statement))) {
+                    parse = RegistryReaderBioCASE::parseProviders;
+
+                } else if (StringUtils.contains(getVersionSource(statement).toString(), "pywrapper.cgi?dsa=")) {
+                    parse = RegistryReaderBioCASE::parseDatasetInventory;
+                }
+                if (parse != null) {
+                    BlankNodeOrIRI version = getVersion(statement);
+                    if (version instanceof IRI) {
+                        InputStream content = get((IRI) version);
+                        if (content != null) {
+                            parse.parse(content, this);
+                        }
+                    }
+                }
+
+
+            } catch (IOException e) {
+                LOG.warn("failed to read from " + getVersion(statement).toString(), e);
+            }
+        }
+
     }
 
 
@@ -116,38 +155,5 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
         }, emitter, datasets);
     }
 
-
-    @Override
-    public void on(Triple statement) {
-        if (Seeds.SEED_NODE_BIOCASE.equals(statement.getSubject())
-                && USED_BY.equals(statement.getPredicate())) {
-            emit(toStatement(REF_NODE_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
-            emit(toStatement(REF_NODE_REGISTRY, HAS_VERSION, toBlank()));
-        } else if (hasVersionAvailable(statement)) {
-            try {
-                EmittingParser parse = null;
-                if (REF_NODE_REGISTRY.equals(getVersionSource(statement))) {
-                    parse = RegistryReaderBioCASE::parseProviders;
-
-                } else if (StringUtils.contains(getVersionSource(statement).toString(), "pywrapper.cgi?dsa=")) {
-                    parse = RegistryReaderBioCASE::parseDatasetInventory;
-                }
-                if (parse != null) {
-                    BlankNodeOrIRI version = getVersion(statement);
-                    if (version instanceof IRI) {
-                        InputStream content = get((IRI) version);
-                        if (content != null) {
-                            parse.parse(content, this);
-                        }
-                    }
-                }
-
-
-            } catch (IOException e) {
-                LOG.warn("failed to read from " + getVersion(statement).toString(), e);
-            }
-        }
-
-    }
 
 }

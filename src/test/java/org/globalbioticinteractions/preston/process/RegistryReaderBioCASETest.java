@@ -17,9 +17,8 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 
-import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
-import static org.globalbioticinteractions.preston.RefNodeConstants.USED_BY;
+import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersionSource;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toIRI;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toLiteral;
@@ -37,15 +36,15 @@ public class RegistryReaderBioCASETest {
     @Before
     public void init() {
         nodes = new ArrayList<>();
-        registryReader = new RegistryReaderBioCASE(TestUtil.getTestBlobStore(), nodes::add);
+        registryReader = new RegistryReaderBioCASE(TestUtil.getTestBlobStore(), TestUtil.getTestCrawlContext(), nodes::add);
     }
 
     @Test
     public void onSeed() {
         RDFTerm bla = toLiteral("bla");
-        registryReader.on(toStatement(Seeds.SEED_NODE_BIOCASE, USED_BY, bla));
-        Assert.assertThat(nodes.size(), is(2));
-        assertThat(((IRI) getVersionSource(nodes.get(1))).getIRIString(), is(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT));
+        registryReader.on(toStatement(Seeds.BIOCASE, WAS_ASSOCIATED_WITH, bla));
+        Assert.assertThat(nodes.size(), is(4));
+        assertThat(((IRI) getVersionSource(nodes.get(3))).getIRIString(), is(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT));
     }
 
     @Test
@@ -87,7 +86,7 @@ public class RegistryReaderBioCASETest {
                 return getClass().getResourceAsStream("biocase-providers.json");
             }
         };
-        registryReader = new RegistryReaderBioCASE(blobStore, nodes::add);
+        registryReader = new RegistryReaderBioCASE(blobStore, TestUtil.getTestCrawlContext(), nodes::add);
         registryReader.on(toStatement(toIRI(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT), HAS_VERSION, refNode));
 
         assertFalse(nodes.isEmpty());
@@ -113,7 +112,7 @@ public class RegistryReaderBioCASETest {
             public InputStream get(IRI key) throws IOException {
                 return getClass().getResourceAsStream("biocase-datasets.xml");
             }
-        }, nodes::add);
+        }, TestUtil.getTestCrawlContext(), nodes::add);
 
         registryReader.on(toStatement(toIRI("http://something/pywrapper.cgi?dsa="), HAS_VERSION, refNode));
 

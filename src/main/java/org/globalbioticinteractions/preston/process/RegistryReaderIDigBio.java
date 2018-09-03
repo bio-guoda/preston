@@ -11,6 +11,7 @@ import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
+import org.globalbioticinteractions.preston.cmd.CrawlContext;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -22,35 +23,44 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Stream;
 
+import static org.globalbioticinteractions.preston.RefNodeConstants.*;
+import static org.globalbioticinteractions.preston.RefNodeConstants.CREATED_BY;
+import static org.globalbioticinteractions.preston.RefNodeConstants.DESCRIPTION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_FORMAT;
+import static org.globalbioticinteractions.preston.RefNodeConstants.IS_A;
+import static org.globalbioticinteractions.preston.RefNodeConstants.ORGANIZATION;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.*;
 
 public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     private final static Log LOG = LogFactory.getLog(RegistryReaderIDigBio.class);
     public static final String PUBLISHERS_URI = "https://search.idigbio.org/v2/search/publishers";
-    public static final IRI PUBLISHERS = toIRI(URI.create(PUBLISHERS_URI));
+    public static final IRI IDIGBIO_REGISTRY = toIRI(URI.create(PUBLISHERS_URI));
 
-    public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, StatementListener listener) {
-        super(blobStore, listener);
+    public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, CrawlContext context, StatementListener listener) {
+        super(blobStore, context, listener);
     }
 
     @Override
     public void on(Triple statement) {
-        if (statement.getSubject().equals(Seeds.SEED_NODE_IDIGBIO)) {
-            IRI publishers = PUBLISHERS;
-            emit(toStatement(publishers, HAD_MEMBER, statement.getSubject()));
-            emit(toStatement(publishers, RefNodeConstants.HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
-            emit(toStatement(publishers, RefNodeConstants.HAS_VERSION, toBlank()));
+        if (statement.getSubject().equals(Seeds.IDIGBIO)
+                && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
+            Stream.of(toStatement(Seeds.IDIGBIO, IS_A, ORGANIZATION),
+                    toStatement(IDIGBIO_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of RSS Feeds that point to publishers of Darwin Core archives, and EML descriptors.")),
+                    toStatement(IDIGBIO_REGISTRY, CREATED_BY, Seeds.IDIGBIO),
+                    toStatement(IDIGBIO_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
+                    toStatement(IDIGBIO_REGISTRY, HAS_VERSION, toBlank()))
+                    .forEach(this::emit);
         } else if (hasVersionAvailable(statement)) {
             parse(statement, (IRI) getVersion(statement));
         }
     }
 
     public void parse(Triple statement, IRI toBeParsed) {
-        if (statement.getObject().equals(PUBLISHERS)) {
+        if (statement.getObject().equals(IDIGBIO_REGISTRY)) {
             parsePublishers(toBeParsed);
         } else {
             parse(toBeParsed);
@@ -124,7 +134,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                         IRI uriNode = toIRI(emlURI);
                         emitter.emit(toStatement(archiveParent, HAD_MEMBER, uriNode));
                         emitter.emit(toStatement(uriNode, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_EML)));
-                        emitter.emit(toStatement(uriNode, RefNodeConstants.HAS_VERSION, toBlank()));
+                        emitter.emit(toStatement(uriNode, HAS_VERSION, toBlank()));
                     }
 
                     if (isDWCA && archiveURI != null) {
@@ -132,7 +142,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                         emitter.emit(toStatement(archiveParent, HAD_MEMBER, refNodeDWCAUri));
 
                         emitter.emit(toStatement(refNodeDWCAUri, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_DWCA)));
-                        emitter.emit(toStatement(refNodeDWCAUri, RefNodeConstants.HAS_VERSION, toBlank()));
+                        emitter.emit(toStatement(refNodeDWCAUri, HAS_VERSION, toBlank()));
 
                     }
 
@@ -149,15 +159,15 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
             for (JsonNode item : r.get("items")) {
                 String publisherUUID = item.get("uuid").asText();
                 IRI refNodePublisher = toUUID(publisherUUID);
-                emitter.emit(toStatement(parent, RefNodeConstants.HAD_MEMBER, refNodePublisher));
+                emitter.emit(toStatement(parent, HAD_MEMBER, refNodePublisher));
                 JsonNode data = item.get("data");
                 if (item.has("data")) {
                     String rssFeedUrl = data.has("rss_url") ? data.get("rss_url").asText() : null;
                     if (StringUtils.isNotBlank(rssFeedUrl)) {
                         IRI refNodeFeed = toIRI(rssFeedUrl);
-                        emitter.emit(toStatement(refNodePublisher, RefNodeConstants.HAD_MEMBER, refNodeFeed));
+                        emitter.emit(toStatement(refNodePublisher, HAD_MEMBER, refNodeFeed));
                         emitter.emit(toStatement(refNodeFeed, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_RSS)));
-                        emitter.emit(toStatement(refNodeFeed, RefNodeConstants.HAS_VERSION, toBlank()));
+                        emitter.emit(toStatement(refNodeFeed, HAS_VERSION, toBlank()));
                     }
                 }
             }
