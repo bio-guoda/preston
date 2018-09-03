@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
 
 public class StatementLoggerNQuadsTest {
 
@@ -24,7 +23,7 @@ public class StatementLoggerNQuadsTest {
 
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        new StatementLoggerTSV(new PrintStream(out)).on(RefNodeFactory.toStatement(source, relation, target));
+        new StatementLoggerNQuads(new PrintStream(out)).on(RefNodeFactory.toStatement(source, relation, target));
 
 
         assertThat(StringUtils.toEncodedString(out.toByteArray(), StandardCharsets.UTF_8),
