@@ -12,7 +12,6 @@ import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.DateUtil;
 import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.cmd.CmdList;
-import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.process.StatementListener;
 import org.globalbioticinteractions.preston.process.StatementProcessor;
 
@@ -61,9 +60,9 @@ public class Archiver extends StatementProcessor {
         try {
             BlankNodeOrIRI version = getVersion(statement);
             if (version == null || !(version instanceof BlankNode)) {
-                emit(statement);
+                emitExistingVersion(statement);
             } else {
-                handleVersion(statement, (BlankNode) version);
+                handleVersions(statement, (BlankNode) version);
             }
         } catch (Throwable e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);
@@ -71,7 +70,7 @@ public class Archiver extends StatementProcessor {
 
     }
 
-    private void handleVersion(Triple statement, BlankNode blankVersion) throws IOException {
+    private void handleVersions(Triple statement, BlankNode blankVersion) throws IOException {
         IRI versionSource = getVersionSource(statement);
         IRI previousVersion = findMostRecentVersion(versionSource);
         if (previousVersion == null || !shouldResolveOnMissingOnly()) {
@@ -155,7 +154,9 @@ public class Archiver extends StatementProcessor {
         }
 
         if (mostRecentVersion != null) {
-            emitExistingVersion(versionSource, HAS_VERSION, mostRecentVersion);
+            emitExistingVersion(toStatement(versionSource,
+                    HAS_VERSION,
+                    mostRecentVersion));
 
             // migrate
             migrateVersions(mostRecentVersion);
@@ -168,7 +169,9 @@ public class Archiver extends StatementProcessor {
         IRI lastVersionId = existingId;
         IRI newerVersionId;
         while ((newerVersionId = getStatementStore().get(Pair.of(HAS_PREVIOUS_VERSION, lastVersionId))) != null) {
-            emitExistingVersion(newerVersionId, HAS_PREVIOUS_VERSION, lastVersionId);
+            emitExistingVersion(toStatement(newerVersionId,
+                    HAS_PREVIOUS_VERSION,
+                    lastVersionId));
             lastVersionId = newerVersionId;
         }
         return lastVersionId;
@@ -194,19 +197,17 @@ public class Archiver extends StatementProcessor {
         }
     }
 
-    private void emitExistingVersion(IRI subj, IRI predicate, RDFTerm obj) throws IOException {
-        IRI timeKey = getStatementStore().get(Pair.of(subj, GENERATED_AT_TIME));
+    private void emitExistingVersion(Triple statement) throws IOException {
+        IRI timeKey = getStatementStore().get(Pair.of(statement.getSubject(), GENERATED_AT_TIME));
         if (timeKey != null) {
             InputStream input = getBlobStore().get(timeKey);
             if (input != null) {
-                emit(toStatement(subj,
+                emit(toStatement(statement.getSubject(),
                         GENERATED_AT_TIME,
                         toLiteral(IOUtils.toString(input, StandardCharsets.UTF_8))));
             }
         }
-        emit(toStatement(subj,
-                predicate,
-                obj));
+        emit(statement);
     }
 
 
