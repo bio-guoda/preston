@@ -9,9 +9,7 @@ import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.MimeTypes;
-import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
-import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -24,11 +22,14 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.globalbioticinteractions.preston.RefNodeConstants.*;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.*;
+
 public class RegistryReaderBioCASE extends ProcessorReadOnly {
     private static final Log LOG = LogFactory.getLog(RegistryReaderBioCASE.class);
 
     static final String BIOCASE_REGISTRY_ENDPOINT = "https://bms.gfbio.org/services/data-sources/";
-    private static final IRI REF_NODE_REGISTRY = RefNodeFactory.toIRI(BIOCASE_REGISTRY_ENDPOINT);
+    private static final IRI REF_NODE_REGISTRY = toIRI(BIOCASE_REGISTRY_ENDPOINT);
 
     // https://wiki.bgbm.org/bps/index.php/Archiving
     // http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=Herbar&inventory=1
@@ -50,9 +51,9 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
                     if (StringUtils.isNotBlank(url) && StringUtils.isNotBlank(datasource)) {
                         URI uri = generateDataSourceAccessUrl(url, datasource);
                         if (uri != null) {
-                            IRI refNode = RefNodeFactory.toIRI(uri);
-                            emitter.emit(RefNodeFactory.toStatement(refNode, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral(MimeTypes.XML)));
-                            emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, refNode));
+                            IRI refNode = toIRI(uri);
+                            emitter.emit(toStatement(refNode, HAS_FORMAT, toLiteral(MimeTypes.XML)));
+                            emitter.emit(toStatement(refNode, HAS_VERSION, toBlank()));
                         }
                     }
                 }
@@ -87,19 +88,19 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
                     NamedNodeMap attributes = item.getAttributes();
                     String url = item.getTextContent();
 
-                    String type = resolveType(mapping, item, attributes);
+                    String type = resolveType(mapping, attributes);
 
                     if (StringUtils.isNotBlank(url) && StringUtils.isNotBlank(type)) {
-                        IRI object = RefNodeFactory.toIRI(url);
-                        emitter.emit(RefNodeFactory.toStatement(object, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral(type)));
-                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, object));
+                        IRI versionSource = toIRI(url);
+                        emitter.emit(toStatement(versionSource, HAS_FORMAT, toLiteral(type)));
+                        emitter.emit(toStatement(versionSource, HAS_VERSION, toBlank()));
                     }
 
                 }
 
             }
 
-            private String resolveType(Map<String, String> mapping, Node item, NamedNodeMap attributes) {
+            private String resolveType(Map<String, String> mapping, NamedNodeMap attributes) {
                 String type = null;
                 Node namespaceNode = attributes.getNamedItem("namespace");
                 if (namespaceNode != null) {
@@ -119,20 +120,20 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     @Override
     public void on(Triple statement) {
         if (Seeds.SEED_NODE_BIOCASE.equals(statement.getSubject())
-                && RefNodeConstants.HAD_MEMBER.equals(statement.getPredicate())) {
-            emit(RefNodeFactory.toStatement(REF_NODE_REGISTRY, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
-            emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, REF_NODE_REGISTRY));
-        } else if (RefNodeFactory.hasDerivedContentAvailable(statement)) {
+                && HAD_MEMBER.equals(statement.getPredicate())) {
+            emit(toStatement(REF_NODE_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
+            emit(toStatement(REF_NODE_REGISTRY, HAS_VERSION, toBlank()));
+        } else if (hasDerivedContentAvailable(statement)) {
             try {
                 EmittingParser parse = null;
-                if (REF_NODE_REGISTRY.equals(RefNodeFactory.getVersionSource(statement))) {
+                if (REF_NODE_REGISTRY.equals(getVersionSource(statement))) {
                     parse = RegistryReaderBioCASE::parseProviders;
 
-                } else if (StringUtils.contains(RefNodeFactory.getVersionSource(statement).toString(), "pywrapper.cgi?dsa=")) {
+                } else if (StringUtils.contains(getVersionSource(statement).toString(), "pywrapper.cgi?dsa=")) {
                     parse = RegistryReaderBioCASE::parseDatasetInventory;
                 }
                 if (parse != null) {
-                    BlankNodeOrIRI version = RefNodeFactory.getVersion(statement);
+                    BlankNodeOrIRI version = getVersion(statement);
                     if (version instanceof IRI) {
                         InputStream content = get((IRI) version);
                         if (content != null) {

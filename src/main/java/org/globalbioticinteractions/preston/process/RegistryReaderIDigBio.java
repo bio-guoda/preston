@@ -26,12 +26,13 @@ import java.util.UUID;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_FORMAT;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.*;
 
 public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     private final static Log LOG = LogFactory.getLog(RegistryReaderIDigBio.class);
     public static final String PUBLISHERS_URI = "https://search.idigbio.org/v2/search/publishers";
-    public static final IRI PUBLISHERS = RefNodeFactory.toIRI(URI.create(PUBLISHERS_URI));
+    public static final IRI PUBLISHERS = toIRI(URI.create(PUBLISHERS_URI));
 
     public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, StatementListener listener) {
         super(blobStore, listener);
@@ -41,11 +42,11 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     public void on(Triple statement) {
         if (statement.getSubject().equals(Seeds.SEED_NODE_IDIGBIO)) {
             IRI publishers = PUBLISHERS;
-            emit(RefNodeFactory.toStatement(publishers, HAD_MEMBER, statement.getSubject()));
-            emit(RefNodeFactory.toStatement(publishers, RefNodeConstants.HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_JSON)));
-            emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, publishers));
-        } else if (RefNodeFactory.hasDerivedContentAvailable(statement)) {
-            parse(statement, (IRI) RefNodeFactory.getVersion(statement));
+            emit(toStatement(publishers, HAD_MEMBER, statement.getSubject()));
+            emit(toStatement(publishers, RefNodeConstants.HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
+            emit(toStatement(publishers, RefNodeConstants.HAS_VERSION, toBlank()));
+        } else if (hasDerivedContentAvailable(statement)) {
+            parse(statement, (IRI) getVersion(statement));
         }
     }
 
@@ -115,24 +116,24 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
                     }
 
-                    IRI archiveParent = uuid == null ? parent1 : RefNodeFactory.toUUID(uuid.toString());
+                    IRI archiveParent = uuid == null ? parent1 : toUUID(uuid.toString());
                     if (uuid != null) {
-                        emitter.emit(RefNodeFactory.toStatement(parent1, HAD_MEMBER, archiveParent));
+                        emitter.emit(toStatement(parent1, HAD_MEMBER, archiveParent));
                     }
 
                     if (emlURI != null) {
-                        IRI uriNode = RefNodeFactory.toIRI(emlURI);
-                        emitter.emit(RefNodeFactory.toStatement(archiveParent, HAD_MEMBER, uriNode));
-                        emitter.emit(RefNodeFactory.toStatement(uriNode, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_EML)));
-                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, uriNode));
+                        IRI uriNode = toIRI(emlURI);
+                        emitter.emit(toStatement(archiveParent, HAD_MEMBER, uriNode));
+                        emitter.emit(toStatement(uriNode, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_EML)));
+                        emitter.emit(toStatement(uriNode, RefNodeConstants.HAS_VERSION, toBlank()));
                     }
 
                     if (isDWCA && archiveURI != null) {
-                        IRI refNodeDWCAUri = RefNodeFactory.toIRI(archiveURI.toString());
-                        emitter.emit(RefNodeFactory.toStatement(archiveParent, HAD_MEMBER, refNodeDWCAUri));
+                        IRI refNodeDWCAUri = toIRI(archiveURI.toString());
+                        emitter.emit(toStatement(archiveParent, HAD_MEMBER, refNodeDWCAUri));
 
-                        emitter.emit(RefNodeFactory.toStatement(refNodeDWCAUri, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_DWCA)));
-                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, refNodeDWCAUri));
+                        emitter.emit(toStatement(refNodeDWCAUri, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_DWCA)));
+                        emitter.emit(toStatement(refNodeDWCAUri, RefNodeConstants.HAS_VERSION, toBlank()));
 
                     }
 
@@ -148,16 +149,16 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         if (r.has("items") && r.get("items").isArray()) {
             for (JsonNode item : r.get("items")) {
                 String publisherUUID = item.get("uuid").asText();
-                IRI refNodePublisher = RefNodeFactory.toUUID(publisherUUID);
-                emitter.emit(RefNodeFactory.toStatement(parent, RefNodeConstants.HAD_MEMBER, refNodePublisher));
+                IRI refNodePublisher = toUUID(publisherUUID);
+                emitter.emit(toStatement(parent, RefNodeConstants.HAD_MEMBER, refNodePublisher));
                 JsonNode data = item.get("data");
                 if (item.has("data")) {
                     String rssFeedUrl = data.has("rss_url") ? data.get("rss_url").asText() : null;
                     if (StringUtils.isNotBlank(rssFeedUrl)) {
-                        IRI refNodeFeed = RefNodeFactory.toIRI(rssFeedUrl);
-                        emitter.emit(RefNodeFactory.toStatement(refNodePublisher, RefNodeConstants.HAD_MEMBER, refNodeFeed));
-                        emitter.emit(RefNodeFactory.toStatement(refNodeFeed, HAS_FORMAT, RefNodeFactory.toContentType(MimeTypes.MIME_TYPE_RSS)));
-                        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.WAS_DERIVED_FROM, refNodeFeed));
+                        IRI refNodeFeed = toIRI(rssFeedUrl);
+                        emitter.emit(toStatement(refNodePublisher, RefNodeConstants.HAD_MEMBER, refNodeFeed));
+                        emitter.emit(toStatement(refNodeFeed, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_RSS)));
+                        emitter.emit(toStatement(refNodeFeed, RefNodeConstants.HAS_VERSION, toBlank()));
                     }
                 }
             }

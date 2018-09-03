@@ -13,6 +13,8 @@ import org.globalbioticinteractions.preston.RefNodeConstants;
 
 import java.net.URI;
 
+import static org.globalbioticinteractions.preston.RefNodeConstants.*;
+
 public class RefNodeFactory {
 
     private static final RDF rdf = new SimpleRDF();
@@ -47,20 +49,14 @@ public class RefNodeFactory {
     }
 
     private static boolean hasVersionStatement(Triple statement) {
-        return RefNodeConstants.WAS_DERIVED_FROM.equals(statement.getPredicate())
-                || RefNodeConstants.HAS_VERSION.equals(statement.getPredicate())
-                || RefNodeConstants.WAS_REVISION_OF.equals(statement.getPredicate())
-                || RefNodeConstants.HAS_PREVIOUS_VERSION.equals(statement.getPredicate());
+        return HAS_VERSION.equals(statement.getPredicate())
+                || HAS_PREVIOUS_VERSION.equals(statement.getPredicate());
     }
 
     public static IRI getVersionSource(Triple statement) {
         IRI versionSource = null;
         if (hasVersionOrIsDerivedFrom(statement)) {
-            if (RefNodeConstants.WAS_DERIVED_FROM.equals(statement.getPredicate())) {
-                versionSource = (IRI) statement.getObject();
-            } else {
-                versionSource = (IRI) statement.getSubject();
-            }
+            versionSource = (IRI) statement.getSubject();
         }
         return versionSource;
     }
@@ -68,11 +64,7 @@ public class RefNodeFactory {
     public static BlankNodeOrIRI getVersion(Triple statement) {
         BlankNodeOrIRI version = null;
         if (hasVersionStatement(statement)) {
-            if (RefNodeConstants.WAS_DERIVED_FROM.equals(statement.getPredicate())) {
-                version = statement.getSubject();
-            } else {
-                version = (BlankNodeOrIRI) statement.getObject();
-            }
+            version = (BlankNodeOrIRI) statement.getObject();
         }
         return version;
     }

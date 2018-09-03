@@ -3,9 +3,7 @@ package org.globalbioticinteractions.preston.process;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
-import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
-import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.store.TestUtil;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,6 +17,12 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 
+import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
+import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersionSource;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toIRI;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toLiteral;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
@@ -37,10 +41,10 @@ public class RegistryReaderBioCASETest {
 
     @Test
     public void onSeed() {
-        RDFTerm bla = RefNodeFactory.toLiteral("bla");
-        registryReader.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_BIOCASE, RefNodeConstants.HAD_MEMBER, bla));
+        RDFTerm bla = toLiteral("bla");
+        registryReader.on(toStatement(Seeds.SEED_NODE_BIOCASE, HAD_MEMBER, bla));
         Assert.assertThat(nodes.size(), is(2));
-        assertThat(((IRI)nodes.get(1).getObject()).getIRIString(), is(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT));
+        assertThat(((IRI) getVersionSource(nodes.get(1))).getIRIString(), is(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT));
     }
 
     @Test
@@ -68,12 +72,12 @@ public class RegistryReaderBioCASETest {
         RegistryReaderBioCASE.parseProviders(providers, nodes::add);
 
         assertFalse(nodes.isEmpty());
-        assertThat(nodes.get(1).getObject().toString(), is("<http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=GFBio_ColiFauna&inventory=1>"));
+        assertThat(getVersionSource(nodes.get(1)).toString(), is("<http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=GFBio_ColiFauna&inventory=1>"));
     }
 
     @Test
     public void handleProviders() throws IOException {
-        IRI refNode = RefNodeFactory.toIRI("https://example.org/test");
+        IRI refNode = toIRI("https://example.org/test");
 
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
 
@@ -83,10 +87,10 @@ public class RegistryReaderBioCASETest {
             }
         };
         registryReader = new RegistryReaderBioCASE(blobStore, nodes::add);
-        registryReader.on(RefNodeFactory.toStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toIRI(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT)));
+        registryReader.on(toStatement(toIRI(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT), HAS_VERSION, refNode));
 
         assertFalse(nodes.isEmpty());
-        assertThat(nodes.get(1).getObject().toString(), is("<http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=GFBio_ColiFauna&inventory=1>"));
+        assertThat(nodes.get(1).getSubject().toString(), is("<http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=GFBio_ColiFauna&inventory=1>"));
     }
 
 
@@ -97,12 +101,12 @@ public class RegistryReaderBioCASETest {
         RegistryReaderBioCASE.parseDatasetInventory(datasets, nodes::add);
 
         assertThat(nodes.size(), is(2));
-        assertThat(nodes.get(1).getObject().toString(), is("<http://ww3.bgbm.org/biocase/downloads/GFBio_ColiFauna/Coleoptera%20observations%20in%20orchards%20of%20South%20Western%20Germany.ABCD_2.06.zip>"));
+        assertThat(getVersionSource(nodes.get(1)).toString(), is("<http://ww3.bgbm.org/biocase/downloads/GFBio_ColiFauna/Coleoptera%20observations%20in%20orchards%20of%20South%20Western%20Germany.ABCD_2.06.zip>"));
     }
 
     @Test
     public void handleDatasets() throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
-        IRI refNode = RefNodeFactory.toIRI("https://example.org/testing");
+        IRI refNode = toIRI("https://example.org/testing");
         registryReader = new RegistryReaderBioCASE(new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -110,10 +114,10 @@ public class RegistryReaderBioCASETest {
             }
         }, nodes::add);
 
-        registryReader.on(RefNodeFactory.toStatement(refNode, RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toIRI("http://something/pywrapper.cgi?dsa=")));
+        registryReader.on(toStatement(toIRI("http://something/pywrapper.cgi?dsa="), HAS_VERSION, refNode));
 
         assertThat(nodes.size(), is(2));
-        assertThat(((IRI)nodes.get(1).getObject()).getIRIString(), is("http://ww3.bgbm.org/biocase/downloads/GFBio_ColiFauna/Coleoptera%20observations%20in%20orchards%20of%20South%20Western%20Germany.ABCD_2.06.zip"));
+        assertThat(getVersionSource(nodes.get(1)).getIRIString(), is("http://ww3.bgbm.org/biocase/downloads/GFBio_ColiFauna/Coleoptera%20observations%20in%20orchards%20of%20South%20Western%20Germany.ABCD_2.06.zip"));
     }
 
     @Test
@@ -125,9 +129,9 @@ public class RegistryReaderBioCASETest {
 
         assertThat(nodes.size(), is(4));
         assertThat(nodes.get(0).getObject().toString(), is("\"application/abcda\""));
-        assertThat(nodes.get(1).getObject().toString(), is("<http://ww3.bgbm.org/biocase/downloads/Herbar/Herbarium%20Berolinense.ABCD_2.06.zip>"));
+        assertThat(getVersionSource(nodes.get(1)).toString(), is("<http://ww3.bgbm.org/biocase/downloads/Herbar/Herbarium%20Berolinense.ABCD_2.06.zip>"));
         assertThat(nodes.get(2).getObject().toString(), is("\"application/dwca\""));
-        assertThat(nodes.get(3).getObject().toString(), is("<http://ww3.bgbm.org/biocase/downloads/Herbar/Herbarium%20Berolinense.DwCA.zip>"));
+        assertThat(getVersionSource(nodes.get(3)).toString(), is("<http://ww3.bgbm.org/biocase/downloads/Herbar/Herbarium%20Berolinense.DwCA.zip>"));
     }
 
 

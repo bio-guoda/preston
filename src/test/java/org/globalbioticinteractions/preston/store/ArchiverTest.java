@@ -15,14 +15,11 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
-import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
-import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_REVISION_OF;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.isBlankOrSkolemizedBlank;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toBlank;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toIRI;
@@ -30,7 +27,6 @@ import static org.globalbioticinteractions.preston.model.RefNodeFactory.toSkolem
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 public class ArchiverTest {

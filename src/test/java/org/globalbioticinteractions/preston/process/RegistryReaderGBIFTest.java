@@ -16,6 +16,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.globalbioticinteractions.preston.RefNodeConstants.*;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringEndsWith.endsWith;
@@ -29,9 +31,9 @@ public class RegistryReaderGBIFTest {
     public void onSeed() {
         ArrayList<Triple> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
-        registryReaderGBIF.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, RefNodeConstants.HAD_MEMBER, RefNodeConstants.SOFTWARE_AGENT));
+        registryReaderGBIF.on(toStatement(Seeds.SEED_NODE_GBIF, HAD_MEMBER, SOFTWARE_AGENT));
         Assert.assertThat(nodes.size(), is(2));
-        assertThat(nodes.get(1).getObject().toString(), is("<https://api.gbif.org/v1/dataset>"));
+        assertThat(getVersionSource(nodes.get(1)).getIRIString(), is("https://api.gbif.org/v1/dataset"));
     }
 
     @Test
@@ -39,9 +41,9 @@ public class RegistryReaderGBIFTest {
         ArrayList<Triple> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
 
-        registryReaderGBIF.on(RefNodeFactory.toStatement(RefNodeFactory.toIRI("https://api.gbif.org/v1/dataset"),
-                RefNodeConstants.HAS_VERSION,
-                RefNodeFactory.toIRI("https://some")));
+        registryReaderGBIF.on(toStatement(toIRI("https://api.gbif.org/v1/dataset"),
+                HAS_VERSION,
+                toIRI("https://some")));
         assertThat(nodes.size(), is(1));
         assertThat(nodes.get(0).getObject().toString(), is("<https://some>"));
     }
@@ -50,8 +52,8 @@ public class RegistryReaderGBIFTest {
     public void onNotSeed() {
         ArrayList<Triple> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
-        RDFTerm bla = RefNodeFactory.toLiteral("bla");
-        registryReaderGBIF.on(RefNodeFactory.toStatement(Seeds.SEED_NODE_GBIF, RefNodeFactory.toIRI("http://example.org"), bla));
+        RDFTerm bla = toLiteral("bla");
+        registryReaderGBIF.on(toStatement(Seeds.SEED_NODE_GBIF, toIRI("http://example.org"), bla));
         assertThat(nodes.size(), is(0));
     }
 
@@ -67,13 +69,13 @@ public class RegistryReaderGBIFTest {
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
 
 
-        Triple firstPage = RefNodeFactory.toStatement(createTestNode(), RefNodeConstants.WAS_DERIVED_FROM, RefNodeFactory.toIRI("https://api.gbif.org/v1/dataset"));
+        Triple firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset"), HAS_VERSION, createTestNode());
 
         registryReaderGBIF.on(firstPage);
 
         Assert.assertThat(nodes.size(), is(17));
         Triple secondPage = nodes.get(nodes.size() - 1);
-        assertThat(secondPage.getObject().toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2>"));
+        assertThat(getVersionSource(secondPage).toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2>"));
     }
 
     @Test
@@ -100,7 +102,7 @@ public class RegistryReaderGBIFTest {
         assertThat(refNode.toString(), is("<http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06> <http://purl.org/dc/elements/1.1/format> \"application/dwca\" ."));
 
         refNode = refNodes.get(4);
-        assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#wasDerivedFrom> <http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06> ."));
+        assertThat(refNode.toString(), startsWith("<http://www.snib.mx/iptconabio/archive.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06> <http://purl.org/pav/hasVersion> "));
 
         refNode = refNodes.get(5);
         assertThat(refNode.toString(), is("<6555005d-4594-4a3e-be33-c70e587b63d7> <http://www.w3.org/ns/prov#hadMember> <http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06> ."));
@@ -109,7 +111,7 @@ public class RegistryReaderGBIFTest {
         assertThat(refNode.toString(), is("<http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06> <http://purl.org/dc/elements/1.1/format> \"application/eml\" ."));
 
         refNode = refNodes.get(7);
-        assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#wasDerivedFrom> <http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06> ."));
+        assertThat(refNode.toString(), startsWith("<http://www.snib.mx/iptconabio/eml.do?r=SNIB-ME006-ME0061704F-ictioplancton-CH-SIB.2017.06.06> <http://purl.org/pav/hasVersion> "));
 
         refNode = refNodes.get(8);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <d0df772d-78f4-4602-acf2-7d768798f632> ."));
@@ -118,13 +120,13 @@ public class RegistryReaderGBIFTest {
         assertThat(lastRefNode.toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
 
         lastRefNode = refNodes.get(refNodes.size() - 1);
-        assertThat(lastRefNode.toString(), endsWith("<http://www.w3.org/ns/prov#wasDerivedFrom> <https://api.gbif.org/v1/dataset?offset=2&limit=2> ."));
+        assertThat(lastRefNode.toString(), startsWith("<https://api.gbif.org/v1/dataset?offset=2&limit=2> <http://purl.org/pav/hasVersion> "));
 
     }
 
     private IRI createTestNode() {
         try {
-            return RefNodeFactory.toIRI(getClass().getResource("gbifdatasets.json").toURI());
+            return toIRI(getClass().getResource("gbifdatasets.json").toURI());
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
         }

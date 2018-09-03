@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.junit.Assert.assertThat;
@@ -57,7 +58,7 @@ public class RegistryReaderIDigBioTest {
         assertThat(node.toString(), is("<https://www.morphosource.org/rss/ms.rss> <http://purl.org/dc/elements/1.1/format> \"application/rss+xml\" ."));
 
         node = nodes.get(3);
-        assertThat(node.toString(), endsWith("<http://www.w3.org/ns/prov#wasDerivedFrom> <https://www.morphosource.org/rss/ms.rss> ."));
+        assertThat(node.toString(), startsWith("<https://www.morphosource.org/rss/ms.rss> <http://purl.org/pav/hasVersion> "));
 
         node = nodes.get(4);
         assertThat(node.toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <a9684883-ce9b-4be1-9841-b063fc69e163> ."));
@@ -69,7 +70,7 @@ public class RegistryReaderIDigBioTest {
         assertThat(node.toString(), is("<http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml> <http://purl.org/dc/elements/1.1/format> \"application/rss+xml\" ."));
 
         node = nodes.get(7);
-        assertThat(node.toString(), endsWith("<http://www.w3.org/ns/prov#wasDerivedFrom> <http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml> ."));
+        assertThat(node.toString(), startsWith("<http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml> <http://purl.org/pav/hasVersion> "));
 
         node = nodes.get(8);
         assertThat(node.toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <089a51fa-5f81-48e7-a1b7-9bc539555f29> ."));
@@ -119,7 +120,7 @@ public class RegistryReaderIDigBioTest {
         assertThat(labels.get(2), is(
                 "<http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.eml> <http://purl.org/dc/elements/1.1/format> \"application/eml\" ."));
 
-        assertThat(labels.get(3), endsWith("<http://www.w3.org/ns/prov#wasDerivedFrom> <http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.eml> ."));
+        assertThat(labels.get(3), startsWith("<http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.eml> <http://purl.org/pav/hasVersion>"));
 
         assertThat(labels.get(5), is(
                 "<http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.zip> <http://purl.org/dc/elements/1.1/format> \"application/dwca\" ."));
@@ -127,7 +128,7 @@ public class RegistryReaderIDigBioTest {
         assertThat(labels.get(4), is(
                 "<4b9c73cc-d12d-4654-bdfb-081dce21729b> <http://www.w3.org/ns/prov#hadMember> <http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.zip> ."));
 
-        assertThat(labels.get(6), endsWith(" <http://www.w3.org/ns/prov#wasDerivedFrom> <http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.zip> ."));
+        assertThat(labels.get(6), startsWith("<http://midwestherbaria.org/portal/content/dwca/ALBC_DwC-A.zip> <http://purl.org/pav/hasVersion>"));
 
         assertThat(labels.get(7), is("<http://example.org> <http://www.w3.org/ns/prov#hadMember> <b01789b2-c5d7-11e4-b6af-00163e00498d> ."));
 
