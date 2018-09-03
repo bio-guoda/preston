@@ -109,7 +109,7 @@ public class Archiver extends StatementProcessor {
 
     private IRI dereference(IRI versionSource) throws IOException {
         InputStream data = getDereferencer().dereference(versionSource);
-        return getBlobStore().putBlob(data);
+        return data == null ? null : getBlobStore().putBlob(data);
     }
 
     private void recordGenerationTime(BlankNodeOrIRI derivedSubject) throws IOException {
