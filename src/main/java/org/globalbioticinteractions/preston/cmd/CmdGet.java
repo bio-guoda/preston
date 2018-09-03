@@ -31,7 +31,7 @@ public class CmdGet implements Runnable {
         try {
             InputStream input = blobStore.get(RefNodeFactory.toIRI(contentHashString));
             if (input == null) {
-                System.err.println("no found: [" + contentHashString + "]");
+                System.err.println("not found: [" + contentHashString + "]");
                 exit(1);
             }
             IOUtils.copy(input, System.out);

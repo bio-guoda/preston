@@ -144,7 +144,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
 
 
             } catch (IOException e) {
-                LOG.warn("failed to read from [" + statement.getSubject().toString() + "]", e);
+                LOG.warn("failed to read from " + getVersion(statement).toString(), e);
             }
         }
 
