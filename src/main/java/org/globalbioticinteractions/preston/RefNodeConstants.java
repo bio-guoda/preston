@@ -26,6 +26,7 @@ public class RefNodeConstants {
     public static final IRI HAS_PREVIOUS_VERSION = RefNodeFactory.toIRI(URI.create("http://purl.org/pav/previousVersion"));
 
     public static final IRI GENERATED_AT_TIME = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#generatedAtTime"));
+    public static final IRI WAS_GENERATED_BY = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasGeneratedBy"));
 
     public static final UUID ARCHIVE_COLLECTION = UUID.fromString("0659a54f-b713-4f86-a917-5be166a14110");
     public static final IRI ARCHIVE_COLLECTION_IRI = toUUID(ARCHIVE_COLLECTION.toString());
@@ -36,7 +37,6 @@ public class RefNodeConstants {
     public static final IRI AGENT = toIRI("http://www.w3.org/ns/prov#Agent");
     public static final IRI SOFTWARE_AGENT = toIRI("http://www.w3.org/ns/prov#SoftwareAgent");
     public static final IRI DESCRIPTION = toIRI("http://purl.org/dc/terms/description");
-    public static final IRI GENERATED_BY = toIRI("http://www.w3.org/ns/prov#wasGeneratedBy");
     public static final IRI COLLECTION = toIRI("http://www.w3.org/ns/prov#Collection");
     public static final IRI ORGANIZATION = toIRI("http://www.w3.org/ns/prov#Organization");
     public static final IRI WAS_ASSOCIATED_WITH = toIRI("http://www.w3.org/ns/prov#wasAssociatedWith");

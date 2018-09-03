@@ -12,6 +12,7 @@ import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.Archiver;
 import org.globalbioticinteractions.preston.store.FilePersistence;
 import org.globalbioticinteractions.preston.store.StatementStoreImpl;
+import org.globalbioticinteractions.preston.store.TestUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class ContentResolverTest {
     }
 
     private Archiver createStatementStore(StatementListener... listeners) {
-        return new Archiver(blobStore, Resources::asInputStream, new StatementStoreImpl(persistence), listeners);
+        return new Archiver(blobStore, Resources::asInputStream, new StatementStoreImpl(persistence), TestUtil.getTestCrawlContext(), listeners);
     }
 
     @After
@@ -80,12 +81,15 @@ public class ContentResolverTest {
 
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
-        assertThat(refNodes.size(), is(2));
+        assertThat(refNodes.size(), is(3));
+
+        assertThat(refNodes.get(1).getPredicate(), is(RefNodeConstants.WAS_GENERATED_BY));
+        assertThat(refNodes.get(1).getObject(), is(TestUtil.getTestCrawlContext().getActivity()));
 
         String expectedHash = "50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
         String expectedValue = "https://example.org";
 
-        Triple cachedNode = refNodes.get(1);
+        Triple cachedNode = refNodes.get(2);
         assertContentWith(cachedNode, expectedHash, expectedValue);
         InputStream inputStream = blobStore.get((IRI) cachedNode.getObject());
         assertNotNull(inputStream);
@@ -99,9 +103,7 @@ public class ContentResolverTest {
         assertTrue(data.exists());
         assertThat(IOUtils.toString(data.toURI(), StandardCharsets.UTF_8), is(expectedValue));
 
-
-        assertContentWith(refNodes.get(1), expectedHash, expectedValue);
-
+        assertContentWith(refNodes.get(2), expectedHash, expectedValue);
 
         FileUtils.deleteQuietly(tempDir.toFile());
     }
@@ -116,7 +118,6 @@ public class ContentResolverTest {
         InputStream inputStream = blobStore.get(Hasher.toHashURI(expectedHash));
 
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is(expectedValue));
-
     }
 
 

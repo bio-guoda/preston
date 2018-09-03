@@ -8,10 +8,10 @@ import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
-import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.cmd.CmdList;
+import org.globalbioticinteractions.preston.cmd.CrawlContext;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.process.StatementListener;
 import org.globalbioticinteractions.preston.process.StatementProcessor;
@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import static org.globalbioticinteractions.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
+import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_GENERATED_BY;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersion;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersionSource;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toLiteral;
@@ -33,7 +34,8 @@ import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatem
 public class Archiver extends StatementProcessor {
     private static Log LOG = LogFactory.getLog(CmdList.class);
 
-    private BlobStore blobStore;
+    private final BlobStore blobStore;
+    private final CrawlContext crawlContext;
 
     private Dereferencer dereferencer;
 
@@ -41,17 +43,16 @@ public class Archiver extends StatementProcessor {
 
     private final StatementStore statementStore;
 
-    public Archiver(BlobStore blobStore, Dereferencer dereferencer, StatementStore statementStore, StatementListener... listener) {
+    public Archiver(BlobStore blobStore, Dereferencer dereferencer, StatementStore statementStore, CrawlContext crawlContext, StatementListener... listener) {
         super(listener);
+        this.crawlContext = crawlContext;
         this.blobStore = blobStore;
         this.statementStore = statementStore;
         this.dereferencer = dereferencer;
     }
 
-    public Archiver(BlobStore blobStore, Dereferencer dereferencer, StatementStoreImpl statementStore) {
-        this.blobStore = blobStore;
-        this.statementStore = statementStore;
-        this.dereferencer = dereferencer;
+    public Archiver(BlobStore blobStore, Dereferencer dereferencer, StatementStore statementStore, CrawlContext crawlContext) {
+        this(blobStore, dereferencer, statementStore, crawlContext, new StatementListener[]{});
     }
 
     StatementStore getStatementStore() {
@@ -117,11 +118,15 @@ public class Archiver extends StatementProcessor {
         getBlobStore().putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
         IRI value1 = Hasher.calcSHA256(value);
 
-        Pair<RDFTerm, RDFTerm> of = Pair.of(derivedSubject, GENERATED_AT_TIME);
-        getStatementStore().put(of, value1);
+        getStatementStore().put(Pair.of(derivedSubject, GENERATED_AT_TIME), value1);
         emit(toStatement(derivedSubject,
                 GENERATED_AT_TIME,
                 nowLiteral));
+
+        getStatementStore().put(Pair.of(derivedSubject, WAS_GENERATED_BY), crawlContext.getActivity());
+        emit(toStatement(derivedSubject,
+                WAS_GENERATED_BY,
+                crawlContext.getActivity()));
     }
 
     private BlobStore getBlobStore() {
@@ -140,9 +145,7 @@ public class Archiver extends StatementProcessor {
         IRI mostRecentVersion = getStatementStore().get(Pair.of(versionSource, HAS_VERSION));
 
         if (mostRecentVersion != null) {
-            emitExistingVersion(toStatement(versionSource,
-                    HAS_VERSION,
-                    mostRecentVersion));
+            emitExistingVersion(toStatement(versionSource, HAS_VERSION, mostRecentVersion));
             mostRecentVersion = findLastVersion(mostRecentVersion);
         }
         return mostRecentVersion;
@@ -152,9 +155,7 @@ public class Archiver extends StatementProcessor {
         IRI lastVersionId = existingId;
         IRI newerVersionId;
         while ((newerVersionId = getStatementStore().get(Pair.of(HAS_PREVIOUS_VERSION, lastVersionId))) != null) {
-            emitExistingVersion(toStatement(newerVersionId,
-                    HAS_PREVIOUS_VERSION,
-                    lastVersionId));
+            emitExistingVersion(toStatement(newerVersionId, HAS_PREVIOUS_VERSION, lastVersionId));
             lastVersionId = newerVersionId;
         }
         return lastVersionId;
@@ -162,6 +163,11 @@ public class Archiver extends StatementProcessor {
 
 
     private void emitExistingVersion(Triple statement) throws IOException {
+        emitGenerationInfo(statement);
+        emit(statement);
+    }
+
+    private void emitGenerationInfo(Triple statement) throws IOException {
         IRI timeKey = getStatementStore().get(Pair.of(statement.getSubject(), GENERATED_AT_TIME));
         if (timeKey != null) {
             InputStream input = getBlobStore().get(timeKey);
@@ -171,7 +177,15 @@ public class Archiver extends StatementProcessor {
                         toLiteral(IOUtils.toString(input, StandardCharsets.UTF_8))));
             }
         }
-        emit(statement);
+        IRI crawlActivityKey = getStatementStore().get(Pair.of(statement.getSubject(), WAS_GENERATED_BY));
+        if (crawlActivityKey != null) {
+            InputStream input = getBlobStore().get(crawlActivityKey);
+            if (input != null) {
+                emit(toStatement(statement.getSubject(),
+                        WAS_GENERATED_BY,
+                        crawlContext.getActivity()));
+            }
+        }
     }
 
     public Dereferencer getDereferencer() {

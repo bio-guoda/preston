@@ -49,7 +49,9 @@ public class ArchiverTest {
 
         Archiver relationStore = new Archiver(
                 new AppendOnlyBlobStore(testPersistence),
-                dereferencer, new StatementStoreImpl(testPersistence));
+                dereferencer,
+                new StatementStoreImpl(testPersistence),
+                TestUtil.getTestCrawlContext());
 
         relationStore.on(statement);
 
@@ -81,6 +83,7 @@ public class ArchiverTest {
                 new AppendOnlyBlobStore(testPersistence),
                 dereferencer,
                 new StatementStoreImpl(testPersistence),
+                TestUtil.getTestCrawlContext(),
                 nodes::add);
 
         relationStore.on(statement);
@@ -108,7 +111,9 @@ public class ArchiverTest {
 
         Archiver relationStore = new Archiver(
                 new AppendOnlyBlobStore(testPersistence),
-                dereferencer, new StatementStoreImpl(testPersistence));
+                dereferencer,
+                new StatementStoreImpl(testPersistence),
+                TestUtil.getTestCrawlContext());
 
         BlobStore blobStore = new AppendOnlyBlobStore(testPersistence);
 
@@ -129,7 +134,7 @@ public class ArchiverTest {
     }
 
     private Archiver getAppendOnlyRelationStore(Dereferencer dereferencer, BlobStore blobStore, Persistence testPersistencetence) {
-        return new Archiver(blobStore, dereferencer, new StatementStoreImpl(testPersistencetence));
+        return new Archiver(blobStore, dereferencer, new StatementStoreImpl(testPersistencetence), TestUtil.getTestCrawlContext());
     }
 
     private String toUTF8(InputStream content) throws IOException {

@@ -104,8 +104,8 @@ public abstract class CmdCrawl implements Runnable, Crawler {
 
         Persistence statementPersistence = new FilePersistence(tmpDir, new File(dataDir, "statement"));
         StatementListener archive = (CrawlMode.replay == crawlMode)
-                ? createOfflineArchive(statementPersistence, blobStore, listeners)
-                : createOnlineArchive(statementPersistence, blobStore, listeners, crawlMode);
+                ? createOfflineArchive(statementPersistence, blobStore, listeners, ctx)
+                : createOnlineArchive(statementPersistence, blobStore, listeners, crawlMode, ctx);
 
         while (!statementQueue.isEmpty()) {
             archive.on(statementQueue.poll());
@@ -144,21 +144,21 @@ public abstract class CmdCrawl implements Runnable, Crawler {
                 toStatement(biodiversityGraphCollection, IS_A, ENTITY),
                 toStatement(biodiversityGraphCollection, IS_A, COLLECTION),
                 toStatement(biodiversityGraphCollection, DESCRIPTION, toEnglishLiteral("A collection of biodiversity graphs.")),
-                toStatement(biodiversityGraphCollection, GENERATED_BY, crawlActivity),
+                toStatement(biodiversityGraphCollection, WAS_GENERATED_BY, crawlActivity),
 
                 toStatement(biodiversityGraph, IS_A, ENTITY),
                 toStatement(biodiversityGraph, IS_A, COLLECTION),
                 toStatement(biodiversityGraph, DESCRIPTION, toEnglishLiteral("A version of the biodiversity graph.")),
-                toStatement(biodiversityGraph, GENERATED_BY, ACTIVITY),
+                toStatement(biodiversityGraph, WAS_GENERATED_BY, crawlActivity),
 
                 toStatement(biodiversityArchiveCollection, IS_A, ENTITY),
                 toStatement(biodiversityArchiveCollection, DESCRIPTION, toEnglishLiteral("A collection of biodiversity graph archives.")),
-                toStatement(biodiversityArchiveCollection, GENERATED_BY, crawlActivity),
+                toStatement(biodiversityArchiveCollection, WAS_GENERATED_BY, crawlActivity),
                 toStatement(biodiversityArchiveCollection, toIRI("http://www.w3.org/ns/prov#wasDerivedFrom"), biodiversityGraph),
 
                 toStatement(biodiversityArchive, IS_A, ENTITY),
                 toStatement(biodiversityArchive, DESCRIPTION, toEnglishLiteral("An nquad archive of the version of this biodiversity graph.")),
-                toStatement(biodiversityArchive, GENERATED_BY, crawlActivity),
+                toStatement(biodiversityArchive, WAS_GENERATED_BY, crawlActivity),
                 toStatement(biodiversityArchive, toIRI("http://www.w3.org/ns/prov#wasDerivedFrom"), biodiversityGraph)
 
 
@@ -191,17 +191,17 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         return logger;
     }
 
-    private StatementListener createOfflineArchive(Persistence persistence, BlobStore blobStore, StatementListener listeners[]) {
+    private StatementListener createOfflineArchive(Persistence persistence, BlobStore blobStore, StatementListener listeners[], CrawlContext crawlContext) {
         StatementStoreImpl statementStore = new StatementStoreImpl(persistence) {
             @Override
             public void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException {
             }
         };
-        return new Archiver(blobStore, null, statementStore, listeners);
+        return new Archiver(blobStore, null, statementStore, crawlContext, listeners);
     }
 
-    private StatementListener createOnlineArchive(Persistence persistence, BlobStore blobStore, StatementListener[] listener, CrawlMode crawlMode) {
-        Archiver Archiver = new Archiver(blobStore, Resources::asInputStream, new StatementStoreImpl(persistence), listener);
+    private StatementListener createOnlineArchive(Persistence persistence, BlobStore blobStore, StatementListener[] listener, CrawlMode crawlMode, CrawlContext crawlContext) {
+        Archiver Archiver = new Archiver(blobStore, Resources::asInputStream, new StatementStoreImpl(persistence), crawlContext, listener);
         Archiver.setResolveOnMissingOnly(CrawlMode.resume == crawlMode);
         return Archiver;
     }
