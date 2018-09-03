@@ -74,20 +74,20 @@ public class ContentResolverTest {
 
         URI testURI = getClass().getResource("test.txt").toURI();
         IRI providedNode = RefNodeFactory.toIRI(testURI);
-        Triple relation = RefNodeFactory.toStatement(RefNodeFactory.toBlank("test"), RefNodeConstants.WAS_DERIVED_FROM, providedNode);
+        Triple relation = RefNodeFactory.toStatement(providedNode, RefNodeConstants.HAS_VERSION, RefNodeFactory.toBlank());
 
         listener.on(relation);
 
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
-        assertThat(refNodes.size(), is(3));
+        assertThat(refNodes.size(), is(2));
 
         String expectedHash = "50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
         String expectedValue = "https://example.org";
 
         Triple cachedNode = refNodes.get(1);
         assertContentWith(cachedNode, expectedHash, expectedValue);
-        InputStream inputStream = blobStore.get((IRI) cachedNode.getSubject());
+        InputStream inputStream = blobStore.get((IRI) cachedNode.getObject());
         assertNotNull(inputStream);
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is("https://example.org"));
 
@@ -108,9 +108,9 @@ public class ContentResolverTest {
 
     private void assertContentWith(Triple cachedNode, String expectedHash, String expectedValue) throws IOException {
         String expectedSHA256 = "hash://sha256/" + expectedHash;
-        assertThat(((IRI)cachedNode.getSubject()).getIRIString(), is(expectedSHA256));
+        assertThat(((IRI)cachedNode.getObject()).getIRIString(), is(expectedSHA256));
 
-        String label = cachedNode.getSubject().toString();
+        String label = cachedNode.getObject().toString();
         assertThat(label, is("<hash://sha256/" + expectedHash + ">"));
 
         InputStream inputStream = blobStore.get(Hasher.toHashURI(expectedHash));

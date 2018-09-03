@@ -53,15 +53,6 @@ public class RefNodeFactory {
                 || RefNodeConstants.HAS_PREVIOUS_VERSION.equals(statement.getPredicate());
     }
 
-    public static boolean hasNoBlanks(Triple statement) {
-        return statement.getObject() instanceof IRI && statement.getSubject() instanceof IRI;
-    }
-
-    public static boolean isNotSkolemized(Triple statement) {
-        return !RefNodeFactory.isBlankOrSkolemizedBlank((IRI) statement.getObject())
-                && !RefNodeFactory.isBlankOrSkolemizedBlank(statement.getSubject());
-    }
-
     public static IRI getVersionSource(Triple statement) {
         IRI versionSource = null;
         if (hasVersionOrIsDerivedFrom(statement)) {

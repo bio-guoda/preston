@@ -22,9 +22,12 @@ import java.nio.charset.StandardCharsets;
 import static org.globalbioticinteractions.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
-import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
-import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_REVISION_OF;
-import static org.globalbioticinteractions.preston.model.RefNodeFactory.*;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersion;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersionSource;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toDateTime;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toLiteral;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toSkolemizedBlank;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
 
 
 public class Archiver extends StatementProcessor {
@@ -93,18 +96,12 @@ public class Archiver extends StatementProcessor {
     private void putVersion(IRI versionSource, IRI previousVersion, BlankNodeOrIRI newVersion) throws IOException {
         if (null != previousVersion && !previousVersion.equals(newVersion)) {
             recordGenerationTime(newVersion);
-            getStatementStore().put(Pair.of(WAS_REVISION_OF, previousVersion), newVersion);
             getStatementStore().put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
-
             emit(toStatement(newVersion, HAS_PREVIOUS_VERSION, previousVersion));
-            emit(toStatement(newVersion, WAS_REVISION_OF, previousVersion));
 
         } else if (null == previousVersion) {
             recordGenerationTime(newVersion);
-            getStatementStore().put(Pair.of(WAS_DERIVED_FROM, versionSource), newVersion);
             getStatementStore().put(Pair.of(versionSource, HAS_VERSION), newVersion);
-
-            emit(toStatement(newVersion, WAS_DERIVED_FROM, versionSource));
             emit(toStatement(versionSource, HAS_VERSION, newVersion));
         }
     }
@@ -124,7 +121,6 @@ public class Archiver extends StatementProcessor {
         emit(toStatement(derivedSubject,
                 GENERATED_AT_TIME,
                 toDateTime(value)));
-
     }
 
     private BlobStore getBlobStore() {
@@ -141,25 +137,11 @@ public class Archiver extends StatementProcessor {
 
     private IRI findMostRecentVersion(IRI versionSource) throws IOException {
         IRI mostRecentVersion = getStatementStore().get(Pair.of(versionSource, HAS_VERSION));
-        if (mostRecentVersion == null) {
-            mostRecentVersion = getStatementStore().get(Pair.of(WAS_DERIVED_FROM, versionSource));
-            if (mostRecentVersion != null) {
-                // migrate
-                Pair<RDFTerm, RDFTerm> query = Pair.of(versionSource, HAS_VERSION);
-                if (getStatementStore().get(query) == null) {
-                    getStatementStore().put(query, mostRecentVersion);
-                    recordTimeFor(mostRecentVersion);
-                }
-            }
-        }
 
         if (mostRecentVersion != null) {
             emitExistingVersion(toStatement(versionSource,
                     HAS_VERSION,
                     mostRecentVersion));
-
-            // migrate
-            migrateVersions(mostRecentVersion);
             mostRecentVersion = findLastVersion(mostRecentVersion);
         }
         return mostRecentVersion;
@@ -177,25 +159,6 @@ public class Archiver extends StatementProcessor {
         return lastVersionId;
     }
 
-    private void migrateVersions(IRI existingId) throws IOException {
-        IRI lastVersionId = existingId;
-        IRI newerVersionId;
-        while ((newerVersionId = getStatementStore().get(Pair.of(WAS_REVISION_OF, lastVersionId))) != null) {
-            Pair<RDFTerm, RDFTerm> query = Pair.of(HAS_PREVIOUS_VERSION, lastVersionId);
-            if (getStatementStore().get(query) == null ) {
-                getStatementStore().put(query, newerVersionId);
-                recordTimeFor(newerVersionId);
-            }
-            lastVersionId = newerVersionId;
-        }
-    }
-
-    private void recordTimeFor(IRI newerVersionId) throws IOException {
-        IRI timeKey = getStatementStore().get(Pair.of(newerVersionId, GENERATED_AT_TIME));
-        if (timeKey != null) {
-            getStatementStore().put(Pair.of(newerVersionId, GENERATED_AT_TIME), timeKey);
-        }
-    }
 
     private void emitExistingVersion(Triple statement) throws IOException {
         IRI timeKey = getStatementStore().get(Pair.of(statement.getSubject(), GENERATED_AT_TIME));
@@ -209,9 +172,6 @@ public class Archiver extends StatementProcessor {
         }
         emit(statement);
     }
-
-
-
 
     public Dereferencer getDereferencer() {
         return dereferencer;

@@ -41,9 +41,9 @@ public class ArchiverTest {
     public void putContentThatFailsToDownload() throws IOException {
         BlankNode blank = toBlank();
         Triple statement
-                = toStatement(blank,
-                WAS_DERIVED_FROM,
-                toIRI(URI.create("http://some")));
+                = toStatement(toIRI(URI.create("http://some")),
+                HAS_VERSION,
+                blank);
 
         Dereferencer dereferencer = uri -> {
             throw new IOException("fails to dereference");
@@ -59,9 +59,9 @@ public class ArchiverTest {
 
         // dereference subject
 
-        IRI contentHash = relationStore.getStatementStore().get(
-                Pair.of(WAS_DERIVED_FROM,
-                        toIRI(URI.create("http://some"))));
+        IRI contentHash = relationStore
+                .getStatementStore()
+                .get(Pair.of(toIRI(URI.create("http://some")), HAS_VERSION));
 
         assertTrue(isBlankOrSkolemizedBlank(contentHash));
     }
@@ -69,10 +69,9 @@ public class ArchiverTest {
     @Test
     public void doNotEmitSkolemizedBlanks() throws IOException {
         IRI skolemizedBlank = toSkolemizedBlank(toBlank());
-        Triple statement
-                = toStatement(skolemizedBlank,
-                WAS_DERIVED_FROM,
-                toIRI(URI.create("http://some")));
+        Triple statement = toStatement(toIRI(URI.create("http://some")),
+                HAS_VERSION,
+                skolemizedBlank);
 
         Dereferencer dereferencer = uri -> {
             throw new IOException("fails to dereference");
@@ -84,7 +83,8 @@ public class ArchiverTest {
 
         Archiver relationStore = new Archiver(
                 new AppendOnlyBlobStore(testPersistence),
-                dereferencer, new StatementStoreImpl(testPersistence),
+                dereferencer,
+                new StatementStoreImpl(testPersistence),
                 nodes::add);
 
         relationStore.on(statement);
@@ -93,8 +93,7 @@ public class ArchiverTest {
 
         // dereference subject
         IRI contentHash = relationStore.getStatementStore().get(
-                Pair.of(WAS_DERIVED_FROM,
-                        toIRI(URI.create("http://some"))));
+                Pair.of(toIRI(URI.create("http://some")), HAS_VERSION));
 
         assertNull(contentHash);
     }
@@ -102,10 +101,11 @@ public class ArchiverTest {
     @Test
     public void putContentThatNeedsDownload() throws IOException {
         BlankNode blank = toBlank();
+
         Triple statement
-                = toStatement(blank,
-                WAS_DERIVED_FROM,
-                toIRI(URI.create("http://some")));
+                = toStatement(toIRI(URI.create("http://some")),
+                HAS_VERSION,
+                blank);
 
         Dereferencer dereferencer = new DereferenceTest("derefData@");
         Persistence testPersistence = TestUtil.getTestPersistence();
@@ -121,8 +121,7 @@ public class ArchiverTest {
         // dereference subject
 
         IRI contentHash = relationStore.getStatementStore().get(
-                Pair.of(WAS_DERIVED_FROM,
-                        toIRI(URI.create("http://some"))));
+                Pair.of(toIRI(URI.create("http://some")), HAS_VERSION));
         InputStream content = blobStore.get(contentHash);
         assertNotNull(contentHash);
 
@@ -143,8 +142,7 @@ public class ArchiverTest {
 
     @Test
     public void putNewVersionOfContent() throws IOException {
-        Triple statement
-                = toStatement(toBlank(), WAS_DERIVED_FROM, SOME_IRI);
+        Triple statement = toStatement(SOME_IRI, HAS_VERSION, toBlank());
 
 
         String prefix = "derefData@";
@@ -158,19 +156,19 @@ public class ArchiverTest {
 
         relationstore.on(statement);
 
-        IRI contentHash = relationstore.getStatementStore().get(Pair.of(WAS_DERIVED_FROM, SOME_IRI));
+        IRI contentHash = relationstore.getStatementStore().get(Pair.of(SOME_IRI, HAS_VERSION));
         assertNotNull(contentHash);
 
         Dereferencer dereferencer = new DereferenceTest("derefData2@");
         relationstore.setDereferencer(dereferencer);
         relationstore.on(statement);
 
-        IRI contentHash2 = relationstore.getStatementStore().get(Pair.of(WAS_DERIVED_FROM, SOME_IRI));
+        IRI contentHash2 = relationstore.getStatementStore().get(Pair.of(SOME_IRI, HAS_VERSION));
 
 
         assertThat(contentHash, Is.is(contentHash2));
 
-        IRI newContentHash = relationstore.getStatementStore().get(Pair.of(WAS_REVISION_OF, contentHash));
+        IRI newContentHash = relationstore.getStatementStore().get(Pair.of(HAS_PREVIOUS_VERSION, contentHash));
         InputStream newContent = blogStore.get(newContentHash);
 
         assertThat(contentHash, not(Is.is(newContentHash)));
@@ -181,67 +179,11 @@ public class ArchiverTest {
         relationstore.setDereferencer(new DereferenceTest("derefData3@"));
         relationstore.on(statement);
 
-        IRI newerContentHash = relationstore.getStatementStore().get(Pair.of(WAS_REVISION_OF, newContentHash));
+        IRI newerContentHash = relationstore.getStatementStore().get(Pair.of(HAS_PREVIOUS_VERSION, newContentHash));
         InputStream newerContent = blogStore.get(newerContentHash);
 
         assertThat(newerContentHash.getIRIString(), Is.is("hash://sha256/7e66eac09d137afe06dd73614e966a417260a111208dabe7225b05f02ce380fd"));
         assertThat(toUTF8(newerContent), Is.is("derefData3@http://some"));
-    }
-
-    @Test
-    public void rewriteFromExistingDerivedFrom() throws IOException {
-        AtomicBoolean deref = new AtomicBoolean(false);
-        Dereferencer explodingDereferencer = uri -> {
-            deref.set(true);
-            throw new IOException("boom!");
-        };
-        assertFalse(deref.get());
-        assertRewrite(explodingDereferencer, true);
-    }
-
-    @Test
-    public void rewriteFromExistingDerivedWithRefresh() throws IOException {
-
-        AtomicBoolean deref = new AtomicBoolean(false);
-        Dereferencer explodingDereferencer = uri -> {
-            deref.set(true);
-            throw new IOException("boom!");
-        };
-        assertRewrite(explodingDereferencer, false);
-        assertTrue(deref.get());
-    }
-
-    public void assertRewrite(Dereferencer explodingDereferencer, boolean resolveOnMissingOnly) throws IOException {
-        BlobStore blogStore = new AppendOnlyBlobStore(TestUtil.getTestPersistence());
-
-        Archiver relationstore = getAppendOnlyRelationStore(explodingDereferencer,
-                blogStore,
-                TestUtil.getTestPersistence());
-        relationstore.setResolveOnMissingOnly(resolveOnMissingOnly);
-
-        String original = "https://example.org/source";
-
-        IRI version1 = toIRI("https://example.org/version1");
-        IRI version2 = toIRI("https://example.org/version2");
-
-        relationstore.getStatementStore().put((
-                Pair.of(WAS_DERIVED_FROM, toIRI(original))),
-                version1);
-
-        relationstore.getStatementStore().put(
-                Pair.of(WAS_REVISION_OF, version1),
-                version2);
-
-        Triple request
-                = toStatement(toIRI(original), HAS_VERSION, toBlank());
-
-        relationstore.on(request);
-
-        IRI contentHash = relationstore.getStatementStore().get(Pair.of(toIRI(original), HAS_VERSION));
-        assertNotNull(contentHash);
-
-        IRI contentHash2 = relationstore.getStatementStore().get(Pair.of(HAS_PREVIOUS_VERSION, version1));
-        assertNotNull(contentHash2);
     }
 
     private class DereferenceTest implements Dereferencer {
