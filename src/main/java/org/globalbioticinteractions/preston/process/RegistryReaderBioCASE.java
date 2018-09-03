@@ -29,7 +29,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     private static final Log LOG = LogFactory.getLog(RegistryReaderBioCASE.class);
 
     static final String BIOCASE_REGISTRY_ENDPOINT = "https://bms.gfbio.org/services/data-sources/";
-    private static final IRI REF_NODE_REGISTRY = toIRI(BIOCASE_REGISTRY_ENDPOINT);
+    public static final IRI REF_NODE_REGISTRY = toIRI(BIOCASE_REGISTRY_ENDPOINT);
 
     // https://wiki.bgbm.org/bps/index.php/Archiving
     // http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=Herbar&inventory=1
@@ -120,10 +120,10 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     @Override
     public void on(Triple statement) {
         if (Seeds.SEED_NODE_BIOCASE.equals(statement.getSubject())
-                && HAD_MEMBER.equals(statement.getPredicate())) {
+                && USED_BY.equals(statement.getPredicate())) {
             emit(toStatement(REF_NODE_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
             emit(toStatement(REF_NODE_REGISTRY, HAS_VERSION, toBlank()));
-        } else if (hasDerivedContentAvailable(statement)) {
+        } else if (hasVersionAvailable(statement)) {
             try {
                 EmittingParser parse = null;
                 if (REF_NODE_REGISTRY.equals(getVersionSource(statement))) {

@@ -9,9 +9,11 @@ import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.simple.SimpleRDF;
 import org.apache.commons.rdf.simple.Types;
+import org.globalbioticinteractions.preston.DateUtil;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 
 import java.net.URI;
+import java.util.UUID;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.*;
 
@@ -28,12 +30,20 @@ public class RefNodeFactory {
         return rdf.createIRI(urlString);
     }
 
+    public static IRI toIRI(UUID uuid) {
+        return rdf.createIRI(uuid.toString());
+    }
+
     public static IRI toIRI(URI uri) {
         return rdf.createIRI(uri.toString());
     }
 
-    public static Literal toLiteral(String bla) {
-        return rdf.createLiteral(bla);
+    public static Literal toLiteral(String str) {
+        return rdf.createLiteral(str);
+    }
+
+    public static Literal toEnglishLiteral(String str) {
+        return rdf.createLiteral(str, "en");
     }
 
     public static Literal toContentType(String contentType) {
@@ -97,8 +107,12 @@ public class RefNodeFactory {
         return toIRI("https://deeplinker.bio/" + SKOLEMIZATION_PATH + subj.uniqueReference());
     }
 
-    public static boolean hasDerivedContentAvailable(Triple statement) {
+    public static boolean hasVersionAvailable(Triple statement) {
         return hasVersionOrIsDerivedFrom(statement)
                 && !isBlankOrSkolemizedBlank(getVersion(statement));
+    }
+
+    public static Literal nowLiteral() {
+        return toDateTime(DateUtil.now());
     }
 }

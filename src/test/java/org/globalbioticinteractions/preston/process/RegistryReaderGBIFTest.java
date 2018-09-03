@@ -3,9 +3,7 @@ package org.globalbioticinteractions.preston.process;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
-import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
-import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.store.TestUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,7 +29,7 @@ public class RegistryReaderGBIFTest {
     public void onSeed() {
         ArrayList<Triple> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
-        registryReaderGBIF.on(toStatement(Seeds.SEED_NODE_GBIF, HAD_MEMBER, SOFTWARE_AGENT));
+        registryReaderGBIF.on(toStatement(Seeds.SEED_NODE_GBIF, USED_BY, toIRI("http://example.org/someActivity")));
         Assert.assertThat(nodes.size(), is(2));
         assertThat(getVersionSource(nodes.get(1)).getIRIString(), is("https://api.gbif.org/v1/dataset"));
     }

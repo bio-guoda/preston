@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
+import static org.globalbioticinteractions.preston.RefNodeConstants.USED_BY;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersionSource;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toIRI;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toLiteral;
@@ -42,7 +43,7 @@ public class RegistryReaderBioCASETest {
     @Test
     public void onSeed() {
         RDFTerm bla = toLiteral("bla");
-        registryReader.on(toStatement(Seeds.SEED_NODE_BIOCASE, HAD_MEMBER, bla));
+        registryReader.on(toStatement(Seeds.SEED_NODE_BIOCASE, USED_BY, bla));
         Assert.assertThat(nodes.size(), is(2));
         assertThat(((IRI) getVersionSource(nodes.get(1))).getIRIString(), is(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT));
     }

@@ -19,7 +19,7 @@ public class RefNodeFactoryTest {
         Triple statement = toStatement(toIRI("http://some"),
                 RefNodeConstants.HAS_VERSION,
                 toBlank());
-        assertFalse(hasDerivedContentAvailable(statement));
+        assertFalse(hasVersionAvailable(statement));
     }
 
 

@@ -9,7 +9,6 @@ import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
-import org.globalbioticinteractions.preston.model.RefNodeFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
-import static org.globalbioticinteractions.preston.model.RefNodeFactory.*;
+import static org.globalbioticinteractions.preston.RefNodeConstants.USED_BY;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersion;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersionSource;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.hasVersionAvailable;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toBlank;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toContentType;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toIRI;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toUUID;
 
 public class RegistryReaderGBIF extends ProcessorReadOnly {
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
@@ -25,9 +32,9 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         put("EML", MimeTypes.MIME_TYPE_EML);
     }};
 
-    private static final String GBIF_DATASET_API_ENDPOINT = "https://api.gbif.org/v1/dataset";
+    public static final String GBIF_DATASET_REGISTRY_STRING = "https://api.gbif.org/v1/dataset";
     private final Log LOG = LogFactory.getLog(RegistryReaderGBIF.class);
-    public static final IRI API_ENTRY_POINT = toIRI(GBIF_DATASET_API_ENDPOINT);
+    public static final IRI GBIF_DATASET_REGISTRY = toIRI(GBIF_DATASET_REGISTRY_STRING);
 
     public RegistryReaderGBIF(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
         super(blobStoreReadOnly, listener);
@@ -36,11 +43,10 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     @Override
     public void on(Triple statement) {
         if (Seeds.SEED_NODE_GBIF.equals(statement.getSubject())
-                && HAD_MEMBER.equals(statement.getPredicate())
-                && statement.getObject().equals(RefNodeConstants.SOFTWARE_AGENT)) {
-            emitPageRequest(this, API_ENTRY_POINT);
-        } else if (hasDerivedContentAvailable(statement)
-                && getVersionSource(statement).toString().startsWith("<" + GBIF_DATASET_API_ENDPOINT)) {
+                && USED_BY.equals(statement.getPredicate())) {
+            emitPageRequest(this, GBIF_DATASET_REGISTRY);
+        } else if (hasVersionAvailable(statement)
+                && getVersionSource(statement).toString().startsWith("<" + GBIF_DATASET_REGISTRY_STRING)) {
             try {
                 IRI currentPage = (IRI) getVersion(statement);
                 parse(currentPage, this, get(currentPage));
@@ -51,7 +57,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     }
 
     private static void emitNextPage(int offset, int limit, StatementEmitter emitter) {
-        String uri = GBIF_DATASET_API_ENDPOINT + "?offset=" + offset + "&limit=" + limit;
+        String uri = GBIF_DATASET_REGISTRY_STRING + "?offset=" + offset + "&limit=" + limit;
         IRI nextPage = toIRI(uri);
         emitPageRequest(emitter, nextPage);
     }

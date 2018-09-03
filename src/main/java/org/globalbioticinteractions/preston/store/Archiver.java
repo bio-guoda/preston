@@ -7,11 +7,12 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
-import org.globalbioticinteractions.preston.DateUtil;
 import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.cmd.CmdList;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.process.StatementListener;
 import org.globalbioticinteractions.preston.process.StatementProcessor;
 
@@ -24,7 +25,6 @@ import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PREVIOUS
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersion;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersionSource;
-import static org.globalbioticinteractions.preston.model.RefNodeFactory.toDateTime;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toLiteral;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toSkolemizedBlank;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
@@ -112,7 +112,8 @@ public class Archiver extends StatementProcessor {
     }
 
     private void recordGenerationTime(BlankNodeOrIRI derivedSubject) throws IOException {
-        String value = toDateTime(DateUtil.now()).getLexicalForm();
+        Literal nowLiteral = RefNodeFactory.nowLiteral();
+        String value = nowLiteral.getLexicalForm();
         getBlobStore().putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
         IRI value1 = Hasher.calcSHA256(value);
 
@@ -120,7 +121,7 @@ public class Archiver extends StatementProcessor {
         getStatementStore().put(of, value1);
         emit(toStatement(derivedSubject,
                 GENERATED_AT_TIME,
-                toDateTime(value)));
+                nowLiteral));
     }
 
     private BlobStore getBlobStore() {

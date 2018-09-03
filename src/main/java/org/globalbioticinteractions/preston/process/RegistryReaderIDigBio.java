@@ -11,7 +11,6 @@ import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
-import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -45,7 +44,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
             emit(toStatement(publishers, HAD_MEMBER, statement.getSubject()));
             emit(toStatement(publishers, RefNodeConstants.HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
             emit(toStatement(publishers, RefNodeConstants.HAS_VERSION, toBlank()));
-        } else if (hasDerivedContentAvailable(statement)) {
+        } else if (hasVersionAvailable(statement)) {
             parse(statement, (IRI) getVersion(statement));
         }
     }
