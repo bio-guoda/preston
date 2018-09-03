@@ -13,7 +13,8 @@ import org.globalbioticinteractions.preston.process.StatementListener;
 import org.globalbioticinteractions.preston.process.RegistryReaderBioCASE;
 import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.process.RegistryReaderIDigBio;
-import org.globalbioticinteractions.preston.process.StatementLogger;
+import org.globalbioticinteractions.preston.process.StatementLoggerNQuads;
+import org.globalbioticinteractions.preston.process.StatementLoggerTSV;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.Archiver;
 import org.globalbioticinteractions.preston.store.BlobStore;
@@ -89,7 +90,9 @@ public abstract class CmdCrawl implements Runnable, Crawler {
     private StatementListener getStatementLogger() {
         StatementListener logger;
         if (Logger.tsv == logMode) {
-            logger = new StatementLogger();
+            logger = new StatementLoggerTSV();
+        } else if (Logger.nquads == logMode) {
+            logger = new StatementLoggerNQuads();
         } else {
             logger = new StatementListener() {
                 AtomicLong count = new AtomicLong(1);
