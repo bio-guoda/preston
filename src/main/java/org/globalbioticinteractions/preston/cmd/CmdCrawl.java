@@ -7,13 +7,12 @@ import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.Resources;
 import org.globalbioticinteractions.preston.Seeds;
+import org.globalbioticinteractions.preston.StatementLogFactory;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.process.RegistryReaderBioCASE;
 import org.globalbioticinteractions.preston.process.RegistryReaderGBIF;
 import org.globalbioticinteractions.preston.process.RegistryReaderIDigBio;
 import org.globalbioticinteractions.preston.process.StatementListener;
-import org.globalbioticinteractions.preston.process.StatementLoggerNQuads;
-import org.globalbioticinteractions.preston.process.StatementLoggerTSV;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.Archiver;
 import org.globalbioticinteractions.preston.store.BlobStore;
@@ -29,7 +28,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.*;
@@ -99,7 +97,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
                 new RegistryReaderIDigBio(blobStore, ctx, statementQueue::add),
                 new RegistryReaderGBIF(blobStore, ctx, statementQueue::add),
                 new RegistryReaderBioCASE(blobStore, ctx, statementQueue::add),
-                getStatementLogger()
+                StatementLogFactory.createLogger(logMode)
         };
 
         Persistence statementPersistence = new FilePersistence(tmpDir, new File(dataDir, "statement"));
@@ -163,32 +161,6 @@ public abstract class CmdCrawl implements Runnable, Crawler {
 
 
         );
-    }
-
-    ;
-
-    private StatementListener getStatementLogger() {
-        StatementListener logger;
-        if (Logger.tsv == logMode) {
-            logger = new StatementLoggerTSV();
-        } else if (Logger.nquads == logMode) {
-            logger = new StatementLoggerNQuads();
-        } else {
-            logger = new StatementListener() {
-                AtomicLong count = new AtomicLong(1);
-
-                @Override
-                public void on(Triple statement) {
-                    long index = count.getAndIncrement();
-                    if ((index % 80) == 0) {
-                        System.out.println();
-                    } else {
-                        System.out.print(".");
-                    }
-                }
-            };
-        }
-        return logger;
     }
 
     private StatementListener createOfflineArchive(Persistence persistence, BlobStore blobStore, StatementListener listeners[], CrawlContext crawlContext) {
