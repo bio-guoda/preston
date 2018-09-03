@@ -48,15 +48,10 @@ public abstract class CmdCrawl implements Runnable, Crawler {
     }
 
     protected void crawl(CrawlMode crawlMode) {
-        final List<Triple> seeds = seedUrls.stream()
-                .map(uriString -> {
-                    IRI refNodeSeed = RefNodeFactory.toIRI(uriString);
-                    return RefNodeFactory.toStatement(refNodeSeed, RefNodeConstants.HAD_MEMBER, RefNodeConstants.SOFTWARE_AGENT);
-                }).collect(Collectors.toList());
 
-        final Queue<Triple> statements =
+        final Queue<Triple> statementQueue =
                 new ConcurrentLinkedQueue<Triple>() {{
-                    addAll(seeds);
+                    addAll(generateSeeds());
                 }};
 
         File dataDir = new File("data");
@@ -67,9 +62,9 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         BlobStore blobStore = new AppendOnlyBlobStore(blobPersistence);
 
         StatementListener listeners[] = {
-                new RegistryReaderIDigBio(blobStore, statements::add),
-                new RegistryReaderGBIF(blobStore, statements::add),
-                new RegistryReaderBioCASE(blobStore, statements::add),
+                new RegistryReaderIDigBio(blobStore, statementQueue::add),
+                new RegistryReaderGBIF(blobStore, statementQueue::add),
+                new RegistryReaderBioCASE(blobStore, statementQueue::add),
                 getStatementLogger()
         };
 
@@ -78,9 +73,17 @@ public abstract class CmdCrawl implements Runnable, Crawler {
                 ? createOfflineArchive(statementPersistence, blobStore, listeners)
                 : createOnlineArchive(statementPersistence, blobStore, listeners, crawlMode);
 
-        while (!statements.isEmpty()) {
-            archive.on(statements.poll());
+        while (!statementQueue.isEmpty()) {
+            archive.on(statementQueue.poll());
         }
+    }
+
+    private List<Triple> generateSeeds() {
+        return seedUrls.stream()
+                .map(uriString -> {
+                    IRI refNodeSeed = RefNodeFactory.toIRI(uriString);
+                    return RefNodeFactory.toStatement(refNodeSeed, RefNodeConstants.HAD_MEMBER, RefNodeConstants.SOFTWARE_AGENT);
+                }).collect(Collectors.toList());
     }
 
     private StatementListener getStatementLogger() {

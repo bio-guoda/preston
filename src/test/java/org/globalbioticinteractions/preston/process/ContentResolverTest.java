@@ -80,7 +80,7 @@ public class ContentResolverTest {
 
         assertTrue(tempDir.toFile().exists());
         assertFalse(refNodes.isEmpty());
-        assertThat(refNodes.size(), is(2));
+        assertThat(refNodes.size(), is(3));
 
         String expectedHash = "50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
         String expectedValue = "https://example.org";

@@ -25,6 +25,7 @@ import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PREVIOUS
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_DERIVED_FROM;
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_REVISION_OF;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.*;
 
 
 public class Archiver extends StatementProcessor {
@@ -58,7 +59,7 @@ public class Archiver extends StatementProcessor {
     @Override
     public void on(Triple statement) {
         try {
-            BlankNodeOrIRI version = RefNodeFactory.getVersion(statement);
+            BlankNodeOrIRI version = getVersion(statement);
             if (version == null || !(version instanceof BlankNode)) {
                 emit(statement);
             } else {
@@ -71,7 +72,7 @@ public class Archiver extends StatementProcessor {
     }
 
     private void handleVersion(Triple statement, BlankNode blankVersion) throws IOException {
-        IRI versionSource = RefNodeFactory.getVersionSource(statement);
+        IRI versionSource = getVersionSource(statement);
         IRI previousVersion = findMostRecentVersion(versionSource);
         if (previousVersion == null || !shouldResolveOnMissingOnly()) {
             if (getDereferencer() != null) {
@@ -82,7 +83,7 @@ public class Archiver extends StatementProcessor {
                     LOG.warn("failed to dereference [" + versionSource.toString() + "]", e);
                 } finally {
                     if (newVersion == null) {
-                        newVersion = RefNodeFactory.toSkolemizedBlank(blankVersion);
+                        newVersion = toSkolemizedBlank(blankVersion);
                     }
                     putVersion(versionSource, previousVersion, newVersion);
                 }
@@ -94,13 +95,18 @@ public class Archiver extends StatementProcessor {
         if (null != previousVersion && !previousVersion.equals(newVersion)) {
             recordGenerationTime(newVersion);
             getStatementStore().put(Pair.of(WAS_REVISION_OF, previousVersion), newVersion);
-            Triple of = RefNodeFactory.toStatement(newVersion, WAS_REVISION_OF, previousVersion);
-            emit(of);
+            getStatementStore().put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
+
+            emit(toStatement(newVersion, HAS_PREVIOUS_VERSION, previousVersion));
+            emit(toStatement(newVersion, WAS_REVISION_OF, previousVersion));
 
         } else if (null == previousVersion) {
             recordGenerationTime(newVersion);
             getStatementStore().put(Pair.of(WAS_DERIVED_FROM, versionSource), newVersion);
-            emit(RefNodeFactory.toStatement(newVersion, WAS_DERIVED_FROM, versionSource));
+            getStatementStore().put(Pair.of(versionSource, HAS_VERSION), newVersion);
+
+            emit(toStatement(newVersion, WAS_DERIVED_FROM, versionSource));
+            emit(toStatement(versionSource, HAS_VERSION, newVersion));
         }
     }
 
@@ -110,15 +116,15 @@ public class Archiver extends StatementProcessor {
     }
 
     private void recordGenerationTime(BlankNodeOrIRI derivedSubject) throws IOException {
-        String value = RefNodeFactory.toDateTime(DateUtil.now()).getLexicalForm();
+        String value = toDateTime(DateUtil.now()).getLexicalForm();
         getBlobStore().putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
         IRI value1 = Hasher.calcSHA256(value);
 
         Pair<RDFTerm, RDFTerm> of = Pair.of(derivedSubject, GENERATED_AT_TIME);
         getStatementStore().put(of, value1);
-        emit(RefNodeFactory.toStatement(derivedSubject,
+        emit(toStatement(derivedSubject,
                 GENERATED_AT_TIME,
-                RefNodeFactory.toDateTime(value)));
+                toDateTime(value)));
 
     }
 
@@ -193,12 +199,12 @@ public class Archiver extends StatementProcessor {
         if (timeKey != null) {
             InputStream input = getBlobStore().get(timeKey);
             if (input != null) {
-                emit(RefNodeFactory.toStatement(subj,
+                emit(toStatement(subj,
                         GENERATED_AT_TIME,
-                        RefNodeFactory.toLiteral(IOUtils.toString(input, StandardCharsets.UTF_8))));
+                        toLiteral(IOUtils.toString(input, StandardCharsets.UTF_8))));
             }
         }
-        emit(RefNodeFactory.toStatement(subj,
+        emit(toStatement(subj,
                 predicate,
                 obj));
     }
