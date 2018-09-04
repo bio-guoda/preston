@@ -39,10 +39,12 @@ public class CmdHistory extends Persisting implements Runnable {
         StatementListener logger = StatementLogFactory.createLogger(getLogMode());
         StatementStore statementStore = new StatementStoreImpl(getStatementPersistence());
         BlobStore blobStore = new AppendOnlyBlobStore(getBlobPersistence());
+        AtomicBoolean gotNone = new AtomicBoolean(true);
         try {
             VersionUtil.findMostRecentVersion(ARCHIVE, statementStore, new VersionListener() {
                 @Override
                 public void onVersion(Triple statement) throws IOException {
+                    gotNone.set(false);
                     Triple generationStatement = VersionUtil.generationTimeFor(statement.getSubject(), statementStore, blobStore);
                     if (generationStatement != null) {
                         logger.on(generationStatement);
@@ -52,6 +54,10 @@ public class CmdHistory extends Persisting implements Runnable {
             });
         } catch (IOException e) {
             throw new RuntimeException("failed to get versions");
+        }
+
+        if (gotNone.get()) {
+            LOG.warn("No history found. Suggest to update first.");
         }
     }
 }
