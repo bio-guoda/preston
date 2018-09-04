@@ -12,13 +12,11 @@ public class Persisting {
 
 
     FilePersistence getBlobPersistence() {
-        return new FilePersistence(
-                getTmpDir(),
-                new File(getDataDir(), "blob"));
+        return new FilePersistence(getTmpDir(), getDataDir());
     }
 
     FilePersistence getStatementPersistence() {
-        return new FilePersistence(getTmpDir(), new File(getDataDir(), "statement"));
+        return new FilePersistence(getTmpDir(), getDataDir());
     }
 
 
