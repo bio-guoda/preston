@@ -51,11 +51,11 @@ public class CmdLine {
     JCommander buildCommander() {
         return JCommander.newBuilder()
                 .addObject(new CommandMain())
-                .addCommand("version", new CmdVersion())
                 .addCommand("ls", new CmdList())
-                .addCommand("update", new CmdUpdate())
                 .addCommand("get", new CmdGet())
+                .addCommand("update", new CmdUpdate())
                 .addCommand("history", new CmdHistory())
+                .addCommand("version", new CmdVersion())
                 .build();
     }
 

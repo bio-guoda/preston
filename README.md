@@ -65,21 +65,16 @@ Please use [maven](https://maven.apache.org) version 3.3+.
 ```
 Usage: <main class> [command] [command options]
   Commands:
-    version      Show Version
-      Usage: version
-
     ls      list biodiversity graph
-      Usage: ls [options] content URLs to update. If specified, the seeds will
-            not be used.
+      Usage: ls [options]
         Options:
           -l, --log
             log format
             Default: nquads
             Possible Values: [tsv, nquads, dots]
-          -u, --seed-uris
-            starting points for graph discovery. Only active when no content
-            urls are provided.
-            Default: [https://idigbio.org, https://gbif.org, http://biocase.org]
+
+    get      get biodiversity node(s)
+      Usage: get node id (e.g., [hash://sha256/8ed311...])
 
     update      update biodiversity graph
       Usage: update [options] content URLs to update. If specified, the seeds
@@ -97,14 +92,6 @@ Usage: <main class> [command] [command options]
             urls are provided.
             Default: [https://idigbio.org, https://gbif.org, http://biocase.org]
 
-    get      get biodiversity node(s)
-      Usage: get [options] node id (e.g., [hash://sha256/8ed311...]S)
-        Options:
-          -l, --log
-            log format
-            Default: nquads
-            Possible Values: [tsv, nquads, dots]
-
     history      show history of biodiversity resource
       Usage: history [options] biodiversity resource locator
         Options:
@@ -112,8 +99,10 @@ Usage: <main class> [command] [command options]
             log format
             Default: nquads
             Possible Values: [tsv, nquads, dots]
-```
 
+    version      show version
+      Usage: version
+```
 
 ## Examples 
 
