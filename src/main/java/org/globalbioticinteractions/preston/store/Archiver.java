@@ -1,6 +1,5 @@
 package org.globalbioticinteractions.preston.store;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -9,16 +8,13 @@ import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Triple;
-import org.globalbioticinteractions.preston.Hasher;
 import org.globalbioticinteractions.preston.cmd.CmdList;
 import org.globalbioticinteractions.preston.cmd.CrawlContext;
-import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.process.StatementListener;
 import org.globalbioticinteractions.preston.process.StatementProcessor;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
@@ -26,7 +22,6 @@ import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_GENERATED_BY;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersion;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersionSource;
-import static org.globalbioticinteractions.preston.model.RefNodeFactory.toLiteral;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toSkolemizedBlank;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
 
@@ -76,13 +71,13 @@ public class Archiver extends StatementProcessor {
 
     private void handleVersions(Triple statement, BlankNode blankVersion) throws IOException {
         IRI versionSource = getVersionSource(statement);
-        IRI previousVersion = VersionUtil.findMostRecentVersion(versionSource, new VersionListener() {
+        IRI previousVersion = VersionUtil.findMostRecentVersion(versionSource, getStatementStore(), new VersionListener() {
 
             @Override
             public void onVersion(Triple statement) throws IOException {
                 emitExistingVersion(statement);
             }
-        }, getStatementStore());
+        });
         if (previousVersion == null || !shouldResolveOnMissingOnly()) {
             if (getDereferencer() != null) {
                 IRI newVersion = null;
@@ -119,12 +114,7 @@ public class Archiver extends StatementProcessor {
     }
 
     private void recordGenerationTime(BlankNodeOrIRI derivedSubject) throws IOException {
-        Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
-        String value = nowLiteral.getLexicalForm();
-        getBlobStore().putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
-        IRI value1 = Hasher.calcSHA256(value);
-
-        getStatementStore().put(Pair.of(derivedSubject, GENERATED_AT_TIME), value1);
+        Literal nowLiteral = VersionUtil.recordGenerationTimeFor(derivedSubject, getBlobStore(), getStatementStore());
         emit(toStatement(derivedSubject,
                 GENERATED_AT_TIME,
                 nowLiteral));
@@ -153,14 +143,9 @@ public class Archiver extends StatementProcessor {
     }
 
     private void emitGenerationInfo(Triple statement) throws IOException {
-        IRI timeKey = getStatementStore().get(Pair.of(statement.getSubject(), GENERATED_AT_TIME));
-        if (timeKey != null) {
-            InputStream input = getBlobStore().get(timeKey);
-            if (input != null) {
-                emit(toStatement(statement.getSubject(),
-                        GENERATED_AT_TIME,
-                        toLiteral(IOUtils.toString(input, StandardCharsets.UTF_8))));
-            }
+        Triple statement1 = VersionUtil.generationTimeFor(statement.getSubject(), getStatementStore(), getBlobStore());
+        if (statement1 != null) {
+            emit(statement1);
         }
         IRI crawlActivityKey = getStatementStore().get(Pair.of(statement.getSubject(), WAS_GENERATED_BY));
         if (crawlActivityKey != null) {

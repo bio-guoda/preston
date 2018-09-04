@@ -29,9 +29,7 @@ public class RefNodeConstants {
     public static final IRI WAS_GENERATED_BY = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasGeneratedBy"));
 
     public static final UUID ARCHIVE_COLLECTION = UUID.fromString("0659a54f-b713-4f86-a917-5be166a14110");
-    public static final IRI ARCHIVE_COLLECTION_IRI = toUUID(ARCHIVE_COLLECTION.toString());
-    public static final UUID GRAPH_COLLECTION = UUID.fromString("2c1946b9-0871-42fb-8eef-580b16d17294");
-    public static final IRI GRAPH_COLLECTION_IRI = toUUID(GRAPH_COLLECTION.toString());
+    public static final IRI ARCHIVE = toUUID(ARCHIVE_COLLECTION.toString());
 
     public static final IRI USED_BY = toIRI("http://www.w3.org/ns/prov#usedBy");
     public static final IRI AGENT = toIRI("http://www.w3.org/ns/prov#Agent");

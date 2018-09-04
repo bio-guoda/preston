@@ -31,15 +31,6 @@ public class TestUtil {
                 return toIRI("https://example.com/testActivity");
             }
 
-            @Override
-            public IRI getArchive() {
-                return toIRI("https://example.com/testArchive");
-            }
-
-            @Override
-            public IRI getGraph() {
-                return toIRI("https://example.com/testGraph");
-            }
         };
     }
 }

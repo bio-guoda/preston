@@ -10,6 +10,7 @@ import java.util.List;
 
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toBlank;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toIRI;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 public class CmdCrawlTest {
@@ -18,10 +19,10 @@ public class CmdCrawlTest {
     public void findCrawlInfo() {
 
         IRI someCrawlActivity = toIRI("http://example.org/crawl");
-        IRI someGraph = toIRI("http://example.org/graph");
-        IRI someArchive = toIRI("http://example.org/archive");
 
-        List<Triple> crawlInfo = CmdCrawl.findCrawlInfo(someCrawlActivity, someGraph, someArchive);
+        List<Triple> crawlInfo = CmdCrawl.findCrawlInfo(someCrawlActivity);
+
+        assertFalse(crawlInfo.isEmpty());
 
         crawlInfo.forEach(System.out::println);
     }
@@ -32,8 +33,7 @@ public class CmdCrawlTest {
 
         assertThat(uuid, Is.is("0659a54f-b713-4f86-a917-5be166a14110"));
 
-        String uuid2 = RefNodeConstants.GRAPH_COLLECTION.toString();
-        assertThat(uuid2, Is.is("2c1946b9-0871-42fb-8eef-580b16d17294"));
+
     }
 
 }

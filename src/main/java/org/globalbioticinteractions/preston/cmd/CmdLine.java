@@ -55,6 +55,7 @@ public class CmdLine {
                 .addCommand("ls", new CmdList())
                 .addCommand("update", new CmdUpdate())
                 .addCommand("get", new CmdGet())
+                .addCommand("history", new CmdHistory())
                 .build();
     }
 

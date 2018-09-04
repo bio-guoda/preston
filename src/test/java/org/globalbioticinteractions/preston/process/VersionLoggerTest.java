@@ -27,7 +27,7 @@ public class VersionLoggerTest {
         };
         VersionLogger reader = new VersionLogger(blobStore, nodes::add);
         reader.on(RefNodeFactory
-                .toStatement(RefNodeConstants.ARCHIVE_COLLECTION_IRI, RefNodeConstants.HAS_VERSION, RefNodeFactory.toIRI("http://some")));
+                .toStatement(RefNodeConstants.ARCHIVE, RefNodeConstants.HAS_VERSION, RefNodeFactory.toIRI("http://some")));
 
         assertThat(nodes.size(), Is.is(10));
 
