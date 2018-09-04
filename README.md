@@ -112,6 +112,8 @@ Usage: <main class> [command] [command options]
             log format
             Default: nquads
             Possible Values: [tsv, nquads, dots]
+```
+
 
 ## Examples 
 
