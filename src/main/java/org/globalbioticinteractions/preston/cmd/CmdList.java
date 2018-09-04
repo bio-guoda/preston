@@ -7,7 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.StatementLogFactory;
-import org.globalbioticinteractions.preston.process.StatementArchiveProcessor;
+import org.globalbioticinteractions.preston.process.VersionLogger;
 import org.globalbioticinteractions.preston.process.StatementListener;
 import org.globalbioticinteractions.preston.store.Archiver;
 import org.globalbioticinteractions.preston.store.BlobStore;
@@ -44,12 +44,13 @@ public class CmdList extends CmdCrawl {
                 new ConcurrentLinkedQueue<Triple>() {{
                     add(toStatement(ARCHIVE_COLLECTION_IRI, HAS_VERSION, toBlank()));
                 }};
+
         // lookup previous archives with the intent to replay
         StatementListener logger = StatementLogFactory.createLogger(getLogMode());
 
         AtomicBoolean receivedSomething = new AtomicBoolean(false);
-        StatementArchiveProcessor reader = new StatementArchiveProcessor(blobStore,
-                logger, statement -> receivedSomething.set(true));
+        VersionLogger reader = new VersionLogger(
+                blobStore, logger, statement -> receivedSomething.set(true));
 
         StatementListener offlineArchive
                 = createOfflineArchive(statementPersistence, blobStore, reader);

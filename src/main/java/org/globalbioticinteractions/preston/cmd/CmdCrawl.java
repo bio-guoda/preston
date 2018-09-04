@@ -1,6 +1,7 @@
 package org.globalbioticinteractions.preston.cmd;
 
 import com.beust.jcommander.Parameter;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,6 +19,7 @@ import org.globalbioticinteractions.preston.process.StatementLoggerNQuads;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
 import org.globalbioticinteractions.preston.store.Archiver;
 import org.globalbioticinteractions.preston.store.BlobStore;
+import org.globalbioticinteractions.preston.store.Dereferencer;
 import org.globalbioticinteractions.preston.store.FilePersistence;
 import org.globalbioticinteractions.preston.store.Persistence;
 import org.globalbioticinteractions.preston.store.StatementStoreImpl;
@@ -26,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -40,7 +43,6 @@ import static org.globalbioticinteractions.preston.RefNodeConstants.AGENT;
 import static org.globalbioticinteractions.preston.RefNodeConstants.ARCHIVE_COLLECTION_IRI;
 import static org.globalbioticinteractions.preston.RefNodeConstants.COLLECTION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.DESCRIPTION;
-import static org.globalbioticinteractions.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static org.globalbioticinteractions.preston.RefNodeConstants.GRAPH_COLLECTION_IRI;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.IS_A;
@@ -53,11 +55,12 @@ import static org.globalbioticinteractions.preston.model.RefNodeFactory.toEnglis
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toIRI;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
 
-public abstract class CmdCrawl implements Runnable, Crawler {
+public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
     private static final Log LOG = LogFactory.getLog(CmdCrawl.class);
 
     public static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
     public static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
+    public static final IRI ENDED_AT_TIME = toIRI("http://www.w3.org/ns/prov#endedAtTime");
 
     @Parameter(names = {"-u", "--seed-uris"}, description = "[starting points of graph crawl (aka seed URIs)]", validateWith = URIValidator.class)
     private List<String> seedUrls = new ArrayList<String>() {{
@@ -67,7 +70,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
     }};
 
     @Parameter(names = {"-l", "--log",}, description = "select how to show the biodiversity graph", converter = LoggerConverter.class)
-    private Logger logMode = Logger.tsv;
+    private Logger logMode = Logger.nquads;
 
     protected Logger getLogMode() {
         return logMode;
@@ -78,9 +81,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         File dataDir = getDataDir();
         File tmpDir = getTmpDir();
 
-        Persistence blobPersistence = new FilePersistence(
-                tmpDir,
-                new File(dataDir, "blob"));
+        Persistence blobPersistence = getBlobPersistence();
 
         BlobStore blobStore = new AppendOnlyBlobStore(blobPersistence);
 
@@ -89,13 +90,6 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         run(blobStore, statementPersistence);
     }
 
-    private File getTmpDir() {
-        return new File(getDataDir(), "tmp");
-    }
-
-    private File getDataDir() {
-        return new File("data");
-    }
 
     protected void run(BlobStore blobStore, Persistence statementPersistence) {
         CrawlContext ctx = createNewCrawlContext();
@@ -109,21 +103,50 @@ public abstract class CmdCrawl implements Runnable, Crawler {
                 }};
 
 
-        File tmpArchive;
-        PrintStream printStream;
+        File tmpArchive = null;
+        PrintStream printStream = null;
         try {
             tmpArchive = File.createTempFile("archive", "nq", getTmpDir());
             printStream = new PrintStream(IOUtils.buffer(new FileOutputStream(tmpArchive)), true, StandardCharsets.UTF_8.name());
-        } catch (IOException e) {
-            throw new RuntimeException("failed to create tmp file", e);
-        }
 
+            StatementListener archivingLogger = new StatementLoggerNQuads(printStream);
+
+            doCrawl(blobStore, statementPersistence, ctx, statementQueue, archivingLogger);
+
+            printStream.flush();
+            printStream.close();
+
+            CrawlContext archivingContext = createNewCrawlContext();
+
+            StatementListener crawlArchiver = new Archiver(
+                    blobStore,
+                    new CrawlArchiveDereferencer(tmpArchive),
+                    new StatementStoreImpl(statementPersistence),
+                    archivingContext,
+                    StatementLogFactory.createLogger(logMode));
+
+            crawlArchiver.on(toStatement(ARCHIVE_COLLECTION_IRI, HAS_VERSION, RefNodeFactory.toBlank()));
+
+        } catch (IOException ex) {
+            LOG.warn("failed to archive crawl", ex);
+        } finally {
+            if (printStream != null) {
+                printStream.flush();
+                printStream.close();
+            }
+            if (tmpArchive != null) {
+                FileUtils.deleteQuietly(tmpArchive);
+            }
+        }
+    }
+
+    private void doCrawl(BlobStore blobStore, Persistence statementPersistence, CrawlContext ctx, Queue<Triple> statementQueue, StatementListener statementLoggerNQuads) {
         StatementListener listeners[] = {
                 new RegistryReaderIDigBio(blobStore, statementQueue::add),
                 new RegistryReaderGBIF(blobStore, statementQueue::add),
                 new RegistryReaderBioCASE(blobStore, statementQueue::add),
                 StatementLogFactory.createLogger(logMode),
-                new StatementLoggerNQuads(printStream)
+                statementLoggerNQuads
         };
 
         StatementListener archive = createOnlineArchive(statementPersistence, blobStore, listeners, getCrawlMode(), ctx);
@@ -132,22 +155,7 @@ public abstract class CmdCrawl implements Runnable, Crawler {
             archive.on(statementQueue.poll());
         }
 
-        try {
-            // wrapping up
-            archive.on(toStatement(ctx.getActivity(), toIRI("http://www.w3.org/ns/prov#endedAtTime"), RefNodeFactory.nowDateTimeLiteral()));
-
-            printStream.flush();
-            printStream.close();
-            IRI archiveIRI = blobStore.putBlob(new FileInputStream(tmpArchive));
-
-            archive.on(toStatement(ARCHIVE_COLLECTION_IRI, HAS_VERSION, archiveIRI));
-
-            archive.on(toStatement(archiveIRI, WAS_GENERATED_BY, ctx.getActivity()));
-            archive.on(toStatement(archiveIRI, GENERATED_AT_TIME, RefNodeFactory.nowDateTimeLiteral()));
-
-        } catch (IOException ex) {
-            LOG.warn("failed to archive crawl log write to [" + tmpArchive + "]", ex);
-        }
+        archive.on(toStatement(ctx.getActivity(), ENDED_AT_TIME, RefNodeFactory.nowDateTimeLiteral()));
     }
 
 
@@ -197,14 +205,12 @@ public abstract class CmdCrawl implements Runnable, Crawler {
 
 
                 toStatement(crawlActivity, IS_A, ACTIVITY),
-                toStatement(crawlActivity, DESCRIPTION, toEnglishLiteral("A crawl event is an activity that discovers biodiversity archives.")),
+                toStatement(crawlActivity, DESCRIPTION, toEnglishLiteral("A crawl event that discovers biodiversity archives.")),
                 toStatement(crawlActivity, toIRI("http://www.w3.org/ns/prov#startedAtTime"), RefNodeFactory.nowDateTimeLiteral()),
                 toStatement(crawlActivity, toIRI("http://www.w3.org/ns/prov#wasStartedBy"), crawler),
 
                 toStatement(biodiversityGraphCollection, IS_A, ENTITY),
-                toStatement(biodiversityGraphCollection, IS_A, COLLECTION),
                 toStatement(biodiversityGraphCollection, DESCRIPTION, toEnglishLiteral("A collection of biodiversity graphs.")),
-                toStatement(biodiversityGraphCollection, WAS_GENERATED_BY, crawlActivity),
 
                 toStatement(biodiversityGraph, IS_A, ENTITY),
                 toStatement(biodiversityGraph, IS_A, COLLECTION),
@@ -213,15 +219,8 @@ public abstract class CmdCrawl implements Runnable, Crawler {
 
                 toStatement(biodiversityArchiveCollection, IS_A, ENTITY),
                 toStatement(biodiversityArchiveCollection, DESCRIPTION, toEnglishLiteral("A collection of biodiversity graph archives.")),
-                toStatement(biodiversityArchiveCollection, WAS_GENERATED_BY, crawlActivity),
-                toStatement(biodiversityArchiveCollection, toIRI("http://www.w3.org/ns/prov#wasDerivedFrom"), biodiversityGraph),
 
-                toStatement(biodiversityArchive, IS_A, ENTITY),
-                toStatement(biodiversityArchive, DESCRIPTION, toEnglishLiteral("An nquad archive of the version of this biodiversity graph.")),
-                toStatement(biodiversityArchive, WAS_GENERATED_BY, crawlActivity),
-                toStatement(biodiversityArchive, toIRI("http://www.w3.org/ns/prov#wasDerivedFrom"), biodiversityGraph)
-
-
+                toStatement(ARCHIVE_COLLECTION_IRI, HAS_VERSION, toBlank())
         );
     }
 
@@ -232,4 +231,18 @@ public abstract class CmdCrawl implements Runnable, Crawler {
         return Archiver;
     }
 
+    private static class CrawlArchiveDereferencer implements Dereferencer {
+        private final File tmpArchive;
+
+        public CrawlArchiveDereferencer(File tmpArchive) {
+            this.tmpArchive = tmpArchive;
+        }
+
+        @Override
+        public InputStream dereference(IRI uri) throws IOException {
+            return ARCHIVE_COLLECTION_IRI.equals(uri)
+                    ?  new FileInputStream(tmpArchive)
+                    : null;
+        }
+    }
 }

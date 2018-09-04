@@ -79,6 +79,8 @@ public class ArchiverTest {
 
         List<Triple> nodes = new ArrayList<>();
 
+
+
         Archiver relationStore = new Archiver(
                 new AppendOnlyBlobStore(testPersistence),
                 dereferencer,

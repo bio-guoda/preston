@@ -6,28 +6,27 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDF;
 import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.jena.JenaRDF;
+import org.apache.commons.rdf.simple.SimpleRDF;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.sparql.core.Quad;
-import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public class StatementArchiveProcessor extends ProcessorReadOnly {
+public class VersionLogger extends ProcessorReadOnly {
 
-    private static final Log LOG = LogFactory.getLog(StatementArchiveProcessor.class);
+    private static final Log LOG = LogFactory.getLog(VersionLogger.class);
 
-    public StatementArchiveProcessor(BlobStoreReadOnly blobStoreReadOnly, StatementListener... listeners) {
+    public VersionLogger(BlobStoreReadOnly blobStoreReadOnly, StatementListener... listeners) {
         super(blobStoreReadOnly, listeners);
     }
 
     @Override
     public void on(Triple statement) {
-        if (statement.getSubject().equals(RefNodeConstants.ARCHIVE_COLLECTION_IRI)
-                && RefNodeFactory.hasVersionAvailable(statement)) {
+        if (RefNodeFactory.hasVersionAvailable(statement)) {
 
             IRI version = (IRI) RefNodeFactory.getVersion(statement);
             try {
@@ -42,6 +41,7 @@ public class StatementArchiveProcessor extends ProcessorReadOnly {
 
     private class EmittingStreamRDF implements StreamRDF {
         RDF rdf = new JenaRDF();
+        RDF rdfSimmple = new SimpleRDF();
 
         @Override
         public void start() {
@@ -50,14 +50,17 @@ public class StatementArchiveProcessor extends ProcessorReadOnly {
 
         @Override
         public void triple(org.apache.jena.graph.Triple triple) {
-            Triple triple1 = JenaRDF.asTriple(rdf, triple);
-            emit(triple1);
+            copyOnEmit(JenaRDF.asTriple(rdf, triple));
         }
 
         @Override
         public void quad(Quad quad) {
-            org.apache.commons.rdf.api.Quad quad1 = JenaRDF.asQuad(rdf, quad);
-            emit(quad1.asTriple());
+            copyOnEmit(JenaRDF.asQuad(rdf, quad).asTriple());
+        }
+
+        public void copyOnEmit(Triple triple) {
+            Triple copyOfTriple = rdfSimmple.createTriple(triple.getSubject(), triple.getPredicate(), triple.getObject());
+            emit(copyOfTriple);
         }
 
         @Override

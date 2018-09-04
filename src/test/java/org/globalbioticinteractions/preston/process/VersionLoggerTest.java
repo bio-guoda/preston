@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertThat;
 
-public class StatementArchiveProcessorTest {
+public class VersionLoggerTest {
 
     @Test
     public void replayArchive() {
@@ -25,7 +25,7 @@ public class StatementArchiveProcessorTest {
                 return getClass().getResourceAsStream("archivetest.nq");
             }
         };
-        StatementArchiveProcessor reader = new StatementArchiveProcessor(blobStore, nodes::add);
+        VersionLogger reader = new VersionLogger(blobStore, nodes::add);
         reader.on(RefNodeFactory
                 .toStatement(RefNodeConstants.ARCHIVE_COLLECTION_IRI, RefNodeConstants.HAS_VERSION, RefNodeFactory.toIRI("http://some")));
 

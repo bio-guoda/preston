@@ -183,7 +183,7 @@ public class Archiver extends StatementProcessor {
             if (input != null) {
                 emit(toStatement(statement.getSubject(),
                         WAS_GENERATED_BY,
-                        crawlContext.getActivity()));
+                        crawlActivityKey));
             }
         }
     }
