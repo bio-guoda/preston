@@ -42,15 +42,13 @@ public class VersionUtil {
     }
 
     public static IRI findPreviousVersion(IRI versionSource, StatementStore statementStore, VersionListener versionListener) throws IOException {
-        IRI mostRecentVersion;
-        IRI mostRecentVersion1 = statementStore.get(Pair.of(HAS_PREVIOUS_VERSION, versionSource));
+        IRI mostRecentVersion = statementStore.get(Pair.of(HAS_PREVIOUS_VERSION, versionSource));
 
-        if (mostRecentVersion1 != null) {
+        if (mostRecentVersion != null) {
             if (versionListener != null) {
-                versionListener.onVersion(toStatement(mostRecentVersion1, HAS_PREVIOUS_VERSION, versionSource));
+                versionListener.onVersion(toStatement(mostRecentVersion, HAS_PREVIOUS_VERSION, versionSource));
             }
         }
-        mostRecentVersion = mostRecentVersion1;
         return mostRecentVersion;
     }
 
