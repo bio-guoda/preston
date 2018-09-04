@@ -99,8 +99,8 @@ public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
                             IRI mostRecentVersion = VersionUtil.findMostRecentVersion(ARCHIVE, statementStore);
                             if (mostRecentVersion != null) {
                                 statementStore.put(Pair.of(mostRecentVersion, USED_BY), ctx.getActivity());
+                                add(toStatement(mostRecentVersion, USED_BY, ctx.getActivity()));
                             }
-                            add(toStatement(mostRecentVersion, USED_BY, ctx.getActivity()));
                         }
                     };
 
