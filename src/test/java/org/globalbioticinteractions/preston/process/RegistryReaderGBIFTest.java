@@ -92,8 +92,8 @@ public class RegistryReaderGBIFTest {
         registryReaderGBIF.on(firstPage);
 
         Assert.assertThat(nodes.size(), is(4));
-        Triple secondPage = nodes.get(nodes.size() - 1);
-        assertThat(getVersionSource(secondPage).toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2>"));
+        Triple lastItem = nodes.get(nodes.size() - 1);
+        assertThat(getVersionSource(lastItem).toString(), is("<https://api.gbif.org/v1/dataset/b7010c1b-8013-4a3c-a43b-4309a91f9629>"));
     }
 
     @Test
