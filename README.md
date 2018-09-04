@@ -25,13 +25,13 @@ Preston is a stand-alone java application, packaged in a jarfile. You can build 
 On linux (and Mac) it is recommended to make an alias by appending the following to ~/.bash_aliases :
 
 ```
-alias nomer='java -Xmx4G -jar [some dir]/preston.jar'
+alias preston='java -Xmx4G -jar [some dir]/preston.jar'
 ```
 
 where [some dir] is the location where preston.jar lives. With this alias, you can now do ```preston version``` instead of ```java -jar preston.jar version```.
 
 ### Maven, Gradle, SBT
-Nomer is made available through a [maven](https://maven.apache.org) repository.
+Preston is made available through a [maven](https://maven.apache.org) repository.
 
 To include ```preston``` in your project, add the following sections to your pom.xml (or equivalent for sbt, gradle etc):
 ```
