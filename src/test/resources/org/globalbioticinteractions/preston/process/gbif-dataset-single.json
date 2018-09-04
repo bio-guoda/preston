@@ -1,0 +1,175 @@
+{
+  "key": "7b7b9345-9632-469e-a881-e8d6403e3f4e",
+  "installationKey": "7ce8aef1-9e92-11dc-8740-b8a03c50a999",
+  "publishingOrganizationKey": "7ce8aef0-9e92-11dc-8738-b8a03c50a862",
+  "doi": "10.5281/zenodo.199558",
+  "external": false,
+  "numConstituents": 0,
+  "type": "CHECKLIST",
+  "title": "Phylogeny of Calyptraeotheres Campos, 1990 (Crustacea, Decapoda, Brachyura, Pinnotheridae) with the description of C. pepeluisi new species from the tropical Mexican Pacific",
+  "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Campos, Ernesto, Hernández-Ávila, Iván (2010): Phylogeny of Calyptraeotheres Campos, 1990 (Crustacea, Decapoda, Brachyura, Pinnotheridae) with the description of C. pepeluisi new species from the tropical Mexican Pacific. Zootaxa 2691: 41-52, DOI: 10.5281/zenodo.199558",
+  "language": "eng",
+  "homepage": "http://tb.plazi.org/GgServer/summary/2924FFB8FFC7C76B4B0B503BFFD8D973",
+  "citation": {
+    "text": "Hernández-Ávila I (2009). Phylogeny of Calyptraeotheres Campos, 1990 (Crustacea, Decapoda, Brachyura, Pinnotheridae) with the description of C. pepeluisi new species from the tropical Mexican Pacific. Plazi.org taxonomic treatments database. Checklist dataset https://doi.org/10.5281/zenodo.199558 accessed via GBIF.org on 2018-09-04."
+  },
+  "lockedForAutoUpdate": false,
+  "createdBy": "plazi",
+  "modifiedBy": "License import script 2.3",
+  "created": "2016-04-11T08:06:35.927+0000",
+  "modified": "2017-10-04T14:27:58.194+0000",
+  "contacts": [
+    {
+      "key": 699691,
+      "type": "ORIGINATOR",
+      "primary": true,
+      "userId": [],
+      "firstName": "Iván",
+      "lastName": "Hernández-Ávila",
+      "position": [],
+      "email": [],
+      "phone": [],
+      "homepage": [],
+      "address": [],
+      "createdBy": "crawler.gbif.org",
+      "modifiedBy": "crawler.gbif.org",
+      "created": "2017-06-20T07:22:28.157+0000",
+      "modified": "2017-06-20T07:22:28.157+0000"
+    },
+    {
+      "key": 699692,
+      "type": "ADMINISTRATIVE_POINT_OF_CONTACT",
+      "primary": true,
+      "userId": [],
+      "firstName": "Guido",
+      "lastName": "Sautter",
+      "position": [],
+      "email": [
+        "sautter@ipd.uka.de"
+      ],
+      "phone": [],
+      "homepage": [
+        "http://plazi.org"
+      ],
+      "address": [],
+      "createdBy": "crawler.gbif.org",
+      "modifiedBy": "crawler.gbif.org",
+      "created": "2017-06-20T07:22:28.160+0000",
+      "modified": "2017-06-20T07:22:28.160+0000"
+    },
+    {
+      "key": 699693,
+      "type": "PUBLISHER",
+      "primary": false,
+      "userId": [],
+      "position": [],
+      "email": [
+        "magnolia@mapress.com"
+      ],
+      "phone": [],
+      "homepage": [
+        "http://www.mapress.com/"
+      ],
+      "organization": "Magnolia Press",
+      "address": [
+        "St. Lukes 1346"
+      ],
+      "city": "Auckland",
+      "country": "NZ",
+      "createdBy": "crawler.gbif.org",
+      "modifiedBy": "crawler.gbif.org",
+      "created": "2017-06-20T07:22:28.162+0000",
+      "modified": "2017-06-20T07:22:28.162+0000"
+    },
+    {
+      "key": 699694,
+      "type": "DISTRIBUTOR",
+      "primary": false,
+      "userId": [],
+      "position": [],
+      "email": [
+        "info@plazi.org"
+      ],
+      "phone": [],
+      "homepage": [
+        "http://plazi.org/"
+      ],
+      "organization": "Plazi",
+      "address": [],
+      "city": "Bern",
+      "country": "CH",
+      "createdBy": "crawler.gbif.org",
+      "modifiedBy": "crawler.gbif.org",
+      "created": "2017-06-20T07:22:28.163+0000",
+      "modified": "2017-06-20T07:22:28.163+0000"
+    },
+    {
+      "key": 699695,
+      "type": "METADATA_AUTHOR",
+      "primary": true,
+      "userId": [],
+      "position": [],
+      "email": [],
+      "phone": [],
+      "homepage": [],
+      "organization": "Plazi",
+      "address": [],
+      "createdBy": "crawler.gbif.org",
+      "modifiedBy": "crawler.gbif.org",
+      "created": "2017-06-20T07:22:28.165+0000",
+      "modified": "2017-06-20T07:22:28.165+0000"
+    }
+  ],
+  "endpoints": [
+    {
+      "key": 106457,
+      "type": "DWC_ARCHIVE",
+      "url": "http://plazi.cs.umb.edu/GgServer/dwca/2924FFB8FFC7C76B4B0B503BFFD8D973.zip",
+      "createdBy": "plazi",
+      "modifiedBy": "plazi",
+      "created": "2016-04-11T08:06:36.418+0000",
+      "modified": "2016-04-11T08:06:36.418+0000",
+      "machineTags": []
+    }
+  ],
+  "machineTags": [
+    {
+      "key": 2067028,
+      "namespace": "crawler.gbif.org",
+      "name": "crawl_attempt",
+      "value": "70",
+      "createdBy": "crawler.gbif.org",
+      "created": "2018-09-01T15:06:56.101+0000"
+    }
+  ],
+  "tags": [],
+  "identifiers": [
+    {
+      "key": 81539,
+      "type": "DOI",
+      "identifier": "10.15468/o58a6a",
+      "createdBy": "crawler.gbif.org",
+      "created": "2016-12-10T05:25:31.143+0000"
+    },
+    {
+      "key": 36930,
+      "type": "UUID",
+      "identifier": "2924FFB8FFC7C76B4B0B503BFFD8D973",
+      "createdBy": "plazi",
+      "created": "2016-04-11T08:06:36.180+0000"
+    }
+  ],
+  "comments": [],
+  "bibliographicCitations": [],
+  "curatorialUnits": [],
+  "taxonomicCoverages": [],
+  "geographicCoverages": [],
+  "temporalCoverages": [],
+  "keywordCollections": [],
+  "countryCoverage": [],
+  "collections": [],
+  "dataDescriptions": [],
+  "dataLanguage": "eng",
+  "pubDate": "2009-12-31T23:00:00.001+0000",
+  "license": "http://creativecommons.org/licenses/by/4.0/legalcode"
+}

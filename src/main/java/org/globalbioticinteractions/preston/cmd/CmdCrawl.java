@@ -33,6 +33,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
@@ -50,6 +51,7 @@ import static org.globalbioticinteractions.preston.RefNodeConstants.SOFTWARE_AGE
 import static org.globalbioticinteractions.preston.RefNodeConstants.USED_BY;
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_GENERATED_BY;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toBlank;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toEnglishLiteral;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toIRI;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
@@ -60,12 +62,16 @@ public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
     public static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
     public static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
 
-    @Parameter(names = {"-u", "--seed-uris"}, description = "[starting points of graph crawl (aka seed URIs)]", validateWith = URIValidator.class)
+    @Parameter(names = {"-u", "--seed-uris"}, description = "starting points for graph discovery. Only active when no content urls are provided.", validateWith = URIValidator.class)
     private List<String> seedUrls = new ArrayList<String>() {{
         add(Seeds.IDIGBIO.getIRIString());
         add(Seeds.GBIF.getIRIString());
         add(Seeds.BIOCASE.getIRIString());
     }};
+
+    @Parameter(description = "content URLs to update. If specified, the seeds will not be used.",
+            validateWith = IRIValidator.class)
+    private final List<String> IRIs  = new ArrayList<>();
 
 
     @Override
@@ -95,7 +101,6 @@ public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
                     new ConcurrentLinkedQueue<Triple>() {{
                         addAll(findCrawlInfo(ctx.getActivity()));
                         addPreviousVersionReference();
-                        addAll(generateSeeds(ctx.getActivity()));
                     }
 
                         private void addPreviousVersionReference() throws IOException {
@@ -107,6 +112,11 @@ public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
                         }
                     };
 
+            if (IRIs.isEmpty()) {
+                statementQueue.addAll(generateSeeds(ctx.getActivity()));
+            } else {
+                IRIs.forEach(iri -> statementQueue.add(toStatement(toIRI(iri), HAS_VERSION, toBlank())));
+            }
 
             doCrawl(blobStore, ctx, statementQueue, archivingLogger, statementStore);
 

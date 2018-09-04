@@ -9,7 +9,6 @@ import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
-import org.globalbioticinteractions.preston.cmd.CrawlContext;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,10 +18,8 @@ import java.util.stream.Stream;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.CREATED_BY;
 import static org.globalbioticinteractions.preston.RefNodeConstants.DESCRIPTION;
-import static org.globalbioticinteractions.preston.RefNodeConstants.HAD_MEMBER;
 import static org.globalbioticinteractions.preston.RefNodeConstants.IS_A;
 import static org.globalbioticinteractions.preston.RefNodeConstants.ORGANIZATION;
-import static org.globalbioticinteractions.preston.RefNodeConstants.USED_BY;
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersion;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersionSource;
@@ -40,7 +37,9 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         put("EML", MimeTypes.MIME_TYPE_EML);
     }};
 
-    public static final String GBIF_DATASET_REGISTRY_STRING = "https://api.gbif.org/v1/dataset";
+
+    public static final String GBIF_API_URL_PART = "//api.gbif.org/v1/dataset";
+    public static final String GBIF_DATASET_REGISTRY_STRING = "https:" + GBIF_API_URL_PART;
     private final Log LOG = LogFactory.getLog(RegistryReaderGBIF.class);
     public static final IRI GBIF_REGISTRY = toIRI(GBIF_DATASET_REGISTRY_STRING);
 
@@ -59,7 +58,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                     .forEach(this::emit);
             emitPageRequest(this, GBIF_REGISTRY);
         } else if (hasVersionAvailable(statement)
-                && getVersionSource(statement).toString().startsWith("<" + GBIF_DATASET_REGISTRY_STRING)) {
+                && getVersionSource(statement).toString().contains(GBIF_API_URL_PART)) {
             try {
                 IRI currentPage = (IRI) getVersion(statement);
                 parse(currentPage, this, get(currentPage));
@@ -82,29 +81,15 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 .forEach(emitter::emit);
     }
 
-    public static void parse(IRI currentPage, StatementEmitter emitter, InputStream in) throws IOException {
+    static void parse(IRI currentPage, StatementEmitter emitter, InputStream in) throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(in);
-        if (jsonNode != null && jsonNode.has("results")) {
-            for (JsonNode result : jsonNode.get("results")) {
-                if (result.has("key") && result.has("endpoints")) {
-                    String uuid = result.get("key").asText();
-                    IRI datasetUUID = toUUID(uuid);
-                    emitter.emit(toStatement(currentPage, RefNodeConstants.HAD_MEMBER, datasetUUID));
-
-                    for (JsonNode endpoint : result.get("endpoints")) {
-                        if (endpoint.has("url") && endpoint.has("type")) {
-                            String urlString = endpoint.get("url").asText();
-                            String type = endpoint.get("type").asText();
-
-                            if (SUPPORTED_ENDPOINT_TYPES.containsKey(type)) {
-                                IRI dataArchive = toIRI(urlString);
-                                emitter.emit(toStatement(datasetUUID, RefNodeConstants.HAD_MEMBER, dataArchive));
-                                emitter.emit(toStatement(dataArchive, RefNodeConstants.HAS_FORMAT, toContentType(SUPPORTED_ENDPOINT_TYPES.get(type))));
-                                emitter.emit(toStatement(dataArchive, RefNodeConstants.HAS_VERSION, toBlank()));
-                            }
-                        }
-                    }
+        if (jsonNode != null) {
+            if (jsonNode.has("results")) {
+                for (JsonNode result : jsonNode.get("results")) {
+                    parseIndividualDataset(currentPage, emitter, result);
                 }
+            } else if (jsonNode.has("key")) {
+                parseIndividualDataset(currentPage, emitter, jsonNode);
             }
         }
 
@@ -115,6 +100,28 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
             emitNextPage(offset + limit, limit, emitter);
         }
 
+    }
+
+    public static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
+        if (result.has("key") && result.has("endpoints")) {
+            String uuid = result.get("key").asText();
+            IRI datasetUUID = toUUID(uuid);
+            emitter.emit(toStatement(currentPage, RefNodeConstants.HAD_MEMBER, datasetUUID));
+
+            for (JsonNode endpoint : result.get("endpoints")) {
+                if (endpoint.has("url") && endpoint.has("type")) {
+                    String urlString = endpoint.get("url").asText();
+                    String type = endpoint.get("type").asText();
+
+                    if (SUPPORTED_ENDPOINT_TYPES.containsKey(type)) {
+                        IRI dataArchive = toIRI(urlString);
+                        emitter.emit(toStatement(datasetUUID, RefNodeConstants.HAD_MEMBER, dataArchive));
+                        emitter.emit(toStatement(dataArchive, RefNodeConstants.HAS_FORMAT, toContentType(SUPPORTED_ENDPOINT_TYPES.get(type))));
+                        emitter.emit(toStatement(dataArchive, RefNodeConstants.HAS_VERSION, toBlank()));
+                    }
+                }
+            }
+        }
     }
 
 }
