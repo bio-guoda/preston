@@ -2,11 +2,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.globalbioticinteractions</groupId>
+    <groupId>bio.guoda</groupId>
     <artifactId>preston</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Preston commandline tool</name>
-    <description>Discover, cache and check occurrence content</description>
+    <description>a biodiversity dataset tracker</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -122,7 +122,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>org.globalbioticinteractions.preston.Preston</mainClass>
+                            <mainClass>bio.guoda.preston.Preston</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Implementation-Version>${project.version}</Implementation-Version>
