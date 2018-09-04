@@ -55,14 +55,14 @@ public class VersionUtil {
     }
 
     public static IRI findVersion(IRI versionSource, StatementStore statementStore, VersionListener versionListener) throws IOException {
-        IRI mostRecentVersion2 = statementStore.get(Pair.of(versionSource, HAS_VERSION));
+        IRI mostRecentVersion = statementStore.get(Pair.of(versionSource, HAS_VERSION));
 
-        if (mostRecentVersion2 != null) {
+        if (mostRecentVersion != null) {
             if (versionListener != null) {
-                versionListener.onVersion(toStatement(versionSource, HAS_VERSION, mostRecentVersion2));
+                versionListener.onVersion(toStatement(versionSource, HAS_VERSION, mostRecentVersion));
             }
         }
-        return mostRecentVersion2;
+        return mostRecentVersion;
     }
 
     public static Literal recordGenerationTimeFor(BlankNodeOrIRI derivedSubject, BlobStore blobStore, StatementStore statementStore) throws IOException {
