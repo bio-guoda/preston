@@ -1,5 +1,6 @@
 package org.globalbioticinteractions.preston.cmd;
 
+import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
@@ -8,6 +9,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.StatementLogFactory;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.process.StatementListener;
 import org.globalbioticinteractions.preston.process.VersionLogger;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
@@ -24,15 +26,20 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.ARCHIVE;
+import static org.globalbioticinteractions.preston.RefNodeConstants.ARCHIVE_COLLECTION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toBlank;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
 
-@Parameters(separators = "= ", commandDescription = "show history")
+@Parameters(separators = "= ", commandDescription = "show history of biodiversity resource")
 public class CmdHistory extends Persisting implements Runnable {
 
     private static final Log LOG = LogFactory.getLog(CmdHistory.class);
+
+    @Parameter(description = "biodiversity resource locator", validateWith = IRIValidator.class)
+    private String biodiversityNode = ARCHIVE_COLLECTION.toString();
+
 
     @Override
     public void run() {
@@ -41,7 +48,7 @@ public class CmdHistory extends Persisting implements Runnable {
         BlobStore blobStore = new AppendOnlyBlobStore(getBlobPersistence());
         AtomicBoolean gotNone = new AtomicBoolean(true);
         try {
-            VersionUtil.findMostRecentVersion(ARCHIVE, statementStore, new VersionListener() {
+            VersionUtil.findMostRecentVersion(RefNodeFactory.toIRI(biodiversityNode), statementStore, new VersionListener() {
                 @Override
                 public void onVersion(Triple statement) throws IOException {
                     gotNone.set(false);
@@ -57,7 +64,7 @@ public class CmdHistory extends Persisting implements Runnable {
         }
 
         if (gotNone.get()) {
-            LOG.warn("No history found. Suggest to update first.");
+            LOG.warn("No history found for [" + biodiversityNode + "]. Suggest to update first.");
         }
     }
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Persisting {
 
-    @Parameter(names = {"-l", "--log",}, description = "select how to show the biodiversity graph", converter = LoggerConverter.class)
+    @Parameter(names = {"-l", "--log",}, description = "log format", converter = LoggerConverter.class)
     private Logger logMode = Logger.nquads;
 
     protected Logger getLogMode() {

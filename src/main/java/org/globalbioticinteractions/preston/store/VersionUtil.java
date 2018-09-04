@@ -26,27 +26,43 @@ public class VersionUtil {
     }
 
     public static IRI findMostRecentVersion(IRI versionSource, StatementStore statementStore, VersionListener versionListener) throws IOException {
-        IRI mostRecentVersion = statementStore.get(Pair.of(versionSource, HAS_VERSION));
+        IRI mostRecentVersion = findVersion(versionSource, statementStore, versionListener);
 
         if (mostRecentVersion != null) {
-            if (versionListener != null) {
-                versionListener.onVersion(toStatement(versionSource, HAS_VERSION, mostRecentVersion));
+            IRI lastVersionId = mostRecentVersion;
+            IRI newerVersionId;
+
+            while ((newerVersionId = findPreviousVersion(lastVersionId, statementStore, versionListener)) != null) {
+                lastVersionId = newerVersionId;
             }
-            mostRecentVersion = findPreviousVersion(mostRecentVersion, statementStore, versionListener);
+            mostRecentVersion = lastVersionId;
         }
+
         return mostRecentVersion;
     }
 
-    private static IRI findPreviousVersion(IRI existingId, StatementStore statementStore, VersionListener versionListener) throws IOException {
-        IRI lastVersionId = existingId;
-        IRI newerVersionId;
-        while ((newerVersionId = statementStore.get(Pair.of(HAS_PREVIOUS_VERSION, lastVersionId))) != null) {
+    public static IRI findPreviousVersion(IRI versionSource, StatementStore statementStore, VersionListener versionListener) throws IOException {
+        IRI mostRecentVersion;
+        IRI mostRecentVersion1 = statementStore.get(Pair.of(HAS_PREVIOUS_VERSION, versionSource));
+
+        if (mostRecentVersion1 != null) {
             if (versionListener != null) {
-                versionListener.onVersion(toStatement(newerVersionId, HAS_PREVIOUS_VERSION, lastVersionId));
+                versionListener.onVersion(toStatement(mostRecentVersion1, HAS_PREVIOUS_VERSION, versionSource));
             }
-            lastVersionId = newerVersionId;
         }
-        return lastVersionId;
+        mostRecentVersion = mostRecentVersion1;
+        return mostRecentVersion;
+    }
+
+    public static IRI findVersion(IRI versionSource, StatementStore statementStore, VersionListener versionListener) throws IOException {
+        IRI mostRecentVersion2 = statementStore.get(Pair.of(versionSource, HAS_VERSION));
+
+        if (mostRecentVersion2 != null) {
+            if (versionListener != null) {
+                versionListener.onVersion(toStatement(versionSource, HAS_VERSION, mostRecentVersion2));
+            }
+        }
+        return mostRecentVersion2;
     }
 
     public static Literal recordGenerationTimeFor(BlankNodeOrIRI derivedSubject, BlobStore blobStore, StatementStore statementStore) throws IOException {
