@@ -83,8 +83,11 @@ public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
     protected void run(BlobStore blobStore, StatementStore statementStore) {
         CrawlContext ctx = createNewCrawlContext();
 
-        ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, statementStore, ctx);
+
+
+        final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, statementStore, ctx);
         try {
+            Runtime.getRuntime().addShutdownHook(new LoggerExitHook(archivingLogger));
 
             archivingLogger.start();
 
@@ -176,6 +179,23 @@ public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
         return Archiver;
     }
 
+    private static class LoggerExitHook extends Thread {
+
+        private final ArchivingLogger archivingLogger;
+
+        public LoggerExitHook(ArchivingLogger archivingLogger) {
+            this.archivingLogger = archivingLogger;
+        }
+
+        public void run() {
+            try {
+                archivingLogger.stop();
+            } catch (IOException e) {
+                archivingLogger.destroy();
+            }
+        }
+    }
+
     private class ArchivingLogger implements StatementListener {
         private final BlobStore blobStore;
         private final StatementStore statementStore;
@@ -207,7 +227,7 @@ public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
         }
 
         void stop() throws IOException {
-            if (tmpArchive != null && printStream != null && listener != null) {
+            if (tmpArchive != null && tmpArchive.exists() && printStream != null && listener != null) {
                 printStream.flush();
                 printStream.close();
 
