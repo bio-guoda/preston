@@ -44,8 +44,8 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     private final Log LOG = LogFactory.getLog(RegistryReaderGBIF.class);
     public static final IRI GBIF_REGISTRY = toIRI(GBIF_DATASET_REGISTRY_STRING);
 
-    public RegistryReaderGBIF(BlobStoreReadOnly blobStoreReadOnly, CrawlContext context, StatementListener listener) {
-        super(blobStoreReadOnly, context, listener);
+    public RegistryReaderGBIF(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
+        super(blobStoreReadOnly, listener);
     }
 
     @Override

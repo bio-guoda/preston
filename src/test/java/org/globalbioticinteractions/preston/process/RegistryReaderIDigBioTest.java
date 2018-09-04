@@ -4,7 +4,6 @@ import com.sun.syndication.io.FeedException;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
-import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.store.TestUtil;
@@ -31,7 +30,7 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void onSeed() {
         ArrayList<Triple> nodes = new ArrayList<>();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtil.getTestCrawlContext(), nodes::add);
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = RefNodeFactory.toLiteral("bla");
         reader.on(RefNodeFactory.toStatement(Seeds.IDIGBIO, WAS_ASSOCIATED_WITH, bla));
         assertThat(nodes.size(), is(5));
@@ -40,7 +39,7 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void onNotSeed() {
         ArrayList<Triple> nodes = new ArrayList<>();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtil.getTestCrawlContext(), nodes::add);
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = RefNodeFactory.toLiteral("bla");
         reader.on(RefNodeFactory.toStatement(Seeds.IDIGBIO, RefNodeFactory.toIRI("https://example.org/bla"), bla));
         assertThat(nodes.size(), is(0));

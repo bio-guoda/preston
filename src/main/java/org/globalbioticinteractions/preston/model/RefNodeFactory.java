@@ -112,7 +112,7 @@ public class RefNodeFactory {
                 && !isBlankOrSkolemizedBlank(getVersion(statement));
     }
 
-    public static Literal nowLiteral() {
+    public static Literal nowDateTimeLiteral() {
         return toDateTime(DateUtil.now());
     }
 }

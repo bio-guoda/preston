@@ -36,7 +36,7 @@ public class RegistryReaderBioCASETest {
     @Before
     public void init() {
         nodes = new ArrayList<>();
-        registryReader = new RegistryReaderBioCASE(TestUtil.getTestBlobStore(), TestUtil.getTestCrawlContext(), nodes::add);
+        registryReader = new RegistryReaderBioCASE(TestUtil.getTestBlobStore(), nodes::add);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class RegistryReaderBioCASETest {
                 return getClass().getResourceAsStream("biocase-providers.json");
             }
         };
-        registryReader = new RegistryReaderBioCASE(blobStore, TestUtil.getTestCrawlContext(), nodes::add);
+        registryReader = new RegistryReaderBioCASE(blobStore, nodes::add);
         registryReader.on(toStatement(toIRI(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT), HAS_VERSION, refNode));
 
         assertFalse(nodes.isEmpty());
@@ -112,7 +112,7 @@ public class RegistryReaderBioCASETest {
             public InputStream get(IRI key) throws IOException {
                 return getClass().getResourceAsStream("biocase-datasets.xml");
             }
-        }, TestUtil.getTestCrawlContext(), nodes::add);
+        }, nodes::add);
 
         registryReader.on(toStatement(toIRI("http://something/pywrapper.cgi?dsa="), HAS_VERSION, refNode));
 

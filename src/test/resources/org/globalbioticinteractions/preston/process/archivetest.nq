@@ -1,0 +1,10 @@
+<https://preston.guoda.org> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> .
+<https://preston.guoda.org> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> .
+<https://preston.guoda.org> <http://purl.org/dc/terms/description> "Preston is a software program that finds, archives and provides access to biodiversity datasets."@en .
+<5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> .
+<5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1> <http://purl.org/dc/terms/description> "A crawl event is an activity that discovers biodiversity archives."@en .
+<5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1> <http://www.w3.org/ns/prov#startedAtTime> "2018-09-03T22:36:11.738Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1> <http://www.w3.org/ns/prov#wasStartedBy> <https://preston.guoda.org> .
+<2c1946b9-0871-42fb-8eef-580b16d17294> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Entity> .
+<2c1946b9-0871-42fb-8eef-580b16d17294> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Collection> .
+<2c1946b9-0871-42fb-8eef-580b16d17294> <http://purl.org/dc/terms/description> "A collection of biodiversity graphs."@en .

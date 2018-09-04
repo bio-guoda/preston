@@ -10,7 +10,6 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.Seeds;
-import org.globalbioticinteractions.preston.cmd.CrawlContext;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -24,8 +23,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.globalbioticinteractions.preston.RefNodeConstants.*;
-import static org.globalbioticinteractions.preston.model.RefNodeFactory.*;
+import static org.globalbioticinteractions.preston.RefNodeConstants.CREATED_BY;
+import static org.globalbioticinteractions.preston.RefNodeConstants.DESCRIPTION;
+import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_FORMAT;
+import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_VERSION;
+import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersion;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersionSource;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.hasVersionAvailable;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toBlank;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toContentType;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toEnglishLiteral;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toIRI;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toLiteral;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.toStatement;
 
 public class RegistryReaderBioCASE extends ProcessorReadOnly {
     private static final Log LOG = LogFactory.getLog(RegistryReaderBioCASE.class);
@@ -38,8 +49,8 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     // https://bms.gfbio.org/services/data-sources/
 
 
-    public RegistryReaderBioCASE(BlobStoreReadOnly blobStoreReadOnly, CrawlContext context, StatementListener listener) {
-        super(blobStoreReadOnly, context, listener);
+    public RegistryReaderBioCASE(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
+        super(blobStoreReadOnly, listener);
     }
 
     @Override

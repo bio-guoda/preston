@@ -113,7 +113,7 @@ public class Archiver extends StatementProcessor {
     }
 
     private void recordGenerationTime(BlankNodeOrIRI derivedSubject) throws IOException {
-        Literal nowLiteral = RefNodeFactory.nowLiteral();
+        Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
         String value = nowLiteral.getLexicalForm();
         getBlobStore().putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
         IRI value1 = Hasher.calcSHA256(value);

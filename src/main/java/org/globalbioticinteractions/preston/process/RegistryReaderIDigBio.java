@@ -40,8 +40,8 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     public static final String PUBLISHERS_URI = "https://search.idigbio.org/v2/search/publishers";
     public static final IRI IDIGBIO_REGISTRY = toIRI(URI.create(PUBLISHERS_URI));
 
-    public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, CrawlContext context, StatementListener listener) {
-        super(blobStore, context, listener);
+    public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, StatementListener listener) {
+        super(blobStore, listener);
     }
 
     @Override

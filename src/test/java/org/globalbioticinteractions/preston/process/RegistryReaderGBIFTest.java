@@ -28,7 +28,7 @@ public class RegistryReaderGBIFTest {
     @Test
     public void onSeed() {
         ArrayList<Triple> nodes = new ArrayList<>();
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), TestUtil.getTestCrawlContext(), nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
         registryReaderGBIF.on(toStatement(Seeds.GBIF, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         Assert.assertThat(nodes.size(), is(5));
         assertThat(getVersionSource(nodes.get(4)).getIRIString(), is("https://api.gbif.org/v1/dataset"));
@@ -37,7 +37,7 @@ public class RegistryReaderGBIFTest {
     @Test
     public void onEmptyPage() {
         ArrayList<Triple> nodes = new ArrayList<>();
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), TestUtil.getTestCrawlContext(), nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
 
         registryReaderGBIF.on(toStatement(toIRI("https://api.gbif.org/v1/dataset"),
                 HAS_VERSION,
@@ -48,7 +48,7 @@ public class RegistryReaderGBIFTest {
     @Test
     public void onNotSeed() {
         ArrayList<Triple> nodes = new ArrayList<>();
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), TestUtil.getTestCrawlContext(), nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = toLiteral("bla");
         registryReaderGBIF.on(toStatement(Seeds.GBIF, toIRI("http://example.org"), bla));
         assertThat(nodes.size(), is(0));
@@ -63,7 +63,7 @@ public class RegistryReaderGBIFTest {
                 return getClass().getResourceAsStream(GBIFDATASETS_JSON);
             }
         };
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtil.getTestCrawlContext(), nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
 
 
         Triple firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset"), HAS_VERSION, createTestNode());
