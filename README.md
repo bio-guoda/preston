@@ -62,6 +62,7 @@ Please use [maven](https://maven.apache.org) version 3.3+.
 
 ## Usage
 
+```
 Usage: <main class> [command] [command options]
   Commands:
     version      Show Version
