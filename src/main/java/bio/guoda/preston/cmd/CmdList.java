@@ -1,5 +1,8 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.store.AppendOnlyBlobStore;
+import bio.guoda.preston.store.Persistence;
+import bio.guoda.preston.store.StatementStoreImpl;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
@@ -25,18 +28,15 @@ import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 @Parameters(separators = "= ", commandDescription = "list biodiversity graph")
-public class CmdList extends CmdCrawl {
+public class CmdList extends LoggingPersisting {
 
     private static final Log LOG = LogFactory.getLog(CmdList.class);
 
-    @Override
-    public CrawlMode getCrawlMode() {
-        return CrawlMode.replay;
-    }
+    public void run() {
+        BlobStore blobStore = new AppendOnlyBlobStore(getBlobPersistence());
 
-    @Override
-    protected void run(BlobStore blobStore, StatementStore statementStore) {
-        attemptReplay(blobStore, statementStore);
+        StatementStore statementPersistence = new StatementStoreImpl(getStatementPersistence());
+        attemptReplay(blobStore, statementPersistence);
     }
 
     private void attemptReplay(final BlobStore blobStore, final StatementStore statementPersistence) {

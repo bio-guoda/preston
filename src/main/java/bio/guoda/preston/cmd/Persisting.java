@@ -9,12 +9,6 @@ import java.io.IOException;
 
 public class Persisting {
 
-    @Parameter(names = {"-l", "--log",}, description = "log format", converter = LoggerConverter.class)
-    private Logger logMode = Logger.nquads;
-
-    protected Logger getLogMode() {
-        return logMode;
-    }
 
 
     FilePersistence getBlobPersistence() {

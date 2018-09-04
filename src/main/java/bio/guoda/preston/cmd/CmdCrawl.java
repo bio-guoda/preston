@@ -55,7 +55,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
-public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
+public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Crawler {
     private static final Log LOG = LogFactory.getLog(CmdCrawl.class);
 
     public static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");

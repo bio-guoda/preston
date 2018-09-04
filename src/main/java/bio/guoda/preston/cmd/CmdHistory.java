@@ -25,7 +25,7 @@ import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 
 @Parameters(separators = "= ", commandDescription = "show history of biodiversity resource")
-public class CmdHistory extends Persisting implements Runnable {
+public class CmdHistory extends LoggingPersisting implements Runnable {
 
     private static final Log LOG = LogFactory.getLog(CmdHistory.class);
 

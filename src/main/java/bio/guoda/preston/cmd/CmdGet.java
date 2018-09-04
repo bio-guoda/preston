@@ -19,7 +19,7 @@ import static java.lang.System.exit;
 @Parameters(separators = "= ", commandDescription = "get biodiversity node(s)")
 public class CmdGet extends Persisting implements Runnable {
 
-    @Parameter(description = "node id (e.g., [hash://sha256/8ed311...]). Waits for stdin if none are specified.",
+    @Parameter(description = "node id (e.g., [hash://sha256/8ed311...])",
             validateWith = URIValidator.class)
     private List<String> hashes = new ArrayList<>();
 
