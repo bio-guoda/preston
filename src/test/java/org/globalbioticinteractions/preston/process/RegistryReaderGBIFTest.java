@@ -76,6 +76,27 @@ public class RegistryReaderGBIFTest {
     }
 
     @Test
+    public void onContinuationWithQuery() {
+        ArrayList<Triple> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return getClass().getResourceAsStream(GBIFDATASETS_JSON);
+            }
+        };
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+
+
+        Triple firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR"), HAS_VERSION, createTestNode());
+
+        registryReaderGBIF.on(firstPage);
+
+        Assert.assertThat(nodes.size(), is(16));
+        Triple secondPage = nodes.get(nodes.size() - 1);
+        assertThat(getVersionSource(secondPage).toString(), is("<https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR&offset=2&limit=2>"));
+    }
+
+    @Test
     public void onSingle() {
         ArrayList<Triple> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
@@ -97,13 +118,21 @@ public class RegistryReaderGBIFTest {
     }
 
     @Test
+    public void nextPage() {
+        List<Triple> nodes = new ArrayList<Triple>();
+        RegistryReaderGBIF.emitNextPage(0, 10, nodes::add, "https://bla/?limit=2&offset=8");
+        assertThat(nodes.size(), is(2));
+        assertThat(nodes.get(1).getSubject().toString(), is("<https://bla/?limit=10&offset=0>"));
+    }
+
+    @Test
     public void parseDatasets() throws IOException {
 
         final List<Triple> refNodes = new ArrayList<>();
 
         IRI testNode = createTestNode();
 
-        RegistryReaderGBIF.parse(testNode, refNodes::add, getClass().getResourceAsStream(GBIFDATASETS_JSON));
+        RegistryReaderGBIF.parse(testNode, refNodes::add, getClass().getResourceAsStream(GBIFDATASETS_JSON), toIRI("http://example.org/"));
 
         assertThat(refNodes.size(), is(16));
 
@@ -132,10 +161,10 @@ public class RegistryReaderGBIFTest {
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <d0df772d-78f4-4602-acf2-7d768798f632> ."));
 
         Triple lastRefNode = refNodes.get(refNodes.size() - 2);
-        assertThat(lastRefNode.toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
+        assertThat(lastRefNode.toString(), is("<http://example.org/?offset=2&limit=2> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
 
         lastRefNode = refNodes.get(refNodes.size() - 1);
-        assertThat(lastRefNode.toString(), startsWith("<https://api.gbif.org/v1/dataset?offset=2&limit=2> <http://purl.org/pav/hasVersion> "));
+        assertThat(lastRefNode.toString(), startsWith("<http://example.org/?offset=2&limit=2> <http://purl.org/pav/hasVersion> "));
 
     }
 

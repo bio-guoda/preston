@@ -71,7 +71,7 @@ public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
 
     @Parameter(description = "content URLs to update. If specified, the seeds will not be used.",
             validateWith = IRIValidator.class)
-    private final List<String> IRIs  = new ArrayList<>();
+    private List<String> IRIs  = new ArrayList<>();
 
 
     @Override
@@ -201,6 +201,8 @@ public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
             try {
                 archivingLogger.stop();
             } catch (IOException e) {
+                LOG.warn("failed to stop archive logger", e);
+            } finally {
                 archivingLogger.destroy();
             }
         }
@@ -237,9 +239,12 @@ public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
         }
 
         void stop() throws IOException {
+            LOG.info("attempting to archive crawl...");
             if (tmpArchive != null && tmpArchive.exists() && printStream != null && listener != null) {
                 printStream.flush();
                 printStream.close();
+
+                printStream = null;
 
                 IRI newVersion = blobStore.putBlob(new FileInputStream(tmpArchive));
                 VersionUtil.recordGenerationTimeFor(newVersion, blobStore, statementStore);
@@ -251,6 +256,9 @@ public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
                 } else {
                     statementStore.put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
                 }
+                LOG.info("wrote archive.");
+            } else {
+                LOG.info("nothing to archive...");
             }
 
         }

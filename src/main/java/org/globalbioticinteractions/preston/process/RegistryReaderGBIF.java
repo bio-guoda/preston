@@ -2,6 +2,7 @@ package org.globalbioticinteractions.preston.process;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
@@ -12,6 +13,7 @@ import org.globalbioticinteractions.preston.Seeds;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -61,15 +63,20 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 && getVersionSource(statement).toString().contains(GBIF_API_URL_PART)) {
             try {
                 IRI currentPage = (IRI) getVersion(statement);
-                parse(currentPage, this, get(currentPage));
+                parse(currentPage, this, get(currentPage), getVersionSource(statement));
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
         }
     }
 
-    private static void emitNextPage(int offset, int limit, StatementEmitter emitter) {
-        String uri = GBIF_DATASET_REGISTRY_STRING + "?offset=" + offset + "&limit=" + limit;
+    static void emitNextPage(int offset, int limit, StatementEmitter emitter, String versionSourceURI) {
+        URI uri1 = URI.create(versionSourceURI);
+        String uriNoQuery = StringUtils.removePattern(versionSourceURI, "\\?.*");
+        String query = uri1.getQuery();
+        query = StringUtils.replacePattern(query, "limit=[0-9]*", "limit=" + limit);
+        query = StringUtils.replacePattern(query, "offset=[0-9]*", "offset=" + offset);
+        String uri = uriNoQuery + "?" + query;
         IRI nextPage = toIRI(uri);
         emitPageRequest(emitter, nextPage);
     }
@@ -81,7 +88,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 .forEach(emitter::emit);
     }
 
-    static void parse(IRI currentPage, StatementEmitter emitter, InputStream in) throws IOException {
+    static void parse(IRI currentPage, StatementEmitter emitter, InputStream in, IRI versionSource) throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(in);
         if (jsonNode != null) {
             if (jsonNode.has("results")) {
@@ -97,7 +104,8 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         if (!endOfRecords && jsonNode.has("offset") && jsonNode.has("limit")) {
             int offset = jsonNode.get("offset").asInt();
             int limit = jsonNode.get("limit").asInt();
-            emitNextPage(offset + limit, limit, emitter);
+            String previousURL = versionSource.getIRIString();
+            emitNextPage(offset + limit, limit, emitter, previousURL);
         }
 
     }
