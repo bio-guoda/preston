@@ -12,6 +12,8 @@ import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.globalbioticinteractions.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static org.globalbioticinteractions.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
@@ -28,11 +30,20 @@ public class VersionUtil {
     public static IRI findMostRecentVersion(IRI versionSource, StatementStore statementStore, VersionListener versionListener) throws IOException {
         IRI mostRecentVersion = findVersion(versionSource, statementStore, versionListener);
 
+        List<IRI> versions = new ArrayList<IRI>();
+        versions.add(mostRecentVersion);
+
         if (mostRecentVersion != null) {
             IRI lastVersionId = mostRecentVersion;
             IRI newerVersionId;
 
             while ((newerVersionId = findPreviousVersion(lastVersionId, statementStore, versionListener)) != null) {
+                versions.add(mostRecentVersion);
+                if (versions.contains(newerVersionId)) {
+                    break;
+                } else {
+                    versions.add(newerVersionId);
+                }
                 lastVersionId = newerVersionId;
             }
             mostRecentVersion = lastVersionId;
