@@ -10,6 +10,7 @@ import org.apache.commons.rdf.api.Triple;
 import org.globalbioticinteractions.preston.MimeTypes;
 import org.globalbioticinteractions.preston.RefNodeConstants;
 import org.globalbioticinteractions.preston.Seeds;
+import org.globalbioticinteractions.preston.model.RefNodeFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,11 +19,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static org.globalbioticinteractions.preston.RefNodeConstants.*;
 import static org.globalbioticinteractions.preston.RefNodeConstants.CREATED_BY;
 import static org.globalbioticinteractions.preston.RefNodeConstants.DESCRIPTION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.IS_A;
 import static org.globalbioticinteractions.preston.RefNodeConstants.ORGANIZATION;
 import static org.globalbioticinteractions.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static org.globalbioticinteractions.preston.model.RefNodeFactory.*;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersion;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.getVersionSource;
 import static org.globalbioticinteractions.preston.model.RefNodeFactory.hasVersionAvailable;
@@ -84,8 +87,8 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
 
     private static void emitPageRequest(StatementEmitter emitter, IRI nextPage) {
         Stream.of(
-                toStatement(nextPage, RefNodeConstants.HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
-                toStatement(nextPage, RefNodeConstants.HAS_VERSION, toBlank()))
+                toStatement(nextPage, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
+                toStatement(nextPage, HAS_VERSION, toBlank()))
                 .forEach(emitter::emit);
     }
 
@@ -112,22 +115,30 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     }
 
     public static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
-        if (result.has("key") && result.has("endpoints")) {
+        if (result.has("key")) {
             String uuid = result.get("key").asText();
             IRI datasetUUID = toUUID(uuid);
-            emitter.emit(toStatement(currentPage, RefNodeConstants.HAD_MEMBER, datasetUUID));
+            emitter.emit(toStatement(currentPage, HAD_MEMBER, datasetUUID));
 
-            for (JsonNode endpoint : result.get("endpoints")) {
-                if (endpoint.has("url") && endpoint.has("type")) {
-                    String urlString = endpoint.get("url").asText();
-                    String type = endpoint.get("type").asText();
+            if (result.has("endpoints")) {
+                handleEndpoints(emitter, result, datasetUUID);
+            } else {
+                emitter.emit(toStatement(toIRI(GBIF_DATASET_REGISTRY_STRING + "/" + uuid), HAS_VERSION, toBlank()));
+            }
+        }
+    }
 
-                    if (SUPPORTED_ENDPOINT_TYPES.containsKey(type)) {
-                        IRI dataArchive = toIRI(urlString);
-                        emitter.emit(toStatement(datasetUUID, RefNodeConstants.HAD_MEMBER, dataArchive));
-                        emitter.emit(toStatement(dataArchive, RefNodeConstants.HAS_FORMAT, toContentType(SUPPORTED_ENDPOINT_TYPES.get(type))));
-                        emitter.emit(toStatement(dataArchive, RefNodeConstants.HAS_VERSION, toBlank()));
-                    }
+    public static void handleEndpoints(StatementEmitter emitter, JsonNode result, IRI datasetUUID) {
+        for (JsonNode endpoint : result.get("endpoints")) {
+            if (endpoint.has("url") && endpoint.has("type")) {
+                String urlString = endpoint.get("url").asText();
+                String type = endpoint.get("type").asText();
+
+                if (SUPPORTED_ENDPOINT_TYPES.containsKey(type)) {
+                    IRI dataArchive = toIRI(urlString);
+                    emitter.emit(toStatement(datasetUUID, HAD_MEMBER, dataArchive));
+                    emitter.emit(toStatement(dataArchive, HAS_FORMAT, toContentType(SUPPORTED_ENDPOINT_TYPES.get(type))));
+                    emitter.emit(toStatement(dataArchive, HAS_VERSION, toBlank()));
                 }
             }
         }

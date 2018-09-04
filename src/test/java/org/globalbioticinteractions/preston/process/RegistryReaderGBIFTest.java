@@ -76,6 +76,27 @@ public class RegistryReaderGBIFTest {
     }
 
     @Test
+    public void onContinuationSearchOrSuggestion() {
+        ArrayList<Triple> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return getClass().getResourceAsStream("gbif-dataset-search-results.json");
+            }
+        };
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+
+
+        Triple firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset/suggest"), HAS_VERSION, createTestNode());
+
+        registryReaderGBIF.on(firstPage);
+
+        Assert.assertThat(nodes.size(), is(4));
+        Triple secondPage = nodes.get(nodes.size() - 1);
+        assertThat(getVersionSource(secondPage).toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2>"));
+    }
+
+    @Test
     public void onContinuationWithQuery() {
         ArrayList<Triple> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {

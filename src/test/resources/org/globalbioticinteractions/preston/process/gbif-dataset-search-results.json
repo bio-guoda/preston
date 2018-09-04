@@ -1,0 +1,58 @@
+{
+  "offset": 1320,
+  "limit": 2,
+  "endOfRecords": true,
+  "count": 1322,
+  "results": [
+    {
+      "key": "0f94c521-af21-4e18-8eb4-0b01deb2ee6f",
+      "title": "Bases de datos de plantas, insectos, reptiles, anfibios, aves y mamíferos del “Arroyo la Junta, Una joya de biodiversidad en la Reserva de la Biosfera Sierra La Laguna”",
+      "description": "<p>Un equipo internacional de 29 científicos provenientes de 19 instituciones tanto de México\ncomo de Estados Unidos, dirigieron una evaluación de la biodiversidad dentro de la\nReserva de la Biosfera Sierra La Laguna, en Baja California Sur, México. La expedición\nde ocho días se llevó a cabo por petición de y en colaboración con la Comisión Nacional\nde Áreas Naturales Protegidas de México (CONANP) para documentar la diversidad\nde aproximadamente 500 hectáreas de tierra, actualmente solicitada para Los Cardones:\nun proyecto de una mina de oro a cielo abierto. A partir del 4 y hasta el 11 de diciembre de\n2015 los científicos participantes documentaron la presencia de 877 especies, incluyendo\n381 plantas, 29 mamíferos, 77 aves, 366 insectos y 24 reptiles y anfibios. La mayoría de\nesta diversidad se encontró asociada al sistema ribereño La Junta, en el centro del lugar\npropuesto para la mina. Veintinueve especies protegidas por las leyes mexicanas, debido\na que están incluidas en la lista de especies en peligro NOM-059-SEMARNAT-2010,\nfueron descubiertas dentro de la huella del proyecto, así como 107 especies endémicas\na la región del Cabo. La biodiversidad que se concentra en y alrededor del Arroyo La\nJunta y sus tributarios constituye la base de una trama alimentaria compleja. Con base en\nlos altos índices de diversidad biológica y de endemismos, especialmente en la cantidad\nde formas de vida asociadas a los hábitats acuáticos, los hallazgos de esta inspección\nrespaldan la previa designación de la región como área para la conservación por parte de\norganizaciones mexicanas e internacionales.</p>\n<p>Reino: 1\nFilo: 1\nClase: 1\nOrden: 32\nFamilia: 86\nGénero: 258\nSubgénero: 5\nEspecie: 310\nEpitetoinfraespecifico: 70</p>",
+      "type": "OCCURRENCE",
+      "hostingOrganizationKey": "ff90b050-c256-11db-b71b-b8a03c50a862",
+      "hostingOrganizationTitle": "Comisión nacional para el conocimiento y uso de la biodiversidad",
+      "countryCoverage": [],
+      "publishingCountry": "MX",
+      "publishingOrganizationKey": "ff90b050-c256-11db-b71b-b8a03c50a862",
+      "publishingOrganizationTitle": "Comisión nacional para el conocimiento y uso de la biodiversidad",
+      "license": "http://creativecommons.org/licenses/by-nc/4.0/legalcode",
+      "decades": [
+        2010
+      ],
+      "keywords": [
+        "Specimen",
+        "Plantas",
+        "Occurrence"
+      ],
+      "projectIdentifier": "SNIB-Z055-Z05516111_Plants-plantas"
+    },
+    {
+      "key": "b7010c1b-8013-4a3c-a43b-4309a91f9629",
+      "title": "Los musgos de México",
+      "description": "<p>Los musgos de México han sido estudiados desde mediados del siglo XIX. En 1872 Bescherelle produjo el primer catálogo de las especies conocidas y, en 1951, Crum en una tesis no publicada, enlistó alrededor de 836 especies y variedades. No obstante, la flora de musgos mexicanos es poco conocida debido a que muchas zonas importantes han permanecido al margen de la investigación briológica y, además las colecciones existentes en el país son pobres y no existen duplicados de las realizadas por investigadores extranjeros. Sin embargo a partir de 1972 se organizó un grupo de\ninvestigadores de varios países que se han dedicado a estudiar los musgos de México, y a la fecha han publicado numerosos artículos basados principalmente en las colecciones de los herbarios extranjeros. En México, investigadores del Instituto de Biología de la UNAM , han realizado importantes expediciones a regiones no exploradas por otros biólogos y sus trabajos han aumentado el conocimiento de la flora de briofitas de México. Como resultado de la sistematización de esta información y con el apoyo de la CONABIO, se obtuvo una base de datos de los musgos de México a partir de un total de 960 ejemplares correspondientes a 917 especies.</p>\n<p>Reino: 1\nFilo: 2\nClase: 2\nOrden: 20\nFamilia: 67\nGénero: 313\nEspecie: 865\nEpitetoinfraespecifico: 95</p>",
+      "type": "OCCURRENCE",
+      "hostingOrganizationKey": "ff90b050-c256-11db-b71b-b8a03c50a862",
+      "hostingOrganizationTitle": "Comisión nacional para el conocimiento y uso de la biodiversidad",
+      "countryCoverage": [],
+      "publishingCountry": "MX",
+      "publishingOrganizationKey": "ff90b050-c256-11db-b71b-b8a03c50a862",
+      "publishingOrganizationTitle": "Comisión nacional para el conocimiento y uso de la biodiversidad",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "decades": [
+        1840,
+        1850,
+        1860,
+        1870,
+        1880,
+        1890
+      ],
+      "keywords": [
+        "Specimen",
+        "Plantas",
+        "Occurrence"
+      ],
+      "projectIdentifier": "SNIB-P090-P090502F-_modificadaEnlaces_CamposTaxSeparados"
+    }
+  ],
+  "facets": []
+}
