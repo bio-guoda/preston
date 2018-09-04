@@ -76,7 +76,13 @@ public class Archiver extends StatementProcessor {
 
     private void handleVersions(Triple statement, BlankNode blankVersion) throws IOException {
         IRI versionSource = getVersionSource(statement);
-        IRI previousVersion = findMostRecentVersion(versionSource);
+        IRI previousVersion = VersionUtil.findMostRecentVersion(versionSource, new VersionListener() {
+
+            @Override
+            public void onVersion(Triple statement) throws IOException {
+                emitExistingVersion(statement);
+            }
+        }, getStatementStore());
         if (previousVersion == null || !shouldResolveOnMissingOnly()) {
             if (getDereferencer() != null) {
                 IRI newVersion = null;
@@ -140,27 +146,6 @@ public class Archiver extends StatementProcessor {
     public void setResolveOnMissingOnly(boolean resolveOnMissingOnly) {
         this.resolveOnMissingOnly = resolveOnMissingOnly;
     }
-
-    private IRI findMostRecentVersion(IRI versionSource) throws IOException {
-        IRI mostRecentVersion = getStatementStore().get(Pair.of(versionSource, HAS_VERSION));
-
-        if (mostRecentVersion != null) {
-            emitExistingVersion(toStatement(versionSource, HAS_VERSION, mostRecentVersion));
-            mostRecentVersion = findLastVersion(mostRecentVersion);
-        }
-        return mostRecentVersion;
-    }
-
-    private IRI findLastVersion(IRI existingId) throws IOException {
-        IRI lastVersionId = existingId;
-        IRI newerVersionId;
-        while ((newerVersionId = getStatementStore().get(Pair.of(HAS_PREVIOUS_VERSION, lastVersionId))) != null) {
-            emitExistingVersion(toStatement(newerVersionId, HAS_PREVIOUS_VERSION, lastVersionId));
-            lastVersionId = newerVersionId;
-        }
-        return lastVersionId;
-    }
-
 
     private void emitExistingVersion(Triple statement) throws IOException {
         emitGenerationInfo(statement);

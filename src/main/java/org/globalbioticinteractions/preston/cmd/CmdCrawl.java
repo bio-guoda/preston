@@ -218,9 +218,7 @@ public abstract class CmdCrawl extends Persisting implements Runnable, Crawler {
                 toStatement(biodiversityGraph, WAS_GENERATED_BY, crawlActivity),
 
                 toStatement(biodiversityArchiveCollection, IS_A, ENTITY),
-                toStatement(biodiversityArchiveCollection, DESCRIPTION, toEnglishLiteral("A collection of biodiversity graph archives.")),
-
-                toStatement(ARCHIVE_COLLECTION_IRI, HAS_VERSION, toBlank())
+                toStatement(biodiversityArchiveCollection, DESCRIPTION, toEnglishLiteral("A collection of biodiversity graph archives."))
         );
     }
 
