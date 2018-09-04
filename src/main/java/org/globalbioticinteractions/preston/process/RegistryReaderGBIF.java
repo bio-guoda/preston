@@ -71,13 +71,14 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     }
 
     static void emitNextPage(int offset, int limit, StatementEmitter emitter, String versionSourceURI) {
-        URI uri1 = URI.create(versionSourceURI);
-        String uriNoQuery = StringUtils.removePattern(versionSourceURI, "\\?.*");
-        String query = uri1.getQuery();
-        query = StringUtils.replacePattern(query, "limit=[0-9]*", "limit=" + limit);
-        query = StringUtils.replacePattern(query, "offset=[0-9]*", "offset=" + offset);
-        String uri = uriNoQuery + "?" + query;
-        IRI nextPage = toIRI(uri);
+        String nextPageURL = versionSourceURI;
+        nextPageURL = StringUtils.replacePattern(nextPageURL, "limit=[0-9]*", "limit=" + limit);
+        nextPageURL = StringUtils.replacePattern(nextPageURL, "offset=[0-9]*", "offset=" + offset);
+        nextPageURL = StringUtils.contains(nextPageURL, "?") ? nextPageURL : nextPageURL + "?";
+        nextPageURL = StringUtils.contains(nextPageURL, "offset") ? nextPageURL : nextPageURL + "&offset=" + offset;
+        nextPageURL = StringUtils.contains(nextPageURL, "limit") ? nextPageURL : nextPageURL + "&limit=" + limit;
+        nextPageURL = StringUtils.replace(nextPageURL, "?&", "?");
+        IRI nextPage = toIRI(nextPageURL);
         emitPageRequest(emitter, nextPage);
     }
 
