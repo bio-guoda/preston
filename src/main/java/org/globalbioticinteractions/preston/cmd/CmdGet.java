@@ -2,45 +2,63 @@ package org.globalbioticinteractions.preston.cmd;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import com.beust.jcommander.converters.URIConverter;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.globalbioticinteractions.preston.model.RefNodeFactory;
 import org.globalbioticinteractions.preston.store.AppendOnlyBlobStore;
-import org.globalbioticinteractions.preston.store.FilePersistence;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.System.exit;
 
-@Parameters(separators = "= ", commandDescription = "get biodiversity node")
-public class CmdGet extends  Persisting implements Runnable {
+@Parameters(separators = "= ", commandDescription = "get biodiversity node(s)")
+public class CmdGet extends Persisting implements Runnable {
 
-    @Parameter(description = "node id (e.g., [hash://sha256/8ed3110302c38077eace003a67bbfebefc0e2e2c9e67c8703ca49355514bdec9] )",
-            required = true,
+    @Parameter(description = "node id (e.g., [hash://sha256/8ed311...]). Waits for stdin if none are specified.",
             validateWith = URIValidator.class)
-    private String contentHashString  = null;
-
+    private List<String> hashes = new ArrayList<>();
 
     @Override
     public void run() {
         AppendOnlyBlobStore blobStore = new AppendOnlyBlobStore(getBlobPersistence());
 
         try {
-            InputStream input = blobStore.get(RefNodeFactory.toIRI(contentHashString));
-            if (input == null) {
-                System.err.println("not found: [" + contentHashString + "]");
-                exit(1);
+            if (hashes.isEmpty()) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    handleHash(blobStore, StringUtils.trim(line));
+                }
+            } else {
+                for (String s : hashes) {
+                    handleHash(blobStore, s);
+                }
             }
-            IOUtils.copy(input, System.out);
-            exit(0);
-        } catch (IOException e) {
-            System.err.println("problem retrieving [" + contentHashString + "]");
-            e.printStackTrace(System.err);
+        } catch (Throwable th) {
+            th.printStackTrace(System.err);
             exit(1);
         }
 
+        exit(0);
+    }
+
+    public void handleHash(AppendOnlyBlobStore blobStore, String hash) throws IOException {
+        try {
+            InputStream input = blobStore.get(RefNodeFactory.toIRI(hash));
+            if (input == null) {
+                System.err.println("not found: [" + hash + "]");
+                exit(1);
+            }
+            IOUtils.copy(input, System.out);
+
+        } catch (IOException e) {
+            throw new IOException("problem retrieving [" + hash + "]", e);
+        }
     }
 
 }
