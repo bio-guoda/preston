@@ -6,7 +6,7 @@
 
 Preston is an open-source software system that keeps track of biodiversity datasets. Scientists can use Preston to keep a local, uniquely identifiable, versioned copy of all or parts of [GBIF](https://gbif.org)-indexed datasets. Institutions can use Preston to check that their collections are indexed and available. Biodiversity informatics researchers can use Preston to perform metadata analysis. And finally, archivists can distribute archives across the world. 
  
-Preston uses the [PROV](https://www.w3.org/TR/prov-o/) and [PAV](https://pav-ontology.github.io/pav/) ontologies to model the actors, activities and entities involved in discovery, access and change control of digital biodiversity datasets. In addition, Preston uses content-addressed storage and SHA256 hashes to uniquely identify and store content. A [hexastore](https://people.csail.mit.edu/tdanford/6830papers/weiss-hexastore.pdf)-like index is used to navigate a local graph of biodiversity datasets. Preston is designed to work offline and can be cloned, copied and moved across storage media with existing tools and infrastructures like rsync, dropbox, the internet archive or thumbdrives. In addition to versioned copies of uniquely identifiable original [ABCD](http://tdwg.github.io/abcd/ABCD_v206.html)-A, [DWC](http://rs.tdwg.org/dwc/)-A and [EML](https://www.researchgate.net/profile/Oliver_Guenther/publication/228958840_EML-the_Environmental_Markup_Language/links/0046351ee4c535bf56000000.pdf?inViewer=true&disableCoverPage=true&origin=publication_detail) files, Preston also keeps track of the [GBIF](https://gbif.org), [iDigBio](https://idigbio.org) and [BioCASe](http://biocasemonitor.biodiv.naturkundemuseum-berlin.de/index.php/Main_Page) registries to help retain the relationships between the institutions to keep a detailed record of provenance. 
+Preston uses the [PROV](https://www.w3.org/TR/prov-o/) and [PAV](https://pav-ontology.github.io/pav/) ontologies to model the actors, activities and entities involved in discovery, access and change control of digital biodiversity datasets. In addition, Preston uses [content-addressed storage](https://bentrask.com/?q=hash://sha256/98493caa8b37eaa26343bbf73f232597a3ccda20498563327a4c3713821df892) and [SHA256 hashes](https://en.wikipedia.org/wiki/SHA-2) to uniquely identify and store content. A [hexastore](https://people.csail.mit.edu/tdanford/6830papers/weiss-hexastore.pdf)-like index is used to navigate a local graph of biodiversity datasets. Preston is designed to work offline and can be cloned, copied and moved across storage media with existing tools and infrastructures like rsync, dropbox, the internet archive or thumbdrives. In addition to versioned copies of uniquely identifiable original [ABCD](http://tdwg.github.io/abcd/ABCD_v206.html)-A, [DWC](http://rs.tdwg.org/dwc/)-A and [EML](https://www.researchgate.net/profile/Oliver_Guenther/publication/228958840_EML-the_Environmental_Markup_Language/links/0046351ee4c535bf56000000.pdf?inViewer=true&disableCoverPage=true&origin=publication_detail) files, Preston also keeps track of the [GBIF](https://gbif.org), [iDigBio](https://idigbio.org) and [BioCASe](http://biocasemonitor.biodiv.naturkundemuseum-berlin.de/index.php/Main_Page) registries to help retain the relationships between the institutions to keep a detailed record of provenance. 
 
 If you haven't yet tried preston, please see the [Installation](#install) section.
 
@@ -157,7 +157,7 @@ $ preston history http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38
 
 In the previous section the commands `update`, `ls`, `get` and `history` were introduced. Now, some use cases are covered to show how to combine these basic commands to make for useful operations. This is by no means an exhaustive list of all the potential uses, but instead is just to provide some inspiration on how to get the most out of preston.
 
-#### Mining EML Citations
+#### Mining Citations
 
 The Ecological Metadata Language (EML) files contain citations, and your biodiversity graph contains EML files. To extract all citations you can do:
 
@@ -178,7 +178,7 @@ So, now we have a way to attribute each and every dataset individually.
 
 #### Archiving
 
-Preston creates a "data" folder that stores the biodiversity datasets and associated information. For archiving, you can take this "data" folder, copy it and move it somewhere safe. You can also use tools like [git-annex](http://git-annex.branchable.com), [rsync](https://en.wikipedia.org/wiki/Rsync), or use distributed storage systems like the [Interplanetary File System (ipfs)](https://ipfs.org) or [Dat](https://dat-project.org). 
+Preston creates a "data" folder that stores the biodiversity datasets and associated information. For archiving, you can take this "data" folder, copy it and move it somewhere safe. You can also use tools like [git-annex](http://git-annex.branchable.com), [rsync](https://en.wikipedia.org/wiki/Rsync), or use distributed storage systems like the [Interplanetary File System (ipfs)](https://ipfs.io) or [Dat](https://dat-project.org). 
 
 #### Data Access Monitor
 
@@ -200,6 +200,25 @@ $ preston ls -l tsv | grep "/.well-known/genid/" | grep "Version" | cut -f1,3 | 
       3 http://xbiod.osu.edu/ipt/eml.do?r=platys
 ```
  
+#### Compare Versions
+
+Keeping track of changes across a diverse consortium of data publishers is necessary for reproducible workflows and reliable results. As datasets change, Preston can help you give insights into what changed *exactly*. For instance, the GBIF dataset registry changes as datasets are added, updated or deprecated. Below is an example of two version of the  https://api.gbif.org/v1/dataset endpoint, one from 2018-09-03 and the other from 2018-09-04. Using ```jq``` and ```diff``` in combination with ```preston get``` and ```preston history``` gives us a way to check and see what changed.
+
+```console
+$ preston history https://api.gbif.org/v1/dataset
+<https://api.gbif.org/v1/dataset> <http://purl.org/pav/hasVersion> <hash://sha256/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b> .
+<hash://sha256/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02> <http://www.w3.org/ns/prov#generatedAtTime> "2018-09-03T02:19:14.636Z" .
+<hash://sha256/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02> <http://purl.org/pav/previousVersion> <hash://sha256/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b> .
+$ preston get hash://sha256/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b | jq . > one.json
+$ preston get hash://sha256/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02 | jq . > two.json
+$ diff one.json two.json
+20c20
+<         "text": "Ali P A, Maddison W P, Zahid M, Butt A (2017). New chrysilline and aelurilline jumping spiders from Pakistan (Araneae, Salticidae). Plazi.org taxonomic treatments database. Checklist dataset https://doi.org/10.3897/zookeys.783.21985 accessed via GBIF.org on 2018-08-31."
+---
+>         "text": "Ali P A, Maddison W P, Zahid M, Butt A (2017). New chrysilline and aelurilline jumping spiders from Pakistan (Araneae, Salticidae). Plazi.org taxonomic treatments database. Checklist dataset https://doi.org/10.3897/zookeys.783.21985 accessed via GBIF.org on 2018-09-03."
+248c248
+```
+
 
 #### Generating Citations
 
