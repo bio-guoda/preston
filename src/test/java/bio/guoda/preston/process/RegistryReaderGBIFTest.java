@@ -97,6 +97,27 @@ public class RegistryReaderGBIFTest {
     }
 
     @Test
+    public void onContinuationSuggestion() {
+        ArrayList<Triple> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return getClass().getResourceAsStream("gbif-suggest.json");
+            }
+        };
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+
+
+        Triple firstPage = toStatement(toIRI("http://api.gbif.org/v1/dataset/suggest?q=Amazon&amp;type=OCCURRENCE"), HAS_VERSION, createTestNode());
+
+        registryReaderGBIF.on(firstPage);
+
+        Assert.assertThat(nodes.size(), is(40));
+        Triple lastItem = nodes.get(nodes.size() - 1);
+        assertThat(getVersionSource(lastItem).toString(), is("<https://api.gbif.org/v1/dataset/663199f1-3528-4289-8069-d27552f62f10>"));
+    }
+
+    @Test
     public void onContinuationWithQuery() {
         ArrayList<Triple> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {

@@ -98,6 +98,10 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 }
             } else if (jsonNode.has("key")) {
                 parseIndividualDataset(currentPage, emitter, jsonNode);
+            } else if (jsonNode.isArray()) {
+                for (JsonNode node : jsonNode) {
+                    parseIndividualDataset(currentPage, emitter, node);
+                }
             }
         }
 

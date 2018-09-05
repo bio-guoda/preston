@@ -1,0 +1,122 @@
+[
+  {
+    "key": "82ceb6ba-f762-11e1-a439-00145eb45e9a",
+    "title": "Andes to Amazon Biodiversity Program",
+    "description": "The Andes to Amazon Program is an international, multidisciplinary team of scientists, students, and Peruvian locals working between the Botanical Research Institute of Texas (BRIT) and selected field and museum sites in Peru.",
+    "type": "OCCURRENCE"
+  },
+  {
+    "key": "58414378-4fb2-47e0-8dd5-8b55d5c77117",
+    "title": "Bolivian Amazon lowland fish metacommunity data",
+    "description": "<p>This dataset represents data from the paper Yukoni, T. and Torres L. V. (2016) Fish metacommunity dynamics in the patchy heterogeneous habitats of varzea lakes, turbid river channels and transparent clear and black water bodies in the Amazonian Lowlands of Bolivia. Environmental Biology of Fishes.</p>\n<p>This study documents the spatial dynamic of fish metacommunity based on the date sets of 65 sites, covering two geographic patches of transparent water valleys; Manuripi and Itenez Rivers, separated by turbid water valleys originate in the Andes and the Savanna.</p>\n<p>See http://www.freshwaterbiodiversity.eu/metadb/bf_mdb_view.php?entryID=BFE_105 for additional metadata.</p>",
+    "type": "OCCURRENCE"
+  },
+  {
+    "key": "5a607ce6-eaaf-4420-a302-54ddc767130c",
+    "title": "Earthworms (Oligochaeta: Glossoscolecidae) of the Amazon region of Colombia",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article M, Alexander Feijoo, Celis, Liliana V. (2011): Earthworms (Oligochaeta: Glossoscolecidae) of the Amazon region of Colombia. Zootaxa 3201: 27-44, DOI: 10.5281/zenodo.202378",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "4716951d-11f5-4f31-bb1d-d40c95268ad3",
+    "title": "Notes on the Agrilus fauna of the Colombian Amazon (Coleoptera, Buprestidae)",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Curletti, Gianfranco, Dutto, Angelo (2017): Notes on the Agrilus fauna of the Colombian Amazon (Coleoptera, Buprestidae). Zootaxa 4243 (2): 373-376, DOI: https://doi.org/10.11646/zootaxa.4243.2.7",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "10b6b053-2ccf-4ca0-8922-486ad098fc56",
+    "title": "Stink bugs (Hemiptera: Pentatomidae) from Brazilian Amazon: checklist and new records",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Silva, Valeria Juliete Da, Santos, Cleverson Rannieri Meira Dos, Fernandes, Jose Antonio Marin (2018): Stink bugs (Hemiptera: Pentatomidae) from Brazilian Amazon: checklist and new records. Zootaxa 4425 (3): 401-455, DOI: https://doi.org/10.11646/zootaxa.4425.3.1",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "6b43aef0-e62d-478f-9a88-b692578f0a73",
+    "title": "New species and notes on Apenesia (Hymenoptera, Bethylidae) from the Brazilian Amazon",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Lanes, G. O., Azevedo, C. O. (2004): New species and notes on Apenesia (Hymenoptera, Bethylidae) from the Brazilian Amazon. Zootaxa 679: 1-16, DOI: 10.5281/zenodo.158458",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "9f2ce723-8926-4f4c-b9f6-a4b596c8c1a9",
+    "title": "Revision of the Brazilian Amazon Basin species of Porphyrochroa Melander (Diptera: Empididae)",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Mendonça, Mirian Nascimento, Rafael, José Albertino, Ale-Rocha, Rosaly (2008): Revision of the Brazilian Amazon Basin species of Porphyrochroa Melander (Diptera: Empididae). Zootaxa 1859: 1-39, DOI: 10.5281/zenodo.183631",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "f0096116-c79f-41cd-8376-35587cbe9fcd",
+    "title": "New species of earthworms (Oligochaeta: Glossoscolecidae) in the Amazon region of Colombia",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article M, Alexander Feijoo, Celis, Liliana V. (2012): New species of earthworms (Oligochaeta: Glossoscolecidae) in the Amazon region of Colombia. Zootaxa 3458: 103-119, DOI: 10.5281/zenodo.214602",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "0d875ec4-2366-4592-803d-cf6c61de8df4",
+    "title": "A new species of Rhinella (Anura: Bufonidae) from Brazilian Amazon",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Lima, Albertina P., Menin, Marcelo, Araújo, Maria Carmozina De (2007): A new species of Rhinella (Anura: Bufonidae) from Brazilian Amazon. Zootaxa 1663: 1-15, DOI: 10.5281/zenodo.179996",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "92b19f16-a3d8-4924-89ff-1800c1d048d0",
+    "title": "Amazoonops, a new genus of goblin spiders (Araneae: Oonopidae) from the Brazilian Amazon",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Ott, Ricardo, Ruiz, Gustavo R. S., Brescovit, Antonio D., Bonaldo, Alexandre B. (2017): Amazoonops, a new genus of goblin spiders (Araneae: Oonopidae) from the Brazilian Amazon. Zootaxa 4236 (2): 244-268, DOI: https://doi.org/10.11646/zootaxa.4236.2.2",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "e24ad3dc-e2fe-44a9-983c-d7fb90147e9f",
+    "title": "Three new species of Leptohyphidae (Insecta: Ephemeroptera) from Central Amazon, Brazil",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Belmont, Enide Luciana L., Salles, Frederico F., Hamada, Neusa (2011): Three new species of Leptohyphidae (Insecta: Ephemeroptera) from Central Amazon, Brazil. Zootaxa 3047: 43-53, DOI: 10.5281/zenodo.201430",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "9d215804-dcb2-49ba-82d5-cc927abfb384",
+    "title": "Two New Species of Halictophagidae (Insecta: Strepsiptera) from the Brazilian Amazon Basin",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Kogan, Marcos (2012): Two New Species of Halictophagidae (Insecta: Strepsiptera) from the Brazilian Amazon Basin. Zootaxa 3517: 79-87, DOI: 10.5281/zenodo.282617",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "b4683510-1fed-4ad4-bef6-64606e847fe9",
+    "title": "A new Argyrodiaptomus (Copepoda: Calanoida: Diaptomidae) from the southwestern Brazilian Amazon",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Previattelli, Daniel, Santos-Silva, Edinaldo Nelson Dos (2007): A new Argyrodiaptomus (Copepoda: Calanoida: Diaptomidae) from the southwestern Brazilian Amazon. Zootaxa 1518: 1-29, DOI: 10.5281/zenodo.177358",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "d0e838e4-82b0-440b-b876-b62afe416245",
+    "title": "A new species of Elachistocleis (Anura; Microhylidae) from the Brazilian Amazon",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Toledo, Luís Felipe (2010): A new species of Elachistocleis (Anura; Microhylidae) from the Brazilian Amazon. Zootaxa 2496: 63-68, DOI: 10.5281/zenodo.195714",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "b3262114-8580-4828-973d-b743d1034d00",
+    "title": "A new species of Furciseta (Diptera, Ctenostylidae) from the Brazilian Amazon",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Câmara, J. T., Rafael, J. A. (2013): A new species of Furciseta (Diptera, Ctenostylidae) from the Brazilian Amazon. Zootaxa 3669 (2): 147-152, DOI: http://dx.doi.org/10.11646/zootaxa.3669.2.5",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "a1d56c0b-d41f-42c1-91d2-417ab340969f",
+    "title": "A new species of Besleria (Gesneriaceae) from the western Amazon rainforest",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Gabriel Emiliano Ferreira, Andréa Onofre De Araújo, Michael John Gilbert Hopkins, Alain Chautems (2017): A new species of Besleria (Gesneriaceae) from the western Amazon rainforest. Brittonia 69 (2): 241-245, DOI: 10.1007/s12228-017-9464-6",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "1edd9658-1b17-4794-bbf0-e2eccb017fd3",
+    "title": "Leporinus amazonicus, a new anostomid species from the Amazon lowlands, Brazil (Osteichthyes: Characiformes)",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Santos, Geraldo Mendes Dos, Zuanon, Jansen (2008): Leporinus amazonicus, a new anostomid species from the Amazon lowlands, Brazil (Osteichthyes: Characiformes). Zootaxa 1815: 35-42, DOI: 10.5281/zenodo.182896",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "bbe844d6-89b6-4c9b-9cd1-4b7a8c332dc5",
+    "title": "A new species of Paraonis and an annotated checklist of polychaetes from mangroves of the Brazilian Amazon Coast (Annelida, Paraonidae)",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Ribeiro, Rannyele Passos, Alves, Paulo Ricardo, Almeida, Zafira da Silva de, Ruta, Christine (2018): A new species of Paraonis and an annotated checklist of polychaetes from mangroves of the Brazilian Amazon Coast (Annelida, Paraonidae). ZooKeys 740: 1-34, DOI: http://dx.doi.org/10.3897/zookeys.740.14640, URL: http://dx.doi.org/10.3897/zookeys.740.14640",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "6e68c0bd-4d98-4a19-a066-e610c60b9478",
+    "title": "Amazoniaseius imparisetosus n. sp., n. g.: an unusual new phytoseiid mite (Acari: Phytoseiidae) from the Amazon forest",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Demite, Peterson R., Cruz, Wilton P., Moraes, Gilberto J. (2017): Amazoniaseius imparisetosus n. sp., n. g.: an unusual new phytoseiid mite (Acari: Phytoseiidae) from the Amazon forest. Zootaxa 4236 (2): 302-310, DOI: https://doi.org/10.11646/zootaxa.4236.2.5",
+    "type": "CHECKLIST"
+  },
+  {
+    "key": "663199f1-3528-4289-8069-d27552f62f10",
+    "title": "A survey of Dryinidae (Hymenoptera, Chrysidoidea) from Caxiuanã, Amazon Basin, with three new taxa and keys to genera and species",
+    "description": "This dataset contains the digitized treatments in Plazi based on the original journal article Coelho, Beatriz W., Aguiar, Alexandre P., Engel, Michael S. (2011): A survey of Dryinidae (Hymenoptera, Chrysidoidea) from Caxiuanã, Amazon Basin, with three new taxa and keys to genera and species. Zootaxa 2907: 1-21, DOI: 10.5281/zenodo.201416",
+    "type": "CHECKLIST"
+  }
+]
