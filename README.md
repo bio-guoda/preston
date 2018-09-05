@@ -32,7 +32,7 @@ If you haven't yet tried preston, please see the [Installation](#install) sectio
 
 ## Usage
 
-Preston was designed with the [unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) in mind: a simple tools with a specific focus. For Preston, the focus is keeping track of biodiversity archives available through registries like [GBIF](https://gbif.org), [iDigBio](https://idigbio.org) and [BioCASe](http://biocasemonitor.biodiv.naturkundemuseum-berlin.de/index.php/Main_Page). The functionality is currently available through a command line tool.
+Preston was designed with the [unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) in mind: a simple tool with a specific focus. For Preston, the focus is keeping track of biodiversity archives available through registries like [GBIF](https://gbif.org), [iDigBio](https://idigbio.org) and [BioCASe](http://biocasemonitor.biodiv.naturkundemuseum-berlin.de/index.php/Main_Page). The functionality is currently available through a command line tool.
 
 ### Command Line Tool
 
@@ -42,7 +42,7 @@ The examples below assume that you've created a shortcut ```preston``` to ```jav
 
 #### `update`
 
-The ```update``` command updates your local biodiversity graph using remote resources. By default, Preson uses GBIF, iDigBio and BioCASe and retrieve associated registries and data archives. The output are statements, expressed in nquads (or nquad-like tsv). In depth discussion of rdf, nquads and related topics are beyond the current scope. However, with a little patience, you can probably disect that Preston is trying to communicate. 
+The ```update``` command updates your local biodiversity graph using remote resources. By default, Preston uses GBIF, iDigBio and BioCASe and retrieve associated registries and data archives. The output are statements, expressed in nquads (or nquad-like tsv). In depth discussion of rdf, nquads and related topics are beyond the current scope. However, with a little patience, you can probably disect that Preston is trying to communicate. 
 
 For instance:
 
