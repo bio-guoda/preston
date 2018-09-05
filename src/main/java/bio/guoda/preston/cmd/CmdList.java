@@ -28,10 +28,11 @@ import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 @Parameters(separators = "= ", commandDescription = "list biodiversity graph")
-public class CmdList extends LoggingPersisting {
+public class CmdList extends LoggingPersisting implements Runnable {
 
     private static final Log LOG = LogFactory.getLog(CmdList.class);
 
+    @Override
     public void run() {
         BlobStore blobStore = new AppendOnlyBlobStore(getBlobPersistence());
 
