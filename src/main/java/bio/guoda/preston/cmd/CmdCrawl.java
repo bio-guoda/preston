@@ -238,7 +238,6 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
         }
 
         void stop() throws IOException {
-            LOG.info("attempting to archive crawl...");
             if (tmpArchive != null && tmpArchive.exists() && printStream != null && listener != null) {
                 printStream.flush();
                 printStream.close();
@@ -255,10 +254,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                 } else {
                     statementStore.put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
                 }
-                LOG.info("wrote archive.");
-            } else {
-                LOG.info("nothing to archive...");
-            }
+            } 
 
         }
 
