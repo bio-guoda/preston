@@ -36,7 +36,7 @@ Preston was designed with the [unix philosophy](https://en.wikipedia.org/wiki/Un
 
 ### Command Line Tool
 
-The command line tool provides four commands: ```update```, ```ls```, ```get``` and ```history```. In short, the commands are used to track and access DwC-A, EMLs and various registries. The output of the tools is nquads or tsv. Both output formats are structured in three "columns" to form a three term sentence per line. In a way, this output is telling you the story of your local biodiversity data graph in terms of simple sentences. This line-by-line format helps to re-use existing text processing tools like awk, sed, cut, etc. Also, tab-separated-values output plays well with spreadsheet applications and [R](https://r-project.org).
+The command line tool provides four commands: ```update```, ```ls```, ```get``` and ```history```. In short, the commands are used to track and access DwC-A, EMLs and various registries. The output of the tools is [nquads](https://www.w3.org/TR/n-quads/) or [tsv](https://www.iana.org/assignments/media-types/text/tab-separated-values). Both output formats are structured in "columns" to form a three term sentence per line. In a way, this output is telling you the story of your local biodiversity data graph in terms of simple sentences. This line-by-line format helps to re-use existing text processing tools like awk, sed, cut, etc. Also, tab-separated-values output plays well with spreadsheet applications and [R](https://r-project.org).
 
 The examples below assume that you've created a shortcut ```preston``` to ```java -jar preston.jar ``` (see [installation](#install)).
 
