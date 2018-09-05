@@ -9,8 +9,6 @@ import java.io.IOException;
 
 public class Persisting {
 
-
-
     FilePersistence getBlobPersistence() {
         return new FilePersistence(getTmpDir(), getDataDir());
     }
@@ -18,7 +16,6 @@ public class Persisting {
     FilePersistence getStatementPersistence() {
         return new FilePersistence(getTmpDir(), getDataDir());
     }
-
 
     File getTmpDir() {
         File tmp = new File(getDataDir(), "tmp");

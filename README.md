@@ -19,11 +19,11 @@ If you haven't yet tried preston, please see the [Installation](#install) sectio
       * [`get`](#get) - print biodiversity graph node (e.g., dwca)
       * [`history`](#history) - show history of biodiversity graph node
    * [Use Cases](#use-cases)
-      * [`retrieve citations`](#retrieve-citations)
+      * [`mining citations`](#mining-citations)
       * [`archiving`](#archiving)
-      * [`data-access-monitor`](#data-access-monitor)
-      * [`compare-versions`](#compare-versions)
-      * [`mirroring`](#mirroring)
+      * [`data access monitor`](#data-access-monitor)
+      * [`compare versions`](#compare-versions)
+      * [`generating citations`](#generating-citations)
  * [Prerequisites](#prerequisites)
  * [Install](#install)
  * [Building](#building)
@@ -32,7 +32,7 @@ If you haven't yet tried preston, please see the [Installation](#install) sectio
 
 ## Usage
 
-Preston was designed with the [unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) in mind: a simple tool with a specific focus. For Preston, the focus is keeping track of biodiversity archives available through registries like [GBIF](https://gbif.org), [iDigBio](https://idigbio.org) and [BioCASe](http://biocasemonitor.biodiv.naturkundemuseum-berlin.de/index.php/Main_Page). The functionality is currently available through a command line tool.
+Preston was designed with the [unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) in mind: a simple tool with a specific focus that works well with others. For Preston, the focus is keeping track of biodiversity archives available through registries like [GBIF](https://gbif.org), [iDigBio](https://idigbio.org) and [BioCASe](http://biocasemonitor.biodiv.naturkundemuseum-berlin.de/index.php/Main_Page). The functionality is currently available through a command line tool.
 
 ### Command Line Tool
 
@@ -42,7 +42,7 @@ The examples below assume that you've created a shortcut ```preston``` to ```jav
 
 #### `update`
 
-The ```update``` command updates your local biodiversity graph using remote resources. By default, Preston uses GBIF, iDigBio and BioCASe and retrieve associated registries and data archives. The output are statements, expressed in nquads (or nquad-like tsv). In depth discussion of rdf, nquads and related topics are beyond the current scope. However, with a little patience, you can probably disect that Preston is trying to communicate. 
+The ```update``` command updates your local biodiversity graph using remote resources. By default, Preston uses GBIF, iDigBio and BioCASe and retrieve associated registries and data archives. The output are statements, expressed in nquads (or nquad-like tsv). In depth discussion of rdf, nquads and related topics are beyond the current scope. However, with a little patience, you can probably figure out what Preston is trying to communicate. 
 
 For instance:
 
@@ -60,7 +60,7 @@ $ preston update
 ...
 ```
 
-Tells us that there's a software program called "Preston" that started a crawl on 2018-09-05 . A little farther down, you'll see things like:
+tells us that there's a software program called "Preston" that started a crawl on 2018-09-05 . A little farther down, you'll see things like:
 
 ```console
 <https://gbif.org> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Organization> .
@@ -91,11 +91,11 @@ So, in a nutshell, the update process produces a detailed record of which resour
 
 #### `get`
 
-`get` retrieves a specific node in the biodiversity graph. This can be a darwin core archive, EML file but also a copy of the iDigBio publisher registry. For instance, if you'd like to retrieve the node with DwC-A content, get the file and list the content using ```unzip```.
+`get` retrieves a specific node in the biodiversity graph. This can be a darwin core archive, EML file but also a copy of the iDigBio publisher registry. For instance, if you'd like to retrieve the node with DwC-A content, get the file and list the content using ```unzip``` and access the references in the taxa.txt file.
 
 ```console
 $ preston get hash://sha256/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8 > dwca.zip 
-$ unzip -l bla.zip 
+$ unzip -l dwca.zip 
 Archive:  bla.zip
   Length      Date    Time    Name
 ---------  ---------- -----   ----
@@ -110,16 +110,22 @@ Archive:  bla.zip
        33  2017-06-20 02:39   vernaculars.txt
 ---------                     -------
     96959                     9 files
-
+$ unzip -p dwca.zip taxa.txt | cut -f16
+references
+http://treatment.plazi.org/id/038787F9FE149009FED7FE39FEA9FCEE
+http://treatment.plazi.org/id/038787F9FE1B9004FED7FA49FE99FA06
+http://treatment.plazi.org/id/038787F9FE1E9002FED7FA5EFC1FFE3E
 ```
 
 The implication of using content addressed storage is that if the hash is the same, you are guaranteed that the content is the same. So, you can reproduce the **exact** same results above if you have a file with the same content hash.
+
 
 #### History
 
 History helps to list your local content versions associated with a web address. Because the internet today might not be the internet of yesterday, and because publishers update their content for various reasons, Preston helps you keep track of the different versions retrieved from a particular location. Just like the [Internet Archive](https://archive.org)'s Way Back Machine keeps track of web page content, Preston help you keep track of the datasets that you are interested in. 
 
 To inspect the history you can type:
+
 ```console
 $ preston history
 <0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/pav/hasVersion> <hash://sha256/ea430cf506640ffd170d88bfc429c979d9e8ded97d839f17fdf9f4d8227017c2> .
@@ -151,7 +157,7 @@ $ preston history http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38
 
 In the previous section the commands `update`, `ls`, `get` and `history` were introduced. Now, some use cases are covered to show how to combine these basic commands to make for useful operations. This is by no means an exhaustive list of all the potential uses, but instead is just to provide some inspiration on how to get the most out of preston.
 
-#### Retrieve Citations
+#### Mining EML Citations
 
 The Ecological Metadata Language (EML) files contain citations, and your biodiversity graph contains EML files. To extract all citations you can do:
 
@@ -159,17 +165,45 @@ The Ecological Metadata Language (EML) files contain citations, and your biodive
 # first make a list of all the emls
 preston ls | grep application/eml | cut -f1 > emls.txt
 # then 
-preston ls -l tsv | grep -f emls.tsv | grep "Version" | grep hash | cut -f3 | preston get | grep citation
+preston ls -l tsv | grep -f emls.tsv | grep "Version" | grep hash | cut -f3 | preston get | grep citation | sed 's/<[^>]*>//g' > citations.txt
+head citations.txt
+            HW Jackson C, Ochieng J, Musila S, Navarro R, Kanga E (2018): A Checklist of the Mammals of Arabuko-Sokoke Forest, Kenya, 2018. v1.0. A Rocha Kenya. Dataset/Checklist. http://ipt.museums.or.ke/ipt/resource?r=asfmammals&amp;v=1.0
+            Adda M., Sanou L., Bori H., 2018. Specimens d&apos;herbier de la flore du Niger. Données d&apos;occurrence publiées dans le cadre du Prjet BID Régional. CNSF-Niger  					
+                Michel.C., 2000. Arbres,arbustes et lianes des zones sèches d&apos;Afrique de l&apos;Ouest.3ème édition.Quae.MNHN.573p.
+            Hendrickson D A, Cohen A, Casarez M (2018): Ichthyology. v1.3. University of Texas at Austin, Biodiversity Collections. Dataset/Occurrence. http://ipt.tacc.utexas.edu/resource?r=tnhci&amp;v=1.3
+            Urrutia N S (2014): Caracterización Florística de un Área Degradada por Actividad Minera en la Costa Caucana. v2.0. Instituto de Investigaciones Ambientales del Pacifico John Von Neumann (IIAP). Dataset/Occurrence. http://doi.org/10.15472/mkjqef
+
 ```
+So, now we have a way to attribute each and every dataset individually.
 
 #### Archiving
 
+Preston creates a "data" folder that stores the biodiversity datasets and associated information. For archiving, you can take this "data" folder, copy it and move it somewhere safe. You can also use tools like [git-annex](http://git-annex.branchable.com), [rsync](https://en.wikipedia.org/wiki/Rsync), or use distributed storage systems like the [Interplanetary File System (ipfs)](https://ipfs.org) or [Dat](https://dat-project.org). 
+
 #### Data Access Monitor
 
-#### Compare Versions
+By running [`update`](#update) periodically and checking for "blank", or "missing" nodes (see [blank skolemization](https://www.w3.org/TR/rdf11-concepts/#section-skolemization)), you can make a list of the dataset providers that went offline or are not responding.
 
-#### Mirroring
+The example below wsa created on 2018-09-05 using biodiversity dataset graph with hash [hash://sha256/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93](https://preston.guoda.bio/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93).
 
+```console
+$ preston ls -l tsv | grep "/.well-known/genid/" | grep "Version" | cut -f1,3 | tr '\t' '\n' | grep -v "/.well-known/genid/" | grep -v "hash" | sort | uniq -c | sort -nr | head -n10
+     21 http://187.32.44.123/ipt/eml.do?r=camporupestre-15plot-survey-sampling-itacolomi-lagoa076-checklist
+     21 http://187.32.44.123/ipt/eml.do?r=camporupestre-15plot-survey-sampling-itacolomi-calais107-checklist
+     12 http://187.32.44.123/ipt/eml.do?r=2014-10-12-ufv-leep-buriti-543b4b1b47b42
+      6 http://xbiod.osu.edu/ipt/eml.do?r=rome
+      6 http://xbiod.osu.edu/ipt/eml.do?r=osuc
+      6 http://xbiod.osu.edu/ipt/archive.do?r=rome
+      6 http://91.151.189.38:8080/viript/eml.do?r=Avena_herbarium1
+      3 http://xbiod.osu.edu/ipt/eml.do?r=ucfc
+      3 http://xbiod.osu.edu/ipt/eml.do?r=proctos
+      3 http://xbiod.osu.edu/ipt/eml.do?r=platys
+```
+ 
+
+#### Citation
+
+Preston provides both a date and a content-based identifier for the datasets that you are using and the biodiversity graph as a whole. Also, it produces the information is a format that is machine readable. This supports the automated generation of citations, for human or machine consumption, as evidenced by the reference to a [particular version of the biodiversity dataset graph](https://preston.guoda.bio/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93) in the previous section. 
 
 ## Prerequisites
 
