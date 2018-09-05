@@ -1,0 +1,37 @@
+digraph test123 {
+    r [shape="box", label="a registry"];
+    b [shape="box", label="a biodiversity\ngraph"];
+    preston [shape="box", label="Preston"]; 
+    
+    x0 [shape="box", label="a biodiversity\ngraph\nversion"];
+    b -> x0 [shape="box", label="(3) hasVersion"];
+    
+    a0 [label="a crawl\nactivity"];
+    a0 -> preston [label="(1) startedBy"];
+    x0 -> a0 [label = "(2) generatedBy"];
+    
+    a1 [label="a crawl\nactivity"];
+    a1 -> preston [label="(4) startedBy"];
+    
+    x0 -> a1 [label="(5) usedBy"];
+    r -> a1 [label="(6) usedBy"];
+
+    rv0 [shape="box", label="a registry\nversion"];
+    r -> rv0 [label="(7) hasVersion"];
+    rv0 -> a1 [label="(8) generatedBy"];
+
+    d [shape="box", label="a dataset"];
+    rv0 -> d [label="(9) hadMember"];
+    d -> a1 [label="(10) usedBy"];
+
+    dv0 [shape="box", label="a dataset\nversion"];
+    dv0 -> a1 [label="(11) generatedBy"];
+
+    d -> dv0 [label="(12) hasVersion"];
+    
+    x1 [shape="box", label="a biodiversity\ngraph\nversion"];
+    x1 -> a1 [label="(13) generatedBy"];
+    x1 -> x0 [label="(14) hasPreviousVersion"];
+
+}
+

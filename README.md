@@ -10,6 +10,11 @@ Preston uses the [PROV](https://www.w3.org/TR/prov-o/) and [PAV](https://pav-ont
 
 If you haven't yet tried Preston, please see the [Installation](#install) section. Please also see [a template repository](https://github.com/bio-guoda/preston-amazon) and [use cases](#use-cases) for examples.
 
+
+![preston process](https://raw.githubusercontent.com/bio-guoda/preston/master/preocess.png)
+
+Preston initiates crawls to create versioned copies registries and datasets and adds this to a new version of a biodiversity dataset graph. The numbers indicate the sequence of events.
+
 ## Table of Contents
  
  * [Usage](#usage) - command available on the preston commandline tool
