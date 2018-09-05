@@ -201,7 +201,7 @@ $ preston ls -l tsv | grep "/.well-known/genid/" | grep "Version" | cut -f1,3 | 
 ```
  
 
-#### Citation
+#### Generating Citations
 
 Preston provides both a date and a content-based identifier for the datasets that you are using and the biodiversity graph as a whole. Also, it produces the information is a format that is machine readable. This supports the automated generation of citations, for human or machine consumption, as evidenced by the reference to a [particular version of the biodiversity dataset graph](https://preston.guoda.bio/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93) in the previous section. 
 
