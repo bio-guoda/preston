@@ -60,19 +60,115 @@ $ preston update
 ...
 ```
 
-Tells us that there's a software program called "Preston" that started a crawl on 2018-09-05 . 
+Tells us that there's a software program called "Preston" that started a crawl on 2018-09-05 . A little farther down, you'll see things like:
 
+```console
+<https://gbif.org> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Organization> .
+<https://api.gbif.org/v1/dataset> <http://purl.org/dc/terms/description> "Provides a registry of Darwin Core archives, and EML descriptors."@en .
+<https://api.gbif.org/v1/dataset> <http://purl.org/pav/createdBy> <https://gbif.org> .
+<https://api.gbif.org/v1/dataset> <http://purl.org/dc/elements/1.1/format> "application/json" .
+<https://api.gbif.org/v1/dataset> <http://purl.org/pav/hasVersion> <hash://sha256/5d1bb4f3a5a9da63fc76efc4d7b4a7debbec954bfd056544225c294fff679b4c> .
+```
 
-      * [`update`](#update) - update biodiversity graph
-      * [`ls`](#ls) - list/print biodiversity graph
-      * [`get`](#get) - print biodiversity graph node (e.g., dwca)
-      * [`history`](#history) - show history of biodiversity graph node
-   * [Use Cases](#use-cases)
-      * [`retrieve citations`](#retrieve-citations)
-      * [`archiving`](#archiving)
-      * [`data-access-monitor`](#data-access-monitor)
-      * [`compare-versions`](#compare-versions)
-      * [`mirroring`](#mirroring)
+which says that GBIF, an organization created a registry that has a version at <hash://sha256/5d1bb4f3a5a9da63fc76efc4d7b4a7debbec954bfd056544225c294fff679b4c> . This weird looking url is a [content address hash](https://bentrask.com/?q=hash://sha256/98493caa8b37eaa26343bbf73f232597a3ccda20498563327a4c3713821df892). Rather than describing where things are (e.g., https://eol.org), content address hashes describe what they contain. 
+
+If you don't want to download the entire biodiversity graph (~60GB) onto your computer, you can also use [GBIF's dataset registry search api](https://www.gbif.org/developer/registry) as a starting point. For instance, if you run ```preston update "http://api.gbif.org/v1/dataset/suggest?q=Amazon&amp;type=OCCURRENCE"```, you only get occurence datasets that GBIF suggests are related to the Amazon. If you track these suggested datasets, you might see something like:
+
+```console
+<http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38FFDCFF90.zip> <http://purl.org/dc/elements/1.1/format> "application/dwca" .
+<hash://sha256/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8> <http://www.w3.org/ns/prov#generatedAtTime> "2018-09-05T05:11:33.592Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<hash://sha256/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8> <http://www.w3.org/ns/prov#wasGeneratedBy> <21de25a8-927f-49a1-99be-725f1f506232> .
+<http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38FFDCFF90.zip> <http://purl.org/pav/hasVersion> <hash://sha256/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8> .
+```
+
+Which tells us that a [darwin core archive](http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38FFDCFF90.zip) was found and a copy of it was made on 2018-09-05. The copy has a content hash of hash://sha256/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8 . Incidentally, you can reach this same exact dataset at [web-accessible preston archive](https://preston.guoda.bio/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8). With this, we established that on 2018-09-05 a specific web addressed produced a specific content. On the next update run, Preston will download the content again. If the content is the same as before, nothing happens. If the content changed, a new version will be created associated with the same address, establishing a versioning of the content produced by the web address. This is addressed in a statement like ```<some hash> <.../previousVersion> <some previous hash>```. 
+
+So, in a nutshell, the update process produces a detailed record of which resources are downloaded, what they look like and were they came from. You can retrieve the record of a successful run by using `ls`.
+
+#### `ls`  
+
+`ls` print the results of the previous updates. An update always refers to a previous update, so that a complete history can be printed / replayed of all past updates. So, the `ls` commands lists your (local) copy of the biodiversity graph. 
+
+#### `get`
+
+`get` retrieves a specific node in the biodiversity graph. This can be a darwin core archive, EML file but also a copy of the iDigBio publisher registry. For instance, if you'd like to retrieve the node with DwC-A content, get the file and list the content using ```unzip```.
+
+```console
+$ preston get hash://sha256/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8 > dwca.zip 
+$ unzip -l bla.zip 
+Archive:  bla.zip
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+    11694  2016-01-03 13:36   meta.xml
+     4664  2016-01-03 13:36   eml.xml
+     5533  2017-06-20 02:39   taxa.txt
+      284  2017-06-20 02:39   occurrences.txt
+    16978  2017-06-20 02:39   description.txt
+       54  2017-06-20 02:39   distribution.txt
+    48439  2017-06-20 02:39   media.txt
+     9280  2017-06-20 02:39   references.txt
+       33  2017-06-20 02:39   vernaculars.txt
+---------                     -------
+    96959                     9 files
+
+```
+
+The implication of using content addressed storage is that if the hash is the same, you are guaranteed that the content is the same. So, you can reproduce the **exact** same results above if you have a file with the same content hash.
+
+#### History
+
+History helps to list your local content versions associated with a web address. Because the internet today might not be the internet of yesterday, and because publishers update their content for various reasons, Preston helps you keep track of the different versions retrieved from a particular location. Just like the [Internet Archive](https://archive.org)'s Way Back Machine keeps track of web page content, Preston help you keep track of the datasets that you are interested in. 
+
+To inspect the history you can type:
+```console
+$ preston history
+<0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/pav/hasVersion> <hash://sha256/ea430cf506640ffd170d88bfc429c979d9e8ded97d839f17fdf9f4d8227017c2> .
+<hash://sha256/0231077876124b92cc001f3c19651b536fa10a15fd94bfb7912e60722f2bde1d> <http://www.w3.org/ns/prov#generatedAtTime> "2018-09-05T02:24:43.730Z" .
+<hash://sha256/0231077876124b92cc001f3c19651b536fa10a15fd94bfb7912e60722f2bde1d> <http://purl.org/pav/previousVersion> <hash://sha256/ea430cf506640ffd170d88bfc429c979d9e8ded97d839f17fdf9f4d8227017c2> .
+<hash://sha256/c00b87e43b8b5a63ee68d4057138df342ae4f709cc794a74bed3ed0a1ccbdd7b> <http://www.w3.org/ns/prov#generatedAtTime> "2018-09-05T02:34:49.282Z" .
+<hash://sha256/c00b87e43b8b5a63ee68d4057138df342ae4f709cc794a74bed3ed0a1ccbdd7b> <http://purl.org/pav/previousVersion> <hash://sha256/0231077876124b92cc001f3c19651b536fa10a15fd94bfb7912e60722f2bde1d> .
+...
+``` 
+
+By default, the `history` command shows the versions of your local biodiversity graph as a **whole**. A list of versions associated with the sequence of updates. If you'd like to know what the UUID 0659a54f-b713-4f86-a917-5be166a14110 is described as, you can use `ls` and filter by the UUID:
+
+```console
+$ preston ls | grep 0659a54f-b713-4f86-a917-5be166a14110
+<0659a54f-b713-4f86-a917-5be166a14110> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Entity> .
+<0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/dc/terms/description> "A biodiversity graph archive."@en .
+```
+
+So, the UUID ending on 4110 is describe as "A biodiversity graph archive". This UUID is the same across all Preston updates, so in a way we are help to create different versions of the same "a biodiversity graph". Good to know right? 
+
+You can also use `history` for a specific url, like:
+
+```console
+$ preston history http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38FFDCFF90.zip
+<http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38FFDCFF90.zip> <http://purl.org/pav/hasVersion> <hash://sha256/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8> .
+```
+
+### Use Cases
+
+In the previous section the commands `update`, `ls`, `get` and `history` were introduced. Now, some use cases are covered to show how to combine these basic commands to make for useful operations. This is by no means an exhaustive list of all the potential uses, but instead is just to provide some inspiration on how to get the most out of preston.
+
+#### Retrieve Citations
+
+The Ecological Metadata Language (EML) files contain citations, and your biodiversity graph contains EML files. To extract all citations you can do:
+
+```console
+# first make a list of all the emls
+preston ls | grep application/eml | cut -f1 > emls.txt
+# then 
+preston ls -l tsv | grep -f emls.tsv | grep "Version" | grep hash | cut -f3 | preston get | grep citation
+```
+
+#### Archiving
+
+#### Data Access Monitor
+
+#### Compare Versions
+
+#### Mirroring
 
 
 ## Prerequisites
