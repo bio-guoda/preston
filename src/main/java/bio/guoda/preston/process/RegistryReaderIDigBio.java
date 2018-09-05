@@ -59,7 +59,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     }
 
     public void parse(Triple statement, IRI toBeParsed) {
-        if (statement.getObject().equals(IDIGBIO_REGISTRY)) {
+        if (statement.getSubject().equals(IDIGBIO_REGISTRY)) {
             parsePublishers(toBeParsed);
         } else {
             parse(toBeParsed);

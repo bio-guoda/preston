@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.store.BlobStore;
 import com.sun.syndication.io.FeedException;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static bio.guoda.preston.RefNodeConstants.*;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -45,13 +47,39 @@ public class RegistryReaderIDigBioTest {
         assertThat(nodes.size(), is(0));
     }
 
+
+    @Test
+    public void onRegistry() {
+        ArrayList<Triple> nodes = new ArrayList<>();
+        BlobStore blob = new BlobStore() {
+
+            @Override
+            public IRI putBlob(InputStream is) throws IOException {
+                return null;
+            }
+
+            @Override
+            public IRI putBlob(RDFTerm entity) throws IOException {
+                return null;
+            }
+
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return publishersInputStream();
+            }
+        };
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, nodes::add);
+        reader.on(RefNodeFactory.toStatement(RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/publishers"), HAS_VERSION, RefNodeFactory.toIRI("http://something")));
+        assertThat(nodes.size(), not(is(0)));
+    }
+
     @Test
     public void parsePublishers() throws IOException {
 
         IRI providedParent = RefNodeFactory.toUUID("someRegistryUUID");
         final List<Triple> nodes = new ArrayList<>();
 
-        InputStream is = getClass().getResourceAsStream("idigbio-publishers.json");
+        InputStream is = publishersInputStream();
 
         RegistryReaderIDigBio.parsePublishers(providedParent, nodes::add, is);
 
@@ -84,6 +112,10 @@ public class RegistryReaderIDigBioTest {
         node = nodes.get(8);
         assertThat(node.toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <089a51fa-5f81-48e7-a1b7-9bc539555f29> ."));
 
+    }
+
+    public InputStream publishersInputStream() {
+        return getClass().getResourceAsStream("idigbio-publishers.json");
     }
 
     @Test

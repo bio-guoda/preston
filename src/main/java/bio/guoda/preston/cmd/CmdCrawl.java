@@ -254,7 +254,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                 } else {
                     statementStore.put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
                 }
-            } 
+            }
 
         }
 
