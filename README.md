@@ -69,7 +69,7 @@ tells us that there's a software program called "Preston" that started a crawl o
 <https://api.gbif.org/v1/dataset> <http://purl.org/pav/hasVersion> <hash://sha256/5d1bb4f3a5a9da63fc76efc4d7b4a7debbec954bfd056544225c294fff679b4c> .
 ```
 
-which says that GBIF, an organization created a registry that has a version at <hash://sha256/5d1bb4f3a5a9da63fc76efc4d7b4a7debbec954bfd056544225c294fff679b4c> . This weird looking url is a [content address hash](https://bentrask.com/?q=hash://sha256/98493caa8b37eaa26343bbf73f232597a3ccda20498563327a4c3713821df892). Rather than describing where things are (e.g., https://eol.org), content address hashes describe what they contain. 
+which says that GBIF, an organization created a registry that has a version at <hash://sha256/5d1bb4f3a5a9da63fc76efc4d7b4a7debbec954bfd056544225c294fff679b4c> . This weird looking url is a [content-addressed hash](https://bentrask.com/?q=hash://sha256/98493caa8b37eaa26343bbf73f232597a3ccda20498563327a4c3713821df892). Rather than describing where things are (e.g., https://eol.org), content-addressed hashes describe what they contain. 
 
 If you don't want to download the entire biodiversity graph (~60GB) onto your computer, you can also use [GBIF's dataset registry search api](https://www.gbif.org/developer/registry) as a starting point. For instance, if you run ```preston update "http://api.gbif.org/v1/dataset/suggest?q=Amazon&amp;type=OCCURRENCE"```, you only get occurence datasets that GBIF suggests are related to the Amazon. If you track these suggested datasets, you might see something like:
 
