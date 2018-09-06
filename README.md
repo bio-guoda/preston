@@ -18,10 +18,10 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
  
  * [Usage](#usage) - command available on the preston commandline tool
    * [Command Line Tool](#command-line-tool)
-      * [`update`](#update) - update biodiversity graph
-      * [`ls`](#ls) - list/print biodiversity graph
-      * [`get`](#get) - print biodiversity graph node (e.g., dwca)
-      * [`history`](#history) - show history of biodiversity graph node
+      * [`update`](#update) - update biodiversity dataset graph
+      * [`ls`](#ls) - list/print biodiversity dataset graph
+      * [`get`](#get) - print biodiversity dataset graph node (e.g., dwca)
+      * [`history`](#history) - show history of biodiversity dataset graph node
    * [Use Cases](#use-cases)
       * [`mining citations`](#mining-citations)
       * [`archiving`](#archiving)
@@ -46,7 +46,7 @@ The examples below assume that you've created a shortcut ```preston``` to ```jav
 
 #### `update`
 
-The ```update``` command updates your local biodiversity graph using remote resources. By default, Preston uses GBIF, iDigBio and BioCASe to retrieve associated registries and data archives. The output is statements, expressed in nquads (or nquad-like tsv). An in depth discussion of rdf, nquads and related topics are beyond the current scope. However, with a little patience, you can probably figure out what Preston is trying to communicate. 
+The ```update``` command updates your local biodiversity dataset graph using remote resources. By default, Preston uses GBIF, iDigBio and BioCASe to retrieve associated registries and data archives. The output is statements, expressed in nquads (or nquad-like tsv). An in depth discussion of rdf, nquads and related topics are beyond the current scope. However, with a little patience, you can probably figure out what Preston is trying to communicate. 
 
 For instance:
 
@@ -75,7 +75,7 @@ tells us that there's a software program called "Preston" that started a crawl o
 
 which says that GBIF, an organization created a registry that has a version at <hash://sha256/5d1bb4f3a5a9da63fc76efc4d7b4a7debbec954bfd056544225c294fff679b4c> . This weird looking url is a [content-addressed hash](https://bentrask.com/?q=hash://sha256/98493caa8b37eaa26343bbf73f232597a3ccda20498563327a4c3713821df892). Rather than describing where things are (e.g., https://eol.org), content-addressed hashes describe what they contain. 
 
-If you don't want to download the entire biodiversity graph (~60GB) onto your computer, you can also use [GBIF's dataset registry search api](https://www.gbif.org/developer/registry) as a starting point. For instance, if you run ```preston update "http://api.gbif.org/v1/dataset/suggest?q=Amazon&amp;type=OCCURRENCE"```, you only get occurence datasets that GBIF suggests are related to the Amazon. If you track these suggested datasets, you might see something like:
+If you don't want to download the entire biodiversity dataset graph (~60GB) onto your computer, you can also use [GBIF's dataset registry search api](https://www.gbif.org/developer/registry) as a starting point. For instance, if you run ```preston update "http://api.gbif.org/v1/dataset/suggest?q=Amazon&amp;type=OCCURRENCE"```, you only get occurence datasets that GBIF suggests are related to the Amazon. If you track these suggested datasets, you might see something like:
 
 ```console
 <http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38FFDCFF90.zip> <http://purl.org/dc/elements/1.1/format> "application/dwca" .
@@ -90,11 +90,11 @@ So, in a nutshell, the update process produces a detailed record of which resour
 
 #### `ls`  
 
-`ls` print the results of the previous updates. An update always refers to a previous update, so that a complete history can be printed / replayed of all past updates. So, the `ls` commands lists your (local) copy of the biodiversity graph. 
+`ls` print the results of the previous updates. An update always refers to a previous update, so that a complete history can be printed / replayed of all past updates. So, the `ls` commands lists your (local) copy of the biodiversity dataset graph. 
 
 #### `get`
 
-`get` retrieves a specific node in the biodiversity graph. This can be a darwin core archive, EML file but also a copy of the iDigBio publisher registry. For instance, if you'd like to retrieve the node with DwC-A content, get the file and list the content using ```unzip``` and access the references in the taxa.txt file.
+`get` retrieves a specific node in the biodiversity dataset graph. This can be a darwin core archive, EML file but also a copy of the iDigBio publisher registry. For instance, if you'd like to retrieve the node with DwC-A content, get the file and list the content using ```unzip``` and access the references in the taxa.txt file.
 
 ```console
 $ preston get hash://sha256/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8 > dwca.zip 
@@ -139,15 +139,15 @@ $ preston history
 ...
 ``` 
 
-By default, the `history` command shows the versions of your local biodiversity graph as a **whole**. A list of versions associated with the sequence of updates. If you'd like to know what the UUID 0659a54f-b713-4f86-a917-5be166a14110 is described as, you can use `ls` and filter by the UUID:
+By default, the `history` command shows the versions of your local biodiversity dataset graph as a **whole**. A list of versions associated with the sequence of updates. If you'd like to know what the UUID 0659a54f-b713-4f86-a917-5be166a14110 is described as, you can use `ls` and filter by the UUID:
 
 ```console
 $ preston ls | grep 0659a54f-b713-4f86-a917-5be166a14110
 <0659a54f-b713-4f86-a917-5be166a14110> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Entity> .
-<0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/dc/terms/description> "A biodiversity graph archive."@en .
+<0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/dc/terms/description> "A biodiversity dataset graph archive."@en .
 ```
 
-So, the UUID ending on 4110 is describe as "A biodiversity graph archive". This UUID is the same across all Preston updates, so in a way we are help to create different versions of the same "a biodiversity graph". Good to know right? 
+So, the UUID ending on 4110 is describe as "A biodiversity dataset graph archive". This UUID is the same across all Preston updates, so in a way we are help to create different versions of the same "a biodiversity dataset graph". Good to know right? 
 
 You can also use `history` for a specific url, like:
 
@@ -162,7 +162,7 @@ In the previous section the commands `update`, `ls`, `get` and `history` were in
 
 #### Mining Citations
 
-The Ecological Metadata Language (EML) files contain citations, and your biodiversity graph contains EML files. To extract all citations you can do:
+The Ecological Metadata Language (EML) files contain citations, and your biodiversity dataset graph contains EML files. To extract all citations you can do:
 
 ```console
 # first make a list of all the emls
@@ -225,7 +225,7 @@ $ diff one.json two.json
 
 #### Generating Citations
 
-Preston provides both a date and a content-based identifier for the datasets that you are using and the biodiversity graph as a whole. Also, it produces the information is a format that is machine readable. This supports the automated generation of citations, for human or machine consumption, as evidenced by the reference to a [particular version of the biodiversity dataset graph](https://deeplinker.bio/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93) in the previous section. 
+Preston provides both a date and a content-based identifier for the datasets that you are using and the biodiversity dataset graph as a whole. Also, it produces the information is a format that is machine readable. This supports the automated generation of citations, for human or machine consumption, as evidenced by the reference to a [particular version of the biodiversity dataset graph](https://deeplinker.bio/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93) in the previous section. 
 
 ## Prerequisites
 
@@ -284,7 +284,7 @@ To include ```preston``` in your project, add the following sections to your pom
 ```
 Usage: <main class> [command] [command options]
   Commands:
-    ls      list biodiversity graph
+    ls      list biodiversity dataset graph
       Usage: ls [options]
         Options:
           -l, --log
@@ -295,7 +295,7 @@ Usage: <main class> [command] [command options]
     get      get biodiversity node(s)
       Usage: get node id (e.g., [hash://sha256/8ed311...])
 
-    update      update biodiversity graph
+    update      update biodiversity dataset graph
       Usage: update [options] content URLs to update. If specified, the seeds
             will not be used.
         Options:

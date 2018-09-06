@@ -3,7 +3,7 @@ package bio.guoda.preston.cmd;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
-@Parameters(separators = "= ", commandDescription = "update biodiversity graph")
+@Parameters(separators = "= ", commandDescription = "update biodiversity dataset graph")
 public class CmdUpdate extends CmdCrawl {
 
     @Parameter(names = {"-i", "--incremental",}, description = "resume unfinished update")

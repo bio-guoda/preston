@@ -177,7 +177,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                 toStatement(crawlActivity, toIRI("http://www.w3.org/ns/prov#wasStartedBy"), PRESTON),
 
                 toStatement(ARCHIVE, IS_A, ENTITY),
-                toStatement(ARCHIVE, DESCRIPTION, toEnglishLiteral("A biodiversity graph archive."))
+                toStatement(ARCHIVE, DESCRIPTION, toEnglishLiteral("A biodiversity dataset graph archive."))
         );
     }
 
