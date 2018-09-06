@@ -84,7 +84,7 @@ If you don't want to download the entire biodiversity graph (~60GB) onto your co
 <http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38FFDCFF90.zip> <http://purl.org/pav/hasVersion> <hash://sha256/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8> .
 ```
 
-which tells us that a [darwin core archive](http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38FFDCFF90.zip) was found and a copy of it was made on 2018-09-05. The copy, or version, has a content hash of hash://sha256/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8 . Incidentally, you can reach this same exact dataset at [web-accessible preston archive](https://preston.guoda.bio/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8). With this, we established that on 2018-09-05 a specific web addressed produced a specific content. On the next update run, Preston will download the content again. If the content is the same as before, nothing happens. If the content changed, a new version will be created associated with the same address, establishing a versioning of the content produced by the web address. This is addressed in a statement like ```<some hash> <.../previousVersion> <some previous hash>```. 
+which tells us that a [darwin core archive](http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38FFDCFF90.zip) was found and a copy of it was made on 2018-09-05. The copy, or version, has a content hash of hash://sha256/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8 . Incidentally, you can reach this same exact dataset at [web-accessible preston archive](https://deeplinker.bio/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8). With this, we established that on 2018-09-05 a specific web addressed produced a specific content. On the next update run, Preston will download the content again. If the content is the same as before, nothing happens. If the content changed, a new version will be created associated with the same address, establishing a versioning of the content produced by the web address. This is addressed in a statement like ```<some hash> <.../previousVersion> <some previous hash>```. 
 
 So, in a nutshell, the update process produces a detailed record of which resources are downloaded, what they look like and were they came from. You can retrieve the record of a successful run by using `ls`.
 
@@ -187,7 +187,7 @@ Preston creates a "data" folder that stores the biodiversity datasets and associ
 
 By running [`update`](#update) periodically and checking for "blank", or "missing" nodes (see [blank skolemization](https://www.w3.org/TR/rdf11-concepts/#section-skolemization)), you can make a list of the dataset providers that went offline or are not responding.
 
-The example below was created on 2018-09-05 using biodiversity dataset graph with hash [hash://sha256/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93](https://preston.guoda.bio/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93).
+The example below was created on 2018-09-05 using biodiversity dataset graph with hash [hash://sha256/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93](https://deeplinker.bio/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93).
 
 ```console
 $ preston ls -l tsv | grep "/.well-known/genid/" | grep "Version" | cut -f1,3 | tr '\t' '\n' | grep -v "/.well-known/genid/" | grep -v "hash" | sort | uniq -c | sort -nr | head -n10
@@ -225,7 +225,7 @@ $ diff one.json two.json
 
 #### Generating Citations
 
-Preston provides both a date and a content-based identifier for the datasets that you are using and the biodiversity graph as a whole. Also, it produces the information is a format that is machine readable. This supports the automated generation of citations, for human or machine consumption, as evidenced by the reference to a [particular version of the biodiversity dataset graph](https://preston.guoda.bio/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93) in the previous section. 
+Preston provides both a date and a content-based identifier for the datasets that you are using and the biodiversity graph as a whole. Also, it produces the information is a format that is machine readable. This supports the automated generation of citations, for human or machine consumption, as evidenced by the reference to a [particular version of the biodiversity dataset graph](https://deeplinker.bio/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93) in the previous section. 
 
 ## Prerequisites
 
