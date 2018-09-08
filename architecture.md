@@ -133,7 +133,7 @@ $ curl --silent https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a
 
 ## summary 
 
-In summary, Preson combines a crawler, registry content handlers, and an archiver with a blob store and simple hexastore to implement a relatively simple scheme to record a versioned provenance of a biodiversity dataset graph and associated the content of datasets and their registries. By using a hashes to uniquely identify both dereferenced (or downloaded) content and simply queries (what content was downloaded from a specific url?) a simple file structure can be used to serve content and answer queries. Because the hashing schemes are applied consistently, each and every preston based blob and hexastore can be used to reliably retrieve content as well as query provenance of that content.
+[Preson](https://github.com/bio-guoda/preston) combines a [`crawler`](#crawler), [`content handlers`](#content-handlers), and an [`archiver`](#archiver) with a [`blob store`](#blob-store) and [`simple hexastore`](#simple-hexastore) to implement a relatively simple scheme to establish an immutable, versioned, provenance of a biodiversity dataset graph and associated the content of datasets and their registries over time. By using a hashes to uniquely identify both dereferenced (or downloaded) content and simply queries (what content was downloaded from a specific url?) a simple file structure can be used to serve content and answer queries. Because the hashing schemes are applied consistently, each and every preston based blob and hexastore can be used to reliably retrieve content as well as query provenance of that content.
 
 
 ## examples
