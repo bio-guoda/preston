@@ -16,10 +16,6 @@ public class FilePersistence implements Persistence {
     private final File tmpDir;
     private final File datasetDir;
 
-    public FilePersistence() {
-        this(new File("tmp"), new File("datasets"));
-    }
-
     public FilePersistence(File tmpDir, File datasetDir) {
         this.tmpDir = tmpDir;
         this.datasetDir = datasetDir;

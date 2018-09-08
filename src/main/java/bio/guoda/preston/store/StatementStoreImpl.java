@@ -28,13 +28,13 @@ public class StatementStoreImpl implements StatementStore {
         persistence.put(key.getIRIString(), value instanceof IRI ? ((IRI) value).getIRIString() : value.toString());
     }
 
-    private IRI calculateKeyFor(Pair<RDFTerm, RDFTerm> unhashedKeyPair) {
+    protected static IRI calculateKeyFor(Pair<RDFTerm, RDFTerm> unhashedKeyPair) {
         IRI left = calculateHashFor(unhashedKeyPair.getLeft());
         IRI right = calculateHashFor(unhashedKeyPair.getRight());
         return Hasher.calcSHA256(left.getIRIString() + right.getIRIString());
     }
 
-    private IRI calculateHashFor(RDFTerm left1) {
+    protected static IRI calculateHashFor(RDFTerm left1) {
         return Hasher.calcSHA256(RDFUtil.getValueFor(left1));
     }
 
