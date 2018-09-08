@@ -53,7 +53,7 @@ then the content handler will attempt to parse the content. In parsing the conte
 
 ## `archiver`
 
-An archiver listens to statements containing  a _blank_ . On receiving such a statement, the archiver attempts to dereference the resources (e.g., https://search.idigbio.org/v2/search/publishers) by attempting to download the content associated to the resource. On successfully downloading the content, the content is put into the [`blob store`](#blob-store) and the relationship between the publisher, the version term and the content is stored in the [`statement store`](#statement-store) as a key value pair. More on that later.
+An archiver listens to statements containing  a _blank_ . On receiving such a statement, the archiver attempts to dereference the resources (e.g., https://search.idigbio.org/v2/search/publishers) by attempting to download the content associated to the resource. On successfully downloading the content, the content is put into the [`blob store`](#blob-store) and the relationship between the publisher, the version term and the content is stored in the [`simple hexastore`](#statement-store) as a key value pair. More on that later.
 
 ## `blob store`
 
@@ -71,7 +71,7 @@ With the file path being derived from the hash of the data itself, you can now e
 
 ## `simple hexastore`
 
-The statement store contains relationships that connect resources with their content using predicates (or verbs). The relationship is stored by combining a hashed "hasVersion" relationship (or predicate) with the hashed resource url. This combination is now turned into a unique identifier also, by adding the two hash urls and hashing the result. For example:
+The simple hexastore contains relationships that connect resources with their content using predicates (or verbs). The relationship is stored by combining a hashed "hasVersion" relationship (or predicate) with the hashed resource url. This combination is now turned into a unique identifier also, by adding the two hash urls and hashing the result. For example:
 
 ```
 sha256(
@@ -89,7 +89,7 @@ $ echo -n "https://search.idigbio.org/v2/search/publishers" | sha256sum
 
 So, lets say that the archiver has dereferenced the publisher url to content with the hash identifier hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 . Now the archiver stores the publisher/hasVersion hash as a key with value hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 into the statement (or relationstore) store. With this, we can retrieve the first version of the deferenced publisher content by lookup up the content of the hash://sha256/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e . This effectively implements a simplified version of a hexastore in which queries (e.g., what is the content hash of the content retrieve from https://search.idigbio.org/v2/search/publisher ? ) can be answered by dereferencing (or downloading) the content of the combined hash key of publisher url and hasVersion term. You can do this now using https://deeplinker.bio/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e .
 
-The statement store itself uses the same folder structure as the blob store to store the value associated with the hash key like:
+The simple hexastore itself uses the same folder structure as the blob store to store the value associated with the hash key like:
 
 ```
 a2/
