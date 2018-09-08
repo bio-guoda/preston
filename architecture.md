@@ -75,10 +75,16 @@ The simple hexastore contains relationships that connect resources with their co
 
 ```
 sha256(
-  sha256(<https://search.idigbio.org/v2/search/publishers>) -> hash://sha256/3edfe376ce9a6602fec3a6d3fa30d1d97bbf7a768fb855c8c75eeab389e1e3ef
-+
-  sha256(<http://purl.org/pav/hasVersion>) -> hash://sha256/0b658d6c9e2f6275fee7c564a229798c56031c020ded04c1040e30d2527f1806
-) = hash://sha256/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e 
+  sha256(<https://search.idigbio.org/v2/search/publishers>)
+  + sha256(<http://purl.org/pav/hasVersion>)
+) -->
+
+sha256(
+  hash://sha256/3edfe376ce9a6602fec3a6d3fa30d1d97bbf7a768fb855c8c75eeab389e1e3ef
+  + hash://sha256/0b658d6c9e2f6275fee7c564a229798c56031c020ded04c1040e30d2527f1806
+) -->
+
+hash://sha256/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e 
 ```
 
 Note that on a *nix command line, you can calculate the hashes using the `sha256sum` program like:
