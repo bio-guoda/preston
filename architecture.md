@@ -1,6 +1,6 @@
 # Preston Architecture
 
-Preston consist of the following components: a [`crawler`](#crawler), [`content handlers`](#content-handlers), an [`archiver`](#archiver), a content addressed [`blob store`](#blob-store), and a [`simplified hexastore`](#simplified-hexastore). In the following sections, each component is discussed.  
+Preston consist of the following components: a [`crawler`](#crawler), [`content handlers`](#content-handlers), an [`archiver`](#archiver), a content addressed [`blob store`](#blob-store), and a [`simplified hexastore`](#simplified-hexastore). In the following sections, each component is discussed, ending with a [`summary`](#summary). 
 
 Please [open an issue](https://github.com/bio-guoda/preston) if you have any questions, comments and suggestions.
 
