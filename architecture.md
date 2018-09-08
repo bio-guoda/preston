@@ -155,7 +155,7 @@ The record of a crawl session can also be interpreted as a version of a biodiver
 
 description | a version of biodiversity dataset graph 
  --- | --- 
-resource (subject)  | 0659a54f-b713-4f86-a917-5be166a14110 (uuid of the biodiversity dataset graph idea)
+resource (subject)  | 0659a54f-b713-4f86-a917-5be166a14110 (uuid of the biodiversity dataset graph)
 relationship (predicate) |  http://purl.org/pav/hasVersion
 search key (subject+predicate)	 | hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a
 content hash (object)	| hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 (resolved via [deeplinker.bio](https://deeplinker.bio/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a)).
