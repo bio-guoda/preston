@@ -2,6 +2,8 @@
 
 Preston consist of the following components: a [`crawler`](#crawler), [`content handlers`](#content-handlers), an [`archiver`](#archiver), a content addressed [`blob store`](#blob-store), and a [`simplified hexastore`](#simplified-hexastore). In the following sections, each component is discussed.  
 
+Please [open an issue](https://github.com/bio-guoda/preston) if you have any questions, comments and suggestions.
+
 ## ```crawler```
 
 The crawler creates statements that describe the crawling activity. An example of one of the many crawler statements is the start time of the crawl, or, as expressed in nquad speak:
