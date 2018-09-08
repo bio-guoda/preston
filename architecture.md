@@ -140,11 +140,17 @@ $ curl --silent https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a
 
 The example below show some example of how to query for versions of things in a Preston file structure or web accessible store.  
 
-description | a version of eBird's dwca | a version of biodiversity data graph 
+description | a version of eBird's dwca 
  --- | --- | ---
-resource (subject)	| http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip	| 0659a54f-b713-4f86-a917-5be166a14110 (uuid of the biodiversity dataset graph idea)
-relationship (predicate) |	http://purl.org/pav/hasVersion |	http://purl.org/pav/hasVersion
-search key (subject+predicate) |	hash://sha256/ae27e5a9612ab3754f8160922abf6c5c6ffc6b5a077f3e684d1ce57605929eb6	 | hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a
-content hash (object)|	hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c (resolved via [deeplinker.io](https://deeplinker.io/ae27e5a9612ab3754f8160922abf6c5c6ffc6b5a077f3e684d1ce57605929eb6))	| hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 (resolved via [deeplinker.io](https://deeplinker.io/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a)).
+resource (subject)	| http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip	
+relationship (predicate) |	http://purl.org/pav/hasVersion
+search key (subject+predicate) |	hash://sha256/ae27e5a9612ab3754f8160922abf6c5c6ffc6b5a077f3e684d1ce57605929eb6	
+content hash (object)|	hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c (resolved via [deeplinker.io](https://deeplinker.io/ae27e5a9612ab3754f8160922abf6c5c6ffc6b5a077f3e684d1ce57605929eb6))
 
 
+description | a version of biodiversity data graph 
+ --- | --- 
+resource (subject)  | 0659a54f-b713-4f86-a917-5be166a14110 (uuid of the biodiversity dataset graph idea)
+relationship (predicate) |  http://purl.org/pav/hasVersion
+search key (subject+predicate)	 | hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a
+content hash (object)	| hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 (resolved via [deeplinker.io](https://deeplinker.io/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a)).
