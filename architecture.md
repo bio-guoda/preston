@@ -1,6 +1,6 @@
 # Preston Architecture
 
-Preston consist of the following components: a [`crawler`](#crawler), an [`archiver`](#archiver), a content addressed [`blob store`](#blob-store), a [`simplified hexastore`](#simplified-hexastore) and various [`content handlers`](#content-handler). In the following sections, each component is discussed.  
+Preston consist of the following components: a [`crawler`](#crawler), [`content handlers`](#content-handlers), an [`archiver`](#archiver), a content addressed [`blob store`](#blob-store), and a [`simplified hexastore`](#simplified-hexastore). In the following sections, each component is discussed.  
 
 ## ```crawler```
 
@@ -26,9 +26,9 @@ The crawler also issues statements that describe registries of biodiversity data
 
 The statement above describe idigbio as an organization that created a resource, https://search.idigbio.org/v2/search/publishers, which has a format "application/json". 
 
-At the end of a crawl, the archiver stores the record of the crawl into the ```blobstore```. Also, the archiver uses the [`simplified hexastore`](#simplified-hexastore) to descibe the stored record as a version of the biodiversity dataset graph. Note also, that at the start of a successive crawl, a relation with the previous crawl is created. This relation helps to retain the provenance and versions of the various versions of the biodiversity dataset graph.  
+On finishing a crawl, the complete record of the crawl is stored into the ```blobstore```. Also, the [`simplified hexastore`](#simplified-hexastore) is used to descibe the stored record as a version of the biodiversity dataset graph. Note also, that at the start of a successive crawl, a relation with the previous crawl is created. This relation helps to retain the provenance and versions of the various versions of the biodiversity dataset graph.  
 
-So, in short, the crawler produces, stores and versions the information that describes a crawl, including registries like the list of publishers created by iDigBio and retrieved archives. 
+So, in short, the crawler produces, stores and versions the information that describes a crawl, including registries like the list of publishers created by iDigBio and retrieved archives. The versions of the crawl can be interpreted as versions of a biodiversity dataset graph.
 
 ## `content handlers`
 
