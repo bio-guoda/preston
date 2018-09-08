@@ -141,7 +141,7 @@ $ curl --silent https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a
 The example below show some example of how to query for versions of things in a Preston file structure or web accessible store.  
 
 description | a version of eBird's dwca 
- --- | --- | ---
+ --- | --- 
 resource (subject)	| http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip	
 relationship (predicate) |	http://purl.org/pav/hasVersion
 search key (subject+predicate) |	hash://sha256/ae27e5a9612ab3754f8160922abf6c5c6ffc6b5a077f3e684d1ce57605929eb6	
