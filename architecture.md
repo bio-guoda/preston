@@ -67,7 +67,7 @@ On succesfully saving the content into the blob store, a unique identifier is re
                 data
 ```
 
-With the file path being derived from the hash of the data itself, you can now easily locate the content by its hash. For instance, on the server at https://deeplinker.io , the nginx webserver is configured such that you can retrieve the said datafile by requesting https://deeplinker.io/3edfe376ce9a6602fec3a6d3fa30d1d97bbf7a768fb855c8c75eeab389e1e3ef . Note that this content hash is "real" and you can download the copy (or version) of the content that was served by https://search.idigbio.org/v2/search/publishers at some point in the past. So, using the blob store, we know have a way to easily access content as long as we know the content hash.  
+With the file path being derived from the hash of the data itself, you can now easily locate the content by its hash. For instance, on the server at https://deeplinker.bio , the nginx webserver is configured such that you can retrieve the said datafile by requesting https://deeplinker.bio/3edfe376ce9a6602fec3a6d3fa30d1d97bbf7a768fb855c8c75eeab389e1e3ef . Note that this content hash is "real" and you can download the copy (or version) of the content that was served by https://search.idigbio.org/v2/search/publishers at some point in the past. So, using the blob store, we know have a way to easily access content as long as we know the content hash.  
 
 ## `simple hexastore`
 
@@ -140,17 +140,23 @@ $ curl --silent https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a
 
 The example below show some example of how to query for versions of things in a Preston file structure or web accessible store.  
 
+### eBird
+eBird is the biggest collection of occurrence data that I know of. ~10GB.
+
 description | a version of eBird's dwca 
  --- | --- 
 resource (subject)	| http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip	
 relationship (predicate) |	http://purl.org/pav/hasVersion
 search key (subject+predicate) |	hash://sha256/ae27e5a9612ab3754f8160922abf6c5c6ffc6b5a077f3e684d1ce57605929eb6	
-content hash (object)|	hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c (resolved via [deeplinker.io](https://deeplinker.io/ae27e5a9612ab3754f8160922abf6c5c6ffc6b5a077f3e684d1ce57605929eb6))
+content hash (object)|	hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c (resolved via [deeplinker.bio](https://deeplinker.bio/ae27e5a9612ab3754f8160922abf6c5c6ffc6b5a077f3e684d1ce57605929eb6))
 
+### a first biodiversity dataset graph version
+The record of a crawl session can also be interpreted as a version of a biodiversity graph. Here's how you retrieve the first version:
 
-description | a version of biodiversity data graph 
+description | a version of biodiversity dataset graph 
  --- | --- 
 resource (subject)  | 0659a54f-b713-4f86-a917-5be166a14110 (uuid of the biodiversity dataset graph idea)
 relationship (predicate) |  http://purl.org/pav/hasVersion
 search key (subject+predicate)	 | hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a
-content hash (object)	| hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 (resolved via [deeplinker.io](https://deeplinker.io/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a)).
+content hash (object)	| hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 (resolved via [deeplinker.bio](https://deeplinker.bio/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a)).
+
