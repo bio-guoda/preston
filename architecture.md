@@ -11,6 +11,7 @@ The crawler creates statements that describe the crawling activity. An example o
 <e8a41d42-3688-43a7-b287-b78b8d485a2c> <http://www.w3.org/ns/prov#startedAtTime> "2018-09-07T12:43:10.322Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 ```
 
+
 The first line defined the crawl event or activity, and the second line states that this particular crawl event was started at some time on 2018-09-07.
 
 The crawler also issues statements that describe registries of biodiversity datasets, or more specifically:
@@ -25,7 +26,9 @@ The crawler also issues statements that describe registries of biodiversity data
 
 The statement above describe idigbio as an organization that created a resource, https://search.idigbio.org/v2/search/publishers, which has a format "application/json". 
 
-So, in short, the crawler produces information that describes a crawl, including registries like the list of publishers created by iDigBio. 
+At the end of a crawl, the archiver stores the record of the crawl into the ```blobstore```. Also, the archiver uses the [`simplified hexastore`](#simplified-hexastore) to descibe the stored record as a version of the biodiversity dataset graph. Note also, that at the start of a successive crawl, a relation with the previous crawl is created. This relation helps to retain the provenance and versions of the various versions of the biodiversity dataset graph.  
+
+So, in short, the crawler produces, stores and versions the information that describes a crawl, including registries like the list of publishers created by iDigBio and retrieved archives. 
 
 ## `content handlers`
 
