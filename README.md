@@ -12,7 +12,7 @@ The process diagram below shows how Preston starts crawls to create versioned co
 
 <img src="https://raw.githubusercontent.com/bio-guoda/preston/master/process.png" width="50%">
 
-If you haven't yet tried Preston, please see the [Installation](#install) section. Please also see [a template repository](https://github.com/bio-guoda/preston-amazon) and [use cases](#use-cases) for examples.
+If you haven't yet tried Preston, please see the [Installation](#install) section. Please also see [a template repository](https://github.com/bio-guoda/preston-amazon) and [use cases](#use-cases) for examples. If you are interested in learning how Preston works, please visit the [architecture](./architecture.md) page.
 
 ## Table of Contents
  
