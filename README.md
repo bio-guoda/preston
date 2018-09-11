@@ -233,7 +233,7 @@ Levatich T, Padilla F (2017). EOD - eBird Observation Dataset. Cornell Lab of Or
 
 A citation might look something like:
 
-Levatich T, Padilla F (2017). EOD - eBird Observation Dataset. Cornell Lab of Ornithology. Occurrence dataset [hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c](https://deeplinker.bio/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c) accessed at [http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip](http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip) with provenance [hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d](https://deeplinker.bio/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d) .
+Levatich T, Padilla F (2017). EOD - eBird Observation Dataset. Cornell Lab of Ornithology. Occurrence dataset [hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c](https://deeplinker.bio/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c) accessed at [http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip](http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip) at 2018-09-02 with provenance [hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d](https://deeplinker.bio/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d) .
 
 ## Prerequisites
 
