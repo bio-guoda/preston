@@ -190,7 +190,7 @@ For instance, assuming that a preston data directory exists on a ```serverA``` w
 $ rsync -Pavz preston@someserver:~/preston-archive/data /home/someuser/preston-archive/
 ```
 
-On a consumer internet connection with bandwidth < 10Mb/s, an initial sync with a remote trans-atlantic server with a 67GB preston archive took about 3 days. After the initial sync, updates are fast because rsync does not copy file you already have synced.
+On a consumer internet connection with bandwidth < 10Mb/s, an initial sync with a remote trans-atlantic server with a 67GB preston archive took about 3 days. After the initial sync, only files that you don't have yet are included. For instance, if no new files are added to the remote preston archive, a sync take a few minutes instead of hours or days. 
 
 Note that ssh and rsync comes with frequently used linux distributions like Ubuntu v18.04 by default). 
 
