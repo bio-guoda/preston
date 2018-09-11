@@ -227,6 +227,18 @@ $ diff one.json two.json
 
 Preston provides both a date and a content-based identifier for the datasets that you are using and the biodiversity dataset graph as a whole. Also, it produces the information is a format that is machine readable. This supports the automated generation of citations, for human or machine consumption, as evidenced by the reference to a [particular version of the biodiversity dataset graph](https://deeplinker.bio/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93) in the previous section. 
 
+Instead of a citation to a dataset like:
+
+```
+Levatich T, Padilla F (2017). EOD - eBird Observation Dataset. Cornell Lab of Ornithology. Occurrence dataset https://doi.org/10.15468/aomfnb accessed via GBIF.org on 2018-09-11.
+```
+
+A citation might look something like:
+
+```
+Levatich T, Padilla F (2017). EOD - eBird Observation Dataset. Cornell Lab of Ornithology. Occurrence dataset [hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c](https://deeplinker.bio/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c) accessed at [http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip](http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip) with provenance [hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d](https://deeplinker.bio/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d) .
+```
+
 ## Prerequisites
 
 Preston needs Java 8+.
