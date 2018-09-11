@@ -207,8 +207,9 @@ location ~ "^/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{58})$" {
             	try_files /preston/$1/$2/$3/$uri/data =404;
 }
 ```
+The first line redirects any [skolemized blank nodes](https://www.w3.org/TR/rdf11-concepts/#section-skolemization) to the appropriate w3c documentation on the topic. The second configuration attempts to retrieve a static file with a 64 hexadecimal sha256 hash from a preston archive directory on the web server. 
 
-This would help you to access your Preston archive remotely using the URLs like https://someserver/[sha256 content hash] . So, if you'd like to dereference (or download) hash://sha256/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02 , you can now point your http client or browser at https://someserver/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02 . Note that you do not need any other software than the (standard) nginx webserver, because you are serving the content as static files from the file system of your server. 
+With this, you can access your Preston archive remotely using the URLs like ```https://someserver/[sha256 content hash]``` . So, if you'd like to dereference (or download) ```hash://sha256/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02``` , you can now point your http client or browser at ```https://someserver/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02``` . Note that you do not need any other software than the (standard) nginx webserver, because you are serving the content as static files from the file system of your server. 
 
 #### Data Access Monitor
 
