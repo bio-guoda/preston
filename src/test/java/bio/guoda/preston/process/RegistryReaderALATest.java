@@ -40,7 +40,7 @@ public class RegistryReaderALATest {
         ArrayList<Triple> nodes = new ArrayList<>();
         RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), nodes::add);
 
-        registryReader.on(toStatement(toIRI("https://collections.ala.org.au/ws/dataResource?status=dataAvailable"),
+        registryReader.on(toStatement(toIRI("https://collections.ala.org.au/ws/dataResource?status=dataAvailable&resourceType=records"),
                 HAS_VERSION,
                 toIRI("https://some")));
         assertThat(nodes.size(), is(0));

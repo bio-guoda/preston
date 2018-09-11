@@ -25,6 +25,7 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
    * [Use Cases](#use-cases)
       * [`mining citations`](#mining-citations)
       * [`archiving`](#archiving)
+      * [`remote access`](#remote-access)
       * [`data access monitor`](#data-access-monitor)
       * [`compare versions`](#compare-versions)
       * [`generating citations`](#generating-citations)
@@ -182,6 +183,32 @@ So, now we have a way to attribute each and every dataset individually.
 #### Archiving
 
 Preston creates a "data" folder that stores the biodiversity datasets and associated information. For archiving, you can take this "data" folder, copy it and move it somewhere safe. You can also use tools like [git-annex](http://git-annex.branchable.com), [rsync](https://en.wikipedia.org/wiki/Rsync), or use distributed storage systems like the [Interplanetary File System (ipfs)](https://ipfs.io) or [Dat](https://dat-project.org). 
+
+For instance, assuming that a preston data directory exists on a ```serverA``` which has ssh and rsync installed on it, you can keep a local copy in sync by running:
+
+```
+$ rsync -Pavz preston@someserver:~/preston-archive/data /home/someuser/preston-archive/
+```
+
+On a consumer internet connection with bandwidth < 10Mb/s, an initial sync with a remote trans-atlantic server with a 67GB preston archive took about 3 days. After the initial sync, updates are fast because rsync does not copy file you already have synced.
+
+Note that ssh and rsync comes with frequently used linux distributions like Ubuntu v18.04 by default). 
+
+#### Web Access
+
+If you'd like to make your Preston archive accessible via http/https by using a [nginx webserver](http://nginx.org), you can use a following address mapping to your [nginx configuration](https://nginx.org/en/docs/beginners_guide.html):
+
+```console
+location ~ "/\.well-known/genid/" {
+		return 302 https://www.w3.org/TR/rdf11-concepts/#section-skolemization;
+}
+
+location ~ "^/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{58})$" {
+            	try_files /preston/$1/$2/$3/$uri/data =404;
+}
+```
+
+This would help you to access your Preston archive remotely using the URLs like https://someserver/[sha256 content hash] . So, if you'd like to dereference (or download) hash://sha256/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02 , you can now point your http client or browser at https://someserver/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02 . Note that you do not need any other software than the (standard) nginx webserver, because you are serving the content as static files from the file system of your server. 
 
 #### Data Access Monitor
 
