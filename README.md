@@ -25,7 +25,7 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
    * [Use Cases](#use-cases)
       * [`mining citations`](#mining-citations)
       * [`archiving`](#archiving)
-      * [`remote access`](#remote-access)
+      * [`web access`](#web-access)
       * [`data access monitor`](#data-access-monitor)
       * [`compare versions`](#compare-versions)
       * [`generating citations`](#generating-citations)
