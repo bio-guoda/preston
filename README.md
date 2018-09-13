@@ -132,11 +132,12 @@ To inspect the history you can type:
 
 ```console
 $ preston history
-<0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/pav/hasVersion> <hash://sha256/ea430cf506640ffd170d88bfc429c979d9e8ded97d839f17fdf9f4d8227017c2> .
-<hash://sha256/0231077876124b92cc001f3c19651b536fa10a15fd94bfb7912e60722f2bde1d> <http://www.w3.org/ns/prov#generatedAtTime> "2018-09-05T02:24:43.730Z" .
-<hash://sha256/0231077876124b92cc001f3c19651b536fa10a15fd94bfb7912e60722f2bde1d> <http://purl.org/pav/previousVersion> <hash://sha256/ea430cf506640ffd170d88bfc429c979d9e8ded97d839f17fdf9f4d8227017c2> .
-<hash://sha256/c00b87e43b8b5a63ee68d4057138df342ae4f709cc794a74bed3ed0a1ccbdd7b> <http://www.w3.org/ns/prov#generatedAtTime> "2018-09-05T02:34:49.282Z" .
-<hash://sha256/c00b87e43b8b5a63ee68d4057138df342ae4f709cc794a74bed3ed0a1ccbdd7b> <http://purl.org/pav/previousVersion> <hash://sha256/0231077876124b92cc001f3c19651b536fa10a15fd94bfb7912e60722f2bde1d> .
+preston history
+<0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/pav/hasVersion> <hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55> .
+<hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d> <http://www.w3.org/ns/prov#generatedAtTime> "2018-09-04T20:48:35.096Z" .
+<hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d> <http://purl.org/pav/previousVersion> <hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55> .
+<hash://sha256/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93> <http://www.w3.org/ns/prov#generatedAtTime> "2018-09-04T23:14:22.292Z" .
+<hash://sha256/7efdea9263e57605d2d2d8b79ccd26a55743123d0c974140c72c8c1cfc679b93> <http://purl.org/pav/previousVersion> <hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d> .
 ...
 ``` 
 
