@@ -57,17 +57,17 @@ An archiver listens to statements containing  a _blank_ . On receiving such a st
 
 ## `blob store`
 
-On succesfully saving the content into the blob store, a unique identifier is returned in the form of a SHA256 hash. The unique content identifier is now used to store a relation between the resource and it's unique content identifier. This identifier is now used to point to the content. Also, the content is saved in an hierarchical file structure derived from the content hash. For example, if the url https://search.idigbio.org/v2/search/publishers resolved to content with a hash of hash://sha256/3edfe376ce9a6602fec3a6d3fa30d1d97bbf7a768fb855c8c75eeab389e1e3ef (see [the "official" spec of hash uri notation](https://github.com/hash-uri/hash-uri/blob/master/README.md) with examples at [hash-archive.org](https://hash-archive.org)), then a file called "data" is stored in the following structure:
+On succesfully saving the content into the blob store, a unique identifier is returned in the form of a SHA256 hash. The unique content identifier is now used to store a relation between the resource and it's unique content identifier. This identifier is now used to point to the content. Also, the content is saved in an hierarchical file structure derived from the content hash. For example, if the url https://search.idigbio.org/v2/search/publishers resolved to content with a hash of hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 (see [the "official" spec of hash uri notation](https://github.com/hash-uri/hash-uri/blob/master/README.md) with examples at [hash-archive.org](https://hash-archive.org)), then a file called "data" is stored in the following structure:
 
 ```
 3e/
-    df/
-        e3/
-            3edfe376ce9a6602fec3a6d3fa30d1d97bbf7a768fb855c8c75eeab389e1e3ef/
+    ff/
+        98/
+            3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362/
                 data
 ```
 
-With the file path being derived from the hash of the data itself, you can now easily locate the content by its hash. For instance, on the server at https://deeplinker.bio , the nginx webserver is configured such that you can retrieve the said datafile by requesting https://deeplinker.bio/3edfe376ce9a6602fec3a6d3fa30d1d97bbf7a768fb855c8c75eeab389e1e3ef . Note that this content hash is "real" and you can download the copy (or version) of the content that was served by https://search.idigbio.org/v2/search/publishers at some point in the past. So, using the blob store, we know have a way to easily access content as long as we know the content hash.  
+With the file path being derived from the hash of the data itself, you can now easily locate the content by its hash. For instance, on the server at https://deeplinker.bio , the nginx webserver is configured such that you can retrieve the said datafile by requesting https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 . Note that this content hash is "real" and you can download the copy (or version) of the content that was served by https://search.idigbio.org/v2/search/publishers at some point in the past. So, using the blob store, we know have a way to easily access content as long as we know the content hash.  
 
 ## `simple hexastore`
 
@@ -90,7 +90,7 @@ hash://sha256/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e
 Note that on a *nix command line, you can calculate the hashes using the `sha256sum` program like:
 ```console
 $ echo -n "https://search.idigbio.org/v2/search/publishers" | sha256sum
-3edfe376ce9a6602fec3a6d3fa30d1d97bbf7a768fb855c8c75eeab389e1e3ef  -
+3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  -
 ```
 
 So, lets say that the archiver has dereferenced the publisher url to content with the hash identifier ```hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362``` . Now the archiver stores the publisher/hasVersion hash as a key with value ```hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362``` into the statement (or relationstore) store. With this, we can retrieve the first version of the deferenced publisher content by lookup up the content of the ```hash://sha256/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e``` . This effectively implements a simplified version of a hexastore in which queries (e.g., what is the content hash of the content retrieve from https://search.idigbio.org/v2/search/publisher ? ) can be answered by dereferencing (or downloading) the content of the combined hash key of publisher url and hasVersion term. You can do this now using https://deeplinker.bio/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e .
