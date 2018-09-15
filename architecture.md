@@ -57,7 +57,7 @@ An archiver listens to statements containing  a _blank_ . On receiving such a st
 
 ## `blob store`
 
-On succesfully saving the content into the blob store, a unique identifier is returned in the form of a SHA256 hash. The unique content identifier is now used to store a relation between the resource and it's unique content identifier. This identifier is now used to point to the content. Also, the content is saved in an hierarchical file structure derived from the content hash. For example, if the url https://search.idigbio.org/v2/search/publishers resolved to content with a hash of hash://sha256/3edfe376ce9a6602fec3a6d3fa30d1d97bbf7a768fb855c8c75eeab389e1e3ef (see https://hash-store.org for the hash url notation), then a file called "data" is stored in the following structure:
+On succesfully saving the content into the blob store, a unique identifier is returned in the form of a SHA256 hash. The unique content identifier is now used to store a relation between the resource and it's unique content identifier. This identifier is now used to point to the content. Also, the content is saved in an hierarchical file structure derived from the content hash. For example, if the url https://search.idigbio.org/v2/search/publishers resolved to content with a hash of hash://sha256/3edfe376ce9a6602fec3a6d3fa30d1d97bbf7a768fb855c8c75eeab389e1e3ef (see [the "official" spec of hash url notation](https://github.com/hash-uri/hash-uri/blob/master/README.md) with examples at [hash-archive.org](https://hash-archive.org)), then a file called "data" is stored in the following structure:
 
 ```
 3e/
