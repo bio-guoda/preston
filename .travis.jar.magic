@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+@ 2>/dev/null # 2>nul & echo off & goto BOF
+:
+exec java -Xmx500m -XX:+UseG1GC $JAVA_OPTS -cp "$0" org.globalbioticinteractions.elton.Elton "$@"
+exit
+
+:BOF
+@echo off
+java -Xmx500m -XX:+UseG1GC %JAVA_OPTS% -cp "%~dpnx0" org.globalbioticinteractions.elton.Elton %*
+exit /B %errorlevel%
