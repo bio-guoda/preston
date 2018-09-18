@@ -274,13 +274,12 @@ Preston needs Java 8+.
 
 Preston is a stand-alone java application, packaged in a jarfile. You can build you own (see [building](#building)) or download a prebuilt jar at [releases](https://github.com/bio-guoda/preston/releases).
 
-On linux (and Mac) it is recommended to make an alias by appending the following to ~/.bash_aliases :
+On linux (and Mac) you can install Preston by running:
+```sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.0.5/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version```
 
-```
-alias preston='java -Xmx4G -jar [some dir]/preston.jar'
-```
-
-where [some dir] is the location where preston.jar lives. With this alias, you can now do ```preston version``` instead of ```java -jar preston.jar version```.
+On successful installation, execute ```preston version``` on the commandline should print the version of preston. 
+.
+Alternatively, you can download the jar manually and run preston by using commands like ```java -jar preston.jar version```.
 
 ### Building
 
