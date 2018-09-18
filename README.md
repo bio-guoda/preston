@@ -29,7 +29,7 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
       * [`data access monitor`](#data-access-monitor)
       * [`compare versions`](#compare-versions)
       * [`generating citations`](#generating-citations)
-      * [`finding copies using hash-archive.org`](#finding-copies-using-hash-archiveorg)
+      * [`finding copies with hash-archive.org`](#finding-copies-with-hash-archiveorg)
  * [Prerequisites](#prerequisites)
  * [Install](#install)
  * [Building](#building)
