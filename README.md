@@ -29,6 +29,7 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
       * [`data access monitor`](#data-access-monitor)
       * [`compare versions`](#compare-versions)
       * [`generating citations`](#generating-citations)
+      * [`registering with hash-archive.org`](#registering-with-hash-archive-org)
  * [Prerequisites](#prerequisites)
  * [Install](#install)
  * [Building](#building)
@@ -265,6 +266,45 @@ A citation might look something like:
 Levatich T, Padilla F (2017). EOD - eBird Observation Dataset. Cornell Lab of Ornithology. Occurrence dataset [hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c](https://deeplinker.bio/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c) accessed at [http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip](http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip) at 2018-09-02 with provenance [hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d](https://deeplinker.bio/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d) .
 
 The latter citation tells you exactly what file was used and where it came from. The former tells you that some eBird dataset was accessed via GBIF on a specific date and leaves it up to the reader to figure out exactly which dataset was used.
+
+#### Registering with hash-archive.org
+
+[hash-archive.org](https://hash-archive.org) is a project by [Ben Trask](https://bentrask.com), the same person who suggested to use hash uris to represent content hashes (e.g., hash://sha256/...). The hash archive keeps track of what content specific urls created using content hashes. To make the hash archive update the hash associated with a url, you can send a http get request in the form of https://hash-archive.org/api/enqueue/[some url] . For example, to register a url that is known to host an DwC-A at ```http://zoobank.org:8080/ipt/eml.do?r=zoobank```, you can type ```https://hash-archive.org/api/enqueue/https://hash-archive.org/history/http://zoobank.org:8080/ipt/eml.do?r=zoobank``` in your browser, or using curl like 
+
+
+```sh
+curl https://hash-archive.org/api/enqueue/http://zoobank.org:8080/ipt/eml.do?r=zoobank
+```
+
+On successful completion of the request, hash-archive.org returns something like:
+
+```json
+{
+    "url": "http://zoobank.org:8080/ipt/eml.do?r=zoobank",
+    "timestamp": 1537269631,
+    "status": 200,
+    "type": "text/xml;charset=utf-8",
+    "length": 3905,
+    "hashes": [
+        "md5-zyn7V5JlXkrqxJILT8ZfGw==",
+        "sha1-SALPtju8vNii2S/Rt3R946iKc0g=",
+        "sha256-yBrrBSjo86D8U4mniRsigr4ijoTAtXZ2aSJlhcTa1sQ=",
+        "sha384-IguP+tlrYZ8QVBC86YIPxf/7CWFhU2HTzxI2DYLq40mo1dwcS5yn6qJb0SatWaUH",
+        "sha512-sl3/Qm7Jd965F+QLkxbp/Xdsv7ZwWX6HKDgpwXk3OLyOGWpgym1HBSOEhRtMiH2g7MZzwKjyEyL4PajQAinj"
+    ]
+}
+```
+
+This indicates that the hash archive has independently downloaded the EML url, and calculated various content hashes. Now, you should be able to do to https://hash-archive.org/history/http://zoobank.org:8080/ipt/eml.do?r=zoobank , and see the history of content that this particular url has produced. 
+
+In short, hash-archive provides a way to check whether content produced by a url has changed. Also, it provides a way to lookup which urls are associated with a unique content hash. 
+
+The example below shows how Preston was used to register biodiversity source urls as well as Preston web-accessible urls via https://deeplinker.bio (see [Web Access](#web-access)). 
+
+<script src="https://gist.github.com/jhpoelen/0f531a8489c1001e92aae4c94a003ba3.js"></script>
+
+If all web-accessible Preston instances would periodically register their content like this, https://hash-archive.org could serve as a way to lookup backup for the an archive that you got from some no longer active archive url.
+
 
 ## Prerequisites
 
