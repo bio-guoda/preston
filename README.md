@@ -269,7 +269,7 @@ The latter citation tells you exactly what file was used and where it came from.
 
 #### Finding copies with hash-archive.org
 
-[hash-archive.org](https://hash-archive.org) is a project by [Ben Trask](https://bentrask.com), the same person who suggested to use hash uris to represent content hashes (e.g., hash://sha256/...). The hash archive keeps track of what content specific urls created using content hashes. To make the hash archive update the hash associated with a url, you can send a http get request in the form of ```https://hash-archive.org/api/enqueue/[some url]``` . For example, to register a url that is known to host an DwC-A at ```http://zoobank.org:8080/ipt/eml.do?r=zoobank```, you can click on https://hash-archive.org/api/enqueue/https://hash-archive.org/history/http://zoobank.org:8080/ipt/eml.do?r=zoobank , or using curl like 
+[hash-archive.org](https://hash-archive.org) is a project by [Ben Trask](https://bentrask.com), the same person who suggested to use hash uris to represent content hashes (e.g., hash://sha256/...). The hash archive keeps track of what content specific urls created using content hashes. To make the hash archive update the hash associated with a url, you can send a http get request in the form of ```https://hash-archive.org/api/enqueue/[some url]``` . For example, to register a url that is known to host an DwC-A at ```http://zoobank.org:8080/ipt/eml.do?r=zoobank```, you can click on https://hash-archive.org/api/enqueue/http://zoobank.org:8080/ipt/eml.do?r=zoobank , or using curl like 
 
 
 ```sh
