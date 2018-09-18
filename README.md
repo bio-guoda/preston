@@ -29,7 +29,7 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
       * [`data access monitor`](#data-access-monitor)
       * [`compare versions`](#compare-versions)
       * [`generating citations`](#generating-citations)
-      * [`registering with hash-archive.org`](#registering-with-hash-archive-org)
+      * [`registering with hash-archive.org`](#registering-with-hash-archiveorg)
  * [Prerequisites](#prerequisites)
  * [Install](#install)
  * [Building](#building)
@@ -269,7 +269,7 @@ The latter citation tells you exactly what file was used and where it came from.
 
 #### Registering with hash-archive.org
 
-[hash-archive.org](https://hash-archive.org) is a project by [Ben Trask](https://bentrask.com), the same person who suggested to use hash uris to represent content hashes (e.g., hash://sha256/...). The hash archive keeps track of what content specific urls created using content hashes. To make the hash archive update the hash associated with a url, you can send a http get request in the form of https://hash-archive.org/api/enqueue/[some url] . For example, to register a url that is known to host an DwC-A at ```http://zoobank.org:8080/ipt/eml.do?r=zoobank```, you can type ```https://hash-archive.org/api/enqueue/https://hash-archive.org/history/http://zoobank.org:8080/ipt/eml.do?r=zoobank``` in your browser, or using curl like 
+[hash-archive.org](https://hash-archive.org) is a project by [Ben Trask](https://bentrask.com), the same person who suggested to use hash uris to represent content hashes (e.g., hash://sha256/...). The hash archive keeps track of what content specific urls created using content hashes. To make the hash archive update the hash associated with a url, you can send a http get request in the form of ```https://hash-archive.org/api/enqueue/[some url]``` . For example, to register a url that is known to host an DwC-A at ```http://zoobank.org:8080/ipt/eml.do?r=zoobank```, you can click on https://hash-archive.org/api/enqueue/https://hash-archive.org/history/http://zoobank.org:8080/ipt/eml.do?r=zoobank , or using curl like 
 
 
 ```sh
@@ -295,13 +295,23 @@ On successful completion of the request, hash-archive.org returns something like
 }
 ```
 
-This indicates that the hash archive has independently downloaded the EML url, and calculated various content hashes. Now, you should be able to do to https://hash-archive.org/history/http://zoobank.org:8080/ipt/eml.do?r=zoobank , and see the history of content that this particular url has produced. 
+This response indicates that the hash archive has independently downloaded the EML url, and calculated various content hashes. Now, you should be able to do to https://hash-archive.org/history/http://zoobank.org:8080/ipt/eml.do?r=zoobank , and see the history of content that this particular url has produced. 
 
 In short, hash-archive provides a way to check whether content produced by a url has changed. Also, it provides a way to lookup which urls are associated with a unique content hash. 
 
-The example below shows how Preston was used to register biodiversity source urls as well as Preston web-accessible urls via https://deeplinker.bio (see [Web Access](#web-access)). 
+The example (also see related [gist](https://gist.github.com/jhpoelen/0f531a8489c1001e92aae4c94a003ba3)) below shows how Preston was used to register biodiversity source urls as well as Preston web-accessible urls via https://deeplinker.bio (see [Web Access](#web-access)). 
 
-<script src="https://gist.github.com/jhpoelen/0f531a8489c1001e92aae4c94a003ba3.js"></script>
+```bash
+#!/bin/bash
+# Register all preston urls with hash-archive.org
+#
+# Please replace "deeplinker\.bio" instances below with you own escaped hostname of your Preston instance.
+
+# see https://preston.guoda.bio on how to install preston
+#
+
+preston ls -l tsv | grep Version | cut -f1,3 | tr '\t' '\n' | grep -v "deeplinker\.bio/\.well-known/genid" | sort | uniq | sed -e 's/hash:\/\/sha256/https:\/\/deeplinker.bio/g' | sed -e 's/^/https:\/\/hash-archive.org\/api\/enqueue\//g' | xargs -L1 curl 
+```
 
 If all web-accessible Preston instances would periodically register their content like this, https://hash-archive.org could serve as a way to lookup backup for the an archive that you got from some no longer active archive url.
 
