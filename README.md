@@ -186,11 +186,13 @@ So, now we have a way to attribute each and every dataset individually.
 
 Preston creates a "data" folder that stores the biodiversity datasets and associated information. For archiving, you can take this "data" folder, copy it and move it somewhere safe. You can also use tools like [git-annex](http://git-annex.branchable.com), [rsync](https://en.wikipedia.org/wiki/Rsync), or use distributed storage systems like the [Interplanetary File System (ipfs)](https://ipfs.io) or [Dat](https://dat-project.org). 
 
-For instance, assuming that a preston data directory exists on a ```serverA``` which has ssh and rsync installed on it, you can keep a local copy in sync by running:
+For instance, assuming that a preston data directory exists on a ```serverA``` which has ssh and rsync installed on it, you can keep a local copy in sync by running the following command on your local server:
 
 ```
 $ rsync -Pavz preston@someserver:~/preston-archive/data /home/someuser/preston-archive/
 ```
+
+where someserver is the remote server you'd like to sync with and /home/someuser/preston-archive is the place on your own server you'd like to store the rsync-ed Preston archive.
 
 On a consumer internet connection with bandwidth < 10Mb/s, an initial sync with a remote trans-atlantic server with a 67GB preston archive took about 3 days. After the initial sync, only files that you don't have yet are included. For instance, if no new files are added to the remote preston archive, a sync take a few minutes instead of hours or days. 
 
