@@ -70,6 +70,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     private void parse(IRI iri) {
         try {
             // first parse document to check whether it is valid
+
             new XmlMapper().readTree(get(iri));
             /// then parse
             parseRssFeed(iri, this, get(iri));

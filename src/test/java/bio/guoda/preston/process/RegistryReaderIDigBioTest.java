@@ -1,7 +1,6 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.store.BlobStore;
-import com.sun.syndication.io.FeedException;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
@@ -119,7 +118,7 @@ public class RegistryReaderIDigBioTest {
     }
 
     @Test
-    public void parseFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
+    public void parseFeeds() throws XMLStreamException, IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Triple> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
@@ -143,7 +142,7 @@ public class RegistryReaderIDigBioTest {
     }
 
     @Test
-    public void parseSymbiotaFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
+    public void parseSymbiotaFeeds() throws XMLStreamException, IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Triple> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
@@ -176,7 +175,7 @@ public class RegistryReaderIDigBioTest {
     }
 
     @Test
-    public void parseIntermountainFeeds() throws XMLStreamException, IOException, FeedException, ParserConfigurationException, SAXException, XPathExpressionException {
+    public void parseIntermountainFeeds() throws XMLStreamException, IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Triple> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
