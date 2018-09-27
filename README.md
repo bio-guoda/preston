@@ -202,6 +202,7 @@ Note that ssh and rsync comes with frequently used linux distributions like Ubun
 
 If you'd like to make your Preston archive accessible via http/https by using a [nginx webserver](http://nginx.org), you can use a following address mapping to your [nginx configuration](https://nginx.org/en/docs/beginners_guide.html):
 
+##### ```nginx``` 
 ```console
 location ~ "/\.well-known/genid/" {
 		return 302 https://www.w3.org/TR/rdf11-concepts/#section-skolemization;
@@ -212,6 +213,22 @@ location ~ "^/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{58})$" {
 }
 ```
 The first ```location``` block redirects any URIs describing [skolemized blank nodes](https://www.w3.org/TR/rdf11-concepts/#section-skolemization) to the appropriate [w3c](https://w3c.org) documentation on the topic. The second ```location``` block configures the server to attempt to retrieve a static file with a 64 hexadecimal sha256 hash from the appropriate ```data``` file in preston archive directory on the web server. 
+
+##### ```caddy```
+Similary, for [Caddy](https://caddyserver.com), add the following to your ```Caddyfile```:
+
+```console
+redir 302 {
+  if {path} starts_with /.well-known/genid/
+  https://www.w3.org/TR/rdf11-concepts/#section-skolemization
+}
+
+rewrite {
+  r ^/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{58})$
+  to data/{1}/{2}/{3}/{path}/data 404.html
+}
+```
+Where you can replace ```data/``` with the relative location of the local preston archive data directory.
 
 With this, you can access your Preston archive remotely using the URLs like ```https://someserver/[sha256 content hash]``` . So, if you'd like to dereference (or download) ```hash://sha256/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02``` , you can now point your http client or browser at ```https://someserver/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02``` . Note that you do not need any other software than the (standard) nginx webserver, because you are serving the content as static files from the file system of your server. 
 
