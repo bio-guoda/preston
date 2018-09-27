@@ -225,7 +225,7 @@ redir 302 {
 
 rewrite {
   r ^/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{58})$
-  to data/{1}/{2}/{3}/{path}/data 404.html
+  to data/{1}/{2}/{3}/{path}/data
 }
 ```
 Where you can replace ```data/``` with the relative location of the local preston archive data directory.
