@@ -53,7 +53,7 @@ then the content handler will attempt to parse the content. In parsing the conte
 
 ## `archiver`
 
-An archiver listens to statements containing  a _blank_ . On receiving such a statement, the archiver attempts to dereference the resources (e.g., https://search.idigbio.org/v2/search/publishers) by attempting to download the content associated to the resource. On successfully downloading the content, the content is put into the [`blob store`](#blob-store) and the relationship between the publisher, the version term and the content is stored in the [`simple hexastore`](#statement-store) as a key value pair. More on that later.
+An archiver listens to statements containing  a _blank_ . On receiving such a statement, the archiver attempts to dereference the resources (e.g., https://search.idigbio.org/v2/search/publishers) by attempting to download the content associated to the resource. On successfully downloading the content, the content is put into the [`blob store`](#blob-store) and the relationship between the publisher, the version term and the content is stored in the [`simplified hexastore`](#simplified-hexastore) as a key value pair. More on that later.
 
 ## `blob store`
 
@@ -71,7 +71,7 @@ With the file path being derived from the hash of the data itself, you can now e
 
 ## `simplified hexastore`
 
-The simple hexastore contains relationships that connect resources with their content using predicates (or verbs). The relationship is stored by combining a hashed "hasVersion" relationship (or predicate) with the hashed resource url. This combination is now turned into a unique identifier also, by adding the two hash urls and hashing the result. For example:
+The simplified hexastore contains relationships that connect resources with their content using predicates (or verbs). The relationship is stored by combining a hashed "hasVersion" relationship (or predicate) with the hashed resource url. This combination is now turned into a unique identifier also, by adding the two hash urls and hashing the result. For example:
 
 ```
 sha256(
@@ -95,7 +95,7 @@ $ echo -n "https://search.idigbio.org/v2/search/publishers" | sha256sum
 
 So, lets say that the archiver has dereferenced the publisher url to content with the hash identifier ```hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362``` . Now the archiver stores the publisher/hasVersion hash as a key with value ```hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362``` into the statement (or relationstore) store. With this, we can retrieve the first version of the deferenced publisher content by lookup up the content of the ```hash://sha256/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e``` . This effectively implements a simplified version of a hexastore in which queries (e.g., what is the content hash of the content retrieve from https://search.idigbio.org/v2/search/publisher ? ) can be answered by dereferencing (or downloading) the content of the combined hash key of publisher url and hasVersion term. You can do this now using https://deeplinker.bio/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e .
 
-The simple hexastore itself uses the same folder structure as the blob store to store the value associated with the hash key like:
+The simplified hexastore itself uses the same folder structure as the blob store to store the value associated with the hash key like:
 
 ```
 a2/
@@ -133,7 +133,7 @@ $ curl --silent https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a
 
 ## summary 
 
-[Preson](https://github.com/bio-guoda/preston) combines a [`crawler`](#crawler), [`content handlers`](#content-handlers), and an [`archiver`](#archiver) with a [`blob store`](#blob-store) and [`simple hexastore`](#simple-hexastore) to implement a relatively simple scheme to establish an immutable, versioned, provenance of a biodiversity dataset graph and associated the content of datasets and their registries over time. By using a hashes to uniquely identify both dereferenced (or downloaded) content and simply queries (what content was downloaded from a specific url?) a simple file structure can be used to serve content and answer queries. Because the hashing schemes are applied consistently, each and every preston based blob and hexastore can be used to reliably retrieve content as well as query provenance of that content.
+[Preson](https://github.com/bio-guoda/preston) combines a [`crawler`](#crawler), [`content handlers`](#content-handlers), and an [`archiver`](#archiver) with a [`blob store`](#blob-store) and [`simplified hexastore`](#simplified-hexastore) to implement a relatively simple scheme to establish an immutable, versioned, provenance of a biodiversity dataset graph and associated the content of datasets and their registries over time. By using a hashes to uniquely identify both dereferenced (or downloaded) content and simply queries (what content was downloaded from a specific url?) a simple file structure can be used to serve content and answer queries. Because the hashing schemes are applied consistently, each and every preston based blob and hexastore can be used to reliably retrieve content as well as query provenance of that content.
 
 
 ## examples
