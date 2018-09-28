@@ -69,7 +69,7 @@ On succesfully saving the content into the blob store, a unique identifier is re
 
 With the file path being derived from the hash of the data itself, you can now easily locate the content by its hash. For instance, on the server at https://deeplinker.bio , the nginx webserver is configured such that you can retrieve the said datafile by requesting https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 . Note that this content hash is "real" and you can download the copy (or version) of the content that was served by https://search.idigbio.org/v2/search/publishers at some point in the past. So, using the blob store, we know have a way to easily access content as long as we know the content hash.  
 
-## `simple hexastore`
+## `simplified hexastore`
 
 The simple hexastore contains relationships that connect resources with their content using predicates (or verbs). The relationship is stored by combining a hashed "hasVersion" relationship (or predicate) with the hashed resource url. This combination is now turned into a unique identifier also, by adding the two hash urls and hashing the result. For example:
 
