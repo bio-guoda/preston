@@ -56,6 +56,7 @@ public class CmdLine {
                 .addCommand("update", new CmdUpdate())
                 .addCommand("history", new CmdHistory())
                 .addCommand("version", new CmdVersion())
+                .addCommand("seeds", new CmdSeeds())
                 .build();
     }
 
