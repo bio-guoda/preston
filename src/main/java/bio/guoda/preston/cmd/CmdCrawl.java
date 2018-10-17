@@ -67,7 +67,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
         add(Seeds.IDIGBIO.getIRIString());
         add(Seeds.GBIF.getIRIString());
         add(Seeds.BIOCASE.getIRIString());
-        add(Seeds.DATA_ONE.getIRIString());
+        //add(Seeds.DATA_ONE.getIRIString());
     }};
 
     @Parameter(description = "content URLs to update. If specified, the seeds will not be used.",
