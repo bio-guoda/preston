@@ -1,0 +1,59 @@
+{
+  "responseHeader": {
+    "status": 0,
+    "QTime": 2,
+    "params": {
+      "q": "formatId:eml* AND -obsoletedBy:*",
+      "fl": "identifier,dataUrl",
+      "start": "0",
+      "rows": "1000",
+      "wt": "json"
+    }
+  },
+  "response": {
+    "numFound": 101686,
+    "start": 0,
+    "docs": [
+      {
+        "identifier": "aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/KM_CUDM.20160202",
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FKM_CUDM.20160202"
+      },
+      {
+        "identifier": "aekos.org.au/collection/sa.gov.au/DEWNR_ROADSIDEVEG/45.20160201",
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fsa.gov.au%2FDEWNR_ROADSIDEVEG%2F45.20160201"
+      },
+      {
+        "identifier": "www.supersites.net.au/knb/metacat/lloyd.230.18/html",
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/www.supersites.net.au%2Fknb%2Fmetacat%2Flloyd.230.18%2Fhtml"
+      },
+      {
+        "identifier": "aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/RIPWY.20150515",
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FRIPWY.20150515"
+      },
+      {
+        "identifier": "aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/LIGWYDIR.20150723",
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FLIGWYDIR.20150723"
+      },
+      {
+        "identifier": "aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/NAMB_RAPID.20150723",
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNAMB_RAPID.20150723"
+      },
+      {
+        "identifier": "aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/V_TBLD_DB3.20150515",
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FV_TBLD_DB3.20150515"
+      },
+      {
+        "identifier": "www.ltern.org.au/knb/metacat/ltern.80.27/html",
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/www.ltern.org.au%2Fknb%2Fmetacat%2Fltern.80.27%2Fhtml"
+      },
+      {
+        "identifier": "aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/WAMBERAL.20150515",
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FWAMBERAL.20150515"
+      },
+      {
+        "identifier": "aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/NOMBIN.20150515",
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515"
+      }
+    ]
+  }
+}

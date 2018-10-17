@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:objectLocationList xmlns:ns2="http://ns.dataone.org/service/types/v1">
+    <identifier>aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/NOMBIN.20150515</identifier>
+    <objectLocation>
+        <nodeIdentifier>urn:node:TERN</nodeIdentifier>
+        <baseURL>https://dataone.tern.org.au/mn</baseURL>
+        <version>v1</version>
+        <version>v2</version>
+        <url>https://dataone.tern.org.au/mn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515</url>
+    </objectLocation>
+    <objectLocation>
+        <nodeIdentifier>urn:node:CN</nodeIdentifier>
+        <baseURL>https://cn.dataone.org/cn</baseURL>
+        <version>v1</version>
+        <version>v2</version>
+        <url>https://cn.dataone.org/cn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515</url>
+    </objectLocation>
+    <objectLocation>
+        <nodeIdentifier>urn:node:NKN</nodeIdentifier>
+        <baseURL>https://dataone.northwestknowledge.net/mn</baseURL>
+        <version>v1</version>
+        <version>v2</version>
+        <url>https://dataone.northwestknowledge.net/mn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515</url>
+    </objectLocation>
+    <objectLocation>
+        <nodeIdentifier>urn:node:NMEPSCOR</nodeIdentifier>
+        <baseURL>https://nmepscor-d1.unm.edu/mn</baseURL>
+        <version>v1</version>
+        <url>https://nmepscor-d1.unm.edu/mn/v1/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515</url>
+    </objectLocation>
+    <objectLocation>
+        <nodeIdentifier>urn:node:US_MPC</nodeIdentifier>
+        <baseURL>https://dataone-prod.pop.umn.edu/mn</baseURL>
+        <version>v1</version>
+        <url>https://dataone-prod.pop.umn.edu/mn/v1/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515</url>
+    </objectLocation>
+</ns2:objectLocationList>
