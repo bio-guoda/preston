@@ -136,6 +136,29 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>0.9.13</version>
+                <configuration>
+                    <to>
+                        <image>${project.groupId}/${project.artifactId}:${project.version}</image>
+                    </to>
+                    <container>
+                        <args>
+                            <arg>update</arg>
+                        </args>
+                    </container>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>buildTar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.vafer</groupId>
                 <artifactId>jdeb</artifactId>
                 <version>1.6</version>
