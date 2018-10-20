@@ -1,0 +1,6 @@
+[Unit]
+Description=Run Preston
+
+[Timer]
+OnCalendar=weekly
+RandomizedDelaySec=86400

@@ -15,7 +15,7 @@ deploy:
   provider: releases
   api_key:
     secure: '038nHViZ/EMfo7qc2zKeA5+WTF3H4v6rLy7wbZCf1ffZxakgbuDxRs0FICTngkBL/ot0c1N77HoqpamZ24NnKUH2t6OwZC4ZTmqdNkz3lbVUAi7C9qAiakcOD4BCAZDOxGs8FrZhB833G/iGL30Yd9zkMlzCniMBqnFh1DAiSLh+p6FcLUGU8h7NHJjDihzQkLD2MPJ+RghWVKeUlUU67F3v4vjDJnc/JNPrt+s3IzF4YCus7elJIX2dXzPZfqCENaRCScgA1vT/KUGI7FrUS6UZxuzJ0JG6VcyF0Mc/RVsFeDgLgpA4f9hbjheh9kh5hiiEB0RUWZ5u9zsWGb9TF/5gJDaFijXWv3rqnVKqQwjaJGUDNFYYwxAUookYyfT9OeYjNRpZ1gRPvprAl0wii2pTdrFXa+xpSjEmhjgjK3cOZWwUn0Kpqo9824O4QJSVYMRHpLncND4/WJ/gvAjUXO7mRm97vpt5klmGxlpF4hRnhZfxwXYVa1C/rIuz6sCNief/cidTf2ThKt2ZlE3pTHFCd0+bBDYp4POXHVeYNMN/uiORkUrQZwUslUNRQfZijRw9citaudjOIK3TxDloNrGBQgkuGgpdP/13t8+P77NdRFT/XQW/bFYkJMfvx7XwNuQQRuAXAlRtFW4Oq+EBSgujoEbRbD4VWvbA07gRw0Q='
-  file: preston.jar
+  file: target/preston.*
   skip_cleanup: true
   on:
     repo: bio-guoda/preston

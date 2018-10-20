@@ -1,0 +1,10 @@
+Package: [[artifactId]]
+Version: [[version]]
+Section: misc
+Priority: optional
+Architecture: all
+Maintainer: Jorrit Poelen <jhpoelen@xs4all.nl>
+Description: Preston - a biodiversity dataset tracker
+Depends: debconf (>= 0.5) | debconf-2.0
+PreDepends: dpkg (>= 1.15.7.2)
+Distribution: development

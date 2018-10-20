@@ -135,6 +135,58 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.vafer</groupId>
+                <artifactId>jdeb</artifactId>
+                <version>1.6</version>
+                <configuration>
+                    <deb>${project.build.directory}/${project.artifactId}.deb</deb>
+                    <controlDir>${project.basedir}/src/main/deb/control/</controlDir>
+                    <timestamped>true</timestamped>
+                    <dataSet>
+                        <data>
+                            <src>${project.build.directory}/${project.artifactId}.jar</src>
+                            <type>file</type>
+                            <mapper>
+                                <type>perm</type>
+                                <prefix>/opt/${project.artifactId}/</prefix>
+                                <user>root</user>
+                                <group>root</group>
+                                <filemode>755</filemode>
+                            </mapper>
+                        </data>
+                        <data>
+                            <type>link</type>
+                            <symlink>true</symlink>
+                            <linkName>/usr/local/bin/${project.artifactId}</linkName>
+                            <linkTarget>/opt/${project.artifactId}/${project.artifactId}.jar</linkTarget>
+                        </data>
+                        <data>
+                            <src>${project.basedir}/src/main/deb/etc/systemd/system/</src>
+                            <type>directory</type>
+                            <mapper>
+                                <type>perm</type>
+                                <prefix>/etc/systemd/system/</prefix>
+                                <filemode>755</filemode>
+                                <user>root</user>
+                                <group>root</group>
+                            </mapper>
+                        </data>
+                        <data>
+                            <type>template</type>
+                            <paths>
+                                <path>var/log/${project.artifactId}</path>
+                                <path>var/lib/${project.artifactId}</path>
+                            </paths>
+                            <mapper>
+                                <type>perm</type>
+                                <user>preston</user>
+                                <group>preston</group>
+                            </mapper>
+                        </data>
+                    </dataSet>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

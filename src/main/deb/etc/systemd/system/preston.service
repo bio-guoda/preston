@@ -1,0 +1,8 @@
+[Unit]
+Description=Preston tracks biodiversity datasets.
+
+[Service]
+Type=oneshot
+User=preston
+WorkingDirectory=/var/lib/preston
+ExecStart=/usr/local/bin/preston update
