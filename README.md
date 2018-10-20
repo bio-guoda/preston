@@ -54,13 +54,13 @@ For instance:
 
 ```console
 $ preston update
-<https://preston.guoda.org> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> .
-<https://preston.guoda.org> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> .
-<https://preston.guoda.org> <http://purl.org/dc/terms/description> "Preston is a software program that finds, archives and provides access to biodiversity datasets."@en .
+<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> .
+<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> .
+<https://preston.guoda.bio> <http://purl.org/dc/terms/description> "Preston is a software program that finds, archives and provides access to biodiversity datasets."@en .
 <0b472626-1ef2-4c84-ab8f-9e455f7b6bb6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> .
 <0b472626-1ef2-4c84-ab8f-9e455f7b6bb6> <http://purl.org/dc/terms/description> "A crawl event that discovers biodiversity archives."@en .
 <0b472626-1ef2-4c84-ab8f-9e455f7b6bb6> <http://www.w3.org/ns/prov#startedAtTime> "2018-09-05T04:42:40.108Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
-<0b472626-1ef2-4c84-ab8f-9e455f7b6bb6> <http://www.w3.org/ns/prov#wasStartedBy> <https://preston.guoda.org> .
+<0b472626-1ef2-4c84-ab8f-9e455f7b6bb6> <http://www.w3.org/ns/prov#wasStartedBy> <https://preston.guoda.bio> .
 <0659a54f-b713-4f86-a917-5be166a14110> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Entity> .
 ...
 ```
@@ -341,6 +341,7 @@ Preston needs Java 8+.
 
 ## Install
 
+### Standalone
 Preston is a stand-alone java application, packaged in a jarfile. You can build you own (see [building](#building)) or download a prebuilt jar at [releases](https://github.com/bio-guoda/preston/releases).
 
 On linux (and Mac) you can install Preston by running:
@@ -352,6 +353,26 @@ sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/pr
 On successful installation, execute ```preston version``` on the commandline should print the version of preston. 
 .
 Alternatively, you can download the jar manually and run preston by using commands like ```java -jar preston.jar version```.
+
+### Docker
+If you'd like to run Preston inside a docker container use:
+
+```console
+# download the image
+wget https://github.com/bio-guoda/preston/releases/download/0.0.7/preston.image.tar
+# load the image
+$ sudo docker load --input preston.image.tar  
+Loaded image: bio.guoda/preston:0.0.7
+# run a container, mapping a host volume onto the containers /data folder
+$ sudo docker run -v [some absolute host dir]/data:/data bio.guoda/preston:0.0.7
+# preston starts updating / crawling
+<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> .
+<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> .
+<https://preston.guoda.bio> <http://purl.org/dc/terms/description> "Preston is a software program that finds, archives and provides access to biodiversity datasets."@en .
+<a4accddb-bf8a-477f-aa6f-413281c8d650> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> .
+... 
+```
+
 
 ### Building
 

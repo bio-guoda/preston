@@ -13,7 +13,7 @@ public class RefNodeConstants {
 
     public static final IRI HAD_MEMBER = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#hadMember"));
 
-    public static final String PRESTON_URI = "https://preston.guoda.org";
+    public static final String PRESTON_URI = "https://preston.guoda.bio";
 
     public static final IRI PRESTON = RefNodeFactory.toIRI(URI.create(PRESTON_URI));
 
