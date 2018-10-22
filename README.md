@@ -404,7 +404,7 @@ RandomizedDelaySec=86400
 [Install]
 WantedBy= multi-user.target
 ```
-After installing the systemd service and timer, apply changes by ```sudo systemctl daemon-reload``` and enable timer using ```sudo systemctl enable preston.timer```.
+After installing the systemd service and timer, apply changes by ```sudo systemctl daemon-reload``` and enable timer using ```sudo systemctl enable preston.timer``` and ```sudo systemctl start preston.timer``` to start the timer.
 
 See [systemd](https://en.wikipedia.org/wiki/Systemd) for more information. 
 
