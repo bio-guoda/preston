@@ -357,20 +357,18 @@ Alternatively, you can download the jar manually and run preston by using comman
 ### Docker
 If you'd like to run Preston inside a docker container use:
 
-```console
-# download the image
-wget https://github.com/bio-guoda/preston/releases/download/0.0.7/preston.image.tar
-# load the image
-$ sudo docker load --input preston.image.tar  
-Loaded image: bio.guoda/preston:0.0.7
-# run a container, mapping a host volume onto the containers /data folder
-$ sudo docker run -v [some absolute host dir]/data:/data bio.guoda/preston:0.0.7
-# preston starts updating / crawling
+1. download the image ```wget https://github.com/bio-guoda/preston/releases/download/0.0.7/preston.image.tar```
+2. load the image ```sudo docker load --input preston.image.tar```
+3. run a container, mapping a host volume onto the containers /data folder ```sudo docker run -v [some absolute host dir]/data:/data bio.guoda/preston:0.0.7```
+4. generation of preston updating / crawl messages like
+```
 <https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> .
 <https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> .
 <https://preston.guoda.bio> <http://purl.org/dc/terms/description> "Preston is a software program that finds, archives and provides access to biodiversity datasets."@en .
 <a4accddb-bf8a-477f-aa6f-413281c8d650> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> .
 ... 
+```
+
 ```
 
 
