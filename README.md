@@ -401,6 +401,7 @@ Description=Run Preston
 OnCalendar=weekly
 RandomizedDelaySec=86400
 ```
+After installing the systemd service and timer, apply changes by ```sudo systemctl daemon-reload``` and enable timer using ```sudo systemctl enable preston.timer```.
 
 See [systemd](https://en.wikipedia.org/wiki/Systemd) for more information. 
 
