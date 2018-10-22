@@ -32,6 +32,9 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
       * [`finding copies with hash-archive.org`](#finding-copies-with-hash-archiveorg)
  * [Prerequisites](#prerequisites)
  * [Install](#install)
+   * [`standalone`](#standalone)
+   * [`docker`](#docker)
+   * [`running periodically`](#running-periodically)
  * [Building](#building)
  * [Contribute](#contribute)
  * [License](#license)
@@ -355,7 +358,7 @@ On successful installation, execute ```preston version``` on the commandline sho
 Alternatively, you can download the jar manually and run preston by using commands like ```java -jar preston.jar version```.
 
 ### Docker
-If you'd like to run Preston inside a docker container use:
+If you'd like to run Preston inside a docker container so that you don't have to worry about installing/conflicting java dependencies use:
 
 1. download the image ```wget https://github.com/bio-guoda/preston/releases/download/0.0.7/preston.image.tar```
 2. load the image ```sudo docker load --input preston.image.tar```
@@ -368,6 +371,38 @@ If you'd like to run Preston inside a docker container use:
 <a4accddb-bf8a-477f-aa6f-413281c8d650> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> .
 ... 
 ```
+
+### running periodically
+If you'd like to run Preston as a service to periodically update, you can use a systemd service combined with a systemd timer, or perhaps some jenkins job like those at http://archive.guoda.bio/view/Preston%20Jobs/ . Both have advantages. The following example focuses on systemd. 
+
+Assuming that you have some standalone installation of preston running, you might be inspired by the following examples [preston.service](./src/main/deb/etc/systemd/system/preston.service) and [preston.timer](https://github.com/bio-guoda/preston/blob/master/src/main/deb/etc/systemd/system/preston.timer). The .service file defined how to run the update, while the .timer file defines how to run that update.
+
+To use, copy [preston.service](./src/main/deb/etc/systemd/system/preston.service) and [preston.timer](./src/main/deb/etc/systemd/preston.timer) into ```/etc/systemd/system/``` on your debian/ubuntu server. 
+
+Example of ```preston.service``` : 
+```
+[Unit]
+Description=Preston tracks biodiversity datasets.
+
+[Service]
+Type=oneshot
+User=preston
+WorkingDirectory=/var/lib/preston
+ExecStart=/usr/local/bin/preston update
+```
+
+Example of ```preston.timer``` :
+
+```
+[Unit]
+Description=Run Preston
+
+[Timer]
+OnCalendar=weekly
+RandomizedDelaySec=86400
+```
+
+See [systemd](https://en.wikipedia.org/wiki/Systemd) for more information. 
 
 ### Building
 
