@@ -34,4 +34,81 @@ http://bim-mirror.aseanbiodiversity.org:8080/ipt/eml.do?r=mcme_uplb_museum_plant
 http://bim-mirror.aseanbiodiversity.org:8080/ipt/eml.do?r=mmfrph_zingi |	140
 
 
+## origin of url
 
+Now that we noticed that some urls have many version, we'd like to understand how the url was discovered.
+
+```sparql
+SELECT ?originUrl ?originHash ?originCollection ?dateTime
+WHERE {
+  { ?originCollection <http://www.w3.org/ns/prov#hadMember> <http://bim-mirror.aseanbiodiversity.org:8080/ipt/eml.do?r=mmfrph_zingi> }
+  { ?originHash ?p ?originCollection }
+  { ?originHash <http://www.w3.org/ns/prov#generatedAtTime> ?dateTime }
+  { ?originUrl <http://purl.org/pav/hasVersion> ?x }
+  { ?x (<http://purl.org/pav/hasVersion>|^<http://purl.org/pav/previousVersion>)* ?originHash }
+}
+LIMIT 10
+```
+
+which produced the following result:
+
+originUrl   | originHash | originCollection | dateTime
+---   | --- | --- | ---
+https://api.gbif.org/v1/dataset?offset=13480&limit=20 | hash://sha256/e285cbc69418e2847a3727ec650edfc7e1c405dc71dc9a93b859a28028e79cab | af32ab2e-7be6-42ca-a570-ad79fe0e32bb | 2018-09-01T19:02:16.675Z
+
+
+Now, we know that the result was retrieved from the gbif registry via https://api.gbif.org/v1/dataset?offset=13480&limit=20 on 2018-09-01T19:02:16.675Z with content hash [hash://sha256/e285cbc69418e2847a3727ec650edfc7e1c405dc71dc9a93b859a28028e79cab](https://deeplinker.bio/e285cbc69418e2847a3727ec650edfc7e1c405dc71dc9a93b859a28028e79cab). After retrieving that specific registry chunk, we notice: 
+
+```json
+{
+  ...
+      "key": "af32ab2e-7be6-42ca-a570-ad79fe0e32bb",
+      "installationKey": "286d31fd-2be5-4df7-be2d-20448e158c81",
+      "publishingOrganizationKey": "a30d7f59-d3d4-4e89-97dc-de9cf837f591",
+      "doi": "10.15468/b95s7t",
+     ...
+     "endpoints": [
+        {
+          "key": 260345,
+          "type": "DWC_ARCHIVE",
+          "url": "https://orphans.gbif.org/af2a0fa1-4c8e-4bdc-8954-b1a55e32b0f1/af32ab2e-7be6-42ca-a570-ad79fe0e32bb.zip",
+          "description": "Orphaned dataset awaiting adoption.",
+          "createdBy": "MattBlissett",
+          "modifiedBy": "MattBlissett",
+          "created": "2018-03-06T16:14:55.983+0000",
+          "modified": "2018-03-06T16:14:55.983+0000",
+          "machineTags": []
+        },
+        {
+          "key": 127629,
+          "type": "EML",
+          "url": "http://bim-mirror.aseanbiodiversity.org:8080/ipt/eml.do?r=mmfrph_zingi",
+          "createdBy": "a30d7f59-d3d4-4e89-97dc-de9cf837f591",
+          "modifiedBy": "a30d7f59-d3d4-4e89-97dc-de9cf837f591",
+          "created": "2016-07-13T05:53:31.072+0000",
+          "modified": "2016-07-13T05:53:31.072+0000",
+          "machineTags": []
+        }
+      ],
+   ...
+}
+```
+
+Which seem to indicate tha the DWC-a of this dataset was orphaned and (temporarily?) archived by GBIF. However, our suspicious url, the EML file, was not orphaned. 
+
+On inspecting one of the different versions of the EML file, we find most versions are blank nodes, indicating a failed attempt to retrieve the content. In one instance some content was retrieved: [hash://sha256/9944f274ee46c33a577e170bb3fd85a4b824741eb7bcc18a002c8b77ca8f3e3a](https://deeplinker.bio/9944f274ee46c33a577e170bb3fd85a4b824741eb7bcc18a002c8b77ca8f3e3a). This specific content turns out to be some html page, not an advertised EML file. The first few lines of this html page with hash ending on 3e3a looks like:
+
+```html
+10<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+0    <head>
+ 	    <meta name="copyright" lang="en" content="GBIF" />
+ 		<title>IPT setup</title>
+	  <link rel="stylesheet" type="text/css" media="all" href="http://bim-mirror.aseanbiodiversity.org:8080/ipt/styles/reset.css" />
+		<link rel="stylesheet" type="text/css" media="all" href="http://bim-mirror.aseanbiodiversity.org:8080/ipt/styles/text.css" />
+		<link rel="stylesheet" type="text/css" media="all" href="http://bim-mirror.aseanbiodiversity.org:8080/ipt/styles/960_24_col.css" />
+ 		<link rel="stylesheet" type="text/css" href="http://bim-mirror.aseanbiodiversity.org:8080/ipt/styles/main.css"/>
+ 		<link rel="shortcut icon" href="http://bim-mirror.aseanbiodiversity.org:8080/ipt/images/icons/favicon-16x16.png" type="image/x-icon" />
+                ...
+```
+
+Unfortunately, since Preston was not running before the EML file was orphaned/ removed, we do not have a copy of it somewhere. Also, I am not aware of a method to retrieve this historic content via some other openly available method / service. 
