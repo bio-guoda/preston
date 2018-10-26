@@ -4,9 +4,17 @@ Preston records how and when datasets are discovered and accessed in the rdf/nqu
 
 This page contains some [sparql](https://www.w3.org/TR/rdf-sparql-query/) queries to discover and analyze the dataset graph. 
 
-## change rate of urls
+# Use Cases
 
-URLs are used to access content. While the URLs might be static, the content is often not. This query generates a list of urls in decreasing order of change rate. 
+## Detecting Linkrot
+
+[Linkrot](https://en.wikipedia.org/wiki/Link_rot), a well documented, and often occurring, phenomenon in which content associated to links become permanently unavailable.  
+
+URLs are used to access content. While the URLs might be static, the content is often not. High turnover or error rates in content linked to by a url can be a sign of an instable, actively maintained, or randomly changing datasets. Since Preston is continuously tracking urls and their content, we can use its output, a biodiversity dataset graph, to detect linkrot. 
+
+### Change Rate of Urls
+
+To detect the rate of change of urls the following query was created. This query generates a list of urls in decreasing order of change rate. Note that Preston records each failed attempt to access a url's content as "blank" content. 
 
 ```sparql
 SELECT DISTINCT ?url (COUNT(?url) as ?totalVersions)
@@ -34,7 +42,7 @@ http://bim-mirror.aseanbiodiversity.org:8080/ipt/eml.do?r=mcme_uplb_museum_plant
 http://bim-mirror.aseanbiodiversity.org:8080/ipt/eml.do?r=mmfrph_zingi |	140
 
 
-## origin of url
+### Tracking the Origin of a URL
 
 Now that we noticed that some urls have many version, we'd like to understand how the url was discovered.
 
@@ -111,4 +119,7 @@ On inspecting different versions of the EML file, we find most versions are blan
                 ...
 ```
 
-Unfortunately, since Preston was not running before the EML file was orphaned/ removed, we do not have a copy of it somewhere. Also, I am not aware of a method to retrieve this historic content via some other openly available method / service. Another theory is that the GBIF team is relocating the archive associated with collection with id af32ab2e-7be6-42ca-a570-ad79fe0e32bb , and is in the process of setting up a new IPT (integrated publishing toolkit) instance. Without a configuration history associated with the dataset/collection with key af32ab2e-7be6-42ca-a570-ad79fe0e32bb (see also https://www.gbif.org/dataset/af32ab2e-7be6-42ca-a570-ad79fe0e32bb), we don't know how configuration or associated content changed over time, simply because this content is not being tracked in an open manner. From the available metadata, the dataset was first published in 2016. From this information, the longevity, or availability period, of the dataset was about 2 years. 
+### Conclusion
+We were able to detect ongoing outages (or bitrot) of an EML file related to a dataset that is registered in the GBIF network using a biodiversity dataset graph tracked by a Preston instance over a period of early Sept - late Oct 2018.  
+
+Unfortunately, since Preston was not running before the EML file was orphaned/ removed, we do not have a copy of it somewhere. Also, I am not aware of a method to retrieve this historic content via some other openly available method / service. Another theory is that the GBIF team is relocating the archive associated with collection with id af32ab2e-7be6-42ca-a570-ad79fe0e32bb , and is in the process of setting up a new IPT (integrated publishing toolkit) instance. Without a configuration history associated with the dataset/collection with key af32ab2e-7be6-42ca-a570-ad79fe0e32bb (see also https://www.gbif.org/dataset/af32ab2e-7be6-42ca-a570-ad79fe0e32bb), we don't know how configuration or associated content changed over time, simply because this content is not being tracked in an open manner. From the available metadata, the dataset was first published in 2016. From this information, the longevity, or availability period, of the dataset was about 2 years. Extending this simple exampl e, a more continuous and widescale monitoring scheme can be constructed to monitor the health of our digital datasets. Also, by employing content tracking techniques, we have an effective tool to stave of natural phenonemona in our digital infrastructures: linkrot and datarot.   
