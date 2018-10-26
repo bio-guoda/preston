@@ -94,7 +94,7 @@ Now, we know that the result was retrieved from the gbif registry via https://ap
 }
 ```
 
-Which seem to indicate tha the DWC-a of this dataset was orphaned and (temporarily?) archived by GBIF. However, our suspicious url, the EML file, was not orphaned. 
+Which seem to indicate tha the DWC-a of this dataset was orphaned and (temporarily?) archived by GBIF. However, our suspicious url, the EML file, was not orphaned or (temporarily?) archived. 
 
 On inspecting different versions of the EML file, we find most versions are blank nodes, indicating a failed attempt to retrieve the content. In one instance some content was retrieved: [hash://sha256/9944f274ee46c33a577e170bb3fd85a4b824741eb7bcc18a002c8b77ca8f3e3a](https://deeplinker.bio/9944f274ee46c33a577e170bb3fd85a4b824741eb7bcc18a002c8b77ca8f3e3a). This specific content turns out to be some html page, not an advertised EML file. The first few lines of this html page with hash ending on 3e3a looks like:
 
