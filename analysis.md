@@ -2,9 +2,9 @@
 
 Preston records how and when datasets are discovered and accessed in the rdf/nquads. These crawl records, or biodiversity dataset graphs, can be loaded into triple stores like [Apache Jena Fuseki](https://jena.apache.org/documentation/fuseki2/) for discovery and analysis. 
 
-This page contains some [sparql](https://www.w3.org/TR/rdf-sparql-query/) queries to discover and analyze the dataset graph 
+This page contains some [sparql](https://www.w3.org/TR/rdf-sparql-query/) queries to discover and analyze the dataset graph. 
 
-## change rate of url
+## change rate of urls
 
 URLs are used to access content. While the URLs might be static, the content is often not. This query generates a list of urls in decreasing order of change rate. 
 
@@ -96,11 +96,11 @@ Now, we know that the result was retrieved from the gbif registry via https://ap
 
 Which seem to indicate tha the DWC-a of this dataset was orphaned and (temporarily?) archived by GBIF. However, our suspicious url, the EML file, was not orphaned. 
 
-On inspecting one of the different versions of the EML file, we find most versions are blank nodes, indicating a failed attempt to retrieve the content. In one instance some content was retrieved: [hash://sha256/9944f274ee46c33a577e170bb3fd85a4b824741eb7bcc18a002c8b77ca8f3e3a](https://deeplinker.bio/9944f274ee46c33a577e170bb3fd85a4b824741eb7bcc18a002c8b77ca8f3e3a). This specific content turns out to be some html page, not an advertised EML file. The first few lines of this html page with hash ending on 3e3a looks like:
+On inspecting different versions of the EML file, we find most versions are blank nodes, indicating a failed attempt to retrieve the content. In one instance some content was retrieved: [hash://sha256/9944f274ee46c33a577e170bb3fd85a4b824741eb7bcc18a002c8b77ca8f3e3a](https://deeplinker.bio/9944f274ee46c33a577e170bb3fd85a4b824741eb7bcc18a002c8b77ca8f3e3a). This specific content turns out to be some html page, not an advertised EML file. The first few lines of this html page with hash ending on 3e3a looks like:
 
 ```html
-10<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-0    <head>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+    <head>
  	    <meta name="copyright" lang="en" content="GBIF" />
  		<title>IPT setup</title>
 	  <link rel="stylesheet" type="text/css" media="all" href="http://bim-mirror.aseanbiodiversity.org:8080/ipt/styles/reset.css" />
