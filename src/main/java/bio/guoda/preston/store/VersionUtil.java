@@ -18,6 +18,7 @@ import java.util.List;
 import static bio.guoda.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.model.RefNodeFactory.toDateTime;
 import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
@@ -72,12 +73,15 @@ public class VersionUtil {
 
     public static Literal recordGenerationTimeFor(BlankNodeOrIRI derivedSubject, BlobStore blobStore, StatementStore statementStore) throws IOException {
         Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
-        String value = nowLiteral.getLexicalForm();
+        return recordGenerationTimeFor(derivedSubject, blobStore, statementStore, nowLiteral);
+    }
+
+    public static Literal recordGenerationTimeFor(BlankNodeOrIRI derivedSubject, BlobStore blobStore, StatementStore statementStore, Literal dateTimeLiteral) throws IOException {
+        String value = dateTimeLiteral.getLexicalForm();
         blobStore.putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
         IRI value1 = Hasher.calcSHA256(value);
-
         statementStore.put(Pair.of(derivedSubject, GENERATED_AT_TIME), value1);
-        return nowLiteral;
+        return dateTimeLiteral;
     }
 
     public static Triple generationTimeFor(BlankNodeOrIRI subject, StatementStore statementStore, BlobStore blobStore) throws IOException {
@@ -88,7 +92,7 @@ public class VersionUtil {
             if (input != null) {
                 statement1 = toStatement(subject,
                         GENERATED_AT_TIME,
-                        toLiteral(IOUtils.toString(input, StandardCharsets.UTF_8)));
+                        toDateTime(IOUtils.toString(input, StandardCharsets.UTF_8)));
 
             }
         }

@@ -3,13 +3,18 @@ package bio.guoda.preston.store;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import bio.guoda.preston.RefNodeConstants;
+import org.apache.commons.rdf.api.Literal;
+import org.apache.commons.rdf.api.Triple;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.IOException;
 
 import static bio.guoda.preston.model.RefNodeFactory.toBlank;
+import static bio.guoda.preston.model.RefNodeFactory.toDateTime;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 public class VersionUtilTest {
@@ -25,7 +30,7 @@ public class VersionUtilTest {
 
         IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some"), statementStore);
 
-        assertThat(mostRecentVersion.toString(), Is.is("<http://some/version>"));
+        assertThat(mostRecentVersion.toString(), is("<http://some/version>"));
     }
 
     @Test
@@ -40,7 +45,7 @@ public class VersionUtilTest {
 
         IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some"), statementStore);
 
-        assertThat(mostRecentVersion.toString(), Is.is("<http://some/version>"));
+        assertThat(mostRecentVersion.toString(), is("<http://some/version>"));
     }
 
     @Test
@@ -57,7 +62,40 @@ public class VersionUtilTest {
 
         IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some"), statementStore);
 
-        assertThat(mostRecentVersion.toString(), Is.is("<http://some/other/version>"));
+        assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));
+    }
+
+    @Test
+    public void generationTimeFor() throws IOException {
+        Persistence testPersistence = TestUtil.getTestPersistence();
+
+
+        StatementStore statementStore = new StatementStoreImpl(testPersistence);
+        BlobStore blobStore = new AppendOnlyBlobStore(testPersistence);
+
+        Literal dateTime = VersionUtil.recordGenerationTimeFor(toIRI("http://some"), blobStore, statementStore, toDateTime("2018-10-25"));
+
+        Triple triple = VersionUtil.generationTimeFor(toIRI("http://some"), statementStore, blobStore);
+
+        assertNotNull(triple);
+        assertThat(triple.getObject(), is(dateTime));
+        assertThat(triple.toString(), is("<http://some> <http://www.w3.org/ns/prov#generatedAtTime> \"2018-10-25\"^^<http://www.w3.org/2001/XMLSchema#dateTime> ."));
+    }
+
+    @Test
+    public void recordGenerationTime() throws IOException {
+        Persistence testPersistence = TestUtil.getTestPersistence();
+
+
+        StatementStore statementStore = new StatementStoreImpl(testPersistence);
+        BlobStore blobStore = new AppendOnlyBlobStore(testPersistence);
+
+
+        Literal dateTime = VersionUtil.recordGenerationTimeFor(toIRI("http://some"), blobStore, statementStore, toDateTime("2018-10-25"));
+
+        assertNotNull(dateTime);
+        assertThat(dateTime.toString(), is("\"2018-10-25\"^^<http://www.w3.org/2001/XMLSchema#dateTime>"));
+
     }
 
 }
