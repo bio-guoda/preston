@@ -365,7 +365,7 @@ Preston is a stand-alone java application, packaged in a jarfile. You can build 
 On linux (and Mac) you can install Preston by running:
 
 ```console
-sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.0.7/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
+sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.0.8/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
 ```
 
 On successful installation, execute ```preston version``` on the commandline should print the version of preston. 
@@ -375,9 +375,9 @@ Alternatively, you can download the jar manually and run preston by using comman
 ### Docker
 If you'd like to run Preston inside a docker container so that you don't have to worry about installing/conflicting java dependencies use:
 
-1. download the image ```wget https://github.com/bio-guoda/preston/releases/download/0.0.7/preston.image.tar```
+1. download the image ```wget https://github.com/bio-guoda/preston/releases/download/0.0.8/preston.image.tar```
 2. load the image ```sudo docker load --input preston.image.tar```
-3. run a container, mapping a host volume onto the containers /data folder ```sudo docker run -v [some absolute host dir]/data:/data bio.guoda/preston:0.0.7```
+3. run a container, mapping a host volume onto the containers /data folder ```sudo docker run -v [some absolute host dir]/data:/data bio.guoda/preston:0.0.8```
 4. generation of preston updating / crawl messages like:
 ```
 <https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> .
