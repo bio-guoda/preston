@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.RegistryReaderDataONE;
+import bio.guoda.preston.process.RegistryReaderRSS;
 import com.beust.jcommander.Parameter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -135,6 +136,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                 new RegistryReaderGBIF(blobStore, statementQueue::add),
                 new RegistryReaderBioCASE(blobStore, statementQueue::add),
                 new RegistryReaderDataONE(blobStore, statementQueue::add),
+                new RegistryReaderRSS(blobStore, statementQueue::add),
                 StatementLogFactory.createLogger(getLogMode()),
                 statementLoggerNQuads
         };

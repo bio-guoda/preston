@@ -1,0 +1,1842 @@
+<?xml version="1.0"?>
+<rss version="2.0"
+     xmlns:ipt="http://ipt.gbif.org/"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+    <channel>
+        <title>gbif.no</title>
+        <link>https://data.gbif.no/ipt</link>
+        <atom:link href="https://data.gbif.no/ipt/rss.do" rel="self" type="application/rss+xml" />
+        <description>Resource metadata of gbif.no</description>
+        <language>en-us</language>
+        <!-- RFC-822 date-time / Wed, 02 Oct 2010 13:00:00 GMT -->
+        <pubDate>Wed, 25 Jul 2012 09:54:03 +0200</pubDate>
+        <lastBuildDate>Mon, 29 Oct 2018 13:39:10 +0100</lastBuildDate>
+        <!-- UUID of the IPT making RSS feed available -->
+        <ipt:identifier>c4e83f8a-f24c-4573-a197-f085ca242917</ipt:identifier>
+        <generator>GBIF IPT 2.3.5-rb9b0544</generator>
+        <webMaster>christian.svindseth@nhm.uio.no (Christian Svindseth)</webMaster>
+        <docs>http://cyber.law.harvard.edu/rss/rss.html</docs>
+        <ttl>15</ttl>
+        <geo:Point>
+            <geo:lat>59.920073</geo:lat>
+            <geo:long>10.772183</geo:long>
+        </geo:Point>
+        <item>
+            <title>BioFokus - Version 1.872</title>
+            <link>https://data.gbif.no/ipt/resource?r=biofokus</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[BioFokus is a non-profit organization for providing biodiversity survey information on biological diversity to decition makers and the public in Norway. BioFokus contributes to a knowledge-based management of Norwegian nature. BioFokus focuses on field work to secure updated and relevant data on botany, zoology, ecology, and survey for respective areas. A high level of competences are a pre-requisite for quality registration and reporting of biodiversity data. BioFokus employees cover a wide range of species-groups and have broad understanding of ecology in the respective nature types, including forest, cultural landscapes and fresh water.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=biofokus</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=biofokus</ipt:dwca>
+            <pubDate>Mon, 29 Oct 2018 13:44:19 +0100</pubDate>
+            <guid isPermaLink="false">2e4cc37b-302e-4f1b-bbbb-1f674ff90e14/v1.872</guid>
+        </item>
+        <item>
+            <title>Norwegian Biodiversity Information Centre - Other datasets - Version 31.166</title>
+            <link>https://data.gbif.no/ipt/resource?r=nbic_other</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Other data providers sharing occurence data via the Norwegian Species Map Service. These providers allow Nbic to share their data as they do not provide their own IPT servide. Providers: Following databases/datasets from the Norwegian Environment Agency (http://www.miljodirektoratet.no/): Predator database, water species database, naturedatabase and salmon registry. From Sustain.no (http://www.miljolare.no/en/) following databases/datasets: Alien species, plants, butterflies, earthworms, snails, water species, garden birds, coastal species, ponds species and steam species.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nbic_other</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nbic_other</ipt:dwca>
+            <pubDate>Mon, 29 Oct 2018 08:59:13 +0100</pubDate>
+            <guid isPermaLink="false">492d63a8-4978-4bc7-acd8-7d0e3ac0e744/v31.166</guid>
+        </item>
+        <item>
+            <title>Faun - Version 1.157</title>
+            <link>https://data.gbif.no/ipt/resource?r=faun</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Observations. Faun Naturforvaltning AS.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=faun</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=faun</ipt:dwca>
+            <pubDate>Mon, 29 Oct 2018 08:45:57 +0100</pubDate>
+            <guid isPermaLink="false">a5a68903-ae86-40d6-8c65-8e18127eddad/v1.157</guid>
+        </item>
+        <item>
+            <title>Mollusc data of Molltax, Norway - Version 1.150</title>
+            <link>https://data.gbif.no/ipt/resource?r=molltax</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Molluscs from Skagerak, from the observation database of Per Bie Wikander, Molltax, Grimstad, Norway]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=molltax</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=molltax</ipt:dwca>
+            <pubDate>Mon, 29 Oct 2018 08:40:33 +0100</pubDate>
+            <guid isPermaLink="false">fe78e7ec-b95e-402d-bbac-e336a26f18f0/v1.150</guid>
+        </item>
+        <item>
+            <title>Vascular plant herbarium, NTNU University Museum - Version 30.650</title>
+            <link>https://data.gbif.no/ipt/resource?r=trh_v</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Adding licence to the images</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=trh_v</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=trh_v</ipt:dwca>
+            <pubDate>Sun, 28 Oct 2018 17:26:47 +0100</pubDate>
+            <guid isPermaLink="false">d29d79fd-2dc4-4ef5-89b8-cdf66994de0d/v30.650</guid>
+        </item>
+        <item>
+            <title>svalbardflora.no - Version 1.145</title>
+            <link>https://data.gbif.no/ipt/resource?r=svalbard</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Updated metadata and dataset homepage</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=svalbard</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=svalbard</ipt:dwca>
+            <pubDate>Thu, 25 Oct 2018 19:55:04 +0200</pubDate>
+            <guid isPermaLink="false">7b634023-7bd3-4d64-806a-90f5c0465750/v1.145</guid>
+        </item>
+        <item>
+            <title>Radiolaria taxa in the Norwegian Sea and Arctic Ocean - Version 1.12</title>
+            <link>https://data.gbif.no/ipt/resource?r=radiolaria_taxa</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Added images and one more taxon</description>
+            <author>dag.endresen@nhm.uio.no (Dag Endresen)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=radiolaria_taxa</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=radiolaria_taxa</ipt:dwca>
+            <pubDate>Thu, 25 Oct 2018 10:31:03 +0200</pubDate>
+            <guid isPermaLink="false">38f91564-30ff-47b0-aa6b-cf3b59f0fca7/v1.12</guid>
+        </item>
+        <item>
+            <title>Vascular Plants, Field notes, Oslo (O) - Version 1.145</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_vxl</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Updated contact information</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_vxl</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_vxl</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 15:55:12 +0200</pubDate>
+            <guid isPermaLink="false">d34ed8a4-d3cb-473c-a11c-79c5fec4d649/v1.145</guid>
+        </item>
+        <item>
+            <title>Fish collection, Natural History Museum, University of Oslo - Version 1.142</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_fish</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Updated metadata</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_fish</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_fish</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:50:02 +0200</pubDate>
+            <guid isPermaLink="false">f0d00d00-aa57-4209-abaf-be2aed9a71dd/v1.142</guid>
+        </item>
+        <item>
+            <title>Coleoptera collection, NHM - Version 1.133</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_col</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Coleoptera collection, NHM]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_col</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_col</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:50:01 +0200</pubDate>
+            <guid isPermaLink="false">7ee98521-4558-4edd-b241-edef8e1ebf62/v1.133</guid>
+        </item>
+        <item>
+            <title>Helgeland Museum, Lepidoptera - Version 1.142</title>
+            <link>https://data.gbif.no/ipt/resource?r=rmz_lepidoptera</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Helgeland Museum.
+                Lepidoptera collection.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=rmz_lepidoptera</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=rmz_lepidoptera</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:48:00 +0200</pubDate>
+            <guid isPermaLink="false">3538370e-448f-4214-a1d4-49687d4cae17/v1.142</guid>
+        </item>
+        <item>
+            <title>Diptera collection, Natural History Museum, University of Oslo - Version 1.142</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_dip</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Diptera collection, Natural History Museum, University of Oslo]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_dip</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_dip</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:47:48 +0200</pubDate>
+            <guid isPermaLink="false">bb39604c-3731-49ce-a9dc-f3617d3d0d15/v1.142</guid>
+        </item>
+        <item>
+            <title>Notes from the Mycology Herbarium, Oslo (O) - Version 33.143</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_fungi_notes</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Notes on Norwegian fungi at the Natural History Museum, University of Oslo]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_fungi_notes</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_fungi_notes</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:47:49 +0200</pubDate>
+            <guid isPermaLink="false">1939e560-d089-44b5-99fb-3ff15e4d34be/v33.143</guid>
+        </item>
+        <item>
+            <title>Fungi field notes, Oslo (O) - Version 1.142</title>
+            <link>https://data.gbif.no/ipt/resource?r=nxs</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Natural History Museum, University of Oslo.
+                Fungi field notes.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nxs</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nxs</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:47:49 +0200</pubDate>
+            <guid isPermaLink="false">695de7d9-e608-49fd-8fe2-dafb59810784/v1.142</guid>
+        </item>
+        <item>
+            <title>Hymenoptera collection, Natural History Museum, University of Oslo - Version 1.142</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_hym</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Hymenoptera collection, Natural History Museum, University of Oslo]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_hym</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_hym</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:47:37 +0200</pubDate>
+            <guid isPermaLink="false">a4e7ff0a-f9c0-481a-88ed-5986ec86b24a/v1.142</guid>
+        </item>
+        <item>
+            <title>Lichen field notes, Oslo (O) - Version 1.142</title>
+            <link>https://data.gbif.no/ipt/resource?r=nxl</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Natural History Museum, University of Oslo.
+                Lichen field notes]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nxl</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nxl</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:47:37 +0200</pubDate>
+            <guid isPermaLink="false">d74d5b23-922d-40ff-9120-eb742d1d66f6/v1.142</guid>
+        </item>
+        <item>
+            <title>Mammal collection, Natural History Museum, University of Oslo - Version 31.141</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_mammals</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Mammals at Natural History Museum, University of Oslo]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_mammals</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_mammals</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:47:26 +0200</pubDate>
+            <guid isPermaLink="false">609217ee-054d-441d-a850-356cbc2fb385/v31.141</guid>
+        </item>
+        <item>
+            <title>Fungus herbarium, UiB - Version 1.147</title>
+            <link>https://data.gbif.no/ipt/resource?r=bg_fungi</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The Fungus Herbarium contains about 16 000 specimens. The majority of the collection data have been recorded (with the exception of inter alia Myxomycetes) and are searchable in the common Norwegian Fungus Database (see below).
+
+                Jens Stordal’s macro-fungi collections constitute a significant part of the fungus collection in Bergen.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=bg_fungi</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=bg_fungi</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:47:15 +0200</pubDate>
+            <guid isPermaLink="false">41690f55-ccbe-48ba-8238-01173f657072/v1.147</guid>
+        </item>
+        <item>
+            <title>Diptera, NEF - Version 1.142</title>
+            <link>https://data.gbif.no/ipt/resource?r=nef_dip</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Diptera collection of the Norwegian Entomological Society]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nef_dip</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nef_dip</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:44:43 +0200</pubDate>
+            <guid isPermaLink="false">a1bd8c5d-cfb3-4d55-943a-cebcd6c32be6/v1.142</guid>
+        </item>
+        <item>
+            <title>Lichen herbarium, NMBU - Version 1.141</title>
+            <link>https://data.gbif.no/ipt/resource?r=nlh_lichens</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Norwegian University of Life Sciences, Department of Ecology and Natural Resource Management. Lichen collection.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nlh_lichens</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nlh_lichens</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:44:44 +0200</pubDate>
+            <guid isPermaLink="false">c89f43c2-98cf-4c60-ad53-ddf7127bb9d5/v1.141</guid>
+        </item>
+        <item>
+            <title>Vascular Plant Herbarium, UiB - Version 4.142</title>
+            <link>https://data.gbif.no/ipt/resource?r=bg_vascular</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The vascular plant herbarium is divided into a Nordic Herbarium, including ca. 400 000 specimens, and a General Herbarium, including ca. 200 000 specimens. The Nordic herbarium covers Norway, Sweden, Finland, Denmark, Svalbard, Jan Mayen and Bjørnøya, and the General Herbarium covers all other areas of the world. In the Nordic Herbarium collections from western Norway are dominant, and important collectors are T. Lillefosse and J. Naustdal. A larger collection from mountain regions in South Norway has been collected by R. Nordhagen and others. In the General Herbarium important collections from Iran and Afghanistan (Per Wendelbo and others) and of plants of the families Ulmaceae and Moraceae from tropical Central and South America (C.C. Berg and others) are stored. The work to make the information about all specimens available via the web is in progress, and until February 2013 around 215 000 specimens from the Nordic herbarium had been entered into the database.&quot;]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=bg_vascular</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=bg_vascular</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:41:21 +0200</pubDate>
+            <guid isPermaLink="false">4db619a6-9429-4bef-90c9-06cc90c39552/v4.142</guid>
+        </item>
+        <item>
+            <title>Red list project inventory, lichens - Version 1.143</title>
+            <link>https://data.gbif.no/ipt/resource?r=rlp_l</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Inventories of lichens by the Norwegian Red list project]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=rlp_l</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=rlp_l</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:40:19 +0200</pubDate>
+            <guid isPermaLink="false">8904724a-8de2-41cf-848f-e6af7a80a2d3/v1.143</guid>
+        </item>
+        <item>
+            <title>Red list project inventory, vascular plants - Version 1.143</title>
+            <link>https://data.gbif.no/ipt/resource?r=rlp_v</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Inventories of vascular plants by the Norwegian Red list project]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=rlp_v</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=rlp_v</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:40:19 +0200</pubDate>
+            <guid isPermaLink="false">72a85a13-37f3-4bbc-92f0-3ba8dbe7c3d0/v1.143</guid>
+        </item>
+        <item>
+            <title>Collection of various insect orders, Natural History Museum, University of Oslo - Version 1.144</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_div</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Collection of various insect orders, Natural History Museum, University of Oslo]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_div</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_div</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:39:38 +0200</pubDate>
+            <guid isPermaLink="false">4cfd80a7-d630-4d7f-89fb-d2d1e749a418/v1.144</guid>
+        </item>
+        <item>
+            <title>Vascular Plants, Observations, Oslo (O) - Version 1.144</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_v_gps</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Vascular Plants, Observations, Oslo (O)]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_v_gps</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_v_gps</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:38:37 +0200</pubDate>
+            <guid isPermaLink="false">88ea9eca-96ad-4a5a-8a01-99a4acabe050/v1.144</guid>
+        </item>
+        <item>
+            <title>Collembola collection of Arne Fjellberg, Norway - Version 1.143</title>
+            <link>https://data.gbif.no/ipt/resource?r=af_collembola</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Collembola collection of Arne Fjellberg, Norway]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=af_collembola</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=af_collembola</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:38:16 +0200</pubDate>
+            <guid isPermaLink="false">f0f63002-020d-4bbc-9503-423eca3ab4a3/v1.143</guid>
+        </item>
+        <item>
+            <title>Herpetile collection, Natural History Museum, University of Oslo - Version 1.149</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_herpetiles</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Herpetiles at Natural History Museum, University of Oslo]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_herpetiles</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_herpetiles</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:38:04 +0200</pubDate>
+            <guid isPermaLink="false">0d8f74b3-42b9-488f-9ec1-1faefaff1d1c/v1.149</guid>
+        </item>
+        <item>
+            <title>University of Bergen, Gastropoda - Version 35.149</title>
+            <link>https://data.gbif.no/ipt/resource?r=bg_gastropoda</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Snails and slugs, University of Bergen]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=bg_gastropoda</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=bg_gastropoda</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:37:52 +0200</pubDate>
+            <guid isPermaLink="false">7ccdcbd6-e559-4c71-ac50-59275ef592f3/v35.149</guid>
+        </item>
+        <item>
+            <title>Helgeland Museum, Araneae - Version 33.142</title>
+            <link>https://data.gbif.no/ipt/resource?r=rmz_araneae</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Helgeland Museum.
+                Araneae collection.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=rmz_araneae</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=rmz_araneae</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:37:52 +0200</pubDate>
+            <guid isPermaLink="false">3cfef28e-0d7b-4e19-a592-15afd82bd6fb/v33.142</guid>
+        </item>
+        <item>
+            <title>Moss herbarium, UiB - Version 1.145</title>
+            <link>https://data.gbif.no/ipt/resource?r=bg_bryophytes</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The Moss herbarium is believed to contain 80 000 specimens. The majority of the material is Norwegian, but the herbarium also holds important collections from Bouvet Island and Antarctica (T. Engelskjøn). Important collectors are E. Jørgensen, B.B.L. Kaalaas, J.J. Havås and T. Lillefosse. As of May 2005 data of c.10 000 of the specimens have been recorded, among them the Norwegian red listed mosses.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=bg_bryophytes</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=bg_bryophytes</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:37:53 +0200</pubDate>
+            <guid isPermaLink="false">ec1922d6-292e-4443-8bae-deba1092856b/v1.145</guid>
+        </item>
+        <item>
+            <title>Odonata collection, NTNU University Museum - Version 7.134</title>
+            <link>https://data.gbif.no/ipt/resource?r=vm_odonata</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[44 of the 46 or 47 odonata species registered in Norway are represented in this collection.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=vm_odonata</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=vm_odonata</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:37:40 +0200</pubDate>
+            <guid isPermaLink="false">39657c3a-e1ca-4a80-89cd-2f10356dfe83/v7.134</guid>
+        </item>
+        <item>
+            <title>Vascular Plants, Museum of Archaeology, University of Stavanger - Version 30.140</title>
+            <link>https://data.gbif.no/ipt/resource?r=svg_vascular</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Vascular Plants, Museum of Archaeology, University of Stavanger]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=svg_vascular</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=svg_vascular</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:37:40 +0200</pubDate>
+            <guid isPermaLink="false">b4926f5d-6426-4774-83fa-099e927862a1/v30.140</guid>
+        </item>
+        <item>
+            <title>Plecoptera - Version 1.143</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_plecoptera</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Natural History Museum, University of Oslo.
+                Plecoptera collection.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_plecoptera</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_plecoptera</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:37:39 +0200</pubDate>
+            <guid isPermaLink="false">17e622b5-dfbb-487f-94c7-47cc8cb0823b/v1.143</guid>
+        </item>
+        <item>
+            <title>NHM, Heteroptera - Version 1.143</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_het</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Natural History Museum, University of Oslo. Heteroptera collection.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_het</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_het</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:37:41 +0200</pubDate>
+            <guid isPermaLink="false">1acdfdd0-e43d-4d5d-92bc-7a2a60a03782/v1.143</guid>
+        </item>
+        <item>
+            <title>Vascular Herbarium, NMBU - Version 1.142</title>
+            <link>https://data.gbif.no/ipt/resource?r=nlh_vascular</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Vascular Plants, The Norwegian University of Life Sciences (NMBU)]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nlh_vascular</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nlh_vascular</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:37:28 +0200</pubDate>
+            <guid isPermaLink="false">a17ad49c-1861-40ab-b571-a15f92793a3f/v1.142</guid>
+        </item>
+        <item>
+            <title>Vascular Plants, Field notes, Agder naturmuseum (KMN) - Version 1.123</title>
+            <link>https://data.gbif.no/ipt/resource?r=kmn_vxl</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Vascular Plants, Field notes from Norway]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=kmn_vxl</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=kmn_vxl</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:37:26 +0200</pubDate>
+            <guid isPermaLink="false">0efbb3b3-6473-414a-af91-cdbcbcd8aba1/v1.123</guid>
+        </item>
+        <item>
+            <title>Reptilia notes, NTNU University Museum - Version 33.143</title>
+            <link>https://data.gbif.no/ipt/resource?r=vm_reptilia</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>changed institutionCode from VM to NTNU-VM</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=vm_reptilia</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=vm_reptilia</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 08:37:05 +0200</pubDate>
+            <guid isPermaLink="false">2af62ff7-0608-462e-a8f8-798e323bbd71/v33.143</guid>
+        </item>
+        <item>
+            <title>Norwegian Species Observation Service - Version 3.24</title>
+            <link>https://data.gbif.no/ipt/resource?r=nbic_artsobs</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Citizen science species observations from the Species Observation Service in Norway (Artsobservasjoner).]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nbic_artsobs</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nbic_artsobs</ipt:dwca>
+            <pubDate>Mon, 24 Sep 2018 06:55:53 +0200</pubDate>
+            <guid isPermaLink="false">b124e1e0-4755-430f-9eab-894f25a9b59c/v3.24</guid>
+        </item>
+        <item>
+            <title>Bryophyte Herbarium, Oslo (O-B) - Version 1.657</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_bryophytes</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Updated dataset and collection metadata</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_bryophytes</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_bryophytes</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 10:54:53 +0200</pubDate>
+            <guid isPermaLink="false">68a0650f-96ae-499c-8b2a-a4f92c01e4b3/v1.657</guid>
+        </item>
+        <item>
+            <title>Vascular Plant Herbarium, Oslo (O) - Version 1.658</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_vascular</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Natural History Museum, University of Oslo.
+                Vascular plant collection.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_vascular</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_vascular</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 06:43:28 +0200</pubDate>
+            <guid isPermaLink="false">e45c7d91-81c6-4455-86e3-2965a5739b1f/v1.658</guid>
+        </item>
+        <item>
+            <title>Entomology, Natural History Museum, University of Oslo - Version 1.687</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_lepidoptera</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Entomological collections at Natural History Museum, University of Oslo]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_lepidoptera</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_lepidoptera</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 05:14:36 +0200</pubDate>
+            <guid isPermaLink="false">26f5b360-8770-4d54-9c2d-397798a5e513/v1.687</guid>
+        </item>
+        <item>
+            <title>Mycology herbarium, Oslo (O) - Version 1.659</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_fungi</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Fungi in the Natural History Museum, University of Oslo]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_fungi</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_fungi</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:57:53 +0200</pubDate>
+            <guid isPermaLink="false">e4deab67-0998-4140-b573-0ba1f624eb3e/v1.659</guid>
+        </item>
+        <item>
+            <title>Bryophyte herbarium, NTNU University Museum - Version 1.935</title>
+            <link>https://data.gbif.no/ipt/resource?r=trh_b</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The Norwegian and Nordic bryophyte herbarium contains more than 100 000 specimens, most of which have been digitized., Collections from the late 1800s and early 1900s comprise the foundation of this collection, primarily through the work of Ingebrigt Severin Hagen who worked at the NTNU University Museum from 1907 until his death in 1917.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=trh_b</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=trh_b</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:51:10 +0200</pubDate>
+            <guid isPermaLink="false">6728c42d-c4b6-4fda-a211-5ad1bb59cda4/v1.935</guid>
+        </item>
+        <item>
+            <title>Vascular plant herbarium, Tromsø Museum - Version 1.641</title>
+            <link>https://data.gbif.no/ipt/resource?r=trom_vascular</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The vascular plant herbarium at Tromsø Museum., More than 90% of the specimens are from the Norwegian mainland, and of these ~80-85% are from Finnmark, Troms and Nordland. The vascular plant herbarium also contains valuable collections from the other Nordic countries as well as the arctic. The herbarium contains around 7000 specimens from Jan Mayen, arctic Canada, Alaska, Svalbard and Bjørnøya.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=trom_vascular</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=trom_vascular</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:48:37 +0200</pubDate>
+            <guid isPermaLink="false">d0aa984e-c6d3-45ee-8fc0-df1df8f4126b/v1.641</guid>
+        </item>
+        <item>
+            <title>Entomological collections, UiB - Version 1.771</title>
+            <link>https://data.gbif.no/ipt/resource?r=entomology_zmbn</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The Entomological collections contain research material of all extant terrestrial and aquatic arthropod groups except crustaceans:Hexapoda, Myriopoda, Tardigrada, Arachnoidea and Cheliceratea., More than 430 000 needle mounted insects have been identified with genus or species names and an additional number identified to family level. Moreover, the collection contains about 42,000 tubes with ethanol-fixed insects identified to genus or species level, and 29,000 slides (mainly aphids and chironomids)., Of other terrestrial arthropods we have more than 15,000 tubes with ethanol-fixed material of spiders determined to species or genus. In addition, we have more than 1200 dried galls and mines., The bulk of the material is from the last 70-80 years and is available for loan to other scientific institutions for the purpose of scientific studies. Other persons must make arrangement with a local institution that may be willing to take responsibility for the loan.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=entomology_zmbn</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=entomology_zmbn</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:39:06 +0200</pubDate>
+            <guid isPermaLink="false">6ce9819a-d82b-41e1-9059-0dd201f15993/v1.771</guid>
+        </item>
+        <item>
+            <title>Lichen herbarium, Oslo (O) - Version 1.683</title>
+            <link>https://data.gbif.no/ipt/resource?r=o_lichens</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The lichen herbarium at the Natural History Museum, University of Oslo, consists of a Norwegian herbarium (c. 110,000 specimens), a foreign herbarium (c. 200,000 specimens), a type herbarium (c. 1,100 specimens), and a collection of exsiccatae (c. 5,000 specimens).
+
+
+                The herbarium has important collections from Norway, Iceland, the Arctic (especially Greenland, Jan Mayen, Bear Island, Svalbard, and Novaya Zemlya), Macaronesia, and East Africa (especially Ethiopia, Kenya, Tanzania, and Uganda). The material includes, e.g., the collections of Mathias Numsen Blytt (1789-1862), Søren Christian Sommerfelt (1794-1838), Niels Green Moe (1812-1892), Johannes Musæus Norman (1823-1903; part), Bernt Lynge (1884-1942), Eilif Dahl (1916-1993), and Hildur Krog (1922-).
+
+
+                Computerization of the herbarium labels started in September 1994, and by September 2010, all Norwegian and c. 30,000 foreign specimens are recorded. Priority is given to specimens sent out on loan, type material, and Arctic and African material..]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=o_lichens</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=o_lichens</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:38:33 +0200</pubDate>
+            <guid isPermaLink="false">7948250c-6958-4a29-a670-ed1015b26252/v1.683</guid>
+        </item>
+        <item>
+            <title>Vascular plant herbarium, Agder naturmuseum og botaniske hage - Version 1.666</title>
+            <link>https://data.gbif.no/ipt/resource?r=kmn_vascular</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Vascular plants at Agder naturmuseum og botanisk hage]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=kmn_vascular</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=kmn_vascular</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:25:30 +0200</pubDate>
+            <guid isPermaLink="false">30bc94f2-50aa-4688-8e87-a8e11d3d69ff/v1.666</guid>
+        </item>
+        <item>
+            <title>Entomology collection, UiT - Version 1.258</title>
+            <link>https://data.gbif.no/ipt/resource?r=trom_entomology</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Entomology collection, UiT]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=trom_entomology</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=trom_entomology</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:20:39 +0200</pubDate>
+            <guid isPermaLink="false">f2a77c80-1e74-4c23-a3c9-c52cede89434/v1.258</guid>
+        </item>
+        <item>
+            <title>Lichen herbarium, UiB - Version 1.688</title>
+            <link>https://data.gbif.no/ipt/resource?r=bg_lichens</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The Lichen Herbarium contains (as per 2014) 90 000 lichens. The majority is from Norway, but there are also larger, important collections of lichens from North America (T. Tønsberg), Bouvet Island and Antarctica (T. Engelskjøn).
+
+                Important collectors are J.J. Havaas, J.M. Norman (part of his collection) and T. Tønsberg. The entire lichen collection has been data recorded and the c. 50 000 lichens collected in Norway can be searched for in the common”Norsk Lav Database” (NLD). From this link/connection there is information on red-listed lichens in Norway. T. Tønsberg at the lichen herbarium publishes the lichen exsiccate “Lichenes isidiosi et sorediosi crustacei exsiccati”.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=bg_lichens</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=bg_lichens</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:17:16 +0200</pubDate>
+            <guid isPermaLink="false">fb1ecd28-f09e-4747-8bde-0b3d7a6f78d1/v1.688</guid>
+        </item>
+        <item>
+            <title>Lichen herbarium, NTNU University Museum - Version 10.583</title>
+            <link>https://data.gbif.no/ipt/resource?r=trh_lichens</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The collection of Norwegian and Nordic lichen contains around 36 500 specimens.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=trh_lichens</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=trh_lichens</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:16:52 +0200</pubDate>
+            <guid isPermaLink="false">78c1a71e-abb2-49cf-abc8-efafb981b0e4/v10.583</guid>
+        </item>
+        <item>
+            <title>Lichen herbarium, Tromsø Museum - Version 1.669</title>
+            <link>https://data.gbif.no/ipt/resource?r=trom_lichens</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The lichen herbarium at Tromsø Museum., This collection saw little activity before the year 2000. Much of the material is older, collected in northern Norway and on arctic islands by J. M. Norman, Bernt Lynge and other botanists working in the latter half of the 1800s and the first half of the 1900s., In many cases, specimens are also available in the lichen herbarium at the Natural History Museum in Oslo., The lichen herbarium also contains around 1000 specimens from Chile, Bolivia and Peru.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=trom_lichens</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=trom_lichens</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:41 +0200</pubDate>
+            <guid isPermaLink="false">e87a12af-fc4c-4315-bff7-c7b827379aca/v1.669</guid>
+        </item>
+        <item>
+            <title>Mycology herbarium, Tromsø Museum - Version 1.613</title>
+            <link>https://data.gbif.no/ipt/resource?r=trom_fungi</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The mycology herbarium at Tromsø Museum., Around 90% of the specimens are from the Norwegian mainland, and of these around 95% are from Finnmark, Troms and Nordland.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=trom_fungi</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=trom_fungi</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:40 +0200</pubDate>
+            <guid isPermaLink="false">374e0d4c-cf9f-4e1a-97a4-14123ee1bb7e/v1.613</guid>
+        </item>
+        <item>
+            <title>Lichen collection, Norwegian Forest and Landscape Institute - Version 1.680</title>
+            <link>https://data.gbif.no/ipt/resource?r=nfli_lichens</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Lichen collection, Norwegian Forest and Landscape Institute]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nfli_lichens</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nfli_lichens</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:26 +0200</pubDate>
+            <guid isPermaLink="false">d1c13016-51c4-4819-8e4d-56b2082baab4/v1.680</guid>
+        </item>
+        <item>
+            <title>Hymenoptera, NEF - Version 33.679</title>
+            <link>https://data.gbif.no/ipt/resource?r=nef_hym</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Norwegian Entomological Society. Hymenoptera collection]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nef_hym</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nef_hym</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:28 +0200</pubDate>
+            <guid isPermaLink="false">9cc95cb1-d97a-4c35-9d0e-5de8a6e2f134/v33.679</guid>
+        </item>
+        <item>
+            <title>Algae herbarium, NTNU University Museum - Version 11.957</title>
+            <link>https://data.gbif.no/ipt/resource?r=trh_algae</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The algae herbarium contains about 4 500 specimens, mainly from Norway.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=trh_algae</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=trh_algae</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:27 +0200</pubDate>
+            <guid isPermaLink="false">fb716825-2962-4375-8532-3ac7429aa86d/v11.957</guid>
+        </item>
+        <item>
+            <title>Mycology herbarium, NTNU University Museum - Version 29.654</title>
+            <link>https://data.gbif.no/ipt/resource?r=trh_f</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[This Norwegian and Nordic collection of fungi contains around 15 200 specimens, most of which have been digitized. Most of the material is from Central Norway, but Northern Norway is also well represented.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=trh_f</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=trh_f</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:25 +0200</pubDate>
+            <guid isPermaLink="false">7eb54e10-fd36-4139-8764-1fd8abc2bd67/v29.654</guid>
+        </item>
+        <item>
+            <title>Arthropod collection, Tromsø Museum - Version 1.642</title>
+            <link>https://data.gbif.no/ipt/resource?r=trom_arthropoda</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Lepidoptera and other arthropods, Tromsø Museum.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=trom_arthropoda</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=trom_arthropoda</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:24 +0200</pubDate>
+            <guid isPermaLink="false">ed527c71-23aa-40cf-b16b-1a5b8ec6770a/v1.642</guid>
+        </item>
+        <item>
+            <title>Algae, Norwegian College of Fishery Science - Version 1.681</title>
+            <link>https://data.gbif.no/ipt/resource?r=nfh_algae</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Norwegian College of Fishery Science. Algae collection.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nfh_algae</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nfh_algae</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:25 +0200</pubDate>
+            <guid isPermaLink="false">4894f2f8-74b5-403e-bd8d-6fe5123a3f71/v1.681</guid>
+        </item>
+        <item>
+            <title>Mycology collection, Norwegian Forest and Landscape Institute - Version 7.671</title>
+            <link>https://data.gbif.no/ipt/resource?r=nfli_fungi</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Mycology collection at the Norwegian Forest and Landscape Institute]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nfli_fungi</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nfli_fungi</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:23 +0200</pubDate>
+            <guid isPermaLink="false">b80a8d39-2e0e-4ae4-91e4-03ee6dc9d1bc/v7.671</guid>
+        </item>
+        <item>
+            <title>Algae, Specimens, Agder naturmuseum (KMN) - Version 1.636</title>
+            <link>https://data.gbif.no/ipt/resource?r=kmn_alge</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Agder Naturmuseum&apos;s algae collection]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=kmn_alge</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=kmn_alge</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:29 +0200</pubDate>
+            <guid isPermaLink="false">f60aa56f-cbb7-4f55-8a6d-67288d5ba9b1/v1.636</guid>
+        </item>
+        <item>
+            <title>Helgeland Museum, Tabanidae - Version 1.669</title>
+            <link>https://data.gbif.no/ipt/resource?r=rmz_tabanidae</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Helgeland Museum.
+                Tabanidae collection.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=rmz_tabanidae</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=rmz_tabanidae</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:23 +0200</pubDate>
+            <guid isPermaLink="false">1f8694bd-6207-4685-921e-d29db4243947/v1.669</guid>
+        </item>
+        <item>
+            <title>Red list project inventory, fungi - Version 1.681</title>
+            <link>https://data.gbif.no/ipt/resource?r=rlp_f</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Inventories of fungi by the Norwegian Red list project]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=rlp_f</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=rlp_f</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:22 +0200</pubDate>
+            <guid isPermaLink="false">f0752414-5da7-4eff-9029-56933963243f/v1.681</guid>
+        </item>
+        <item>
+            <title>Helgeland Museum, Syrphidae - Version 1.681</title>
+            <link>https://data.gbif.no/ipt/resource?r=rmz_syrphidae</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Helgeland Museum.
+                Syrphidae collection.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=rmz_syrphidae</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=rmz_syrphidae</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:07 +0200</pubDate>
+            <guid isPermaLink="false">e5daba37-255f-4ac9-b45a-b3ac722ec488/v1.681</guid>
+        </item>
+        <item>
+            <title>Bryophyte herbarium, Tromsø Museum - Version 1.612</title>
+            <link>https://data.gbif.no/ipt/resource?r=trom_bryophytes</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The bryophyte herbarium at Tromsø Museum., This collection is of varying quality. A large part of the large genus Sphagnum from the Trøndelag area, northern Norway and Svalbard has been revised recently., As the herbarium is being digitized, a lot is being done to improve data quality (taxonomic revision) and the quality of the physical specimens themselves (new labels etc).]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=trom_bryophytes</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=trom_bryophytes</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:21 +0200</pubDate>
+            <guid isPermaLink="false">0f061eff-6854-4bb3-abe2-acb184ea3ab7/v1.612</guid>
+        </item>
+        <item>
+            <title>Various insect orders, NEF - Version 1.934</title>
+            <link>https://data.gbif.no/ipt/resource?r=nef_div</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Norwegian Entomological Society, Various insect orders]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nef_div</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nef_div</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:03 +0200</pubDate>
+            <guid isPermaLink="false">40126b48-3511-4fbb-aa79-7d039779c387/v1.934</guid>
+        </item>
+        <item>
+            <title>Red list project inventory, bryophytes - Version 1.672</title>
+            <link>https://data.gbif.no/ipt/resource?r=rlp_b</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Inventories of bryophytes by the Norwegian Red list project]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=rlp_b</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=rlp_b</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:01 +0200</pubDate>
+            <guid isPermaLink="false">150f1700-e93d-47c6-92f5-de44ab80e353/v1.672</guid>
+        </item>
+        <item>
+            <title>SWECO - Version 1.681</title>
+            <link>https://data.gbif.no/ipt/resource?r=sweco</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[SWECO]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=sweco</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=sweco</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 04:11:02 +0200</pubDate>
+            <guid isPermaLink="false">eba5d1aa-35dd-4f0c-b1dc-304f6b44d3b3/v1.681</guid>
+        </item>
+        <item>
+            <title>The avian collection at the Natural History Museum, Oslo, Norway - Version 1.8</title>
+            <link>https://data.gbif.no/ipt/resource?r=birds</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Lars Erik updated the contact information</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=birds</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=birds</ipt:dwca>
+            <pubDate>Thu, 27 Sep 2018 12:31:21 +0200</pubDate>
+            <guid isPermaLink="false">264e6a66-9c9e-4115-9aec-29d694c68097/v1.8</guid>
+        </item>
+        <item>
+            <title>Naturmiljø Bergensbanen 2015 (project number 616033) - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=bergensbanen2015</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Added hardcoded mapping to collectionCode = 616033_Bergensbanen, for improved indexing in Artskart</description>
+            <author>dag.endresen@nhm.uio.no (Dag Endresen)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=bergensbanen2015</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=bergensbanen2015</ipt:dwca>
+            <pubDate>Wed, 15 Aug 2018 16:19:21 +0200</pubDate>
+            <guid isPermaLink="false">499f7f48-56fc-44a6-b5a4-d4f5e4bfdd97/v1.4</guid>
+        </item>
+        <item>
+            <title>A global database for the distributions of crop wild relatives - Version 1.12</title>
+            <link>https://data.gbif.no/ipt/resource?r=cwr</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>citation string again</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=cwr</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=cwr</ipt:dwca>
+            <pubDate>Wed, 25 Jul 2018 09:31:48 +0200</pubDate>
+            <guid isPermaLink="false">07044577-bd82-4089-9f3a-f4a9d2170b2e/v1.12</guid>
+        </item>
+        <item>
+            <title>Artsprosjektet 2011 - Pseudofungi - Version 1.7</title>
+            <link>https://data.gbif.no/ipt/resource?r=pseudosopp</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Mapping and barcoding of pseudofungi in Norway, including Svalbard.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=pseudosopp</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=pseudosopp</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:47:17 +0200</pubDate>
+            <guid isPermaLink="false">804eb748-b92a-4017-9c2a-92995328b4e8/v1.7</guid>
+        </item>
+        <item>
+            <title>E39 Lyngdal - Ålgård - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=asplan-e39</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of biodiversity survey in the area between Lyngdal in Vest-Agder and Ålgård in Rogaland, in connection with the planning process of a new European route E39.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=asplan-e39</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=asplan-e39</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:47:16 +0200</pubDate>
+            <guid isPermaLink="false">986d4f73-db26-4e13-b597-76716b1d4c67/v1.5</guid>
+        </item>
+        <item>
+            <title>Effects of vegetation clearing on vascular plants in power line clearings southeast Norway - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=vascular-powerline</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Added occurrenceStatus (set to &quot;absent&quot; when organismQuantity equals &quot;0&quot;, present in all other cases)</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=vascular-powerline</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=vascular-powerline</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:47:05 +0200</pubDate>
+            <guid isPermaLink="false">78ab5416-bf56-4714-a2bf-096b16f0e1d8/v1.5</guid>
+        </item>
+        <item>
+            <title>nnf_verdisetting_vestlandet - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=nnf_verdisetting_vestlandet</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[List contains mosses, lichens, and vascular plants found in the norwegian Black and Red list for Species, that were registered by observation during a nature type cartography project in various locations throughout Hordaland in western Norway.
+
+                Habitat is given in nature types defined by the NiN description system.]</description>
+            <author>conrad@radgivende-biologer.no (Conrad Blanck)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nnf_verdisetting_vestlandet</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nnf_verdisetting_vestlandet</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:45:00 +0200</pubDate>
+            <guid isPermaLink="false">20da1510-558c-448e-991c-07e99f1430b0/v1.4</guid>
+        </item>
+        <item>
+            <title>Drammensfjord recolonization study - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=foram-drammensfjord</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Occurrence data of living benthic foraminifera (&gt;125µm) from Drammensfjorden, collected in 1984 and 1988. The research project was undertaken by the Department of Geociences, University of Oslo and focused on recolonization patterns after a period of nearly permanent anoxic bottom water conditions and the seasonal stability of the assemblages after recolonization in Drammensfjorden. Samples were taken with a gravity corer and data represent the occurrence of living benthic foraminifera in the upper sediment centimeter (0-1cm) .]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=foram-drammensfjord</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=foram-drammensfjord</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:45:00 +0200</pubDate>
+            <guid isPermaLink="false">75969a1c-4ab3-4cd5-b44b-a9650f177fe9/v1.5</guid>
+        </item>
+        <item>
+            <title>Marine fish and their ectoparasitic copepods in the western Wadden Sea (North Sea) in 2010 - Version 1.7</title>
+            <link>https://data.gbif.no/ipt/resource?r=nioz_wouter</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Fixed wrong conversion of coordinates</description>
+            <author>wouter.koch@artsdatabanken.no (Wouter Koch)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nioz_wouter</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nioz_wouter</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:44:59 +0200</pubDate>
+            <guid isPermaLink="false">75e53d5f-0531-4076-8bd2-0400ee219805/v1.7</guid>
+        </item>
+        <item>
+            <title>20th century Betula pubescens ssp. czerepanovii tree- and forest lines in Norway - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=uio_nhm_forest_lines</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Updated dataset in response to the corresponding data paper peer review comments.</description>
+            <author>dag.endresen@nhm.uio.no (Dag Endresen)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=uio_nhm_forest_lines</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=uio_nhm_forest_lines</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:44:58 +0200</pubDate>
+            <guid isPermaLink="false">ec961283-84ec-46e4-80ba-2cedb9ee51d3/v1.5</guid>
+        </item>
+        <item>
+            <title>Kinorhyncha - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=kinorhyncha</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Kinorhyncha - a poorly known and neglected animal phylum.
+                Mapping the mud dragons of Norway., The project had 5 major objectives:
+
+                To collect intertidal (and to some extent deep-sea) sediment samples
+                To undertake morphological species determination, and identification of the species likely to be new to Norway and/or science
+                To characterize molecularly the Kinorhyncha species detected in Norwegian waters;
+                To provide state-of-the-art descriptions of newly discovered species;
+                To establish a comprehensive overview on the biodiversity and geographic distribution of the Norwegian Kinorhyncha fauna.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=kinorhyncha</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=kinorhyncha</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:44:57 +0200</pubDate>
+            <guid isPermaLink="false">b4fc23e2-df21-4756-8029-e8ace96e6589/v1.6</guid>
+        </item>
+        <item>
+            <title>Long-lasting effects of logging on beetles in hollow oaks - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=hollow-oaks</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Habitat loss is currently one of the largest threats to biodiversity worldwide, but an increasing number of studies show that accounting for past habitat loss is essential to understanding current distributional patterns. Hollow oaks (Quercus spp.) are important habitats for species that depend on deadwood. We used a gradient spanning 40 km from the coast to inland areas reflecting historical logging intensity through 500 years in Southern Norway, to investigate if the historical variation in oak density is influencing the structure of beetle communities in hollow oaks today. We trapped beetles in 32 hollow oaks along this gradient. The current dataset contains data from 2014, but not 2013 which also was included in the study (and is available through Norway&apos;s Species Map Service, http://artskart.artsdatabanken.no). We selected hollow oaks Quercus robur and Q. petraea along a coast-inland gradient in two regions, Agder and Larvik, in southern Norway. Agder is situated in the south, with hollow oaks from the coast to 40 km inland, while Larvik is located in the southeast with hollow oaks from the coast to 25 km inland. We sampled 16 hollow oaks in each region. Our study included trees in forest (n = 17) and semi-natural habitats (n = 15). The latter represents oaks in forest edges along fields or close to settlements. Each oak was sampled for insects using two flight interception traps (window size 20 × 40 cm) for each oak, one in front of the cavity opening and one in the canopy. The insect traps were active from mid-May to mid-August in 2014, and emptied once a month. All beetle species caught were determined to species.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=hollow-oaks</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=hollow-oaks</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:44:57 +0200</pubDate>
+            <guid isPermaLink="false">9cc6fab1-4652-47ec-b89b-db2950629372/v1.5</guid>
+        </item>
+        <item>
+            <title>Norwegian Lepidoptera working group - Version 1.105</title>
+            <link>https://data.gbif.no/ipt/resource?r=leparb_lep</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Replace dataset with one single record - to describe the move to a metadata-only set, following the move of data records to the NHMO Museum database</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=leparb_lep</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=leparb_lep</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:44:56 +0200</pubDate>
+            <guid isPermaLink="false">7c44411b-0296-4634-9538-0ae43b10a38a/v1.105</guid>
+        </item>
+        <item>
+            <title>Norwegian Red List 2015 - Version 1.8</title>
+            <link>https://data.gbif.no/ipt/resource?r=redlist-norway</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Added locationID (ISO:NO)</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=redlist-norway</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=redlist-norway</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:44:55 +0200</pubDate>
+            <guid isPermaLink="false">4f1047ac-a19d-41a8-98eb-d968b2548b53/v1.8</guid>
+        </item>
+        <item>
+            <title>Invasive vascular plants - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=invasive-vascular</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Approximately 370 observation records for invasive (black-listed) species and approximately 20 observation records for threatened red-listed species from train stations on the railroad line between Bergen and Oslo]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=invasive-vascular</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=invasive-vascular</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:44:43 +0200</pubDate>
+            <guid isPermaLink="false">https://data.gbif.no/ipt/resource?id=invasive-vascular/v1.6</guid>
+        </item>
+        <item>
+            <title>Artsprosjektet - Gyrodactylus - Version 1.8</title>
+            <link>https://data.gbif.no/ipt/resource?r=gyrodactylus</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The biodiversity of invertebrate parasites is an important factor in ecosystem health. This project targets the Norwegian gyrodactylid fauna. This group of ectoparasites of fish and cephalopod molluscs includes the major pathogen Gyrodactylus salaris on salmon and the emerging pathogen Gyrodactylus marinus on cod. Overall the genus Gyrodactylus is poorly known and many species and parasite strains await proper description. This is particularly true for the gyrodactylids on Norwegian marine fishes, where perhaps up to 50 species remain to be catalogued, and several species new to science are to be expected. This project adopts a novel approach, screening the fish collection of the Natural History Museum Oslo that has a comprehensive representation of the Norwegian fish fauna for gyrodactylids. These parasites will then be described using advanced morphometric and molecular approaches. We aim at developing towards a comprehensive picture of the Norwegian gyrodactylid fauna of both freshwater and marine fishes, and expect to add morphometric and molecular descriptions of some 30-50 species (including some new to science) to the Norwegian fauna lists.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=gyrodactylus</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=gyrodactylus</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:44:43 +0200</pubDate>
+            <guid isPermaLink="false">c7aa4f2e-0c01-41c4-b326-d6730134718e/v1.8</guid>
+        </item>
+        <item>
+            <title>Fv. 555 Kolltveit - Austefjorden - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=asplan-kolltveit</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of biodiversity survey in the area between Kolltveit - Austefjorden in Hordaland county, in connection with the planning process of a new road Fv. 555.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=asplan-kolltveit</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=asplan-kolltveit</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:44:42 +0200</pubDate>
+            <guid isPermaLink="false">0ce0ef1a-dcb0-4649-8960-093429d0b396/v1.4</guid>
+        </item>
+        <item>
+            <title>Crustacea collection, UiB - Version 1.3</title>
+            <link>https://data.gbif.no/ipt/resource?r=bg_crust</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Bergen Museum, Crustacea collection]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=bg_crust</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=bg_crust</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:44:31 +0200</pubDate>
+            <guid isPermaLink="false">https://data.gbif.no/ipt/resource?id=bg_crust/v1.3</guid>
+        </item>
+        <item>
+            <title>Radiolaria specimens from the Norwegian Sea and Arctic Ocean - Version 1.15</title>
+            <link>https://data.gbif.no/ipt/resource?r=radiolaria</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Minor update to contact information</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=radiolaria</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=radiolaria</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:44:31 +0200</pubDate>
+            <guid isPermaLink="false">2b52369a-7fe0-4d28-b88c-c882c0ce71d8/v1.15</guid>
+        </item>
+        <item>
+            <title>Drøbak-collections - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=drobak</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Updated metadata &amp; adding notice that dataset is deliberately published without occurrence data.</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=drobak</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=drobak</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:09 +0200</pubDate>
+            <guid isPermaLink="false">6c71e42e-a320-44b2-8bc7-f48846556de2/v1.6</guid>
+        </item>
+        <item>
+            <title>Tillegg Røtinga i Os - Version 1.2</title>
+            <link>https://data.gbif.no/ipt/resource?r=asplan-roetinga</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of a biodiversity survey in an area in Os in Hordaland where a road is planned.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=asplan-roetinga</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=asplan-roetinga</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:09 +0200</pubDate>
+            <guid isPermaLink="false">eb5df2ee-5105-4e2a-abcf-470c75e072e4/v1.2</guid>
+        </item>
+        <item>
+            <title>Foraminifera study in Masfjorden, western Norway - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=foram-masfjord</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Occurrence data of living benthic foraminifera (&gt;63µm) in the Masfjord, collected in 2015. Samples were taken with a gravity corer. The data represent the occurrence of living benthic foraminifera in the upper sediment centimeters (0-2cm) of 3 replicates.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=foram-masfjord</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=foram-masfjord</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:08 +0200</pubDate>
+            <guid isPermaLink="false">66c9903c-5bb2-4b10-a3ac-33c505623f66/v1.5</guid>
+        </item>
+        <item>
+            <title>Cephalaspidean Gastropods - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=boblesnegler</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Changed datasetName to &quot;Artsprosjekt_46-13_boblesnegler&quot;</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=boblesnegler</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=boblesnegler</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:08 +0200</pubDate>
+            <guid isPermaLink="false">8f3081d6-42e6-44df-972a-a5c0c991f3ca/v1.6</guid>
+        </item>
+        <item>
+            <title>Lowland lakeshore vegetation in Nord-Trøndelag, Norway - Version 1.10</title>
+            <link>https://data.gbif.no/ipt/resource?r=wetlands</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Lakeshore vegetation in six proteced areas in four lowland lakes in the Nord-Trøndelag county was investigated in 2009 as part of a status assessment of biological values of the proteced areas. A total of 77 vegetation plots were analysed in the six areas. 59 of them in the Hammervatnet nature reserve using a transect approach. In the other areas the plots were placed subjectively in areas of homogenous vegetation.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=wetlands</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=wetlands</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:07 +0200</pubDate>
+            <guid isPermaLink="false">2f7d526c-750a-41ae-a98e-ddcfb6550d79/v1.10</guid>
+        </item>
+        <item>
+            <title>Konsekvensutredning naturmangfold E6 Åsen - Mære - Version 1.2</title>
+            <link>https://data.gbif.no/ipt/resource?r=asplan-aasen</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of biodiversity survey in the area between Åsen and Mære in Nord-Trønndelag county, in connection with the planning process of a new European route E6.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=asplan-aasen</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=asplan-aasen</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:07 +0200</pubDate>
+            <guid isPermaLink="false">f5b325e5-4c25-4dd3-a028-297c685b3327/v1.2</guid>
+        </item>
+        <item>
+            <title>Specimens from India at the NTNU University Museum in Trondheim - Version 8.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=india_trh</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[This dataset includes specimens originating from India in the natural history collections at the University Museum of the Norwegian University of Science and Technology (NTNU). &lt;br /&gt;&lt;br /&gt;&lt;b&gt;Animals&lt;/b&gt;: The zoological collection includes 1 cnidarian, 122 molluscs (mostly marine), 24 birds, 4 mammals and three reptiles. These are all old specimens, presumably from the end of the 19th century or the first half of the 20th century, without collecting date. In addition, the collecting site is poorly documented, often restricted to “India” or “Indian Ocean”. There is no easy way to obtain more precise data. Data from Indian specimens in Trondheim are not previously available in the GBIF portal. &lt;br /&gt;&lt;br /&gt;&lt;b&gt;Plants&lt;/b&gt;: The vascular plant collection has not been digitised, but random sampling suggests that it contains no specimens from India. The most interesting Indian material in Trondheim is found in the bryophyte collection, which houses the legacy of the botanist Ingebrigt Hagen (1852-1917). In the course of 2013 the bryophyte herbarium with its circa 30.000 specimens will be digitised. A random sample suggests that the number of specimens from India will be around 200. These are mostly from the Himalaya, and include relatively many type specimens (not labelled as such) which the Finnish botanist V.F. Brotherus (1849-1929) has worked on. These specimens have relatively complete collecting data. Moreover, the digitisation project in Trondheim includes the addition of the currently valid nomenclature. As an illustration of the data that become available after digitisation, an initial sample is included in this dataset.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=india_trh</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=india_trh</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:06 +0200</pubDate>
+            <guid isPermaLink="false">4359b08c-37a2-4ec9-98a5-ce4887fc3a80/v8.5</guid>
+        </item>
+        <item>
+            <title>Species plots from the Norwegian Vegetation Mapping Programme - Version 1.12</title>
+            <link>https://data.gbif.no/ipt/resource?r=utmark</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[As an integrated part of an on-going survey programme for vegetation mapping, plant species have been recorded. This dataset contains 18 521 registrations of plants from 1190 different circular plots throughout Norway. All species localities are georeferenced, the spatial uncertainty is provided, and additional ecological information is reported.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=utmark</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=utmark</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:06 +0200</pubDate>
+            <guid isPermaLink="false">1daaaa9b-f637-4d6a-84d4-d8038d4c71aa/v1.12</guid>
+        </item>
+        <item>
+            <title>Algae collection - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=algae_o</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Algae collection at the Natural History Museum, Oslo]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=algae_o</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=algae_o</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:05 +0200</pubDate>
+            <guid isPermaLink="false">7aa3a91c-eafe-44f5-adfb-d48fca1a3db5/v1.5</guid>
+        </item>
+        <item>
+            <title>MATRIX project, Mabira in Uganda - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=mabira</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data on vascular plants was collected in 2009-2011 in Mabira Forest, Uganda as part of the MATRIX project in order to look at forest recovery
+                from disturbance., Mabira Central Forest Reserve (hereon Mabira Forest) is close to Lake Victoria in Central Uganda. Mabira Forest is a semi-deciduous forest, considered secondary growth and highly influenced by human activities. About 95 per
+                cent of the forest is of the Celtis-Chrysophyllummedium altitude semi-deciduous forest type; within this there are different sub-climax communities which have developed since the forest underwent phases of felling and heavy encroachment. Three ages of stand were surveyed to examine how quickly plants were recovering from disturbance., Transects of 10 m × 30 m were established in randomly-selected compartments in each of the three types. In order to cover a range of microhabitats, transects were arranged in ‘triplets’ of increasing distance upslope from forest streams, at 5 m, 65 m, and 125 m. For all other angiosperm sampling, transects were situated in the same locations (subject to 10 m GPS-derived relocation error) as the 5m and 125 m transects for the ferns. In total, 63 transects were sampled for ferns and 35 for angiosperms., In transects where angiosperms were sampled, trees of DBH (diameter at breast height) &gt;10 cm were counted across the whole transect. Ground layer vegetation up to 2 m height was sampled by dividing the 10 × 30 m transect into 5 × 5 m plots and sampling six of those subplots, moving along the transect on alternate sides., All the species in these subplots were recorded, (including all woody plants large enough to identify and with stems &lt; 10 cm DBH), and their percent cover estimated. Ferns were recorded by abundance of individuals, which was estimated in classes (&lt;5, 6-15, 16-30, 31-50, 50-100, &gt;100). Individuals which could not be identified were taken to Makerere University Herbarium for identification., We are grateful to the Ugandan National Forest Authority (NFA) for permitting access to work in Mabira.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=mabira</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=mabira</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:05 +0200</pubDate>
+            <guid isPermaLink="false">37dddcd2-ed51-4ada-86df-37449162f404/v1.6</guid>
+        </item>
+        <item>
+            <title>Aplacophora collection, UiB - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=bg_aplacophora</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Bergen Museum, Aplacophora collection]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=bg_aplacophora</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=bg_aplacophora</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:04 +0200</pubDate>
+            <guid isPermaLink="false">https://data.gbif.no/ipt/resource?id=bg_aplacophora/v1.4</guid>
+        </item>
+        <item>
+            <title>Savanna herbaceous vegetation, Lake Mburo National Park, Uganda - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=uganda-savanna</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Termites and large herbivores represent important functional groups in savanna ecosystems. Termites affect vegetation far beyond their mounds. In addition, large herbivores feed selectively on termite mound vegetation or in the vicinity of mounds. Previous studies of savanna vegetation communities have focused on termites and large herbivores separately, although interaction effects may be predicted., We studied the effects of large herbivores and large vegetated Macrotermes mounds on the herbaceous vegetation in Lake Mburo National Park in Uganda. We recorded herbaceous vegetation change over 3 years on savanna areas (with and without large herbivores) and on corresponding termite mounds (with and without large herbivores) in a randomized block design., Termite mounds and savannas had significantly different plant communities, but large herbivore grazing exclusions did not result in significant shifts in plant communities during this study period. A canonical correspondence analysis separated species mainly along an axis from termitaria to savanna. Only a few species responded to grazing exclusion. Some erect species, such as Hyparrhenia filipendula and Themeda triandra, increased in cover, and creeping species, such as Cynodon dactylon, decreased, following the exclusion of grazers. Forbs dominated mound areas, while graminoids dominated the savanna areas. Fencing increased the cover of graminoids over time and led to gradual increase in the relative cover of graminoids compared with forbs., Mound soil was higher in pH, calcium and magnesium and lower in sodium compared with adjacent savanna areas. Nitrogen and carbon soil content did not differ between the two habitats. Soil phosphorus increased following grazing exclusion., This study shows that termites may exert a far more important effect on the herbaceous community than large herbivores in savanna areas, even if the biomass of large herbivores is relatively high. Thus, future studies on savanna vegetation ecology should focus increasingly on important insect groups in addition to the more conspicuous large mammal guild.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=uganda-savanna</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=uganda-savanna</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:04 +0200</pubDate>
+            <guid isPermaLink="false">f3c5a8cd-dd9c-4307-be91-195464f016bd/v1.4</guid>
+        </item>
+        <item>
+            <title>POLYSKAG-collections - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=polyskag</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Updated metadata &amp; adding notice that dataset is deliberately published without occurrence data.</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=polyskag</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=polyskag</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:43:04 +0200</pubDate>
+            <guid isPermaLink="false">66bcafab-db85-4d27-ab12-ef6cd9e19089/v1.6</guid>
+        </item>
+        <item>
+            <title>Nordic Crop Wild Relative (CWR) Checklist - Version 1.11</title>
+            <link>https://data.gbif.no/ipt/resource?r=cwr-nordic</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Minor update to people roles</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=cwr-nordic</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=cwr-nordic</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:41:19 +0200</pubDate>
+            <guid isPermaLink="false">8027d8d5-c8bc-4d54-bee9-f854f141b442/v1.11</guid>
+        </item>
+        <item>
+            <title>Coleoptera, NEF - Version 1.17</title>
+            <link>https://data.gbif.no/ipt/resource?r=nef_col</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The Norwegian Entomological Society&apos;s coleoptera collection.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nef_col</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nef_col</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:41:18 +0200</pubDate>
+            <guid isPermaLink="false">2d4d4edb-4a78-4855-909e-56dd4c6dfe38/v1.17</guid>
+        </item>
+        <item>
+            <title>The importance of host tree age, size and growth rate as determinants of epiphytic lichen diversity in boreal spruce forest. - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=nmbu_epiphytic</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The amount of large and old trees has decreased in the boreal forests during the last centuries of forestry. Such trees are important habitats for epiphytic lichens and there is a growing concern for lichen species that are associated with large and old trees. However, only little is known about the relative importance of tree size versus age as determinants of lichen diversity. Here we have determined the size, age and growth rate of 157 Norway spruce trees and recorded the occurrence of epiphytic lichen species on their branches and lower stems. The study includes crustose lichens and was done in two old-growth forests in SE Norway. Tree age and tree size were the parameters that explained the largest part of epiphytic lichen diversity. Only the growth rate of the most recent time period, i.e. 1984-2004, showed a statistically significant relationship to diversity. There was no indication of a stabilising species number with increasing tree age. Slow-growing and old trees were, however, mainly of importance to the lichen species growing on stems, and this set of species were in general adversely affected by a large amount of branches. The opposite was the case for the species that were confined to branches as their diversity increased when the amount of branches increased. Our study adds empirical data to support the importance of large and old trees as bearers of biodiversity in boreal forests. Site preservation and patch retention of groups of old and large trees is recommended as measures to maintain epiphytic lichen diversity.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nmbu_epiphytic</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nmbu_epiphytic</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:41:17 +0200</pubDate>
+            <guid isPermaLink="false">39a80c99-56c2-482c-beef-fa960a8eec4d/v1.6</guid>
+        </item>
+        <item>
+            <title>Foraminifera study in the Horten inner harbor area - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=foram-horten</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Occurrence data of living benthic foraminifera in the Horten harbor area, collected in 2014. Samples were taken with a gravity corer. The data represent the occurrence of living benthic foraminifera (&gt;63µm) in the upper sediment centimeter (0-1cm) of 3 replicates.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=foram-horten</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=foram-horten</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:41:16 +0200</pubDate>
+            <guid isPermaLink="false">b9f90d91-53c5-4c0f-b950-5678a7ecd571/v1.5</guid>
+        </item>
+        <item>
+            <title>Øvre Heimdalsvatn, Radiocaesium (Cs-137) monitored annually in brown trout (Salmo trutta) - Version 10.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=heimdalsvatn</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[&quot;This dataset describes a long time serie for monitoring of radioactive radiocaesium isotope (Cs-137) concentration in the brown trout (Salmo trutta) population in a mountain lake (Øvre Heimdalsvatn) situated on the tree line in the eastern edge of the Jotunheimen Mountains. Ecosystem studies at Øvre Heimdalsvatn started in 1957, while this time series for radioecological monitoring started after the Chernobyl nuclear power plant accident in 1986. The aim of this study was to document the long-term changes in the radioactive isotope Cs-137 in brown trout and to elucidate the factors determining changes in Cs-137 activity concentrations over time.
+
+                This dataset provides only one time serie from the extensive ecosystem studies (initiated in 1957) at Øvre Heimdalsvatn. The mountain lake is at 1090 meter above sea-level with a surface area of 0.78 square kilometer (km2) (78 hectare). The maximum length is 3 km and the maximum width is 396 m. The largest depth is 13 m and the average depth is 4.7 m. Vegetation near the lake ranges from subalpine birch forest with areas of mountain pasture to high alpine vegetation above 1,600 m a.s.l. Originally brown trout was the sole fish species in the lake, but since 1969 the European minnow (Phoxinus phoxinus) has also been recorded and its numbers have subsequently increased substantially. Brown trout for this study were generally caught by gill netting around the lake.&quot;]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=heimdalsvatn</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=heimdalsvatn</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:41:15 +0200</pubDate>
+            <guid isPermaLink="false">7221810e-52b1-459d-a6a4-02160c67feef/v10.6</guid>
+        </item>
+        <item>
+            <title>Foraminiferal assemblages in the Hardangerfjord, western Norway - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=foram-hardangerfjord</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Occurrence data of living benthic foraminifera (&gt;63µm) in the Hardangerfjord, collected in 1996. The samples were collected during an environmental monitoring cruise in Hardangerfjorden. Foraminiferal assemblage ananlyses were undertaken by the Department of Geociences, University of Oslo. The study provided new insights into the foraminiferal diversity in the Hardangerfjord. Samples were taken from gravity core tops or grab samples. The data represent the occurrence of living benthic foraminifera in the upper sediment centimeter (0-1cm).]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=foram-hardangerfjord</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=foram-hardangerfjord</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:39 +0200</pubDate>
+            <guid isPermaLink="false">2372eba1-a784-48a3-980e-ae7798f12c7d/v1.5</guid>
+        </item>
+        <item>
+            <title>NNI Riverbase - Mosses &amp; Liverworts - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=nni_riverbase</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data collected during riverside biodiversity mapping in Norway]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nni_riverbase</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nni_riverbase</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:38 +0200</pubDate>
+            <guid isPermaLink="false">b5a50aa1-ce8b-4e54-ac05-310fa1c01303/v1.6</guid>
+        </item>
+        <item>
+            <title>npi_fauna - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=npi_fauna</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[NPI_Fauna]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=npi_fauna</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=npi_fauna</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:37 +0200</pubDate>
+            <guid isPermaLink="false">https://data.gbif.no/ipt/resource?id=npi_fauna/v1.5</guid>
+        </item>
+        <item>
+            <title>Specimens from India at the Natural History Museum at the University of Oslo (NHM-UiO) - Version 5.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=india_o</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[This dataset includes specimens originating from India in the collections at the Natural History Museum at the University of Oslo (NHM-UiO). &lt;br /&gt;&lt;br /&gt;Animals: The mammal collection includes 108 specimens (mounted animals, skulls or skins, sometimes from the same individuals) from ‘India’. Insofar these are dated at all, they originate from the 19th century. No further collecting information is preserved. These data are already available from the GBIF portal (and not included in this dataset). Oslo has 1027 bird specimens from India, both skins and mounted and demounted specimens. These are either not dated or originate from the 19th century or the first half of the 20th century. Locality is sometimes recorded at the region or district level, with relatively many specimens from Darjeeling. More detailed collecting data are missing. Most have been collected by Englishmen, some of whom have had an important role in Indian ornithology. These skins may therefore be of particular historical value. Notable are 295 skins labeled as being collected by ‘Blyth’. This name most likely refers to the English zoologist Edward Blyth (1810 –1873), who was one of the founders of zoology in India (cf. Wikipedia lemma Edward Blyth). Another known name is Henry Seebohm (1832-1895), to whom twelve skins are attributed (misspelled in one case as Subohm). The bird data are not yet published in GBIF. The fish collection contains 34 databased specimens. The Staphylinidae beetle collection includes 508 specimens from India which are not yet identified to species level. The Hymenoptera collection includes 130 pinned specimens originating from the collection of Charles Thomas Bingham (1848-1908). These have been collected in Sikkim. In addition there are 7 Hymenoptera and 1 Orthoptera originating from the Deinboll collection, all labelled Trankebar. Some of these may represent types of taxa described by J.C. Fabricius (1745-1808). These collections are not yet digitised. There are virtually no Lepidoptera or Diptera from India in Oslo. Finally, the museum holds circa 10 crustacean specimens and 3 molluscs. &lt;br /&gt;&lt;br /&gt;Plants: There is a small digitised collection of 89 vascular plants from Himachal Pradesh and Maharashtra provinces. These were deposited by the Indian student B. Natarajan who studied in Oslo in the 1990s. In addition, the older vascular plant type collection in Oslo has been digitised. This includes 12 older type specimens from India. Most of the herbarium has not been digitised, however. It may contain between 5 000 and 10 000 specimens from India. These are currently difficult to locate as the herbarium is organised in taxonomic rather than geographic units. The museum intends to digitise the herbarium at a level that would enable the retrieval of taxa per continent or even per country. This enterprise is still in the planning phase, however. Likewise the bryophyte and algae collections might contain material from India, but this can only be retrieved after digitisation. Some of these records are published to GBIF as a separate dataset. Oslo probably holds no Indian fungi. The digitisation of the Oslo lichen herbarium is ongoing. Currently 34 specimens from India are visible in the GBIF portal (and not included i this dataset). This number may increase to circa 100 once the entire lichen herbarium is digitised. Most of these have been collected after 1950 and have rather complete collecting data. The botanical garden in Oslo has 6 living plants originating from India.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=india_o</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=india_o</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:27 +0200</pubDate>
+            <guid isPermaLink="false">d1f1209b-b689-4f32-999f-330f3ecd4df2/v5.6</guid>
+        </item>
+        <item>
+            <title>Species observations during citizen science expeditions - Version 1.18</title>
+            <link>https://data.gbif.no/ipt/resource?r=nils</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Species sigtings during recreational or professional citizen science expeditions]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nils</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nils</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:27 +0200</pubDate>
+            <guid isPermaLink="false">f861b96e-76f8-4a4d-b301-ebb82eed6011/v1.18</guid>
+        </item>
+        <item>
+            <title>Heibo, Symphyta - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=heibo</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Heibo, Symphyta]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=heibo</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=heibo</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:26 +0200</pubDate>
+            <guid isPermaLink="false">https://data.gbif.no/ipt/resource?id=heibo/v1.4</guid>
+        </item>
+        <item>
+            <title>Boreonemoral regnskog på østsiden av Lygrespollen - Version 1.3</title>
+            <link>https://data.gbif.no/ipt/resource?r=asplan_lygrespollen</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of biodiversity survey in several areas on the east side of Lygrespollen in Fusa in Hordaland.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=asplan_lygrespollen</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=asplan_lygrespollen</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:26 +0200</pubDate>
+            <guid isPermaLink="false">aa49854a-c4bb-49b3-baec-3f5f2cf57f49/v1.3</guid>
+        </item>
+        <item>
+            <title>Rodents (smågnagere) Lierne Steinkjer - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=rodents_lierne</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Adding Zenodo DOI for archived version v1.4</description>
+            <author>dag.endresen@nhm.uio.no (Dag Endresen)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=rodents_lierne</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=rodents_lierne</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:26 +0200</pubDate>
+            <guid isPermaLink="false">2f2c251e-a69f-444b-af7e-6b7ad808f74f/v1.6</guid>
+        </item>
+        <item>
+            <title>ARKO 2014 - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=asplan-arko</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of a biodiversity project in which red-listed species were mapped in Hordaland county, Norway. The project was named ARKO 2014 (Arealer for Rødlistearter – Kartlegging og Overvåking).]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=asplan-arko</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=asplan-arko</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:25 +0200</pubDate>
+            <guid isPermaLink="false">78a8380d-8e09-4190-8628-21fc8cf56d09/v1.5</guid>
+        </item>
+        <item>
+            <title>Verdivurdering naturmangfold E39 Stord-Os - Version 1.7</title>
+            <link>https://data.gbif.no/ipt/resource?r=stord-os</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of biodiversity survey in the area between Stord, Tysnes and Os in Hordaland, in connection with the planning process of a new European route E39.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=stord-os</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=stord-os</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:25 +0200</pubDate>
+            <guid isPermaLink="false">9c4e14d4-4047-4d30-9954-1a2df1ba7d15/v1.7</guid>
+        </item>
+        <item>
+            <title>Rådgivende Biologer - Version 33.79</title>
+            <link>https://data.gbif.no/ipt/resource?r=rbiol</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Rådgivende Biologer]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=rbiol</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=rbiol</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:24 +0200</pubDate>
+            <guid isPermaLink="false">789d286b-73b7-4d8c-a8c6-7a2cfe84a576/v33.79</guid>
+        </item>
+        <item>
+            <title>Artsrike vegkanter i Haugesund - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=asplan-haugesund</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data (most vasular plants) was collected as a part of biodiversity survey in areas close to roads in the Haugesund area.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=asplan-haugesund</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=asplan-haugesund</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:14 +0200</pubDate>
+            <guid isPermaLink="false">f0951f50-c8b7-4043-b5a8-499e580296b9/v1.6</guid>
+        </item>
+        <item>
+            <title>Nordic Saproxylic Database - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=saproxylic</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Updated metadata</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=saproxylic</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=saproxylic</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:13 +0200</pubDate>
+            <guid isPermaLink="false">https://data.gbif.no/ipt/resource?id=saproxylic/v1.4</guid>
+        </item>
+        <item>
+            <title>Mound building termites contribute to savanna vegetation heterogeneity- woody plants, forbs and graminoids - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=uganda-woodly</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[With biomass densities comparable to large ungulates and megaherbivores, termites play a key functional role in many tropical savanna ecosystems. This study focuses on vegetated termite mounds (termitaria) constructed by the Termitidae species Macrotermes herus. We studied how resource rich termitaria affect graminoid herbs (Poaceae and Cyperaceae), forbs and woody species composition and diversity. The density of termitaria explained 89% of the variation in dense thickets in the area. Fire tolerant Acacia species dominated the open savanna while fire sensitive species like Grewia spp. and the succulent Euphorbia candelabrum were restricted to termite mounds. Termitaria plots had four times the mean number of woody species and supported three times as many forb species as the adjacent savanna. For woody species, both the Shannon–Wiener index and the Shannon evenness index were higher on temitaria than on the savanna. There were no differences for graminoid herbs, except for the Shannon evenness index which was higher on termitaria. Our results indicate that graminoid herb richness peaks at lower productivity levels than trees and forbs in savanna ecosystems, as also recently found in temperate areas.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=uganda-woodly</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=uganda-woodly</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:12 +0200</pubDate>
+            <guid isPermaLink="false">d5a8d3f2-9bad-4724-b793-daf78f8bca29/v1.4</guid>
+        </item>
+        <item>
+            <title>Jordal - Version 1.90</title>
+            <link>https://data.gbif.no/ipt/resource?r=jordal</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[John Bjarne Jordal. Observations.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=jordal</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=jordal</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:37:11 +0200</pubDate>
+            <guid isPermaLink="false">09c38deb-8674-446e-8be8-3347f6c094ef/v1.90</guid>
+        </item>
+        <item>
+            <title>Large herbivores in African savannahs, Lake Mburo National Park, Uganda - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=uganda-herbivores</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Large herbivore abundance at nine study sites in African savannahs, Lake Mburo National Park, Uganda. Species observed during fieldwork on small mammals in termitaria and savanna habitats in 2005-2007.  The most numerous ungulate species in Lake Mburo National park are impala (Aepyceros melampus) and Burchell’s Zebra (Equus burchelli). Other common ungulates are eland (Taurotragus oryx), topi (Damascilus korrigum), waterbuck (Kobus ellipsiprymnus), bushbuck (Tragelaphus scriptus), warthog (Phacochoerus africanus) and the African buffalo (Syncerus caffer) (Rannestad et al. 2006).]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=uganda-herbivores</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=uganda-herbivores</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:36:40 +0200</pubDate>
+            <guid isPermaLink="false">c1f425be-cf91-4df4-ac10-f48066facf52/v1.5</guid>
+        </item>
+        <item>
+            <title>Dataset of fungus gnats (Diptera,Sciaroidea) from Møre og Romsdal county in Norway - Version 1.7</title>
+            <link>https://data.gbif.no/ipt/resource?r=gnats</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Timeframe corrected</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=gnats</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=gnats</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:36:28 +0200</pubDate>
+            <guid isPermaLink="false">8d1253fc-30b6-4b4d-a12d-d711391e5382/v1.7</guid>
+        </item>
+        <item>
+            <title>Effects of vegetation clearing and dead wood on beetles in power line clearings southeast Norway - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=beetles-powerline</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Linear habitats, such as power-line clearings, have been thought to affect biodiversity negatively. However, during the last decade several studies have highlighted the potential value of power-line clearings as habitats for a number of taxonomic groups, like bees and butterflies. The vegetation below power-lines is continuously reset to earlier successional stages, which provides suitable habitats for several native plant species, which hosts diverse assemblages of pollinating insects. In addition, the dead wood and biomass from the vegetation clearing, together with tree falls along the clearing edges may be important habitats for xylophagous beetles. With proper management, power-line clearings could be important for conservation of species associated with open-canopy habitats and dead wood., We conducted a large-scale field experiment, with 19 sites haphazardly distributed within the main power line grid in southeast Norway. All sites were placed below power lines in a boreal forest system consisting of varying proportions of the main tree species: Norway spruce Picea abies, Scots pine Pinus sylvestris and birch Betula spp. Sites were located between latitudes 59.33°–61.12°N and longitudes 08.95°–11.36°E at 48–536 m a.s.l., varying in width and age. Each site had been subjected to the same management regime with cutting of all woody vegetation every 5-10 years, without chemicals used, and had a stretch of at least 200 meters with substantial regrowth of trees before experiments were performed. At each site, we established three plots of approx. 30 x 60 m, at least 20 m apart. During late autumn 2012 (16 sites) and early spring 2013 (3 sites), treatments were randomly allocated to each of the plots within a site: 1) cut: woody vegetation was cut and left to decay in the plot, 2) cut-remove: woody vegetation was cut and removed, 3) Vegetation was uncut., Within a 10m × 10m plot in the centre of each treatment, we measured amount and type of dead wood (volume, species, diameter, degree of decay). In each experimental treatment, we also deployed insect traps (three flight intersection for trapping insects from spring to early autumn), and measured microclimatic conditions (light, temperature, precipitation) and various habitat attributes (tree layer characteristics, canopy density). Field data collections on vascular plants, insects, dead wood, habitat characteristics and microclimatic conditions have been collected over a three-year period (2013-2015). All insect specimen have been sorted into orders and all the beetles have been identified to species by Sindre Ligaard (Beetles: approx 48 000 specimen).]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=beetles-powerline</ipt:eml>
+            <pubDate>Mon, 09 Jul 2018 08:33:05 +0200</pubDate>
+            <guid isPermaLink="false">c5fe763f-6851-4610-bdc3-67143540be67/v1.4</guid>
+        </item>
+        <item>
+            <title>MATRIX project, Budongo fragments birds - Version 1.7</title>
+            <link>https://data.gbif.no/ipt/resource?r=budongo-birds</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The connections between forest fragments around Budongo Forest Reserve in western Uganda have been extensively disturbed by agriculture and commercial plantations thereby isolating the forest fragments and the main forest. We conducted bird surveys through mist-netting in the continuous forest and six forest fragments, to evaluate the effects of different aspects of fragmentation on bird species richness and community composition.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=budongo-birds</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=budongo-birds</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:35:58 +0200</pubDate>
+            <guid isPermaLink="false">ad739ed0-ab30-4ca1-83ae-7c6ce228cafb/v1.7</guid>
+        </item>
+        <item>
+            <title>ARKO - Version 9.9</title>
+            <link>https://data.gbif.no/ipt/resource?r=arko</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Fungi field notes]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=arko</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=arko</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:35:06 +0200</pubDate>
+            <guid isPermaLink="false">8167bb10-9d74-4d70-afea-778b87720307/v9.9</guid>
+        </item>
+        <item>
+            <title>Bekkelag basin, Inner Oslofjord - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=foram-bekkelag</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Occurrence data of living benthic foraminifera (&gt;63µm) from 3 sites in the Bekkelag basin, Oslofjord, collected during 2008-2014. The data are related to a recolonization study undertaken by the Department of Geociences, University of Oslo. Samples were taken with a gravity corer and data represent the occurrence of living benthic foraminifera  in the upper sediment centimeters (0-3cm) of 3 replicates per sampling event.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=foram-bekkelag</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=foram-bekkelag</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:35:05 +0200</pubDate>
+            <guid isPermaLink="false">101f5645-c5c0-4981-a1a2-3d2bb1853edf/v1.5</guid>
+        </item>
+        <item>
+            <title>Balsfjord Nature Reserves - Version 1.8</title>
+            <link>https://data.gbif.no/ipt/resource?r=balsfjord_nature_reserves</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>New dataset with corrected values.</description>
+            <author>vidar.bakken@usit.uio.no (Vidar Bakken)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=balsfjord_nature_reserves</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=balsfjord_nature_reserves</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:35:05 +0200</pubDate>
+            <guid isPermaLink="false">4b456e0f-a945-4083-8a72-79ea06898258/v1.8</guid>
+        </item>
+        <item>
+            <title>Foraminifera study in Lurefjorden, western Norway - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=foram-lurefjord</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Occurrence data of living benthic foraminifera in the Lurefjord, collected in 2015. Samples were taken with a gravity corer. The data represent the occurrence of living benthic foraminifera (&gt;63µm) in the upper sediment centimeters (0-2cm) of 3 replicates.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=foram-lurefjord</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=foram-lurefjord</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:35:04 +0200</pubDate>
+            <guid isPermaLink="false">5a8d4f46-ff7c-442b-a8da-1e312cbaafb5/v1.5</guid>
+        </item>
+        <item>
+            <title>Vascular plants in power line clearings and the nearby forest, southeast Norway - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=vascular-powerline2</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Power line clearings are edge-creating disturbances in landscapes world-wide, but there have been few studies on their bordering vegetation. Our aim was to quantify edge effects on plant communities along such clearings in Norway and to identify factors that influence these edge effects., We surveyed understorey plant communities on either side of the power line clearing–forest edge at 51 sites, along four parallel transects at each site. Each transect had four plots located, respectively, in the clearing centre, clearing edge, forest edge and forest. We quantified the magnitude of edge effects (MEE) on either side by comparing edges with their corresponding ‘non-edge’ reference habitats. We also measured differences in species composition across the edge (clearing edge vs. forest edge). Habitat characteristics were sampled at plot and site level and from digital maps. % cover of vascular plants were registered (see Eldegard et al 2015 for description of study design and methods)., Differences in species composition were greater between clearing centres and clearing edges than between forests and forest edges. Differences in species composition across the edge increased with edge contrast and forest productivity. Edge effects on species composition into the forest were smallest along north-facing edges, whereas those in the clearings increased with power line age., Species richness increased slightly towards the edge in forests but decreased considerably towards the edge in clearings. The direction and MEE on either side differed among functional groups. Edge contrast and edge aspect were the prime factors influencing the MEE into forests, whereas in clearings, these were influenced principally by tree regrowth in the clearings and by forest productivity., Synthesis and applications. Edge effects on plant communities bordering power line clearings were determined by factors that can be influenced by planners and managers. For existing power lines, management plans should differentiate between the following: (i) clearings through high conservation value forests, where edge effects into the adjacent forest should be limited; (ii) clearings that can act as replacement habitat for cultural landscape species, where maintaining open-canopy habitats should be prioritized; and (iii) ‘business-as-usual’ clearings, where continuing the current practice of cutting every 5–10 years is recommended.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=vascular-powerline2</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=vascular-powerline2</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:35:57 +0200</pubDate>
+            <guid isPermaLink="false">9678e1a6-b1c4-4e86-9d26-ebb169338655/v1.4</guid>
+        </item>
+        <item>
+            <title>Ecofact - Version 1.7</title>
+            <link>https://data.gbif.no/ipt/resource?r=ecofact</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Vascular plants. Observations by Ecofact. Ecofact is aNorwegian consult company with offices in Sandenes and Tromsø. This dataset includes species observations from comissioned environment assessments from all of Norway including Svalbard and Jan Mayen.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=ecofact</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=ecofact</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:35:03 +0200</pubDate>
+            <guid isPermaLink="false">d7e36e03-340d-4cba-904c-a2a3e662d3cd/v1.7</guid>
+        </item>
+        <item>
+            <title>Small rodents trapped in old growth forest in Vegårshei, Norway - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=small-rodents</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Small rodents trapped in old growth forest over several years from 1999 to 2016. Specimen have been collected at ten different sites in Vegårshei (Aust-Agder county), but some of the localities have changed over the years due to clear cuts. Each year, 100 traps, baited with carrot, have been put out for 4 days and nights, during summer season. The main species, Myodes glareolus and Apodemus sylvaticus, have been identified and counted.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=small-rodents</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=small-rodents</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:52 +0200</pubDate>
+            <guid isPermaLink="false">cef50838-45d9-488a-831e-3dc3fc6b62fd/v1.4</guid>
+        </item>
+        <item>
+            <title>Vegetation data with and without experimental warming, alpine Finse 2000, 2004, 2011 - Version 1.7</title>
+            <link>https://data.gbif.no/ipt/resource?r=finse</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Vegetation data with and without experimental warming, collected in Finse in 2000, 2004, 2011, under a project called “Experimental warming in alpine Dryas heath”.  The seed-addition and warming experiment was conducted at Finse (60°36′59″N, 07°31′23″E) in the alpine region of southern Norway, established in 2000. During summer, (June–August) Finse has a mean monthly temperature and rainfall of 6.3°C and 89 mm, respectively. The study site is located at approximately 1550 m a.s.l. on an exposed ridge of Mt Sanddalsnuten (peak at 1556 m a.s.l.). The bedrock consists mainly of phyllite, supporting a species rich Dryas heath community. The vegetation is dominated by the dwarf shrub Dryas octopetala, and other common species are Bistorta vivipara, Carex rupestris, Carex vaginata, Saussurea alpina and Thalictrum alpinum., The experiment was initiated in 2000 to study the relative impacts of seed dispersal and different biotic and abiotic factors on plant species richness. They established 80 main plots, each of which consisted of two 30 × 60 cm split-plots which were further divided into eighteen 10 × 10 cm subplots. One of the split-plots in each main plot was randomly selected for seed addition, while the other was used as a control for natural background recruitment. Seeds and propagules (from here on collectively called seeds) were collected of 27 species at Mt Sanddalsnuten and randomly varied the number of species added to each split-plot to study the effect of seed species richness on community species richness. Each seed-addition plot received 0, 3, 6, 9, 12, 15, 18, 21, 24 or 27 species as seeds, with eight replicates per level of seed-addition. Eleven of the added species were not present in the plots prior to seed addition (Table 1). To examine whether warming affected the relative importance of dispersal and environmental filtering for species richness, open- top chambers (OTCs) open- top chambers (OTCs) were randomly placed upon half of the main plots. OTCs are hexagonal polycarbonate chambers with an inside diagonal of 1 m used for experimental warming of vegetation (see for instance Marion et al. 1997). Collection methods: species abundance by subplot frequency.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=finse</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=finse</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:50 +0200</pubDate>
+            <guid isPermaLink="false">6bbcb71c-42e7-40e7-bd02-b66d4e9a5c6e/v1.7</guid>
+        </item>
+        <item>
+            <title>Plants from India in the vascular plant herbarium, Natural History Museum at the University of Oslo (NHM-UiO) - Version 5.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=india_o_vascular</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[This dataset includes specimens originating from India in the vascular plant herbarium, the Natural History Museum at the University of Oslo (NHM-UiO). &lt;br /&gt;&lt;br /&gt;&lt;b&gt;Introduction&lt;/b&gt;: As the country of India has banned the export of plant specimens, specimens collected in India prior to the ban are of high value for the research community. This report is from a survey of the herbarium sheets in the vascular plant herbarium of Oslo which ended in an inventory of plants from India present in the herbarium. Due to ongoing mass digitization of the vascular plant herbarium in Oslo, the angiosperms were only surveyed up to and including the family of Cyperaceae. The specimens were primarily collected in the mid or late 19.th century. Whereas most are personal collections and some are from “flora exsiccata”, which were herbarium sheets sold by sellers that did not necessarily collect the specimens themselves. &lt;br/&gt;&lt;b&gt;The collectors&lt;/b&gt;: One of the earliest collectors which has donated material to Oslo was Nathaniel Wallich (1786-1854). Unfortunately he did not specify where in India or when the collection was made. But it is known that he arrived in India in 1807, and that he retired aroud 1846. It is also known that he spent most of the time in or around Calcutta, but he also made several expeditions to what is now known as neighboring countries of India. Wallich described many new species on his journey, and some of the specimens might therefor be type specimens. The most famous, and important of the collectors may be Joseph Dalton Hooker(1817-1911), who collected along with Thomas Thomson (1817-1878), mainly in the Khasia area. They also split up and went for individual surveys where J.D. Hooker went to Sikkim, and T. Thomson went to the western Himalaya and Punjab. J.D. Hooker is known to have collected and described many new species from India, which means that there might be some hidden syntypes in the material present at the herbarium in Oslo. The collections are not numbered which might further complicate the decision of the status of the specimens. J.D. Hooker&apos;s main affilation was to the botanical garden in Kew, where more of their material can be found. However, the value of the collections in Oslo is high as it might add to what is found in Kew. Their journeys are well described, so an approxiamate date to their collections can be found by tracing their journey. Major/Captain Francis Jenkins (1763-1866) and John William Masters (1792-1873) collected plant specimens in the area of Assam. F. Jenkins is credited for beeing the one that discovered the tea plant in Assam. Most of the collections present in Oslo was made by J.W. Masters, with little of no additional information other than the label shared with F. Jenkins &quot;Coll. Jenkins Plants of Assam&quot;. They apparently did more collecting than describing. Thomas Anderson (1832-1870) is represented with a few collections in the herbarium. It seems like some former worker in the herbaria of Oslo confused him with the Swedish botanist Nils Johan Andersson (1821-1880), which was on a circumference within approximately the same time period. Some of their collections are quite presice and inludes the site and even the date of collecting, however others are of less precision. John Firminger Duthie (1845-1922), is strongly represented in the collection of material from India. Most of his collections are from the period of 1880-1900. Therefore the number of new species described by him is lower than the previous collectors for obvious reasons. His collections are very precise and includes both area and date of collection. One of the collectors from the early 1800&apos;s was Dr. Bernhard Schmid (1787-1857). Working as a missionary he mainly collected. But his material has been used by Jonathan Carl Zenker. The material is almost exclusively collected in the Nilagiri area. More recently, Robert L. Fleming collected many specimens in the Dehra Dun area about 1950, mainly pteridophytes. Ove Arbo Høeg a professor from the University of Oslo did some collections in 1951-1952. As these collectors are more recent, the labels are more detailed than the predecessors. In addition to these collectors which count for most of the material, several others have contributed. Mainly serveral persons from the University of Delhi, which mainly collected around Delhi, even on the University campus. A special case is that of Rudolph Friedrich Hohenacker (1798-1874). Many collections bears his label, but these are not collected by him personally. R.F Hohenacker sold flora exsiccata&apos;s which consist of specimens collected by other persons. The only additional information on these collections are the area they were collected. These collections have to be considered of lower scientific value than others, unless the original collectors can be traced, and therby giving a timespan and an actual collector. &lt;br/&gt;&lt;b&gt;Final remarks&lt;/b&gt;: Many of the specimens from India in the herbarium of Oslo are from the 1800&apos;s and are therefore of a certain value. The possibility that some of them might be syntypes or isotypes adds additional value. And again for scientific purposes, material from India is rare outside India due to their export ban. Allthough it&apos;s not very useful for most modern DNA techniques, morphology is still the backbone of modern botany. It is also worth mentioning the &quot;cool&quot; factor of some of these collections. J.D. Hooker was one of Charles Darwins closest friends, which gives some perspective to what kind of material we are dealing with and help convey this era of botany.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=india_o_vascular</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=india_o_vascular</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:38 +0200</pubDate>
+            <guid isPermaLink="false">9b914050-4a8e-45c0-b66d-ed0073e8b962/v5.6</guid>
+        </item>
+        <item>
+            <title>Artsnavnebasen - Version 1.14</title>
+            <link>https://data.gbif.no/ipt/resource?r=artsnavn</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Removed some labels &quot;not_assigned&quot; in for higher classifications and epithet columns.</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=artsnavn</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=artsnavn</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:37 +0200</pubDate>
+            <guid isPermaLink="false">a6c6cead-b5ce-4a4e-8cf5-1542ba708dec/v1.14</guid>
+        </item>
+        <item>
+            <title>Vascular plants from a study of primary producer traits across an altitudinal gradient in alpine Finse - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=alpine-finse</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Added logo to metadata</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=alpine-finse</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=alpine-finse</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:24 +0200</pubDate>
+            <guid isPermaLink="false">3b9a6c7a-98cb-4e1e-bc33-7fecb2599a87/v1.5</guid>
+        </item>
+        <item>
+            <title>Bioversity Collecting Mission Database - Version 1.9</title>
+            <link>https://data.gbif.no/ipt/resource?r=bcd</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>Updated to use ID_SUB_MISSION as eventID and ID_MISSION as parentEventID (when different), added record level link to the Fusion table data portal. Some additional minor updates.</description>
+            <author>dag.endresen@nhm.uio.no (Dag Endresen)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=bcd</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=bcd</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:49 +0200</pubDate>
+            <guid isPermaLink="false">33795d9d-3f94-4b0e-a2f6-d3a03cfce7aa/v1.9</guid>
+        </item>
+        <item>
+            <title>Lepidoptera collection, NTNU University Museum - Version 1.45</title>
+            <link>https://data.gbif.no/ipt/resource?r=vm_lepidoptera</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The lepidoptera collection contains around 80 000 specimens from around 1 500 different species, most of them from Norway.
+
+                A large part of the collection comes from the personal collection of C.F. Lühr, Lom, who donated his collection to the museum at the end of the 20th century.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=vm_lepidoptera</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=vm_lepidoptera</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:24 +0200</pubDate>
+            <guid isPermaLink="false">38c0c1a7-44b7-44e6-b2af-a3114de02ef4/v1.45</guid>
+        </item>
+        <item>
+            <title>MATRIX project, Kampala monkey trees - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=matrix-trees</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[This study sought to determine the current status of the Red-tailed Monkey and its habitats in eleven peri-urban forest fragments. A tree enumeration was conducted along the same transect used for censuring monkeys. These are the trees that provide both the food resources and a medium for travel and rest for the arboreal primates. Large trees (&gt;100cm dbh) were found missing in most of the fragments and where present, these were few. Tree basal area and composition did not show a significant relationship with red-tailed monkeys’ group size., Belt transect method was employed for the enumeration exercise. A transect was established across each forest. A 2.5m strip on either side of the transect was established within which all trees with diameter greater than or equal to 10cm at breast height were measured using a diameter tape and recorded.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=matrix-trees</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=matrix-trees</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:23 +0200</pubDate>
+            <guid isPermaLink="false">d750e2d1-89cf-4d8c-a434-26441e5e7629/v1.5</guid>
+        </item>
+        <item>
+            <title>MUST, Insecta - Version 9.266</title>
+            <link>https://data.gbif.no/ipt/resource?r=must</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Museum Stavanger, insect collection]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=must</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=must</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:20 +0200</pubDate>
+            <guid isPermaLink="false">c2e0fa78-45b5-4e28-919b-4ff81d3304a9/v9.266</guid>
+        </item>
+        <item>
+            <title>Rekartlegging av skog i Kvam i 2015 og 2016 - Version 1.8</title>
+            <link>https://data.gbif.no/ipt/resource?r=asplan-kvam</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of biodiversity survey in the forest in the area near Linga in Kvam, Hordaland county.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=asplan-kvam</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=asplan-kvam</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:19 +0200</pubDate>
+            <guid isPermaLink="false">5f10af1e-3b3a-40c5-b55d-f3bff1243b4c/v1.8</guid>
+        </item>
+        <item>
+            <title>KU E16 Slæn - Tvinno - Version 1.7</title>
+            <link>https://data.gbif.no/ipt/resource?r=asplan-e16</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of biodiversity survey in the area between Slæn and Tvinno in Voss, Hordaland county, in connection with the planning process of a new European route E16.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=asplan-e16</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=asplan-e16</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:19 +0200</pubDate>
+            <guid isPermaLink="false">381802fd-f387-4d3e-a4d4-de13d5cdb3fa/v1.7</guid>
+        </item>
+        <item>
+            <title>Summer Browsing 2008-2013 Oikos - Version 2.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=oikos</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[-----]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=oikos</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=oikos</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:18 +0200</pubDate>
+            <guid isPermaLink="false">https://data.gbif.no/ipt/resource?id=oikos/v2.5</guid>
+        </item>
+        <item>
+            <title>Dannevig- and Drobak-collections Polychaeta - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=polychaeta</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Occurrence data of marine benthic polychaetes from the Dannevig- and Drobak-collections which were carried out 1950-1955 and covered the Oslofjord and south Norwegian coastal areas:  registered and catalogued specimens in the NHMO invertebrate collections.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=polychaeta</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=polychaeta</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:36 +0200</pubDate>
+            <guid isPermaLink="false">c6dc7a32-b0d6-4ae5-838c-085bfad3b4d3/v1.5</guid>
+        </item>
+        <item>
+            <title>Small rodents in mountain birch forest 2002-2016 - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=gnagere</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Small rodents have been trapped in a mountain birch forest in Øvre Heimdalsvann, (Øystre Slidre in Oppland, Norway) at an elevation of 1000 masl. 100 traps, baited with carrot, have been put out for 4 days and nights, late August, every year since 2002. Small rodents were identified, weighted (gram),  and length was measured, both body length  and total length (cm).The collections have been conducted by students and employees at NMBU, and will continue years to come.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=gnagere</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=gnagere</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:17 +0200</pubDate>
+            <guid isPermaLink="false">7b330f7a-0ec3-4e19-8fbe-727a004df693/v1.6</guid>
+        </item>
+        <item>
+            <title>Specimens from India at the University Museum at the University of Bergen - Version 5.7</title>
+            <link>https://data.gbif.no/ipt/resource?r=india_uib</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[This dataset includes specimens originating from India in the natural history collections at the University Museum of the the University of Bergen (UiB). &lt;br /&gt;&lt;br /&gt;&lt;b&gt;Animals&lt;/b&gt;: The vertebrate collection contains 18 reptile specimens as well as a few bird eggs and fishes from India. There are no bird skins or mammals in this part of the collection. However, the osteology collection contains 8 craniums and skeletons, in some cases of the same individual. The museum in Bergen contains neither insects nor marine invertebrates from India. &lt;br /&gt;&lt;br /&gt;&lt;b&gt;Plants and fungi&lt;/b&gt;: The vascular plant collection is likely to hold some specimens from India but these are difficult to find as the material is sorted taxonomically and not yet digitised. While the Fennoscandian herbarium had been digitised, there are as yet no plans for the digitisation of the general herbarium. Some 30% of the bryophyte herbarium has been digitised, including 41 specimens from India (10 of these where previously visible in the GBIF portal). Once the complete bryophyte herbarium is digitised (80 0000 specimens) there may be an estimated number of 150 mosses from India. Lichens and fungi have all been digitised and include 39 lichen specimens from India and no fungi. 34 lichen specimens where previously visible in the GBIF portal.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=india_uib</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=india_uib</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:16 +0200</pubDate>
+            <guid isPermaLink="false">41f8f918-1a6b-4e69-89d3-0f570c38a9cb/v5.7</guid>
+        </item>
+        <item>
+            <title>Relascope sum of Sitka spruce Picea sitchensis in Fusa and Tysnes - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=sitka</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Invasive species can be considered a threat to biodiversity, and remote sensing has been proposed as a tool for detection and monitoring of invasive species. In this study, we test the ability to discriminate between two tree species of the same genera, using data from Landsat 8 satellite imagery, aerial images, and airborne laser scanning. Ground observations from forest stands dominated by either Norway spruce (Picea abies) or Sitka spruce (Picea sitchensis) were coupled with variables derived from each of the three sets of remote sensing data. Random forest, support vector machine, and logistic regression classification models were fit to the data, and the classification accuracy tested by performing a cross-validation. Classification accuracies were compared for different combinations of remote sensing data and classification methods. The overall classification accuracy varied from 0.53 to 0.79, with the highest accuracy obtained using logistic regression with a combination of data derived from Landsat imagery and aerial images. The corresponding kappa value was 0.58. The contribution to the classification accuracy from using airborne data in addition to Landsat imagery was not substantial in this study. The classification accuracy varied between models using data from individual Landsat images., The study area is within the Fusa and Tysnes municipalities on the western coast of Norway (60°2′N, 5°46′E, 0–500 m above sea level, Figure 1). The forest is naturally dominated by Scots pine and deciduous species, mainly birch (Betula pubescens). From the 1940s and throughout the second part of the twentieth century, regeneration using non-native tree species—such as Sitka spruce—was common in this region on the west coast of Norway. Note that Norway spruce is also considered non-native in parts of this region. The productive forest area is about 260 km2, and the species composition is approximately 13% spruce, 66% pine, and 20% deciduous trees. Three sets of field observations were utilized in the present study, with observations from a total of 240 individual locations. All locations were situated in a spruce-dominated forest, and the proportions of Sitka spruce and Norway spruce were recorded for all locations. A total of 113 locations were dominated by Sitka spruce, and 127 were dominated by Norway spruce. Two of the sets were initially collected as a part of the data acquisition in other research and forest inventory projects., Field measurements with the main purpose of increasing the number of observations from locations dominated by Sitka spruce was carried out during the summer of 2015. From an initial set of all forest stands in the study area dominated by Sitka spruce, 30 stands were subjectively chosen for measurements. With an initial goal of having the observations evenly spread out in the study area, the selection was ultimately guided by accessibility from, e.g., forest roads. The selection of the 30 stands were carried out prior to visiting the stands in the field, with the exception of a few occasions in which a nearby stand was measured instead due to severe storm felling in the originally chosen stand. Within the selected stands, three locations were subjectively chosen, guided by these criteria: the locations are evenly spread out in the stand and are preferably not close to stand borders. At each of the three locations, the proportions of the basal area of Sitka spruce versus other species were recorded using a relascope.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=sitka</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=sitka</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:16 +0200</pubDate>
+            <guid isPermaLink="false">44ef1f04-b01c-4b42-8baa-679e26ce43bc/v1.6</guid>
+        </item>
+        <item>
+            <title>Foraminifera study in the Lysefjord and Høgsfjord, western Norway - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=foram-lysefjord</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Occurrence data of living benthic foraminifera in the Høgsfjord, collected in 2013. Samples were taken with a gravity corer. The data represent the occurrence of living benthic foraminifera (&gt;63µm)  in the upper sediment centimeter (0-1cm) of 3 replicates.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=foram-lysefjord</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=foram-lysefjord</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:15 +0200</pubDate>
+            <guid isPermaLink="false">27707a6d-3320-4e85-be33-aafaf7f321f3/v1.5</guid>
+        </item>
+        <item>
+            <title>Foraminifera of station OF2, outer Oslofjord - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=foram-of2</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Occurrence data of living benthic foraminifera of stastion OF2 (outer Oslofjord), collected in 2013. Samples were taken with a gravity corer. The data represent the occurrence of living benthic foraminifera (&gt;63µm) in the upper sediment centimeters (0-2cm) of 3 replicates.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=foram-of2</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=foram-of2</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:15 +0200</pubDate>
+            <guid isPermaLink="false">1033dac1-8ed3-467d-a097-52d0a4b7dc26/v1.5</guid>
+        </item>
+        <item>
+            <title>Boreonemoral regnskog i Sveio - Version 1.3</title>
+            <link>https://data.gbif.no/ipt/resource?r=asplan_regnskog</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of a biodiversity survey in several areas in Sveio in Hordaland.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=asplan_regnskog</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=asplan_regnskog</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:34:13 +0200</pubDate>
+            <guid isPermaLink="false">787e8928-0088-42f4-8922-1ba5ecd4fa5d/v1.3</guid>
+        </item>
+        <item>
+            <title>Dannevig-collections - Version 1.7</title>
+            <link>https://data.gbif.no/ipt/resource?r=dannevig</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Spatial and temporal project data (EVENT DATA) from 280 marine sampling events. Marine benthic invertebrates were collected during annual summer period cruises 1950-1953 with research vessel R/V “G.M. Dannevig”. The sampling effort was organised by the Natural History Museum in Oslo. The cruises covered Norwegian coastal areas from the mouth of the Oslofjord to Kvitsøy on the west coast., This dataset is deliberately published WITHOUT OCCURRENCES. The collected invertebrate material was to be made available for revisions by specialists. It was further intended that the collections should form a core material for a series of publications on Nordic marine fauna named ‘Marine
+                Invertebrates of Scandinavia (MIOS)’. Ten volumes were published, but the original idea of a series covering more than 40 systematic groups was never completed., The collected material was deposited in the invertebrate collections of the Natural History Museum of the University of Oslo. Parts of the material has not yet been registered. Parts has been registered but is still to be digitised (status per 2018). It will be published in GBIF as occurrence files which will be linked to these datasets using the corresponding eventID. So far, occurrence data of several polychaete families have been published: https://data.gbif.no/ipt/resource?r=polychaeta#]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=dannevig</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=dannevig</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:59 +0200</pubDate>
+            <guid isPermaLink="false">65f31196-9c76-49fd-9ff1-1b8394091092/v1.7</guid>
+        </item>
+        <item>
+            <title>BIOSKAG-collections - Version 1.8</title>
+            <link>https://data.gbif.no/ipt/resource?r=bioskag</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Spatial and temporal data (EVENT DATA) from a total of 178 sampling events of marine benthic invertebrates from two sampling project periods:
+                27 events from coastal areas near Arendal and deeper parts of Skagerrak collected in June 2006 with research vessel R/V “G.M. Dannevig”.  The sampling was organised by Christoffer Schander, University of Bergen.
+                151 events from deep areas of Skagerrak collected in May 2009 with research vessel R/V “Håkon Mosby”.  The sampling was organised by Christoffer Schander, University of Bergen in collaboration with the the Swedish Species Information Centre., This dataset is deliberately published WITHOUT OCCURRENCES. The dataset describes collaborative collecting efforts during marine expeditions. The collected material is deposited in the national university museum collections in Norway. Many of the museum specimens are not yet digitized (status per 2018) but will be linked to these datasets using the corresponding eventID when they are published in GBIF.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=bioskag</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=bioskag</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:59 +0200</pubDate>
+            <guid isPermaLink="false">c013532f-c30a-4832-97da-7323e2c1533c/v1.8</guid>
+        </item>
+        <item>
+            <title>The effect of Macrotermes on distribution and abundance of rodents in Lake Mburo National Park, Uganda - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=uganda-rodents</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Small rodents trapped in African savannahs, to compare the population of rodents on and off termitaria in a savanna area. In addition, an experiment to assess the effect of herbivore exclusion on the population of rodents on and off termitaria in a savanna area., Large herbivores and termites are important functional groups in African savannahs. Both groups affect small mammals, which are also important determinants for savannah structure and function. Because vegetation on Macrotermes mounds are preferentially grazed by large herbivores, and mounds represent resource-rich distinct habitat patches for small mammals in relatively resource-poor savannahs, termite mounds are ideal sites for studies of how grazing by large mammals and productivity affect communities of small mammals. We conducted an experiment in Lake Mburo National Park, Uganda, with four treatments: large vegetated Macrotermes mounds (with and without large herbivores) and adjacent savannah areas (with and without large herbivores). We replicated the treatment blocks nine times and trapped small mammals regularly over a period of almost 2 years. Small mammal species assemblages differed considerably between mounds and savannah areas. Grazing had a substantial effect on small mammal species assemblages in the resource-poor savannah, but not in the relatively resource-rich termitaria. Small mammal species abundance, biomass, and richness were higher on termite mounds than adjacent savannah areas. Excluding large herbivores caused a major increase in species abundance, biomass, and richness both on savannah and termitaria. Herbaceous plant species evenness was an important determinant of the small mammal community. Small mammal biomass increased with high plant dominance, indicating that a few dominant plant species are important for biomass production of small mammals. Small mammal diversity was not related to any of the treatments, but increased with plant species evenness as well as richness. Fencing increased species dominance in the small mammal community on both savannah and termitaria, probably because competitive patterns shift from inter-guild (that is, between large and small mammals) to intra-guild (that is, between small mammals) when large mammals are excluded. The study highlights the complex interactions among large herbivores, termites, herbaceous plants, and small mammals in African savannahs. When studying the structure and function of small mammal communities it is therefore important to consider several coexisting functional groups.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=uganda-rodents</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=uganda-rodents</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:22 +0200</pubDate>
+            <guid isPermaLink="false">9e54a9c3-98cf-438d-bdf2-89358b647ffa/v1.4</guid>
+        </item>
+        <item>
+            <title>Kystfuruskoger i Tysnes og Fusa - Version 1.3</title>
+            <link>https://data.gbif.no/ipt/resource?r=asplan_furuskog</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of biodiversity survey in several areas in Tysnes and Fusa in Hordaland.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=asplan_furuskog</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=asplan_furuskog</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:21 +0200</pubDate>
+            <guid isPermaLink="false">9a2879b9-0640-4248-bb15-8404367b531d/v1.3</guid>
+        </item>
+        <item>
+            <title>Saproxylic insects caught in window traps and hatched from polypores in small and large old forests in southern Norway - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=saproxylic-insects</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[The dataset includes beetle species caught in window traps in 5 old forests fragments in southern Norway and 1 in Southern Sweden. Five traps were used per forest and sampling occurred from mid May to mid August 2014 at 4 out of the 6 sites. The two remaining sites were sampled from mid June to mid August. In addition to the traps, the dataset includes insect species hathced from 114 polypore Fomitopsis pinicola collected in the same areas. There is also data on insects from 5 Fomitopsis rosea. Both beetles and parasitoids are identified to species.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=saproxylic-insects</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=saproxylic-insects</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:20 +0200</pubDate>
+            <guid isPermaLink="false">04930329-93ce-4f80-8d67-423a526a736b/v1.6</guid>
+        </item>
+        <item>
+            <title>Lichens along norwegian rivers - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=nni_riverlichen</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Lichens along norwegian rivers]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=nni_riverlichen</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=nni_riverlichen</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:20 +0200</pubDate>
+            <guid isPermaLink="false">5baf7c1e-d75d-4c31-a298-5a20f2e0133c/v1.5</guid>
+        </item>
+        <item>
+            <title>Lindesnes - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=asplan-lindesnes</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of forest conservation survey in the area between lake Tarvannet and lake Fisketjønna in Lindesnes, Vest-Agder.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=asplan-lindesnes</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=asplan-lindesnes</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:19 +0200</pubDate>
+            <guid isPermaLink="false">0c2b68be-1332-4cdc-880a-0c9a835467a0/v1.5</guid>
+        </item>
+        <item>
+            <title>MATRIX project, monkeys near Kampala in Uganda - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=matrix-monkeys</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Monkeys were counted along transects using standard primate census techniques twice a month for nine months, starting October 2011. Transect lines (Buckland, Plumptre, Thomas, &amp; Rexstad, 2010) were established in each forest patch along which monkey censuses were conducted. The number and length of the transects was dependent on the size of the forest patch, following the longest distance across the forest. The census was done between 0700hrs and 1100hrs and later between 1500hrs to 1900hrs since the monkeys tend to be more active in the early morning and late afternoon (Davies &amp; Hoffmann, 2002). During each census, the transect was walked at approximately 1km/hr and all observed monkeys were recorded.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=matrix-monkeys</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=matrix-monkeys</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:18 +0200</pubDate>
+            <guid isPermaLink="false">fe7fa086-1b67-4c90-abe1-123048ead530/v1.6</guid>
+        </item>
+        <item>
+            <title>PES-project, Southern Norwegian Fjords - Version 1.7</title>
+            <link>https://data.gbif.no/ipt/resource?r=foram-pes</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Occurrence data of living benthic foraminifera (&gt;63µm) from southern Norwegian fjords, collected in 2008. The data are related to the PES research project undertaken by the Department of Geociences, University of Oslo. The project focused on the development of paleoecology-based tools for reconstructing soft-bottom ecologic status, including reference conditions in coastal waters. Samples were mainly taken with a gravity corer and data represent the occurrence of living benthic foraminifera in the upper sediment centimeters (0-2cm) of 3 replicates.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=foram-pes</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=foram-pes</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:17 +0200</pubDate>
+            <guid isPermaLink="false">4f659137-54b4-4243-8bcb-5b2f534481c8/v1.7</guid>
+        </item>
+        <item>
+            <title>Kystfuruskoger 2015 - Version 1.8</title>
+            <link>https://data.gbif.no/ipt/resource?r=kystfuruskoger_2015</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data was collected as a part of a biodiversity survey of humid forests in northwestern Norway.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=kystfuruskoger_2015</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=kystfuruskoger_2015</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:16 +0200</pubDate>
+            <guid isPermaLink="false">841b568b-4ef6-456c-bee6-d780b06cd641/v1.8</guid>
+        </item>
+        <item>
+            <title>Lichens from a study of primary producer traits across an altitudinal gradient in alpine Finse - Version 1.4</title>
+            <link>https://data.gbif.no/ipt/resource?r=finse-lichens</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[One of the major challenges for contemporary ecologists is to understand how ecological communities respond to environmental changes. Although classifying species to their taxonomy is useful, it has major limitations when it comes to answering ecological questions. A more functional approach, based on a species set of traits that define its performance within an ecosystem, provides much more insight. Many plant ecologists have now applied such trait-based approaches, but these studies are often limited to vascular plants and do not include other important primary producer groups such as lichens and bryophytes. However, there may be clear differences in what drives changes in community level traits across environmental gradients between producer groups: in vascular plants changes in species community are often most important and intraspecific variation is often also significant, whereas recent studies suggest that in lichens intraspecific variation alone drives changes in community level traits. In this study, we will disentangle the relative importance of species turnover versus intraspecific variation as drivers of community-level traits in different primary producer groups simultaneously across the same environmental gradient in Finse, Southern Norway.  The % cover was estimated visually in 50x50cm subplots with a wire frame marking out 10x10cm squares. All species covering less than 1% was marked as cover = 0.5 in the data.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=finse-lichens</ipt:eml>
+            <pubDate>Mon, 09 Jul 2018 08:32:03 +0200</pubDate>
+            <guid isPermaLink="false">cf999616-58f0-43af-8dba-164c0323f19d/v1.4</guid>
+        </item>
+        <item>
+            <title>Redlisted beetles found in oak grove near Lake Østensjø - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=ostensjobiller</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Data obtained from an insect survey of the oak grove in the ‘environmental park’ around Lake Østensjø (established 2002). “Østensjøvannets Venner” initiated the survey in 2014 to document the species diversity particularly in relation to a few large and potentially hollow oak trees. The aim of the survey was to identify which beetle species associated with dead wood exists in this area. Four insect traps (window traps) were put out at three different oak-tree locations, in the beginning of May to the end of August 2014. The traps were emptied every second week during this period. Sindre Ligaard identified the beetles. Totally 45 beetle species were found.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=ostensjobiller</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=ostensjobiller</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:16 +0200</pubDate>
+            <guid isPermaLink="false">c6fe2d03-eeb2-4af7-bd7f-f2e5bfef02b3/v1.6</guid>
+        </item>
+        <item>
+            <title>Change in aboveground biomass carbon stock following the establishment of exclosures on degraded lands in Tigray, Ethiopia - Version 1.6</title>
+            <link>https://data.gbif.no/ipt/resource?r=ethopia-trees</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[This dataset contains a vegetation inventory from a study in Ethiopia and these data represent the trees and shrubs found in the exclosures (see methods section)., Aboveground biomass and carbon stocks were measured in three pools; i. e. aboveground biomass of woody plants, herbaceous vegetation and litter.  A nested plot, with three sections was used in all land use types to assess the aboveground biomass of woody species, herbs and grasses, and litter. The size and shape of the main plot was fixed based on the diameter size and degree of homogeneity of the plant species sampled in that plot. Accordingly, two plot shapes of different sizes were selected; a rectangular plot of 1000 m2 (0.1 ha) for the E. globulus plantations (Ravindranath and Ostwald, 2008) and a square of 400 m2 (0.04 ha) for the exclosures and grazing lands (WBISPP, 2000). At the southwestern corner of each main plot, a sub-plot of 4 m2 was positioned for the biomass assessment of herbs and grasses. Within the 4 m2 plots, a sub-plot of 1 m2 was established randomly at one of the corners of the sub-plot, for the measurement of litter biomass., In each main plot located in the exclosures and grazing lands, diameter at stump height (DSH) (30 cm from the ground) and total height of all trees and shrubs were measured. Local names of all plant species were recorded and plant specimens mainly from the foliage were also collected for subsequent identification. Diameter at breast height (DBH) and total height (H) of each E. globulus tree found in the main plot were also measured. DBH and DSH were measured by using calipers graduated in mm. Total height was measured using a meter tape or a hypsometer, depending on the height of the plant. Altitude and coordinates of each plot center were taken using GPS. Average slope was also measured at each plot using a clinometer.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=ethopia-trees</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=ethopia-trees</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:14 +0200</pubDate>
+            <guid isPermaLink="false">3ae1285c-1cdf-4bf6-bb97-0af43a81cb1b/v1.6</guid>
+        </item>
+        <item>
+            <title>Priority effects of early successional insects influence late successional fungi in dead wood - Version 1.5</title>
+            <link>https://data.gbif.no/ipt/resource?r=fungiaspen</link>
+            <!-- shows what changed in this version, or shows the resource description if change summary was empty -->
+            <description>[Community assembly is an integral process in all ecosystems, producing patterns of species distributions, biodiversity, and ecosystem functioning. Environmental filters and colonization history govern the assembly process, but their relative importance varies depending on the study system. Dead wood decomposition is a slow process, allowing decomposer communities to develop within a slowly changing substrate for decades. Despite this, there are few long-term studies of priority effects from colonization history in this ecosystem. In this study, we investigate the importance of insects in early succession of dead wood on the fungal community present one decade later. Sixty aspen trees were killed in two study landscapes, each tree producing one aspen high stump and log. Insects were sampled with flight interception traps during the first 4 years after tree death, and fungal fruiting bodies were registered in year twelve. We found positive priority effects of two fungivorous beetles, the sap beetle Glischrochilus quadripunctatus and the round fungus beetle Agathidium nigripenne, on the Artist’s bracket (Ganoderma applanatum) and a positive priority effect of wood-boring beetles on the ascomycete Yellow fairy cup (Bisporella citrina). The Aspen bracket (Phellinus tremulae) did not respond to insects in early succession of the dead wood. Our results suggest that early successional insects can have significant, long-lasting effects on the late successional fungal community in dead wood. Also, the effect can be specific, with one fungus species depending on one or a few fungivorous beetle species. This has implications for decomposition and biodiversity in dead wood, as loss of early colonizing beetles may also affect the successional pathways they seem to initiate.]</description>
+            <author>christian.svindseth@nhm.uio.no (Christian Svindseth)</author>
+            <ipt:eml>https://data.gbif.no/ipt/eml.do?r=fungiaspen</ipt:eml>
+            <ipt:dwca>https://data.gbif.no/ipt/archive.do?r=fungiaspen</ipt:dwca>
+            <pubDate>Mon, 09 Jul 2018 08:33:03 +0200</pubDate>
+            <guid isPermaLink="false">3b778b3e-c784-4df6-bd89-364e0ab503ed/v1.5</guid>
+        </item>
+    </channel>
+</rss>
