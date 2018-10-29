@@ -45,7 +45,6 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
     private void parse(IRI iri) {
         try {
             // first parse document to check whether it is valid
-
             new XmlMapper().readTree(get(iri));
             /// then parse
             parseRssFeed(iri, this, get(iri));
@@ -61,7 +60,8 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
             public void evaluateXPath(StatementEmitter emitter, NodeList nodeList) throws XPathExpressionException {
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     boolean isDWCA = false;
-                    URI archiveURI = null;
+                    URI linkURL = null;
+                    URI dwcaURL = null;
                     URI emlURI = null;
                     UUID uuid = null;
                     Node item = nodeList.item(i);
@@ -78,22 +78,11 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
                                 // ignore
                             }
                         } else if (Arrays.asList("ipt_eml", "emllink", "ipt:eml").contains(itemName)) {
-                            try {
-                                if (emlURI == null) {
-                                    emlURI = URI.create(itemValue);
-                                }
-                            } catch (IllegalArgumentException ex) {
-                                // ignore
-                            }
-                        } else if (Arrays.asList("ipt_dwca", "link", "ipt:dwca").contains(itemName)) {
-                            try {
-                                if (archiveURI == null) {
-                                    archiveURI = URI.create(itemValue);
-                                }
-                            } catch (IllegalArgumentException ex) {
-                                // ignore
-                            }
-
+                            emlURI = generateURI(emlURI, itemValue);
+                        } else if (Arrays.asList("ipt_dwca", "ipt:dwca").contains(itemName)) {
+                            dwcaURL = generateURI(dwcaURL, itemValue);
+                        } else if ("link".equals(itemName)) {
+                            linkURL = generateURI(linkURL, itemValue);
                         } else if (Arrays.asList("type", "archiveType").contains(itemName)) {
                             isDWCA = StringUtils.equals(itemValue, "DWCA");
                         }
@@ -112,8 +101,12 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
                         emitter.emit(toStatement(uriNode, HAS_VERSION, toBlank()));
                     }
 
-                    if (isDWCA && archiveURI != null) {
-                        IRI refNodeDWCAUri = toIRI(archiveURI.toString());
+                    if (linkURL != null && isDWCA && dwcaURL == null) {
+                        dwcaURL = linkURL;
+                    }
+
+                    if (dwcaURL != null) {
+                        IRI refNodeDWCAUri = toIRI(dwcaURL.toString());
                         emitter.emit(toStatement(archiveParent, HAD_MEMBER, refNodeDWCAUri));
 
                         emitter.emit(toStatement(refNodeDWCAUri, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_DWCA)));
@@ -122,6 +115,15 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
                     }
 
                 }
+            }
+
+            public URI generateURI(URI uri, String itemValue) {
+                try {
+                    return URI.create(itemValue);
+                } catch (IllegalArgumentException ex) {
+                    // ignore
+                }
+                return uri;
             }
         };
 

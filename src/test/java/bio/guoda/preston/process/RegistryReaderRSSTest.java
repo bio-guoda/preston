@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
@@ -102,7 +103,22 @@ public class RegistryReaderRSSTest {
 
         RegistryReaderRSS.parseRssFeed(parent, emitter, is);
 
-        assertThat(nodes.size(), is(486));
+        boolean hasEML = false;
+        boolean hasEMLLink = false;
+        boolean hasDWCA = false;
+        boolean hasDWCALink = false;
+        for (Triple node : nodes) {
+            hasEML = hasEML || node.getObject().toString().equals("\"application/eml\"");
+            hasDWCA = hasDWCA || node.getObject().toString().equals("\"application/dwca\"");
+            hasEMLLink = hasEMLLink || node.getObject().toString().equals("<https://data.gbif.no/ipt/eml.do?r=ethopia-trees>");
+            hasDWCALink = hasDWCALink || node.getObject().toString().equals("<https://data.gbif.no/ipt/archive.do?r=ethopia-trees>");
+        }
+
+        assertTrue(hasEML);
+        assertTrue(hasEMLLink);
+        assertTrue(hasDWCA);
+        assertTrue(hasDWCALink);
+        assertThat(nodes.size(), is(966));
     }
 
 
