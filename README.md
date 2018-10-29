@@ -30,7 +30,7 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
       * [`compare versions`](#compare-versions)
       * [`generating citations`](#generating-citations)
       * [`finding copies with hash-archive.org`](#finding-copies-with-hash-archiveorg)
-      * [`tracking a GBIF IPT`](#tracking-a-gbif-ipt)
+      * [`tracking an GBIF IPT`](#tracking-an-gbif-ipt)
  * [Prerequisites](#prerequisites)
  * [Install](#install)
    * [`standalone`](#standalone)
@@ -338,9 +338,9 @@ preston ls -l tsv | grep Version | cut -f1,3 | tr '\t' '\n' | grep -v "deeplinke
 
 If all web-accessible Preston instances would periodically register their content like this, https://hash-archive.org could serve as a way to lookup backup for the an archive that you got from some no longer active archive url.
 
-#### Tracking a GBIF IPT 
+#### Tracking an GBIF IPT 
 
-[GBIF](https://gbif.org)'s [Integrated Publishing Toolkit (IPT)](https://www.gbif.org/ipt) helps to publish and register biodiversity datasets with GBIF. IPT provide RSS feeds that list publicly available collections/datasets. Using this RSS feed, Preston can track datasets of individual IPTs, such as GBIF Norway's IPT at https://data.gbif.no/ipt . You can find the RSS link at the bottom of the home page of the ipt. GBIF Norway's RSS feed is ```https://data.gbif.no/ipt/rss.do``` . Now, you can update/track the IPT using Preston by running:
+[GBIF](https://gbif.org)'s [Integrated Publishing Toolkit (IPT)](https://www.gbif.org/ipt) helps to publish and register biodiversity datasets with GBIF. IPT provide a RSS feeds that lists publicly available collections/datasets. Using this RSS feed, Preston can track datasets of individual IPTs, such as GBIF Norway's IPT at https://data.gbif.no/ipt . You can find the RSS link at the bottom of the home page of the ipt. GBIF Norway's RSS feed is ```https://data.gbif.no/ipt/rss.do``` . Now, you can update/track the IPT using Preston by running:
 
 ```
 preston update https://data.gbif.no/ipt/rss.do 
