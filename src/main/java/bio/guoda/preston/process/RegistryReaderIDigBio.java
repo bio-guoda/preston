@@ -1,37 +1,36 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.MimeTypes;
+import bio.guoda.preston.Seeds;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
-import bio.guoda.preston.MimeTypes;
-import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.Seeds;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.UUID;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.RefNodeConstants.*;
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
 import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
 import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
+import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.ORGANIZATION;
-import static bio.guoda.preston.model.RefNodeFactory.*;
+import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static bio.guoda.preston.model.RefNodeFactory.getVersion;
+import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
+import static bio.guoda.preston.model.RefNodeFactory.toBlank;
+import static bio.guoda.preston.model.RefNodeFactory.toContentType;
+import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
+import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.model.RefNodeFactory.toUUID;
 
 public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
