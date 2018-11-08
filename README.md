@@ -24,8 +24,8 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
       * [`history`](#history) - show history of biodiversity dataset graph node
    * [Use Cases](#use-cases)
       * [`mining citations`](#mining-citations)
-      * [`archiving`](#archiving)
       * [`web access`](#web-access) ([`nginx`](#nginx) / [`caddy`](#caddy))
+      * [`archiving`](#archiving) ([`rsync`](#rsync) / [`archive.org`](#archiveorg))
       * [`data access monitor`](#data-access-monitor)
       * [`compare versions`](#compare-versions)
       * [`generating citations`](#generating-citations)
@@ -189,6 +189,7 @@ So, now we have a way to attribute each and every dataset individually.
 
 Preston creates a "data" folder that stores the biodiversity datasets and associated information. For archiving, you can take this "data" folder, copy it and move it somewhere safe. You can also use tools like [git-annex](http://git-annex.branchable.com), [rsync](https://en.wikipedia.org/wiki/Rsync), or use distributed storage systems like the [Interplanetary File System (ipfs)](https://ipfs.io) or [Dat](https://dat-project.org). 
 
+##### Rsync
 For instance, assuming that a preston data directory exists on a ```serverA``` which has ssh and rsync installed on it, you can keep a local copy in sync by running the following command on your local server:
 
 ```
@@ -200,6 +201,38 @@ where someserver is the remote server you'd like to sync with and /home/someuser
 On a consumer internet connection with bandwidth < 10Mb/s, an initial sync with a remote trans-atlantic server with a 67GB preston archive took about 3 days. After the initial sync, only files that you don't have yet are included. For instance, if no new files are added to the remote preston archive, a sync take a few minutes instead of hours or days. 
 
 Note that ssh and rsync comes with frequently used linux distributions like Ubuntu v18.04 by default). 
+
+##### Archive.org
+
+The [Internet Archive](https://archive.org), a 501(c)(3) non-profit, is building a digital library of Internet sites and other cultural artifacts in digital form. Like a paper library, we provide free access to researchers, historians, scholars, the print disabled, and the general public. Our mission is to provide Universal Access to All Knowledge.
+
+One of the services of the Internet Archive is the [Wayback Machine](https://archive.org/web/) .  If your Preston archive is [Web Accessible](#web-access), you can use the Wayback Machine to make snapshots of your cached datasets. The bash scripts below can be used to do so.
+
+```bash
+#!/bin/bash
+# Register all preston urls with internet-archive.org
+#
+set -x
+
+domain="https:\/\/deeplinker\.bio"
+
+function register_with_internet_archive {
+  zcat $1 | grep "hash:\/\/sha256" | sort | uniq | sed -e "s/hash:\/\/sha256/${domain}/g" | tee domain_urls.txt | sed -e 's/^/https:\/\/archive.org\/wayback\/available?url=/g' | xargs --no-run-if-empty -L1 curl -s | jq --raw-output ".archived_snapshots.closest | select(.available == true) | .url" | sort | uniq > domain_url_available_snapshots.txt
+
+  cat domain_url_available_snapshots.txt | sed -e "s/^.*${domain}//g" | sed -e "s/^/${domain}/g" > domain_urls_archived.txt
+ 
+  diff --changed-group-format='%>' --unchanged-group-format='' domain_urls_archived.txt domain_urls.txt > domain_urls_to_be_archived.txt 
+  
+  cat domain_urls_to_be_archived.txt | sed -e "s/^/https:\/\/web.archive.org\/save\//g" | tee domain_urls_save_request.txt | xargs --no-run-if-empty -L1 curl -s 
+}
+
+/usr/local/bin/preston ls -l tsv | grep Version | head -n13 | cut -f1,3 | tr '\t' '\n' | grep -v "${domain}/\.well-known/genid" | sort | uniq | gzip > url_uniq.tsv.gz
+
+register_with_internet_archive url_uniq.tsv.gz
+```
+
+In the script above, a list of urls is extracted and registered with archive.org if they haven't already. 
+
 
 #### Web Access
 
