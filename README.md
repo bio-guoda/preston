@@ -424,7 +424,7 @@ If you'd like to run Preston as a service to periodically update, you can use a 
 
 Assuming that you have some standalone installation of preston running, you might be inspired by the following examples [preston.service](./src/main/deb/etc/systemd/system/preston.service) and [preston.timer](https://github.com/bio-guoda/preston/blob/master/src/main/deb/etc/systemd/system/preston.timer). The .service file defined how to run the update, while the .timer file defines how to run that update.
 
-To use, copy [preston.service](./src/main/deb/etc/systemd/system/preston.service) and [preston.timer](./src/main/deb/etc/systemd/preston.timer) into ```/etc/systemd/system/``` on your debian/ubuntu server. 
+To use, copy [preston.service](./src/main/deb/etc/systemd/system/preston.service) and [preston.timer](./src/main/deb/etc/systemd/system/preston.timer) into ```/etc/systemd/system/``` on your debian/ubuntu server. 
 
 Example of ```preston.service``` : 
 ```
