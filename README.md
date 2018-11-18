@@ -233,6 +233,13 @@ register_with_internet_archive url_uniq.tsv.gz
 
 In the script above, a list of urls is extracted and registered with archive.org if they haven't already. 
 
+Another way to submit content to the Internet Archive is using their s3-like interface via the [Internet Archive Command-line Interface](https://archive.org/services/docs/api/internetarchive/installation.html). Assuming that your preston archive is stored in ```/home/preston/preston-archive```, your Internet Archive project id is ```preston-archive``` and that the commandline tool ```ia``` is configured properly, you can upload all the data using:
+
+```bash
+#!/bin/bash
+find /home/preston/preston-archive | grep -v "tmp" | grep "data.*/data$" | sed 's/.*preston-archive\///g' | xargs -L1 bash -c 'echo upload preston-archive /home/preston/preston-archive/$0 --remote-name=$0' | tee uploaded_req.txt | xargs -L1 ia  
+```
+
 
 #### Web Access
 
