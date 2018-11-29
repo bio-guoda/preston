@@ -6,3 +6,6 @@ Type=oneshot
 User=preston
 WorkingDirectory=/var/lib/preston
 ExecStart=/usr/local/bin/preston-registration.sh
+
+[Install]
+WantedBy=multi-user.target
