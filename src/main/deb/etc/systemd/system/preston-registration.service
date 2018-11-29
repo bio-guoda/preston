@@ -1,0 +1,8 @@
+[Unit]
+Description=Preston Biodiversity Dataset Registration.
+
+[Service]
+Type=oneshot
+User=cc
+WorkingDirectory=/var/lib/preston
+ExecStart=/usr/local/bin/preston-registration.sh

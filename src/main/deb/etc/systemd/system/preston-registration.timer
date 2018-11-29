@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Preston Registration
+
+[Timer]
+OnCalendar=weekly
+RandomizedDelaySec=86400
+
+[Install]
+WantedBy=timers.target
