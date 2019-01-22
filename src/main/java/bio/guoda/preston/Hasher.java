@@ -26,8 +26,12 @@ public final class Hasher {
     }
 
     public static IRI calcSHA256(InputStream is, OutputStream os) throws IOException {
+        return calcSHA256(is, os, true);
+    }
+
+    public static IRI calcSHA256(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
         try {
-            MessageDigest md = createDigest(is, os);
+            MessageDigest md = createDigest(is, os, shouldCloseInputStream);
             String format = String.format("%064x", new BigInteger(1, md.digest()));
             return toHashURI(format);
         } catch (IOException | NoSuchAlgorithmException var9) {
@@ -36,10 +40,16 @@ public final class Hasher {
     }
 
     private static MessageDigest createDigest(InputStream is, OutputStream os) throws NoSuchAlgorithmException, IOException {
+        return createDigest(is, os, true);
+    }
+
+    private static MessageDigest createDigest(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws NoSuchAlgorithmException, IOException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         DigestInputStream digestInputStream = new DigestInputStream(is, md);
         IOUtils.copy(digestInputStream, os);
-        digestInputStream.close();
+        if (shouldCloseInputStream) {
+            digestInputStream.close();
+        }
         os.flush();
         os.close();
         return md;
