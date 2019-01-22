@@ -12,6 +12,15 @@ This page contains some [sparql](https://www.w3.org/TR/rdf-sparql-query/) querie
 
 URLs are used to access content. While the URLs might be static, the content is often not. High turnover or error rates in content linked to by a url can be a sign of an instable, actively maintained, or randomly changing datasets. Since Preston is continuously tracking urls and their content, we can use its output, a biodiversity dataset graph, to detect linkrot. 
 
+### Reproduce 
+If you'd like to reproduce the results below, please:
+
+1. download and run a local copy of https://jena.apache.org/documentation/fuseki2/
+2. download file https://zenodo.org/record/1472394/files/preston-ls.nq.bz2 from http://doi.org/10.5281/zenodo.1472394 
+3. load preston-ls.nq.bz2 as a new dataset into Fuseki, using the web-based admin tool. If your version of fuseki does not support bzip2 compression, you need to decompress the preston-ls.nq.bz2 before loading it.
+4. Verify successful installation of software and data by reproducing the results of the sparql query below. 
+
+
 ### Change Rate of Urls
 
 To detect the rate of change of urls the following query was created. This query generates a list of urls in decreasing order of change rate. Note that Preston records each failed attempt to access a url's content as "blank" content. 
