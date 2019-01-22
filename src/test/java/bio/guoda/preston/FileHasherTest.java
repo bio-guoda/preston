@@ -45,10 +45,10 @@ public class FileHasherTest {
     @Test
     public void hashOfOrderedHashes() throws IOException, URISyntaxException {
         File tmpDir = new File("target/tmpDir");
-        FileUtils.forceDelete(tmpDir);
+        FileUtils.deleteQuietly(tmpDir);
         FileUtils.forceMkdir(tmpDir);
         File dataDir = new File("target/testDir");
-        FileUtils.forceDelete(dataDir);
+        FileUtils.deleteQuietly(dataDir);
         FileUtils.forceMkdir(dataDir);
 
         List<String> fileNames = Arrays.asList("d2/d9/9a/d2d99ac0926397ebf0904c306730a1642ff10f43b3297777f749bbd720b0ba2e/data",
