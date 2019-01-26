@@ -26,10 +26,6 @@ public class FilePersistence implements Persistence {
     }
 
     public static File getDataFile(File parentDir, String filePath) {
-        return getDatasetDir(getDatasetDir(parentDir, filePath), "data");
-    }
-
-    public static File getDatasetDir(File parentDir, String filePath) {
         return new File(parentDir, filePath);
     }
 
@@ -49,9 +45,8 @@ public class FilePersistence implements Persistence {
     private void writeToDiskIfNotExists(String key, InputStream source) throws IOException {
         String filePath = keyToPath.toPath(key);
         if (!getDataFile(getDatasetDir(), filePath).exists()) {
-            File datasetPath = getDatasetDir(getDatasetDir(), filePath);
-            FileUtils.forceMkdir(datasetPath);
             File destFile = getDataFile(getDatasetDir(), filePath);
+            FileUtils.forceMkdirParent(destFile);
             FileUtils.copyToFile(source, destFile);
         }
     }

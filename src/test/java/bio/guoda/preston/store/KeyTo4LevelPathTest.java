@@ -28,7 +28,7 @@ public class KeyTo4LevelPathTest {
         IRI hash = Hasher.calcSHA256("bla");
         assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
         String actual = new KeyTo4LevelPath().toPath(hash.getIRIString());
-        assertThat(actual, is("4d/f3/c3/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+        assertThat(actual, is("4d/f3/c3/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703/data"));
     }
 
 }

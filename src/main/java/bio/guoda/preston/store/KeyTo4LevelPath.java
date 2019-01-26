@@ -16,6 +16,6 @@ public class KeyTo4LevelPath implements KeyToPath {
         String u0 = key.substring(offset + 0, offset + 2);
         String u1 = key.substring(offset + 2, offset + 4);
         String u2 = key.substring(offset + 4, offset + 6);
-        return StringUtils.join(Arrays.asList(u0, u1, u2, key.substring(offset)), "/");
+        return StringUtils.join(Arrays.asList(u0, u1, u2, key.substring(offset), "data"), "/");
     }
 }
