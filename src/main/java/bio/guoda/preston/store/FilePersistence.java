@@ -2,43 +2,40 @@ package bio.guoda.preston.store;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import bio.guoda.preston.Hasher;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+
 
 public class FilePersistence implements Persistence {
 
     private final File tmpDir;
     private final File datasetDir;
+    private final KeyToPath keyToPath;
 
     public FilePersistence(File tmpDir, File datasetDir) {
+        this(tmpDir, datasetDir, new KeyTo4LevelPath());
+    }
+
+    public FilePersistence(File tmpDir, File datasetDir, KeyToPath keyToPath) {
         this.tmpDir = tmpDir;
         this.datasetDir = datasetDir;
+        this.keyToPath = keyToPath;
     }
 
-    public static File getDataFile(String key, File dataDir) {
-        return new File(getDatasetDir(key, dataDir), "data");
+    public static File getDataFile(File parentDir, String filePath) {
+        return getDatasetDir(getDatasetDir(parentDir, filePath), "data");
     }
 
-    public static File getDatasetDir(String key, File dataDir) {
-        return new File(dataDir, toPath(key));
+    public static File getDatasetDir(File parentDir, String filePath) {
+        return new File(parentDir, filePath);
     }
+
 
     public static String toPath(String key) {
-        int offset = Hasher.getHashPrefix().length();
-        int expectedLength = 8 + offset;
-        if (StringUtils.length(key) < expectedLength) {
-            throw new IllegalArgumentException("expected id [" + key + "] of at least [" + expectedLength + "] characters");
-        }
-        String u0 = key.substring(offset + 0, offset + 2);
-        String u1 = key.substring(offset + 2, offset + 4);
-        String u2 = key.substring(offset + 4, offset + 6);
-        return StringUtils.join(Arrays.asList(u0, u1, u2, key.substring(offset)), "/");
+        return new KeyTo4LevelPath().toPath(key);
     }
 
 
@@ -50,10 +47,11 @@ public class FilePersistence implements Persistence {
     }
 
     private void writeToDiskIfNotExists(String key, InputStream source) throws IOException {
-        if (!getDataFile(key, getDatasetDir()).exists()) {
-            File datasetPath = getDatasetDir(key, getDatasetDir());
+        String filePath = keyToPath.toPath(key);
+        if (!getDataFile(getDatasetDir(), filePath).exists()) {
+            File datasetPath = getDatasetDir(getDatasetDir(), filePath);
             FileUtils.forceMkdir(datasetPath);
-            File destFile = getDataFile(key, getDatasetDir());
+            File destFile = getDataFile(getDatasetDir(), filePath);
             FileUtils.copyToFile(source, destFile);
         }
     }
@@ -73,7 +71,7 @@ public class FilePersistence implements Persistence {
 
     @Override
     public InputStream get(String key) throws IOException {
-        File dataFile = getDataFile(key, getDatasetDir());
+        File dataFile = getDataFile(getDatasetDir(), keyToPath.toPath(key));
         return dataFile.exists() ? FileUtils.openInputStream(dataFile) : null;
     }
 

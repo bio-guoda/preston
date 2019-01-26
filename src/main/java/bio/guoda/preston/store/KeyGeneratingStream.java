@@ -5,6 +5,5 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public interface KeyGeneratingStream {
-
     String generateKeyWhileStreaming(InputStream is, OutputStream os) throws IOException;
 }

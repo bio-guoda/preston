@@ -28,20 +28,11 @@ public class FilePersistenceTest {
     @Before
     public void init() throws IOException {
         path = Files.createTempDirectory(Paths.get(new File("target").toURI()), "test");
-
     }
 
     @After
     public void teardown() {
         FileUtils.deleteQuietly(path.toFile());
-    }
-
-    @Test
-    public void toPath() {
-        IRI hash = Hasher.calcSHA256("bla");
-        assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
-        String actual = FilePersistence.toPath(hash.getIRIString());
-        assertThat(actual, is("4d/f3/c3/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
     }
 
     @Test

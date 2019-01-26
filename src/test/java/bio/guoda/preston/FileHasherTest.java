@@ -80,7 +80,7 @@ public class FileHasherTest {
             String iriString = Hasher.calcSHA256(is, IOUtils.buffer(os)
                     , false).getIRIString();
             hashList.add(iriString);
-            FileUtils.moveFile(tmpFile, FilePersistence.getDataFile(iriString, dataDir));
+            FileUtils.moveFile(tmpFile, FilePersistence.getDataFile(dataDir, FilePersistence.toPath(iriString)));
             is.closeEntry();
         }
         is.close();
