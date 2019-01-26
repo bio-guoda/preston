@@ -16,7 +16,7 @@ public class FilePersistence implements Persistence {
     private final KeyToPath keyToPath;
 
     public FilePersistence(File tmpDir, File datasetDir) {
-        this(tmpDir, datasetDir, new KeyTo4LevelPath());
+        this(tmpDir, datasetDir, new KeyTo5LevelPath());
     }
 
     public FilePersistence(File tmpDir, File datasetDir, KeyToPath keyToPath) {
@@ -31,7 +31,7 @@ public class FilePersistence implements Persistence {
 
 
     public static String toPath(String key) {
-        return new KeyTo4LevelPath().toPath(key);
+        return new KeyTo5LevelPath().toPath(key);
     }
 
 

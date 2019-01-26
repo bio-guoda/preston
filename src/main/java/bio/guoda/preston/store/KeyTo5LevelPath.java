@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 
-public class KeyTo4LevelPath implements KeyToPath {
+public class KeyTo5LevelPath implements KeyToPath {
     @Override
     public String toPath(String key) {
         int offset = Hasher.getHashPrefix().length();
