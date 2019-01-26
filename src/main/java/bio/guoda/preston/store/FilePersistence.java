@@ -30,11 +30,6 @@ public class FilePersistence implements Persistence {
     }
 
 
-    public static String toPath(String key) {
-        return new KeyTo5LevelPath().toPath(key);
-    }
-
-
     @Override
     public void put(String key, String value) throws IOException {
         try (InputStream source = IOUtils.toInputStream(value, StandardCharsets.UTF_8)) {

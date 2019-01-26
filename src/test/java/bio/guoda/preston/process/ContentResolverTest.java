@@ -59,13 +59,6 @@ public class ContentResolverTest {
         FileUtils.deleteQuietly(datasetDir.toFile());
     }
 
-
-    @Test
-    public void generatePathFromUUID() {
-        assertThat(FilePersistence.toPath("hash://sha256/3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"),
-                is("3f/c9/b6/3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"));
-    }
-
     @Test
     public void cacheContent() throws IOException, URISyntaxException {
         ArrayList<Triple> refNodes = new ArrayList<>();

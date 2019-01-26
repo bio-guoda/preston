@@ -18,10 +18,7 @@ import bio.guoda.preston.store.VersionUtil;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
 import static bio.guoda.preston.RefNodeConstants.ARCHIVE_COLLECTION;
-import static bio.guoda.preston.RefNodeConstants.GENERATED_AT_TIME;
-import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 
 @Parameters(separators = "= ", commandDescription = "show history of biodiversity resource")
@@ -36,7 +33,7 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
     @Override
     public void run() {
         StatementListener logger = StatementLogFactory.createLogger(getLogMode());
-        StatementStore statementStore = new StatementStoreImpl(getStatementPersistence());
+        StatementStore statementStore = new StatementStoreImpl(getDatasetRelationsStore());
         BlobStore blobStore = new AppendOnlyBlobStore(getBlobPersistence());
         AtomicBoolean gotNone = new AtomicBoolean(true);
         try {

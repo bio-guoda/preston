@@ -1,18 +1,26 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.store.FilePersistence;
+import bio.guoda.preston.store.Persistence;
+import com.beust.jcommander.Parameter;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Persisting {
 
-    FilePersistence getBlobPersistence() {
+    Persistence getBlobPersistence() {
         return new FilePersistence(getTmpDir(), getDataDir());
     }
 
-    FilePersistence getStatementPersistence() {
+    Persistence getDatasetRelationsStore() {
+        return new FilePersistence(getTmpDir(), getDataDir());
+    }
+
+    Persistence getLogRelationsStore() {
         return new FilePersistence(getTmpDir(), getDataDir());
     }
 

@@ -82,18 +82,18 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
 
         BlobStore blobStore = new AppendOnlyBlobStore(blobPersistence);
 
-        Persistence statementPersistence = getStatementPersistence();
+        Persistence datasetRelationsStore = getDatasetRelationsStore();
 
-        run(blobStore, new StatementStoreImpl(statementPersistence));
+        Persistence logRelationsStore = getLogRelationsStore();
+
+        run(blobStore, new StatementStoreImpl(datasetRelationsStore), new StatementStoreImpl(logRelationsStore));
     }
 
 
-    protected void run(BlobStore blobStore, StatementStore statementStore) {
+    protected void run(BlobStore blobStore, StatementStore datasetRelations, StatementStore logRelations) {
         CrawlContext ctx = createNewCrawlContext();
 
-
-
-        final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, statementStore, ctx);
+        final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, logRelations, ctx);
         try {
             Runtime.getRuntime().addShutdownHook(new LoggerExitHook(archivingLogger));
 
@@ -106,9 +106,9 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                     }
 
                         private void addPreviousVersionReference() throws IOException {
-                            IRI mostRecentVersion = VersionUtil.findMostRecentVersion(ARCHIVE, statementStore);
+                            IRI mostRecentVersion = VersionUtil.findMostRecentVersion(ARCHIVE, datasetRelations);
                             if (mostRecentVersion != null) {
-                                statementStore.put(Pair.of(mostRecentVersion, USED_BY), ctx.getActivity());
+                                datasetRelations.put(Pair.of(mostRecentVersion, USED_BY), ctx.getActivity());
                                 add(toStatement(mostRecentVersion, USED_BY, ctx.getActivity()));
                             }
                         }
@@ -120,7 +120,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                 IRIs.forEach(iri -> statementQueue.add(toStatement(toIRI(iri), HAS_VERSION, toBlank())));
             }
 
-            doCrawl(blobStore, ctx, statementQueue, archivingLogger, statementStore);
+            doCrawl(blobStore, ctx, statementQueue, archivingLogger, datasetRelations);
 
             archivingLogger.stop();
         } catch (IOException ex) {
@@ -131,7 +131,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
     }
 
     private void doCrawl(BlobStore blobStore, CrawlContext ctx, Queue<Triple> statementQueue, StatementListener statementLoggerNQuads, StatementStore statementStore) {
-        StatementListener listeners[] = {
+        StatementListener[] listeners = {
                 new RegistryReaderIDigBio(blobStore, statementQueue::add),
                 new RegistryReaderGBIF(blobStore, statementQueue::add),
                 new RegistryReaderBioCASE(blobStore, statementQueue::add),
