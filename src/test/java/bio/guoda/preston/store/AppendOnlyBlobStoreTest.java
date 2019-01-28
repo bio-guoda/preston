@@ -45,8 +45,8 @@ public class AppendOnlyBlobStoreTest {
         assertThat(TestUtil.toUTF8(inputStream), is("_:" + entity.uniqueReference()));
     }
 
-    public static Persistence getTestPersistence() {
-        return new Persistence() {
+    public static KeyValueStore getTestPersistence() {
+        return new KeyValueStore() {
             private final Map<String, String> lookup = new TreeMap<>();
 
             @Override

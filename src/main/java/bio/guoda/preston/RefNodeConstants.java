@@ -7,7 +7,7 @@ import java.net.URI;
 import java.util.UUID;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toUUID;
+import static bio.guoda.preston.model.RefNodeFactory.fromUUID;
 
 public class RefNodeConstants {
 
@@ -29,7 +29,7 @@ public class RefNodeConstants {
     public static final IRI WAS_GENERATED_BY = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasGeneratedBy"));
 
     public static final UUID ARCHIVE_COLLECTION = UUID.fromString("0659a54f-b713-4f86-a917-5be166a14110");
-    public static final IRI ARCHIVE = toUUID(ARCHIVE_COLLECTION.toString());
+    public static final IRI ARCHIVE = fromUUID(ARCHIVE_COLLECTION.toString());
 
     public static final IRI USED_BY = toIRI("http://www.w3.org/ns/prov#usedBy");
     public static final IRI AGENT = toIRI("http://www.w3.org/ns/prov#Agent");

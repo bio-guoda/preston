@@ -15,17 +15,17 @@ import java.nio.charset.StandardCharsets;
 
 public class StatementStoreImpl implements StatementStore {
 
-    private final Persistence persistence;
+    private final KeyValueStore keyValueStore;
 
-    public StatementStoreImpl(Persistence persistence) {
-        this.persistence = persistence;
+    public StatementStoreImpl(KeyValueStore keyValueStore) {
+        this.keyValueStore = keyValueStore;
     }
 
     @Override
     public void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException {
         // write-once, read-many
         IRI key = calculateKeyFor(queryKey);
-        persistence.put(key.getIRIString(), value instanceof IRI ? ((IRI) value).getIRIString() : value.toString());
+        keyValueStore.put(key.getIRIString(), value instanceof IRI ? ((IRI) value).getIRIString() : value.toString());
     }
 
     protected static IRI calculateKeyFor(Pair<RDFTerm, RDFTerm> unhashedKeyPair) {
@@ -40,7 +40,7 @@ public class StatementStoreImpl implements StatementStore {
 
     @Override
     public IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException {
-        InputStream inputStream = persistence.get(calculateKeyFor(queryKey).getIRIString());
+        InputStream inputStream = keyValueStore.get(calculateKeyFor(queryKey).getIRIString());
         return inputStream == null
                 ? null
                 : RefNodeFactory.toIRI(URI.create(IOUtils.toString(inputStream, StandardCharsets.UTF_8)));

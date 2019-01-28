@@ -34,20 +34,14 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
     public void run() {
         StatementListener logger = StatementLogFactory.createLogger(getLogMode());
         StatementStore statementStore = new StatementStoreImpl(getDatasetRelationsStore());
-        BlobStore blobStore = new AppendOnlyBlobStore(getBlobPersistence());
         AtomicBoolean gotNone = new AtomicBoolean(true);
         try {
-            VersionUtil.findMostRecentVersion(RefNodeFactory.toIRI(biodiversityNode), statementStore, new VersionListener() {
-                @Override
-                public void onVersion(Triple statement) throws IOException {
-                    gotNone.set(false);
-                    Triple generationStatement = VersionUtil.generationTimeFor(statement.getSubject(), statementStore, blobStore);
-                    if (generationStatement != null) {
-                        logger.on(generationStatement);
-                    }
-                    logger.on(statement);
-                }
-            });
+            VersionUtil.findMostRecentVersion(RefNodeFactory.toIRI(biodiversityNode)
+                    , statementStore
+                    , statement -> {
+                        gotNone.set(false);
+                        logger.on(statement);
+                    });
         } catch (IOException e) {
             throw new RuntimeException("failed to get versions");
         }

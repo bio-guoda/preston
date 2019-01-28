@@ -16,7 +16,7 @@ public class TestUtil {
         return content == null ? null : IOUtils.toString(content, StandardCharsets.UTF_8);
     }
 
-    public static Persistence getTestPersistence() {
+    public static KeyValueStore getTestPersistence() {
         return AppendOnlyBlobStoreTest.getTestPersistence();
     }
 

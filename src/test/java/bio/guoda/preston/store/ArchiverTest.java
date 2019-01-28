@@ -45,12 +45,12 @@ public class ArchiverTest {
             throw new IOException("fails to dereference");
         };
 
-        Persistence testPersistence = TestUtil.getTestPersistence();
+        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
         Archiver relationStore = new Archiver(
-                new AppendOnlyBlobStore(testPersistence),
+                new AppendOnlyBlobStore(testKeyValueStore),
                 dereferencer,
-                new StatementStoreImpl(testPersistence),
+                new StatementStoreImpl(testKeyValueStore),
                 TestUtil.getTestCrawlContext());
 
         relationStore.on(statement);
@@ -75,14 +75,14 @@ public class ArchiverTest {
             throw new IOException("fails to dereference");
         };
 
-        Persistence testPersistence = TestUtil.getTestPersistence();
+        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
         List<Triple> nodes = new ArrayList<>();
 
         Archiver relationStore = new Archiver(
-                new AppendOnlyBlobStore(testPersistence),
+                new AppendOnlyBlobStore(testKeyValueStore),
                 dereferencer,
-                new StatementStoreImpl(testPersistence),
+                new StatementStoreImpl(testKeyValueStore),
                 TestUtil.getTestCrawlContext(),
                 nodes::add);
 
@@ -107,15 +107,15 @@ public class ArchiverTest {
                 blank);
 
         Dereferencer dereferencer = new DereferenceTest("derefData@");
-        Persistence testPersistence = TestUtil.getTestPersistence();
+        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
         Archiver relationStore = new Archiver(
-                new AppendOnlyBlobStore(testPersistence),
+                new AppendOnlyBlobStore(testKeyValueStore),
                 dereferencer,
-                new StatementStoreImpl(testPersistence),
+                new StatementStoreImpl(testKeyValueStore),
                 TestUtil.getTestCrawlContext());
 
-        BlobStore blobStore = new AppendOnlyBlobStore(testPersistence);
+        BlobStore blobStore = new AppendOnlyBlobStore(testKeyValueStore);
 
         relationStore.on(statement);
 
@@ -133,7 +133,7 @@ public class ArchiverTest {
         assertThat(contentHash, Is.is(Hasher.calcSHA256(expectedContent)));
     }
 
-    private Archiver getAppendOnlyRelationStore(Dereferencer dereferencer, BlobStore blobStore, Persistence testPersistencetence) {
+    private Archiver getAppendOnlyRelationStore(Dereferencer dereferencer, BlobStore blobStore, KeyValueStore testPersistencetence) {
         return new Archiver(blobStore, dereferencer, new StatementStoreImpl(testPersistencetence), TestUtil.getTestCrawlContext());
     }
 

@@ -20,9 +20,9 @@ import static bio.guoda.preston.RefNodeConstants.*;
 public class RefNodeFactory {
 
     private static final RDF rdf = new SimpleRDF();
-    public static final String SKOLEMIZATION_PATH = ".well-known/genid/";
+    private static final String SKOLEMIZATION_PATH = ".well-known/genid/";
 
-    public static IRI toUUID(String publisherUUID) {
+    public static IRI fromUUID(String publisherUUID) {
         return toIRI(publisherUUID);
     }
 

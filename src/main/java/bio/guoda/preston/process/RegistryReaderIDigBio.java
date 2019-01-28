@@ -30,7 +30,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toContentType;
 import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
-import static bio.guoda.preston.model.RefNodeFactory.toUUID;
+import static bio.guoda.preston.model.RefNodeFactory.fromUUID;
 
 public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
@@ -68,7 +68,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         if (r.has("items") && r.get("items").isArray()) {
             for (JsonNode item : r.get("items")) {
                 String publisherUUID = item.get("uuid").asText();
-                IRI refNodePublisher = toUUID(publisherUUID);
+                IRI refNodePublisher = fromUUID(publisherUUID);
                 emitter.emit(toStatement(parent, HAD_MEMBER, refNodePublisher));
                 JsonNode data = item.get("data");
                 if (item.has("data")) {

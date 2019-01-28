@@ -10,7 +10,7 @@ import bio.guoda.preston.Resources;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.AppendOnlyBlobStore;
 import bio.guoda.preston.store.Archiver;
-import bio.guoda.preston.store.FilePersistence;
+import bio.guoda.preston.store.FileKeyValueStore;
 import bio.guoda.preston.store.StatementStoreImpl;
 import bio.guoda.preston.store.TestUtil;
 import org.junit.After;
@@ -39,13 +39,13 @@ public class ContentResolverTest {
     private AppendOnlyBlobStore blobStore;
     private Path tempDir;
     private Path datasetDir;
-    private FilePersistence persistence;
+    private FileKeyValueStore persistence;
 
     @Before
     public void init() throws IOException {
         tempDir = Files.createTempDirectory(Paths.get("target/"), "caching");
         datasetDir = Files.createTempDirectory(Paths.get("target/"), "datasets");
-        this.persistence = new FilePersistence(tempDir.toFile(), datasetDir.toFile());
+        this.persistence = new FileKeyValueStore(tempDir.toFile(), datasetDir.toFile());
         this.blobStore = new AppendOnlyBlobStore(persistence);
     }
 

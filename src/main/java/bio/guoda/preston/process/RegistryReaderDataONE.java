@@ -35,7 +35,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toContentType;
 import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
-import static bio.guoda.preston.model.RefNodeFactory.toUUID;
+import static bio.guoda.preston.model.RefNodeFactory.fromUUID;
 
 public class RegistryReaderDataONE extends ProcessorReadOnly {
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
@@ -181,7 +181,7 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
     public static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
         if (result.has("identifier")) {
             String uuid = result.get("identifier").asText();
-            IRI datasetUUID = toUUID(uuid);
+            IRI datasetUUID = fromUUID(uuid);
             emitter.emit(toStatement(currentPage, HAD_MEMBER, datasetUUID));
 
             if (result.has("dataUrl")) {

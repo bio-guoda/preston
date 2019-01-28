@@ -26,7 +26,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toContentType;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
-import static bio.guoda.preston.model.RefNodeFactory.toUUID;
+import static bio.guoda.preston.model.RefNodeFactory.fromUUID;
 
 public class RegistryReaderRSS extends ProcessorReadOnly {
     public RegistryReaderRSS(BlobStoreReadOnly testBlobStore, StatementListener listener) {
@@ -89,7 +89,7 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
 
                     }
 
-                    IRI archiveParent = uuid == null ? parent1 : toUUID(uuid.toString());
+                    IRI archiveParent = uuid == null ? parent1 : fromUUID(uuid.toString());
                     if (uuid != null) {
                         emitter.emit(toStatement(parent1, HAD_MEMBER, archiveParent));
                     }

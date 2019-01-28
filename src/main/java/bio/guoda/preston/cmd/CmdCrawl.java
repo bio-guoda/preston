@@ -22,7 +22,7 @@ import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.store.AppendOnlyBlobStore;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
-import bio.guoda.preston.store.Persistence;
+import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
 import bio.guoda.preston.store.VersionUtil;
@@ -78,13 +78,13 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
 
     @Override
     public void run() {
-        Persistence blobPersistence = getBlobPersistence();
+        KeyValueStore blobKeyValueStore = getBlobPersistence();
 
-        BlobStore blobStore = new AppendOnlyBlobStore(blobPersistence);
+        BlobStore blobStore = new AppendOnlyBlobStore(blobKeyValueStore);
 
-        Persistence datasetRelationsStore = getDatasetRelationsStore();
+        KeyValueStore datasetRelationsStore = getDatasetRelationsStore();
 
-        Persistence logRelationsStore = getLogRelationsStore();
+        KeyValueStore logRelationsStore = getLogRelationsStore();
 
         run(blobStore, new StatementStoreImpl(datasetRelationsStore), new StatementStoreImpl(logRelationsStore));
     }

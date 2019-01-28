@@ -5,7 +5,6 @@ import org.apache.commons.rdf.api.IRI;
 import bio.guoda.preston.RefNodeConstants;
 import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Triple;
-import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -21,10 +20,10 @@ public class VersionUtilTest {
 
     @Test
     public void getVersion() throws IOException {
-        Persistence testPersistence = TestUtil.getTestPersistence();
+        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        StatementStore statementStore = new StatementStoreImpl(testPersistence);
+        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
         statementStore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
 
 
@@ -35,10 +34,10 @@ public class VersionUtilTest {
 
     @Test
     public void versionPointingToItself() throws IOException {
-        Persistence testPersistence = TestUtil.getTestPersistence();
+        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        StatementStore statementStore = new StatementStoreImpl(testPersistence);
+        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
         statementStore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
         statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/version"));
 
@@ -50,10 +49,10 @@ public class VersionUtilTest {
 
     @Test
     public void versionPointingToItself2() throws IOException {
-        Persistence testPersistence = TestUtil.getTestPersistence();
+        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        StatementStore statementStore = new StatementStoreImpl(testPersistence);
+        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
         statementStore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
         statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
         statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/other/version")), toIRI("http://some/version"));
@@ -67,11 +66,11 @@ public class VersionUtilTest {
 
     @Test
     public void generationTimeFor() throws IOException {
-        Persistence testPersistence = TestUtil.getTestPersistence();
+        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        StatementStore statementStore = new StatementStoreImpl(testPersistence);
-        BlobStore blobStore = new AppendOnlyBlobStore(testPersistence);
+        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
+        BlobStore blobStore = new AppendOnlyBlobStore(testKeyValueStore);
 
         Literal dateTime = VersionUtil.recordGenerationTimeFor(toIRI("http://some"), blobStore, statementStore, toDateTime("2018-10-25"));
 
@@ -84,11 +83,11 @@ public class VersionUtilTest {
 
     @Test
     public void recordGenerationTime() throws IOException {
-        Persistence testPersistence = TestUtil.getTestPersistence();
+        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        StatementStore statementStore = new StatementStoreImpl(testPersistence);
-        BlobStore blobStore = new AppendOnlyBlobStore(testPersistence);
+        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
+        BlobStore blobStore = new AppendOnlyBlobStore(testKeyValueStore);
 
 
         Literal dateTime = VersionUtil.recordGenerationTimeFor(toIRI("http://some"), blobStore, statementStore, toDateTime("2018-10-25"));

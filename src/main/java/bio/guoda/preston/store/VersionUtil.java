@@ -31,7 +31,7 @@ public class VersionUtil {
     public static IRI findMostRecentVersion(IRI versionSource, StatementStore statementStore, VersionListener versionListener) throws IOException {
         IRI mostRecentVersion = findVersion(versionSource, statementStore, versionListener);
 
-        List<IRI> versions = new ArrayList<IRI>();
+        List<IRI> versions = new ArrayList<>();
         versions.add(mostRecentVersion);
 
         if (mostRecentVersion != null) {

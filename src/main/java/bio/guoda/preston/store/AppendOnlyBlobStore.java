@@ -15,17 +15,17 @@ import java.nio.charset.StandardCharsets;
 
 public class AppendOnlyBlobStore implements BlobStore {
 
-    private final Persistence persistence;
+    private final KeyValueStore keyValueStore;
 
-    public AppendOnlyBlobStore(Persistence persistence) {
-        this.persistence = persistence;
+    public AppendOnlyBlobStore(KeyValueStore keyValueStore) {
+        this.keyValueStore = keyValueStore;
     }
 
     // write-once, read-many
 
     @Override
     public IRI putBlob(InputStream is) throws IOException {
-        return RefNodeFactory.toIRI(URI.create(persistence.put((is1, os1)-> {
+        return RefNodeFactory.toIRI(URI.create(keyValueStore.put((is1, os1)-> {
             IRI key = Hasher.calcSHA256(is1, os1);
             return key.getIRIString();
         }, is)));
@@ -39,7 +39,7 @@ public class AppendOnlyBlobStore implements BlobStore {
 
     @Override
     public InputStream get(IRI key) throws IOException {
-        return key == null ? null : persistence.get(key.getIRIString());
+        return key == null ? null : keyValueStore.get(key.getIRIString());
     }
 
 }

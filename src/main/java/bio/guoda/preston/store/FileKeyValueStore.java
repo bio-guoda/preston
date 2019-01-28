@@ -9,17 +9,17 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 
-public class FilePersistence implements Persistence {
+public class FileKeyValueStore implements KeyValueStore {
 
     private final File tmpDir;
     private final File datasetDir;
     private final KeyToPath keyToPath;
 
-    public FilePersistence(File tmpDir, File datasetDir) {
+    public FileKeyValueStore(File tmpDir, File datasetDir) {
         this(tmpDir, datasetDir, new KeyTo5LevelPath());
     }
 
-    public FilePersistence(File tmpDir, File datasetDir, KeyToPath keyToPath) {
+    public FileKeyValueStore(File tmpDir, File datasetDir, KeyToPath keyToPath) {
         this.tmpDir = tmpDir;
         this.datasetDir = datasetDir;
         this.keyToPath = keyToPath;

@@ -1,6 +1,6 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.store.FilePersistence;
+import bio.guoda.preston.store.FileKeyValueStore;
 import bio.guoda.preston.store.KeyTo5LevelPath;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -81,7 +81,7 @@ public class FileHasherTest {
             String iriString = Hasher.calcSHA256(is, IOUtils.buffer(os)
                     , false).getIRIString();
             hashList.add(iriString);
-            FileUtils.moveFile(tmpFile, FilePersistence.getDataFile(dataDir, new KeyTo5LevelPath().toPath(iriString)));
+            FileUtils.moveFile(tmpFile, FileKeyValueStore.getDataFile(dataDir, new KeyTo5LevelPath().toPath(iriString)));
             is.closeEntry();
         }
         is.close();
