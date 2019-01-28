@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -114,10 +115,11 @@ public class Archiver extends StatementProcessor {
     }
 
     private void recordGenerationTime(BlankNodeOrIRI derivedSubject) throws IOException {
-        Literal nowLiteral = VersionUtil.recordGenerationTimeFor(derivedSubject, getBlobStore(), getStatementStore());
+        Literal nowLiteral1 = RefNodeFactory.nowDateTimeLiteral();
+        VersionUtil.recordGenerationTimeFor(derivedSubject, getBlobStore(), getStatementStore(), nowLiteral1);
         emit(toStatement(derivedSubject,
                 GENERATED_AT_TIME,
-                nowLiteral));
+                nowLiteral1));
 
         getStatementStore().put(Pair.of(derivedSubject, WAS_GENERATED_BY), crawlContext.getActivity());
         emit(toStatement(derivedSubject,

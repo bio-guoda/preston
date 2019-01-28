@@ -71,17 +71,11 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    public static Literal recordGenerationTimeFor(BlankNodeOrIRI derivedSubject, BlobStore blobStore, StatementStore statementStore) throws IOException {
-        Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
-        return recordGenerationTimeFor(derivedSubject, blobStore, statementStore, nowLiteral);
-    }
-
-    public static Literal recordGenerationTimeFor(BlankNodeOrIRI derivedSubject, BlobStore blobStore, StatementStore statementStore, Literal dateTimeLiteral) throws IOException {
+    public static void recordGenerationTimeFor(BlankNodeOrIRI derivedSubject, BlobStore blobStore, StatementStore statementStore, Literal dateTimeLiteral) throws IOException {
         String value = dateTimeLiteral.getLexicalForm();
         blobStore.putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
         IRI value1 = Hasher.calcSHA256(value);
         statementStore.put(Pair.of(derivedSubject, GENERATED_AT_TIME), value1);
-        return dateTimeLiteral;
     }
 
     public static Triple generationTimeFor(BlankNodeOrIRI subject, StatementStore statementStore, BlobStore blobStore) throws IOException {
