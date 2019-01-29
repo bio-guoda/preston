@@ -28,20 +28,20 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
     public void run() {
         StatementListener logger = StatementLogFactory.createLogger(getLogMode());
         StatementStore statementStore = new StatementStoreImpl(getCrawlRelationsStore());
-        AtomicBoolean gotNone = new AtomicBoolean(true);
+        AtomicBoolean foundHistory = new AtomicBoolean(false);
         try {
             VersionUtil.findMostRecentVersion(
                     ARCHIVE
                     , statementStore
                     , statement -> {
-                        gotNone.set(false);
+                        foundHistory.set(true);
                         logger.on(statement);
                     });
         } catch (IOException e) {
-            throw new RuntimeException("failed to get versions");
+            throw new RuntimeException("Failed to get version history.");
         }
 
-        if (gotNone.get()) {
+        if (!foundHistory.get()) {
             LOG.warn("No history found. Suggest to update first.");
         }
     }
