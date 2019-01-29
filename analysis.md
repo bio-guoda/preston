@@ -16,7 +16,7 @@ URLs are used to access content. While the URLs might be static, the content is 
 If you'd like to reproduce the results below, please:
 
 1. download (https://jena.apache.org/download/) and install Apache Jena Fuseki
-2. start Jena Fuseki (run ./fuseki-server). If it runs well, you will see the administration console at http://localhost:3030
+2. start Jena Fuseki (./fuseki-server). If it runs well, you will see the administration console at http://localhost:3030
 3. download the data file https://zenodo.org/record/1472394/files/preston-ls.nq.bz2
 4. using the Fuseki administration console, create a new dataset and add the data file as an in-memory resource. If this procedure fails, try decompressing the bz2 file and add its uncompressed version instead.
 5. copy the query (find below) in the SPARQL query section, leave the by-default options, and click on the arrow at the upper right to execute the query. The results should appear at the bottom.
