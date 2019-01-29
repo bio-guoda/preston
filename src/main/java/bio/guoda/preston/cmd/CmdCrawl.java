@@ -9,7 +9,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Triple;
 import bio.guoda.preston.Resources;
 import bio.guoda.preston.Seeds;
@@ -251,8 +250,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                 printStream = null;
 
                 IRI newVersion = blobStore.putBlob(new FileInputStream(tmpArchive));
-                Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
-                VersionUtil.recordGenerationTimeFor(newVersion, blobStore, statementStore, nowLiteral);
+                VersionUtil.recordGenerationTimeFor(newVersion, blobStore, statementStore);
                 statementStore.put(Pair.of(newVersion, WAS_GENERATED_BY), ctx.getActivity());
 
                 IRI previousVersion = VersionUtil.findMostRecentVersion(ARCHIVE, statementStore);
