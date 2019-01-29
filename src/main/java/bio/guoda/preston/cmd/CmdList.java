@@ -35,7 +35,7 @@ public class CmdList extends LoggingPersisting implements Runnable {
     public void run() {
         BlobStore blobStore = new AppendOnlyBlobStore(getBlobPersistence());
 
-        StatementStore statementPersistence = new StatementStoreImpl(getDatasetRelationsStore());
+        StatementStore statementPersistence = new StatementStoreImpl(getCrawlRelationsStore());
         attemptReplay(blobStore, statementPersistence);
     }
 

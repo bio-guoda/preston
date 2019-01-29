@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.RegistryReaderDataONE;
 import bio.guoda.preston.process.RegistryReaderRSS;
+import bio.guoda.preston.store.KeyGeneratingStream;
 import com.beust.jcommander.Parameter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -31,6 +32,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -73,7 +75,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
 
     @Parameter(description = "content URLs to update. If specified, the seeds will not be used.",
             validateWith = IRIValidator.class)
-    private List<String> IRIs  = new ArrayList<>();
+    private List<String> IRIs = new ArrayList<>();
 
 
     @Override
@@ -82,11 +84,9 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
 
         BlobStore blobStore = new AppendOnlyBlobStore(blobKeyValueStore);
 
-        KeyValueStore datasetRelationsStore = getDatasetRelationsStore();
+        KeyValueStore logRelationsStore = getCrawlRelationsStore();
 
-        KeyValueStore logRelationsStore = getLogRelationsStore();
-
-        run(blobStore, new StatementStoreImpl(datasetRelationsStore), new StatementStoreImpl(logRelationsStore));
+        run(blobStore, new StatementStoreImpl(new NullKeyValueStore()), new StatementStoreImpl(logRelationsStore));
     }
 
 
@@ -100,15 +100,16 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
             archivingLogger.start();
 
             final Queue<Triple> statementQueue =
-                    new ConcurrentLinkedQueue<Triple>() {{
-                        addAll(findCrawlInfo(ctx.getActivity()));
-                        addPreviousVersionReference();
-                    }
+                    new ConcurrentLinkedQueue<Triple>() {
+                        {
+                            addAll(findCrawlInfo(ctx.getActivity()));
+                            addPreviousVersionReference();
+                        }
 
                         private void addPreviousVersionReference() throws IOException {
-                            IRI mostRecentVersion = VersionUtil.findMostRecentVersion(ARCHIVE, datasetRelations);
+                            IRI mostRecentVersion = VersionUtil.findMostRecentVersion(ARCHIVE, logRelations);
                             if (mostRecentVersion != null) {
-                                datasetRelations.put(Pair.of(mostRecentVersion, USED_BY), ctx.getActivity());
+                                logRelations.put(Pair.of(mostRecentVersion, USED_BY), ctx.getActivity());
                                 add(toStatement(mostRecentVersion, USED_BY, ctx.getActivity()));
                             }
                         }
@@ -209,6 +210,23 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
             } finally {
                 archivingLogger.destroy();
             }
+        }
+    }
+
+    private static class NullKeyValueStore implements KeyValueStore {
+        @Override
+        public void put(String key, String value) throws IOException {
+
+        }
+
+        @Override
+        public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
+            return null;
+        }
+
+        @Override
+        public InputStream get(String key) throws IOException {
+            return null;
         }
     }
 

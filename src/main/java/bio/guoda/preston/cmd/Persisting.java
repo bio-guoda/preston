@@ -13,7 +13,7 @@ public class Persisting {
         return new FileKeyValueStore(getTmpDir(), getDataDir());
     }
 
-    KeyValueStore getDatasetRelationsStore() {
+    KeyValueStore getCrawlRelationsStore() {
         return new FileKeyValueStore(getTmpDir(), getDataDir());
     }
 

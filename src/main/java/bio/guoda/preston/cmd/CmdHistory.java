@@ -4,15 +4,11 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.rdf.api.Triple;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.StatementListener;
-import bio.guoda.preston.store.AppendOnlyBlobStore;
-import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
-import bio.guoda.preston.store.VersionListener;
 import bio.guoda.preston.store.VersionUtil;
 
 import java.io.IOException;
@@ -33,7 +29,7 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
     @Override
     public void run() {
         StatementListener logger = StatementLogFactory.createLogger(getLogMode());
-        StatementStore statementStore = new StatementStoreImpl(getDatasetRelationsStore());
+        StatementStore statementStore = new StatementStoreImpl(getCrawlRelationsStore());
         AtomicBoolean gotNone = new AtomicBoolean(true);
         try {
             VersionUtil.findMostRecentVersion(RefNodeFactory.toIRI(biodiversityNode)
