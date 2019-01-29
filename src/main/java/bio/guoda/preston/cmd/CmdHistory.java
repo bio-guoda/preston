@@ -14,6 +14,7 @@ import bio.guoda.preston.store.VersionUtil;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
 import static bio.guoda.preston.RefNodeConstants.ARCHIVE_COLLECTION;
 import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 
@@ -22,9 +23,6 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
 
     private static final Log LOG = LogFactory.getLog(CmdHistory.class);
 
-    @Parameter(description = "biodiversity resource locator", validateWith = IRIValidator.class)
-    private String biodiversityNode = ARCHIVE_COLLECTION.toString();
-
 
     @Override
     public void run() {
@@ -32,7 +30,8 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
         StatementStore statementStore = new StatementStoreImpl(getCrawlRelationsStore());
         AtomicBoolean gotNone = new AtomicBoolean(true);
         try {
-            VersionUtil.findMostRecentVersion(RefNodeFactory.toIRI(biodiversityNode)
+            VersionUtil.findMostRecentVersion(
+                    ARCHIVE
                     , statementStore
                     , statement -> {
                         gotNone.set(false);
@@ -43,7 +42,7 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
         }
 
         if (gotNone.get()) {
-            LOG.warn("No history found for [" + biodiversityNode + "]. Suggest to update first.");
+            LOG.warn("No history found. Suggest to update first.");
         }
     }
 }
