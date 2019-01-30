@@ -32,15 +32,18 @@ public class VersionRetriever implements StatementListener {
     public void on(Triple statement) {
         IRI mostRecentVersion = mostRecentVersionForStatement(statement);
         if (mostRecentVersion != null) {
-            try {
-                InputStream inputStream = blobStore.get(mostRecentVersion);
-                if (inputStream != null) {
-                    IOUtils.copy(inputStream, new NullOutputStream());
-                    inputStream.close();
-                }
-            } catch (IOException e) {
-                LOG.warn("failed to access [" + mostRecentVersion.getIRIString() + "]");
+            touchMostRecentVersion(mostRecentVersion);
+        }
+    }
+
+    private void touchMostRecentVersion(IRI mostRecentVersion) {
+        try {
+            InputStream inputStream = blobStore.get(mostRecentVersion);
+            if (inputStream != null) {
+                inputStream.close();
             }
+        } catch (IOException e) {
+            LOG.warn("failed to access [" + mostRecentVersion.getIRIString() + "]");
         }
     }
 

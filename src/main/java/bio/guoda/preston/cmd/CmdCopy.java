@@ -23,10 +23,10 @@ public class CmdCopy extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        KeyValueStore movingKeyValueStore = new CopyingKeyValueStore("data", targetDir, "tmp");
+        KeyValueStore copyingKeyValueStore = new CopyingKeyValueStore("data", targetDir, "tmp");
         attemptReplay(
-                new AppendOnlyBlobStore(movingKeyValueStore)
-                , new StatementStoreImpl(movingKeyValueStore)
+                new AppendOnlyBlobStore(copyingKeyValueStore)
+                , new StatementStoreImpl(copyingKeyValueStore)
                 , getLogMode());
     }
 
