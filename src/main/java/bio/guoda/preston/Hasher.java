@@ -39,10 +39,6 @@ public final class Hasher {
         }
     }
 
-    private static MessageDigest createDigest(InputStream is, OutputStream os) throws NoSuchAlgorithmException, IOException {
-        return createDigest(is, os, true);
-    }
-
     private static MessageDigest createDigest(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws NoSuchAlgorithmException, IOException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         DigestInputStream digestInputStream = new DigestInputStream(is, md);

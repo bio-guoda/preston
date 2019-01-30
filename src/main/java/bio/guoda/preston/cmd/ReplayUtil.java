@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.VersionLogger;
 import bio.guoda.preston.store.Archiver;
@@ -14,6 +13,9 @@ import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -27,18 +29,20 @@ public final class ReplayUtil {
 
     private static final Log LOG = LogFactory.getLog(ReplayUtil.class);
 
-    public static void attemptReplay(final BlobStore blobStore, final StatementStore statementStore, Logger logMode) {
+
+    public static void attemptReplay(final BlobStore blobStore, final StatementStore statementStore, StatementListener... listeners) {
         final Queue<Triple> statementQueue =
                 new ConcurrentLinkedQueue<Triple>() {{
                     add(toStatement(ARCHIVE, HAS_VERSION, toBlank()));
                 }};
 
-        // lookup previous archives with the intent to replay
-        StatementListener logger = StatementLogFactory.createLogger(logMode);
-
         AtomicBoolean receivedSomething = new AtomicBoolean(false);
+        List<StatementListener> statementListeners = new ArrayList<>(Arrays.asList(listeners));
+        statementListeners.add(statement -> receivedSomething.set(true));
+
+        // lookup previous archives with the intent to replay
         VersionLogger reader = new VersionLogger(
-                blobStore, new VersionRetriever(blobStore), logger, statement -> receivedSomething.set(true)
+                blobStore, statementListeners.toArray(new StatementListener[0])
         );
 
         StatementStore readOnlyStatementStore = new StatementStore() {

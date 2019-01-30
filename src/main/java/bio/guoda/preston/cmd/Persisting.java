@@ -9,20 +9,16 @@ import java.io.IOException;
 
 public class Persisting {
 
-    KeyValueStore getBlobPersistence(File dataDir) {
+    KeyValueStore getKeyValueStore(File dataDir) {
         return new FileKeyValueStore(getTmpDir(), dataDir);
     }
 
-    KeyValueStore getBlobPersistence() {
-        return getBlobPersistence(getDefaultDataDir());
+    KeyValueStore getKeyValueStore() {
+        return getKeyValueStore(getDefaultDataDir());
     }
 
     public File getDefaultDataDir() {
         return getDataDir("data");
-    }
-
-    KeyValueStore getCrawlRelationsStore() {
-        return getBlobPersistence(getDefaultDataDir());
     }
 
     File getTmpDir() {

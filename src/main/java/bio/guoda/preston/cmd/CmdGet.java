@@ -25,7 +25,7 @@ public class CmdGet extends Persisting implements Runnable {
 
     @Override
     public void run() {
-        AppendOnlyBlobStore blobStore = new AppendOnlyBlobStore(getBlobPersistence());
+        AppendOnlyBlobStore blobStore = new AppendOnlyBlobStore(getKeyValueStore());
 
         try {
             if (hashes.isEmpty()) {

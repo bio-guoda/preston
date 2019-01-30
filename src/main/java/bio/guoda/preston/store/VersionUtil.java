@@ -1,11 +1,13 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
+import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
 
 import java.io.IOException;
@@ -69,18 +71,20 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    public static Triple generationTimeFor(BlankNodeOrIRI subject, StatementStore statementStore, BlobStore blobStore) throws IOException {
-        Triple statement1 = null;
-        IRI timeKey = statementStore.get(Pair.of(subject, GENERATED_AT_TIME));
-        if (timeKey != null) {
-            InputStream input = blobStore.get(timeKey);
-            if (input != null) {
-                statement1 = toStatement(subject,
-                        GENERATED_AT_TIME,
-                        toDateTime(IOUtils.toString(input, StandardCharsets.UTF_8)));
-
+    public static IRI mostRecentVersionForStatement(Triple statement) {
+        IRI mostRecentVersion = null;
+        RDFTerm mostRecentTerm = null;
+        if (statement.getPredicate().equals(HAS_PREVIOUS_VERSION)) {
+            mostRecentTerm = statement.getSubject();
+        } else if (statement.getPredicate().equals(HAS_VERSION)) {
+            mostRecentTerm = statement.getObject();
+        }
+        if (mostRecentTerm instanceof IRI) {
+            IRI mostRecentIRI = (IRI) mostRecentTerm;
+            if (!RefNodeFactory.isBlankOrSkolemizedBlank(mostRecentIRI)) {
+                mostRecentVersion = mostRecentIRI;
             }
         }
-        return statement1;
+        return mostRecentVersion;
     }
 }

@@ -79,11 +79,11 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
 
     @Override
     public void run() {
-        KeyValueStore blobKeyValueStore = getBlobPersistence();
+        KeyValueStore blobKeyValueStore = getKeyValueStore();
 
         BlobStore blobStore = new AppendOnlyBlobStore(blobKeyValueStore);
 
-        KeyValueStore logRelationsStore = getCrawlRelationsStore();
+        KeyValueStore logRelationsStore = getKeyValueStore();
 
         run(blobStore, new StatementStoreImpl(new NullKeyValueStore()), new StatementStoreImpl(logRelationsStore));
     }

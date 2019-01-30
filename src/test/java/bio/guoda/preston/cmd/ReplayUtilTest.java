@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.StatementStore;
@@ -21,7 +22,7 @@ public class ReplayUtilTest {
         final IRI testKeyIRI = RefNodeFactory.toIRI("test:key");
         final IRI testKeyNewerIRI = RefNodeFactory.toIRI("test:key-new");
 
-        ReplayUtil.attemptReplay(new BlobStore() {
+        final BlobStore blobStore = new BlobStore() {
             @Override
             public IRI putBlob(InputStream is) throws IOException {
                 throw new IllegalArgumentException();
@@ -42,7 +43,8 @@ public class ReplayUtilTest {
                     throw new IOException("no value for [" + key.getIRIString() + "] found.");
                 }
             }
-        }, new StatementStore() {
+        };
+        ReplayUtil.attemptReplay(blobStore, new StatementStore() {
             @Override
             public void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException {
                 throw new IllegalArgumentException();
@@ -59,7 +61,7 @@ public class ReplayUtilTest {
                     return null;
                 }
             }
-        }, Logger.nquads);
+        }, new VersionRetriever(blobStore), StatementLogFactory.createLogger(Logger.nquads));
     }
 
 }

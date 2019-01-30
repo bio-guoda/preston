@@ -1,6 +1,5 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.cmd.VersionRetriever;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,7 +27,7 @@ public class VersionLogger extends ProcessorReadOnly {
 
     @Override
     public void on(Triple statement) {
-        IRI version = VersionRetriever.mostRecentVersionForStatement(statement);
+        IRI version = VersionUtil.mostRecentVersionForStatement(statement);
 
         if (version != null) {
             try {
