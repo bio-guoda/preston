@@ -9,6 +9,7 @@ import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
 import bio.guoda.preston.store.VersionUtil;
 import com.beust.jcommander.Parameters;
+import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
@@ -39,16 +40,17 @@ public class CmdVerify extends Persisting implements Runnable {
                 IRI iri = VersionUtil.mostRecentVersionForStatement(statement);
                 if (iri != null && !verifiedMap.containsKey(iri.getIRIString())) {
                     State state = State.MISSING;
+                    CountingOutputStream counting = new CountingOutputStream(new NullOutputStream());
                     try (InputStream is = blobStore.get(iri)) {
                         if (is != null) {
-                            IRI hashIRI = Hasher.calcSHA256(is, new NullOutputStream());
+                            IRI hashIRI = Hasher.calcSHA256(is, counting);
                             state = hashIRI.equals(iri) ? State.MATCHING_HASH : State.INVALID_HASH;
                         }
                     } catch (IOException e) {
                         //
                     } finally {
                         verifiedMap.put(iri.getIRIString(), state);
-                        System.out.println(iri.getIRIString() + "\t" + state);
+                        System.out.println(iri.getIRIString() + "\t" + state + "\t" + counting.getByteCount());
                     }
                 }
             }
