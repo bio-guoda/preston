@@ -1,6 +1,5 @@
 package bio.guoda.preston.store;
 
-import jdk.internal.util.xml.impl.Input;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
