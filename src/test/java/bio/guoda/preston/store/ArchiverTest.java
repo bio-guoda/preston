@@ -186,6 +186,50 @@ public class ArchiverTest {
         assertThat(newerContentHash.getIRIString(), Is.is("hash://sha256/7e66eac09d137afe06dd73614e966a417260a111208dabe7225b05f02ce380fd"));
         assertThat(toUTF8(newerContent), Is.is("derefData3@http://some"));
     }
+    @Test
+    public void archiveLastestTwo() throws IOException {
+        Triple statement = toStatement(SOME_IRI, HAS_VERSION, toBlank());
+
+        String prefix = "derefData@";
+        Dereferencer dereferencer1 = new DereferenceTest(prefix);
+
+        BlobStore blogStore = new AppendOnlyBlobStore(TestUtil.getTestPersistence());
+
+        Archiver relationstore = getAppendOnlyRelationStore(dereferencer1,
+                blogStore,
+                TestUtil.getTestPersistence());
+
+        relationstore.on(statement);
+
+        IRI contentHash = relationstore.getStatementStore().get(Pair.of(SOME_IRI, HAS_VERSION));
+        assertNotNull(contentHash);
+
+        Dereferencer dereferencer = new DereferenceTest("derefData2@");
+        relationstore.setDereferencer(dereferencer);
+        relationstore.on(statement);
+
+        IRI contentHash2 = relationstore.getStatementStore().get(Pair.of(SOME_IRI, HAS_VERSION));
+
+
+        assertThat(contentHash, Is.is(contentHash2));
+
+        IRI newContentHash = relationstore.getStatementStore().get(Pair.of(HAS_PREVIOUS_VERSION, contentHash));
+        InputStream newContent = blogStore.get(newContentHash);
+
+        assertThat(contentHash, not(Is.is(newContentHash)));
+        assertThat(newContentHash.getIRIString(), Is.is("hash://sha256/960d96611c4048e05303f6f532590968fd5eb23d0035141c4b02653b436f568c"));
+
+        assertThat(toUTF8(newContent), Is.is("derefData2@http://some"));
+
+        relationstore.setDereferencer(new DereferenceTest("derefData3@"));
+        relationstore.on(statement);
+
+        IRI newerContentHash = relationstore.getStatementStore().get(Pair.of(HAS_PREVIOUS_VERSION, newContentHash));
+        InputStream newerContent = blogStore.get(newerContentHash);
+
+        assertThat(newerContentHash.getIRIString(), Is.is("hash://sha256/7e66eac09d137afe06dd73614e966a417260a111208dabe7225b05f02ce380fd"));
+        assertThat(toUTF8(newerContent), Is.is("derefData3@http://some"));
+    }
 
     private class DereferenceTest implements Dereferencer {
 

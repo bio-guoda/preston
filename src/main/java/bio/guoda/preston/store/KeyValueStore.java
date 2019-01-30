@@ -8,5 +8,7 @@ public interface KeyValueStore {
 
     String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException;
 
+    void put(String key, InputStream is) throws IOException;
+
     InputStream get(String key) throws IOException;
 }

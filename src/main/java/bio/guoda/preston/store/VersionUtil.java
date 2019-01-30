@@ -1,13 +1,12 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Triple;
-import bio.guoda.preston.Hasher;
-import bio.guoda.preston.model.RefNodeFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +18,6 @@ import static bio.guoda.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.toDateTime;
-import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class VersionUtil {
@@ -73,15 +71,7 @@ public class VersionUtil {
 
     public static Literal recordGenerationTimeFor(BlankNodeOrIRI derivedSubject, BlobStore blobStore, StatementStore statementStore) throws IOException {
         Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
-        return recordGenerationTimeFor(derivedSubject, blobStore, statementStore, nowLiteral);
-    }
-
-    public static Literal recordGenerationTimeFor(BlankNodeOrIRI derivedSubject, BlobStore blobStore, StatementStore statementStore, Literal dateTimeLiteral) throws IOException {
-        String value = dateTimeLiteral.getLexicalForm();
-        blobStore.putBlob(IOUtils.toInputStream(value, StandardCharsets.UTF_8));
-        IRI value1 = Hasher.calcSHA256(value);
-        statementStore.put(Pair.of(derivedSubject, GENERATED_AT_TIME), value1);
-        return dateTimeLiteral;
+        return nowLiteral;
     }
 
     public static Triple generationTimeFor(BlankNodeOrIRI subject, StatementStore statementStore, BlobStore blobStore) throws IOException {

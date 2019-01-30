@@ -33,6 +33,20 @@ public class VersionUtilTest {
     }
 
     @Test
+    public void getTwoVersions() throws IOException {
+        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
+
+        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
+        statementStore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
+        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/later/version"));
+
+
+        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some"), statementStore);
+
+        assertThat(mostRecentVersion.toString(), is("<http://some/later/version>"));
+    }
+
+    @Test
     public void versionPointingToItself() throws IOException {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
@@ -64,37 +78,5 @@ public class VersionUtilTest {
         assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));
     }
 
-    @Test
-    public void generationTimeFor() throws IOException {
-        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
-
-
-        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
-        BlobStore blobStore = new AppendOnlyBlobStore(testKeyValueStore);
-
-        Literal dateTime = VersionUtil.recordGenerationTimeFor(toIRI("http://some"), blobStore, statementStore, toDateTime("2018-10-25"));
-
-        Triple triple = VersionUtil.generationTimeFor(toIRI("http://some"), statementStore, blobStore);
-
-        assertNotNull(triple);
-        assertThat(triple.getObject(), is(dateTime));
-        assertThat(triple.toString(), is("<http://some> <http://www.w3.org/ns/prov#generatedAtTime> \"2018-10-25\"^^<http://www.w3.org/2001/XMLSchema#dateTime> ."));
-    }
-
-    @Test
-    public void recordGenerationTime() throws IOException {
-        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
-
-
-        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
-        BlobStore blobStore = new AppendOnlyBlobStore(testKeyValueStore);
-
-
-        Literal dateTime = VersionUtil.recordGenerationTimeFor(toIRI("http://some"), blobStore, statementStore, toDateTime("2018-10-25"));
-
-        assertNotNull(dateTime);
-        assertThat(dateTime.toString(), is("\"2018-10-25\"^^<http://www.w3.org/2001/XMLSchema#dateTime>"));
-
-    }
 
 }

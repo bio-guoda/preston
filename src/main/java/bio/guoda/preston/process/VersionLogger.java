@@ -1,5 +1,7 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.cmd.VersionRetriever;
+import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
@@ -26,22 +28,21 @@ public class VersionLogger extends ProcessorReadOnly {
 
     @Override
     public void on(Triple statement) {
-        if (RefNodeFactory.hasVersionAvailable(statement)) {
+        IRI version = VersionRetriever.mostRecentVersionForStatement(statement);
 
-            IRI version = (IRI) RefNodeFactory.getVersion(statement);
+        if (version != null) {
             try {
                 InputStream inputStream = get(version);
                 RDFDataMgr.parse(new EmittingStreamRDF(), inputStream, Lang.NQUADS);
             } catch (IOException e) {
                 LOG.warn("failed to read archive [" + RefNodeFactory.getVersion(statement) + "]", e);
             }
-
         }
     }
 
     private class EmittingStreamRDF implements StreamRDF {
         RDF rdf = new JenaRDF();
-        RDF rdfSimmple = new SimpleRDF();
+        RDF rdfSimple = new SimpleRDF();
 
         @Override
         public void start() {
@@ -59,7 +60,7 @@ public class VersionLogger extends ProcessorReadOnly {
         }
 
         public void copyOnEmit(Triple triple) {
-            Triple copyOfTriple = rdfSimmple.createTriple(triple.getSubject(), triple.getPredicate(), triple.getObject());
+            Triple copyOfTriple = rdfSimple.createTriple(triple.getSubject(), triple.getPredicate(), triple.getObject());
             emit(copyOfTriple);
         }
 

@@ -10,7 +10,6 @@ import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.simple.SimpleRDF;
 import org.apache.commons.rdf.simple.Types;
 import bio.guoda.preston.DateUtil;
-import bio.guoda.preston.RefNodeConstants;
 
 import java.net.URI;
 import java.util.UUID;
@@ -54,18 +53,14 @@ public class RefNodeFactory {
         return rdf.createLiteral(dateTime, Types.XSD_DATETIME);
     }
 
-    public static boolean hasVersionOrIsDerivedFrom(Triple statement) {
-        return hasVersionStatement(statement);
-    }
-
-    private static boolean hasVersionStatement(Triple statement) {
+    public static boolean hasVersionStatement(Triple statement) {
         return HAS_VERSION.equals(statement.getPredicate())
                 || HAS_PREVIOUS_VERSION.equals(statement.getPredicate());
     }
 
     public static IRI getVersionSource(Triple statement) {
         IRI versionSource = null;
-        if (hasVersionOrIsDerivedFrom(statement)) {
+        if (hasVersionStatement(statement)) {
             versionSource = (IRI) statement.getSubject();
         }
         return versionSource;
@@ -108,7 +103,7 @@ public class RefNodeFactory {
     }
 
     public static boolean hasVersionAvailable(Triple statement) {
-        return hasVersionOrIsDerivedFrom(statement)
+        return hasVersionStatement(statement)
                 && !isBlankOrSkolemizedBlank(getVersion(statement));
     }
 

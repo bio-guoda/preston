@@ -1,8 +1,24 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.Resources;
+import bio.guoda.preston.Seeds;
+import bio.guoda.preston.StatementLogFactory;
+import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.process.RegistryReaderBioCASE;
 import bio.guoda.preston.process.RegistryReaderDataONE;
+import bio.guoda.preston.process.RegistryReaderGBIF;
+import bio.guoda.preston.process.RegistryReaderIDigBio;
 import bio.guoda.preston.process.RegistryReaderRSS;
+import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementLoggerNQuads;
+import bio.guoda.preston.store.AppendOnlyBlobStore;
+import bio.guoda.preston.store.Archiver;
+import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.KeyGeneratingStream;
+import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.StatementStore;
+import bio.guoda.preston.store.StatementStoreImpl;
+import bio.guoda.preston.store.VersionUtil;
 import com.beust.jcommander.Parameter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -11,22 +27,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
-import bio.guoda.preston.Resources;
-import bio.guoda.preston.Seeds;
-import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.process.RegistryReaderBioCASE;
-import bio.guoda.preston.process.RegistryReaderGBIF;
-import bio.guoda.preston.process.RegistryReaderIDigBio;
-import bio.guoda.preston.process.StatementListener;
-import bio.guoda.preston.process.StatementLoggerNQuads;
-import bio.guoda.preston.store.AppendOnlyBlobStore;
-import bio.guoda.preston.store.Archiver;
-import bio.guoda.preston.store.BlobStore;
-import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.StatementStore;
-import bio.guoda.preston.store.StatementStoreImpl;
-import bio.guoda.preston.store.VersionUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,7 +53,6 @@ import static bio.guoda.preston.RefNodeConstants.PRESTON;
 import static bio.guoda.preston.RefNodeConstants.SOFTWARE_AGENT;
 import static bio.guoda.preston.RefNodeConstants.USED_BY;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
-import static bio.guoda.preston.RefNodeConstants.WAS_GENERATED_BY;
 import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
@@ -109,7 +108,6 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                         private void addPreviousVersionReference() throws IOException {
                             IRI mostRecentVersion = VersionUtil.findMostRecentVersion(ARCHIVE, logRelations);
                             if (mostRecentVersion != null) {
-                                logRelations.put(Pair.of(mostRecentVersion, USED_BY), ctx.getActivity());
                                 add(toStatement(mostRecentVersion, USED_BY, ctx.getActivity()));
                             }
                         }
@@ -225,6 +223,11 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
         }
 
         @Override
+        public void put(String key, InputStream is) throws IOException {
+
+        }
+
+        @Override
         public InputStream get(String key) throws IOException {
             return null;
         }
@@ -269,7 +272,6 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
 
                 IRI newVersion = blobStore.putBlob(new FileInputStream(tmpArchive));
                 VersionUtil.recordGenerationTimeFor(newVersion, blobStore, statementStore);
-                statementStore.put(Pair.of(newVersion, WAS_GENERATED_BY), ctx.getActivity());
 
                 IRI previousVersion = VersionUtil.findMostRecentVersion(ARCHIVE, statementStore);
                 if (previousVersion == null) {

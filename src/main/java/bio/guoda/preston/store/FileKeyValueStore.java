@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -33,11 +34,12 @@ public class FileKeyValueStore implements KeyValueStore {
     @Override
     public void put(String key, String value) throws IOException {
         try (InputStream source = IOUtils.toInputStream(value, StandardCharsets.UTF_8)) {
-            writeToDiskIfNotExists(key, source);
+            put(key, source);
         }
     }
 
-    private void writeToDiskIfNotExists(String key, InputStream source) throws IOException {
+    @Override
+    public void put(String key, InputStream source) throws IOException {
         String filePath = keyToPath.toPath(key);
         if (!getDataFile(getDatasetDir(), filePath).exists()) {
             File destFile = getDataFile(getDatasetDir(), filePath);
@@ -50,9 +52,10 @@ public class FileKeyValueStore implements KeyValueStore {
     public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
         FileUtils.forceMkdir(tmpDir);
         File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
-        String key = keyGeneratingStream.generateKeyWhileStreaming(is, FileUtils.openOutputStream(tmpFile));
+        FileOutputStream os = FileUtils.openOutputStream(tmpFile);
+        String key = keyGeneratingStream.generateKeyWhileStreaming(is, os);
         try (InputStream source = FileUtils.openInputStream(tmpFile)) {
-            writeToDiskIfNotExists(key, source);
+            put(key, source);
         } finally {
             FileUtils.deleteQuietly(tmpFile);
         }

@@ -58,10 +58,11 @@ public class Archiver extends StatementProcessor {
     public void on(Triple statement) {
         try {
             BlankNodeOrIRI version = getVersion(statement);
-            if (version == null || !(version instanceof BlankNode)) {
-                emitExistingVersion(statement);
-            } else {
+            if (version instanceof BlankNode) {
                 handleVersions(statement, (BlankNode) version);
+            } else {
+                emitExistingVersion(statement);
+
             }
         } catch (Throwable e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);
@@ -119,7 +120,6 @@ public class Archiver extends StatementProcessor {
                 GENERATED_AT_TIME,
                 nowLiteral));
 
-        getStatementStore().put(Pair.of(derivedSubject, WAS_GENERATED_BY), crawlContext.getActivity());
         emit(toStatement(derivedSubject,
                 WAS_GENERATED_BY,
                 crawlContext.getActivity()));
