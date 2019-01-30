@@ -17,11 +17,11 @@ import java.util.TreeMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class AppendOnlyBlobStoreTest {
+public class BlobStoreAppendOnlyTest {
 
     @Test
     public void put() throws IOException {
-        BlobStore blobStore = new AppendOnlyBlobStore(getTestPersistence());
+        BlobStore blobStore = new BlobStoreAppendOnly(getTestPersistence());
         IRI key = blobStore.putBlob(IOUtils.toInputStream("testing123", StandardCharsets.UTF_8));
         InputStream inputStream = blobStore.get(key);
         assertThat(TestUtil.toUTF8(inputStream), is("testing123"));
@@ -29,7 +29,7 @@ public class AppendOnlyBlobStoreTest {
 
     @Test
     public void putURI() throws IOException {
-        BlobStore blobStore = new AppendOnlyBlobStore(getTestPersistence());
+        BlobStore blobStore = new BlobStoreAppendOnly(getTestPersistence());
         IRI key = blobStore.putBlob(RefNodeFactory.toIRI("pesto:123"));
         InputStream inputStream = blobStore.get(key);
         assertThat(TestUtil.toUTF8(inputStream), is("pesto:123"));
@@ -37,7 +37,7 @@ public class AppendOnlyBlobStoreTest {
 
     @Test
     public void putBlank() throws IOException {
-        BlobStore blobStore = new AppendOnlyBlobStore(getTestPersistence());
+        BlobStore blobStore = new BlobStoreAppendOnly(getTestPersistence());
         BlankNode entity = RefNodeFactory.toBlank();
         IRI key = blobStore.putBlob(entity);
         InputStream inputStream = blobStore.get(key);

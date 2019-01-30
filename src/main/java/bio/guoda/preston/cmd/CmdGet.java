@@ -5,7 +5,7 @@ import com.beust.jcommander.Parameters;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.store.AppendOnlyBlobStore;
+import bio.guoda.preston.store.BlobStoreAppendOnly;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class CmdGet extends Persisting implements Runnable {
 
     @Override
     public void run() {
-        AppendOnlyBlobStore blobStore = new AppendOnlyBlobStore(getKeyValueStore());
+        BlobStoreAppendOnly blobStore = new BlobStoreAppendOnly(getKeyValueStore());
 
         try {
             if (hashes.isEmpty()) {
@@ -47,7 +47,7 @@ public class CmdGet extends Persisting implements Runnable {
         exit(0);
     }
 
-    public void handleHash(AppendOnlyBlobStore blobStore, String hash) throws IOException {
+    public void handleHash(BlobStoreAppendOnly blobStore, String hash) throws IOException {
         try {
             InputStream input = blobStore.get(RefNodeFactory.toIRI(hash));
             if (input == null) {

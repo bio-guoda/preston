@@ -1,7 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.store.AppendOnlyBlobStore;
+import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
@@ -14,7 +14,7 @@ public class CmdList extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        BlobStore blobStore = new AppendOnlyBlobStore(getKeyValueStore());
+        BlobStore blobStore = new BlobStoreAppendOnly(getKeyValueStore());
         StatementStore statementPersistence = new StatementStoreImpl(getKeyValueStore());
         attemptReplay(blobStore, statementPersistence, StatementLogFactory.createLogger(getLogMode()));
     }

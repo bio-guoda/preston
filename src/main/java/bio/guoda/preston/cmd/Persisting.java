@@ -1,6 +1,6 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.store.FileKeyValueStore;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStore;
 import org.apache.commons.io.FileUtils;
 
@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Persisting {
 
     KeyValueStore getKeyValueStore(File dataDir) {
-        return new FileKeyValueStore(getTmpDir(), dataDir);
+        return new KeyValueStoreLocalFileSystem(getTmpDir(), dataDir);
     }
 
     KeyValueStore getKeyValueStore() {

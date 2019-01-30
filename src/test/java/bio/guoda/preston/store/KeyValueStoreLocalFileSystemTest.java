@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 
-public class FileKeyValueStoreTest {
+public class KeyValueStoreLocalFileSystemTest {
 
     private Path path;
 
@@ -35,7 +35,7 @@ public class FileKeyValueStoreTest {
 
     @Test
     public void write() throws IOException {
-        FileKeyValueStore filePersistence = new FileKeyValueStore(new File(path.toFile(), "tmp"), new File(path.toFile(), "datasets"));
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new File(path.toFile(), "datasets"));
         filePersistence.get("somethinggggggggggggggggggggg");
         filePersistence.put("somethinggggggggggggggggggggg", "some value");
 
@@ -45,7 +45,7 @@ public class FileKeyValueStoreTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void writeKeyTooShort() throws IOException {
-        FileKeyValueStore filePersistence = new FileKeyValueStore(new File(path.toFile(), "tmp"), new File(path.toFile(), "datasets"));
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new File(path.toFile(), "datasets"));
         filePersistence.get("something");
         filePersistence.put("something", "some value");
 
@@ -55,7 +55,7 @@ public class FileKeyValueStoreTest {
 
     @Test
     public void writeStream() throws IOException {
-        FileKeyValueStore filePersistence = new FileKeyValueStore(new File(path.toFile(), "tmp"), new File(path.toFile(), "datasets"));
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new File(path.toFile(), "datasets"));
 
         assertThat(filePersistence.get("some keyyyyyyyyyyyyyyyyyy"), is(nullValue()));
         filePersistence.put(new KeyGeneratingStream() {

@@ -15,6 +15,7 @@ public class Preston {
             CmdLine.run(args);
             exit(0);
         } catch (Throwable t) {
+            t.printStackTrace(System.err);
             exit(1);
         }
     }

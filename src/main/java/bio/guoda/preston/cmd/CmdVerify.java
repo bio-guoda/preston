@@ -1,9 +1,8 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.Hasher;
-import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.StatementListener;
-import bio.guoda.preston.store.AppendOnlyBlobStore;
+import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
@@ -28,7 +27,7 @@ public class CmdVerify extends Persisting implements Runnable {
 
     @Override
     public void run() {
-        final BlobStore blobStore = new AppendOnlyBlobStore(getKeyValueStore());
+        final BlobStore blobStore = new BlobStoreAppendOnly(getKeyValueStore());
         final StatementStore statementPersistence = new StatementStoreImpl(getKeyValueStore());
 
 

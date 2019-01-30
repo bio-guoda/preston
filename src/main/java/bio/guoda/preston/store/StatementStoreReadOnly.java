@@ -6,9 +6,8 @@ import org.apache.commons.rdf.api.RDFTerm;
 
 import java.io.IOException;
 
-public interface StatementStore extends StatementStoreReadOnly {
+public interface StatementStoreReadOnly {
 
-    void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException;
-
+    IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException;
 
 }

@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import jdk.internal.util.xml.impl.Input;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -10,17 +11,17 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 
-public class FileKeyValueStore implements KeyValueStore {
+public class KeyValueStoreLocalFileSystem implements KeyValueStore {
 
     private final File tmpDir;
     private final File datasetDir;
     private final KeyToPath keyToPath;
 
-    public FileKeyValueStore(File tmpDir, File datasetDir) {
+    public KeyValueStoreLocalFileSystem(File tmpDir, File datasetDir) {
         this(tmpDir, datasetDir, new KeyTo5LevelPath());
     }
 
-    public FileKeyValueStore(File tmpDir, File datasetDir, KeyToPath keyToPath) {
+    public KeyValueStoreLocalFileSystem(File tmpDir, File datasetDir, KeyToPath keyToPath) {
         this.tmpDir = tmpDir;
         this.datasetDir = datasetDir;
         this.keyToPath = keyToPath;
@@ -33,18 +34,18 @@ public class FileKeyValueStore implements KeyValueStore {
 
     @Override
     public void put(String key, String value) throws IOException {
-        try (InputStream source = IOUtils.toInputStream(value, StandardCharsets.UTF_8)) {
-            put(key, source);
-        }
+        put(key, IOUtils.toInputStream(value, StandardCharsets.UTF_8));
     }
 
     @Override
     public void put(String key, InputStream source) throws IOException {
-        String filePath = keyToPath.toPath(key);
-        if (!getDataFile(getDatasetDir(), filePath).exists()) {
-            File destFile = getDataFile(getDatasetDir(), filePath);
-            FileUtils.forceMkdirParent(destFile);
-            FileUtils.copyToFile(source, destFile);
+        try (InputStream src = source) {
+            String filePath = keyToPath.toPath(key);
+            if (!getDataFile(getDatasetDir(), filePath).exists()) {
+                File destFile = getDataFile(getDatasetDir(), filePath);
+                FileUtils.forceMkdirParent(destFile);
+                FileUtils.copyToFile(src, destFile);
+            }
         }
     }
 
@@ -54,8 +55,8 @@ public class FileKeyValueStore implements KeyValueStore {
         File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
         FileOutputStream os = FileUtils.openOutputStream(tmpFile);
         String key = keyGeneratingStream.generateKeyWhileStreaming(is, os);
-        try (InputStream source = FileUtils.openInputStream(tmpFile)) {
-            put(key, source);
+        try {
+            put(key, FileUtils.openInputStream(tmpFile));
         } finally {
             FileUtils.deleteQuietly(tmpFile);
         }

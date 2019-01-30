@@ -11,7 +11,7 @@ import bio.guoda.preston.process.RegistryReaderIDigBio;
 import bio.guoda.preston.process.RegistryReaderRSS;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
-import bio.guoda.preston.store.AppendOnlyBlobStore;
+import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.KeyGeneratingStream;
@@ -81,7 +81,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
     public void run() {
         KeyValueStore blobKeyValueStore = getKeyValueStore();
 
-        BlobStore blobStore = new AppendOnlyBlobStore(blobKeyValueStore);
+        BlobStore blobStore = new BlobStoreAppendOnly(blobKeyValueStore);
 
         KeyValueStore logRelationsStore = getKeyValueStore();
 
@@ -219,12 +219,17 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
 
         @Override
         public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
+            if (is != null) {
+                is.close();
+            }
             return null;
         }
 
         @Override
         public void put(String key, InputStream is) throws IOException {
-
+            if (is != null) {
+                is.close();
+            }
         }
 
         @Override

@@ -99,12 +99,12 @@ public class Archiver extends StatementProcessor {
 
     private void putVersion(IRI versionSource, IRI previousVersion, BlankNodeOrIRI newVersion) throws IOException {
         if (null != previousVersion && !previousVersion.equals(newVersion)) {
-            recordGenerationTime(newVersion);
+            emitGenerationTime(newVersion);
             getStatementStore().put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
             emit(toStatement(newVersion, HAS_PREVIOUS_VERSION, previousVersion));
 
         } else if (null == previousVersion) {
-            recordGenerationTime(newVersion);
+            emitGenerationTime(newVersion);
             getStatementStore().put(Pair.of(versionSource, HAS_VERSION), newVersion);
             emit(toStatement(versionSource, HAS_VERSION, newVersion));
         }
@@ -115,7 +115,7 @@ public class Archiver extends StatementProcessor {
         return data == null ? null : getBlobStore().putBlob(data);
     }
 
-    private void recordGenerationTime(BlankNodeOrIRI derivedSubject) throws IOException {
+    private void emitGenerationTime(BlankNodeOrIRI derivedSubject) throws IOException {
         Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
         emit(toStatement(derivedSubject,
                 GENERATED_AT_TIME,

@@ -17,11 +17,11 @@ public class TestUtil {
     }
 
     public static KeyValueStore getTestPersistence() {
-        return AppendOnlyBlobStoreTest.getTestPersistence();
+        return BlobStoreAppendOnlyTest.getTestPersistence();
     }
 
     public static BlobStoreReadOnly getTestBlobStore() {
-        return new AppendOnlyBlobStore(getTestPersistence());
+        return new BlobStoreAppendOnly(getTestPersistence());
     }
 
     public static CrawlContext getTestCrawlContext() {

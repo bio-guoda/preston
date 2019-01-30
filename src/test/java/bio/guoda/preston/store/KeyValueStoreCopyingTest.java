@@ -15,7 +15,7 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-public class CopyingKeyValueStoreTest {
+public class KeyValueStoreCopyingTest {
 
     @Test
     public void copyTo() throws IOException {
@@ -42,7 +42,7 @@ public class CopyingKeyValueStoreTest {
         };
         final Map<String, String> cache = new HashMap<>();
 
-        CopyingKeyValueStore store = new CopyingKeyValueStore(testSourceStore, new KeyValueStore() {
+        KeyValueStoreCopying store = new KeyValueStoreCopying(testSourceStore, new KeyValueStore() {
 
 
             @Override

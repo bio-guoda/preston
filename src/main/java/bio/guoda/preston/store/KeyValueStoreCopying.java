@@ -6,11 +6,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class CopyingKeyValueStore implements KeyValueStore {
+public class KeyValueStoreCopying implements KeyValueStore {
     private final KeyValueStore targetKeyValueStore;
     private final KeyValueStore sourceKeyValueStore;
 
-    public CopyingKeyValueStore(String sourceDir, String targetDir, String tmpDir) {
+    public KeyValueStoreCopying(String sourceDir, String targetDir, String tmpDir) {
         if (sourceDir.equals(targetDir)) {
             throw new IllegalArgumentException("source dir [" + sourceDir + "] must be different from target dir [" + targetDir + "].");
         }
@@ -20,11 +20,11 @@ public class CopyingKeyValueStore implements KeyValueStore {
         File tmp = Persisting.getDataDir(tmpDir);
 
 
-        this.sourceKeyValueStore = new FileKeyValueStore(tmp, source);
-        this.targetKeyValueStore = new FileKeyValueStore(tmp, target);
+        this.sourceKeyValueStore = new KeyValueStoreLocalFileSystem(tmp, source);
+        this.targetKeyValueStore = new KeyValueStoreLocalFileSystem(tmp, target);
     }
 
-    public CopyingKeyValueStore(KeyValueStore source, KeyValueStore target) {
+    public KeyValueStoreCopying(KeyValueStore source, KeyValueStore target) {
         this.sourceKeyValueStore = source;
         this.targetKeyValueStore = target;
     }
@@ -49,6 +49,7 @@ public class CopyingKeyValueStore implements KeyValueStore {
         InputStream is = sourceKeyValueStore.get(key);
         if (is != null) {
             targetKeyValueStore.put(key, is);
+            is.close();
             is = targetKeyValueStore.get(key);
         }
         return is;

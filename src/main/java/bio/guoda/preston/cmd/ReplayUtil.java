@@ -30,7 +30,9 @@ public final class ReplayUtil {
     private static final Log LOG = LogFactory.getLog(ReplayUtil.class);
 
 
-    public static void attemptReplay(final BlobStore blobStore, final StatementStore statementStore, StatementListener... listeners) {
+    public static void attemptReplay(final BlobStore blobStore,
+                                     final StatementStore statementStore,
+                                     StatementListener... listeners) {
         final Queue<Triple> statementQueue =
                 new ConcurrentLinkedQueue<Triple>() {{
                     add(toStatement(ARCHIVE, HAS_VERSION, toBlank()));
@@ -42,7 +44,8 @@ public final class ReplayUtil {
 
         // lookup previous archives with the intent to replay
         VersionLogger reader = new VersionLogger(
-                blobStore, statementListeners.toArray(new StatementListener[0])
+                blobStore,
+                statementListeners.toArray(new StatementListener[0])
         );
 
         StatementStore readOnlyStatementStore = new StatementStore() {

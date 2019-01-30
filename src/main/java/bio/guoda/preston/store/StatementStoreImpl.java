@@ -40,11 +40,10 @@ public class StatementStoreImpl implements StatementStore {
 
     @Override
     public IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException {
-        InputStream inputStream = keyValueStore.get(calculateKeyFor(queryKey).getIRIString());
-        return inputStream == null
-                ? null
-                : RefNodeFactory.toIRI(URI.create(IOUtils.toString(inputStream, StandardCharsets.UTF_8)));
+        try(InputStream inputStream = keyValueStore.get(calculateKeyFor(queryKey).getIRIString())) {
+            return inputStream == null
+                    ? null
+                    : RefNodeFactory.toIRI(URI.create(IOUtils.toString(inputStream, StandardCharsets.UTF_8)));
+        }
     }
-
-    ;
 }

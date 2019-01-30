@@ -32,11 +32,15 @@ public class VersionLogger extends ProcessorReadOnly {
         if (version != null) {
             try {
                 InputStream inputStream = get(version);
-                RDFDataMgr.parse(new EmittingStreamRDF(), inputStream, Lang.NQUADS);
+                parseAndEmit(inputStream);
             } catch (IOException e) {
                 LOG.warn("failed to read archive [" + RefNodeFactory.getVersion(statement) + "]", e);
             }
         }
+    }
+
+    public void parseAndEmit(InputStream inputStream) {
+        RDFDataMgr.parse(new EmittingStreamRDF(), inputStream, Lang.NQUADS);
     }
 
     private class EmittingStreamRDF implements StreamRDF {

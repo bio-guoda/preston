@@ -48,7 +48,7 @@ public class ArchiverTest {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
         Archiver relationStore = new Archiver(
-                new AppendOnlyBlobStore(testKeyValueStore),
+                new BlobStoreAppendOnly(testKeyValueStore),
                 dereferencer,
                 new StatementStoreImpl(testKeyValueStore),
                 TestUtil.getTestCrawlContext());
@@ -80,7 +80,7 @@ public class ArchiverTest {
         List<Triple> nodes = new ArrayList<>();
 
         Archiver relationStore = new Archiver(
-                new AppendOnlyBlobStore(testKeyValueStore),
+                new BlobStoreAppendOnly(testKeyValueStore),
                 dereferencer,
                 new StatementStoreImpl(testKeyValueStore),
                 TestUtil.getTestCrawlContext(),
@@ -110,12 +110,12 @@ public class ArchiverTest {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
         Archiver relationStore = new Archiver(
-                new AppendOnlyBlobStore(testKeyValueStore),
+                new BlobStoreAppendOnly(testKeyValueStore),
                 dereferencer,
                 new StatementStoreImpl(testKeyValueStore),
                 TestUtil.getTestCrawlContext());
 
-        BlobStore blobStore = new AppendOnlyBlobStore(testKeyValueStore);
+        BlobStore blobStore = new BlobStoreAppendOnly(testKeyValueStore);
 
         relationStore.on(statement);
 
@@ -149,7 +149,7 @@ public class ArchiverTest {
         String prefix = "derefData@";
         Dereferencer dereferencer1 = new DereferenceTest(prefix);
 
-        BlobStore blogStore = new AppendOnlyBlobStore(TestUtil.getTestPersistence());
+        BlobStore blogStore = new BlobStoreAppendOnly(TestUtil.getTestPersistence());
 
         Archiver relationstore = getAppendOnlyRelationStore(dereferencer1,
                 blogStore,
@@ -193,7 +193,7 @@ public class ArchiverTest {
         String prefix = "derefData@";
         Dereferencer dereferencer1 = new DereferenceTest(prefix);
 
-        BlobStore blogStore = new AppendOnlyBlobStore(TestUtil.getTestPersistence());
+        BlobStore blogStore = new BlobStoreAppendOnly(TestUtil.getTestPersistence());
 
         Archiver relationstore = getAppendOnlyRelationStore(dereferencer1,
                 blogStore,

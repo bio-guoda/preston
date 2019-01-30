@@ -8,9 +8,9 @@ import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.Resources;
 import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.store.AppendOnlyBlobStore;
+import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.Archiver;
-import bio.guoda.preston.store.FileKeyValueStore;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.StatementStoreImpl;
 import bio.guoda.preston.store.TestUtil;
 import org.junit.After;
@@ -36,17 +36,17 @@ import static org.junit.Assert.assertTrue;
 
 public class ContentResolverTest {
 
-    private AppendOnlyBlobStore blobStore;
+    private BlobStoreAppendOnly blobStore;
     private Path tempDir;
     private Path datasetDir;
-    private FileKeyValueStore persistence;
+    private KeyValueStoreLocalFileSystem persistence;
 
     @Before
     public void init() throws IOException {
         tempDir = Files.createTempDirectory(Paths.get("target/"), "caching");
         datasetDir = Files.createTempDirectory(Paths.get("target/"), "datasets");
-        this.persistence = new FileKeyValueStore(tempDir.toFile(), datasetDir.toFile());
-        this.blobStore = new AppendOnlyBlobStore(persistence);
+        this.persistence = new KeyValueStoreLocalFileSystem(tempDir.toFile(), datasetDir.toFile());
+        this.blobStore = new BlobStoreAppendOnly(persistence);
     }
 
     private Archiver createStatementStore(StatementListener... listeners) {

@@ -13,11 +13,11 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 
-public class AppendOnlyBlobStore implements BlobStore {
+public class BlobStoreAppendOnly implements BlobStore {
 
     private final KeyValueStore keyValueStore;
 
-    public AppendOnlyBlobStore(KeyValueStore keyValueStore) {
+    public BlobStoreAppendOnly(KeyValueStore keyValueStore) {
         this.keyValueStore = keyValueStore;
     }
 

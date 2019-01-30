@@ -1,8 +1,8 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.store.AppendOnlyBlobStore;
-import bio.guoda.preston.store.CopyingKeyValueStore;
+import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.StatementStoreImpl;
 import com.beust.jcommander.Parameter;
@@ -23,8 +23,8 @@ public class CmdCopy extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        KeyValueStore copyingKeyValueStore = new CopyingKeyValueStore("data", targetDir, "tmp");
-        final AppendOnlyBlobStore blobStore = new AppendOnlyBlobStore(copyingKeyValueStore);
+        KeyValueStore copyingKeyValueStore = new KeyValueStoreCopying("data", targetDir, "tmp");
+        final BlobStoreAppendOnly blobStore = new BlobStoreAppendOnly(copyingKeyValueStore);
         attemptReplay(
                 blobStore
                 , new StatementStoreImpl(copyingKeyValueStore)
