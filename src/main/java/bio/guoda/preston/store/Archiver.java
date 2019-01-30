@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -61,7 +62,7 @@ public class Archiver extends StatementProcessor {
             if (version instanceof BlankNode) {
                 handleVersions(statement, (BlankNode) version);
             } else {
-                emitExistingVersion(statement);
+                emit(statement);
 
             }
         } catch (Throwable e) {
@@ -76,7 +77,7 @@ public class Archiver extends StatementProcessor {
 
             @Override
             public void onVersion(Triple statement) throws IOException {
-                emitExistingVersion(statement);
+                emit(statement);
             }
         });
         if (previousVersion == null || !shouldResolveOnMissingOnly()) {
@@ -115,7 +116,7 @@ public class Archiver extends StatementProcessor {
     }
 
     private void recordGenerationTime(BlankNodeOrIRI derivedSubject) throws IOException {
-        Literal nowLiteral = VersionUtil.recordGenerationTimeFor(derivedSubject, getBlobStore(), getStatementStore());
+        Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
         emit(toStatement(derivedSubject,
                 GENERATED_AT_TIME,
                 nowLiteral));
@@ -137,26 +138,6 @@ public class Archiver extends StatementProcessor {
         this.resolveOnMissingOnly = resolveOnMissingOnly;
     }
 
-    private void emitExistingVersion(Triple statement) throws IOException {
-        emitGenerationInfo(statement);
-        emit(statement);
-    }
-
-    private void emitGenerationInfo(Triple statement) throws IOException {
-        Triple statement1 = VersionUtil.generationTimeFor(statement.getSubject(), getStatementStore(), getBlobStore());
-        if (statement1 != null) {
-            emit(statement1);
-        }
-        IRI crawlActivityKey = getStatementStore().get(Pair.of(statement.getSubject(), WAS_GENERATED_BY));
-        if (crawlActivityKey != null) {
-            InputStream input = getBlobStore().get(crawlActivityKey);
-            if (input != null) {
-                emit(toStatement(statement.getSubject(),
-                        WAS_GENERATED_BY,
-                        crawlActivityKey));
-            }
-        }
-    }
 
     public Dereferencer getDereferencer() {
         return dereferencer;

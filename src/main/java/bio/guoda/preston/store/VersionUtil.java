@@ -69,11 +69,6 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    public static Literal recordGenerationTimeFor(BlankNodeOrIRI derivedSubject, BlobStore blobStore, StatementStore statementStore) throws IOException {
-        Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
-        return nowLiteral;
-    }
-
     public static Triple generationTimeFor(BlankNodeOrIRI subject, StatementStore statementStore, BlobStore blobStore) throws IOException {
         Triple statement1 = null;
         IRI timeKey = statementStore.get(Pair.of(subject, GENERATED_AT_TIME));
