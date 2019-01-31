@@ -49,7 +49,7 @@ public class CmdVerify extends Persisting implements Runnable {
                         //
                     } finally {
                         verifiedMap.put(iri.getIRIString(), state);
-                        System.out.println(iri.getIRIString() + "\t" + state + "\t" + counting.getByteCount());
+                        System.out.println(iri.getIRIString() + "\t" + (State.MATCHING_HASH == state ? "OK" : "FAIL") + "\t" + state + "\t" + counting.getByteCount());
                     }
                 }
             }
