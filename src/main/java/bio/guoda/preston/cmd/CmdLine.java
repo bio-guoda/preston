@@ -53,7 +53,7 @@ public class CmdLine {
                 .addObject(new CommandMain())
                 .addCommand("ls", new CmdList(), "log")
                 .addCommand("get", new CmdGet(), "cat")
-                .addCommand("cp", new CmdCopy(), "copyTo")
+                .addCommand("cp", new CmdCopyTo(), "copyTo")
                 .addCommand("update", new CmdUpdate(), "pull")
                 .addCommand("history", new CmdHistory())
                 .addCommand("version", new CmdVersion())
