@@ -17,7 +17,7 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
     private final KeyToPath keyToPath;
 
     public KeyValueStoreLocalFileSystem(File tmpDir, File datasetDir) {
-        this(tmpDir, datasetDir, new KeyTo5LevelPath());
+        this(tmpDir, datasetDir, new KeyTo3LevelPath());
     }
 
     public KeyValueStoreLocalFileSystem(File tmpDir, File datasetDir, KeyToPath keyToPath) {
