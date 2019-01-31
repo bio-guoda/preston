@@ -37,18 +37,15 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        String sourceDir = "data";
-        String tmpDir = "tmp";
-        if (sourceDir.equals(targetDir)) {
-            throw new IllegalArgumentException("source dir [" + sourceDir + "] must be different from target dir [" + targetDir + "].");
-        }
-
-        File source = Persisting.getDataDir(sourceDir);
+        File source = getDefaultDataDir();
         File target = Persisting.getDataDir(targetDir);
-        File tmp = Persisting.getDataDir(tmpDir);
+        if (source.equals(target)) {
+            throw new IllegalArgumentException("source dir [" + source.getAbsolutePath() + "] must be different from target dir [" + target.getAbsolutePath() + "].");
+        }
+        File tmp = getTmpDir();
 
         KeyValueStore copyingKeyValueStore = new KeyValueStoreCopying(
-                new KeyValueStoreLocalFileSystem(tmp, source),
+                getKeyValueStore(),
                 new KeyValueStoreLocalFileSystem(tmp, target));
         final BlobStoreAppendOnly blobStore = new BlobStoreAppendOnly(copyingKeyValueStore);
         Set<String> IRIStrings = new TreeSet<>();

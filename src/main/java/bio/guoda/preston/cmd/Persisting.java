@@ -18,7 +18,7 @@ public class Persisting {
         return new KeyValueStoreWithFallback(primary, fallback);
     }
 
-    private File getDefaultDataDir() {
+    File getDefaultDataDir() {
         return getDataDir("data");
     }
 

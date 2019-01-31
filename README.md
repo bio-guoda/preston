@@ -18,10 +18,12 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
  
  * [Usage](#usage) - command available on the preston commandline tool
    * [Command Line Tool](#command-line-tool)
-      * [`update`](#update) - update biodiversity dataset graph
+      * [`update`](#update) - update or track a biodiversity dataset graph
       * [`ls`](#ls) - list/print biodiversity dataset graph
       * [`get`](#get) - print biodiversity dataset graph node (e.g., dwca)
       * [`history`](#history) - show history of biodiversity dataset graph node
+      * [`copyTo`](#copyTo) - copies local ersioned dataset graphs to another location
+      * [`check`](#check) - check the integrity of the locally versioned dataset graphs and their datasets.
    * [Use Cases](#use-cases)
       * [`mining citations`](#mining-citations)
       * [`web access`](#web-access) ([`nginx`](#nginx) / [`caddy`](#caddy))
@@ -129,7 +131,7 @@ http://treatment.plazi.org/id/038787F9FE1E9002FED7FA5EFC1FFE3E
 The implication of using content addressed storage is that if the hash is the same, you are guaranteed that the content is the same. So, you can reproduce the **exact** same results above if you have a file with the same content hash.
 
 
-#### History
+#### `history`
 
 History helps to list your local content versions associated with a web address. Because the internet today might not be the internet of yesterday, and because publishers update their content for various reasons, Preston helps you keep track of the different versions retrieved from a particular location. Just like the [Internet Archive](https://archive.org)'s Way Back Machine keeps track of web page content, Preston help you keep track of the datasets that you are interested in. 
 
@@ -155,11 +157,27 @@ $ preston ls | grep 0659a54f-b713-4f86-a917-5be166a14110
 
 So, the UUID ending on 4110 is describe as "A biodiversity dataset graph archive". This UUID is the same across all Preston updates, so in a way we are help to create different versions of the same "a biodiversity dataset graph". Good to know right? 
 
-You can also use `history` for a specific url, like:
+#### `copyTo`
+
+Preston stores versioned copies of biodiversity dataset graphs and their associated datasets in the ```data/``` directory. The ```copyTo``` command moves the locally available biodiversity dataset graphs and their data to another location.
+
+```console 
+$ preston copyTo /home/someuser/target/data
+indexing... done.
+copying... [0.1]%
+[...]
+Copied [279636] datasets from [/home/someuser/source/data] to [/home/someuser/target/data] in [543] minutes.
+```
+
+#### `check`
+
+The `check` command takes the locally versions of the dataset graph and verifies that the associated datasets are available locally. In addition, the content hash (e.g., hash://sha256/...) for each local dataset graph and dataset is re-computed to verify that the content is still consistent with the content hash signatures recorded previously. The `check` command produces tab-separated values with four columns. The first column is the content hash of the file being checked, the second contains OK/FAIL to record the success of the check, the third gives a reason for check outcome and the fourth contains the total number of bytes of the local file associated with the hash.
 
 ```console
-$ preston history http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38FFDCFF90.zip
-<http://plazi.cs.umb.edu/GgServer/dwca/FFBEFF81FE1A9007FFDFFC38FFDCFF90.zip> <http://purl.org/pav/hasVersion> <hash://sha256/5cba2f513fee9e1811fe023d54e074df2d562b4169b801f15abacd772e7528f8> .
+$ preston check
+hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  OK     MATCHING_HASH   89931
+hash://sha256/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b  OK     MATCHING_HASH   210344
+...
 ```
 
 ### Use Cases
@@ -404,7 +422,7 @@ Preston is a stand-alone java application, packaged in a jarfile. You can build 
 On linux (and Mac) you can install Preston by running:
 
 ```console
-sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.0.8/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
+sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.0.9/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
 ```
 
 On successful installation, execute ```preston version``` on the commandline should print the version of preston. 
