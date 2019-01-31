@@ -83,8 +83,8 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
             }
         }
         stopWatch.stop();
-        System.out.println("\tcopying [100%].");
-        System.out.println("copying [" + IRIStrings.size() + "] datasets from [" + source.getAbsolutePath() + "] to [" + targetDir + "] completed in [" + stopWatch.getTime(TimeUnit.MINUTES) + "] min.");
+        System.out.println("\tcopying done.");
+        System.out.println("Copied [" + IRIStrings.size() + "] datasets from [" + source.getAbsolutePath() + "] to [" + targetDir + "] in [" + stopWatch.getTime(TimeUnit.MINUTES) + "] minutes.");
     }
 
     static String formatProgress(long i, long total) {
