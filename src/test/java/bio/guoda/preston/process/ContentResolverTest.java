@@ -88,11 +88,11 @@ public class ContentResolverTest {
         assertNotNull(inputStream);
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is("https://example.org"));
 
-        String baseCacheDir = "/50/d7/a9/" + expectedHash + "/";
+        String baseCacheDir = "/50/d7/" + expectedHash;
         String absCacheDir = datasetDir.toAbsolutePath().toString() + baseCacheDir;
 
 
-        File data = new File(absCacheDir + "data");
+        File data = new File(absCacheDir);
         assertTrue(data.exists());
         assertThat(IOUtils.toString(data.toURI(), StandardCharsets.UTF_8), is(expectedValue));
 

@@ -49,16 +49,16 @@ public class FileHasherTest {
         FileUtils.deleteQuietly(dataDir);
         FileUtils.forceMkdir(dataDir);
 
-        List<String> expectedFiles = Arrays.asList("d2/d9/9a/d2d99ac0926397ebf0904c306730a1642ff10f43b3297777f749bbd720b0ba2e/data",
-                "86/d9/ac/86d9acea28cbda1dffaea4131eff98a85ab40bfdb7de00a2c6ef3feac1baa798/data",
-                "17/38/94/17389498c3e4a526a8ec2acb0c50cafde7a9fed070ca7d776c28701eef3f14f0/data",
-                "d4/58/97/d458978d6cb4d4ba8585c722b57cf85099738e0b2165cb9d1f2d461fe82fec3e/data",
-                "c3/f6/6a/c3f66a93c2e12eb64129cc5b194eae067891fde052a8143d39379d8ecb34f3cf/data",
-                "e6/fd/d9/e6fdd97108175a3fac481f424f4da99ccefcb009149274dbcb0f46b55edde17b/data",
-                "06/6e/68/066e685fa9b5ef8a01d7d69f2f0e7f4074a646e5ae437f741a4629d881ade9eb/data",
-                "b9/b0/7a/b9b07a44c577c596e502ca764370d4cbd3cef06eff5b2c0b4dc5466a7614fd5a/data",
-                "c8/68/83/c868839024230e2a0e144f6501da74502a9652fde035d53e2489cd92e77e1f59/data",
-                "e1/ae/4a/e1ae4ab2711a209646d31b42d06698e242ecdf46e8d52394fb233d07337a222b/data");
+        List<String> expectedFiles = Arrays.asList("d2/d9/d2d99ac0926397ebf0904c306730a1642ff10f43b3297777f749bbd720b0ba2e",
+                "86/d9/86d9acea28cbda1dffaea4131eff98a85ab40bfdb7de00a2c6ef3feac1baa798",
+                "17/38/17389498c3e4a526a8ec2acb0c50cafde7a9fed070ca7d776c28701eef3f14f0",
+                "d4/58/d458978d6cb4d4ba8585c722b57cf85099738e0b2165cb9d1f2d461fe82fec3e",
+                "c3/f6/c3f66a93c2e12eb64129cc5b194eae067891fde052a8143d39379d8ecb34f3cf",
+                "e6/fd/e6fdd97108175a3fac481f424f4da99ccefcb009149274dbcb0f46b55edde17b",
+                "06/6e/066e685fa9b5ef8a01d7d69f2f0e7f4074a646e5ae437f741a4629d881ade9eb",
+                "b9/b0/b9b07a44c577c596e502ca764370d4cbd3cef06eff5b2c0b4dc5466a7614fd5a",
+                "c8/68/c868839024230e2a0e144f6501da74502a9652fde035d53e2489cd92e77e1f59",
+                "e1/ae/e1ae4ab2711a209646d31b42d06698e242ecdf46e8d52394fb233d07337a222b");
 
         assertNoFilesExistYet(dataDir, expectedFiles);
 
