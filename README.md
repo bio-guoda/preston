@@ -270,7 +270,7 @@ location ~ "/\.well-known/genid/" {
 }
 
 location ~ "^/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{58})$" {
-            	try_files /preston/$1/$2/$3/$uri/data =404;
+            	try_files /preston/$1/$2/$uri =404;
 }
 ```
 The first ```location``` block redirects any URIs describing [skolemized blank nodes](https://www.w3.org/TR/rdf11-concepts/#section-skolemization) to the appropriate [w3c](https://w3c.org) documentation on the topic. The second ```location``` block configures the server to attempt to retrieve a static file with a 64 hexadecimal sha256 hash from the appropriate ```data``` file in preston archive directory on the web server. 
@@ -286,7 +286,7 @@ redir 302 {
 
 rewrite {
   r ^/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{58})$
-  to data/{1}/{2}/{3}/{path}/data
+  to data/{1}/{2}/{path}
 }
 ```
 Where you can replace ```data/``` with the relative location of the local preston archive data directory.
