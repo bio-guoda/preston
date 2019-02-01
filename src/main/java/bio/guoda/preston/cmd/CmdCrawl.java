@@ -72,7 +72,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
         //add(Seeds.DATA_ONE.getIRIString());
     }};
 
-    @Parameter(description = "content URLs to update. If specified, the seeds will not be used.",
+    @Parameter(description = "[url1] [url2] ...",
             validateWith = IRIValidator.class)
     private List<String> IRIs = new ArrayList<>();
 

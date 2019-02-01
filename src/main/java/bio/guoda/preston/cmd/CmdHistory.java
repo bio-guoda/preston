@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
 import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 
-@Parameters(separators = "= ", commandDescription = "show history of biodiversity resource")
+@Parameters(separators = "= ", commandDescription = "show history of biodiversity dataset graph")
 public class CmdHistory extends LoggingPersisting implements Runnable {
 
     private static final Log LOG = LogFactory.getLog(CmdHistory.class);

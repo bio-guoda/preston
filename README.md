@@ -318,10 +318,9 @@ $ preston ls -l tsv | grep "/.well-known/genid/" | grep "Version" | cut -f1,3 | 
 Keeping track of changes across a diverse consortium of data publishers is necessary for reproducible workflows and reliable results. As datasets change, Preston can help you give insights into what changed *exactly*. For instance, the GBIF dataset registry changes as datasets are added, updated or deprecated. Below is an example of two version of the  https://api.gbif.org/v1/dataset endpoint, one from 2018-09-03 and the other from 2018-09-04. Using ```jq``` and ```diff``` in combination with ```preston get``` and ```preston history``` gives us a way to check and see what changed.
 
 ```console
-$ preston history https://api.gbif.org/v1/dataset
+$ preston ls | grep https://api.gbif.org/v1/dataset
 <https://api.gbif.org/v1/dataset> <http://purl.org/pav/hasVersion> <hash://sha256/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b> .
-<hash://sha256/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02> <http://www.w3.org/ns/prov#generatedAtTime> "2018-09-03T02:19:14.636Z" .
-<hash://sha256/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02> <http://purl.org/pav/previousVersion> <hash://sha256/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b> .
+<https://api.gbif.org/v1/dataset> <http://purl.org/pav/hasVersion> <hash://sha256/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02> .
 $ preston get hash://sha256/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b | jq . > one.json
 $ preston get hash://sha256/1846abf2b9623697cf9b2212e019bc1f6dc4a20da51b3b5629bfb964dc808c02 | jq . > two.json
 $ diff one.json two.json
@@ -491,10 +490,6 @@ Please use [maven](https://maven.apache.org) version 3.3+.
 
 ## Examples
 
-### preston update 
-
-
-
 ### Maven, Gradle, SBT
 Preston is made available through a [maven](https://maven.apache.org) repository.
 
@@ -548,7 +543,7 @@ Usage: <main class> [command] [command options]
             urls are provided.
             Default: [https://idigbio.org, https://gbif.org, http://biocase.org]
 
-    history      show history of biodiversity resource
+    history      show history of biodiversity dataset graph
       Usage: history [options] biodiversity resource locator
         Options:
           -l, --log
