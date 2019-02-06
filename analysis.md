@@ -153,7 +153,7 @@ The graph below show the cumulative size of tracked datasets. Due to a bug in Pr
 
 <img src="https://raw.githubusercontent.com/bio-guoda/preston/master/20190204-size-time-cumulative.png" width="50%"></img>
 
-The graph was produces using output of ```preston ls``` and ```preston check``` to extract the content hashes along with associated access timestamps and file sizes. 
+The graph was produced using output of ```preston ls``` and ```preston check``` to extract the content hashes along with associated access timestamps and file sizes. 
 
 An example of binary, but not semantic, content drift includes two versions of DwC-A served by http://www.gbif.se/ipt/archive.do?r=nrm-herpetology . These datasetversions had content hashes hash://sha256/59f32445a50646d923f8ba462a7d87a848632f28bd93ac579de210e3375714de (retrieved 2018-09-05) and hash://sha256/a7e64e7a64fdbceb35d92427b722c20456a127fc7422219f43215c5654e9b80b (retrieved 2018-09-16) respectively. However, close inspection of the content of the zip files shows that the size of the respective content is the same:
 
