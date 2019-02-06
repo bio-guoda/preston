@@ -1,5 +1,6 @@
 package bio.guoda.preston;
 
+import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
@@ -40,9 +41,10 @@ public class DWCASignatureTest {
     }
 
     @Test
-    public void invalidDwCA() throws IOException {
+    public void invalidDwCALeadsToHashOfNothing() throws IOException {
         IRI shaIRIOld = emlSha(IOUtils.toInputStream("not a zipfile", StandardCharsets.UTF_8));
-        assertNull(shaIRIOld);
+        String shaForEmptyContent = "hash://sha256/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+        assertThat(shaIRIOld, is(RefNodeFactory.toIRI(shaForEmptyContent)));
     }
 
     public IRI emlSha(InputStream dwcaInputStream) throws IOException {

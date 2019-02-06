@@ -9,9 +9,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -21,7 +19,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.Is.is;
@@ -59,8 +56,6 @@ public class FileHasherTest {
                 "c8/68/c868839024230e2a0e144f6501da74502a9652fde035d53e2489cd92e77e1f59",
                 "e1/ae/e1ae4ab2711a209646d31b42d06698e242ecdf46e8d52394fb233d07337a222b");
 
-        assertNoFilesExistYet(dataDir, expectedFiles);
-
         Set<String> hashList = hashDWCA(dwcaInputStream(), entry -> true);
 
         assertThat(hashList.size(), is(10));
@@ -77,7 +72,7 @@ public class FileHasherTest {
                 "hash://sha256/e6fdd97108175a3fac481f424f4da99ccefcb009149274dbcb0f46b55edde17b",
                 "hash://sha256/e1ae4ab2711a209646d31b42d06698e242ecdf46e8d52394fb233d07337a222b");
 
-        assertThat(hashList, is(expectedHashes));
+        assertThat(hashList, is(new TreeSet(expectedHashes)));
 
         Stream<String> sortedHashes = hashList.stream().distinct().sorted();
         String sortedJoin = sortedHashes.collect(Collectors.joining());
@@ -88,7 +83,7 @@ public class FileHasherTest {
         String expectedHashOfSortedHash = "hash://sha256/057391bd7ebe300dca56b8c2f44ec5526b8986bf832be552f285ad7d700aa1e6";
         assertThat(actualHashOfSortedHash.getIRIString(), is(expectedHashOfSortedHash));
 
-        String joinedUnsorted = String.join("", hashList);
+        String joinedUnsorted = String.join("", expectedHashes);
 
         IRI multihashUnsorted = Hasher.calcSHA256(joinedUnsorted);
         assertThat(multihashUnsorted.getIRIString(), is(not(expectedHashOfSortedHash)));
@@ -116,12 +111,6 @@ public class FileHasherTest {
         }
         is.close();
         return hashList;
-    }
-
-    public void assertNoFilesExistYet(File dataDir, List<String> expectedFiles) {
-        for (String fileName : expectedFiles) {
-            assertFalse(new File(dataDir, fileName).exists());
-        }
     }
 
 }
