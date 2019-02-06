@@ -1,7 +1,5 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.store.KeyTo3LevelPath;
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
@@ -9,13 +7,14 @@ import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -62,12 +61,9 @@ public class FileHasherTest {
 
         assertNoFilesExistYet(dataDir, expectedFiles);
 
-        List<String> hashList = hashDWCA(tmpDir, dataDir, dwcaInputStream());
-
+        Set<String> hashList = hashDWCA(dwcaInputStream(), entry -> true);
 
         assertThat(hashList.size(), is(10));
-
-        assertFilesExist(dataDir, expectedFiles);
 
         List<String> expectedHashes = Arrays.asList(
                 "hash://sha256/c3f66a93c2e12eb64129cc5b194eae067891fde052a8143d39379d8ecb34f3cf",
@@ -100,23 +96,22 @@ public class FileHasherTest {
 
     }
 
-    public void assertFilesExist(File dataDir, List<String> expectedFiles) {
-        for (String fileName : expectedFiles) {
-            assertTrue(new File(dataDir, fileName).exists());
-        }
+    public interface EntryFilter {
+        boolean accept(ZipEntry entry);
     }
 
-    private List<String> hashDWCA(File tmpDir, File dataDir, InputStream dwcaInputStream) throws IOException {
-        List<String> hashList = new ArrayList<String>();
+    public static Set<String> hashDWCA(InputStream dwcaInputStream, EntryFilter filter) throws IOException {
+        Set<String> hashList = new TreeSet<String>();
         ZipInputStream is = new ZipInputStream(dwcaInputStream);
         ZipEntry entry;
         while ((entry = is.getNextEntry()) != null) {
-            File tmpFile = new File(tmpDir, entry.getCrc() + ".tmp");
-            OutputStream os = new FileOutputStream(tmpFile);
-            String iriString = Hasher.calcSHA256(is, IOUtils.buffer(os)
-                    , false).getIRIString();
-            hashList.add(iriString);
-            FileUtils.moveFile(tmpFile, KeyValueStoreLocalFileSystem.getDataFile(dataDir, new KeyTo3LevelPath().toPath(iriString)));
+            if (filter.accept(entry)) {
+                String iriString = Hasher.calcSHA256(is, new NullOutputStream()
+                        , false).getIRIString();
+                hashList.add(iriString);
+            } else {
+                IOUtils.copy(is, new NullOutputStream());
+            }
             is.closeEntry();
         }
         is.close();
