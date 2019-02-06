@@ -151,7 +151,7 @@ Preston tracked idigbio, gbif and biocase networks over a period Sept 2018 - Jan
 
 The graph below show the cumulative size of tracked datasets. Due to a bug in Preston (fixed in v0.0.9), few new datasets were tracked, because only the first version of registries were used to discover datasets. So, in period Sept 2018 - Jan 2019 mostly dataset urls from Sept 2018 were used to track content. Even without the addition of new dataset endpoints/urls, the graph shows a positive linear relationship between time and size of the content registry, with almost 10x increase over a 5 month period. Anecdotal evidence suggests that this increase is unlikely to come from newly added records. Instead the increase in size is due to binary content drift, but not necessarily semantic content drift. 
 
-<img src="https://raw.githubusercontent.com/bio-guoda/preston/20190204-size-time-cumulative.png" width="50%"></img>
+<img src="https://raw.githubusercontent.com/bio-guoda/preston/master/20190204-size-time-cumulative.png" width="50%"></img>
 
 For instance, two versions of DwC-A served by http://www.gbif.se/ipt/archive.do?r=nrm-herpetology had content hashes hash://sha256/59f32445a50646d923f8ba462a7d87a848632f28bd93ac579de210e3375714de (retrieved 2018-09-05) and hash://sha256/a7e64e7a64fdbceb35d92427b722c20456a127fc7422219f43215c5654e9b80b (retrieved 2018-09-16) respectively. However, close inspection of the content of the zip files shows:
 
