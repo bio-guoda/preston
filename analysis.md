@@ -147,7 +147,7 @@ Issues opened following this analysis:
 
 Preston tracked idigbio, gbif and biocase networks over a period Sept 2018 - Jan 2019. Each registry, dataset, DwC-A or EML file was downloaded in content-addressed storage. Also, the log of the discover and download processes were captured the preston crawl history as nquads. This history contains the registry urls, meta-data urls, dataset urls as well as a reference to the content that was retrieved from these urls. These content references are expressed in sha256 hashes. These hashes uniquely represent the downloaded content. If two files have the same sha256 content hash, they contain the same byte-by-byte content. A distinction is made between binary content drift and semantic content drift. The former can be detecting by comparing content hashes like sha256: even thought all bytes except for one are the same for two files, their content hashes will be very different. The latter, semantic content drift, is comparing the content across two files extracted from the same URI based on the (relevant) information they contain. 
 
-### Binary Content Drift 
+### Binary vs. Semantic Content Drift 
 
 The graph below show the cumulative size of tracked datasets. Due to a bug in Preston (fixed in v0.0.9), few new datasets were tracked, because only the first version of registries were used to discover datasets. So, in period Sept 2018 - Jan 2019 mostly dataset urls from Sept 2018 were used to track content. Even without the addition of new dataset endpoints/urls, the graph shows a positive linear relationship between time and size of the content registry, with almost 10x increase over a 5 month period. Anecdotal evidence suggests that this increase is unlikely to come from newly added records. Instead the increase in size is due to binary content drift, but not necessarily semantic content drift. 
 
@@ -155,6 +155,7 @@ The graph below show the cumulative size of tracked datasets. Due to a bug in Pr
 
 For instance, two versions of DwC-A served by http://www.gbif.se/ipt/archive.do?r=nrm-herpetology had content hashes hash://sha256/59f32445a50646d923f8ba462a7d87a848632f28bd93ac579de210e3375714de (retrieved 2018-09-05) and hash://sha256/a7e64e7a64fdbceb35d92427b722c20456a127fc7422219f43215c5654e9b80b (retrieved 2018-09-16) respectively. However, close inspection of the content of the zip files shows:
 
+```
 $ unzip -l dwca.zip.old
 Archive:  dwca.zip.old
   Length      Date    Time    Name
