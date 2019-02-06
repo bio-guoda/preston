@@ -199,7 +199,12 @@ $ diff eml.xml.older eml.xml.newer
 
 So, even though the content in the meta.xml and occurrence.txt are identical, a semantically insignificant change in the eml.xml causes Preston to think that a new version of the dataset at http://www.gbif.se/ipt/archive.do?r=nrm-herpetology was published. So, because Preston only detects binary content drift, a whole new version is stored in Preston's content-addressed file store. Multiplying this behavior across the >40k datasets in the network, a disproportionate growth of the total size of dataset versions is expected even when few records are changed in datasets. Assuming that publishing organizations like gbif.se are unlikely to change their publication methods anytime soon, Preston will have to get smarter about detecting changes in a dataset over time. If not, the amount of storage needed will increase rapidly, causing data mobility and storage issues. Alternatives include chunking the dataset into smaller parts (file contents, of chunks of files) or removing/ignoring parts of the content that carries no meaning (pubDates/ packageIds). The chunking in combination with merkle-trees is used by platforms such as git, ipfs and dat-project to reduce communication overhead and storage requirement by detecting duplication of (chunked) content in directories and files.
 
+A naive estimate of duplication similar to the example above (e.g., only changes in eml) leads to an upper bound of 26GB content with duplicates out of ~283GB . The estimation assumed that datasets stored by Preston with the same file size are likely duplicates. This suggests that introducing a semantic content hash would only reduce the amount of unique content by about 10%. A quick-and-dirty calculation suggests that likely unique datasets have about 7MB average file size while possibly identical datasets are on average ~ 100KB in size. This seems consistent with anecdotal evidence that larger collections tend to be more actively managed, leading to updates to the data archives.  
+
+More analysis is needed to understand the duplication of information in the gathered datasets in period Sept 2018 - Jan 2019. This understanding would provide a basis for more efficient handling of biodiversity datasets from iDigBio, GBIF and BioCASe networks.  
+
 Issues opened following this analysis:
-    * https://github.com/bio-guoda/preston/issues/10
+    
+* https://github.com/bio-guoda/preston/issues/10
 
 
