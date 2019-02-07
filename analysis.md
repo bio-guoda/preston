@@ -149,7 +149,7 @@ Preston tracked idigbio, gbif and biocase networks over a period Sept 2018 - Jan
 
 ### Binary vs. Semantic Content Drift 
 
-The graph below show the cumulative size of tracked datasets. Due to a bug in Preston (fixed in v0.0.9), few new datasets were tracked, because only the first version of registries were used to discover datasets. So, in period Sept 2018 - Jan 2019 mostly dataset urls from Sept 2018 were used to track content. Even without the addition of new dataset endpoints/urls, the graph shows a positive linear relationship between time and size of the content registry, with about a 10x increase in total size over a 5 month period. Anecdotal evidence suggests that this increase is unlikely to come from newly added records. Instead the increase in size is due to binary content drift, but not necessarily semantic content drift. 
+The graph below show the cumulative size of ~ 40k tracked datasets. Due to a bug in Preston (fixed in v0.0.9), few new datasets were tracked, because only the first version of registries were used to discover datasets. So, in period Sept 2018 - Jan 2019 mostly dataset urls from Sept 2018 were used to track content. Even without the addition of new dataset endpoints/urls, the graph shows a positive linear relationship between time and size of the content registry, with about a 10x increase in total size over a 5 month period. Anecdotal evidence suggests that this increase is unlikely to come from newly added records. Instead the increase in size is due to binary content drift, but not necessarily semantic content drift. 
 
 <img src="https://raw.githubusercontent.com/bio-guoda/preston/master/20190204-size-time-cumulative.png" width="50%"></img>
 
