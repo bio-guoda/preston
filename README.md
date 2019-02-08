@@ -16,7 +16,7 @@ The process diagram below shows how Preston starts crawls to download copies of 
 
 The figure above shows how Preston starts (1) a crawl activity. This crawl activity then accesses (2) a registry to save (3,4) a snapshot (or version) of it. Now, datasets referenced in this registry version are accessed, downloaded and saved (6,7,8). After all this, the crawl activity saves the log that contains its activities (1-8) as a version of a biodiversity dataset and linked to previous versions (see figure below). This log can be used to retrace the steps of the crawl activity to reconstruct the relationships between the registries, datasets as well as their respective content signatures or content hashes. Actual instances of crawl activities contains multiple registries (e.g., GBIF, iDigBio) and potentially thousands of datasets.   
 
-<img src="https://raw.githubusercontent.com/bio-guoda/preston/master/history.png" width="50%">
+<img src="https://raw.githubusercontent.com/bio-guoda/preston/master/history.png">
 
 If you haven't yet tried Preston, please see the [Installation](#install) section. Please also see [a template repository](https://github.com/bio-guoda/preston-amazon) and [use cases](#use-cases) for examples. If you are interested in learning how Preston works, please visit the [architecture](./architecture.md) page.
 
