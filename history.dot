@@ -1,0 +1,11 @@
+digraph biodiversity_graph {
+      rankdir=RL
+      a [shape="box", label="history of biodiversity\ndataset graphs"]; 
+      //v1 [shape="box", label="a biodiversity\ndataset graph\nhash://sha256/..."]; 
+      v1 [shape="box", image="process.png"]; 
+      v2 [shape="box", image="process.png"]; 
+      
+      v2 -> v1 [label="hasPreviousVersion"]
+      v1 -> a [label="versionOf"]
+}
+

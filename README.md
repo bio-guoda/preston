@@ -12,7 +12,7 @@ Preston uses the [PROV](https://www.w3.org/TR/prov-o/) and [PAV](https://pav-ont
 
 The process diagram below shows how Preston starts crawls to download copies of biodiversity registries and their datasets. A detailed log of the crawl activities are recorded to describe what data was discovered and how. This activity log is referred to as the history of a biodiversity dataset graph. The numbers indicate the sequence of events. Click on the image to enlarge. 
 
-<img src="https://raw.githubusercontent.com/bio-guoda/preston/master/process.png" width="50%">
+<img src="https://raw.githubusercontent.com/bio-guoda/preston/master/history.png" width="50%">
 
 The figure above shows how Preston starts (1) a crawl activity. This crawl activity then accesses (2) a registry to save (3,4) a snapshot (or version) of it. Now, datasets referenced in this registry version are accessed, downloaded and saved (6,7,8). After all this, the crawl activity saves the log that contains its activities (1-8) as a version of a biodiversity dataset (9, 10). This log can be used to retrace the steps of the crawl activity to reconstruct the relationships between the registries, datasets as well as their respective content signatures or content hashes. Actual instances of crawl activities contains multiple registries (e.g., GBIF, iDigBio) and potentially thousands of datasets.   
 

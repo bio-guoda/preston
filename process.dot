@@ -1,28 +1,32 @@
-digraph test123 {
-    r [shape="box", label="a registry\nhttps://..."];
-    b [shape="box", label="history of\nbiodiversity\ndatasets"];
-    preston [shape="box", label="Preston"]; 
+digraph biodiversity_graph {
+      labelloc="t";  
+      label="a biodiversity dataset graph\nhash://sha256/...";
+      
+      r [shape="box", label="a registry\nhttps://..."];
+      preston [shape="box", label="Preston"]; 
     
-    a1 [label="a crawl\nactivity"];
-    a1 -> preston [label="(1) startedBy"];
+      a1 [label="a crawl\nactivity"];
+      a1 -> preston [label="(1) startedBy"];
     
-    r -> a1 [label="(2) usedBy"];
+      r -> a1 [label="(2) usedBy"];
 
-    rv0 [shape="box", label="a registry\nversion\nhash://sha256/..."];
-    r -> rv0 [label="(4) hasVersion"];
-    rv0 -> a1 [label="(3) generatedBy"];
+      rv0 [shape="box", label="a registry\nversion\nhash://sha256/..."];
+      r -> rv0 [label="(4) hasVersion"];
+      rv0 -> a1 [label="(3) generatedBy"];
 
-    d [shape="box", label="a dataset\nhttps://..."];
-    rv0 -> d [label="(5) hadMember"];
-    d -> a1 [label="(6) usedBy"];
+      d [shape="box", label="a dataset\nhttps://..."];
+      rv0 -> d [label="(5) hadMember"];
+      d -> a1 [label="(6) usedBy"];
 
-    dv0 [shape="box", label="a dataset\nversion\nhash://sha256/..."];
-    dv0 -> a1 [label="(7) generatedBy"];
+      dv0 [shape="box", label="a dataset\nversion\nhash://sha256/..."];
+      dv0 -> a1 [label="(7) generatedBy"];
 
-    d -> dv0 [label="(8) hasVersion"];
+      d -> dv0 [label="(8) hasVersion"];
     
-    x1 [shape="box", label="a biodiversity\ndataset\ngraph\n\nhash://sha256/..."];
-    x1 -> a1 [label="(9) generatedBy"];
-    b -> x1 [shape="box", label="(10) hasVersion"];
+
+
+      //cluster_0 -> a1 [label="(9) generatedBy"];
+      //b -> cluster_0 [shape="box", label="(10) hasVersion"];
+      //b [shape="box", label="history of\nbiodiversity\ndatasets"];
 }
 
