@@ -18,7 +18,6 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.Is.is;
@@ -38,24 +37,6 @@ public class FileHasherTest {
 
     @Test
     public void hashOfOrderedHashes() throws IOException {
-        File tmpDir = new File("target/tmpDir");
-        FileUtils.deleteQuietly(tmpDir);
-        FileUtils.forceMkdir(tmpDir);
-        File dataDir = new File("target/testDir");
-        FileUtils.deleteQuietly(dataDir);
-        FileUtils.forceMkdir(dataDir);
-
-        List<String> expectedFiles = Arrays.asList("d2/d9/d2d99ac0926397ebf0904c306730a1642ff10f43b3297777f749bbd720b0ba2e",
-                "86/d9/86d9acea28cbda1dffaea4131eff98a85ab40bfdb7de00a2c6ef3feac1baa798",
-                "17/38/17389498c3e4a526a8ec2acb0c50cafde7a9fed070ca7d776c28701eef3f14f0",
-                "d4/58/d458978d6cb4d4ba8585c722b57cf85099738e0b2165cb9d1f2d461fe82fec3e",
-                "c3/f6/c3f66a93c2e12eb64129cc5b194eae067891fde052a8143d39379d8ecb34f3cf",
-                "e6/fd/e6fdd97108175a3fac481f424f4da99ccefcb009149274dbcb0f46b55edde17b",
-                "06/6e/066e685fa9b5ef8a01d7d69f2f0e7f4074a646e5ae437f741a4629d881ade9eb",
-                "b9/b0/b9b07a44c577c596e502ca764370d4cbd3cef06eff5b2c0b4dc5466a7614fd5a",
-                "c8/68/c868839024230e2a0e144f6501da74502a9652fde035d53e2489cd92e77e1f59",
-                "e1/ae/e1ae4ab2711a209646d31b42d06698e242ecdf46e8d52394fb233d07337a222b");
-
         Set<String> hashList = hashDWCA(dwcaInputStream(), entry -> true);
 
         assertThat(hashList.size(), is(10));
@@ -72,7 +53,7 @@ public class FileHasherTest {
                 "hash://sha256/e6fdd97108175a3fac481f424f4da99ccefcb009149274dbcb0f46b55edde17b",
                 "hash://sha256/e1ae4ab2711a209646d31b42d06698e242ecdf46e8d52394fb233d07337a222b");
 
-        assertThat(hashList, is(new TreeSet(expectedHashes)));
+        assertThat(hashList, is(new TreeSet<>(expectedHashes)));
 
         Stream<String> sortedHashes = hashList.stream().distinct().sorted();
         String sortedJoin = sortedHashes.collect(Collectors.joining());
@@ -87,8 +68,6 @@ public class FileHasherTest {
 
         IRI multihashUnsorted = Hasher.calcSHA256(joinedUnsorted);
         assertThat(multihashUnsorted.getIRIString(), is(not(expectedHashOfSortedHash)));
-
-
     }
 
     public interface EntryFilter {
