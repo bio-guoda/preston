@@ -10,6 +10,16 @@ Preston is an open-source software system that keeps track of biodiversity datas
  
 Preston uses the [PROV](https://www.w3.org/TR/prov-o/) and [PAV](https://pav-ontology.github.io/pav/) ontologies to model the actors, activities and entities involved in discovery, access and change control of digital biodiversity datasets. In addition, Preston uses [content-addressed storage](https://bentrask.com/?q=hash://sha256/98493caa8b37eaa26343bbf73f232597a3ccda20498563327a4c3713821df892) and [SHA256 hashes](https://en.wikipedia.org/wiki/SHA-2) to uniquely identify and store content. A [hexastore](https://people.csail.mit.edu/tdanford/6830papers/weiss-hexastore.pdf)-like index is used to navigate a local graph of biodiversity datasets. Preston is designed to work offline and can be cloned, copied and moved across storage media with existing tools and infrastructures like rsync, dropbox, the internet archive or thumbdrives. In addition to versioned copies of uniquely identifiable original [ABCD](http://tdwg.github.io/abcd/ABCD_v206.html)-A, [DWC](http://rs.tdwg.org/dwc/)-A and [EML](https://www.researchgate.net/profile/Oliver_Guenther/publication/228958840_EML-the_Environmental_Markup_Language/links/0046351ee4c535bf56000000.pdf?inViewer=true&disableCoverPage=true&origin=publication_detail) files, Preston also keeps track of the [GBIF](https://gbif.org), [iDigBio](https://idigbio.org) and [BioCASe](http://biocasemonitor.biodiv.naturkundemuseum-berlin.de/index.php/Main_Page) registries to help retain the relationships between the institutions to keep a detailed record of provenance. 
 
+Periodically, the crawl process (see diagram below) is run for each institution which stores biodiversity datasets:
+1. A crawl activity is started (1)
+2. The registry (set of datasets) of Institution i is requested and downloaded (2)
+3. The sha-256 hash is computed for the downloaded registry (3) (4)
+4. The list of registry's datasets is created and each dataset is related to the registry (5)
+5. For each dataset in the registry:
+..a) The information about the dataset is downloaded (6)
+..b) For the downloaded dataset, it is computed the sha-256 hash (7) (8)
+6. The crawl activity finishes: log is completed.
+
 The process diagram below shows how Preston starts crawls to download copies of biodiversity registries and their datasets. A detailed log of the crawl activities are recorded to describe what data was discovered and how. This activity log is referred to as the history of a biodiversity dataset graph. The numbers indicate the sequence of events. Click on the image to enlarge. 
 
 <img src="https://raw.githubusercontent.com/bio-guoda/preston/master/process.png" width="50%">
