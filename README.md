@@ -16,8 +16,8 @@ Periodically, the crawl process (see diagram below) is run for each institution 
 3. The sha-256 hash is computed for the downloaded registry (3) (4)
 4. The list of registry's datasets is created and each dataset is related to the registry (5)
 5. For each dataset in the registry:
-..1. The information about the dataset is downloaded (6)
-..2. For the downloaded dataset, it is computed the sha-256 hash (7) (8)
+   a) The information about the dataset is downloaded (6)
+   b) For the downloaded dataset, it is computed the sha-256 hash (7) (8)
 6. The crawl activity finishes: log is completed.
 
 The process diagram below shows how Preston starts crawls to download copies of biodiversity registries and their datasets. A detailed log of the crawl activities are recorded to describe what data was discovered and how. This activity log is referred to as the history of a biodiversity dataset graph. The numbers indicate the sequence of events. Click on the image to enlarge. 
