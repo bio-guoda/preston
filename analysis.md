@@ -217,7 +217,7 @@ Biodiversity datasets range in size from less than 100kB to various GBs compress
 
 ### Intermediate results
 
-A scala-based spark script https://github.com/bio-guoda/idigbio-spark/blob/36330bed3edbca302237dc3332f130d85ae3231e/src/test/scala/bio/guoda/preston/spark/PrestonUtil.scala was created to implement unpack (step 1) and recompress (step 2) the hundreds of thousands of datasets tracked over Sept 2018 - Jan 2019. On a Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz (quad) with 16GB memory and ~1.5TB hard disks in RAID configuration raid, it took little over 3 days to process all the datasets using 8 parallel processes. It is expected that the processing time will be dramatically reduced when the preston datasets are loaded in distributed storage like HDFS and processed with a multi-node compute cluster like the one provided by GUODA. 
+A scala-based spark script https://github.com/bio-guoda/idigbio-spark/blob/36330bed3edbca302237dc3332f130d85ae3231e/src/test/scala/bio/guoda/preston/spark/PrestonUtil.scala was created to implement unpack (step 1), recompress (step 2) and partition paths of (step 3) the hundreds of thousands of datasets tracked over Sept 2018 - Jan 2019. On a Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz (quad) with 16GB memory and ~1.5TB hard disks in RAID configuration raid, it took little over 3 days to process all the datasets using 8 parallel processes. It is expected that the processing time will be dramatically reduced when the preston datasets are loaded in distributed storage like HDFS and processed with a multi-node compute cluster like the one provided by GUODA. 
 
 After completing steps 1. and 2., an attempt was made to count the lines in all the files using a spark-shell v2.4.0 and :
 
