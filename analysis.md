@@ -8,6 +8,7 @@ This page contains some [sparql](https://www.w3.org/TR/rdf-sparql-query/) querie
 
  * [`Detecting Linkrot`](#detecting-linkrot)
  * [`Content Drift`](#content-drift)
+ * [`Large-scale Content Analysis`](#large-scale-content-analysis)
 
 ## Detecting Linkrot
 
@@ -206,9 +207,9 @@ Issues opened following this analysis:
     
 * https://github.com/bio-guoda/preston/issues/10
 
-## Content Analysis of Big Collections of Datasets
+## Large-scale Content Analysis
 
-Biodiversity datasets range in size from less than 100kB to various GBs compressed. The bitrot and content drift analysis used signatures, or sha256 hashes, of datasets to unique identify the datasets. To dig into the contents of the datasets, we need to parse the content of the datasets. In smaller datasets, this task is easy: use commandline tools like grep, sed, awk, python's pandas or R to analyze the content. However, when dealing with hundreds of thousands of datasets, another approach is needed to analyze content. GUODA has adopted Apache Spark as an engine for large-scale data processing. To prepare the datasets tracked by Preston for use in Spark, the following was done.
+Biodiversity datasets range in size from less than 100kB to various GBs compressed. The [linkrot](#detecting-linkrot) and [content drift](#content-drift) analysis used signatures, or sha256 hashes, of datasets to unique identify the datasets. To dig into the contents of the datasets, we need to parse the content of the datasets. In smaller datasets, this task is easy: use commandline tools like grep, sed, awk, python's pandas or R to analyze the content. However, when dealing with hundreds of thousands of datasets, another approach is needed to analyze content. GUODA has adopted Apache Spark as an engine for large-scale data processing. To prepare the datasets tracked by Preston for use in Spark, the following was done.
 
 1. Unpack zip files. Zip files are unsuitable for large-scala data processing because they are not splittable. File that are not splittable cannot be distributed across multiple workers. For our dataset this poses a problem especially because of the bimodal distribution of archive sizes. 
 2. Recompress data files using bz2 . Most distributed application are IO bound, and compressing data can help reduce the amount of data that has be transferred from disk and network to memory. By chosing bz2, the files are splittable, meaning they can be parallelized across many workers. Gzip, a popular compression method, is *not* splittable. 
