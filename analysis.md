@@ -9,7 +9,6 @@ This page contains some [sparql](https://www.w3.org/TR/rdf-sparql-query/) querie
  * [`Detecting Linkrot`](#detecting-linkrot)
  * [`Content Drift`](#content-drift)
 
-
 ## Detecting Linkrot
 
 [Linkrot](https://en.wikipedia.org/wiki/Link_rot), a well documented, and often occurring, phenomenon in which content associated to links become permanently unavailable.  
@@ -207,4 +206,44 @@ Issues opened following this analysis:
     
 * https://github.com/bio-guoda/preston/issues/10
 
+## Content Analysis of Big Collections of Datasets
 
+Biodiversity datasets range in size from less than 100kB to various GBs compressed. The bitrot and content drift analysis used signatures, or sha256 hashes, of datasets to unique identify the datasets. To dig into the contents of the datasets, we need to parse the content of the datasets. In smaller datasets, this task is easy: use commandline tools like grep, sed, awk, python's pandas or R to analyze the content. However, when dealing with hundreds of thousands of datasets, another approach is needed to analyze content. GUODA has adopted Apache Spark as an engine for large-scale data processing. To prepare the datasets tracked by Preston for use in Spark, the following was done.
+
+1. Unpack zip files. Zip files are unsuitable for large-scala data processing because they are not splittable. File that are not splittable cannot be distributed across multiple workers. For our dataset this poses a problem especially because of the bimodal distribution of archive sizes. 
+2. Recompress data files using bz2 . Most distributed application are IO bound, and compressing data can help reduce the amount of data that has be transferred from disk and network to memory. By chosing bz2, the files are splittable, meaning they can be parallelized across many workers. Gzip, a popular compression method, is *not* splittable. 
+3. Partition file paths up to 256 parts. Datasets tracking many datasets, contains many files. To help easily access many files, Apache Spark support path patterns (via Hadoop) like ```file:///some/path/*```. However, when hundreds of thousands of files are encountered, Spark attempts to load all file paths into memory, causing a fair amount of memory pressure/ usage. To avoid loading all files at once, Preston's content-based folder structure was used to make 16*16 = 256 file patterns to cover all possible datasets. Because the sha256 signatures of datasets distribute content evenly across possible sha256 ranges, the path patterns are expected to include similar amount of datasets.
+
+### Intermediate results
+
+A scala-based spark script https://github.com/bio-guoda/idigbio-spark/blob/36330bed3edbca302237dc3332f130d85ae3231e/src/test/scala/bio/guoda/preston/spark/PrestonUtil.scala was created to implement unpack (step 1) and recompress (step 2) the hundreds of thousands of datasets tracked over Sept 2018 - Jan 2019. On a Intel(R) Core(TM) i7-2600 CPU @ 3.40GHz (quad) with 16GB memory and ~1.5TB hard disks in RAID configuration raid, it took little over 3 days to process all the datasets using 8 parallel processes. It is expected that the processing time will be dramatically reduced when the preston datasets are loaded in distributed storage like HDFS and processed with a multi-node compute cluster like the one provided by GUODA. 
+
+After completing steps 1. and 2., an attempt was made to count the lines in all the files using a spark-shell v2.4.0 and :
+
+```scala
+import org.apache.hadoop.fs.{FileSystem, Path}
+
+// partition the file path patterns in up to 256 chunks
+val pathPatterns = Range(0, 16 * 16).map(x => "%02x".format(x)).map(x => s"file:///home/preston/spark-preston-analysis/test-data/${x.substring(0, 1)}*/${x.substring(1, 2)}*/*/*.bz2")
+val fs = FileSystem.get(spark.sparkContext.hadoopConfiguration)
+import org.apache.hadoop.fs.{FileSystem, Path}
+// spark crashes on path patterns with no matching files - so pre-emptively remove the empty patterns
+val nonEmptyPatterns = pathPatterns.filter(x => fs.globStatus(new Path(x)).nonEmpty)
+val fs = FileSystem.get(spark.sparkContext.hadoopConfiguration)
+val all_the_data = nonEmptyPatterns.map(x => sc.textFile(x))
+val number_of_lines = all_the_data.map(_.count).reduce(_ + _)
+```
+
+On the same hardware described in previous section, the first attempt to calculae the number of lines using method above failed after hours of processing due to an out-of-memory error. The inability to quickly count lines suggests that pre-processing beyond steps 1, 2 and 3 are needed to efficiently compute over a large corpus of biodiversity datasets. 
+
+Note that the bash commands below counted lines at about 500M lines/ hr using a single process using same hardware. 
+
+```bash
+find unzip-bz2-data/ | grep "bz2$" | xargs -L1 bzcat | pv -l | wc -l
+```
+
+### Bottlenecks
+
+1. Computing and storage facilities - without access to more HDFS storage capacity and a compute cluster, the ability to process and analyze a large datasets is limited. This can be mitigated by cleaning or adding more capacity to the GUODA HDFS cluster.  
+2. Number of files - results suggests that Apache Spark is able to handle many files natively, and workarounds are needed to avoid out-of-memory errors on building lists for hundreds of thousands of file paths on systems with limited hardware. Possible mitigations include packaging (smaller) files into sequence files,using Apache Kafka (or similar) to transform the files into streams of lines, or packaging lines with their schemas into specialized file formats like Apache Avro (row-based) or Apache Parquet (columnar storage).
+3. Partitioning - Preston's usage of sha256 hashes to implement a content-based storage help to distribute datasets evenly across a hash-space. However, the dadtasets themselves vary in size from <100kB to >GB . To evenly distribute the data records across partitions for processing of evenly sized chunks, a partition strategy other than sha256 hashes of the data archives has to be adopted. Mitigations include stream-based approaches using Apache Kafka, or partitioning data records using hashes of individual records.  
