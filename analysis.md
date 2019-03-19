@@ -254,6 +254,13 @@ find unzip-bz2-data/ | grep "bz2$" | xargs -L1 bzcat | pv -l | wc -l
 Building on previous work that extracted entries from Darwin Core Archives into bz2 compressed entries, DwC metadata files (e.g., meta.xml) were extracted and collected as a sequence file. The sequence file uses the content hash as a key and the content of the associated meta.xml file as a value. Using the sequence file helped make access to thousands of small meta.xml files fast (~ seconds) and provided a way to work around the overhead of accessing the files via a file system. The metadata was then used to associated the terms (e.g., http://rs.tdwg.org/dwc/terms/kingdom) with columns in specific (bz2 compressed) tabular files. For each dataset, a single parquet file, ```core.parquet``` was created using the terms as columns names. [Parquet](https://parquet.apache.org) files contains both the schema as well as a the data in a columnar manner. The file format is supported by default in Apache Spark and allows for analyzing the dataset. For example, the code fragment below shows how to count all the records of all core.paruqet files in a folder structure using a specific schema. Note that library [idigbio-spark](https://github.com/bio-guoda/idigbio-spark) was used to help parsing and merging the schemas into a single unified schema. The example below was executed in the interactive spark-shell environment. 
 
 ```console
+# download idigbio-spark library
+$ curl https://s3-us-west-2.amazonaws.com/guoda/idigbio-spark/iDigBio-LD-assembly-1.5.9.jar > iDigBio-LD-assembly-1.5.9.jar
+
+# start spark shell
+$ spark-shell --jars iDigBio-LD-assembly-1.5.9.jar --conf spark.sql.caseSensitive=true --driver-memory 4G --executor-memory 6G 
+
+
 Spark context Web UI available at http://Ubuntu-1804-bionic-64-minimal:4040
 Spark context available as 'sc' (master = local[*], app id = local-1552953461423).
 Spark session available as 'spark'.
