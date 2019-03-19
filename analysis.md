@@ -249,5 +249,85 @@ find unzip-bz2-data/ | grep "bz2$" | xargs -L1 bzcat | pv -l | wc -l
 2. Number of files - results suggests that Apache Spark is able to handle many files natively, and workarounds are needed to avoid out-of-memory errors on building lists for hundreds of thousands of file paths on systems with limited hardware. Possible mitigations include packaging (smaller) files into sequence files,using Apache Kafka (or similar) to transform the files into streams of lines, or packaging lines with their schemas into specialized file formats like Apache Avro (row-based) or Apache Parquet (columnar storage).
 3. Partitioning - Preston's usage of sha256 hashes to implement a content-based storage help to distribute datasets evenly across a hash-space. However, the dadtasets themselves vary in size from <100kB to >GB . To evenly distribute the data records across partitions for processing of evenly sized chunks, a partition strategy other than sha256 hashes of the data archives has to be adopted. Mitigations include stream-based approaches using Apache Kafka, or partitioning data records using hashes of individual records. 
 
+## Large-scale Content Analysis Continued 
+
+Building on previous work that extracted entries from Darwin Core Archives into bz2 compressed entries, DwC metadata files (e.g., meta.xml) were extracted and collected as a sequence file. The sequence file uses the content hash as a key and the content of the associated meta.xml file as a value. Using the sequence file helped make access to thousands of small meta.xml files fast (~ seconds) and provided a way to work around the overhead of accessing the files via a file system. The metadata was then used to associated the terms (e.g., http://rs.tdwg.org/dwc/terms/kingdom) with columns in specific (bz2 compressed) tabular files. For each dataset, a single parquet file, ```core.parquet``` was created using the terms as columns names. [Parquet](https://parquet.apache.org) files contains both the schema as well as a the data in a columnar manner. The file format is supported by default in Apache Spark and allows for analyzing the dataset. For example, the code fragment below shows how to count all the records of all core.paruqet files in a folder structure using a specific schema. Note that library [idigbio-spark](https://github.com/bio-guoda/idigbio-spark) was used to help parsing and merging the schemas into a single unified schema. The example below was executed in the interactive spark-shell environment. 
+
+```console
+Spark context Web UI available at http://Ubuntu-1804-bionic-64-minimal:4040
+Spark context available as 'sc' (master = local[*], app id = local-1552953461423).
+Spark session available as 'spark'.
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 2.4.0
+      /_/
+         
+Using Scala version 2.11.12 (OpenJDK 64-Bit Server VM, Java 1.8.0_191)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> import bio.guoda.preston.spark.PrestonUtil
+import bio.guoda.preston.spark.PrestonUtil
+
+scala> import bio.guoda.preston.spark.PrestonUtil._
+import bio.guoda.preston.spark.PrestonUtil._
+
+scala> implicit val sp = spark
+sp: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@6f8035d6
+
+scala> val schema = metaSeqToSchema("data") // "data" is the Preston data folder with metadata sequence file, "meta.xml.seq" in it
+schema: org.apache.spark.sql.types.StructType = StructType(StructField(http://purl.org/dc/terms/contributor,StringType,true), StructField(http://rs.tdwg.org/dwc/terms/organismRemarks,StringType,true), StructField(http://purl.org/dc/terms/extent,StringType,true), StructField(http://rs.tdwg.org/dwc/terms/basionymID,StringType,true), StructField(http://rs.tdwg.org/dwc/terms/pointRadiusSpatialFit,StringType,true), StructField(http://rs.tdwg.org/dwc/terms/verbatimLatitude,StringType,true), StructField(http://rs.tdwg.org/dwc/terms/organismQuantity,StringType,true), StructField(http://purl.org/dc/terms/source,StringType,true), StructField(http://rs.tdwg.org/dwc/terms/samplingEffort,StringType,true), StructField(http://rs.tdwg.org/dwc/terms/taxonRemarks,StringType,true), StructField(http://rs.t...
+scala> val core = spark.read.schema(schema).parquet(s"data/*/*/*/core.parquet")
+core: org.apache.spark.sql.DataFrame = [http://purl.org/dc/terms/contributor: string, http://rs.tdwg.org/dwc/terms/organismRemarks: string ... 264 more fields]
+
+scala> core.count
+res0: Long = 3502478216
+
+scala> res0 / 1000000
+res1: Long = 3502
+
+scala> schema.fieldNames.filter(_.contains("kingdom"))
+res4: Array[String] = Array(http://rs.tdwg.org/dwc/terms/kingdom)
+
+scala> core.select("`http://rs.tdwg.org/dwc/terms/kingdom`").show(10)
++------------------------------------+
+|http://rs.tdwg.org/dwc/terms/kingdom|
++------------------------------------+
+|                             Plantae|
+|                             Plantae|
+|                             Plantae|
+|                             Plantae|
+|                             Plantae|
+|                             Plantae|
+|                             Plantae|
+|                             Plantae|
+|                             Plantae|
+|                             Plantae|
++------------------------------------+
+only showing top 10 rows
+scala> core.select("`http://rs.tdwg.org/dwc/terms/occurrenceID`").take(10).foreach(println)
+[http://ucjeps.berkeley.edu/cgi-bin/new_detail.pl?UCR184043&related=yes]
+[urn:catalog:CAS:BOT-BC:144720]
+[http://ucjeps.berkeley.edu/cgi-bin/new_detail.pl?SBBG39376&related=yes]
+[50f2db6b-aa04-4762-9153-894a197371b4]
+[2c5e834f-3599-4d2c-a291-3d06a5284b20]
+[http://ucjeps.berkeley.edu/cgi-bin/new_detail.pl?UCD162592&related=yes]
+[26e0971d-ab75-4397-a037-403c39e2b808]
+[fcf54555-d2e7-4b0a-8be7-8d623e711cba]
+[http://ucjeps.berkeley.edu/cgi-bin/new_detail.pl?RSA65398&related=yes]
+[urn:catalog:CAS:BOT-BC:40382]
+
+
+scala> val approxDistinct = core.select("`http://rs.tdwg.org/dwc/terms/occurrenceID`").as[String].rdd.countApproxDistinct(0.1)
+approxDistinct: Long = 699181619
+```
+
+The example above shows that 3.5 billion rows exist across the thousands of parquet files that were generated from the darwin core files. Also, it shows how to inspect the first ten kingdom and occurrenceID term values using a single schema. Finally, about 700 million distinct occurrenceIDs were estimated to exist across all the data using Spark's [RDD.countApproxDistinct](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.rdd.RDD@countApproxDistinct(relativeSD:Double):Long), an algorithm based on HyperLogLog cardinality estimation http://dx.doi.org/10.1145/2452376.2452456 .
+
+With this exercise, we showed that with relatively modest hardware (16 GB memory, 1.5TB harddisk, 4 CPUs) you can do transformations on billions of rows. Note though, that Spark needs to be configured properly (e.g., memory settings) and that processing times are long (e.g., ~hour instead of seconds to count all the rows). With access to more hardware and a distributed file system, we expect that process times will drop. 
+
+
 ### Links
 Also see https://github.com/bio-linker/organization/wiki/preston2spark .
