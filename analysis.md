@@ -9,6 +9,7 @@ This page contains some [sparql](https://www.w3.org/TR/rdf-sparql-query/) querie
  * [`Detecting Linkrot`](#detecting-linkrot)
  * [`Content Drift`](#content-drift)
  * [`Large-scale Content Analysis`](#large-scale-content-analysis)
+ * [`Large-scale Content Analysis Continued`](#large-scale-content-analysis-continued)
 
 ## Detecting Linkrot
 
