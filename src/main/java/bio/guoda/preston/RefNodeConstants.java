@@ -12,6 +12,7 @@ import static bio.guoda.preston.model.RefNodeFactory.fromUUID;
 public class RefNodeConstants {
 
     public static final IRI HAD_MEMBER = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#hadMember"));
+    public static final IRI SEE_ALSO = RefNodeFactory.toIRI(URI.create("http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso"));
 
     public static final String PRESTON_URI = "https://preston.guoda.bio";
 

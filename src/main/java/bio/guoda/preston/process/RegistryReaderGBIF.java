@@ -119,6 +119,10 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
             String uuid = result.get("key").asText();
             IRI datasetUUID = fromUUID(uuid);
             emitter.emit(toStatement(currentPage, HAD_MEMBER, datasetUUID));
+            if (result.has("doi")) {
+                String doi = result.get("doi").asText();
+                emitter.emit(toStatement(datasetUUID, SEE_ALSO, toIRI("https://doi.org/" + doi)));
+            }
 
             if (result.has("endpoints")) {
                 handleEndpoints(emitter, result, datasetUUID);
