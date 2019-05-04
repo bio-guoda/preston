@@ -13,9 +13,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
-import static org.junit.matchers.JUnitMatchers.containsString;
 
 public class ResourcesTest {
 
@@ -28,7 +26,7 @@ public class ResourcesTest {
 
     @Test
     public void dataOneObjectLocationList() throws IOException {
-        InputStream is = Resources.asInputStream(RefNodeFactory.toIRI(URI.create("https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FJTH_BMW.20160629")));
+        InputStream is = Resources.asInputStream(RefNodeFactory.toIRI(URI.create("https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FJTH_BMW.20160629")), Resources.REDIRECT_CODES);
 
         StringWriter output = new StringWriter();
         IOUtils.copy(is, output, StandardCharsets.UTF_8);

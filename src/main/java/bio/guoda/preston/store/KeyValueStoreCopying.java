@@ -5,9 +5,9 @@ import java.io.InputStream;
 
 public class KeyValueStoreCopying implements KeyValueStore {
     private final KeyValueStore targetKeyValueStore;
-    private final KeyValueStore sourceKeyValueStore;
+    private final KeyValueStoreReadOnly sourceKeyValueStore;
 
-    public KeyValueStoreCopying(KeyValueStore source, KeyValueStore target) {
+    public KeyValueStoreCopying(KeyValueStoreReadOnly source, KeyValueStore target) {
         this.sourceKeyValueStore = source;
         this.targetKeyValueStore = target;
     }
@@ -29,11 +29,14 @@ public class KeyValueStoreCopying implements KeyValueStore {
 
     @Override
     public InputStream get(String key) throws IOException {
-        InputStream is = sourceKeyValueStore.get(key);
-        if (is != null) {
-            targetKeyValueStore.put(key, is);
-            is.close();
-            is = targetKeyValueStore.get(key);
+        InputStream is = targetKeyValueStore.get(key);
+        if (is == null) {
+            is = sourceKeyValueStore.get(key);
+            if (is != null) {
+                targetKeyValueStore.put(key, is);
+                is.close();
+                is = targetKeyValueStore.get(key);
+            }
         }
         return is;
     }

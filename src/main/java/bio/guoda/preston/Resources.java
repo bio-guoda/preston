@@ -5,7 +5,6 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -19,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Resources {
@@ -35,7 +35,16 @@ public class Resources {
         return is;
     }
 
+    public static InputStream asInputStreamIgnore404(IRI dataURI) throws IOException {
+        return asInputStream(dataURI, Arrays.asList(404));
+    }
+
     public static InputStream asInputStream(IRI dataURI) throws IOException {
+        return asInputStream(dataURI, Collections.emptyList());
+    }
+
+
+    public static InputStream asInputStream(IRI dataURI, List<Integer> ignoreCodes) throws IOException {
         InputStream is = asInputStreamOfflineOnly(dataURI);
         if (is == null) {
             HttpGet get = new HttpGet(URI.create(dataURI.getIRIString()));
@@ -49,13 +58,17 @@ public class Resources {
 
             StatusLine statusLine = response.getStatusLine();
             HttpEntity entity = response.getEntity();
-            if (statusLine.getStatusCode() >= 300) {
-                if (shouldRedirect(dataURI) || !REDIRECT_CODES.contains(statusLine.getStatusCode())) {
-                    EntityUtils.consume(entity);
-                    throw new HttpResponseException(statusLine.getStatusCode(), statusLine.getReasonPhrase());
+            if (ignoreCodes.contains(statusLine.getStatusCode())) {
+                EntityUtils.consume(entity);
+            } else {
+                if (statusLine.getStatusCode() >= 300) {
+                    if (shouldRedirect(dataURI) || !REDIRECT_CODES.contains(statusLine.getStatusCode())) {
+                        EntityUtils.consume(entity);
+                        throw new HttpResponseException(statusLine.getStatusCode(), "[" + dataURI + "]" + statusLine.getReasonPhrase());
+                    }
                 }
+                is = entity.getContent();
             }
-            is = entity.getContent();
         }
         return is;
     }

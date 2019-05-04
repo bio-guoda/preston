@@ -43,7 +43,12 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
             if (!getDataFile(getDatasetDir(), filePath).exists()) {
                 File destFile = getDataFile(getDatasetDir(), filePath);
                 FileUtils.forceMkdirParent(destFile);
-                FileUtils.copyToFile(src, destFile);
+                try {
+                    FileUtils.copyToFile(src, destFile);
+                } catch (IOException ex) {
+                    FileUtils.deleteQuietly(destFile);
+                    throw ex;
+                }
             }
         }
     }

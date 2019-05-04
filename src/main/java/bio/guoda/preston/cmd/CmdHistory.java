@@ -1,5 +1,9 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.KeyValueStoreCopying;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.KeyValueStoreRemoteHTTP;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,6 +28,7 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
     @Override
     public void run() {
         StatementListener logger = StatementLogFactory.createLogger(getLogMode());
+
         StatementStore statementStore = new StatementStoreImpl(getKeyValueStore());
         AtomicBoolean foundHistory = new AtomicBoolean(false);
         try {
@@ -35,7 +40,7 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
                         logger.on(statement);
                     });
         } catch (IOException e) {
-            throw new RuntimeException("Failed to get version history.");
+            throw new RuntimeException("Failed to get version history.", e);
         }
 
         if (!foundHistory.get()) {
