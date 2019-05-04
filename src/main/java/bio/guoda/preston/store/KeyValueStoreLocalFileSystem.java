@@ -42,10 +42,14 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
             String filePath = keyToPath.toPath(key);
             if (!getDataFile(getDatasetDir(), filePath).exists()) {
                 File destFile = getDataFile(getDatasetDir(), filePath);
+                File tmpDestFile = getDataFile(getDatasetDir(), filePath + ".tmp");
+                tmpDestFile.deleteOnExit();
                 FileUtils.forceMkdirParent(destFile);
                 try {
-                    FileUtils.copyToFile(src, destFile);
+                    FileUtils.copyToFile(src, tmpDestFile);
+                    tmpDestFile.renameTo(destFile);
                 } catch (IOException ex) {
+                    FileUtils.deleteQuietly(tmpDestFile);
                     FileUtils.deleteQuietly(destFile);
                     throw ex;
                 }

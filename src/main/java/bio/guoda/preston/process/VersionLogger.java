@@ -11,6 +11,7 @@ import org.apache.commons.rdf.simple.SimpleRDF;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.system.StreamRDF;
+import org.apache.jena.shared.JenaException;
 import org.apache.jena.sparql.core.Quad;
 import bio.guoda.preston.model.RefNodeFactory;
 
@@ -34,7 +35,9 @@ public class VersionLogger extends ProcessorReadOnly {
                 InputStream inputStream = get(version);
                 parseAndEmit(inputStream);
             } catch (IOException e) {
-                LOG.warn("failed to read archive [" + RefNodeFactory.getVersion(statement) + "]", e);
+                LOG.warn("failed to read archive [" + version + "]", e);
+            } catch (JenaException ex) {
+                throw new RuntimeException("failed to read archive [" + version + "]", ex);
             }
         }
     }
