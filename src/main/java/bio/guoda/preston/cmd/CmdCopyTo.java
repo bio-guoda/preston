@@ -3,6 +3,7 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
@@ -46,7 +47,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
         KeyValueStore copyingKeyValueStore = new KeyValueStoreCopying(
                 getKeyValueStore(),
-                new KeyValueStoreLocalFileSystem(tmp, target));
+                new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI())));
         final BlobStoreAppendOnly blobStore = new BlobStoreAppendOnly(copyingKeyValueStore);
         Set<String> IRIStrings = new TreeSet<>();
 

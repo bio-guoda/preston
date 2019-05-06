@@ -16,16 +16,12 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
     private final File tmpDir;
     private final KeyToPath keyToPath;
 
-    public KeyValueStoreLocalFileSystem(File tmpDir, File datasetDir) {
-        this(tmpDir, new KeyTo3LevelPath(datasetDir.toURI()));
-    }
-
     public KeyValueStoreLocalFileSystem(File tmpDir, KeyToPath keyToPath) {
         this.tmpDir = tmpDir;
         this.keyToPath = keyToPath;
     }
 
-    public static File getDataFile(URI filePath) {
+    private static File getDataFile(URI filePath) {
         return new File(filePath);
     }
 

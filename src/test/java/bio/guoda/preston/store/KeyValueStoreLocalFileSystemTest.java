@@ -35,7 +35,7 @@ public class KeyValueStoreLocalFileSystemTest {
 
     @Test
     public void write() throws IOException {
-        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new File(path.toFile(), "datasets"));
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()));
         filePersistence.get("somethinggggggggggggggggggggg");
         filePersistence.put("somethinggggggggggggggggggggg", "some value");
 
@@ -45,7 +45,7 @@ public class KeyValueStoreLocalFileSystemTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void writeKeyTooShort() throws IOException {
-        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new File(path.toFile(), "datasets"));
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()));
         filePersistence.get("something");
         filePersistence.put("something", "some value");
 
@@ -55,7 +55,7 @@ public class KeyValueStoreLocalFileSystemTest {
 
     @Test
     public void writeStream() throws IOException {
-        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new File(path.toFile(), "datasets"));
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()));
 
         assertThat(filePersistence.get("some keyyyyyyyyyyyyyyyyyy"), is(nullValue()));
         filePersistence.put(new KeyGeneratingStream() {

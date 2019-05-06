@@ -1,9 +1,13 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.Resources;
+import bio.guoda.preston.store.KeyTo1LevelPath;
+import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyTo5LevelPath;
+import bio.guoda.preston.store.KeyToPath;
+import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreRemoteHTTP;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
@@ -31,7 +35,9 @@ public class Persisting {
     KeyValueStore getKeyValueStore() {
         KeyValueStore store;
         if (hasRemote()) {
-            store = new KeyValueStoreCopying(new KeyValueStoreRemoteHTTP(getRemoteURI()), getKeyValueStoreLocal());
+            KeyTo1LevelPath keyToPath = new KeyTo1LevelPath(getRemoteURI());
+            KeyValueStoreReadOnly keyStoreRemote = new KeyValueStoreRemoteHTTP(keyToPath, Resources::asInputStreamIgnore404);
+            store = new KeyValueStoreCopying(keyStoreRemote, getKeyValueStoreLocal());
         } else {
             store = getKeyValueStoreLocal();
         }
@@ -57,12 +63,15 @@ public class Persisting {
         return data;
     }
 
-    private KeyValueStore getKeyValueStoreLocal() {
-        KeyValueStore primary = new KeyValueStoreLocalFileSystem(getTmpDir(), getDefaultDataDir());
+    public KeyValueStore getKeyValueStoreLocal() {
+        KeyValueStore primary = new KeyValueStoreLocalFileSystem(getTmpDir(), getKeyToPathLocal());
         KeyValueStoreReadOnly fallback = new KeyValueStoreLocalFileSystem(getTmpDir(), new KeyTo5LevelPath(getDefaultDataDir().toURI()));
         return new KeyValueStoreWithFallback(primary, fallback);
     }
 
+    KeyToPath getKeyToPathLocal() {
+        return new KeyTo3LevelPath(getDefaultDataDir().toURI());
+    }
 
 
 }

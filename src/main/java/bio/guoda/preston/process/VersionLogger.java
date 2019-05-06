@@ -33,7 +33,9 @@ public class VersionLogger extends ProcessorReadOnly {
         if (version != null) {
             try {
                 InputStream inputStream = get(version);
-                parseAndEmit(inputStream);
+                if (inputStream != null) {
+                    parseAndEmit(inputStream);
+                }
             } catch (IOException e) {
                 LOG.warn("failed to read archive [" + version + "]", e);
             } catch (JenaException ex) {

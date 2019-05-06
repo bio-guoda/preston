@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.store.KeyTo3LevelPath;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -45,7 +46,7 @@ public class ContentResolverTest {
     public void init() throws IOException {
         tempDir = Files.createTempDirectory(Paths.get("target/"), "caching");
         datasetDir = Files.createTempDirectory(Paths.get("target/"), "datasets");
-        this.persistence = new KeyValueStoreLocalFileSystem(tempDir.toFile(), datasetDir.toFile());
+        this.persistence = new KeyValueStoreLocalFileSystem(tempDir.toFile(), new KeyTo3LevelPath(datasetDir.toFile().toURI()));
         this.blobStore = new BlobStoreAppendOnly(persistence);
     }
 
