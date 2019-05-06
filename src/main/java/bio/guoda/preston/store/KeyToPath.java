@@ -1,5 +1,7 @@
 package bio.guoda.preston.store;
 
+import java.net.URI;
+
 public interface KeyToPath {
-    String toPath(String key);
+    URI toPath(String key);
 }

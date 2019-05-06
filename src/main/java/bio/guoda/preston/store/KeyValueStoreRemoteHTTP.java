@@ -2,31 +2,31 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.Resources;
 import bio.guoda.preston.model.RefNodeFactory;
+import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
 
 
 public class KeyValueStoreRemoteHTTP implements KeyValueStoreReadOnly {
 
-    private final URL baseUrl;
     private final KeyToPath keyToPath;
     private final Dereferencer dereferencer;
 
-    public KeyValueStoreRemoteHTTP(URL baseUrl) {
-        this(baseUrl, new KeyTo1LevelPath(), Resources::asInputStreamIgnore404);
+    public KeyValueStoreRemoteHTTP(URI baseUrl) {
+        this(new KeyTo1LevelPath(baseUrl), Resources::asInputStreamIgnore404);
     }
 
-    public KeyValueStoreRemoteHTTP(URL baseUrl, KeyToPath keyToPath, Dereferencer deferencer) {
-        this.baseUrl = baseUrl;
+    public KeyValueStoreRemoteHTTP(KeyToPath keyToPath, Dereferencer deferencer) {
         this.keyToPath = keyToPath;
         this.dereferencer = deferencer;
     }
 
     @Override
     public InputStream get(String key) throws IOException {
-        return dereferencer.dereference(RefNodeFactory.toIRI(baseUrl.toExternalForm() + keyToPath.toPath(key)));
+        IRI uri = RefNodeFactory.toIRI(keyToPath.toPath(key));
+        return dereferencer.dereference(uri);
     }
 
 

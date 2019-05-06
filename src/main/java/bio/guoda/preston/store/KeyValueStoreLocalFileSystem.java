@@ -7,27 +7,26 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 
 public class KeyValueStoreLocalFileSystem implements KeyValueStore {
 
     private final File tmpDir;
-    private final File datasetDir;
     private final KeyToPath keyToPath;
 
     public KeyValueStoreLocalFileSystem(File tmpDir, File datasetDir) {
-        this(tmpDir, datasetDir, new KeyTo3LevelPath());
+        this(tmpDir, new KeyTo3LevelPath(datasetDir.toURI()));
     }
 
-    public KeyValueStoreLocalFileSystem(File tmpDir, File datasetDir, KeyToPath keyToPath) {
+    public KeyValueStoreLocalFileSystem(File tmpDir, KeyToPath keyToPath) {
         this.tmpDir = tmpDir;
-        this.datasetDir = datasetDir;
         this.keyToPath = keyToPath;
     }
 
-    public static File getDataFile(File parentDir, String filePath) {
-        return new File(parentDir, filePath);
+    public static File getDataFile(URI filePath) {
+        return new File(filePath);
     }
 
 
@@ -39,10 +38,10 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
     @Override
     public void put(String key, InputStream source) throws IOException {
         try (InputStream src = source) {
-            String filePath = keyToPath.toPath(key);
-            if (!getDataFile(getDatasetDir(), filePath).exists()) {
-                File destFile = getDataFile(getDatasetDir(), filePath);
-                File tmpDestFile = getDataFile(getDatasetDir(), filePath + ".tmp");
+            URI filePath = keyToPath.toPath(key);
+            if (!getDataFile(filePath).exists()) {
+                File destFile = getDataFile(filePath);
+                File tmpDestFile = getDataFile(filePath.resolve(".tmp"));
                 tmpDestFile.deleteOnExit();
                 FileUtils.forceMkdirParent(destFile);
                 try {
@@ -73,12 +72,8 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
 
     @Override
     public InputStream get(String key) throws IOException {
-        File dataFile = getDataFile(getDatasetDir(), keyToPath.toPath(key));
+        File dataFile = getDataFile(keyToPath.toPath(key));
         return dataFile.exists() ? FileUtils.openInputStream(dataFile) : null;
-    }
-
-    private File getDatasetDir() {
-        return datasetDir;
     }
 
 }
