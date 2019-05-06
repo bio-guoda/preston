@@ -2,6 +2,7 @@ package bio.guoda.preston.store;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -65,7 +66,8 @@ public class KeyValueStoreCopyingTest {
 
             @Override
             public InputStream get(String key) throws IOException {
-                return IOUtils.toInputStream(cache.get(key), StandardCharsets.UTF_8);
+                String value = cache.get(key);
+                return StringUtils.isBlank(value) ? null : IOUtils.toInputStream(value, StandardCharsets.UTF_8);
             }
         });
 
