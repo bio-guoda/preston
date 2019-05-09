@@ -4,6 +4,7 @@ import bio.guoda.preston.Resources;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.process.RegistryReaderBHL;
 import bio.guoda.preston.process.RegistryReaderBioCASE;
 import bio.guoda.preston.process.RegistryReaderDataONE;
 import bio.guoda.preston.process.RegistryReaderGBIF;
@@ -136,6 +137,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                 new RegistryReaderBioCASE(blobStore, statementQueue::add),
                 new RegistryReaderDataONE(blobStore, statementQueue::add),
                 new RegistryReaderRSS(blobStore, statementQueue::add),
+                new RegistryReaderBHL(blobStore, statementQueue::add),
                 StatementLogFactory.createLogger(getLogMode()),
                 statementLoggerNQuads
         };
