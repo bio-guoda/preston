@@ -1,0 +1,10 @@
+﻿ItemID	TitleID	ThumbnailPageID	BarCode	MARCItemID	CallNumber	VolumeInfo	ItemURL	LocalID	Year	InstitutionName	ZQuery	CreationDate
+24	11	268274	mobot31753000022803	i11499722	QK98 .R6 1789		https://www.biodiversitylibrary.org/item/24 		1789	Missouri Botanical Garden, Peter H. Raven Library		2006-05-04 00:00
+49	23	6027003	mobot31753000028362	i11506039	QK495.F67 T7 1916		https://www.biodiversitylibrary.org/item/49 		1916	Missouri Botanical Garden, Peter H. Raven Library		2006-05-04 00:00
+150	47	6208526	mobot31753000049772	i11534485	QK400.5 .B65 1837		https://www.biodiversitylibrary.org/item/150 		1837	Missouri Botanical Garden, Peter H. Raven Library		2006-05-04 00:00
+668	60	197749	mobot31753002220777	i11576042	QK1 .B55	v.9 (1888)	https://www.biodiversitylibrary.org/item/668 		1888	Missouri Botanical Garden, Peter H. Raven Library		2006-05-04 00:00
+687	60	209671	mobot31753002220934	i11576224	QK1 .B55	v.27 (1900)	https://www.biodiversitylibrary.org/item/687 		1900	Missouri Botanical Garden, Peter H. Raven Library		2006-05-04 00:00
+693	60	211920	mobot31753002220991	i11576273	QK1 .B55	v.31 (1902)	https://www.biodiversitylibrary.org/item/693 		1902	Missouri Botanical Garden, Peter H. Raven Library		2006-05-04 00:00
+709	60	218036	mobot31753002221080	i11576406	QK1 .B55	v.47 (1912)	https://www.biodiversitylibrary.org/item/709 		1912	Missouri Botanical Garden, Peter H. Raven Library		2006-05-04 00:00
+935	64	36774	mobot31753002306857	i11595206	QK1 .F418	v.23:no.2 (1840)	https://www.biodiversitylibrary.org/item/935 		1840	Missouri Botanical Garden, Peter H. Raven Library		2006-05-04 00:00
+947	64	44519	mobot31753002306964	i11595310	QK1 .F418	v.33 (1850)	https://www.biodiversitylibrary.org/item/947 		1850	Missouri Botanical Garden, Peter H. Raven Library		2006-05-04 00:00

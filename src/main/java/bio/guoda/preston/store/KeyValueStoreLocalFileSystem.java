@@ -37,7 +37,7 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
             URI filePath = keyToPath.toPath(key);
             if (!getDataFile(filePath).exists()) {
                 File destFile = getDataFile(filePath);
-                File tmpDestFile = getDataFile(filePath.resolve(".tmp"));
+                File tmpDestFile = getDataFile(URI.create(filePath.toString() + ".tmp"));
                 tmpDestFile.deleteOnExit();
                 FileUtils.forceMkdirParent(destFile);
                 try {
