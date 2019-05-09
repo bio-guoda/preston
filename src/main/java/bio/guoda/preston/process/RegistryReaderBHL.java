@@ -19,10 +19,12 @@ import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
 import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
+import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.ORGANIZATION;
+import static bio.guoda.preston.RefNodeConstants.SEE_ALSO;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
 import static bio.guoda.preston.model.RefNodeFactory.getVersion;
 import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
@@ -31,6 +33,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toContentType;
 import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class RegistryReaderBHL extends ProcessorReadOnly {
@@ -63,37 +66,42 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(BHL_API_URL_PART)) {
             try {
-                IRI currentPage = (IRI) getVersion(statement);
-                parse(this, get(currentPage), getVersionSource(statement));
+                IRI version = (IRI) getVersion(statement);
+                parse(this, get(version), version);
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
         }
     }
 
-    static void parse(StatementEmitter emitter, InputStream in, IRI versionSource) throws IOException {
+    static void parse(StatementEmitter emitter, InputStream in, IRI version) throws IOException {
         InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(reader);
         String header = bufferedReader.readLine();
         String[] columnNames = StringUtils.split(header, '\t');
         for (int i = 0; i < columnNames.length; i++) {
-            if ("BarCode".equals(StringUtils.trim(columnNames[i]))) {
-                handleBarCodes(bufferedReader, i, emitter);
+            String columnName = StringUtils.trim(columnNames[i]);
+            if ("BarCode".equals(columnName)) {
+                handleBarCodes(bufferedReader, i, emitter, version);
             }
         }
     }
 
-    private static void handleBarCodes(BufferedReader bufferedReader, int i, StatementEmitter emitter) throws IOException {
+    private static void handleBarCodes(BufferedReader bufferedReader, int barCodeIndex, StatementEmitter emitter, IRI versionSource) throws IOException {
         String line;
         while ((line = bufferedReader.readLine()) != null) {
             String[] values = StringUtils.split(line, '\t');
-            String barCode = StringUtils.trim(values[i]);
-            if (StringUtils.isNotBlank(barCode)) {
-                IRI ocrText = toIRI("https://archive.org/download/" + barCode + "/" + barCode + "_djvu.txt");
-                Stream.of(
-                        toStatement(ocrText, HAS_FORMAT, toContentType(MimeTypes.TEXT_UTF8)),
-                        toStatement(ocrText, HAS_VERSION, toBlank()))
-                        .forEach(emitter::emit);
+            if (barCodeIndex < values.length - 1) {
+                String barCode = StringUtils.trim(values[barCodeIndex]);
+                if (StringUtils.isNotBlank(barCode)) {
+                    IRI ocrText = toIRI("https://archive.org/download/" + barCode + "/" + barCode + "_djvu.txt");
+                    Stream.of(
+                            toStatement(versionSource, HAD_MEMBER, toIRI(barCode)),
+                            toStatement(toIRI(barCode), SEE_ALSO, ocrText),
+                            toStatement(ocrText, HAS_FORMAT, toContentType(MimeTypes.TEXT_UTF8)),
+                            toStatement(ocrText, HAS_VERSION, toBlank()))
+                            .forEach(emitter::emit);
+                }
             }
 
         }
