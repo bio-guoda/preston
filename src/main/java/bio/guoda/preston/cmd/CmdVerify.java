@@ -69,6 +69,7 @@ public class CmdVerify extends Persisting implements Runnable {
                                     (State.MATCHING_HASH == state ? "OK" : "FAIL") + "\t" +
                                     state + "\t" +
                                     counting.getByteCount());
+                            System.out.flush();
                         }
                     }
                 }
