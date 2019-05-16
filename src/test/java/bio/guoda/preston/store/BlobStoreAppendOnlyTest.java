@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -22,7 +23,24 @@ public class BlobStoreAppendOnlyTest {
     @Test
     public void put() throws IOException {
         BlobStore blobStore = new BlobStoreAppendOnly(getTestPersistence());
-        IRI key = blobStore.putBlob(IOUtils.toInputStream("testing123", StandardCharsets.UTF_8));
+        AtomicBoolean wasClosed = new AtomicBoolean(false);
+        InputStream testing123 = IOUtils.toInputStream("testing123", StandardCharsets.UTF_8);
+        InputStream wrappedInputStream = new InputStream() {
+
+            @Override
+            public int read() throws IOException {
+                return testing123.read();
+            }
+
+            @Override
+            public void close() throws IOException {
+                wasClosed.set(true);
+                super.close();
+            }
+        };
+        assertThat(wasClosed.get(), is(false));
+        IRI key = blobStore.putBlob(wrappedInputStream);
+        assertThat(wasClosed.get(), is(true));
         InputStream inputStream = blobStore.get(key);
         assertThat(TestUtil.toUTF8(inputStream), is("testing123"));
     }

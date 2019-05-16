@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -58,15 +59,33 @@ public class KeyValueStoreLocalFileSystemTest {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()));
 
         assertThat(filePersistence.get("some keyyyyyyyyyyyyyyyyyy"), is(nullValue()));
+        final InputStream someContentStream = IOUtils.toInputStream("some content", StandardCharsets.UTF_8);
+        final AtomicBoolean wasClosed = new AtomicBoolean(false);
+        InputStream wrappedContentStream = new InputStream() {
+            @Override
+            public int read() throws IOException {
+                return someContentStream.read();
+            }
+
+            @Override
+            public void close() throws IOException {
+                wasClosed.set(true);
+                someContentStream.close();
+            }
+        };
+
+        assertFalse(wasClosed.get());
         filePersistence.put(new KeyGeneratingStream() {
             @Override
             public String generateKeyWhileStreaming(InputStream is, OutputStream os) throws IOException {
                 IOUtils.copy(is, os);
                 return "some keyyyyyyyyyyyyyyyyyy";
             }
-        }, IOUtils.toInputStream("some content", StandardCharsets.UTF_8));
+        }, wrappedContentStream);
+        assertTrue(wasClosed.get());
 
         assertThat(TestUtil.toUTF8(filePersistence.get("some keyyyyyyyyyyyyyyyyyy")), is("some content"));
+
 
     }
 

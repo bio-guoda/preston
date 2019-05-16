@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +34,7 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
 
     @Override
     public void put(String key, InputStream source) throws IOException {
-        try (InputStream src = source) {
+        try (InputStream is = source) {
             URI filePath = keyToPath.toPath(key);
             if (!getDataFile(filePath).exists()) {
                 File destFile = getDataFile(filePath);
@@ -41,29 +42,35 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
                 tmpDestFile.deleteOnExit();
                 FileUtils.forceMkdirParent(destFile);
                 try {
-                    FileUtils.copyToFile(src, tmpDestFile);
-                    tmpDestFile.renameTo(destFile);
+                    FileUtils.copyToFile(is, tmpDestFile);
+                    if (!tmpDestFile.renameTo(destFile)) {
+                        throw new IOException("failed to rename tmp file from [" + tmpDestFile.getAbsolutePath() + "] to [" + destFile.getAbsolutePath() + "]");
+                    }
                 } catch (IOException ex) {
                     FileUtils.deleteQuietly(tmpDestFile);
                     FileUtils.deleteQuietly(destFile);
                     throw ex;
                 }
             }
+        } finally {
+            source.close();
         }
     }
 
     @Override
     public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
-        FileUtils.forceMkdir(tmpDir);
-        File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
-        FileOutputStream os = FileUtils.openOutputStream(tmpFile);
-        String key = keyGeneratingStream.generateKeyWhileStreaming(is, os);
-        try {
-            put(key, FileUtils.openInputStream(tmpFile));
-        } finally {
-            FileUtils.deleteQuietly(tmpFile);
+        try (InputStream src = is) {
+            FileUtils.forceMkdir(tmpDir);
+            File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
+            FileOutputStream os = FileUtils.openOutputStream(tmpFile);
+            String key = keyGeneratingStream.generateKeyWhileStreaming(src, os);
+            try (InputStream tmpIs = FileUtils.openInputStream(tmpFile)) {
+                put(key, tmpIs);
+            } finally {
+                FileUtils.deleteQuietly(tmpFile);
+            }
+            return key;
         }
-        return key;
     }
 
     @Override
