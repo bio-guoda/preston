@@ -1,23 +1,19 @@
 package bio.guoda.preston.store;
 
-import org.apache.commons.io.IOUtils;
+import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
-import bio.guoda.preston.Hasher;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertNull;
-import static junit.framework.TestCase.assertTrue;
 import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.isBlankOrSkolemizedBlank;
@@ -25,6 +21,8 @@ import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toSkolemizedBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
@@ -41,14 +39,13 @@ public class ArchiverTest {
                 HAS_VERSION,
                 blank);
 
-        Dereferencer dereferencer = uri -> {
+        Dereferencer3<IRI> dereferencer = uri -> {
             throw new IOException("fails to dereference");
         };
 
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
         Archiver relationStore = new Archiver(
-                new BlobStoreAppendOnly(testKeyValueStore),
                 dereferencer,
                 new StatementStoreImpl(testKeyValueStore),
                 TestUtil.getTestCrawlContext());
@@ -71,7 +68,7 @@ public class ArchiverTest {
                 HAS_VERSION,
                 skolemizedBlank);
 
-        Dereferencer dereferencer = uri -> {
+        Dereferencer3<IRI> dereferencer = uri -> {
             throw new IOException("fails to dereference");
         };
 
@@ -80,7 +77,6 @@ public class ArchiverTest {
         List<Triple> nodes = new ArrayList<>();
 
         Archiver relationStore = new Archiver(
-                new BlobStoreAppendOnly(testKeyValueStore),
                 dereferencer,
                 new StatementStoreImpl(testKeyValueStore),
                 TestUtil.getTestCrawlContext(),
@@ -106,16 +102,10 @@ public class ArchiverTest {
                 HAS_VERSION,
                 blank);
 
-        Dereferencer dereferencer = new DereferenceTest("derefData@");
+        Dereferencer3<IRI> dereferencer = new DereferenceTest("#derefData");
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
-        Archiver relationStore = new Archiver(
-                new BlobStoreAppendOnly(testKeyValueStore),
-                dereferencer,
-                new StatementStoreImpl(testKeyValueStore),
-                TestUtil.getTestCrawlContext());
-
-        BlobStore blobStore = new BlobStoreAppendOnly(testKeyValueStore);
+        Archiver relationStore = getAppendOnlyRelationStore(testKeyValueStore, dereferencer);
 
         relationStore.on(statement);
 
@@ -123,18 +113,11 @@ public class ArchiverTest {
 
         IRI contentHash = relationStore.getStatementStore().get(
                 Pair.of(toIRI(URI.create("http://some")), HAS_VERSION));
-        InputStream content = blobStore.get(contentHash);
-        assertNotNull(contentHash);
-
-        String expectedContent = "derefData@http://some";
-
-        String actualContent = toUTF8(content);
-        assertThat(actualContent, Is.is(expectedContent));
-        assertThat(contentHash, Is.is(Hasher.calcSHA256(expectedContent)));
+        assertThat(contentHash, Is.is(RefNodeFactory.toIRI("http://some#derefData")));
     }
 
-    private Archiver getAppendOnlyRelationStore(Dereferencer dereferencer, BlobStore blobStore, KeyValueStore testPersistencetence) {
-        return new Archiver(blobStore, dereferencer, new StatementStoreImpl(testPersistencetence), TestUtil.getTestCrawlContext());
+    private Archiver getAppendOnlyRelationStore(KeyValueStore testPersistencetence, Dereferencer3<IRI> dereferencer1) {
+        return new Archiver(dereferencer1, new StatementStoreImpl(testPersistencetence), TestUtil.getTestCrawlContext());
     }
 
     private String toUTF8(InputStream content) throws IOException {
@@ -145,23 +128,20 @@ public class ArchiverTest {
     public void putNewVersionOfContent() throws IOException {
         Triple statement = toStatement(SOME_IRI, HAS_VERSION, toBlank());
 
+        KeyValueStore keyValueStore = TestUtil.getTestPersistence();
 
-        String prefix = "derefData@";
-        Dereferencer dereferencer1 = new DereferenceTest(prefix);
-
-        BlobStore blogStore = new BlobStoreAppendOnly(TestUtil.getTestPersistence());
-
-        Archiver relationstore = getAppendOnlyRelationStore(dereferencer1,
-                blogStore,
-                TestUtil.getTestPersistence());
+        final DereferenceTest dereferencer = new DereferenceTest("#derefData");
+        Archiver relationstore = getAppendOnlyRelationStore(
+                keyValueStore, dereferencer);
 
         relationstore.on(statement);
 
         IRI contentHash = relationstore.getStatementStore().get(Pair.of(SOME_IRI, HAS_VERSION));
-        assertNotNull(contentHash);
+        assertThat(contentHash.getIRIString(), Is.is("http://some#derefData"));
 
-        Dereferencer dereferencer = new DereferenceTest("derefData2@");
-        relationstore.setDereferencer(dereferencer);
+        final DereferenceTest dereferencer1 = new DereferenceTest("#derefData2");
+        relationstore = getAppendOnlyRelationStore(
+                keyValueStore, dereferencer1);
         relationstore.on(statement);
 
         IRI contentHash2 = relationstore.getStatementStore().get(Pair.of(SOME_IRI, HAS_VERSION));
@@ -170,79 +150,66 @@ public class ArchiverTest {
         assertThat(contentHash, Is.is(contentHash2));
 
         IRI newContentHash = relationstore.getStatementStore().get(Pair.of(HAS_PREVIOUS_VERSION, contentHash));
-        InputStream newContent = blogStore.get(newContentHash);
 
         assertThat(contentHash, not(Is.is(newContentHash)));
-        assertThat(newContentHash.getIRIString(), Is.is("hash://sha256/960d96611c4048e05303f6f532590968fd5eb23d0035141c4b02653b436f568c"));
+        assertThat(newContentHash.getIRIString(), Is.is("http://some#derefData2"));
 
-        assertThat(toUTF8(newContent), Is.is("derefData2@http://some"));
+        final DereferenceTest dereferencer2 = new DereferenceTest("#derefData3");
+        relationstore = getAppendOnlyRelationStore(
+                keyValueStore, dereferencer2);
 
-        relationstore.setDereferencer(new DereferenceTest("derefData3@"));
         relationstore.on(statement);
 
         IRI newerContentHash = relationstore.getStatementStore().get(Pair.of(HAS_PREVIOUS_VERSION, newContentHash));
-        InputStream newerContent = blogStore.get(newerContentHash);
-
-        assertThat(newerContentHash.getIRIString(), Is.is("hash://sha256/7e66eac09d137afe06dd73614e966a417260a111208dabe7225b05f02ce380fd"));
-        assertThat(toUTF8(newerContent), Is.is("derefData3@http://some"));
+        assertThat(newerContentHash.getIRIString(), Is.is("http://some#derefData3"));
     }
+
     @Test
     public void archiveLastestTwo() throws IOException {
         Triple statement = toStatement(SOME_IRI, HAS_VERSION, toBlank());
 
-        String prefix = "derefData@";
-        Dereferencer dereferencer1 = new DereferenceTest(prefix);
-
-        BlobStore blogStore = new BlobStoreAppendOnly(TestUtil.getTestPersistence());
-
-        Archiver relationstore = getAppendOnlyRelationStore(dereferencer1,
-                blogStore,
-                TestUtil.getTestPersistence());
+        KeyValueStore keyValueStore = TestUtil.getTestPersistence();
+        Archiver relationstore = getAppendOnlyRelationStore(
+                keyValueStore, new DereferenceTest("#derefData"));
 
         relationstore.on(statement);
 
         IRI contentHash = relationstore.getStatementStore().get(Pair.of(SOME_IRI, HAS_VERSION));
         assertNotNull(contentHash);
 
-        Dereferencer dereferencer = new DereferenceTest("derefData2@");
-        relationstore.setDereferencer(dereferencer);
+        final DereferenceTest dereferencer1 = new DereferenceTest("#derefData2");
+        relationstore = getAppendOnlyRelationStore(
+                keyValueStore, dereferencer1);
         relationstore.on(statement);
 
         IRI contentHash2 = relationstore.getStatementStore().get(Pair.of(SOME_IRI, HAS_VERSION));
-
-
         assertThat(contentHash, Is.is(contentHash2));
 
         IRI newContentHash = relationstore.getStatementStore().get(Pair.of(HAS_PREVIOUS_VERSION, contentHash));
-        InputStream newContent = blogStore.get(newContentHash);
 
         assertThat(contentHash, not(Is.is(newContentHash)));
-        assertThat(newContentHash.getIRIString(), Is.is("hash://sha256/960d96611c4048e05303f6f532590968fd5eb23d0035141c4b02653b436f568c"));
+        assertThat(newContentHash.getIRIString(), Is.is("http://some#derefData2"));
 
-        assertThat(toUTF8(newContent), Is.is("derefData2@http://some"));
-
-        relationstore.setDereferencer(new DereferenceTest("derefData3@"));
+        final DereferenceTest dereferencer2 = new DereferenceTest("#derefData3");
+        relationstore = getAppendOnlyRelationStore(
+                keyValueStore, dereferencer2);
         relationstore.on(statement);
 
         IRI newerContentHash = relationstore.getStatementStore().get(Pair.of(HAS_PREVIOUS_VERSION, newContentHash));
-        InputStream newerContent = blogStore.get(newerContentHash);
 
-        assertThat(newerContentHash.getIRIString(), Is.is("hash://sha256/7e66eac09d137afe06dd73614e966a417260a111208dabe7225b05f02ce380fd"));
-        assertThat(toUTF8(newerContent), Is.is("derefData3@http://some"));
+        assertThat(newerContentHash.getIRIString(), Is.is("http://some#derefData3"));
     }
 
-    private class DereferenceTest implements Dereferencer {
-
+    private class DereferenceTest implements Dereferencer3<IRI> {
         private final String prefix;
 
-        DereferenceTest(String prefix) {
-            this.prefix = prefix;
+        public DereferenceTest(String s) {
+            this.prefix = s;
         }
 
         @Override
-        public InputStream dereference(IRI uri) {
-            return IOUtils.toInputStream(prefix + uri.getIRIString(), StandardCharsets.UTF_8);
+        public IRI dereference(IRI uri) throws IOException {
+            return RefNodeFactory.toIRI(uri.getIRIString() + prefix);
         }
     }
-
 }

@@ -15,7 +15,6 @@ import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementProcessor;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import static bio.guoda.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
@@ -30,25 +29,20 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 public class Archiver extends StatementProcessor {
     private static Log LOG = LogFactory.getLog(CmdList.class);
 
-    private final BlobStore blobStore;
     private final CrawlContext crawlContext;
 
-    private Dereferencer dereferencer;
+    private Dereferencer3<IRI> dereferencer;
 
     private boolean resolveOnMissingOnly = false;
 
     private final StatementStore statementStore;
 
-    public Archiver(BlobStore blobStore, Dereferencer dereferencer, StatementStore statementStore, CrawlContext crawlContext, StatementListener... listener) {
+    public Archiver(Dereferencer3<IRI> dereferencer, StatementStore statementStore, CrawlContext crawlContext, StatementListener... listener) {
         super(listener);
         this.crawlContext = crawlContext;
-        this.blobStore = blobStore;
         this.statementStore = statementStore;
         this.dereferencer = dereferencer;
-    }
 
-    public Archiver(BlobStore blobStore, Dereferencer dereferencer, StatementStore statementStore, CrawlContext crawlContext) {
-        this(blobStore, dereferencer, statementStore, crawlContext, new StatementListener[]{});
     }
 
     StatementStore getStatementStore() {
@@ -84,7 +78,7 @@ public class Archiver extends StatementProcessor {
             if (getDereferencer() != null) {
                 IRI newVersion = null;
                 try {
-                    newVersion = dereference(versionSource);
+                    newVersion = dereferencer.dereference(versionSource);
                 } catch (IOException e) {
                     LOG.warn("failed to dereference [" + versionSource.toString() + "]", e);
                 } finally {
@@ -110,11 +104,6 @@ public class Archiver extends StatementProcessor {
         }
     }
 
-    private IRI dereference(IRI versionSource) throws IOException {
-        InputStream data = getDereferencer().dereference(versionSource);
-        return data == null ? null : getBlobStore().putBlob(data);
-    }
-
     private void emitGenerationTime(BlankNodeOrIRI derivedSubject) throws IOException {
         Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
         emit(toStatement(derivedSubject,
@@ -126,10 +115,6 @@ public class Archiver extends StatementProcessor {
                 crawlContext.getActivity()));
     }
 
-    private BlobStore getBlobStore() {
-        return blobStore;
-    }
-
     public boolean shouldResolveOnMissingOnly() {
         return resolveOnMissingOnly;
     }
@@ -139,12 +124,8 @@ public class Archiver extends StatementProcessor {
     }
 
 
-    public Dereferencer getDereferencer() {
+    private Dereferencer3<IRI> getDereferencer() {
         return dereferencer;
-    }
-
-    public void setDereferencer(Dereferencer dereferencer) {
-        this.dereferencer = dereferencer;
     }
 
 }

@@ -15,6 +15,7 @@ import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
+import bio.guoda.preston.store.DereferencerContentAddressed;
 import bio.guoda.preston.store.KeyGeneratingStream;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.StatementStore;
@@ -189,7 +190,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
 
 
     private StatementListener createOnlineArchive(BlobStore blobStore, StatementListener[] listener, CrawlMode crawlMode, CrawlContext crawlContext, StatementStore statementStore) {
-        Archiver Archiver = new Archiver(blobStore, Resources::asInputStream, statementStore, crawlContext, listener);
+        Archiver Archiver = new Archiver(new DereferencerContentAddressed(Resources::asInputStream, blobStore), statementStore, crawlContext, listener);
         Archiver.setResolveOnMissingOnly(CrawlMode.resume == crawlMode);
         return Archiver;
     }

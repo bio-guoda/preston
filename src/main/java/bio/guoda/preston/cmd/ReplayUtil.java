@@ -4,6 +4,7 @@ import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.VersionLogger;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
+import bio.guoda.preston.store.DereferencerContentAddressed;
 import bio.guoda.preston.store.StatementStore;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
@@ -59,11 +60,9 @@ public final class ReplayUtil {
             }
         };
         StatementListener offlineArchive = new Archiver(
-                blobStore
-                , null
-                , readOnlyStatementStore
-                , null
-                , reader);
+                new DereferencerContentAddressed(null, blobStore), readOnlyStatementStore
+                , null,
+                reader);
 
         while (!statementQueue.isEmpty()) {
             offlineArchive.on(statementQueue.poll());

@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.store.DereferencerContentAddressed;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -51,7 +52,7 @@ public class ContentResolverTest {
     }
 
     private Archiver createStatementStore(StatementListener... listeners) {
-        return new Archiver(blobStore, Resources::asInputStream, new StatementStoreImpl(persistence), TestUtil.getTestCrawlContext(), listeners);
+        return new Archiver(new DereferencerContentAddressed(Resources::asInputStream, blobStore), new StatementStoreImpl(persistence), TestUtil.getTestCrawlContext(), listeners);
     }
 
     @After

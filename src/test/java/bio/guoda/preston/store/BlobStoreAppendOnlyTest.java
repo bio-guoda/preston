@@ -41,6 +41,7 @@ public class BlobStoreAppendOnlyTest {
         assertThat(wasClosed.get(), is(false));
         IRI key = blobStore.putBlob(wrappedInputStream);
         assertThat(wasClosed.get(), is(true));
+        assertThat(key.getIRIString(), is("hash://sha256/b822f1cd2dcfc685b47e83e3980289fd5d8e3ff3a82def24d7d1d68bb272eb32"));
         InputStream inputStream = blobStore.get(key);
         assertThat(TestUtil.toUTF8(inputStream), is("testing123"));
     }
@@ -49,6 +50,7 @@ public class BlobStoreAppendOnlyTest {
     public void putURI() throws IOException {
         BlobStore blobStore = new BlobStoreAppendOnly(getTestPersistence());
         IRI key = blobStore.putBlob(RefNodeFactory.toIRI("pesto:123"));
+        assertThat(key.getIRIString(), is("hash://sha256/02707ce2db146bfe983e40cca527240cd46b6e8723710757c4c24f0d2adb8b7c"));
         InputStream inputStream = blobStore.get(key);
         assertThat(TestUtil.toUTF8(inputStream), is("pesto:123"));
     }
