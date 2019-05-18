@@ -31,13 +31,13 @@ public class Archiver extends StatementProcessor {
 
     private final CrawlContext crawlContext;
 
-    private Dereferencer3<IRI> dereferencer;
+    private Dereferencer<IRI> dereferencer;
 
     private boolean resolveOnMissingOnly = false;
 
     private final StatementStore statementStore;
 
-    public Archiver(Dereferencer3<IRI> dereferencer, StatementStore statementStore, CrawlContext crawlContext, StatementListener... listener) {
+    public Archiver(Dereferencer<IRI> dereferencer, StatementStore statementStore, CrawlContext crawlContext, StatementListener... listener) {
         super(listener);
         this.crawlContext = crawlContext;
         this.statementStore = statementStore;
@@ -124,7 +124,7 @@ public class Archiver extends StatementProcessor {
     }
 
 
-    private Dereferencer3<IRI> getDereferencer() {
+    private Dereferencer<IRI> getDereferencer() {
         return dereferencer;
     }
 

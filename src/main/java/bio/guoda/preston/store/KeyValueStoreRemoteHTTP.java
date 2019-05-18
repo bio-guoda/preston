@@ -10,9 +10,9 @@ import java.io.InputStream;
 public class KeyValueStoreRemoteHTTP implements KeyValueStoreReadOnly {
 
     private final KeyToPath keyToPath;
-    private final Dereferencer3<InputStream> dereferencer;
+    private final Dereferencer<InputStream> dereferencer;
 
-    public KeyValueStoreRemoteHTTP(KeyToPath keyToPath, Dereferencer3<InputStream> dereferencer) {
+    public KeyValueStoreRemoteHTTP(KeyToPath keyToPath, Dereferencer<InputStream> dereferencer) {
         this.keyToPath = keyToPath;
         this.dereferencer = dereferencer;
     }

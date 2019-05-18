@@ -39,7 +39,7 @@ public class ArchiverTest {
                 HAS_VERSION,
                 blank);
 
-        Dereferencer3<IRI> dereferencer = uri -> {
+        Dereferencer<IRI> dereferencer = uri -> {
             throw new IOException("fails to dereference");
         };
 
@@ -68,7 +68,7 @@ public class ArchiverTest {
                 HAS_VERSION,
                 skolemizedBlank);
 
-        Dereferencer3<IRI> dereferencer = uri -> {
+        Dereferencer<IRI> dereferencer = uri -> {
             throw new IOException("fails to dereference");
         };
 
@@ -102,7 +102,7 @@ public class ArchiverTest {
                 HAS_VERSION,
                 blank);
 
-        Dereferencer3<IRI> dereferencer = new DereferenceTest("#derefData");
+        Dereferencer<IRI> dereferencer = new DereferenceTest("#derefData");
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
         Archiver relationStore = getAppendOnlyRelationStore(testKeyValueStore, dereferencer);
@@ -116,7 +116,7 @@ public class ArchiverTest {
         assertThat(contentHash, Is.is(RefNodeFactory.toIRI("http://some#derefData")));
     }
 
-    private Archiver getAppendOnlyRelationStore(KeyValueStore testPersistencetence, Dereferencer3<IRI> dereferencer1) {
+    private Archiver getAppendOnlyRelationStore(KeyValueStore testPersistencetence, Dereferencer<IRI> dereferencer1) {
         return new Archiver(dereferencer1, new StatementStoreImpl(testPersistencetence), TestUtil.getTestCrawlContext());
     }
 
@@ -200,7 +200,7 @@ public class ArchiverTest {
         assertThat(newerContentHash.getIRIString(), Is.is("http://some#derefData3"));
     }
 
-    private class DereferenceTest implements Dereferencer3<IRI> {
+    private class DereferenceTest implements Dereferencer<IRI> {
         private final String prefix;
 
         public DereferenceTest(String s) {

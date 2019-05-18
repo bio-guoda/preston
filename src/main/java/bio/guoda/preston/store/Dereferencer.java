@@ -4,7 +4,7 @@ import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
 
-public interface Dereferencer3<T> {
+public interface Dereferencer<T> {
 
     T dereference(IRI uri) throws IOException;
 

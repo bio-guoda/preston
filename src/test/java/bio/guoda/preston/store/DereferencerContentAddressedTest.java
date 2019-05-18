@@ -21,7 +21,7 @@ public class DereferencerContentAddressedTest {
     @Test
     public void dereference() throws IOException {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
-        Dereferencer3<InputStream> dereferencer = new DereferenceTest("derefData@");
+        Dereferencer<InputStream> dereferencer = new DereferenceTest("derefData@");
         BlobStore blobStore = new BlobStoreAppendOnly(testKeyValueStore);
         DereferencerContentAddressed dereferencerContentAddressed = new DereferencerContentAddressed(dereferencer, blobStore);
 
@@ -37,7 +37,7 @@ public class DereferencerContentAddressedTest {
 
     }
 
-    private class DereferenceTest implements Dereferencer3<InputStream> {
+    private class DereferenceTest implements Dereferencer<InputStream> {
 
         private final String prefix;
 
