@@ -10,7 +10,9 @@ import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
 import bio.guoda.preston.store.VersionUtil;
+import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
@@ -19,6 +21,7 @@ import org.apache.commons.rdf.api.Triple;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -28,7 +31,19 @@ import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 @Parameters(separators = "= ", commandDescription = "verifies completeness and integrity of the local biodiversity dataset graph")
 public class CmdVerify extends Persisting implements Runnable {
 
-    enum State {MISSING, INVALID_HASH, MATCHING_HASH}
+    public static final List<State> OK_STATES = Arrays.asList(
+            State.CONTENT_PRESENT_VALID_HASH,
+            State.CONTENT_PRESENT_HASH_NOT_VERIFIED);
+
+    enum State {
+        MISSING,
+        CONTENT_PRESENT_INVALID_HASH,
+        CONTENT_PRESENT_VALID_HASH,
+        CONTENT_PRESENT_HASH_NOT_VERIFIED};
+
+    @Parameter(names = {"--skip-hash-verification"}, description = "do not verify hash, just check availability")
+    private Boolean skipHashVerification = false;
+
 
     @Override
     public void run() {
@@ -53,8 +68,14 @@ public class CmdVerify extends Persisting implements Runnable {
                     CountingOutputStream counting = new CountingOutputStream(new NullOutputStream());
                     try (InputStream is = blobStore.get(iri)) {
                         if (is != null) {
-                            IRI hashIRI = Hasher.calcSHA256(is, counting);
-                            state = hashIRI.equals(iri) ? State.MATCHING_HASH : State.INVALID_HASH;
+                            if (skipHashVerification) {
+                                IOUtils.copy(is, counting);
+                                state = State.CONTENT_PRESENT_HASH_NOT_VERIFIED;
+                            } else {
+
+                                IRI hashIRI = Hasher.calcSHA256(is, counting);
+                                state = hashIRI.equals(iri) ? State.CONTENT_PRESENT_VALID_HASH : State.CONTENT_PRESENT_INVALID_HASH;
+                            }
                         }
                     } catch (IOException e) {
                         //
@@ -64,7 +85,7 @@ public class CmdVerify extends Persisting implements Runnable {
                         for (KeyToPath keyToPath : keyToPathList) {
                             System.out.println(iriString + "\t" +
                                     keyToPath.toPath(iriString) + "\t" +
-                                    (State.MATCHING_HASH == state ? "OK" : "FAIL") + "\t" +
+                                    (OK_STATES.contains(state) ? "OK" : "FAIL") + "\t" +
                                     state + "\t" +
                                     counting.getByteCount());
                             System.out.flush();

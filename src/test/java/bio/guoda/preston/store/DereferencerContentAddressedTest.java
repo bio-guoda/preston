@@ -20,9 +20,8 @@ public class DereferencerContentAddressedTest {
 
     @Test
     public void dereference() throws IOException {
-        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
         Dereferencer<InputStream> dereferencer = new DereferenceTest("derefData@");
-        BlobStore blobStore = new BlobStoreAppendOnly(testKeyValueStore);
+        BlobStore blobStore = new BlobStoreAppendOnly(TestUtil.getTestPersistence());
         DereferencerContentAddressed dereferencerContentAddressed = new DereferencerContentAddressed(dereferencer, blobStore);
 
         IRI contentHash = dereferencerContentAddressed.dereference(toIRI(URI.create("http://some")));
