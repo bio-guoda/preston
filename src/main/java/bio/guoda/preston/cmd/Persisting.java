@@ -69,7 +69,7 @@ public class Persisting {
         return new KeyValueStoreWithFallback(primary, fallback);
     }
 
-    private KeyToPath getKeyToPathLocal() {
+    KeyToPath getKeyToPathLocal() {
         return new KeyTo3LevelPath(getDefaultDataDir().toURI());
     }
 
