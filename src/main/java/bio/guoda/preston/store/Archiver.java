@@ -110,9 +110,11 @@ public class Archiver extends StatementProcessor {
                 GENERATED_AT_TIME,
                 nowLiteral));
 
-        emit(toStatement(derivedSubject,
-                WAS_GENERATED_BY,
-                crawlContext.getActivity()));
+        if (crawlContext != null) {
+            emit(toStatement(derivedSubject,
+                    WAS_GENERATED_BY,
+                    crawlContext.getActivity()));
+        }
     }
 
     public boolean shouldResolveOnMissingOnly() {
