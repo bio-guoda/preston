@@ -43,7 +43,7 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
    * [Use Cases](#use-cases)
       * [`mining citations`](#mining-citations)
       * [`web access`](#web-access) ([`nginx`](#nginx) / [`caddy`](#caddy))
-      * [`archiving`](#archiving) ([`rsync`](#rsync) / [`archive.org`](#archiveorg))
+      * [`archiving`](#archiving) ([`rsync`](#rsync) / [`archive.org`](#archiveorg) / [`preston remote`](#preston-remote))
       * [`data access monitor`](#data-access-monitor)
       * [`compare versions`](#compare-versions)
       * [`generating citations`](#generating-citations)
@@ -235,6 +235,18 @@ where someserver is the remote server you'd like to sync with and /home/someuser
 On a consumer internet connection with bandwidth < 10Mb/s, an initial sync with a remote trans-atlantic server with a 67GB preston archive took about 3 days. After the initial sync, only files that you don't have yet are included. For instance, if no new files are added to the remote preston archive, a sync take a few minutes instead of hours or days. 
 
 Note that ssh and rsync comes with frequently used linux distributions like Ubuntu v18.04 by default). 
+
+##### Preston Remote
+
+Alternatively, you can use an existing Preston remote (a publicly accessible Preston instance) to populate your local Preston installation using 
+
+```shell
+$ preston cp --remote https://deeplinker.bio /some/local/path 
+indexing...
+...
+```
+
+Please note that depending on the size of the biodiversity datasets graph, this might take a while (hours, days, weeks depending on your network bandwidth). Unfortunately, at the time of writing, a progress monitor for the copy process is lacking.  
 
 ##### Archive.org
 
