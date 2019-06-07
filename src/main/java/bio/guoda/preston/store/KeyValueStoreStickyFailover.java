@@ -20,13 +20,14 @@ public class KeyValueStoreStickyFailover implements KeyValueStoreReadOnly {
 
     @Override
     public InputStream get(String key) throws IOException {
+        AtomicReference<Exception> lastException = new AtomicReference<>();
         // try last successful first
         try {
             if (lastSuccessful.get() != null) {
                 return lastSuccessful.get().get(key);
             }
         } catch (IOException ex) {
-            //
+            lastException.set(ex);
         }
 
         for (KeyValueStoreReadOnly keyStoreCandidate : keyStoreCandidates) {
@@ -40,12 +41,17 @@ public class KeyValueStoreStickyFailover implements KeyValueStoreReadOnly {
                     }
                 } catch (IOException ex) {
                     // ignore
+                    lastException.set(ex);
                 }
             }
         }
 
-        lastSuccessful.set(null);
-        throw new IOException("failed to retrieve [" + key + "]");
+        if (lastException.get() != null) {
+            lastSuccessful.set(null);
+            throw new IOException("failed to retrieve [" + key + "]", lastException.get());
+        } else {
+            return null;
+        }
     }
 
 

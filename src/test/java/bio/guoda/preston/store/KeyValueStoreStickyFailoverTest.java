@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 public class KeyValueStoreStickyFailoverTest {
@@ -22,6 +23,30 @@ public class KeyValueStoreStickyFailoverTest {
                     throw new IOException("boom!");
                 },
                 key -> IOUtils.toInputStream("hello", StandardCharsets.UTF_8)
+        ));
+
+        assertHello(failover);
+    }
+
+    @Test
+    public void failoverNulls() throws IOException {
+        KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(Arrays.asList(
+                key -> null,
+                key -> null
+        ));
+
+        assertNull(failover.get("anything"));
+    }
+
+    @Test(expected = IOException.class)
+    public void failoverExceptions() throws IOException {
+        KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(Arrays.asList(
+                key -> {
+                    throw new IOException("boom!");
+                },
+                key -> {
+                    throw new IOException("kaboom!");
+                }
         ));
 
         assertHello(failover);

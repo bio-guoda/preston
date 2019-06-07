@@ -37,17 +37,21 @@ public class Persisting {
     KeyValueStore getKeyValueStore() {
         KeyValueStore store;
         if (hasRemote()) {
-            KeyToPath keyToPath = new KeyTo1LevelPath(getRemoteURI());
-            KeyValueStoreReadOnly keyStoreRemote1 = new KeyValueStoreRemoteHTTP(keyToPath, Resources::asInputStreamIgnore404);
-            KeyToPath keyToPath2 = new KeyTo3LevelPath(getRemoteURI());
-            KeyValueStoreReadOnly keyStoreRemote2 = new KeyValueStoreRemoteHTTP(keyToPath2, Resources::asInputStreamIgnore404);
+            KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(Arrays.asList(
+                    remoteWith(new KeyTo1LevelPath(getRemoteURI())),
+                    remoteWith(new KeyTo3LevelPath(getRemoteURI()))));
+
             store = new KeyValueStoreCopying(
-                    new KeyValueStoreStickyFailover(Arrays.asList(keyStoreRemote1, keyStoreRemote2)),
+                    failover,
                     getKeyValueStoreLocal());
         } else {
             store = getKeyValueStoreLocal();
         }
         return store;
+    }
+
+    private KeyValueStoreRemoteHTTP remoteWith(KeyToPath keyToPath) {
+        return new KeyValueStoreRemoteHTTP(keyToPath, Resources::asInputStreamIgnore404);
     }
 
 
