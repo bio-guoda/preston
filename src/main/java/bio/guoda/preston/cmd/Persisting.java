@@ -10,6 +10,7 @@ import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreRemoteHTTP;
+import bio.guoda.preston.store.KeyValueStoreStickyFailover;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.URIConverter;
@@ -18,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
 
 public class Persisting {
 
@@ -35,9 +37,13 @@ public class Persisting {
     KeyValueStore getKeyValueStore() {
         KeyValueStore store;
         if (hasRemote()) {
-            KeyTo1LevelPath keyToPath = new KeyTo1LevelPath(getRemoteURI());
-            KeyValueStoreReadOnly keyStoreRemote = new KeyValueStoreRemoteHTTP(keyToPath, Resources::asInputStreamIgnore404);
-            store = new KeyValueStoreCopying(keyStoreRemote, getKeyValueStoreLocal());
+            KeyToPath keyToPath = new KeyTo1LevelPath(getRemoteURI());
+            KeyValueStoreReadOnly keyStoreRemote1 = new KeyValueStoreRemoteHTTP(keyToPath, Resources::asInputStreamIgnore404);
+            KeyToPath keyToPath2 = new KeyTo3LevelPath(getRemoteURI());
+            KeyValueStoreReadOnly keyStoreRemote2 = new KeyValueStoreRemoteHTTP(keyToPath2, Resources::asInputStreamIgnore404);
+            store = new KeyValueStoreCopying(
+                    new KeyValueStoreStickyFailover(Arrays.asList(keyStoreRemote1, keyStoreRemote2)),
+                    getKeyValueStoreLocal());
         } else {
             store = getKeyValueStoreLocal();
         }

@@ -1,0 +1,59 @@
+package bio.guoda.preston.store;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+
+public class KeyValueStoreStickyFailoverTest {
+
+    @Test
+    public void failover() throws IOException {
+        KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(Arrays.asList(
+                key -> {
+                    throw new IOException("boom!");
+                },
+                key -> IOUtils.toInputStream("hello", StandardCharsets.UTF_8)
+        ));
+
+        assertHello(failover);
+    }
+
+    @Test
+    public void stickyFailover() throws IOException {
+        KeyValueStoreReadOnly keyValueAssertCalledOnceAndOnlyOnce = new KeyValueStoreReadOnly() {
+            AtomicBoolean calledPrior = new AtomicBoolean(false);
+
+            @Override
+            public InputStream get(String key) throws IOException {
+                assertFalse(calledPrior.get());
+                calledPrior.set(true);
+                throw new IOException("boom!");
+            }
+        };
+
+        KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(Arrays.asList(
+                keyValueAssertCalledOnceAndOnlyOnce,
+                key -> IOUtils.toInputStream("hello", StandardCharsets.UTF_8)
+        ));
+
+        assertHello(failover);
+        assertHello(failover);
+    }
+
+    public void assertHello(KeyValueStoreStickyFailover failover) throws IOException {
+        InputStream inputStream = failover.get("something");
+        String actual = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+
+        assertThat(actual, is("hello"));
+    }
+
+}
