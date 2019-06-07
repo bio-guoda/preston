@@ -36,7 +36,7 @@ public class Resources {
     }
 
     public static InputStream asInputStreamIgnore404(IRI dataURI) throws IOException {
-        return asInputStream(dataURI, Arrays.asList(404));
+        return asInputStream(dataURI, Collections.singletonList(404));
     }
 
     public static InputStream asInputStream(IRI dataURI) throws IOException {
