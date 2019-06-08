@@ -24,7 +24,10 @@ public class KeyValueStoreStickyFailover implements KeyValueStoreReadOnly {
         // try last successful first
         try {
             if (lastSuccessful.get() != null) {
-                return lastSuccessful.get().get(key);
+                InputStream inputStream = lastSuccessful.get().get(key);
+                if (inputStream != null) {
+                    return inputStream;
+                }
             }
         } catch (IOException ex) {
             lastException.set(ex);
@@ -35,7 +38,9 @@ public class KeyValueStoreStickyFailover implements KeyValueStoreReadOnly {
                     || (lastSuccessful.get() != null && lastSuccessful.get() != keyStoreCandidate)) {
                 try {
                     InputStream inputStream = keyStoreCandidate.get(key);
-                    if (inputStream != null) {
+                    if (inputStream == null) {
+                        lastException.set(null);
+                    } else {
                         lastSuccessful.set(keyStoreCandidate);
                         return inputStream;
                     }
