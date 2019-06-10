@@ -20,6 +20,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Persisting {
 
@@ -37,9 +40,9 @@ public class Persisting {
     KeyValueStore getKeyValueStore() {
         KeyValueStore store;
         if (hasRemote()) {
-            KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(Arrays.asList(
-                    remoteWith(new KeyTo1LevelPath(getRemoteURI())),
-                    remoteWith(new KeyTo3LevelPath(getRemoteURI()))));
+            Stream<KeyToPath> keyToPathStream = getKeyToPathRemotes();
+            List<KeyValueStoreReadOnly> keyValueStoreRemotes = keyToPathStream.map(this::remoteWith).collect(Collectors.toList());
+            KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
 
             store = new KeyValueStoreCopying(
                     failover,
@@ -48,6 +51,13 @@ public class Persisting {
             store = getKeyValueStoreLocal();
         }
         return store;
+    }
+
+    protected Stream<KeyToPath> getKeyToPathRemotes() {
+        return Stream.of(
+                        new KeyTo1LevelPath(getRemoteURI()),
+                        new KeyTo3LevelPath(getRemoteURI())
+                );
     }
 
     private KeyValueStoreRemoteHTTP remoteWith(KeyToPath keyToPath) {

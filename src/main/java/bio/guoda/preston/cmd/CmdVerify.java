@@ -57,7 +57,7 @@ public class CmdVerify extends Persisting implements Runnable {
 
         List<KeyToPath> keyToPathList = new ArrayList<KeyToPath>() {{
             if (hasRemote()) {
-                add(new KeyTo1LevelPath(getRemoteURI()));
+                getKeyToPathRemotes().forEach(this::add);
             }
             add(new KeyTo3LevelPath(getDefaultDataDir().toURI()));
         }};
