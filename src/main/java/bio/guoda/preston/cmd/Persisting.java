@@ -19,7 +19,6 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,6 +27,9 @@ public class Persisting {
 
     @Parameter(names = {"--remote"}, description = "remote url", converter = URIConverter.class)
     private URI remoteURI = null;
+
+    @Parameter(names = {"--no-cache"}, description = "cache remote content locally")
+    private Boolean noLocalCache = false;
 
     protected URI getRemoteURI() {
         return remoteURI;
@@ -44,9 +46,15 @@ public class Persisting {
             List<KeyValueStoreReadOnly> keyValueStoreRemotes = keyToPathStream.map(this::remoteWith).collect(Collectors.toList());
             KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
 
-            store = new KeyValueStoreCopying(
-                    failover,
-                    getKeyValueStoreLocal());
+            if (noLocalCache) {
+                store = new KeyValueStoreWithFallback(
+                        getKeyValueStoreLocal(),
+                        failover);
+            } else {
+                store = new KeyValueStoreCopying(
+                        failover,
+                        getKeyValueStoreLocal());
+            }
         } else {
             store = getKeyValueStoreLocal();
         }
@@ -55,9 +63,9 @@ public class Persisting {
 
     protected Stream<KeyToPath> getKeyToPathRemotes() {
         return Stream.of(
-                        new KeyTo1LevelPath(getRemoteURI()),
-                        new KeyTo3LevelPath(getRemoteURI())
-                );
+                new KeyTo1LevelPath(getRemoteURI()),
+                new KeyTo3LevelPath(getRemoteURI())
+        );
     }
 
     private KeyValueStoreRemoteHTTP remoteWith(KeyToPath keyToPath) {
