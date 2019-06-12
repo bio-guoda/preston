@@ -39,7 +39,7 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
       * [`get`](#get) - print biodiversity dataset graph node (e.g., dwca)
       * [`history`](#history) - show history of biodiversity dataset graph node
       * [`copyTo`](#copyTo) - copies local ersioned dataset graphs to another location
-      * [`check`](#check) - check the integrity of the locally versioned dataset graphs and their datasets.
+      * [`check`](#check) / [`verify`](#verify) - verify/check the integrity of the locally versioned dataset graphs and their datasets.
    * [Use Cases](#use-cases)
       * [`mining citations`](#mining-citations)
       * [`web access`](#web-access) ([`nginx`](#nginx) / [`caddy`](#caddy))
@@ -186,13 +186,14 @@ Copied [279636] datasets from [/home/someuser/source/data] to [/home/someuser/ta
 ```
 
 #### `check`
+#### `verify`
 
-The `check` command takes the locally versions of the dataset graph and verifies that the associated datasets are available locally. In addition, the content hash (e.g., hash://sha256/...) for each local dataset graph and dataset is re-computed to verify that the content is still consistent with the content hash signatures recorded previously. The `check` command produces tab-separated values with four columns. The first column is the content hash of the file being checked, the second contains OK/FAIL to record the success of the check, the third gives a reason for check outcome and the fourth contains the total number of bytes of the local file associated with the hash.
+The `check` (aka `verify`) command takes the locally versions of the dataset graph and verifies that the associated datasets are available locally. In addition, the content hash (e.g., hash://sha256/...) for each local dataset graph and dataset is re-computed to verify that the content is still consistent with the content hash signatures recorded previously. The `check` command produces tab-separated values with four columns. The first column is the content hash of the file being checked, the second contains OK/FAIL to record the success of the check, the third gives a reason for check outcome and the fourth contains the total number of bytes of the local file associated with the hash.
 
 ```console
 $ preston check
-hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  OK     MATCHING_HASH   89931
-hash://sha256/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b  OK     MATCHING_HASH   210344
+hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  OK     CONTENT_PRESENT_VALID_HASH   89931
+hash://sha256/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b  OK     CONTENT_PRESENT_VALID_HASH   210344
 ...
 ```
 
