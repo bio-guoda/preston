@@ -188,7 +188,7 @@ Copied [279636] datasets from [/home/someuser/source/data] to [/home/someuser/ta
 #### `check`
 #### `verify`
 
-The `check` (aka `verify`) command takes the locally versions of the dataset graph and verifies that the associated datasets are available locally. In addition, the content hash (e.g., hash://sha256/...) for each local dataset graph and dataset is re-computed to verify that the content is still consistent with the content hash signatures recorded previously. The `check` command produces tab-separated values with four columns. The first column is the content hash of the file being checked, the second contains OK/FAIL to record the success of the check, the third gives a reason for check outcome and the fourth contains the total number of bytes of the local file associated with the hash.
+The `check` (aka `verify`) command takes the locally versions of the dataset graph and verifies that the associated datasets are available locally. In addition, the content hash (e.g., hash://sha256/...) for each local dataset graph and dataset is re-computed to verify that the content is still consistent with the content hash signatures recorded previously. The `check` command produces tab-separated values with five columns. The first column is the content hash of the file being checked, the second contains the location of the locally cached file, the hird contains OK/FAIL to record the success of the check, the fourth gives a reason for check outcome and the fifth contains the total number of bytes of the local file associated with the hash.
 
 ```console
 $ preston check
