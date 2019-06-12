@@ -192,8 +192,8 @@ The `check` (aka `verify`) command takes the locally versions of the dataset gra
 
 ```console
 $ preston check
-hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  OK     CONTENT_PRESENT_VALID_HASH   89931
-hash://sha256/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b  OK     CONTENT_PRESENT_VALID_HASH   210344
+hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  file:/some/path/3e/ff/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  OK     CONTENT_PRESENT_VALID_HASH   89931
+hash://sha256/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b  file://some/path/18/48/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b  OK     CONTENT_PRESENT_VALID_HASH   210344
 ...
 ```
 
