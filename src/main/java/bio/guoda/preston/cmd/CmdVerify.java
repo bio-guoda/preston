@@ -4,9 +4,6 @@ import bio.guoda.preston.Hasher;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
-import bio.guoda.preston.store.KeyTo1LevelPath;
-import bio.guoda.preston.store.KeyTo3LevelPath;
-import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
 import bio.guoda.preston.store.VersionUtil;
@@ -22,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +27,7 @@ import java.util.TreeMap;
 import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 
 @Parameters(separators = "= ", commandDescription = "verifies completeness and integrity of the local biodiversity dataset graph")
-public class CmdVerify extends Persisting implements Runnable {
+public class CmdVerify extends PersistingLocal implements Runnable {
 
     public static final List<State> OK_STATES = Arrays.asList(
             State.CONTENT_PRESENT_VALID_HASH,
@@ -52,15 +48,8 @@ public class CmdVerify extends Persisting implements Runnable {
 
     @Override
     public void run() {
-        final BlobStore blobStore = new BlobStoreAppendOnly(getKeyValueStoreLocal());
-        final StatementStore statementPersistence = new StatementStoreImpl(getKeyValueStoreLocal());
-
-        List<KeyToPath> keyToPathList = new ArrayList<KeyToPath>() {{
-            if (hasRemote()) {
-                getKeyToPathRemotes().forEach(this::add);
-            }
-            add(new KeyTo3LevelPath(getDefaultDataDir().toURI()));
-        }};
+        final BlobStore blobStore = new BlobStoreAppendOnly(getKeyValueStore());
+        final StatementStore statementPersistence = new StatementStoreImpl(getKeyValueStore());
 
         Map<String, State> verifiedMap = new TreeMap<>();
 
@@ -97,14 +86,12 @@ public class CmdVerify extends Persisting implements Runnable {
                     } finally {
                         verifiedMap.put(iri.getIRIString(), state);
                         String iriString = iri.getIRIString();
-                        for (KeyToPath keyToPath : keyToPathList) {
-                            System.out.println(iriString + "\t" +
-                                    keyToPath.toPath(iriString) + "\t" +
-                                    (OK_STATES.contains(state) ? "OK" : "FAIL") + "\t" +
-                                    state + "\t" +
-                                    fileSize);
-                            System.out.flush();
-                        }
+                        System.out.println(iriString + "\t" +
+                                getKeyToPathLocal().toPath(iriString) + "\t" +
+                                (OK_STATES.contains(state) ? "OK" : "FAIL") + "\t" +
+                                state + "\t" +
+                                fileSize);
+                        System.out.flush();
                     }
                 }
             }
