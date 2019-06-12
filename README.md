@@ -188,11 +188,11 @@ Copied [279636] datasets from [/home/someuser/source/data] to [/home/someuser/ta
 #### `check`
 #### `verify`
 
-The `check` (aka `verify`) command takes the locally versions of the dataset graph and verifies that the associated datasets are available locally. In addition, the content hash (e.g., hash://sha256/...) for each local dataset graph and dataset is re-computed to verify that the content is still consistent with the content hash signatures recorded previously. The `check` command produces tab-separated values with five columns. The first column is the content hash of the file being checked, the second contains the location of the locally cached file, the hird contains OK/FAIL to record the success of the check, the fourth gives a reason for check outcome and the fifth contains the total number of bytes of the local file associated with the hash.
+The `check` (aka `verify`) command takes the locally available versions of the dataset graph and verifies that the associated datasets are also available locally. In addition, the content hash (e.g., hash://sha256/...) for each local dataset graph and dataset is re-computed to verify that the content is still consistent with the content hash signatures recorded previously. The `check` command produces tab-separated values with five columns. The first column is the content hash of the file being checked, the second contains the location of the locally cached file, the third contains OK/FAIL to record the success of the check, the fourth gives a reason for check outcome and the fifth contains the total number of bytes of the local file associated with the hash.
 
 ```console
 $ preston check
-hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  file:/some/path/3e/ff/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  OK     CONTENT_PRESENT_VALID_HASH   89931
+hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  file://some/path/3e/ff/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  OK     CONTENT_PRESENT_VALID_HASH   89931
 hash://sha256/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b  file://some/path/18/48/184886cc6ae4490a49a70b6fd9a3e1dfafce433fc8e3d022c89e0b75ea3cda0b  OK     CONTENT_PRESENT_VALID_HASH   210344
 ...
 ```
