@@ -12,6 +12,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.hamcrest.core.Is;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -38,6 +39,7 @@ public class ReplayUtilTest {
                         "<some> <newer> <thing> .\n"));
     }
 
+    @Ignore(value = "re-enable after implementing prov root selection")
     @Test
     public void replayNonDefaultProvenanceRoot() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -50,6 +52,7 @@ public class ReplayUtilTest {
 
     }
 
+    @Ignore(value = "re-enable after implementing prov root selection")
     @Test
     public void replayNonDefaultProvenanceRootHead() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
