@@ -113,6 +113,7 @@ public class ArchiverTest {
 
         IRI contentHash = relationStore.getStatementStore().get(
                 Pair.of(toIRI(URI.create("http://some")), HAS_VERSION));
+        assertNotNull(contentHash);
         assertThat(contentHash, Is.is(RefNodeFactory.toIRI("http://some#derefData")));
     }
 

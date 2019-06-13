@@ -19,7 +19,6 @@ import java.util.List;
 import static bio.guoda.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
-import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toDateTime;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
@@ -32,27 +31,24 @@ public class VersionUtil {
     public static IRI findMostRecentVersion(IRI versionSource, StatementStore statementStore, VersionListener versionListener) throws IOException {
         IRI mostRecentVersion = findVersion(versionSource, statementStore, versionListener);
 
-        if (mostRecentVersion == null) {
-            versionListener.onVersion(toStatement(versionSource, HAS_PREVIOUS_VERSION, toBlank()));
-            mostRecentVersion = versionSource;
-        }
-
         List<IRI> versions = new ArrayList<>();
         versions.add(mostRecentVersion);
 
-        IRI lastVersionId = mostRecentVersion;
-        IRI newerVersionId;
+        if (mostRecentVersion != null) {
+            IRI lastVersionId = mostRecentVersion;
+            IRI newerVersionId;
 
-        while ((newerVersionId = findPreviousVersion(lastVersionId, statementStore, versionListener)) != null) {
-            versions.add(mostRecentVersion);
-            if (versions.contains(newerVersionId)) {
-                break;
-            } else {
-                versions.add(newerVersionId);
+            while ((newerVersionId = findPreviousVersion(lastVersionId, statementStore, versionListener)) != null) {
+                versions.add(mostRecentVersion);
+                if (versions.contains(newerVersionId)) {
+                    break;
+                } else {
+                    versions.add(newerVersionId);
+                }
+                lastVersionId = newerVersionId;
             }
-            lastVersionId = newerVersionId;
+            mostRecentVersion = lastVersionId;
         }
-        mostRecentVersion = lastVersionId;
 
         return mostRecentVersion;
     }

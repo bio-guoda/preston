@@ -5,6 +5,7 @@ import org.apache.commons.rdf.api.IRI;
 import bio.guoda.preston.RefNodeConstants;
 import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Triple;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -78,6 +79,7 @@ public class VersionUtilTest {
         assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));
     }
 
+    @Ignore(value = "enable after implementing prov root selection")
     @Test
     public void versionPointingToItself2NonRoot() throws IOException {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
@@ -92,9 +94,11 @@ public class VersionUtilTest {
 
         IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some/version"), statementStore);
 
+        assertNotNull(mostRecentVersion);
         assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));
     }
 
+    @Ignore(value = "enable after implementing prov root selection")
     @Test
     public void historyOfSpecificNonRootVersion() throws IOException {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
