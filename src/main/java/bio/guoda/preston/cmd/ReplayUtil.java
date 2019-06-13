@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
+import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
@@ -30,13 +31,24 @@ public final class ReplayUtil {
 
     private static final Log LOG = LogFactory.getLog(ReplayUtil.class);
 
-
     public static void attemptReplay(final BlobStore blobStore,
                                      final StatementStore statementStore,
                                      StatementListener... listeners) {
+        attemptReplay(blobStore, statementStore, ARCHIVE, listeners);
+    }
+
+    public static void attemptReplay(final BlobStore blobStore,
+                                     final StatementStore statementStore,
+                                     final IRI provenanceRoot,
+                                     StatementListener... listeners) {
+
+        Triple seedStatement = ARCHIVE.equals(provenanceRoot)
+                ? toStatement(ARCHIVE, HAS_VERSION, toBlank())
+                : toStatement(toBlank(), HAS_PREVIOUS_VERSION, provenanceRoot);
+
         final Queue<Triple> statementQueue =
                 new ConcurrentLinkedQueue<Triple>() {{
-                    add(toStatement(ARCHIVE, HAS_VERSION, toBlank()));
+                    add(seedStatement);
                 }};
 
         AtomicBoolean receivedSomething = new AtomicBoolean(false);

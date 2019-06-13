@@ -12,19 +12,31 @@ import bio.guoda.preston.store.KeyValueStoreStickyFailover;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.URIConverter;
+import org.apache.commons.rdf.api.IRI;
 
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
+
 public class Persisting extends PersistingLocal {
 
-    @Parameter(names = {"--remote"}, description = "remote url", converter = URIConverter.class)
+    @Parameter(names = {"--remote"}, description = "remote url", converter = URIConverter.class, validateWith = URIValidator.class)
     private URI remoteURI = null;
 
     @Parameter(names = {"--no-cache"}, description = "cache remote content locally")
     private Boolean noLocalCache = false;
+
+    @Parameter(names = "--prov", description = "provenance iri",
+            converter = IRIConverter.class, validateWith = IRIValidator.class)
+    private IRI provenanceRoot = ARCHIVE;
+
+    public IRI getProvenanceRoot() {
+        return this.provenanceRoot;
+    }
+
 
     protected URI getRemoteURI() {
         return remoteURI;

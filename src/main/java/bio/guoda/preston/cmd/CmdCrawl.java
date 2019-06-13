@@ -12,9 +12,9 @@ import bio.guoda.preston.process.RegistryReaderIDigBio;
 import bio.guoda.preston.process.RegistryReaderRSS;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
-import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
+import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.DereferencerContentAddressed;
 import bio.guoda.preston.store.KeyGeneratingStream;
 import bio.guoda.preston.store.KeyValueStore;
@@ -108,7 +108,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                         }
 
                         private void addPreviousVersionReference() throws IOException {
-                            IRI mostRecentVersion = VersionUtil.findMostRecentVersion(ARCHIVE, logRelations);
+                            IRI mostRecentVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), logRelations);
                             if (mostRecentVersion != null) {
                                 add(toStatement(mostRecentVersion, USED_BY, ctx.getActivity()));
                             }
@@ -281,7 +281,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                 IRI newVersion = blobStore.putBlob(new FileInputStream(tmpArchive));
                 RefNodeFactory.nowDateTimeLiteral();
 
-                IRI previousVersion = VersionUtil.findMostRecentVersion(ARCHIVE, statementStore);
+                IRI previousVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), statementStore);
                 if (previousVersion == null) {
                     statementStore.put(Pair.of(ARCHIVE, HAS_VERSION), newVersion);
                 } else {

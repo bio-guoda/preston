@@ -78,5 +78,38 @@ public class VersionUtilTest {
         assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));
     }
 
+    @Test
+    public void versionPointingToItself2NonRoot() throws IOException {
+        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
+
+
+        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
+        statementStore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
+        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
+        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/other/version")), toIRI("http://some/version"));
+        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
+
+
+        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some/version"), statementStore);
+
+        assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));
+    }
+
+    @Test
+    public void historyOfSpecificNonRootVersion() throws IOException {
+        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
+
+
+        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
+        statementStore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
+        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
+
+
+        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some/version"), statementStore);
+
+        assertNotNull(mostRecentVersion);
+        assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));
+    }
+
 
 }

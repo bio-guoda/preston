@@ -61,7 +61,13 @@ public class RefNodeFactory {
     public static IRI getVersionSource(Triple statement) {
         IRI versionSource = null;
         if (hasVersionStatement(statement)) {
-            versionSource = (IRI) statement.getSubject();
+            if (HAS_PREVIOUS_VERSION.equals(statement.getPredicate())) {
+                RDFTerm object = statement.getObject();
+                versionSource = object instanceof IRI ? (IRI) object : null;
+            } else if (HAS_VERSION.equals(statement.getPredicate())) {
+                RDFTerm subject = statement.getSubject();
+                versionSource = subject instanceof IRI ? (IRI) subject : null;
+            }
         }
         return versionSource;
     }
@@ -69,7 +75,12 @@ public class RefNodeFactory {
     public static BlankNodeOrIRI getVersion(Triple statement) {
         BlankNodeOrIRI version = null;
         if (hasVersionStatement(statement)) {
-            version = (BlankNodeOrIRI) statement.getObject();
+            if (HAS_PREVIOUS_VERSION.equals(statement.getPredicate())) {
+                version = statement.getSubject();
+            } else if (HAS_VERSION.equals(statement.getPredicate())) {
+                RDFTerm object = statement.getObject();
+                version = object instanceof BlankNodeOrIRI ? (BlankNodeOrIRI) object : null;
+            }
         }
         return version;
     }
