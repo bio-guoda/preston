@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
+import static bio.guoda.preston.RefNodeConstants.ARCHIVE_COLLECTION;
 
 public class Persisting extends PersistingLocal {
 
@@ -29,14 +30,13 @@ public class Persisting extends PersistingLocal {
     @Parameter(names = {"--no-cache"}, description = "cache remote content locally")
     private Boolean noLocalCache = false;
 
-    @Parameter(names = "--prov", description = "provenance iri",
+    @Parameter(names = "--prov", description = "set desired provenance root",
             converter = IRIConverter.class, validateWith = IRIValidator.class)
     private IRI provenanceRoot = ARCHIVE;
 
     public IRI getProvenanceRoot() {
         return this.provenanceRoot;
     }
-
 
     protected URI getRemoteURI() {
         return remoteURI;
@@ -45,7 +45,6 @@ public class Persisting extends PersistingLocal {
     protected boolean hasRemote() {
         return remoteURI != null;
     }
-
 
     @Override
     protected KeyValueStore getKeyValueStore() {
@@ -80,8 +79,6 @@ public class Persisting extends PersistingLocal {
     private KeyValueStoreRemoteHTTP remoteWith(KeyToPath keyToPath) {
         return new KeyValueStoreRemoteHTTP(keyToPath, Resources::asInputStreamIgnore404);
     }
-
-
 
 
 }
