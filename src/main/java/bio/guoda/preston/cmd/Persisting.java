@@ -20,14 +20,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
-import static bio.guoda.preston.RefNodeConstants.ARCHIVE_COLLECTION;
 
 public class Persisting extends PersistingLocal {
 
-    @Parameter(names = {"--remote"}, description = "remote url", converter = URIConverter.class, validateWith = URIValidator.class)
-    private URI remoteURI = null;
+    @Parameter(names = {"--remote", "--remotes"}, description = "remote graph url(s) (e.g., https://deeplinker.bio/,https://example.org)", converter = URIConverter.class, validateWith = URIValidator.class)
+    private List<URI> remoteURIs;
 
-    @Parameter(names = {"--no-cache"}, description = "cache remote content locally")
+    @Parameter(names = {"--no-cache"}, description = "disable local content cache")
     private Boolean noLocalCache = false;
 
     @Parameter(names = "--prov", description = "set desired provenance root",
@@ -38,19 +37,23 @@ public class Persisting extends PersistingLocal {
         return this.provenanceRoot;
     }
 
-    protected URI getRemoteURI() {
-        return remoteURI;
+    protected List<URI> getRemoteURIs() {
+        return remoteURIs;
     }
 
     protected boolean hasRemote() {
-        return remoteURI != null;
+        return remoteURIs != null && !remoteURIs.isEmpty();
     }
 
     @Override
     protected KeyValueStore getKeyValueStore() {
         KeyValueStore store;
         if (hasRemote()) {
-            Stream<KeyToPath> keyToPathStream = getKeyToPathRemotes();
+            Stream<KeyToPath> keyToPathStream =
+                    getRemoteURIs().stream().flatMap(uri -> Stream.of(
+                            new KeyTo1LevelPath(uri),
+                            new KeyTo3LevelPath(uri)));
+
             List<KeyValueStoreReadOnly> keyValueStoreRemotes = keyToPathStream.map(this::remoteWith).collect(Collectors.toList());
             KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
 
@@ -67,13 +70,6 @@ public class Persisting extends PersistingLocal {
             store = super.getKeyValueStore();
         }
         return store;
-    }
-
-    protected Stream<KeyToPath> getKeyToPathRemotes() {
-        return Stream.of(
-                new KeyTo1LevelPath(getRemoteURI()),
-                new KeyTo3LevelPath(getRemoteURI())
-        );
     }
 
     private KeyValueStoreRemoteHTTP remoteWith(KeyToPath keyToPath) {
