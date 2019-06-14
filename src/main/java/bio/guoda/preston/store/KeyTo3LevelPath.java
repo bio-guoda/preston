@@ -23,7 +23,7 @@ public class KeyTo3LevelPath implements KeyToPath {
         String u1 = key.substring(offset + 2, offset + 4);
 
         String suffix = StringUtils.join(Arrays.asList(u0, u1, key.substring(offset)), "/");
-        return URI.create(baseURI.toString() + suffix);
+        return HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
     }
 
 }

@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -24,6 +25,13 @@ public class StatementStoreImplTest {
         IRI iri = StatementStoreImpl.calculateKeyFor(Pair.of(publisher, version));
         assertThat(iri.getIRIString(),
                 is("hash://sha256/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e"));
+    }
+
+    @Test
+    public void calculateRootArchiveQueryKey() {
+        IRI iri = StatementStoreImpl.calculateKeyFor(Pair.of(RefNodeConstants.ARCHIVE, RefNodeConstants.HAS_VERSION));
+        assertThat(iri.getIRIString(),
+                is("hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a"));
     }
 
 }

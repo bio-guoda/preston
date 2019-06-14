@@ -17,7 +17,7 @@ public class KeyTo1LevelPath implements KeyToPath {
         HashKeyUtil.validateHashKey(key);
         int offset = Hasher.getHashPrefix().length();
         String suffix = key.substring(offset);
-        return URI.create(baseURI.toString() + suffix);
+        return HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
     }
 
 }

@@ -15,5 +15,11 @@ public class KeyTo1LevelPathTest {
         assertThat(keyTo1LevelPath.toPath("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"),
                 is(URI.create("https://example.com/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703")));
     }
+    @Test
+    public void singleNoSlash() {
+        KeyTo1LevelPath keyTo1LevelPath = new KeyTo1LevelPath(URI.create("https://example.com"));
+        assertThat(keyTo1LevelPath.toPath("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"),
+                is(URI.create("https://example.com/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703")));
+    }
 
 }

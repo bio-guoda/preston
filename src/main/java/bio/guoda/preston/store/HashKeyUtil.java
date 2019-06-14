@@ -3,6 +3,8 @@ package bio.guoda.preston.store;
 import bio.guoda.preston.Hasher;
 import org.apache.commons.lang3.StringUtils;
 
+import java.net.URI;
+
 public class HashKeyUtil {
     public static void validateHashKey(String hashKey) {
         int offset = Hasher.getHashPrefix().length();
@@ -10,5 +12,10 @@ public class HashKeyUtil {
         if (StringUtils.length(hashKey) < expectedLength) {
             throw new IllegalArgumentException("expected id [" + hashKey + "] of at least [" + expectedLength + "] characters, instead got [" + hashKey.length() + "] characters.");
         }
+    }
+
+    public static URI insertSlashIfNeeded(URI uri, String suffix) {
+        String baseURI = uri.toString();
+        return StringUtils.endsWith(baseURI, "/") ? URI.create(baseURI + suffix) : URI.create(baseURI + "/" + suffix);
     }
 }

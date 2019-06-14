@@ -23,6 +23,6 @@ public class KeyTo5LevelPath implements KeyToPath {
         String u1 = key.substring(offset + 2, offset + 4);
         String u2 = key.substring(offset + 4, offset + 6);
         String suffix = StringUtils.join(Arrays.asList(u0, u1, u2, key.substring(offset), "data"), "/");
-        return URI.create(baseURI.toString() + suffix);
+        return HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
     }
 }

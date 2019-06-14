@@ -26,4 +26,11 @@ public class KeyTo3LevelPathTest {
         new KeyTo3LevelPath(URI.create("some://")).toPath("too:short");
     }
 
+    @Test
+    public void insertSlash() {
+        URI actualPath = new KeyTo3LevelPath(URI.create("file:///some/path")).toPath("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703");
+        assertThat(actualPath.toString(), Is.is("file:///some/path/4d/f3/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+
+    }
+
 }
