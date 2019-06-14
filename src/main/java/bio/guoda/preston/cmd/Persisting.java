@@ -29,9 +29,7 @@ public class Persisting extends PersistingLocal {
     @Parameter(names = {"--no-cache"}, description = "disable local content cache")
     private Boolean noLocalCache = false;
 
-    @Parameter(names = "--prov", description = "set desired provenance root",
-            converter = IRIConverter.class, validateWith = IRIValidator.class)
-    private IRI provenanceRoot = ARCHIVE;
+    private final IRI provenanceRoot = ARCHIVE;
 
     public IRI getProvenanceRoot() {
         return this.provenanceRoot;
