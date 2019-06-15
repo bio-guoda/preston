@@ -256,7 +256,7 @@ Building on previous work that extracted entries from Darwin Core Archives into 
 
 ```console
 # download idigbio-spark library
-$ curl https://s3-us-west-2.amazonaws.com/guoda/idigbio-spark/iDigBio-LD-assembly-1.5.9.jar > iDigBio-LD-assembly-1.5.9.jar
+$ curl https://github.com/bio-guoda/idigbio-spark/releases/download/0.0.1/iDigBio-LD-assembly-1.5.8.jar > iDigBio-LD-assembly-1.5.9.jar
 
 # start spark shell
 $ spark-shell --jars iDigBio-LD-assembly-1.5.9.jar --conf spark.sql.caseSensitive=true --driver-memory 4G --executor-memory 6G 
