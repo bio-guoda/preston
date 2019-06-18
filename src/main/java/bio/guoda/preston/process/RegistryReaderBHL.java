@@ -94,17 +94,22 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
             if (barCodeIndex < values.length - 1) {
                 String barCode = StringUtils.trim(values[barCodeIndex]);
                 if (StringUtils.isNotBlank(barCode)) {
-                    IRI ocrText = toIRI("https://archive.org/download/" + barCode + "/" + barCode + "_djvu.txt");
-                    Stream.of(
-                            toStatement(versionSource, HAD_MEMBER, toIRI(barCode)),
-                            toStatement(toIRI(barCode), SEE_ALSO, ocrText),
-                            toStatement(ocrText, HAS_FORMAT, toContentType(MimeTypes.TEXT_UTF8)),
-                            toStatement(ocrText, HAS_VERSION, toBlank()))
-                            .forEach(emitter::emit);
+                    submit(emitter, versionSource, barCode, "txt");
+                    submit(emitter, versionSource, barCode, "xml");
                 }
             }
 
         }
+    }
+
+    private static void submit(StatementEmitter emitter, IRI versionSource, String barCode, String ext) {
+        IRI ocrText = toIRI("https://archive.org/download/" + barCode + "/" + barCode + "_djvu" + ext);
+        Stream.of(
+                toStatement(versionSource, HAD_MEMBER, toIRI(barCode)),
+                toStatement(toIRI(barCode), SEE_ALSO, ocrText),
+                toStatement(ocrText, HAS_FORMAT, toContentType(MimeTypes.TEXT_UTF8)),
+                toStatement(ocrText, HAS_VERSION, toBlank()))
+                .forEach(emitter::emit);
     }
 
 

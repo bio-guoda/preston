@@ -72,7 +72,7 @@ public class RegistryReaderBHLTest {
 
         registryReader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(36));
+        Assert.assertThat(nodes.size(), is(72));
         Triple mimeType = nodes.get(nodes.size() - 2);
         assertThat(mimeType.getSubject().toString(), is("<https://archive.org/download/mobot31753002306964/mobot31753002306964_djvu.txt>"));
         assertThat(mimeType.getPredicate().toString(), is("<http://purl.org/dc/elements/1.1/format>"));
