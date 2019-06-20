@@ -450,7 +450,7 @@ Preston is a stand-alone java application, packaged in a jarfile. You can build 
 On linux (and Mac) you can install Preston by running:
 
 ```console
-sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.0.15/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
+sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.0.16/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
 ```
 
 On successful installation, execute ```preston version``` on the commandline should print the version of preston. 
