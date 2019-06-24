@@ -33,7 +33,6 @@ import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toContentType;
 import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class RegistryReaderBHL extends ProcessorReadOnly {
@@ -94,20 +93,20 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
             if (barCodeIndex < values.length - 1) {
                 String barCode = StringUtils.trim(values[barCodeIndex]);
                 if (StringUtils.isNotBlank(barCode)) {
-                    submit(emitter, versionSource, barCode, "txt");
-                    submit(emitter, versionSource, barCode, "xml");
+                    submit(emitter, versionSource, barCode, ".txt", MimeTypes.TEXT_UTF8);
+                    //submit(emitter, versionSource, barCode, ".xml", MimeTypes.XML);
                 }
             }
 
         }
     }
 
-    private static void submit(StatementEmitter emitter, IRI versionSource, String barCode, String ext) {
+    private static void submit(StatementEmitter emitter, IRI versionSource, String barCode, String ext, String fileFormat) {
         IRI ocrText = toIRI("https://archive.org/download/" + barCode + "/" + barCode + "_djvu" + ext);
         Stream.of(
                 toStatement(versionSource, HAD_MEMBER, toIRI(barCode)),
                 toStatement(toIRI(barCode), SEE_ALSO, ocrText),
-                toStatement(ocrText, HAS_FORMAT, toContentType(MimeTypes.TEXT_UTF8)),
+                toStatement(ocrText, HAS_FORMAT, toContentType(fileFormat)),
                 toStatement(ocrText, HAS_VERSION, toBlank()))
                 .forEach(emitter::emit);
     }
