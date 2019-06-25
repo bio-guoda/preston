@@ -1,8 +1,10 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.Resources;
+import bio.guoda.preston.store.DereferencerContentAddressedTarGZ;
 import bio.guoda.preston.store.KeyTo1LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
+import bio.guoda.preston.store.KeyTo3LevelTarGzPath;
 import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
@@ -52,7 +54,12 @@ public class Persisting extends PersistingLocal {
                             new KeyTo1LevelPath(uri),
                             new KeyTo3LevelPath(uri)));
 
-            List<KeyValueStoreReadOnly> keyValueStoreRemotes = keyToPathStream.map(this::remoteWith).collect(Collectors.toList());
+            List<KeyValueStoreReadOnly> keyValueStoreRemotes =
+                    Stream.concat(
+                            keyToPathStream.map(this::remoteWith),
+                            getRemoteURIs().stream().map(this::remoteWithTarGz))
+                            .collect(Collectors.toList());
+
             KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
 
             if (noLocalCache) {
@@ -72,6 +79,10 @@ public class Persisting extends PersistingLocal {
 
     private KeyValueStoreRemoteHTTP remoteWith(KeyToPath keyToPath) {
         return new KeyValueStoreRemoteHTTP(keyToPath, Resources::asInputStreamIgnore404);
+    }
+
+    private KeyValueStoreRemoteHTTP remoteWithTarGz(URI baseURI) {
+        return new KeyValueStoreRemoteHTTP(new KeyTo3LevelTarGzPath(baseURI), new DereferencerContentAddressedTarGZ(Resources::asInputStreamIgnore404));
     }
 
 

@@ -1,5 +1,6 @@
 package bio.guoda.preston;
 
+import org.apache.commons.io.input.CountingInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
@@ -70,7 +71,7 @@ public class Resources {
                 is = entity.getContent();
             }
         }
-        return is;
+        return new CountingInputStream(is);
     }
 
     private static boolean shouldRedirect(IRI dataURI) {
