@@ -22,6 +22,7 @@ import static org.junit.Assert.*;
 
 public class KeyValueStoreLocalFileSystemTest {
 
+    public static final String SOME_HASH = "hash://sha256/1234567890123456789012345678901234567890123456789012345678901234";
     private Path path;
 
     @Before
@@ -37,10 +38,10 @@ public class KeyValueStoreLocalFileSystemTest {
     @Test
     public void write() throws IOException {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()));
-        filePersistence.get("somethinggggggggggggggggggggg");
-        filePersistence.put("somethinggggggggggggggggggggg", "some value");
+        assertNull(filePersistence.get(SOME_HASH));
+        filePersistence.put(SOME_HASH, "some value");
 
-        assertThat(TestUtil.toUTF8(filePersistence.get("somethinggggggggggggggggggggg")), is("some value"));
+        assertThat(TestUtil.toUTF8(filePersistence.get(SOME_HASH)), is("some value"));
 
     }
 
@@ -58,7 +59,7 @@ public class KeyValueStoreLocalFileSystemTest {
     public void writeStream() throws IOException {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()));
 
-        assertThat(filePersistence.get("some keyyyyyyyyyyyyyyyyyy"), is(nullValue()));
+        assertThat(filePersistence.get(SOME_HASH), is(nullValue()));
         final InputStream someContentStream = IOUtils.toInputStream("some content", StandardCharsets.UTF_8);
         final AtomicBoolean wasClosed = new AtomicBoolean(false);
         InputStream wrappedContentStream = new InputStream() {
@@ -79,12 +80,12 @@ public class KeyValueStoreLocalFileSystemTest {
             @Override
             public String generateKeyWhileStreaming(InputStream is, OutputStream os) throws IOException {
                 IOUtils.copy(is, os);
-                return "some keyyyyyyyyyyyyyyyyyy";
+                return SOME_HASH;
             }
         }, wrappedContentStream);
         assertTrue(wasClosed.get());
 
-        assertThat(TestUtil.toUTF8(filePersistence.get("some keyyyyyyyyyyyyyyyyyy")), is("some content"));
+        assertThat(TestUtil.toUTF8(filePersistence.get(SOME_HASH)), is("some content"));
 
 
     }
