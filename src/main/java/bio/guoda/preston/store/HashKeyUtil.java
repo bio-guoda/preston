@@ -6,12 +6,17 @@ import org.apache.commons.lang3.StringUtils;
 import java.net.URI;
 
 public class HashKeyUtil {
+
+    public static final int EXPECTED_LENGTH = 64 + Hasher.getHashPrefix().length();
+
     public static void validateHashKey(String hashKey) {
-        int offset = Hasher.getHashPrefix().length();
-        int expectedLength = 8 + offset;
-        if (StringUtils.length(hashKey) < expectedLength) {
-            throw new IllegalArgumentException("expected id [" + hashKey + "] of at least [" + expectedLength + "] characters, instead got [" + hashKey.length() + "] characters.");
+        if (!isValidHashKey(hashKey)) {
+            throw new IllegalArgumentException("expected id [" + hashKey + "] of [" + EXPECTED_LENGTH + "] characters, instead got [" + hashKey.length() + "] characters.");
         }
+    }
+
+    public static boolean isValidHashKey(String hashKey) {
+        return StringUtils.length(hashKey) == EXPECTED_LENGTH;
     }
 
     public static URI insertSlashIfNeeded(URI uri, String suffix) {

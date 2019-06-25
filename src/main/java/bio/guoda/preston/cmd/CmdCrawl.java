@@ -278,14 +278,16 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
 
                 printStream = null;
 
-                IRI newVersion = blobStore.putBlob(new FileInputStream(tmpArchive));
-                RefNodeFactory.nowDateTimeLiteral();
+                try (FileInputStream is = new FileInputStream(tmpArchive)) {
+                    IRI newVersion = blobStore.putBlob(is);
+                    RefNodeFactory.nowDateTimeLiteral();
 
-                IRI previousVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), statementStore);
-                if (previousVersion == null) {
-                    statementStore.put(Pair.of(ARCHIVE, HAS_VERSION), newVersion);
-                } else {
-                    statementStore.put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
+                    IRI previousVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), statementStore);
+                    if (previousVersion == null) {
+                        statementStore.put(Pair.of(ARCHIVE, HAS_VERSION), newVersion);
+                    } else {
+                        statementStore.put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
+                    }
                 }
             }
 

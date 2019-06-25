@@ -16,8 +16,9 @@ public class DereferencerContentAddressed implements Dereferencer<IRI> {
 
     @Override
     public IRI dereference(IRI uri) throws IOException {
-        InputStream data = dereferencer == null ? null : dereferencer.dereference(uri);
-        return data == null ? null : blobStore.putBlob(data);
+        try (InputStream data = dereferencer == null ? null : dereferencer.dereference(uri)) {
+            return data == null ? null : blobStore.putBlob(data);
+        }
     }
 
 }

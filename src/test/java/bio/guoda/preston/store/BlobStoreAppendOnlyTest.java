@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class BlobStoreAppendOnlyTest {
 
@@ -25,6 +26,7 @@ public class BlobStoreAppendOnlyTest {
         BlobStore blobStore = new BlobStoreAppendOnly(getTestPersistence());
         AtomicBoolean wasClosed = new AtomicBoolean(false);
         InputStream testing123 = IOUtils.toInputStream("testing123", StandardCharsets.UTF_8);
+
         InputStream wrappedInputStream = new InputStream() {
 
             @Override
@@ -38,12 +40,17 @@ public class BlobStoreAppendOnlyTest {
                 super.close();
             }
         };
-        assertThat(wasClosed.get(), is(false));
-        IRI key = blobStore.putBlob(wrappedInputStream);
-        assertThat(wasClosed.get(), is(true));
-        assertThat(key.getIRIString(), is("hash://sha256/b822f1cd2dcfc685b47e83e3980289fd5d8e3ff3a82def24d7d1d68bb272eb32"));
-        InputStream inputStream = blobStore.get(key);
-        assertThat(TestUtil.toUTF8(inputStream), is("testing123"));
+
+        try (InputStream is = wrappedInputStream) {
+            assertThat(wasClosed.get(), is(false));
+            IRI key = blobStore.putBlob(is);
+            assertThat(wasClosed.get(), is(false));
+            assertThat(key.getIRIString(), is("hash://sha256/b822f1cd2dcfc685b47e83e3980289fd5d8e3ff3a82def24d7d1d68bb272eb32"));
+            InputStream inputStream = blobStore.get(key);
+            assertThat(TestUtil.toUTF8(inputStream), is("testing123"));
+        }
+
+        assertTrue(wasClosed.get());
     }
 
     @Test
