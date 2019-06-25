@@ -23,7 +23,16 @@ public class BlobStoreAppendOnlyTest {
 
     @Test
     public void put() throws IOException {
-        BlobStore blobStore = new BlobStoreAppendOnly(getTestPersistence());
+        assertClosingStream(false);
+    }
+
+    @Test
+    public void putAndClose() throws IOException {
+        assertClosingStream(true);
+    }
+
+    private void assertClosingStream(boolean expectedClosingStream) throws IOException {
+        BlobStore blobStore = new BlobStoreAppendOnly(getTestPersistence(), expectedClosingStream);
         AtomicBoolean wasClosed = new AtomicBoolean(false);
         InputStream testing123 = IOUtils.toInputStream("testing123", StandardCharsets.UTF_8);
 
@@ -44,7 +53,7 @@ public class BlobStoreAppendOnlyTest {
         try (InputStream is = wrappedInputStream) {
             assertThat(wasClosed.get(), is(false));
             IRI key = blobStore.putBlob(is);
-            assertThat(wasClosed.get(), is(false));
+            assertThat(wasClosed.get(), is(expectedClosingStream));
             assertThat(key.getIRIString(), is("hash://sha256/b822f1cd2dcfc685b47e83e3980289fd5d8e3ff3a82def24d7d1d68bb272eb32"));
             InputStream inputStream = blobStore.get(key);
             assertThat(TestUtil.toUTF8(inputStream), is("testing123"));
@@ -72,7 +81,7 @@ public class BlobStoreAppendOnlyTest {
         assertThat(TestUtil.toUTF8(inputStream), is("_:" + entity.uniqueReference()));
     }
 
-    public static KeyValueStore getTestPersistence() {
+    static KeyValueStore getTestPersistence() {
         return new KeyValueStore() {
             private final Map<String, String> lookup = new TreeMap<>();
 
