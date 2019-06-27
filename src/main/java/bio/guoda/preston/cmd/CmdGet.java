@@ -1,29 +1,26 @@
 package bio.guoda.preston.cmd;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
-import org.apache.commons.io.input.ProxyInputStream;
-import org.apache.commons.lang3.StringUtils;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.System.exit;
-import static java.lang.System.in;
 import static org.apache.commons.io.IOUtils.EOF;
 
-@Parameters(separators = "= ", commandDescription = "get biodiversity node(s)")
+@Parameters(separators = "= ", commandDescription = "get biodiversity data")
 public class CmdGet extends Persisting implements Runnable {
 
-    @Parameter(description = "node id (e.g., [hash://sha256/8ed311...])",
+    @Parameter(description = "data content-hash uri (e.g., [hash://sha256/8ed311...])",
             validateWith = URIValidator.class)
     private List<String> hashes = new ArrayList<>();
 

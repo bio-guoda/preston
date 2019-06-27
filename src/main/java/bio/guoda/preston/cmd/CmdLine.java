@@ -51,7 +51,7 @@ public class CmdLine {
     JCommander buildCommander() {
         return JCommander.newBuilder()
                 .addObject(new CommandMain())
-                .addCommand("ls", new CmdList(), "log")
+                .addCommand("ls", new CmdList(), "log", "logs")
                 .addCommand("get", new CmdGet(), "cat")
                 .addCommand("cp", new CmdCopyTo(), "copyTo", "export")
                 .addCommand("update", new CmdUpdate(), "pull", "track")

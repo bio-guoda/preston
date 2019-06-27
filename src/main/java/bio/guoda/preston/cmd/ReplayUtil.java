@@ -42,6 +42,7 @@ public final class ReplayUtil {
                                      final StatementStore statementStore,
                                      final IRI provRoot,
                                      StatementListener... listeners) {
+
         final Queue<Triple> statementQueue =
                 new ConcurrentLinkedQueue<Triple>() {{
                     add(toStatement(provRoot, HAS_VERSION, toBlank()));
@@ -82,9 +83,9 @@ public final class ReplayUtil {
         }
     }
 
-    public static void throwOnError(final PrintStream out) {
+    public static void checkAndHandle(final PrintStream out, LogErrorHandler handler) {
         if (out.checkError()) {
-            throw new RuntimeException("failed to write: stdout closed?");
+            handler.handleError();
         }
     }
 }

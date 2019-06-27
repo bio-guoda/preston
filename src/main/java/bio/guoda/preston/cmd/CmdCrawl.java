@@ -139,7 +139,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                 new RegistryReaderDataONE(blobStore, statementQueue::add),
                 new RegistryReaderRSS(blobStore, statementQueue::add),
                 new RegistryReaderBHL(blobStore, statementQueue::add),
-                StatementLogFactory.createLogger(getLogMode()),
+                StatementLogFactory.createLogger(getLogMode(), System.out),
                 statementLoggerNQuads
         };
 
