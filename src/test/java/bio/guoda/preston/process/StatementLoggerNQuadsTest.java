@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.cmd.LogErrorHandler;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -44,7 +45,9 @@ public class StatementLoggerNQuadsTest {
         IRI relation = RefNodeFactory.toIRI("relation");
         RDFTerm target = RefNodeFactory.toDateTime("2018-01-01");
 
-        new StatementLoggerNQuads(printWriter).on(RefNodeFactory.toStatement(source, relation, target));
+        new StatementLoggerNQuads(printWriter, () -> {
+            throw new RuntimeException("kaboom!");
+        }).on(RefNodeFactory.toStatement(source, relation, target));
     }
 
 

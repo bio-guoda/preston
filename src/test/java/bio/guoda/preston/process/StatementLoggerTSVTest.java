@@ -44,7 +44,9 @@ public class StatementLoggerTSVTest {
         IRI relation = RefNodeFactory.toIRI("relation");
         RDFTerm target = RefNodeFactory.toDateTime("2018-01-01");
 
-        new StatementLoggerTSV(printWriter).on(RefNodeFactory.toStatement(source, relation, target));
+        new StatementLoggerTSV(printWriter, () -> {
+            throw new RuntimeException("kaboom!");
+        }).on(RefNodeFactory.toStatement(source, relation, target));
     }
 
 
