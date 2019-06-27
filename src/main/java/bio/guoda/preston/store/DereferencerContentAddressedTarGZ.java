@@ -13,8 +13,15 @@ import java.util.zip.GZIPInputStream;
 public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStream> {
     private final Dereferencer<InputStream> dereferencer;
 
+    private final BlobStore blobStore;
+
     public DereferencerContentAddressedTarGZ(Dereferencer<InputStream> dereferencer) {
+        this(dereferencer, null);
+    }
+
+    public DereferencerContentAddressedTarGZ(Dereferencer<InputStream> dereferencer, BlobStore blobStore) {
         this.dereferencer = dereferencer;
+        this.blobStore = blobStore;
     }
 
     @Override
@@ -37,12 +44,19 @@ public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStre
                         TarArchiveEntry entry;
                         while ((entry = tarInputStream.getNextTarEntry()) != null) {
                             if (entry.isFile()) {
-                                IRI foundHashIRI = extractHashURI(entry.getName());
-                                if (foundHashIRI != null && foundHashIRI.equals(expectedHashIRI)) {
-                                    inputStream = tarInputStream;
-                                    break;
+                                if (blobStore == null) {
+                                    IRI foundHashIRI = extractHashURI(entry.getName());
+                                    if (foundHashIRI != null && foundHashIRI.equals(expectedHashIRI)) {
+                                        inputStream = tarInputStream;
+                                        break;
+                                    }
+                                } else {
+                                    blobStore.putBlob(tarInputStream);
                                 }
                             }
+                        }
+                        if (blobStore != null) {
+                            inputStream = blobStore.get(expectedHashIRI);
                         }
                     }
 
