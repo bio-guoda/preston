@@ -1,5 +1,9 @@
 package bio.guoda.preston;
 
+import me.tongfei.progressbar.ProgressBar;
+import me.tongfei.progressbar.ProgressBarBuilder;
+import me.tongfei.progressbar.ProgressBarStyle;
+import org.apache.commons.io.input.ProxyInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
@@ -67,7 +71,17 @@ public class Resources {
                         throw new HttpResponseException(statusLine.getStatusCode(), "[" + dataURI + "]" + statusLine.getReasonPhrase());
                     }
                 }
-                is = entity.getContent();
+                long contentLength = entity.getContentLength();
+
+                ProgressBarBuilder pbb = new ProgressBarBuilder()
+                        .setStyle(ProgressBarStyle.ASCII)
+                        .setTaskName(dataURI.getIRIString())
+                        .setPrintStream(System.err)
+                        .showSpeed()
+                        .setInitialMax(contentLength)
+                        .setUnit("MB", 1024 * 1024);
+
+                is = ProgressBar.wrap(entity.getContent(), pbb);
             }
         }
         return is;
