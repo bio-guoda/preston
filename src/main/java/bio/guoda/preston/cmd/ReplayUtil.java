@@ -14,6 +14,7 @@ import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,8 +68,9 @@ public final class ReplayUtil {
             }
         };
         StatementListener offlineArchive = new Archiver(
-                new DereferencerContentAddressed(null, blobStore), readOnlyStatementStore
-                , null,
+                new DereferencerContentAddressed(null, blobStore),
+                readOnlyStatementStore,
+                null,
                 reader);
 
         while (!statementQueue.isEmpty()) {
@@ -80,4 +82,9 @@ public final class ReplayUtil {
         }
     }
 
+    public static void throwOnError(final PrintStream out) {
+        if (out.checkError()) {
+            throw new RuntimeException("failed to write: stdout closed?");
+        }
+    }
 }

@@ -6,15 +6,20 @@ import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.process.StatementLoggerTSV;
 
+import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class StatementLogFactory {
     public static StatementListener createLogger(Logger logMode) {
+        return createLogger(logMode, System.out);
+    }
+
+    public static StatementListener createLogger(Logger logMode, final PrintStream out) {
         StatementListener logger;
         if (Logger.tsv == logMode) {
-            logger = new StatementLoggerTSV();
+            logger = new StatementLoggerTSV(out);
         } else if (Logger.nquads == logMode) {
-            logger = new StatementLoggerNQuads();
+            logger = new StatementLoggerNQuads(out);
         } else {
             logger = new StatementListener() {
                 AtomicLong count = new AtomicLong(1);
@@ -23,7 +28,7 @@ public class StatementLogFactory {
                 public void on(Triple statement) {
                     long index = count.getAndIncrement();
                     if ((index % 80) == 0) {
-                        System.out.println();
+                        out.println();
                     } else {
                         System.out.print(".");
                     }
