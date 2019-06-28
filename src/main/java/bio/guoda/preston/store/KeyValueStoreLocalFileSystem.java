@@ -58,18 +58,16 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
 
     @Override
     public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
-        try (InputStream src = is) {
-            FileUtils.forceMkdir(tmpDir);
-            File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
-            FileOutputStream os = FileUtils.openOutputStream(tmpFile);
-            String key = keyGeneratingStream.generateKeyWhileStreaming(src, os);
-            try (InputStream tmpIs = FileUtils.openInputStream(tmpFile)) {
-                put(key, tmpIs);
-            } finally {
-                FileUtils.deleteQuietly(tmpFile);
-            }
-            return key;
+        FileUtils.forceMkdir(tmpDir);
+        File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
+        FileOutputStream os = FileUtils.openOutputStream(tmpFile);
+        String key = keyGeneratingStream.generateKeyWhileStreaming(is, os);
+        try (InputStream tmpIs = FileUtils.openInputStream(tmpFile)) {
+            put(key, tmpIs);
+        } finally {
+            FileUtils.deleteQuietly(tmpFile);
         }
+        return key;
     }
 
     @Override

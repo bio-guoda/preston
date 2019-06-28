@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.Resources;
+import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.DereferencerContentAddressedTarGZ;
 import bio.guoda.preston.store.KeyTo1LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
@@ -25,7 +26,7 @@ import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
 
 public class Persisting extends PersistingLocal {
 
-    @Parameter(names = {"--remote", "--remotes"}, description = "remote graph url(s) (e.g., https://deeplinker.bio/,https://example.org)", converter = URIConverter.class, validateWith = URIValidator.class)
+    @Parameter(names = {"--remote", "--remotes"}, description = "remote repositories (e.g., https://deeplinker.bio/,https://example.org)", converter = URIConverter.class, validateWith = URIValidator.class)
     private List<URI> remoteURIs;
 
     @Parameter(names = {"--no-cache"}, description = "disable local content cache")
@@ -57,7 +58,10 @@ public class Persisting extends PersistingLocal {
             List<KeyValueStoreReadOnly> keyValueStoreRemotes =
                     Stream.concat(
                             keyToPathStream.map(this::remoteWith),
-                            getRemoteURIs().stream().map(this::remoteWithTarGz))
+                            getRemoteURIs().stream().map(uri ->
+                                    noLocalCache
+                                    ? this.remoteWithTarGz(uri)
+                                    : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore())))
                             .collect(Collectors.toList());
 
             KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
@@ -82,7 +86,13 @@ public class Persisting extends PersistingLocal {
     }
 
     private KeyValueStoreRemoteHTTP remoteWithTarGz(URI baseURI) {
-        return new KeyValueStoreRemoteHTTP(new KeyTo3LevelTarGzPath(baseURI), new DereferencerContentAddressedTarGZ(Resources::asInputStreamIgnore404));
+        return new KeyValueStoreRemoteHTTP(new KeyTo3LevelTarGzPath(baseURI),
+                new DereferencerContentAddressedTarGZ(Resources::asInputStreamIgnore404));
+    }
+
+    private KeyValueStoreRemoteHTTP remoteWithTarGzCacheAll(URI baseURI, KeyValueStore keyValueStore) {
+        return new KeyValueStoreRemoteHTTP(new KeyTo3LevelTarGzPath(baseURI),
+                new DereferencerContentAddressedTarGZ(Resources::asInputStreamIgnore404, new BlobStoreAppendOnly(keyValueStore, false)));
     }
 
 

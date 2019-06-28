@@ -31,8 +31,6 @@ import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 @Parameters(separators = "= ", commandDescription = "Copy biodiversity dataset graph")
 public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
-    private static final Log LOG = LogFactory.getLog(CmdCopyTo.class);
-
     @Parameter(description = "[target directory]")
     private String targetDir;
 
@@ -48,44 +46,13 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         KeyValueStore copyingKeyValueStore = new KeyValueStoreCopying(
                 getKeyValueStore(),
                 new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI())));
-        final BlobStoreAppendOnly blobStore = new BlobStoreAppendOnly(copyingKeyValueStore);
-        Set<String> IRIStrings = new TreeSet<>();
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        System.out.print("indexing...");
-        attemptReplay(blobStore,
-                new StatementStoreImpl(copyingKeyValueStore),
-                new StatementListener() {
-                    @Override
-                    public void on(Triple statement) {
-                        IRI mostRecent = VersionUtil.mostRecentVersionForStatement(statement);
-                        if (mostRecent != null) {
-                            IRIStrings.add(mostRecent.getIRIString());
-                        }
-                    }
-                });
-        System.out.println(" done.");
-
-
-        AtomicLong count = new AtomicLong(0L);
-        for (String IRIString : IRIStrings) {
-            try (InputStream is = blobStore.get(RefNodeFactory.toIRI(IRIString))) {
-                long l = count.incrementAndGet();
-                if (l % 100 == 0) {
-                    System.out.print(formatProgress(l, IRIStrings.size()));
-                }
-            } catch (IOException e) {
-                LOG.warn("failed to copy [" + IRIString + "]");
-            }
-        }
+        Set<String> IRIStrings = CloneUtil.clone(copyingKeyValueStore);
         stopWatch.stop();
-        System.out.println(" done.");
-        System.out.println("Copied [" + IRIStrings.size() + "] datasets from [" + source.getAbsolutePath() + "] to [" + targetDir + "] in [" + stopWatch.getTime(TimeUnit.MINUTES) + "] minutes.");
-    }
-
-    static String formatProgress(long i, long total) {
-        return String.format("\rcopying [%02.1f%%]...", (100.0 * i / total));
+        System.err.println(" done.");
+        System.err.println("Copied [" + IRIStrings.size() + "] datasets from [" + source.getAbsolutePath() + "] to [" + targetDir + "] in [" + stopWatch.getTime(TimeUnit.MINUTES) + "] minutes.");
     }
 
 }

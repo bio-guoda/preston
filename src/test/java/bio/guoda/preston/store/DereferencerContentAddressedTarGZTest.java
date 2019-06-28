@@ -36,6 +36,7 @@ public class DereferencerContentAddressedTarGZTest {
         assertThat(knownPresentHash.length(), Is.is(78));
 
         BlobStore testBlobStore = new BlobStoreAppendOnly(TestUtil.getTestPersistence(), false);
+        assertNull(testBlobStore.get(RefNodeFactory.toIRI("hash://sha256/a12dd6335e7803027da3007e26926c5c946fea9803a5eb07908d978998d933da")));
 
         try (InputStream is = getDerefTarGZ(testBlobStore).dereference(RefNodeFactory.toIRI("tgz:https://example.com/preston-1a.tar.gz!/1a/57/1a57e55a780b86cff38697cf1b857751ab7b389973d35113564fe5a9a58d6a99"))) {
             assertNotNull(is);
