@@ -36,6 +36,8 @@ public class Persisting extends PersistingLocal {
     @Parameter(names = {"--no-cache"}, description = "disable local content cache")
     private Boolean noLocalCache = false;
 
+    private boolean supportTarGzDiscovery = true;
+
     private final IRI provenanceRoot = ARCHIVE;
 
     public IRI getProvenanceRoot() {
@@ -60,13 +62,9 @@ public class Persisting extends PersistingLocal {
                             new KeyTo3LevelPath(uri)));
 
             List<KeyValueStoreReadOnly> keyValueStoreRemotes =
-                    Stream.concat(
-                            keyToPathStream.map(this::remoteWith),
-                            getRemoteURIs().stream().map(uri ->
-                                    noLocalCache
-                                            ? this.remoteWithTarGz(uri)
-                                            : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore())))
-                            .collect(Collectors.toList());
+                    supportTarGzDiscovery
+                            ? includeTarGzSupport(keyToPathStream)
+                            : defaultRemotePathSupport(keyToPathStream).collect(Collectors.toList());
 
             KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
 
@@ -85,9 +83,32 @@ public class Persisting extends PersistingLocal {
         return store;
     }
 
+    private Stream<KeyValueStoreRemoteHTTP> defaultRemotePathSupport(Stream<KeyToPath> keyToPathStream) {
+        return keyToPathStream.map(this::remoteWith);
+    }
+
+    private List<KeyValueStoreReadOnly> includeTarGzSupport(Stream<KeyToPath> keyToPathStream) {
+        return Stream.concat(
+                defaultRemotePathSupport(keyToPathStream),
+                tarGzRemotePathSupport()
+        ).collect(Collectors.toList());
+    }
+
+    private Stream<KeyValueStoreRemoteHTTP> tarGzRemotePathSupport() {
+        return getRemoteURIs().stream().map(uri ->
+                noLocalCache
+                        ? this.remoteWithTarGz(uri)
+                        : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore()));
+    }
+
     private KeyValueStoreRemoteHTTP remoteWith(KeyToPath keyToPath) {
         return new KeyValueStoreRemoteHTTP(keyToPath, getDerefStream());
     }
+
+    protected void setSupportTarGzDiscovery(boolean supportTarGzDiscovery) {
+        this.supportTarGzDiscovery = supportTarGzDiscovery;
+    }
+
 
     public static Dereferencer<InputStream> getDerefStream() {
         return getDerefStream(new DerefProgressLogger());
