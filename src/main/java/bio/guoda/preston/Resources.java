@@ -1,9 +1,6 @@
 package bio.guoda.preston;
 
-import me.tongfei.progressbar.ProgressBar;
-import me.tongfei.progressbar.ProgressBarBuilder;
-import me.tongfei.progressbar.ProgressBarStyle;
-import org.apache.commons.io.input.ProxyInputStream;
+import org.apache.commons.io.input.CountingInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
@@ -24,6 +21,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Resources {
     public static final List<Integer> REDIRECT_CODES = Arrays.asList(301, 302, 303);
@@ -39,16 +37,32 @@ public class Resources {
         return is;
     }
 
+    public static InputStream asInputStreamIgnore404(IRI dataURI, DerefProgressListener derefProgressListener) throws IOException {
+        return asInputStream(dataURI, Collections.singletonList(404), derefProgressListener);
+    }
+
     public static InputStream asInputStreamIgnore404(IRI dataURI) throws IOException {
-        return asInputStream(dataURI, Collections.singletonList(404));
+        return asInputStreamIgnore404(dataURI, getNullDerefProgressListener());
+    }
+
+    public static DerefProgressListener getNullDerefProgressListener() {
+        return new DerefProgressListener() {
+            @Override
+            public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
+            }
+        };
+    }
+
+    public static InputStream asInputStream(IRI dataURI, DerefProgressListener nullDerefProgressListener) throws IOException {
+        return asInputStream(dataURI, Collections.emptyList(), nullDerefProgressListener);
     }
 
     public static InputStream asInputStream(IRI dataURI) throws IOException {
-        return asInputStream(dataURI, Collections.emptyList());
+        return asInputStream(dataURI, getNullDerefProgressListener());
     }
 
 
-    public static InputStream asInputStream(IRI dataURI, List<Integer> ignoreCodes) throws IOException {
+    public static InputStream asInputStream(IRI dataURI, List<Integer> ignoreCodes, DerefProgressListener listener) throws IOException {
         InputStream is = asInputStreamOfflineOnly(dataURI);
         if (is == null) {
             HttpGet get = new HttpGet(URI.create(dataURI.getIRIString()));
@@ -71,17 +85,37 @@ public class Resources {
                         throw new HttpResponseException(statusLine.getStatusCode(), "[" + dataURI + "]" + statusLine.getReasonPhrase());
                     }
                 }
-                long contentLength = entity.getContentLength();
 
-                ProgressBarBuilder pbb = new ProgressBarBuilder()
-                        .setStyle(ProgressBarStyle.ASCII)
-                        .setTaskName(dataURI.getIRIString())
-                        .setPrintStream(System.err)
-                        .showSpeed()
-                        .setInitialMax(contentLength)
-                        .setUnit("MB", 1024 * 1024);
+                final long contentLength = entity.getContentLength();
 
-                is = ProgressBar.wrap(entity.getContent(), pbb);
+                InputStream contentStream = entity.getContent();
+
+                listener.onProgress(dataURI, DerefState.START, 0, contentLength);
+
+                return new CountingInputStream(contentStream) {
+                    AtomicBoolean isDone = new AtomicBoolean(false);
+                    @Override
+                    public synchronized long skip(long length) throws IOException {
+                        long skip = super.skip(length);
+                        listener.onProgress(dataURI, DerefState.BUSY, getByteCount(), contentLength);
+                        return skip;
+                    }
+
+                    @Override
+                    protected synchronized void afterRead(int n) {
+                        super.afterRead(n);
+                        listener.onProgress(dataURI, DerefState.BUSY, getByteCount(), contentLength);
+                    }
+
+                    @Override
+                    public void close() throws IOException {
+                        super.close();
+                        if (!isDone.get()) {
+                            listener.onProgress(dataURI, DerefState.DONE, getByteCount(), contentLength);
+                            isDone.set(true);
+                        }
+                    }
+                };
             }
         }
         return is;

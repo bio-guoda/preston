@@ -1,7 +1,9 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.Resources;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.DereferencerContentAddressedTarGZ;
 import bio.guoda.preston.store.KeyTo1LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
@@ -17,6 +19,8 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.URIConverter;
 import org.apache.commons.rdf.api.IRI;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,8 +64,8 @@ public class Persisting extends PersistingLocal {
                             keyToPathStream.map(this::remoteWith),
                             getRemoteURIs().stream().map(uri ->
                                     noLocalCache
-                                    ? this.remoteWithTarGz(uri)
-                                    : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore())))
+                                            ? this.remoteWithTarGz(uri)
+                                            : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore())))
                             .collect(Collectors.toList());
 
             KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
@@ -82,17 +86,31 @@ public class Persisting extends PersistingLocal {
     }
 
     private KeyValueStoreRemoteHTTP remoteWith(KeyToPath keyToPath) {
-        return new KeyValueStoreRemoteHTTP(keyToPath, Resources::asInputStreamIgnore404);
+        return new KeyValueStoreRemoteHTTP(keyToPath, getDerefStream());
+    }
+
+    public static Dereferencer<InputStream> getDerefStream() {
+        return getDerefStream(new DerefProgressLogger());
+    }
+
+    public static Dereferencer<InputStream> getDerefStream(final DerefProgressListener listener) {
+        return new Dereferencer<InputStream>() {
+
+            @Override
+            public InputStream dereference(IRI uri) throws IOException {
+                return Resources.asInputStreamIgnore404(uri, listener);
+            }
+        };
     }
 
     private KeyValueStoreRemoteHTTP remoteWithTarGz(URI baseURI) {
         return new KeyValueStoreRemoteHTTP(new KeyTo3LevelTarGzPath(baseURI),
-                new DereferencerContentAddressedTarGZ(Resources::asInputStreamIgnore404));
+                new DereferencerContentAddressedTarGZ(getDerefStream()));
     }
 
     private KeyValueStoreRemoteHTTP remoteWithTarGzCacheAll(URI baseURI, KeyValueStore keyValueStore) {
         return new KeyValueStoreRemoteHTTP(new KeyTo3LevelTarGzPath(baseURI),
-                new DereferencerContentAddressedTarGZ(Resources::asInputStreamIgnore404, new BlobStoreAppendOnly(keyValueStore, false)));
+                new DereferencerContentAddressedTarGZ(getDerefStream(), new BlobStoreAppendOnly(keyValueStore, false)));
     }
 
 
