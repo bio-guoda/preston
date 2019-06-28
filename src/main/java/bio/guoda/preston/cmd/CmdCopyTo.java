@@ -47,12 +47,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
                 getKeyValueStore(),
                 new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI())));
 
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        Set<String> IRIStrings = CloneUtil.clone(copyingKeyValueStore);
-        stopWatch.stop();
-        System.err.println(" done.");
-        System.err.println("Copied [" + IRIStrings.size() + "] datasets from [" + source.getAbsolutePath() + "] to [" + targetDir + "] in [" + stopWatch.getTime(TimeUnit.MINUTES) + "] minutes.");
+        CloneUtil.clone(copyingKeyValueStore);
     }
 
 }

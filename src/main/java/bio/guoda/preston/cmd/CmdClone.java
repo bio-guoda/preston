@@ -13,12 +13,7 @@ public class CmdClone extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        Set<String> IRIStrings = CloneUtil.clone(getKeyValueStore());
-        stopWatch.stop();
-        System.err.println(" done.");
-        System.err.println("cloned [" + IRIStrings.size() + "] datasets in [" + stopWatch.getTime(TimeUnit.MINUTES) + "] minutes.");
+        CloneUtil.clone(getKeyValueStore());
     }
 
 }

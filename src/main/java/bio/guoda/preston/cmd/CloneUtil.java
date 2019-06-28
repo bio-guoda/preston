@@ -22,10 +22,8 @@ import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 public class CloneUtil {
     private static final Log LOG = LogFactory.getLog(CloneUtil.class);
 
-    public static Set<String> clone(KeyValueStore keyValueStore) {
-        System.err.print("indexing...");
+    public static void clone(KeyValueStore keyValueStore) {
         final BlobStoreAppendOnly blobStore = new BlobStoreAppendOnly(keyValueStore);
-        Set<String> IRIStrings = new TreeSet<>();
         attemptReplay(blobStore,
                 new StatementStoreImpl(keyValueStore),
                 new StatementListener() {
@@ -33,28 +31,13 @@ public class CloneUtil {
                     public void on(Triple statement) {
                         IRI mostRecent = VersionUtil.mostRecentVersionForStatement(statement);
                         if (mostRecent != null) {
-                            IRIStrings.add(mostRecent.getIRIString());
+                            try (InputStream is = blobStore.get(mostRecent)) {
+                            } catch (IOException e) {
+                                LOG.warn("failed to copy [" + mostRecent + "]");
+                            }
                         }
                     }
                 });
-        System.err.println(" done.");
-
-
-        AtomicLong count = new AtomicLong(0L);
-        for (String IRIString : IRIStrings) {
-            try (InputStream is = blobStore.get(RefNodeFactory.toIRI(IRIString))) {
-                long l = count.incrementAndGet();
-                if (l % 100 == 0) {
-                    System.out.print(formatProgress(l, IRIStrings.size()));
-                }
-            } catch (IOException e) {
-                LOG.warn("failed to copy [" + IRIString + "]");
-            }
-        }
-        return IRIStrings;
     }
 
-    static String formatProgress(long i, long total) {
-        return String.format("\rcopying [%02.1f%%]...", (100.0 * i / total));
-    }
 }
