@@ -47,7 +47,7 @@ public class Persisting extends PersistingLocal {
     }
 
     protected boolean hasRemote() {
-        return remoteURIs != null && !remoteURIs.isEmpty();
+        return getRemoteURIs() != null && !getRemoteURIs().isEmpty();
     }
 
     @Override
