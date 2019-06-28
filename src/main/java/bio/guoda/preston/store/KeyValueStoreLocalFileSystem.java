@@ -56,7 +56,13 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
         }
     }
 
-    @Override
+
+    /**
+     * @param keyGeneratingStream
+     * @param is the caller is responsible for closing the inputstream
+     * @return
+     * @throws IOException
+     */
     public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
         FileUtils.forceMkdir(tmpDir);
         File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);

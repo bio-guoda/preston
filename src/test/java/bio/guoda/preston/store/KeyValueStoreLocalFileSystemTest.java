@@ -83,7 +83,8 @@ public class KeyValueStoreLocalFileSystemTest {
                 return SOME_HASH;
             }
         }, wrappedContentStream);
-        assertTrue(wasClosed.get());
+
+        assertFalse(wasClosed.get());
 
         assertThat(TestUtil.toUTF8(filePersistence.get(SOME_HASH)), is("some content"));
 
