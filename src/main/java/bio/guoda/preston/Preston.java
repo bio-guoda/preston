@@ -7,6 +7,10 @@ package bio.guoda.preston;
 import org.apache.commons.lang3.StringUtils;
 import bio.guoda.preston.cmd.CmdLine;
 
+import java.io.InputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 import static java.lang.System.exit;
 
 public class Preston {
@@ -21,7 +25,14 @@ public class Preston {
     }
 
     public static String getVersion() {
-        String version = Preston.class.getPackage().getImplementationVersion();
+        String version = "";
+        try (InputStream file = Preston.class.getClassLoader().getResourceAsStream("preston.properties")) {
+            Properties prop = new Properties();
+            prop.load(file);
+            version = prop.getProperty("version");
+        } catch (IOException e) {
+        }
+
         return StringUtils.isBlank(version) ? "dev" : version;
     }
 }
