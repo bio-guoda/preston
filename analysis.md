@@ -348,17 +348,20 @@ The graphs below show the cumulative growth of the observatory along with the re
 
 ![20190701-size-time-relative.png](./20190701-size-time-relative.png)
 
-Note that the observatory switched from a weekly to a monthly sampling interval in February 2019. The reduction of the cumulative growth curve after February seems to indicate that the sampling interval is correlated with the rate of growth. So, the more you sample, the more data you accumulate. Assuming that the rate of data production by the global biodiversity community does *not* depend in the interval at which our data observatory samples the data networks, the observed behavior is consistent with content drift of existing datasets.
+Note that the observatory switched from a weekly to a monthly sampling interval in February 2019. The reduction of the cumulative growth curve after February seems to indicate that the sampling interval is correlated with the rate of growth. So, the more you sample, the more data you accumulate. Assuming that the rate of data production by the global biodiversity community does *not* depend in the interval at which our data observatory samples the data networks, the observed behavior is consistent with content drift of existing datasets. Excluding the eBird event (see below), the volume of new data produced by the tracked networks is between 10-20 GB per Preston sampling event (aka Preston network crawl).
 
 Also note that in April 2019, a big jump is observed in both the cumulative and relative growth. This event is the annual release of the eBird observation dataset. Prior to April 2019, the eBird dataset with content hash [hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c](https://deeplinker.bio/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c) and size ~10GB was observed. After that the eBird dataset with content hash [hash://sha256/ec3ff57cb48d5c41b77b5d1075738b40f598a900e8be56e7645e5a24013dffc4](https://deeplinker.bio/ec3ff57cb48d5c41b77b5d1075738b40f598a900e8be56e7645e5a24013dffc4) of size ~20GB was observed. The most recent version of eBird contains about 562 million observations out of a total of 1.3 billion records in GBIF.  
 
 To further investigate link rot and content drift in the GBIF, iDigBio and BioCASe network, the graph belows show the cumulative and relative growth of unique urls that were discovered. 
 
-![20190701-url-time-cumulative.png](./20190701-url-time-cumulative.png)
+![20190701-url-count-time-cumulative.png](./20190701-url-count-time-cumulative.png)
 
-![20190701-url-time-relative.png](./20190701-url-time-relative.png)
+![20190701-url-count-time-relative.png](./20190701-url-count-time-relative.png)
 
 Note that in period Sept 2018 - Feb 2019 relatively few urls were added, confirming the known bug in Preston up to version v0.0.9 (see https://github.com/bio-guoda/preston/releases/tag/0.0.9). The bug prevented new urls from being tracked. In period Feb- Jul 2019, the number of tracked urls roughly doubled, with most of the urls being added after May 2019.
+
+In period with flat tracked url growth, the volume of new data produced by the networks was in range 10-20 GB, suggesting that the growth of data volume can be, in large part, attributed to the drift of existing datasets, rather than by the addition of new datasets. 
+
 
 IN PROGRESS
 
