@@ -358,7 +358,7 @@ To further investigate link rot and content drift in the GBIF, iDigBio and BioCA
 
 ![20190701-url-count-time-relative.png](./20190701-url-count-time-relative.png)
 
-Note that in period Sept 2018 - Feb 2019 relatively few urls were added, confirming the known bug in Preston up to version v0.0.9 (see https://github.com/bio-guoda/preston/releases/tag/0.0.9). The bug prevented new urls from being tracked. In period Feb- Jul 2019, the number of tracked urls roughly doubled, with most of the urls being added after May 2019.
+Note that in period Sept 2018 - Feb 2019 relatively few urls were added, confirming the known bug in Preston up to version v0.0.9 (see https://github.com/bio-guoda/preston/releases/tag/0.0.9). The bug prevented new urls from being tracked. In period Feb- Jul 2019, the number of tracked urls increased to slighly less than 75k, with over 10k urls added in early May. More analysis is needed to understand the source of the newly added urls. 
 
 In period with flat tracked url growth, the volume of new data produced by the networks was in range 10-20 GB, suggesting that the growth of data volume can be, in large part, attributed to the drift of existing datasets, rather than by the addition of new datasets. 
 
