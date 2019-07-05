@@ -10,6 +10,7 @@ This page contains some [sparql](https://www.w3.org/TR/rdf-sparql-query/) querie
  * [`Content Drift`](#content-drift)
  * [`Large-scale Content Analysis`](#large-scale-content-analysis)
  * [`Large-scale Content Analysis Continued`](#large-scale-content-analysis-continued)
+ * [`Linkrot and Content Drift Revisited`](#linkrot-and-content-drift-revisited)
 
 ## Detecting Linkrot
 
@@ -335,6 +336,27 @@ approxDistinct: Long = 699181619
 The example above shows that 3.5 billion rows exist across the thousands of parquet files that were generated from the darwin core files. Also, it shows how to inspect the first ten kingdom and occurrenceID term values using a single schema. Finally, about 700 million distinct occurrenceIDs were estimated to exist across all the data using Spark's [RDD.countApproxDistinct](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.rdd.RDD@countApproxDistinct(relativeSD:Double):Long), an algorithm based on HyperLogLog cardinality estimation http://dx.doi.org/10.1145/2452376.2452456 .
 
 With this exercise, we showed that with relatively modest hardware (16 GB memory, 1.5TB harddisk, 4 CPUs) you can do transformations on billions of rows. Note though, that Spark needs to be configured properly (e.g., memory settings) and that processing times are long (e.g., ~hour instead of seconds to count all the rows). With access to more hardware and a distributed file system, we expect that process times will drop. 
+
+
+## Linkrot and Content Drift Revisited
+
+In July 2019, the Preston observatory tracking GBIF, iDigBio and BioCASe networks was revisited. 
+
+The graphs below show the cumulative growth of the observatory along with the relative growth. The relative growth is the amount of new content added. So, when no new content is added in a specific time, the relative growth is zero.
+
+![20190701-size-time-cumulative.png](./20190701-size-time-cumulative.png)
+
+![20190701-size-time-relative.png](./20190701-size-time-relative.png)
+
+Note that the observatory switched from a weekly to a monthly sampling interval in February 2019. The reduction of the cumulative growth curve after February seems to indicate that the sampling interval is correlated with the rate of growth. So, the more you sample, the more data you accumulate. Assuming that the rate of data production by the global biodiversity community does *not* depend in the interval at which our data observatory samples the data networks, the observed behavior is consistent with content drift of existing datasets.
+
+Also note that in April 2019, a big jump is observed in both the cumulative and relative growth. This event is the annual release of the eBird observation dataset. Prior to April 2019, the eBird dataset with content hash [hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c](https://deeplinker.bio/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c) and size ~10GB was observed. After that the eBird dataset with content hash [hash://sha256/ec3ff57cb48d5c41b77b5d1075738b40f598a900e8be56e7645e5a24013dffc4](https://deeplinker.bio/ec3ff57cb48d5c41b77b5d1075738b40f598a900e8be56e7645e5a24013dffc4) of size ~20GB was observed. The most recent version of eBird contains about 562 million observations out of a total of 1.3 billion records in GBIF.  
+
+To further investigate link rot and content drift in the GBIF, iDigBio and BioCASe network, the graph belows show the cumulative and relative growth of unique urls that were discovered. 
+
+IN PROGRESS
+
+!
 
 
 ### Links
