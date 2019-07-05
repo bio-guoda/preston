@@ -340,7 +340,7 @@ With this exercise, we showed that with relatively modest hardware (16 GB memory
 
 ## Linkrot and Content Drift Revisited
 
-In July 2019, the Preston observatory tracking GBIF, iDigBio and BioCASe networks was revisited. 
+In July 2019, the Preston observatory tracking GBIF, iDigBio and BioCASe networks was revisited. The data below was generated with the Preston biodiversity dataset graph versions up to, and including, provenance hash [hash://sha256/b9864a749112cad2fe19e62bf5d8bad580a7036d363d16d81d5c16be325fa0fd](https://deeplinker.bio/b9864a749112cad2fe19e62bf5d8bad580a7036d363d16d81d5c16be325fa0fd). 
 
 The graphs below show the cumulative growth of the observatory along with the relative growth. The relative growth is the amount of new content added. So, when no new content is added in a specific time, the relative growth is zero.
 
@@ -354,9 +354,13 @@ Also note that in April 2019, a big jump is observed in both the cumulative and 
 
 To further investigate link rot and content drift in the GBIF, iDigBio and BioCASe network, the graph belows show the cumulative and relative growth of unique urls that were discovered. 
 
-IN PROGRESS
+![20190701-url-time-cumulative.png](./20190701-url-time-cumulative.png)
 
-!
+![20190701-url-time-relative.png](./20190701-url-time-relative.png)
+
+Note that in period Sept 2018 - Feb 2019 relatively few urls were added, confirming the known bug in Preston up to version v0.0.9 (see https://github.com/bio-guoda/preston/releases/tag/0.0.9). The bug prevented new urls from being tracked. In period Feb- Jul 2019, the number of tracked urls roughly doubled, with most of the urls being added after May 2019.
+
+IN PROGRESS
 
 
 ### Links
