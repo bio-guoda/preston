@@ -1,5 +1,7 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.MimeTypes;
+import bio.guoda.preston.Seeds;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -8,8 +10,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
-import bio.guoda.preston.MimeTypes;
-import bio.guoda.preston.Seeds;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
 import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
+import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
@@ -66,18 +67,20 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
         } else if (hasVersionAvailable(statement)) {
             try {
                 EmittingParser parse = null;
-                if (BIO_CASE_REGISTRY.equals(getVersionSource(statement))) {
-                    parse = RegistryReaderBioCASE::parseProviders;
+                BlankNodeOrIRI registryVersion = getVersion(statement);
+                BlankNodeOrIRI registryVersionSource = getVersionSource(statement);
+                if (BIO_CASE_REGISTRY.equals(registryVersionSource)) {
+                    parse = (providers, emitter, versionSource) -> parseProviders(providers, emitter, registryVersion);
 
-                } else if (StringUtils.contains(getVersionSource(statement).toString(), "pywrapper.cgi?dsa=")) {
-                    parse = RegistryReaderBioCASE::parseDatasetInventory;
+                } else if (StringUtils.contains(registryVersionSource.toString(), "pywrapper.cgi?dsa=")) {
+                    parse = (datasets, emitter, versionSource) -> parseDatasetInventory(datasets, emitter, registryVersion);
                 }
                 if (parse != null) {
                     BlankNodeOrIRI version = getVersion(statement);
                     if (version instanceof IRI) {
                         InputStream content = get((IRI) version);
                         if (content != null) {
-                            parse.parse(content, this);
+                            parse.parse(content, this, registryVersion);
                         }
                     }
                 }
@@ -91,7 +94,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     }
 
 
-    public static void parseProviders(InputStream providers, StatementEmitter emitter) throws IOException {
+    public static void parseProviders(InputStream providers, StatementEmitter emitter, BlankNodeOrIRI datasetRegistryVersion) throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(providers);
         if (jsonNode.isArray()) {
             for (JsonNode provider : jsonNode) {
@@ -102,6 +105,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
                         URI uri = generateDataSourceAccessUrl(url, datasource);
                         if (uri != null) {
                             IRI refNode = toIRI(uri);
+                            emitter.emit(toStatement(datasetRegistryVersion, HAD_MEMBER, refNode));
                             emitter.emit(toStatement(refNode, HAS_FORMAT, toLiteral(MimeTypes.XML)));
                             emitter.emit(toStatement(refNode, HAS_VERSION, toBlank()));
                         }
@@ -124,7 +128,8 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
         return uri;
     }
 
-    public static void parseDatasetInventory(InputStream datasets, StatementEmitter emitter) throws IOException {
+
+    public static void parseDatasetInventory(InputStream datasets, StatementEmitter emitter, final BlankNodeOrIRI datasetRegistryEntryVersion) throws IOException {
         XMLUtil.handleXPath("//dsi:archive", new XPathHandler() {
             @Override
             public void evaluateXPath(StatementEmitter emitter, NodeList nodeList) throws XPathExpressionException {
@@ -142,6 +147,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
 
                     if (StringUtils.isNotBlank(url) && StringUtils.isNotBlank(type)) {
                         IRI versionSource = toIRI(url);
+                        emitter.emit(toStatement(datasetRegistryEntryVersion, HAD_MEMBER, versionSource));
                         emitter.emit(toStatement(versionSource, HAS_FORMAT, toLiteral(type)));
                         emitter.emit(toStatement(versionSource, HAS_VERSION, toBlank()));
                     }
