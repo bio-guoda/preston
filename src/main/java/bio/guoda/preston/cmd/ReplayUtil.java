@@ -58,19 +58,8 @@ public final class ReplayUtil {
                 statementListeners.toArray(new StatementListener[0])
         );
 
-        StatementStore readOnlyStatementStore = new StatementStore() {
-            @Override
-            public void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException {
-            }
-
-            @Override
-            public IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException {
-                return statementStore.get(queryKey);
-            }
-        };
-
         StatementListener offlineArchive = new ArchiverReadOnly(
-                readOnlyStatementStore,
+                statementStore,
                 reader);
 
         while (!statementQueue.isEmpty()) {
