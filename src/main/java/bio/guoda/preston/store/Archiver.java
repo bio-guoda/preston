@@ -3,8 +3,6 @@ package bio.guoda.preston.store;
 import bio.guoda.preston.cmd.ActivityContext;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.StatementListener;
-import bio.guoda.preston.process.StatementProcessor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.BlankNode;
@@ -18,13 +16,12 @@ import java.io.IOException;
 import static bio.guoda.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.WAS_GENERATED_BY;
-import static bio.guoda.preston.model.RefNodeFactory.getVersion;
 import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.model.RefNodeFactory.toSkolemizedBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 
-public class Archiver extends StatementProcessor {
+public class Archiver extends VersionProcessor {
     private static Log LOG = LogFactory.getLog(Archiver.class);
 
     private final ActivityContext activityCtx;
@@ -38,22 +35,7 @@ public class Archiver extends StatementProcessor {
     }
 
     @Override
-    public void on(Triple statement) {
-        try {
-            BlankNodeOrIRI version = getVersion(statement);
-            if (version instanceof BlankNode) {
-                handleVersions(statement, (BlankNode) version);
-            } else {
-                emit(statement);
-
-            }
-        } catch (Throwable e) {
-            LOG.warn("failed to handle [" + statement.toString() + "]", e);
-        }
-
-    }
-
-    private void handleVersions(Triple statement, BlankNode blankVersion) throws IOException {
+    void handleBlankVersion(Triple statement, BlankNode blankVersion) throws IOException {
         IRI versionSource = getVersionSource(statement);
         if (getDereferencer() != null) {
             IRI newVersion = null;

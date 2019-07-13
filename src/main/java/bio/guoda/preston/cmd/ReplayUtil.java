@@ -2,9 +2,8 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.VersionLogger;
-import bio.guoda.preston.store.Archiver;
+import bio.guoda.preston.store.ArchiverReadOnly;
 import bio.guoda.preston.store.BlobStore;
-import bio.guoda.preston.store.DereferencerContentAddressed;
 import bio.guoda.preston.store.StatementStore;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
@@ -68,9 +67,9 @@ public final class ReplayUtil {
                 return statementStore.get(queryKey);
             }
         };
-        StatementListener offlineArchive = new Archiver(
-                new DereferencerContentAddressed(null, blobStore),
-                null,
+
+        StatementListener offlineArchive = new ArchiverReadOnly(
+                readOnlyStatementStore,
                 reader);
 
         while (!statementQueue.isEmpty()) {

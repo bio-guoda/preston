@@ -25,8 +25,8 @@ import static org.junit.Assert.assertThat;
 
 public class ReplayUtilTest {
 
-    public static final IRI TEST_KEY_IRI = RefNodeFactory.toIRI("test:key");
-    public static final IRI TEST_KEY_NEWER_IRI = RefNodeFactory.toIRI("test:key-new");
+    private static final IRI TEST_KEY_IRI = RefNodeFactory.toIRI("test:key");
+    private static final IRI TEST_KEY_NEWER_IRI = RefNodeFactory.toIRI("test:key-new");
 
     @Test
     public void replay() {

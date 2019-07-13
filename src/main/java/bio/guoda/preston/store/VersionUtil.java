@@ -1,25 +1,17 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.model.RefNodeFactory;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static bio.guoda.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
-import static bio.guoda.preston.model.RefNodeFactory.toDateTime;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class VersionUtil {
@@ -28,7 +20,7 @@ public class VersionUtil {
         return findMostRecentVersion(versionSource, statementStore, null);
     }
 
-    public static IRI findMostRecentVersion(IRI versionSource, StatementStore statementStore, VersionListener versionListener) throws IOException {
+    public static IRI findMostRecentVersion(IRI versionSource, StatementStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
         IRI mostRecentVersion = findVersion(versionSource, statementStore, versionListener);
 
         List<IRI> versions = new ArrayList<>();
@@ -53,7 +45,7 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    public static IRI findPreviousVersion(IRI versionSource, StatementStore statementStore, VersionListener versionListener) throws IOException {
+    public static IRI findPreviousVersion(IRI versionSource, StatementStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
         IRI mostRecentVersion = statementStore.get(Pair.of(HAS_PREVIOUS_VERSION, versionSource));
 
         if (versionListener != null && mostRecentVersion != null) {
@@ -62,7 +54,7 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    public static IRI findVersion(IRI versionSource, StatementStore statementStore, VersionListener versionListener) throws IOException {
+    public static IRI findVersion(IRI versionSource, StatementStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
         IRI mostRecentVersion = statementStore.get(Pair.of(versionSource, HAS_VERSION));
 
         if (versionListener != null && mostRecentVersion != null) {
