@@ -2,7 +2,6 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.StatementListener;
-import bio.guoda.preston.process.VersionLogger;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.IRI;
@@ -14,6 +13,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.isBlankOrSkolemizedBlank;
@@ -21,12 +21,11 @@ import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toSkolemizedBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
-import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 public class ArchiverTest {
@@ -79,13 +78,16 @@ public class ArchiverTest {
     }
 
     @Test
-    public void doNotEmitSkolemizedBlanks() throws IOException {
+    public void doNotDereferenceSkolemizedBlank() throws IOException {
         IRI skolemizedBlank = toSkolemizedBlank(toBlank());
         Triple statement = toStatement(toIRI(URI.create("http://some")),
                 HAS_VERSION,
                 skolemizedBlank);
 
+        AtomicBoolean triedDereferencing = new AtomicBoolean(false);
+
         Dereferencer<IRI> dereferencer = uri -> {
+            triedDereferencing.set(true);
             throw new IOException("fails to dereference");
         };
 
@@ -98,17 +100,20 @@ public class ArchiverTest {
         Archiver relationStore = new Archiver(
                 dereferencer,
                 TestUtil.getTestCrawlContext(),
-                nodes::add, createVersionLogger(versionStore));
+                nodes::add,
+                createVersionLogger(versionStore));
 
         relationStore.on(statement);
 
+        assertFalse(triedDereferencing.get());
         assertThat(nodes.size(), Is.is(1));
+        assertThat(nodes.get(0).getObject().ntriplesString(), containsString("/.well-known/genid/"));
 
         // dereference subject
         IRI contentHash = versionStore.get(
                 Pair.of(toIRI(URI.create("http://some")), HAS_VERSION));
 
-        assertThat(contentHash.getIRIString(), startsWith("https://deeplinker.bio/.well-known/genid/"));
+        assertThat(contentHash.getIRIString(), containsString("/.well-known/genid/"));
     }
 
     @Test
