@@ -5,6 +5,7 @@ import bio.guoda.preston.process.VersionLogger;
 import bio.guoda.preston.store.ArchiverReadOnly;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.StatementStore;
+import bio.guoda.preston.store.StatementStoreReadOnly;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,13 +33,13 @@ public final class ReplayUtil {
 
 
     public static void attemptReplay(final BlobStore blobStore,
-                                     final StatementStore statementStore,
+                                     final StatementStoreReadOnly statementStore,
                                      StatementListener... listeners) {
         attemptReplay(blobStore, statementStore, ARCHIVE, listeners);
     }
 
     public static void attemptReplay(final BlobStore blobStore,
-                                     final StatementStore statementStore,
+                                     final StatementStoreReadOnly statementStore,
                                      final IRI provRoot,
                                      StatementListener... listeners) {
 

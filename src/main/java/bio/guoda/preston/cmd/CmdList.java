@@ -23,9 +23,10 @@ public class CmdList extends LoggingPersisting implements Runnable {
     }
 
     public void run(LogErrorHandler handler) {
-        BlobStore blobStore = new BlobStoreAppendOnly(getKeyValueStore());
-        StatementStore statementPersistence = new StatementStoreImpl(getKeyValueStore());
-        attemptReplay(blobStore, statementPersistence, StatementLogFactory.createPrintingLogger(getLogMode(), System.out, handler));
+        attemptReplay(
+                new BlobStoreAppendOnly(getKeyValueStore()),
+                new StatementStoreImpl(getKeyValueStore()),
+                StatementLogFactory.createPrintingLogger(getLogMode(), System.out, handler));
     }
 
 }
