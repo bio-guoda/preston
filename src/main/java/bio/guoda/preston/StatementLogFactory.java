@@ -11,12 +11,12 @@ import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class StatementLogFactory {
-    public static StatementListener createLogger(Logger logMode) {
-        return createLogger(logMode, System.out);
+    public static StatementListener createPrintingLogger(Logger logMode) {
+        return createPrintingLogger(logMode, System.out);
     }
 
-    public static StatementListener createLogger(Logger logMode, final PrintStream out) {
-        return createLogger(logMode, out, new LogErrorHandler() {
+    public static StatementListener createPrintingLogger(Logger logMode, final PrintStream out) {
+        return createPrintingLogger(logMode, out, new LogErrorHandler() {
             @Override
             public void handleError() {
                 // ignore
@@ -24,7 +24,7 @@ public class StatementLogFactory {
         });
     }
 
-    public static StatementListener createLogger(Logger logMode, final PrintStream out, LogErrorHandler handler) {
+    public static StatementListener createPrintingLogger(Logger logMode, final PrintStream out, LogErrorHandler handler) {
         StatementListener logger;
         if (Logger.tsv == logMode) {
             logger = new StatementLoggerTSV(out, handler);
@@ -40,7 +40,7 @@ public class StatementLogFactory {
                     if ((index % 80) == 0) {
                         out.println();
                     } else {
-                        System.out.print(".");
+                        out.print(".");
                     }
                 }
             };

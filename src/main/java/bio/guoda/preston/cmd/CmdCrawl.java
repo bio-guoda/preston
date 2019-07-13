@@ -121,7 +121,19 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
                 IRIs.forEach(iri -> statementQueue.add(toStatement(toIRI(iri), HAS_VERSION, toBlank())));
             }
 
-            doCrawl(blobStore, ctx, statementQueue, archivingLogger, datasetRelations);
+            StatementListener printingLogger = StatementLogFactory.createPrintingLogger(getLogMode(), System.out);
+            StatementListener processor = createStatementProcessor(
+                    blobStore,
+                    ctx,
+                    archivingLogger,
+                    datasetRelations,
+                    statementQueue::add,
+                    getCrawlMode(),
+                    printingLogger);
+
+            while (!statementQueue.isEmpty()) {
+                processor.on(statementQueue.poll());
+            }
 
             archivingLogger.stop();
         } catch (IOException ex) {
@@ -131,24 +143,19 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
         }
     }
 
-    private void doCrawl(BlobStore blobStore, CrawlContext ctx, Queue<Triple> statementQueue, StatementListener statementLoggerNQuads, StatementStore statementStore) {
+    public static StatementListener createStatementProcessor(BlobStore blobStore, CrawlContext ctx, StatementListener statementLoggerNQuads, StatementStore statementStore, StatementListener queueAsListener, CrawlMode crawlMode, StatementListener logger) {
         StatementListener[] listeners = {
-                new RegistryReaderIDigBio(blobStore, statementQueue::add),
-                new RegistryReaderGBIF(blobStore, statementQueue::add),
-                new RegistryReaderBioCASE(blobStore, statementQueue::add),
-                new RegistryReaderDataONE(blobStore, statementQueue::add),
-                new RegistryReaderRSS(blobStore, statementQueue::add),
-                new RegistryReaderBHL(blobStore, statementQueue::add),
-                StatementLogFactory.createLogger(getLogMode(), System.out),
+                new RegistryReaderIDigBio(blobStore, queueAsListener),
+                new RegistryReaderGBIF(blobStore, queueAsListener),
+                new RegistryReaderBioCASE(blobStore, queueAsListener),
+                new RegistryReaderDataONE(blobStore, queueAsListener),
+                new RegistryReaderRSS(blobStore, queueAsListener),
+                new RegistryReaderBHL(blobStore, queueAsListener),
+                logger,
                 statementLoggerNQuads
         };
 
-        StatementListener archive = createOnlineArchive(blobStore, listeners, getCrawlMode(), ctx, statementStore);
-
-        while (!statementQueue.isEmpty()) {
-            archive.on(statementQueue.poll());
-        }
-
+        return createOnlineArchive(blobStore, listeners, crawlMode, ctx, statementStore);
     }
 
 
@@ -189,7 +196,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
     }
 
 
-    private StatementListener createOnlineArchive(BlobStore blobStore, StatementListener[] listener, CrawlMode crawlMode, CrawlContext crawlContext, StatementStore statementStore) {
+    private static StatementListener createOnlineArchive(BlobStore blobStore, StatementListener[] listener, CrawlMode crawlMode, CrawlContext crawlContext, StatementStore statementStore) {
         Archiver Archiver = new Archiver(new DereferencerContentAddressed(Resources::asInputStream, blobStore), statementStore, crawlContext, listener);
         Archiver.setResolveOnMissingOnly(CrawlMode.resume == crawlMode);
         return Archiver;

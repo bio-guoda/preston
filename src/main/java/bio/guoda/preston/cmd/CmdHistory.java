@@ -22,7 +22,7 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
         // do not attempt to dig tiny provenance log history files out of tar.gz balls
         setSupportTarGzDiscovery(false);
 
-        StatementListener logger = StatementLogFactory.createLogger(getLogMode());
+        StatementListener logger = StatementLogFactory.createPrintingLogger(getLogMode());
 
         StatementStore statementStore = new StatementStoreImpl(getKeyValueStore());
         AtomicBoolean foundHistory = new AtomicBoolean(false);
