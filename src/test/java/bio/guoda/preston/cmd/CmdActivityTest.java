@@ -13,14 +13,14 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
-public class CmdCrawlTest {
+public class CmdActivityTest {
 
     @Test
     public void findCrawlInfo() {
 
         IRI someCrawlActivity = toIRI("http://example.org/crawl");
 
-        List<Triple> crawlInfo = CmdCrawl.findCrawlInfo(someCrawlActivity);
+        List<Triple> crawlInfo = CmdActivity.findCrawlInfo(someCrawlActivity);
 
         assertFalse(crawlInfo.isEmpty());
 

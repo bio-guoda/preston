@@ -2,7 +2,7 @@ package bio.guoda.preston.store;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
-import bio.guoda.preston.cmd.CrawlContext;
+import bio.guoda.preston.cmd.ActivityContext;
 import bio.guoda.preston.process.BlobStoreReadOnly;
 
 import java.io.IOException;
@@ -24,8 +24,8 @@ public class TestUtil {
         return new BlobStoreAppendOnly(getTestPersistence());
     }
 
-    public static CrawlContext getTestCrawlContext() {
-        return new CrawlContext() {
+    public static ActivityContext getTestCrawlContext() {
+        return new ActivityContext() {
             @Override
             public IRI getActivity() {
                 return toIRI("https://example.com/testActivity");

@@ -44,6 +44,7 @@ import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.AGENT;
 import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
@@ -60,8 +61,8 @@ import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
-public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Crawler {
-    private static final Log LOG = LogFactory.getLog(CmdCrawl.class);
+public abstract class CmdActivity extends LoggingPersisting implements Runnable {
+    private static final Log LOG = LogFactory.getLog(CmdActivity.class);
 
     public static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
     public static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
@@ -92,7 +93,7 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
 
 
     protected void run(BlobStore blobStore, StatementStore datasetRelations, StatementStore logRelations) {
-        CrawlContext ctx = createNewCrawlContext();
+        ActivityContext ctx = createNewActivityContext();
 
         final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, logRelations, ctx);
         try {
@@ -122,17 +123,16 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
             }
 
             StatementListener printingLogger = StatementLogFactory.createPrintingLogger(getLogMode(), System.out);
-            StatementListener processor = createStatementProcessor(
-                    blobStore,
-                    ctx,
-                    archivingLogger,
-                    datasetRelations,
-                    statementQueue::add,
-                    getCrawlMode(),
-                    printingLogger);
+
+            StatementListener[] listeners = Stream.concat(
+                    createProcessors(blobStore, statementQueue::add),
+                    createLoggers(archivingLogger, printingLogger)
+            ).toArray(StatementListener[]::new);
+
+            StatementListener archiver = createActivityProcessor(blobStore, ctx, listeners);
 
             while (!statementQueue.isEmpty()) {
-                processor.on(statementQueue.poll());
+                archiver.on(statementQueue.poll());
             }
 
             archivingLogger.stop();
@@ -143,29 +143,38 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
         }
     }
 
-    public static StatementListener createStatementProcessor(BlobStore blobStore, CrawlContext ctx, StatementListener statementLoggerNQuads, StatementStore statementStore, StatementListener queueAsListener, CrawlMode crawlMode, StatementListener logger) {
-        StatementListener[] listeners = {
+    private StatementListener createActivityProcessor(BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
+        return new Archiver(
+                        new DereferencerContentAddressed(Resources::asInputStream, blobStore),
+                        ctx,
+                        listeners);
+    }
+
+    private Stream<StatementListener> createLoggers(ArchivingLogger archivingLogger, StatementListener printingLogger) {
+        return Stream.of(
+                printingLogger,
+                archivingLogger);
+    }
+
+    private static Stream<StatementListener> createProcessors(BlobStore blobStore, StatementListener queueAsListener) {
+        return Stream.of(
                 new RegistryReaderIDigBio(blobStore, queueAsListener),
                 new RegistryReaderGBIF(blobStore, queueAsListener),
                 new RegistryReaderBioCASE(blobStore, queueAsListener),
                 new RegistryReaderDataONE(blobStore, queueAsListener),
                 new RegistryReaderRSS(blobStore, queueAsListener),
-                new RegistryReaderBHL(blobStore, queueAsListener),
-                logger,
-                statementLoggerNQuads
-        };
-
-        return createOnlineArchive(blobStore, listeners, crawlMode, ctx, statementStore);
+                new RegistryReaderBHL(blobStore, queueAsListener)
+        );
     }
 
 
-    private CrawlContext createNewCrawlContext() {
-        return new CrawlContext() {
-            private final IRI crawlActivity = toIRI(UUID.randomUUID());
+    private ActivityContext createNewActivityContext() {
+        return new ActivityContext() {
+            private final IRI activity = toIRI(UUID.randomUUID());
 
             @Override
             public IRI getActivity() {
-                return crawlActivity;
+                return activity;
             }
 
         };
@@ -195,12 +204,6 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
         );
     }
 
-
-    private static StatementListener createOnlineArchive(BlobStore blobStore, StatementListener[] listener, CrawlMode crawlMode, CrawlContext crawlContext, StatementStore statementStore) {
-        Archiver Archiver = new Archiver(new DereferencerContentAddressed(Resources::asInputStream, blobStore), statementStore, crawlContext, listener);
-        Archiver.setResolveOnMissingOnly(CrawlMode.resume == crawlMode);
-        return Archiver;
-    }
 
     private static class LoggerExitHook extends Thread {
 
@@ -251,12 +254,12 @@ public abstract class CmdCrawl extends LoggingPersisting implements Runnable, Cr
     private class ArchivingLogger implements StatementListener {
         private final BlobStore blobStore;
         private final StatementStore statementStore;
-        private final CrawlContext ctx;
+        private final ActivityContext ctx;
         File tmpArchive;
         PrintStream printStream;
         StatementListener listener;
 
-        public ArchivingLogger(BlobStore blobStore, StatementStore statementStore, CrawlContext ctx) {
+        public ArchivingLogger(BlobStore blobStore, StatementStore statementStore, ActivityContext ctx) {
             this.blobStore = blobStore;
             this.statementStore = statementStore;
             this.ctx = ctx;

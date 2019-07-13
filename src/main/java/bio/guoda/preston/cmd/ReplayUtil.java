@@ -70,7 +70,6 @@ public final class ReplayUtil {
         };
         StatementListener offlineArchive = new Archiver(
                 new DereferencerContentAddressed(null, blobStore),
-                readOnlyStatementStore,
                 null,
                 reader);
 

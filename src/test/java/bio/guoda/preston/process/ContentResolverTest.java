@@ -52,7 +52,7 @@ public class ContentResolverTest {
     }
 
     private Archiver createStatementStore(StatementListener... listeners) {
-        return new Archiver(new DereferencerContentAddressed(Resources::asInputStream, blobStore), new StatementStoreImpl(persistence), TestUtil.getTestCrawlContext(), listeners);
+        return new Archiver(new DereferencerContentAddressed(Resources::asInputStream, blobStore), TestUtil.getTestCrawlContext(), listeners);
     }
 
     @After
