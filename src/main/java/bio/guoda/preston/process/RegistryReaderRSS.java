@@ -45,9 +45,12 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
     private void parse(IRI iri) {
         try {
             // first parse document to check whether it is valid
-            new XmlMapper().readTree(get(iri));
-            /// then parse
-            parseRssFeed(iri, this, get(iri));
+            InputStream in = get(iri);
+            if (in != null) {
+                new XmlMapper().readTree(in);
+                /// then parse
+                parseRssFeed(iri, this, in);
+            }
         } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
             // ignore - opportunistic parsing attempt
         }
