@@ -69,7 +69,10 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
                 && getVersionSource(statement).toString().contains(DATA_ONE_URL_QUERY_PREFIX)) {
             try {
                 IRI currentPage = (IRI) getVersion(statement);
-                parse(currentPage, this, get(currentPage), getVersionSource(statement));
+                InputStream in = get(currentPage);
+                if (in != null) {
+                    parse(currentPage, this, in, getVersionSource(statement));
+                }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }

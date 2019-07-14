@@ -62,7 +62,10 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 && getVersionSource(statement).toString().contains(GBIF_API_URL_PART)) {
             try {
                 IRI currentPage = (IRI) getVersion(statement);
-                parse(currentPage, this, get(currentPage), getVersionSource(statement));
+                InputStream is = get(currentPage);
+                if (is != null) {
+                    parse(currentPage, this, is, getVersionSource(statement));
+                }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }

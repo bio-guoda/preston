@@ -86,7 +86,10 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     private void parsePublishers(IRI refNode) {
         try {
-            parsePublishers(refNode, this, get(refNode));
+            InputStream is = get(refNode);
+            if (is != null) {
+                parsePublishers(refNode, this, is);
+            }
         } catch (IOException e) {
             LOG.warn("failed to parse [" + refNode.toString() + "]", e);
         }

@@ -66,7 +66,10 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
                 && getVersionSource(statement).toString().contains(BHL_API_URL_PART)) {
             try {
                 IRI version = (IRI) getVersion(statement);
-                parse(this, get(version), version);
+                InputStream in = get(version);
+                if (in != null) {
+                    parse(this, in, version);
+                }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
