@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementListener;
@@ -11,9 +10,15 @@ import org.apache.commons.rdf.api.Triple;
 
 import java.util.Queue;
 
-import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
+/**
+ * Command to (re-) process biodiversity dataset graph by providing some existing provenance logs.
+ *
+ * Only considers already tracked datasets and their provenance.
+ *
+ * See https://github.com/bio-guoda/preston/issues/15 .
+ */
 
-@Parameters(separators = "= ", commandDescription = "(re-)process biodiversity dataset provenance logs using stdin")
+@Parameters(separators = "= ", commandDescription = "(re-)process tracked biodiversity dataset graph using stdin")
 public class CmdProcess extends CmdActivity  {
 
     @Override
