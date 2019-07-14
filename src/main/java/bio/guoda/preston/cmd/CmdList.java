@@ -9,7 +9,7 @@ import com.beust.jcommander.Parameters;
 
 import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 
-@Parameters(separators = "= ", commandDescription = "show biodiversity data provenance logs")
+@Parameters(separators = "= ", commandDescription = "show biodiversity dataset provenance logs")
 public class CmdList extends LoggingPersisting implements Runnable {
 
     @Override

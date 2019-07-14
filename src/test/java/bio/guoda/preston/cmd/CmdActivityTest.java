@@ -20,7 +20,7 @@ public class CmdActivityTest {
 
         IRI someCrawlActivity = toIRI("http://example.org/crawl");
 
-        List<Triple> crawlInfo = CmdActivity.findCrawlInfo(someCrawlActivity);
+        List<Triple> crawlInfo = CmdActivity.findActivityInfo(someCrawlActivity);
 
         assertFalse(crawlInfo.isEmpty());
 

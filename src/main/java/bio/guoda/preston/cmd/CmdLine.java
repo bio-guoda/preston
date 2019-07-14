@@ -56,6 +56,7 @@ public class CmdLine {
                 .addCommand("cp", new CmdCopyTo(), "copyTo", "export")
                 .addCommand("clone", new CmdClone(), "pull")
                 .addCommand("update", new CmdUpdate(), "track")
+                .addCommand("process", new CmdProcess(), "handle")
                 .addCommand("history", new CmdHistory())
                 .addCommand("version", new CmdVersion())
                 .addCommand("test", new CmdVerify(), "verify", "check", "validate")

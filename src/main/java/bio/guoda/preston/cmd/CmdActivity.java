@@ -1,7 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.Resources;
-import bio.guoda.preston.Seeds;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.RegistryReaderBHL;
@@ -12,16 +10,13 @@ import bio.guoda.preston.process.RegistryReaderIDigBio;
 import bio.guoda.preston.process.RegistryReaderRSS;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
-import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
-import bio.guoda.preston.store.DereferencerContentAddressed;
 import bio.guoda.preston.store.KeyGeneratingStream;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
 import bio.guoda.preston.store.VersionUtil;
-import com.beust.jcommander.Parameter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -37,13 +32,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.AGENT;
@@ -55,8 +48,6 @@ import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.PRESTON;
 import static bio.guoda.preston.RefNodeConstants.SOFTWARE_AGENT;
 import static bio.guoda.preston.RefNodeConstants.USED_BY;
-import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
-import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
@@ -67,18 +58,6 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     public static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
     public static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
 
-    @Parameter(names = {"-u", "--seed-uris"}, description = "starting points for graph discovery. Only active when no content urls are provided.", validateWith = URIValidator.class)
-    private List<String> seedUrls = new ArrayList<String>() {{
-        add(Seeds.IDIGBIO.getIRIString());
-        add(Seeds.GBIF.getIRIString());
-        add(Seeds.BIOCASE.getIRIString());
-        //add(Seeds.DATA_ONE.getIRIString());
-    }};
-
-    @Parameter(description = "[url1] [url2] ...",
-            validateWith = IRIValidator.class)
-    private List<String> IRIs = new ArrayList<>();
-
 
     @Override
     public void run() {
@@ -88,11 +67,11 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
         KeyValueStore logRelationsStore = getKeyValueStore();
 
-        run(blobStore, new StatementStoreImpl(new NullKeyValueStore()), new StatementStoreImpl(logRelationsStore));
+        run(blobStore, new StatementStoreImpl(logRelationsStore));
     }
 
 
-    protected void run(BlobStore blobStore, StatementStore datasetRelations, StatementStore logRelations) {
+    protected void run(BlobStore blobStore, StatementStore logRelations) {
         ActivityContext ctx = createNewActivityContext();
 
         final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, logRelations, ctx);
@@ -104,7 +83,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
             final Queue<Triple> statementQueue =
                     new ConcurrentLinkedQueue<Triple>() {
                         {
-                            addAll(findCrawlInfo(ctx.getActivity()));
+                            addAll(findActivityInfo(ctx.getActivity()));
                             addPreviousVersionReference();
                         }
 
@@ -116,11 +95,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                         }
                     };
 
-            if (IRIs.isEmpty()) {
-                statementQueue.addAll(generateSeeds(ctx.getActivity()));
-            } else {
-                IRIs.forEach(iri -> statementQueue.add(toStatement(toIRI(iri), HAS_VERSION, toBlank())));
-            }
+            initQueue(statementQueue, ctx);
 
             StatementListener printingLogger = StatementLogFactory.createPrintingLogger(getLogMode(), System.out);
 
@@ -129,11 +104,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                     createLoggers(archivingLogger, printingLogger)
             ).toArray(StatementListener[]::new);
 
-            StatementListener archiver = createActivityProcessor(blobStore, ctx, listeners);
-
-            while (!statementQueue.isEmpty()) {
-                archiver.on(statementQueue.poll());
-            }
+            processQueue(statementQueue, blobStore, ctx, listeners);
 
             archivingLogger.stop();
         } catch (IOException ex) {
@@ -143,12 +114,10 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         }
     }
 
-    private StatementListener createActivityProcessor(BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
-        return new Archiver(
-                        new DereferencerContentAddressed(Resources::asInputStream, blobStore),
-                        ctx,
-                        listeners);
-    }
+    abstract void initQueue(Queue<Triple> statementQueue, ActivityContext ctx);
+
+    abstract void processQueue(Queue<Triple> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners);
+
 
     private Stream<StatementListener> createLoggers(ArchivingLogger archivingLogger, StatementListener printingLogger) {
         return Stream.of(
@@ -179,14 +148,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
         };
     }
-
-    private List<Triple> generateSeeds(final IRI crawlActivity) {
-        return seedUrls.stream()
-                .map((String uriString) -> toStatement(toIRI(uriString), WAS_ASSOCIATED_WITH, crawlActivity))
-                .collect(Collectors.toList());
-    }
-
-    static List<Triple> findCrawlInfo(IRI crawlActivity) {
+    static List<Triple> findActivityInfo(IRI crawlActivity) {
 
         return Arrays.asList(
                 toStatement(PRESTON, IS_A, SOFTWARE_AGENT),
