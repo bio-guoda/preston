@@ -1,14 +1,13 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.RefNodeConstants;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
-import bio.guoda.preston.RefNodeConstants;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.util.List;
 
-import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -20,7 +19,17 @@ public class CmdActivityTest {
 
         IRI someCrawlActivity = toIRI("http://example.org/crawl");
 
-        List<Triple> crawlInfo = CmdActivity.findActivityInfo(someCrawlActivity);
+        List<Triple> crawlInfo = CmdActivity.findActivityInfo(new ActivityContext() {
+            @Override
+            public IRI getActivity() {
+                return someCrawlActivity;
+            }
+
+            @Override
+            public String getDescription() {
+                return "this is an example crawl";
+            }
+        });
 
         assertFalse(crawlInfo.isEmpty());
 

@@ -31,6 +31,11 @@ public class TestUtil {
                 return toIRI("https://example.com/testActivity");
             }
 
+            @Override
+            public String getDescription() {
+                return "this is a test activity";
+            }
+
         };
     }
 }
