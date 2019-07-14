@@ -12,7 +12,6 @@ import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
-import bio.guoda.preston.store.KeyGeneratingStream;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
@@ -29,7 +28,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -55,8 +53,8 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 public abstract class CmdActivity extends LoggingPersisting implements Runnable {
     private static final Log LOG = LogFactory.getLog(CmdActivity.class);
 
-    public static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
-    public static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
+    private static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
+    private static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
 
 
     @Override
@@ -72,7 +70,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
 
     protected void run(BlobStore blobStore, StatementStore logRelations) {
-        ActivityContext ctx = createNewActivityContext();
+        ActivityContext ctx = createNewActivityContext(getActivityDescription());
 
         final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, logRelations, ctx);
         try {
@@ -83,7 +81,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
             final Queue<Triple> statementQueue =
                     new ConcurrentLinkedQueue<Triple>() {
                         {
-                            addAll(findActivityInfo(ctx.getActivity()));
+                            addAll(findActivityInfo(ctx));
                             addPreviousVersionReference();
                         }
 
@@ -137,7 +135,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     }
 
 
-    private ActivityContext createNewActivityContext() {
+    private ActivityContext createNewActivityContext(String activityDescription) {
         return new ActivityContext() {
             private final IRI activity = toIRI(UUID.randomUUID());
 
@@ -146,9 +144,14 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                 return activity;
             }
 
+            @Override
+            public String getDescription() { return activityDescription; };
+
         };
     }
-    static List<Triple> findActivityInfo(IRI crawlActivity) {
+    static List<Triple> findActivityInfo(ActivityContext activity) {
+
+        IRI crawlActivity = activity.getActivity();
 
         return Arrays.asList(
                 toStatement(PRESTON, IS_A, SOFTWARE_AGENT),
@@ -157,7 +160,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
 
                 toStatement(crawlActivity, IS_A, ACTIVITY),
-                toStatement(crawlActivity, DESCRIPTION, toEnglishLiteral("A crawl event that discovers biodiversity archives.")),
+                toStatement(crawlActivity, DESCRIPTION, toEnglishLiteral(activity.getDescription())),
                 toStatement(crawlActivity, toIRI("http://www.w3.org/ns/prov#startedAtTime"), RefNodeFactory.nowDateTimeLiteral()),
                 toStatement(crawlActivity, toIRI("http://www.w3.org/ns/prov#wasStartedBy"), PRESTON),
 
@@ -166,6 +169,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         );
     }
 
+    abstract String getActivityDescription();
 
     private static class LoggerExitHook extends Thread {
 
@@ -183,33 +187,6 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
             } finally {
                 archivingLogger.destroy();
             }
-        }
-    }
-
-    private static class NullKeyValueStore implements KeyValueStore {
-        @Override
-        public void put(String key, String value) throws IOException {
-
-        }
-
-        @Override
-        public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
-            if (is != null) {
-                is.close();
-            }
-            return null;
-        }
-
-        @Override
-        public void put(String key, InputStream is) throws IOException {
-            if (is != null) {
-                is.close();
-            }
-        }
-
-        @Override
-        public InputStream get(String key) throws IOException {
-            return null;
         }
     }
 

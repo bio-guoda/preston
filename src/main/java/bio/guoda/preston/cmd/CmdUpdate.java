@@ -10,6 +10,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
+import org.apache.jena.ext.com.google.common.annotations.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,12 @@ public class CmdUpdate extends CmdActivity {
             processor.on(statementQueue.poll());
         }
     }
+
+    @Override
+    String getActivityDescription() {
+        return "A crawl event that discovers biodiversity archives.";
+    }
+
 
     private StatementListener createActivityProcessor(BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
         return new Archiver(

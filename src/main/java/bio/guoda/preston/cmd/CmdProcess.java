@@ -12,14 +12,14 @@ import java.util.Queue;
 
 /**
  * Command to (re-) process biodiversity dataset graph by providing some existing provenance logs.
- *
+ * <p>
  * Only considers already tracked datasets and their provenance.
- *
+ * <p>
  * See https://github.com/bio-guoda/preston/issues/15 .
  */
 
 @Parameters(separators = "= ", commandDescription = "(re-)process tracked biodiversity dataset graph using stdin")
-public class CmdProcess extends CmdActivity  {
+public class CmdProcess extends CmdActivity {
 
     @Override
     void initQueue(Queue<Triple> statementQueue, ActivityContext ctx) {
@@ -40,6 +40,12 @@ public class CmdProcess extends CmdActivity  {
         new EmittingStreamRDF(emitter).parseAndEmit(System.in);
 
     }
+
+    @Override
+    String getActivityDescription() {
+        return "An event that (re-) processes existing biodiversity datasets graphs and their provenance.";
+    }
+
 
     private void handleStatement(Triple statement, StatementListener[] listeners) {
         if (!(statement.getSubject() instanceof BlankNode) && !(statement.getObject() instanceof BlankNode)) {

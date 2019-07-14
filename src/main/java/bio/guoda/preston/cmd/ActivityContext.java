@@ -6,4 +6,5 @@ public interface ActivityContext {
 
     IRI getActivity();
 
+    String getDescription();
 }
