@@ -12,11 +12,14 @@ import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Triple;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import static bio.guoda.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.WAS_GENERATED_BY;
 import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
+import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toSkolemizedBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
@@ -53,21 +56,30 @@ public class Archiver extends VersionProcessor {
     }
 
     private void putVersion(IRI versionSource, BlankNodeOrIRI newVersion) throws IOException {
-        emitGenerationTime(newVersion);
-        emit(toStatement(versionSource, HAS_VERSION, newVersion));
-    }
-
-    private void emitGenerationTime(BlankNodeOrIRI derivedSubject) throws IOException {
         Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
-        emit(toStatement(derivedSubject,
+        emit(toStatement(newVersion,
                 GENERATED_AT_TIME,
                 nowLiteral));
 
         if (activityCtx != null) {
-            emit(toStatement(derivedSubject,
+            emit(toStatement(newVersion,
                     WAS_GENERATED_BY,
                     activityCtx.getActivity()));
+            IRI downloadActivity = toIRI(UUID.randomUUID());
+            emit(toStatement(newVersion,
+                    toIRI("http://www.w3.org/ns/prov#qualifiedGeneration"),
+                    downloadActivity));
+            emit(toStatement(downloadActivity,
+                    IS_A,
+                    toIRI("http://www.w3.org/ns/prov#Generation")));
+            emit(toStatement(downloadActivity,
+                    toIRI("http://www.w3.org/ns/prov#activity"),
+                    (activityCtx.getActivity())));
+            emit(toStatement(downloadActivity,
+                    toIRI("http://www.w3.org/ns/prov#used"),
+                    versionSource));
         }
+        emit(toStatement(versionSource, HAS_VERSION, newVersion));
     }
 
     private Dereferencer<IRI> getDereferencer() {

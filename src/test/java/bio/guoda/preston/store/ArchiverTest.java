@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.cmd.ActivityContext;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.StatementListener;
 import org.apache.commons.lang3.tuple.Pair;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.model.RefNodeFactory.isBlankOrSkolemizedBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
@@ -24,7 +26,10 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
@@ -114,6 +119,46 @@ public class ArchiverTest {
                 Pair.of(toIRI(URI.create("http://some")), HAS_VERSION));
 
         assertThat(contentHash.getIRIString(), containsString("/.well-known/genid/"));
+    }
+
+    @Test
+    public void includeGenerationActivity() throws IOException {
+        Triple statement = toStatement(toIRI(URI.create("http://some")),
+                HAS_VERSION,
+                toBlank());
+
+        AtomicBoolean triedDereferencing = new AtomicBoolean(false);
+
+        Dereferencer<IRI> dereferencer = uri -> {
+            triedDereferencing.set(true);
+            return toIRI("hash://sha256/bla");
+        };
+
+        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
+
+        List<Triple> nodes = new ArrayList<>();
+
+        StatementStoreImpl versionStore = new StatementStoreImpl(testKeyValueStore);
+
+        ActivityContext testCrawlContext = TestUtil.getTestCrawlContext();
+        Archiver relationStore = new Archiver(
+                dereferencer,
+                testCrawlContext,
+                nodes::add,
+                createVersionLogger(versionStore));
+
+        relationStore.on(statement);
+
+        assertTrue(triedDereferencing.get());
+        assertThat(nodes.size(), Is.is(7));
+
+        assertThat(nodes.get(2).toString(), startsWith("<hash://sha256/bla> <http://www.w3.org/ns/prov#qualifiedGeneration> "));
+        String s = nodes.get(3).getSubject().toString();
+        String qualifiedGeneration = s.substring(1, s.length() - 1);
+        assertThat(nodes.get(3), is(toStatement(toIRI(qualifiedGeneration), IS_A, toIRI("http://www.w3.org/ns/prov#Generation"))));
+        assertThat(nodes.get(4), is(toStatement(toIRI(qualifiedGeneration), toIRI("http://www.w3.org/ns/prov#activity"), testCrawlContext.getActivity())));
+        assertThat(nodes.get(5), is(toStatement(toIRI(qualifiedGeneration), toIRI("http://www.w3.org/ns/prov#used"), toIRI("http://some"))));
+        assertThat(nodes.get(6).toString(), is("<http://some> <http://purl.org/pav/hasVersion> <hash://sha256/bla> ."));
     }
 
     @Test
