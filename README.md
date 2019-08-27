@@ -4,7 +4,7 @@
 
  *Named after [Frank W. Preston (1896-1989)](https://en.wikipedia.org/wiki/Frank_W._Preston) and the Prestonian shortfall, one of the "[Seven Shortfalls that Beset Large-Scale Knowledge of Biodiversity](https://doi.org/10.1146/annurev-ecolsys-112414-054400)" as described by [Hortal et al. 2015](https://doi.org/10.1146/annurev-ecolsys-112414-054400). 
 
-[`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](./architecture.md)
+[`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](./architecture.md) / [`funding`](#funding)
 
 Preston is an open-source software system that keeps track of biodiversity datasets. Scientists can use Preston to keep a local, uniquely identifiable, versioned copy of all or parts of [GBIF](https://gbif.org)-indexed datasets. Institutions can use Preston to check that their collections are indexed and available through [iDigBio](https://idigbio.org). Biodiversity informatics researchers can use Preston to perform metadata analysis. And finally, archivists can distribute archives across the world. 
  
@@ -591,3 +591,6 @@ Feel free to join in. All welcome. Open an [issue](https://github.com/bio-guoda/
 ## License
 
 [MIT](LICENSE)
+
+## Funding
+This work is funded in part by grant [NSF OAC 1839201](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1839201&HistoricalAwards=false) from the National Science Foundation.
