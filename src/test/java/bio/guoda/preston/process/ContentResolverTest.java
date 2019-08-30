@@ -41,13 +41,12 @@ public class ContentResolverTest {
     private BlobStoreAppendOnly blobStore;
     private Path tempDir;
     private Path datasetDir;
-    private KeyValueStoreLocalFileSystem persistence;
 
     @Before
     public void init() throws IOException {
         tempDir = Files.createTempDirectory(Paths.get("target/"), "caching");
         datasetDir = Files.createTempDirectory(Paths.get("target/"), "datasets");
-        this.persistence = new KeyValueStoreLocalFileSystem(tempDir.toFile(), new KeyTo3LevelPath(datasetDir.toFile().toURI()));
+        KeyValueStoreLocalFileSystem persistence = new KeyValueStoreLocalFileSystem(tempDir.toFile(), new KeyTo3LevelPath(datasetDir.toFile().toURI()));
         this.blobStore = new BlobStoreAppendOnly(persistence);
     }
 
