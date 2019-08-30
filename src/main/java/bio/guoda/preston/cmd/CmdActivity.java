@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.Preston;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.RegistryReaderBHL;
@@ -44,6 +45,7 @@ import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.PRESTON;
+import static bio.guoda.preston.RefNodeConstants.PRESTON_URI;
 import static bio.guoda.preston.RefNodeConstants.SOFTWARE_AGENT;
 import static bio.guoda.preston.RefNodeConstants.USED_BY;
 import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
@@ -55,6 +57,8 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
     private static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
     private static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
+    public static final String PRESTON_DOI = "https://doi.org/10.5281/zenodo.1410543";
+    public static final IRI PRESTON_DOI_IRI = toIRI(PRESTON_DOI);
 
 
     @Override
@@ -153,6 +157,9 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
         IRI crawlActivity = activity.getActivity();
 
+
+        String version = Preston.getVersion(null);
+        String versionString = version == null ? "" : (" (Version " + Preston.getVersion() + ")");
         return Arrays.asList(
                 toStatement(PRESTON, IS_A, SOFTWARE_AGENT),
                 toStatement(PRESTON, IS_A, AGENT),
@@ -163,6 +170,13 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                 toStatement(crawlActivity, DESCRIPTION, toEnglishLiteral(activity.getDescription())),
                 toStatement(crawlActivity, toIRI("http://www.w3.org/ns/prov#startedAtTime"), RefNodeFactory.nowDateTimeLiteral()),
                 toStatement(crawlActivity, toIRI("http://www.w3.org/ns/prov#wasStartedBy"), PRESTON),
+
+
+                toStatement(PRESTON_DOI_IRI, USED_BY, crawlActivity),
+                toStatement(PRESTON_DOI_IRI, IS_A, toIRI("http://purl.org/dc/dcmitype/Software")),
+                toStatement(PRESTON_DOI_IRI,
+                        toIRI("http://purl.org/dc/terms/bibliographicCitation"),
+                        toEnglishLiteral("Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2019. Preston: a biodiversity dataset tracker" + versionString + " [Software]. Zenodo. http://doi.org/10.5281/zenodo.3334454")),
 
                 toStatement(ARCHIVE, IS_A, ENTITY),
                 toStatement(ARCHIVE, DESCRIPTION, toEnglishLiteral("A biodiversity dataset graph archive."))
