@@ -45,7 +45,6 @@ import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.PRESTON;
-import static bio.guoda.preston.RefNodeConstants.PRESTON_URI;
 import static bio.guoda.preston.RefNodeConstants.SOFTWARE_AGENT;
 import static bio.guoda.preston.RefNodeConstants.USED_BY;
 import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;

@@ -29,7 +29,7 @@ public class Archiver extends VersionProcessor {
 
     private final ActivityContext activityCtx;
 
-    private Dereferencer<IRI> dereferencer;
+    private final Dereferencer<IRI> dereferencer;
 
     public Archiver(Dereferencer<IRI> dereferencer, ActivityContext activityCtx, StatementListener... listener) {
         super(listener);
