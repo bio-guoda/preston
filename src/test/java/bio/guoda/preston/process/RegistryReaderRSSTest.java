@@ -150,7 +150,7 @@ public class RegistryReaderRSSTest {
         assertTrue(hasEMLLink);
         assertTrue(hasDWCA);
         assertTrue(hasDWCALink);
-        assertThat(nodes.size(), is(966));
+        assertThat(nodes.size(), is(1128));
     }
 
 
