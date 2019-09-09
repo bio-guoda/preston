@@ -48,6 +48,38 @@ public class RegistryReaderRSSTest {
         assertThat(actual, is(expected));
     }
 
+
+    @Test
+    public void parseArthopodEasyFeeds() throws XMLStreamException, IOException, ParserConfigurationException, SAXException, XPathExpressionException {
+        IRI parent = RefNodeFactory.toIRI("http://example.org");
+        List<Triple> nodes = new ArrayList<>();
+        StatementEmitter emitter = nodes::add;
+        InputStream is = getClass().getResourceAsStream("arthropodEasyCapture.xml");
+
+        RegistryReaderRSS.parseRssFeed(parent, emitter, is);
+
+        assertThat(nodes.size(), is(21));
+
+        List<String> actual = nodes.stream().limit(3).map(Object::toString).collect(Collectors.toList());
+
+        List<String> expected = Arrays.asList(
+                "<http://example.org> <http://www.w3.org/ns/prov#hadMember> <urn:uuid:f0cec69a-853c-11e4-8259-0026552be7ea> .",
+                "<urn:uuid:f0cec69a-853c-11e4-8259-0026552be7ea> <http://www.w3.org/ns/prov#hadMember> <http://amnh.begoniasociety.org/dwc/AEC-TTD-TCN_DwC-A20160308.eml> .",
+                "<http://amnh.begoniasociety.org/dwc/AEC-TTD-TCN_DwC-A20160308.eml> <http://purl.org/dc/elements/1.1/format> \"application/eml\" ."
+        );
+
+        assertThat(actual, is(expected));
+
+        actual = nodes.stream().skip(4).limit(2).map(Object::toString).collect(Collectors.toList());
+
+        expected = Arrays.asList(
+                "<urn:uuid:f0cec69a-853c-11e4-8259-0026552be7ea> <http://www.w3.org/ns/prov#hadMember> <http://amnh.begoniasociety.org/dwc/AEC-TTD-TCN_DwC-A20160308.zip> .",
+                "<http://amnh.begoniasociety.org/dwc/AEC-TTD-TCN_DwC-A20160308.zip> <http://purl.org/dc/elements/1.1/format> \"application/dwca\" ."
+        );
+
+        assertThat(actual, is(expected));
+    }
+
     @Test
     public void parseSymbiotaFeeds() throws XMLStreamException, IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");

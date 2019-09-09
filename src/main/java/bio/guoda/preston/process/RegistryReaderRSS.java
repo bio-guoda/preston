@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.UUID;
 
 import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
@@ -26,7 +25,6 @@ import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toContentType;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
-import static bio.guoda.preston.model.RefNodeFactory.fromUUID;
 
 public class RegistryReaderRSS extends ProcessorReadOnly {
     public RegistryReaderRSS(BlobStoreReadOnly testBlobStore, StatementListener listener) {
@@ -66,7 +64,7 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
                     URI linkURL = null;
                     URI dwcaURL = null;
                     URI emlURI = null;
-                    UUID uuid = null;
+                    String uuid = null;
                     Node item = nodeList.item(i);
                     NodeList childNodes = item.getChildNodes();
                     for (int j = 0; j < childNodes.getLength(); j++) {
@@ -75,11 +73,7 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
                         String itemValue = child.getTextContent();
 
                         if ("guid".equals(itemName)) {
-                            try {
-                                uuid = UUID.fromString(itemValue);
-                            } catch (IllegalArgumentException ex) {
-                                // ignore
-                            }
+                            uuid = StringUtils.trim(itemValue);
                         } else if (Arrays.asList("ipt_eml", "emllink", "ipt:eml").contains(itemName)) {
                             emlURI = generateURI(emlURI, itemValue);
                         } else if (Arrays.asList("ipt_dwca", "ipt:dwca").contains(itemName)) {
@@ -87,12 +81,12 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
                         } else if ("link".equals(itemName)) {
                             linkURL = generateURI(linkURL, itemValue);
                         } else if (Arrays.asList("type", "archiveType").contains(itemName)) {
-                            isDWCA = StringUtils.equals(itemValue, "DWCA");
+                            isDWCA = StringUtils.equals(StringUtils.lowerCase(StringUtils.trim(itemValue)), "dwca");
                         }
 
                     }
 
-                    IRI archiveParent = uuid == null ? parent1 : fromUUID(uuid.toString());
+                    IRI archiveParent = uuid == null ? parent1 : toIRI(uuid);
                     if (uuid != null) {
                         emitter.emit(toStatement(parent1, HAD_MEMBER, archiveParent));
                     }
@@ -122,7 +116,7 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
 
             public URI generateURI(URI uri, String itemValue) {
                 try {
-                    return URI.create(itemValue);
+                    return URI.create(StringUtils.trim(itemValue));
                 } catch (IllegalArgumentException ex) {
                     // ignore
                 }
