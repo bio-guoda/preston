@@ -1,0 +1,239 @@
+{
+  "total": 3,
+  "results": [
+    {
+      "id": "4354345d-7faf-4376-b326-ffbc04b6b0cd",
+      "url": "http://ipt.obis.org/nonode/resource?r=wod2009",
+      "archive": "http://ipt.obis.org/nonode/archive.do?r=wod2009",
+      "published": "2018-10-01T02:00:00.000Z",
+      "updated": "2019-06-17T11:31:35.660Z",
+      "title": "World Ocean Database 2009",
+      "citation": "Baranova, O.K, T.D. O'Brien, T.P. Boyer and I.V. Smolyar (2009). Plankton data. Chapter 16 in Boyer, T. P., J. I. Antonov , O. K. Baranova, H. E. Garcia, D. R. Johnson, R. A. Locarnini, A. V. Mishonov, T. D. O'Brien, D. Seidov, I. V. Smolyar, M. M. Zweng, 2009. World Ocean Database 2009. S. Levitus, Ed., NOAA Atlas NESDIS 66, U.S. Gov. Printing Office, Wash., D.C., 216 pp., DVDs",
+      "abstract": "Quantitative, qualitative and biomass Plankton measurements.",
+      "intellectualrights": "This work is licensed under a Creative Commons Attribution (CC-BY) 4.0 License",
+      "feed": {
+        "id": "f6ecda39-1165-4b36-86d3-61ada8abd7bb",
+        "url": "http://ipt.obis.org/nonode/rss.do"
+      },
+      "institutes": [
+        {
+          "name": "Intergovernmental Oceanographic Commission of UNESCO",
+          "oceanexpert_id": 6860,
+          "oceanexpert_parent_id": null
+        },
+        {
+          "name": "National Oceanic & Atmospheric Administration, National Marine Fisheries Service",
+          "oceanexpert_id": 13750,
+          "oceanexpert_parent_id": null
+        }
+      ],
+      "contacts": [
+        {
+          "role": null,
+          "type": "contact",
+          "givenname": "Todd",
+          "surname": "O'Brien",
+          "organization": "National Oceanic and Atmospheric Administration; National Marine Fisheries Service; Office of Science and Technology; Marine Ecosystems Division",
+          "position": null,
+          "email": "todd.obrien@noaa.gov",
+          "url": null,
+          "organization_oceanexpert_id": 13750,
+          "type_display": "Contact"
+        },
+        {
+          "role": null,
+          "type": "creator",
+          "givenname": null,
+          "surname": "OBIS Secretariat",
+          "organization": "Intergovernmental Oceanographic Commission of UNESCO",
+          "position": null,
+          "email": "info@iobis.org",
+          "url": "http://www.iobis.org",
+          "organization_oceanexpert_id": 6860,
+          "type_display": "Creator"
+        },
+        {
+          "role": null,
+          "type": "metadataProvider",
+          "givenname": null,
+          "surname": "OBIS Secretariat",
+          "organization": "Intergovernmental Oceanographic Commission of UNESCO",
+          "position": null,
+          "email": "info@iobis.org",
+          "url": "http://www.iobis.org",
+          "organization_oceanexpert_id": 6860,
+          "type_display": "Metadata Provider"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "310922b4-9d0c-4de1-92d7-9b442d34765b",
+          "name": "OBIS Secretariat"
+        }
+      ],
+      "keywords": null,
+      "records": 3117831
+    },
+    {
+      "id": "ad65221f-0539-44aa-925e-4acf62ad0c6a",
+      "url": "http://ipt.vliz.be/eurobis/resource?r=ices_datras_ns_ibts",
+      "archive": "http://ipt.vliz.be/eurobis/archive.do?r=ices_datras_ns_ibts",
+      "published": "2019-09-19T19:43:07.000Z",
+      "updated": "2019-07-12T20:21:09.787Z",
+      "title": "ICES North Sea International Bottom Trawl Survey for commercial fish species",
+      "citation": "Fish trawl survey: ICES North Sea International Bottom Trawl Survey for commercial fish species. ICES Database of trawl surveys (DATRAS). The International Council for the Exploration of the Sea, Copenhagen. 2010. Online source: http://ecosystemdata.ices.dk.",
+      "abstract": "The dataset includes age- and length-based catch per unit effort data for commercial fish species in ICES roundfish areas.\nIn the North Sea the IBTS started in the 1960's as a survey that was directed at juvenile herring and was at that time called the International Young Herring Survey (IYHS).\n\nAs it was gradually realised that the survey also yielded valuable information for other fish species, such as cod and haddock, the objectives were broadened and the survey was renamed into the International Young Fish Survey (IYFS). Besides the IYFS, which was carried out in the first quarter, a number of national surveys developed in the 1970's and 1980's that were mainly carried out in the third quarter. \n\nIn 1990 ICES decided to combine the international and the national surveys into the IBTS. The IBTS is carried out twice per year (1st and 3rd Quarters) since 1997 and on a quarterly basis in the period 1991-1996.\n\nPrior to 1977 there was no standardisation of gear although all ships used bottom trawls with a small mesh cover. In 1977 ICES recommended that all ships should use a GOV trawl as specified by the Institut des Peches Maritimes, Boulogne. A detailed description of the net is to be found in the manual (Anon. 2004). The GOV trawl has been gradually phased in, e.g. in 1979 only 3 vessels were equipped with the GOV trawl, but by 1983 all 8 nations were using this gear. It should be noted that although the gear is now standard, variations in the rigging exist between the various countries. \n\nThe fishing method is also standardized and described in the manual (Anon. 2004). Fishing speed is 4 knots measured as trawl speed over the ground. In 1977 ICES also recommended that the duration of a tow should be reduced from an hour to half an hour with the catch data to be expressed in numbers per hour. All nations accepted this recommendation although it was a number of years before 30 minutes became the standard.",
+      "intellectualrights": "Licence",
+      "feed": {
+        "id": "e3dad797-a123-4e78-8473-5b0a295d3685",
+        "url": "http://ipt.vliz.be/eurobis/rss.do"
+      },
+      "institutes": [
+        {
+          "name": "Vlaams Instituut voor de Zee",
+          "oceanexpert_id": 6223,
+          "oceanexpert_parent_id": null
+        },
+        {
+          "name": "International Council for the Exploration of the Sea",
+          "oceanexpert_id": 10573,
+          "oceanexpert_parent_id": null
+        }
+      ],
+      "contacts": [
+        {
+          "role": "custodianSteward",
+          "type": "associatedParty",
+          "givenname": null,
+          "surname": null,
+          "organization": "International Council for the Exploration of the Sea (ICES)",
+          "position": null,
+          "email": null,
+          "url": null,
+          "organization_oceanexpert_id": 10573,
+          "type_display": "Custodian Steward"
+        },
+        {
+          "role": null,
+          "type": "contact",
+          "givenname": "Neil",
+          "surname": "Holdsworth",
+          "organization": "International Council for the Exploration of the Sea (ICES)",
+          "position": null,
+          "email": "NeilH@ices.dk",
+          "url": null,
+          "organization_oceanexpert_id": 10573,
+          "type_display": "Contact"
+        },
+        {
+          "role": null,
+          "type": "creator",
+          "givenname": "Neil",
+          "surname": "Holdsworth",
+          "organization": "International Council for the Exploration of the Sea (ICES)",
+          "position": null,
+          "email": "NeilH@ices.dk",
+          "url": null,
+          "organization_oceanexpert_id": 10573,
+          "type_display": "Creator"
+        },
+        {
+          "role": null,
+          "type": "metadataProvider",
+          "givenname": null,
+          "surname": "EurOBIS Data Management Team",
+          "organization": "Flanders Marine Institute (VLIZ)",
+          "position": null,
+          "email": "info@eurobis.org",
+          "url": "http://www.eurobis.org",
+          "organization_oceanexpert_id": 6223,
+          "type_display": "Metadata Provider"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "4bf79a01-65a9-4db6-b37b-18434f26ddfc",
+          "name": "EurOBIS"
+        }
+      ],
+      "keywords": [
+        {
+          "keyword": "Occurrence",
+          "thesaurus": "GBIF Dataset Type Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_type.xml"
+        },
+        {
+          "keyword": "Observation",
+          "thesaurus": "GBIF Dataset Subtype Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_subtype.xml"
+        }
+      ],
+      "records": 2960129
+    },
+    {
+      "id": "fd13c964-0fb6-4ef4-ae89-e35fc88a9c77",
+      "url": "http://ipt.iobis.org/afrobis/resource?r=mcm_linefish",
+      "archive": "http://ipt.iobis.org/afrobis/archive.do?r=mcm_linefish",
+      "published": "2018-11-13T15:01:20.000Z",
+      "updated": "2019-09-14T20:28:54.257Z",
+      "title": "Marine and Coastal Management - Linefish Dataset (AfrOBIS)",
+      "citation": "Marine and Coastal Management - Linefish Dataset",
+      "abstract": "Marine and Coastal Management (MCM)'s linefish dataset is collected around the South African Coast, and currently contains 2759599 records of 63 families.",
+      "intellectualrights": "This work is licensed under a Creative Commons Attribution (CC-BY) 4.0 License",
+      "feed": {
+        "id": "052e40a0-84f9-4623-bccf-59ba8aa05a57",
+        "url": "http://ipt.iobis.org/afrobis/rss.do"
+      },
+      "institutes": null,
+      "contacts": [
+        {
+          "role": null,
+          "type": "contact",
+          "givenname": "Chris",
+          "surname": "Wilke",
+          "organization": "Marine and Coastal Management; Department of Environmental Affairs and Tourism",
+          "position": null,
+          "email": "cwilke@deat.gov.za",
+          "url": null,
+          "organization_oceanexpert_id": null,
+          "type_display": "Contact"
+        },
+        {
+          "role": null,
+          "type": "metadataProvider",
+          "givenname": "Ursula",
+          "surname": "von St Ange",
+          "organization": "CSIR / SADCO / AfrOBIS",
+          "position": "Data Manager",
+          "email": "uvstange@csir.co.za",
+          "url": null,
+          "organization_oceanexpert_id": null,
+          "type_display": "Metadata Provider"
+        },
+        {
+          "role": null,
+          "type": "creator",
+          "givenname": null,
+          "surname": null,
+          "organization": "Marine and Coastal Management Department of Environmental Affairs and Tourism",
+          "position": null,
+          "email": null,
+          "url": null,
+          "organization_oceanexpert_id": null,
+          "type_display": "Creator"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "14fc439c-707d-41d6-a3d4-b9d2696205fe",
+          "name": "AfrOBIS"
+        }
+      ],
+      "keywords": [
+        {
+          "keyword": "Occurrence",
+          "thesaurus": "GBIF Dataset Type Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_type.xml"
+        }
+      ],
+      "records": 2744112
+    }
+  ]
+}
