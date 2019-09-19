@@ -567,7 +567,7 @@ Usage: <main class> [command] [command options]
             log format
             Default: nquads
             Possible Values: [tsv, nquads, dots]
-          -u, --seed-uris
+          -u, --seed
             starting points for graph discovery. Only active when no content
             urls are provided.
             Default: [https://idigbio.org, https://gbif.org, http://biocase.org]

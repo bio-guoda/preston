@@ -25,11 +25,12 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 @Parameters(separators = "= ", commandDescription = "update biodiversity dataset graph")
 public class CmdUpdate extends CmdActivity {
 
-    @Parameter(names = {"-u", "--seed-uris"}, description = "starting points for graph discovery. Only active when no content urls are provided.", validateWith = URIValidator.class)
+    @Parameter(names = {"-u", "--seed"}, description = "starting points for graph discovery. Only active when no content urls are provided.", validateWith = URIValidator.class)
     private List<String> seedUrls = new ArrayList<String>() {{
         add(Seeds.IDIGBIO.getIRIString());
         add(Seeds.GBIF.getIRIString());
         add(Seeds.BIOCASE.getIRIString());
+        add(Seeds.OBIS.getIRIString());
         //add(Seeds.DATA_ONE.getIRIString());
     }};
 

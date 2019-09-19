@@ -56,7 +56,7 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
             Stream.of(
                     toStatement(Seeds.OBIS, IS_A, ORGANIZATION),
-                    toStatement(RegistryReaderOBIS.OBIS_REGISTRY, DESCRIPTION, toEnglishLiteral("OBIS is a global open-access data and information clearing-house on marine biodiversity for science, conservation and sustainable development.")),
+                    toStatement(Seeds.OBIS, DESCRIPTION, toEnglishLiteral("OBIS is a global open-access data and information clearing-house on marine biodiversity for science, conservation and sustainable development.")),
                     toStatement(RegistryReaderOBIS.OBIS_REGISTRY, CREATED_BY, Seeds.OBIS))
                     .forEach(this::emit);
             emitPageRequest(this, OBIS_REGISTRY);

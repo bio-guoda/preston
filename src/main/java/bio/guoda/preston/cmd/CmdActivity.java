@@ -8,6 +8,7 @@ import bio.guoda.preston.process.RegistryReaderBioCASE;
 import bio.guoda.preston.process.RegistryReaderDataONE;
 import bio.guoda.preston.process.RegistryReaderGBIF;
 import bio.guoda.preston.process.RegistryReaderIDigBio;
+import bio.guoda.preston.process.RegistryReaderOBIS;
 import bio.guoda.preston.process.RegistryReaderRSS;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
@@ -133,7 +134,8 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                 new RegistryReaderBioCASE(blobStore, queueAsListener),
                 new RegistryReaderDataONE(blobStore, queueAsListener),
                 new RegistryReaderRSS(blobStore, queueAsListener),
-                new RegistryReaderBHL(blobStore, queueAsListener)
+                new RegistryReaderBHL(blobStore, queueAsListener),
+                new RegistryReaderOBIS(blobStore, queueAsListener)
         );
     }
 
