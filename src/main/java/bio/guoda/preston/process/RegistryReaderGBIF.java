@@ -107,14 +107,26 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
             }
         }
 
-        boolean endOfRecords = jsonNode == null || (!jsonNode.has("endOfRecords") || jsonNode.get("endOfRecords").asBoolean(true));
-        if (!endOfRecords && jsonNode.has("offset") && jsonNode.has("limit")) {
+        if (!isEndOfRecords(jsonNode)
+                && jsonNode.has("count")
+                && jsonNode.has("offset")
+                && jsonNode.has("limit")) {
             int offset = jsonNode.get("offset").asInt();
-            int limit = jsonNode.get("limit").asInt();
-            String previousURL = versionSource.getIRIString();
-            emitNextPage(offset + limit, limit, emitter, previousURL);
+            if (offset == 0) {
+                int totalNumberOfRecords = jsonNode.get("count").asInt();
+                int limit = jsonNode.get("limit").asInt();
+                String previousURL = versionSource.getIRIString();
+                for (int i = offset; i < totalNumberOfRecords; i += limit) {
+                    emitNextPage(i + limit, limit, emitter, previousURL);
+                }
+            }
         }
 
+    }
+
+    private static boolean isEndOfRecords(JsonNode jsonNode) {
+        return jsonNode == null
+                || (!jsonNode.has("endOfRecords") || jsonNode.get("endOfRecords").asBoolean(true));
     }
 
     public static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {

@@ -70,9 +70,11 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(18));
-        Triple secondPage = nodes.get(nodes.size() - 1);
+        Assert.assertThat(nodes.size(), is(40656));
+        Triple secondPage = nodes.get(18 - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2>"));
+        Triple lastPage = nodes.get(nodes.size() - 1);
+        assertThat(getVersionSource(lastPage).toString(), is("<https://api.gbif.org/v1/dataset?offset=40640&limit=2>"));
     }
 
     @Test
@@ -133,9 +135,11 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(18));
-        Triple secondPage = nodes.get(nodes.size() - 1);
+        Assert.assertThat(nodes.size(), is(40656));
+        Triple secondPage = nodes.get(18 - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR&offset=2&limit=2>"));
+        Triple lastPage = nodes.get(nodes.size() - 1);
+        assertThat(getVersionSource(lastPage).toString(), is("<https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR&offset=40640&limit=2>"));
     }
 
     @Test
@@ -176,7 +180,7 @@ public class RegistryReaderGBIFTest {
 
         RegistryReaderGBIF.parse(testNode, refNodes::add, getClass().getResourceAsStream(GBIFDATASETS_JSON), toIRI("http://example.org/"));
 
-        assertThat(refNodes.size(), is(18));
+        assertThat(refNodes.size(), is(40656));
 
         Triple refNode = refNodes.get(0);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <6555005d-4594-4a3e-be33-c70e587b63d7> ."));
@@ -206,10 +210,10 @@ public class RegistryReaderGBIFTest {
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <d0df772d-78f4-4602-acf2-7d768798f632> ."));
 
         Triple lastRefNode = refNodes.get(refNodes.size() - 2);
-        assertThat(lastRefNode.toString(), is("<http://example.org/?offset=2&limit=2> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
+        assertThat(lastRefNode.toString(), is("<http://example.org/?offset=40640&limit=2> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
 
         lastRefNode = refNodes.get(refNodes.size() - 1);
-        assertThat(lastRefNode.toString(), startsWith("<http://example.org/?offset=2&limit=2> <http://purl.org/pav/hasVersion> "));
+        assertThat(lastRefNode.toString(), startsWith("<http://example.org/?offset=40640&limit=2> <http://purl.org/pav/hasVersion> "));
 
     }
 
