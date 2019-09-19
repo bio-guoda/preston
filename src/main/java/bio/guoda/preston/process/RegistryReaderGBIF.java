@@ -116,8 +116,8 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 int totalNumberOfRecords = jsonNode.get("count").asInt();
                 int limit = jsonNode.get("limit").asInt();
                 String previousURL = versionSource.getIRIString();
-                for (int i = offset; i < totalNumberOfRecords; i += limit) {
-                    emitNextPage(i + limit, limit, emitter, previousURL);
+                for (int i = limit; i < totalNumberOfRecords; i += limit) {
+                    emitNextPage(i, limit, emitter, previousURL);
                 }
             }
         }
