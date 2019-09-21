@@ -56,6 +56,29 @@ public class RegistryReaderALATest {
     }
 
     @Test
+    public void onRegistry() {
+        ArrayList<Triple> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return getClass().getResourceAsStream("ala-dataresource-reg.json");
+            }
+        };
+        RegistryReaderALA registryReader = new RegistryReaderALA(blobStore, nodes::add);
+
+
+        Triple firstPage = toStatement(toIRI("https://collections.ala.org.au/ws/dataResource?status=dataAvailable"), HAS_VERSION, createTestNode());
+
+        registryReader.on(firstPage);
+
+        Assert.assertThat(nodes.size(), is(2654));
+        Triple secondPage = nodes.get(nodes.size() - 2);
+        assertThat(secondPage.toString(), is("<https://collections.ala.org.au/ws/dataResource/dr8052> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
+        Triple thirdPage = nodes.get(nodes.size() - 1);
+        assertThat(getVersionSource(thirdPage).toString(), is("<https://collections.ala.org.au/ws/dataResource/dr8052>"));
+    }
+
+    @Test
     public void onSingle() {
         ArrayList<Triple> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
@@ -71,9 +94,34 @@ public class RegistryReaderALATest {
 
         registryReader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(4));
-        Triple secondPage = nodes.get(nodes.size() - 1);
-        assertThat(getVersionSource(secondPage).toString(), is("<http://plazi.cs.umb.edu/GgServer/dwca/2924FFB8FFC7C76B4B0B503BFFD8D973.zip>"));
+        Assert.assertThat(nodes.size(), is(2));
+        Triple first = nodes.get(0);
+        assertThat(getVersionSource(first).toString(), is("<http://biocache.ala.org.au/archives/dr6504/dr6504_ror_dwca.zip>"));
+        Triple second = nodes.get(1);
+        assertThat(getVersionSource(second).toString(), is("<https://biocache.ala.org.au/archives/dr6504/dr6504_ror_dwca.zip>"));
+    }
+
+    @Test
+    public void onSingleDwCA() {
+        ArrayList<Triple> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return getClass().getResourceAsStream("ala-dataresource-dwca.json");
+            }
+        };
+        RegistryReaderALA registryReader = new RegistryReaderALA(blobStore, nodes::add);
+
+
+        Triple firstPage = toStatement(toIRI("https://collections.ala.org.au/ws/dataResource/dr6504"), HAS_VERSION, createTestNode());
+
+        registryReader.on(firstPage);
+
+        Assert.assertThat(nodes.size(), is(2));
+        Triple first = nodes.get(0);
+        assertThat(first.toString(), is("<https://biocache.ala.org.au/archives/gbif/dr382/dr382.zip> <http://purl.org/dc/elements/1.1/format> \"application/dwca\" ."));
+        Triple second = nodes.get(1);
+        assertThat(getVersionSource(second).toString(), is("<https://biocache.ala.org.au/archives/gbif/dr382/dr382.zip>"));
     }
 
     private IRI createTestNode() {
