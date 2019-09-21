@@ -35,16 +35,10 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class RegistryReaderOBIS extends ProcessorReadOnly {
-    private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
-        put("DWC_ARCHIVE", MimeTypes.MIME_TYPE_DWCA);
-        put("EML", MimeTypes.MIME_TYPE_EML);
-    }};
-
-
-    public static final String OBIS_API_URL_PART = "//api.obis.org/v3/dataset";
-    public static final String OBIS_DATASET_REGISTRY_STRING = "https:" + OBIS_API_URL_PART;
+    private static final String OBIS_API_URL_PART = "//api.obis.org/v3/dataset";
+    private static final String OBIS_DATASET_REGISTRY_STRING = "https:" + OBIS_API_URL_PART;
     private final Log LOG = LogFactory.getLog(RegistryReaderOBIS.class);
-    public static final IRI OBIS_REGISTRY = toIRI(OBIS_DATASET_REGISTRY_STRING);
+    private static final IRI OBIS_REGISTRY = toIRI(OBIS_DATASET_REGISTRY_STRING);
 
     public RegistryReaderOBIS(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
         super(blobStoreReadOnly, listener);
@@ -74,18 +68,6 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
         }
     }
 
-    static void emitNextPage(int offset, int limit, StatementEmitter emitter, String versionSourceURI) {
-        String nextPageURL = versionSourceURI;
-        nextPageURL = StringUtils.replacePattern(nextPageURL, "limit=[0-9]*", "limit=" + limit);
-        nextPageURL = StringUtils.replacePattern(nextPageURL, "offset=[0-9]*", "offset=" + offset);
-        nextPageURL = StringUtils.contains(nextPageURL, "?") ? nextPageURL : nextPageURL + "?";
-        nextPageURL = StringUtils.contains(nextPageURL, "offset") ? nextPageURL : nextPageURL + "&offset=" + offset;
-        nextPageURL = StringUtils.contains(nextPageURL, "limit") ? nextPageURL : nextPageURL + "&limit=" + limit;
-        nextPageURL = StringUtils.replace(nextPageURL, "?&", "?");
-        IRI nextPage = toIRI(nextPageURL);
-        emitPageRequest(emitter, nextPage);
-    }
-
     private static void emitPageRequest(StatementEmitter emitter, IRI nextPage) {
         Stream.of(
                 toStatement(nextPage, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
@@ -105,7 +87,7 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
 
     }
 
-    public static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
+    private static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
         if (result.has("id")) {
             String uuid = result.get("id").asText();
             IRI datasetUUID = fromUUID(uuid);
@@ -116,7 +98,7 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
         }
     }
 
-    public static void emitArchive(StatementEmitter emitter, JsonNode result, IRI datasetUUID) {
+    private static void emitArchive(StatementEmitter emitter, JsonNode result, IRI datasetUUID) {
         String urlString = result.get("archive").asText();
         IRI dataArchive = toIRI(urlString);
         emitter.emit(toStatement(datasetUUID, HAD_MEMBER, dataArchive));
