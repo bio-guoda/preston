@@ -16,5 +16,6 @@ public final class Seeds {
     public final static IRI BIOCASE = RefNodeFactory.toIRI("http://biocase.org");
     public final static IRI OBIS = RefNodeFactory.toIRI("https://obis.org");
 
-    public final static List<IRI> AVAILABLE = Arrays.asList(GBIF, IDIGBIO, BIOCASE, DATA_ONE, BHL, OBIS);
+    public final static List<IRI> AVAILABLE
+            = Arrays.asList(GBIF, IDIGBIO, BIOCASE, DATA_ONE, BHL, OBIS, ALA);
 }

@@ -36,12 +36,6 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class RegistryReaderBHL extends ProcessorReadOnly {
-    private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
-        put("DWC_ARCHIVE", MimeTypes.MIME_TYPE_DWCA);
-        put("EML", MimeTypes.MIME_TYPE_EML);
-    }};
-
-
     public static final String BHL_API_URL_PART = "//www.biodiversitylibrary.org/data/item.txt";
     public static final String BHL_DATASET_REGISTRY_STRING = "https:" + BHL_API_URL_PART;
     private final Log LOG = LogFactory.getLog(RegistryReaderBHL.class);
@@ -97,7 +91,7 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
                 String barCode = StringUtils.trim(values[barCodeIndex]);
                 if (StringUtils.isNotBlank(barCode)) {
                     submit(emitter, versionSource, barCode, ".txt", MimeTypes.TEXT_UTF8);
-                    //submit(emitter, versionSource, barCode, ".xml", MimeTypes.XML);
+                    // submit(emitter, versionSource, barCode, ".xml", MimeTypes.XML);
                 }
             }
 
