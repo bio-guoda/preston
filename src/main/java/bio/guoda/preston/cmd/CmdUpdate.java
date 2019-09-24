@@ -30,8 +30,6 @@ public class CmdUpdate extends CmdActivity {
         add(Seeds.IDIGBIO.getIRIString());
         add(Seeds.GBIF.getIRIString());
         add(Seeds.BIOCASE.getIRIString());
-        add(Seeds.OBIS.getIRIString());
-        //add(Seeds.DATA_ONE.getIRIString());
     }};
 
     @Parameter(description = "[url1] [url2] ...",
