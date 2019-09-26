@@ -179,7 +179,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                 toStatement(PRESTON_DOI_IRI, IS_A, toIRI("http://purl.org/dc/dcmitype/Software")),
                 toStatement(PRESTON_DOI_IRI,
                         toIRI("http://purl.org/dc/terms/bibliographicCitation"),
-                        toEnglishLiteral("Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2019. Preston: a biodiversity dataset tracker" + versionString + " [Software]. Zenodo. http://doi.org/10.5281/zenodo.3334454")),
+                        toEnglishLiteral("Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2019. Preston: a biodiversity dataset tracker" + versionString + " [Software]. Zenodo. http://doi.org/10.5281/zenodo.1410543")),
 
                 toStatement(ARCHIVE, IS_A, ENTITY),
                 toStatement(ARCHIVE, DESCRIPTION, toEnglishLiteral("A biodiversity dataset graph archive."))
