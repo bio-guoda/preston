@@ -460,9 +460,9 @@ Alternatively, you can download the jar manually and run preston by using comman
 ### Docker
 If you'd like to run Preston inside a docker container so that you don't have to worry about installing/conflicting java dependencies use:
 
-1. download the image ```wget https://github.com/bio-guoda/preston/releases/download/0.1.1/preston.image.tar```
+1. download the image ```wget https://github.com/bio-guoda/preston/releases/download/0.1.4/preston.image.tar```
 2. load the image ```sudo docker load --input preston.image.tar```
-3. run a container, mapping a host volume onto the containers /data folder ```sudo docker run -v [some absolute host dir]/data:/data bio.guoda/preston:0.1.1```
+3. run a container, mapping a host volume onto the containers /data folder ```sudo docker run -v [some absolute host dir]/data:/data bio.guoda/preston:0.1.4```
 4. generation of preston updating / crawl messages like:
 ```
 <https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> .
