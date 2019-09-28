@@ -47,6 +47,22 @@ public class ResourcesTest {
         assertThat(gotBusyMessage.get(), Is.is(true));
     }
 
+    @Test
+    public void followRedirect302WithUnsupportedCertificate() throws IOException {
+        // see https://github.com/bio-guoda/preston/issues/25
+        final AtomicBoolean gotDoneMessage = new AtomicBoolean(false);
+        IRI dataURI = RefNodeFactory.toIRI(URI.create("http://ipt.env.duke.edu/archive.do?r=zd_872"));
+        DerefProgressListener listener = (dataURI1, derefState, read, total) -> {
+            if (DerefState.DONE.equals(derefState)) {
+                gotDoneMessage.set(true);
+            }
+        };
+        try (InputStream is = Resources.asInputStreamIgnore404(dataURI, listener)) {
+            IOUtils.copy(is, new NullOutputStream());
+        }
+        assertThat(gotDoneMessage.get(), Is.is(true));
+    }
+
 
     @Test
     public void dataOneObjectLocationList() throws IOException {

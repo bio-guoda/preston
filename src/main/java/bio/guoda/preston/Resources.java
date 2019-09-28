@@ -10,14 +10,23 @@ import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
+import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -94,6 +103,7 @@ public class Resources {
 
                 return new CountingInputStream(contentStream) {
                     AtomicBoolean isDone = new AtomicBoolean(false);
+
                     @Override
                     public synchronized long skip(long length) throws IOException {
                         long skip = super.skip(length);
@@ -147,11 +157,31 @@ public class Resources {
     private static CloseableHttpClient initClient(RequestConfig.Builder builder) {
         RequestConfig config = builder
                 .build();
-        return HttpClientBuilder.create().setRetryHandler(new DefaultHttpRequestRetryHandler(3, true)).setUserAgent("globalbioticinteractions/" + Preston.getVersion() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)").setDefaultRequestConfig(config).build();
+
+        try {
+            SSLContext build = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+                public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+                    return true;
+                }
+            }).build();
+            return HttpClientBuilder
+                    .create()
+                    .setHostnameVerifier(new AllowAllHostnameVerifier()) // see https://github.com/bio-guoda/preston/issues/25
+                    .setSslcontext(build)
+                    .setRetryHandler(new DefaultHttpRequestRetryHandler(3, true))
+                    .setUserAgent("globalbioticinteractions/" + Preston.getVersion() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)")
+                    .setDefaultRequestConfig(config)
+                    .build();
+        } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
+            throw new IllegalStateException("unexpected ssl exception", e);
+        }
     }
 
     private static RequestConfig.Builder defaultConfig() {
         int soTimeoutMs = 30 * 1000;
-        return RequestConfig.custom().setSocketTimeout(soTimeoutMs).setConnectTimeout(soTimeoutMs);
+        return RequestConfig
+                .custom()
+                .setSocketTimeout(soTimeoutMs)
+                .setConnectTimeout(soTimeoutMs);
     }
 }
