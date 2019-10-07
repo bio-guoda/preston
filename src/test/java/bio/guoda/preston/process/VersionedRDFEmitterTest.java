@@ -1,12 +1,10 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.RDFUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.model.RefNodeFactory;
-import org.apache.jena.atlas.io.IO;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -18,7 +16,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertThat;
 
-public class VersionLoggerTest {
+public class VersionedRDFEmitterTest {
 
     public static final IRI SOME = RefNodeFactory.toIRI("http://some");
     public static final IRI OTHER = RefNodeFactory.toIRI("http://other");
@@ -26,7 +24,7 @@ public class VersionLoggerTest {
     public void replayArchive() {
         List<Triple> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = createBlobStore();
-        VersionLogger reader = new VersionLogger(blobStore, nodes::add);
+        VersionedRDFEmitter reader = new VersionedRDFEmitter(blobStore, nodes::add);
         reader.on(RefNodeFactory
                 .toStatement(RefNodeConstants.ARCHIVE, RefNodeConstants.HAS_VERSION, SOME));
 
@@ -55,7 +53,7 @@ public class VersionLoggerTest {
     public void replayArchiveMultipleVersions() {
         List<Triple> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = createBlobStore();
-        VersionLogger reader = new VersionLogger(blobStore, nodes::add);
+        VersionedRDFEmitter reader = new VersionedRDFEmitter(blobStore, nodes::add);
         reader.on(RefNodeFactory
                 .toStatement(RefNodeConstants.ARCHIVE, RefNodeConstants.HAS_VERSION, RefNodeFactory.toIRI("http://some")));
         reader.on(RefNodeFactory
@@ -95,7 +93,7 @@ public class VersionLoggerTest {
             }
         };
         final StringBuilder actual = new StringBuilder();
-        new VersionLogger(testStore, new StatementListener() {
+        new VersionedRDFEmitter(testStore, new StatementListener() {
             @Override
             public void on(Triple statement) {
                 actual.append(statement.toString());

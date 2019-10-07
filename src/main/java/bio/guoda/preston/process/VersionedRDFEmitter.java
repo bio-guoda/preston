@@ -10,11 +10,11 @@ import org.apache.jena.shared.JenaException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class VersionLogger extends ProcessorReadOnly {
+public class VersionedRDFEmitter extends ProcessorReadOnly {
 
-    private static final Log LOG = LogFactory.getLog(VersionLogger.class);
+    private static final Log LOG = LogFactory.getLog(VersionedRDFEmitter.class);
 
-    public VersionLogger(BlobStoreReadOnly blobStoreReadOnly, StatementListener... listeners) {
+    public VersionedRDFEmitter(BlobStoreReadOnly blobStoreReadOnly, StatementListener... listeners) {
         super(blobStoreReadOnly, listeners);
     }
 
@@ -37,7 +37,8 @@ public class VersionLogger extends ProcessorReadOnly {
     }
 
     void parseAndEmit(InputStream inputStream) {
-        new EmittingStreamRDF(this).parseAndEmit(inputStream);
+        new EmittingStreamRDF(this)
+                .parseAndEmit(inputStream);
     }
 
 

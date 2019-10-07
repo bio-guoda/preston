@@ -11,27 +11,21 @@ import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
 
 public class ArchiverReadOnly extends VersionProcessor {
 
-    private final StatementStoreReadOnly statementStore;
+    private final StatementStoreReadOnly provenanceLogIndex;
 
-    public ArchiverReadOnly(StatementStoreReadOnly statementStore, StatementListener... listeners) {
+    public ArchiverReadOnly(StatementStoreReadOnly provenanceLogIndex, StatementListener... listeners) {
         super(listeners);
-        this.statementStore = statementStore;
+        this.provenanceLogIndex = provenanceLogIndex;
     }
 
     @Override
     void handleBlankVersion(Triple statement, BlankNode blankVersion) throws IOException {
         IRI versionSource = getVersionSource(statement);
-        VersionUtil.findMostRecentVersion(versionSource, getStatementStore(), new VersionListener() {
-
-            @Override
-            public void onVersion(Triple statement) throws IOException {
-                emit(statement);
-            }
-        });
+        VersionUtil.findMostRecentVersion(versionSource, getProvenanceLogIndex(), this::emit);
     }
 
-    private StatementStoreReadOnly getStatementStore() {
-        return statementStore;
+    private StatementStoreReadOnly getProvenanceLogIndex() {
+        return provenanceLogIndex;
     }
 
 }

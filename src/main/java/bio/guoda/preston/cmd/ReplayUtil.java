@@ -1,19 +1,15 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementListener;
-import bio.guoda.preston.process.VersionLogger;
+import bio.guoda.preston.process.VersionedRDFEmitter;
 import bio.guoda.preston.store.ArchiverReadOnly;
-import bio.guoda.preston.store.BlobStore;
-import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreReadOnly;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,16 +28,16 @@ public final class ReplayUtil {
     private static final Log LOG = LogFactory.getLog(ReplayUtil.class);
 
 
-    public static void attemptReplay(final BlobStore blobStore,
-                                     final StatementStoreReadOnly statementStore,
-                                     StatementListener... listeners) {
-        attemptReplay(blobStore, statementStore, ARCHIVE, listeners);
+    static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
+                              final StatementStoreReadOnly provenanceLogIndex,
+                              StatementListener... listeners) {
+        attemptReplay(provenanceLogStore, provenanceLogIndex, ARCHIVE, listeners);
     }
 
-    public static void attemptReplay(final BlobStore blobStore,
-                                     final StatementStoreReadOnly statementStore,
-                                     final IRI provRoot,
-                                     StatementListener... listeners) {
+    static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
+                              final StatementStoreReadOnly provenanceLogIndex,
+                              final IRI provRoot,
+                              StatementListener... listeners) {
 
         final Queue<Triple> statementQueue =
                 new ConcurrentLinkedQueue<Triple>() {{
@@ -52,15 +48,15 @@ public final class ReplayUtil {
         List<StatementListener> statementListeners = new ArrayList<>(Arrays.asList(listeners));
         statementListeners.add(statement -> receivedSomething.set(true));
 
-        // lookup previous archives with the intent to replay
-        VersionLogger reader = new VersionLogger(
-                blobStore,
+        // lookup previous provenance log versions with the intent to replay
+        VersionedRDFEmitter provenanceLogEmitter = new VersionedRDFEmitter(
+                provenanceLogStore,
                 statementListeners.toArray(new StatementListener[0])
         );
 
         StatementListener offlineArchive = new ArchiverReadOnly(
-                statementStore,
-                reader);
+                provenanceLogIndex,
+                provenanceLogEmitter);
 
         while (!statementQueue.isEmpty()) {
             offlineArchive.on(statementQueue.poll());
