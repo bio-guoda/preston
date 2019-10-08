@@ -54,6 +54,11 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
                     getKeyValueStore(),
                     new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI())));
             CloneUtil.clone(new NullKeyValueStore(), copyingKeyValueStoreProv, copyingKeyValueStoreProv);
+        } else if (ArchiveType.provenance_index_only.equals(getArchiveType())) {
+            KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
+                    getKeyValueStore(),
+                    new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI())));
+            CloneUtil.clone(new NullKeyValueStore(), getKeyValueStore(), copyingKeyValueStoreProv);
         } else {
             throw new IllegalStateException("unsupport archive type [" + getArchiveType().name() + "]");
         }

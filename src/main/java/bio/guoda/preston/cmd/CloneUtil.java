@@ -24,10 +24,10 @@ public class CloneUtil {
         clone(keyValueStore, keyValueStore, keyValueStore);
     }
 
-    public static void clone(KeyValueStore blobKeyValueStore, KeyValueStore provenanceLogKeyValueStore, KeyValueStore provenanceKeyValueStore) {
+    public static void clone(KeyValueStore blobKeyValueStore, KeyValueStore provenanceLogKeyValueStore, KeyValueStore provenanceLogIndexKeyValueStore) {
         final BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(blobKeyValueStore);
         final BlobStoreReadOnly provenanceLogStore = new BlobStoreAppendOnly(provenanceLogKeyValueStore);
-        final StatementStoreReadOnly provenanceLogIndex = new StatementStoreImpl(provenanceKeyValueStore);
+        final StatementStoreReadOnly provenanceLogIndex = new StatementStoreImpl(provenanceLogIndexKeyValueStore);
         attemptReplay(provenanceLogStore,
                 provenanceLogIndex,
                 blobToucher(blobStore));
