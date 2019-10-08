@@ -20,7 +20,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
     private String targetDir;
 
     @Parameter(names = {"-a", "--archive-format",}, description = "archive format", converter = ArchiveTypeConverter.class)
-    private ArchiveType archiveType = ArchiveType.three_level_data_dir;
+    private ArchiveType archiveType = ArchiveType.data_provenance_provindex;
 
     protected ArchiveType getArchiveType() {
         return archiveType;
@@ -36,25 +36,22 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         }
         File tmp = getTmpDir();
 
-        if (ArchiveType.three_level_data_dir.equals(getArchiveType())) {
+        if (ArchiveType.data_provenance_provindex.equals(getArchiveType())) {
             KeyValueStore copyingKeyValueStore = new KeyValueStoreCopying(
                     getKeyValueStore(),
                     new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI())));
             CloneUtil.clone(copyingKeyValueStore);
-        } else if (ArchiveType.zenodo.equals(getArchiveType())) {
-            KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
-                    getKeyValueStore(),
-                    new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI())));
+        } else if (ArchiveType.data.equals(getArchiveType())) {
             KeyValueStore copyingKeyValueStoreBlob = new KeyValueStoreCopying(
                     getKeyValueStore(),
                     new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI())));
-            CloneUtil.clone(copyingKeyValueStoreBlob, copyingKeyValueStoreProv, copyingKeyValueStoreProv);
-        } else if (ArchiveType.provenance_only.equals(getArchiveType())) {
+            CloneUtil.clone(copyingKeyValueStoreBlob, getKeyValueStore(), getKeyValueStore());
+        } else if (ArchiveType.provenance.equals(getArchiveType())) {
             KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
                     getKeyValueStore(),
                     new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI())));
-            CloneUtil.clone(new NullKeyValueStore(), copyingKeyValueStoreProv, copyingKeyValueStoreProv);
-        } else if (ArchiveType.provenance_index_only.equals(getArchiveType())) {
+            CloneUtil.clone(new NullKeyValueStore(), copyingKeyValueStoreProv, getKeyValueStore());
+        } else if (ArchiveType.provindex.equals(getArchiveType())) {
             KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
                     getKeyValueStore(),
                     new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI())));
