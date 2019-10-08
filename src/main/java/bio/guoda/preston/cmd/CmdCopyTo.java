@@ -19,8 +19,8 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
     @Parameter(description = "[target directory]")
     private String targetDir;
 
-    @Parameter(names = {"-a", "--archive-format",}, description = "archive format", converter = ArchiveTypeConverter.class)
-    private ArchiveType archiveType = ArchiveType.data_provenance_provindex;
+    @Parameter(names = {"-t", "--type",}, description = "archive type", converter = ArchiveTypeConverter.class)
+    private ArchiveType archiveType = ArchiveType.data_prov_provindex;
 
     protected ArchiveType getArchiveType() {
         return archiveType;
@@ -36,7 +36,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         }
         File tmp = getTmpDir();
 
-        if (ArchiveType.data_provenance_provindex.equals(getArchiveType())) {
+        if (ArchiveType.data_prov_provindex.equals(getArchiveType())) {
             KeyValueStore copyingKeyValueStore = new KeyValueStoreCopying(
                     getKeyValueStore(),
                     new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI())));
@@ -46,7 +46,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
                     getKeyValueStore(),
                     new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI())));
             CloneUtil.clone(copyingKeyValueStoreBlob, getKeyValueStore(), getKeyValueStore());
-        } else if (ArchiveType.provenance.equals(getArchiveType())) {
+        } else if (ArchiveType.prov.equals(getArchiveType())) {
             KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
                     getKeyValueStore(),
                     new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI())));
