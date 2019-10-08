@@ -1,8 +1,9 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.BlobStoreReadOnly;
+import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementListener;
-import bio.guoda.preston.process.VersionedRDFEmitter;
+import bio.guoda.preston.process.VersionedRDFChainEmitter;
 import bio.guoda.preston.store.ArchiverReadOnly;
 import bio.guoda.preston.store.StatementStoreReadOnly;
 import org.apache.commons.logging.Log;
@@ -49,7 +50,7 @@ public final class ReplayUtil {
         statementListeners.add(statement -> receivedSomething.set(true));
 
         // lookup previous provenance log versions with the intent to replay
-        VersionedRDFEmitter provenanceLogEmitter = new VersionedRDFEmitter(
+        VersionedRDFChainEmitter provenanceLogEmitter = new VersionedRDFChainEmitter(
                 provenanceLogStore,
                 statementListeners.toArray(new StatementListener[0])
         );

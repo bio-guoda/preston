@@ -10,23 +10,26 @@ import org.apache.jena.shared.JenaException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class VersionedRDFEmitter extends ProcessorReadOnly {
+public class VersionedRDFChainEmitter extends ProcessorReadOnly {
 
-    private static final Log LOG = LogFactory.getLog(VersionedRDFEmitter.class);
+    private static final Log LOG = LogFactory.getLog(VersionedRDFChainEmitter.class);
 
-    public VersionedRDFEmitter(BlobStoreReadOnly blobStoreReadOnly, StatementListener... listeners) {
+    public VersionedRDFChainEmitter(BlobStoreReadOnly blobStoreReadOnly, StatementListener... listeners) {
         super(blobStoreReadOnly, listeners);
     }
 
     @Override
     public void on(Triple statement) {
         IRI version = VersionUtil.mostRecentVersionForStatement(statement);
+        emitProvenanceLogVersion(version);
+    }
 
+    public void emitProvenanceLogVersion(IRI version) {
         if (version != null) {
             try {
                 InputStream inputStream = get(version);
                 if (inputStream != null) {
-                    parseAndEmit(inputStream);
+                    parseAndEmit(inputStream, this);
                 }
             } catch (IOException e) {
                 LOG.warn("failed to read archive [" + version + "]", e);
@@ -36,8 +39,12 @@ public class VersionedRDFEmitter extends ProcessorReadOnly {
         }
     }
 
-    void parseAndEmit(InputStream inputStream) {
-        new EmittingStreamRDF(this)
+    public void parseAndEmit(InputStream inputStream) {
+        parseAndEmit(inputStream, this);
+    }
+
+    public static void parseAndEmit(InputStream inputStream, final StatementEmitter emitter) {
+        new EmittingStreamRDF(emitter)
                 .parseAndEmit(inputStream);
     }
 

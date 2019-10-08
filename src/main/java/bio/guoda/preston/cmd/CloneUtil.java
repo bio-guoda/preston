@@ -1,10 +1,12 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.StatementStoreImpl;
+import bio.guoda.preston.store.StatementStoreReadOnly;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,9 +21,15 @@ public class CloneUtil {
     private static final Log LOG = LogFactory.getLog(CloneUtil.class);
 
     public static void clone(KeyValueStore keyValueStore) {
-        final BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(keyValueStore);
-        attemptReplay(blobStore,
-                new StatementStoreImpl(keyValueStore),
+        clone(keyValueStore, keyValueStore, keyValueStore);
+    }
+
+    public static void clone(KeyValueStore blobKeyValueStore, KeyValueStore provenanceLogKeyValueStore, KeyValueStore provenanceKeyValueStore) {
+        final BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(blobKeyValueStore);
+        final BlobStoreReadOnly provenanceLogStore = new BlobStoreAppendOnly(provenanceLogKeyValueStore);
+        final StatementStoreReadOnly provenanceLogIndex = new StatementStoreImpl(provenanceKeyValueStore);
+        attemptReplay(provenanceLogStore,
+                provenanceLogIndex,
                 blobToucher(blobStore));
     }
 

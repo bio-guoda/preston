@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertThat;
 
-public class VersionedRDFEmitterTest {
+public class VersionedRDFChainEmitterTest {
 
     public static final IRI SOME = RefNodeFactory.toIRI("http://some");
     public static final IRI OTHER = RefNodeFactory.toIRI("http://other");
@@ -24,7 +24,7 @@ public class VersionedRDFEmitterTest {
     public void replayArchive() {
         List<Triple> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = createBlobStore();
-        VersionedRDFEmitter reader = new VersionedRDFEmitter(blobStore, nodes::add);
+        VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, nodes::add);
         reader.on(RefNodeFactory
                 .toStatement(RefNodeConstants.ARCHIVE, RefNodeConstants.HAS_VERSION, SOME));
 
@@ -53,7 +53,7 @@ public class VersionedRDFEmitterTest {
     public void replayArchiveMultipleVersions() {
         List<Triple> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = createBlobStore();
-        VersionedRDFEmitter reader = new VersionedRDFEmitter(blobStore, nodes::add);
+        VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, nodes::add);
         reader.on(RefNodeFactory
                 .toStatement(RefNodeConstants.ARCHIVE, RefNodeConstants.HAS_VERSION, RefNodeFactory.toIRI("http://some")));
         reader.on(RefNodeFactory
@@ -93,7 +93,7 @@ public class VersionedRDFEmitterTest {
             }
         };
         final StringBuilder actual = new StringBuilder();
-        new VersionedRDFEmitter(testStore, new StatementListener() {
+        new VersionedRDFChainEmitter(testStore, new StatementListener() {
             @Override
             public void on(Triple statement) {
                 actual.append(statement.toString());
