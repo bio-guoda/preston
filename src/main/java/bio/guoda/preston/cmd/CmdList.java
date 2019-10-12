@@ -1,9 +1,8 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
+import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
-import bio.guoda.preston.store.BlobStore;
-import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
 import com.beust.jcommander.Parameters;
 
@@ -23,10 +22,12 @@ public class CmdList extends LoggingPersisting implements Runnable {
     }
 
     public void run(LogErrorHandler handler) {
+        StatementListener listener = StatementLogFactory.createPrintingLogger(getLogMode(), System.out, handler);
+
         attemptReplay(
                 new BlobStoreAppendOnly(getKeyValueStore()),
                 new StatementStoreImpl(getKeyValueStore()),
-                StatementLogFactory.createPrintingLogger(getLogMode(), System.out, handler));
+                new CmdContext(this, listener));
     }
 
 }

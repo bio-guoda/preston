@@ -9,18 +9,20 @@ import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import com.beust.jcommander.Parameter;
 import org.apache.commons.io.FileUtils;
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class PersistingLocal {
+public class PersistingLocal extends Cmd {
 
     @Parameter(names = {"--data-dir"}, description = "location of local content cache")
     private String localDataDir = "data";
 
     @Parameter(names = {"--tmp-dir"}, description = "location of local tmp dir")
     private String localTmpDir = "tmp";
-
 
     File getDefaultDataDir() {
         return getDataDir(getLocalDataDir());
@@ -57,6 +59,5 @@ public class PersistingLocal {
     public String getLocalTmpDir() {
         return localTmpDir;
     }
-
 
 }

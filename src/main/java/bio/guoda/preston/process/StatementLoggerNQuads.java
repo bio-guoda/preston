@@ -24,7 +24,6 @@ public class StatementLoggerNQuads implements StatementListener {
 
     @Override
     public void on(Triple statement) {
-        ReplayUtil.checkAndHandle(out, handler);
         out.println(statement.toString());
     }
 

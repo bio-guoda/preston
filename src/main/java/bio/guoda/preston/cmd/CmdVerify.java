@@ -53,7 +53,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
 
         Map<String, State> verifiedMap = new TreeMap<>();
 
-        attemptReplay(blobStore, statementPersistence, new StatementListener() {
+        StatementListener statementListener = new StatementListener() {
             @Override
             public void on(Triple statement) {
                 final IRI iri = VersionUtil.mostRecentVersionForStatement(statement);
@@ -91,11 +91,13 @@ public class CmdVerify extends PersistingLocal implements Runnable {
                                 (OK_STATES.contains(state) ? "OK" : "FAIL") + "\t" +
                                 state + "\t" +
                                 fileSize);
-                        System.out.flush();
                     }
                 }
             }
-        });
+        };
+        CmdContext ctx = new CmdContext(this, statementListener);
+
+        attemptReplay(blobStore, statementPersistence, ctx);
     }
 
 }

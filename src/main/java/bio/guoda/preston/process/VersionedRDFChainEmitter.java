@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.cmd.ProcessorState;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,6 +17,10 @@ public class VersionedRDFChainEmitter extends ProcessorReadOnly {
 
     public VersionedRDFChainEmitter(BlobStoreReadOnly blobStoreReadOnly, StatementListener... listeners) {
         super(blobStoreReadOnly, listeners);
+    }
+
+    public VersionedRDFChainEmitter(BlobStoreReadOnly blobStoreReadOnly, ProcessorState state, StatementListener... listeners) {
+        super(blobStoreReadOnly, state, listeners);
     }
 
     @Override
@@ -43,8 +48,8 @@ public class VersionedRDFChainEmitter extends ProcessorReadOnly {
         parseAndEmit(inputStream, this);
     }
 
-    public static void parseAndEmit(InputStream inputStream, final StatementEmitter emitter) {
-        new EmittingStreamRDF(emitter)
+    public void parseAndEmit(InputStream inputStream, final StatementEmitter emitter) {
+        new EmittingStreamRDF(emitter, getState())
                 .parseAndEmit(inputStream);
     }
 

@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.cmd.ProcessorState;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
@@ -11,7 +12,16 @@ public abstract class ProcessorReadOnly extends StatementProcessor {
     private final BlobStoreReadOnly blobStoreReadOnly;
 
     public ProcessorReadOnly(BlobStoreReadOnly blobStoreReadOnly, StatementListener... listeners) {
-        super(listeners);
+        this(blobStoreReadOnly, new ProcessorState() {
+
+            @Override
+            public boolean shouldKeepProcessing() {
+                return true;
+            }
+        }, listeners);
+    }
+    public ProcessorReadOnly(BlobStoreReadOnly blobStoreReadOnly, ProcessorState state, StatementListener... listeners) {
+        super(state, listeners);
         Objects.requireNonNull(blobStoreReadOnly);
         this.blobStoreReadOnly = blobStoreReadOnly;
     }

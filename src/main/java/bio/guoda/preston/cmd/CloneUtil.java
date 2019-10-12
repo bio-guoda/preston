@@ -28,9 +28,10 @@ public class CloneUtil {
         final BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(blobKeyValueStore);
         final BlobStoreReadOnly provenanceLogStore = new BlobStoreAppendOnly(provenanceLogKeyValueStore);
         final StatementStoreReadOnly provenanceLogIndex = new StatementStoreImpl(provenanceLogIndexKeyValueStore);
+        StatementListener statementListener = blobToucher(blobStore);
         attemptReplay(provenanceLogStore,
                 provenanceLogIndex,
-                blobToucher(blobStore));
+                statementListener);
     }
 
     private static StatementListener blobToucher(final BlobStoreReadOnly blobStore) {

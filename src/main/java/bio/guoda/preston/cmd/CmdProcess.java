@@ -37,7 +37,7 @@ public class CmdProcess extends CmdActivity {
                 handleQueuedMessages(statementQueue, listeners);
             }
         };
-        new EmittingStreamRDF(emitter).parseAndEmit(System.in);
+        new EmittingStreamRDF(emitter, this).parseAndEmit(System.in);
 
     }
 

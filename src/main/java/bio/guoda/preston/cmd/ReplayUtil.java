@@ -1,7 +1,6 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.BlobStoreReadOnly;
-import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.VersionedRDFChainEmitter;
 import bio.guoda.preston.store.ArchiverReadOnly;
@@ -11,7 +10,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,19 +37,31 @@ public final class ReplayUtil {
                               final StatementStoreReadOnly provenanceLogIndex,
                               final IRI provRoot,
                               StatementListener... listeners) {
+        attemptReplay(provenanceLogStore, provenanceLogIndex, new CmdContext(new ProcessorState() {
+            @Override
+            public boolean shouldKeepProcessing() {
+                return true;
+            }
+        }, provRoot, listeners));
+    }
+
+    static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
+                              final StatementStoreReadOnly provenanceLogIndex,
+                              final CmdContext ctx) {
 
         final Queue<Triple> statementQueue =
                 new ConcurrentLinkedQueue<Triple>() {{
-                    add(toStatement(provRoot, HAS_VERSION, toBlank()));
+                    add(toStatement(ctx.getProvRoot(), HAS_VERSION, toBlank()));
                 }};
 
         AtomicBoolean receivedSomething = new AtomicBoolean(false);
-        List<StatementListener> statementListeners = new ArrayList<>(Arrays.asList(listeners));
+        List<StatementListener> statementListeners = new ArrayList<>(Arrays.asList(ctx.getListeners()));
         statementListeners.add(statement -> receivedSomething.set(true));
 
         // lookup previous provenance log versions with the intent to replay
         VersionedRDFChainEmitter provenanceLogEmitter = new VersionedRDFChainEmitter(
                 provenanceLogStore,
+                ctx.getState(),
                 statementListeners.toArray(new StatementListener[0])
         );
 
@@ -59,7 +69,7 @@ public final class ReplayUtil {
                 provenanceLogIndex,
                 provenanceLogEmitter);
 
-        while (!statementQueue.isEmpty()) {
+        while (ctx.getState().shouldKeepProcessing() && !statementQueue.isEmpty()) {
             offlineArchive.on(statementQueue.poll());
         }
 
@@ -68,9 +78,4 @@ public final class ReplayUtil {
         }
     }
 
-    public static void checkAndHandle(final PrintStream out, LogErrorHandler handler) {
-        if (out.checkError()) {
-            handler.handleError();
-        }
-    }
 }

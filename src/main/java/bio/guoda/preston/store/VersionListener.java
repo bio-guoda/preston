@@ -6,6 +6,6 @@ import java.io.IOException;
 
 public interface VersionListener {
 
-    void onVersion(Triple statement) throws IOException;
+    void on(Triple statement) throws IOException;
 
 }

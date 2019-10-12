@@ -18,8 +18,9 @@ import static org.junit.Assert.assertThat;
 
 public class VersionedRDFChainEmitterTest {
 
-    public static final IRI SOME = RefNodeFactory.toIRI("http://some");
-    public static final IRI OTHER = RefNodeFactory.toIRI("http://other");
+    private static final IRI SOME = RefNodeFactory.toIRI("http://some");
+    private static final IRI OTHER = RefNodeFactory.toIRI("http://other");
+
     @Test
     public void replayArchive() {
         List<Triple> nodes = new ArrayList<>();

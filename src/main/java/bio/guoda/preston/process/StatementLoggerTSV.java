@@ -28,7 +28,6 @@ public class StatementLoggerTSV implements StatementListener {
 
     @Override
     public void on(Triple statement) {
-        ReplayUtil.checkAndHandle(out, error);
         String subject = RDFUtil.getValueFor(statement.getSubject());
         String predicate = RDFUtil.getValueFor(statement.getPredicate());
         String object = RDFUtil.getValueFor(statement.getObject());

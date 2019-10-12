@@ -49,7 +49,7 @@ public class VersionUtil {
         IRI mostRecentVersion = statementStore.get(Pair.of(HAS_PREVIOUS_VERSION, versionSource));
 
         if (versionListener != null && mostRecentVersion != null) {
-            versionListener.onVersion(toStatement(mostRecentVersion, HAS_PREVIOUS_VERSION, versionSource));
+            versionListener.on(toStatement(mostRecentVersion, HAS_PREVIOUS_VERSION, versionSource));
         }
         return mostRecentVersion;
     }
@@ -58,7 +58,7 @@ public class VersionUtil {
         IRI mostRecentVersion = statementStore.get(Pair.of(versionSource, HAS_VERSION));
 
         if (versionListener != null && mostRecentVersion != null) {
-            versionListener.onVersion(toStatement(versionSource, HAS_VERSION, mostRecentVersion));
+            versionListener.on(toStatement(versionSource, HAS_VERSION, mostRecentVersion));
         }
         return mostRecentVersion;
     }

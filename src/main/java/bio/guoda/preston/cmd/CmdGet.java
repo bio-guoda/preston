@@ -62,10 +62,10 @@ public class CmdGet extends Persisting implements Runnable {
         }
     }
 
-    public static void copyIfNoError(InputStream proxyIs, PrintStream out) throws IOException {
+    private void copyIfNoError(InputStream proxyIs, PrintStream out) throws IOException {
         byte[] buffer = new byte[4096];
         int n;
-        while (!out.checkError() && EOF != (n = proxyIs.read(buffer))) {
+        while (this.shouldKeepProcessing() && !out.checkError() && EOF != (n = proxyIs.read(buffer))) {
             System.out.write(buffer, 0, n);
         }
     }
