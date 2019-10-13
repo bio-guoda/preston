@@ -31,23 +31,4 @@ public class StatementLoggerTSVTest {
                 is("source\trelation\t2018-01-01\n"));
     }
 
-    @Test(expected = RuntimeException.class)
-    public void onWriterError() {
-        PrintStream printWriter = new PrintStream(new NullOutputStream()) {
-            @Override
-            public boolean checkError() {
-                return true;
-            }
-        };
-
-        IRI source = RefNodeFactory.toIRI("source");
-        IRI relation = RefNodeFactory.toIRI("relation");
-        RDFTerm target = RefNodeFactory.toDateTime("2018-01-01");
-
-        new StatementLoggerTSV(printWriter, () -> {
-            throw new RuntimeException("kaboom!");
-        }).on(RefNodeFactory.toStatement(source, relation, target));
-    }
-
-
 }

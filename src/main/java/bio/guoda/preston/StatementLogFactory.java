@@ -27,9 +27,9 @@ public class StatementLogFactory {
     public static StatementListener createPrintingLogger(Logger logMode, final PrintStream out, LogErrorHandler handler) {
         StatementListener logger;
         if (Logger.tsv == logMode) {
-            logger = new StatementLoggerTSV(out, handler);
+            logger = new StatementLoggerTSV(out);
         } else if (Logger.nquads == logMode) {
-            logger = new StatementLoggerNQuads(out, handler);
+            logger = new StatementLoggerNQuads(out);
         } else {
             logger = new StatementListener() {
                 AtomicLong count = new AtomicLong(1);
