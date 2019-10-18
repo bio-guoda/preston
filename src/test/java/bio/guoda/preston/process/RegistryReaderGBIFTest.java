@@ -30,8 +30,8 @@ public class RegistryReaderGBIFTest {
         ArrayList<Triple> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
         registryReaderGBIF.on(toStatement(Seeds.GBIF, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        Assert.assertThat(nodes.size(), is(5));
-        assertThat(getVersionSource(nodes.get(4)).getIRIString(), is("https://api.gbif.org/v1/dataset"));
+        Assert.assertThat(nodes.size(), is(6));
+        assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://api.gbif.org/v1/dataset"));
     }
 
     @Test
@@ -70,8 +70,10 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(40654));
-        Triple secondPage = nodes.get(18 - 1);
+        Assert.assertThat(nodes.size(), is(60973));
+        assertThat(nodes.get(17-1).toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2> <http://purl.org/pav/createdBy> <https://gbif.org> ."));
+        assertThat(nodes.get(18-1).toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
+        Triple secondPage = nodes.get(19 - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2>"));
         Triple lastPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(lastPage).toString(), is("<https://api.gbif.org/v1/dataset?offset=40638&limit=2>"));
@@ -135,8 +137,8 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(40654));
-        Triple secondPage = nodes.get(18 - 1);
+        Assert.assertThat(nodes.size(), is(60973));
+        Triple secondPage = nodes.get(19 - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR&offset=2&limit=2>"));
         Triple lastPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(lastPage).toString(), is("<https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR&offset=40638&limit=2>"));
@@ -167,7 +169,7 @@ public class RegistryReaderGBIFTest {
     public void nextPage() {
         List<Triple> nodes = new ArrayList<Triple>();
         RegistryReaderGBIF.emitNextPage(0, 10, nodes::add, "https://bla/?limit=2&offset=8");
-        assertThat(nodes.size(), is(2));
+        assertThat(nodes.size(), is(3));
         assertThat(nodes.get(1).getSubject().toString(), is("<https://bla/?limit=10&offset=0>"));
     }
 
@@ -180,7 +182,7 @@ public class RegistryReaderGBIFTest {
 
         RegistryReaderGBIF.parse(testNode, refNodes::add, getClass().getResourceAsStream(GBIFDATASETS_JSON), toIRI("http://example.org/"));
 
-        assertThat(refNodes.size(), is(40654));
+        assertThat(refNodes.size(), is(60973));
 
         Triple refNode = refNodes.get(0);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <6555005d-4594-4a3e-be33-c70e587b63d7> ."));
