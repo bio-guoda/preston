@@ -4,7 +4,6 @@ import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.Seeds;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
@@ -12,8 +11,6 @@ import org.apache.commons.rdf.api.Triple;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
@@ -51,9 +48,10 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
             Stream.of(
                     toStatement(Seeds.OBIS, IS_A, ORGANIZATION),
                     toStatement(Seeds.OBIS, DESCRIPTION, toEnglishLiteral("OBIS is a global open-access data and information clearing-house on marine biodiversity for science, conservation and sustainable development.")),
-                    toStatement(RegistryReaderOBIS.OBIS_REGISTRY, CREATED_BY, Seeds.OBIS))
-                    .forEach(this::emit);
-            emitPageRequest(this, OBIS_REGISTRY);
+                    toStatement(RegistryReaderOBIS.OBIS_REGISTRY, CREATED_BY, Seeds.OBIS),
+                    toStatement(RegistryReaderOBIS.OBIS_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
+                    toStatement(RegistryReaderOBIS.OBIS_REGISTRY, HAS_VERSION, toBlank())
+            ).forEach(this::emit);
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(OBIS_API_URL_PART)) {
             try {
@@ -66,13 +64,6 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
         }
-    }
-
-    private static void emitPageRequest(StatementEmitter emitter, IRI nextPage) {
-        Stream.of(
-                toStatement(nextPage, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
-                toStatement(nextPage, HAS_VERSION, toBlank()))
-                .forEach(emitter::emit);
     }
 
     static void parse(IRI currentPage, StatementEmitter emitter, InputStream in) throws IOException {
