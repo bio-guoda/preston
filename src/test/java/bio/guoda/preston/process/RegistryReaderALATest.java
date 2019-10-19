@@ -31,8 +31,8 @@ public class RegistryReaderALATest {
         ArrayList<Triple> nodes = new ArrayList<>();
         RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), nodes::add);
         registryReader.on(toStatement(Seeds.ALA, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        Assert.assertThat(nodes.size(), is(5));
-        assertThat(getVersionSource(nodes.get(4)).getIRIString(), is("https://collections.ala.org.au/ws/dataResource?status=dataAvailable"));
+        Assert.assertThat(nodes.size(), is(6));
+        assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://collections.ala.org.au/ws/dataResource?status=dataAvailable"));
     }
 
     @Test
@@ -71,8 +71,10 @@ public class RegistryReaderALATest {
 
         registryReader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(2654));
-        Triple secondPage = nodes.get(nodes.size() - 2);
+        Assert.assertThat(nodes.size(), is(3981));
+        Triple secondPage = nodes.get(nodes.size() - 3);
+        assertThat(secondPage.toString(), is("<https://collections.ala.org.au/ws/dataResource/dr8052> <http://purl.org/pav/createdBy> <https://ala.org.au> ."));
+        secondPage = nodes.get(nodes.size() - 2);
         assertThat(secondPage.toString(), is("<https://collections.ala.org.au/ws/dataResource/dr8052> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
         Triple thirdPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(thirdPage).toString(), is("<https://collections.ala.org.au/ws/dataResource/dr8052>"));

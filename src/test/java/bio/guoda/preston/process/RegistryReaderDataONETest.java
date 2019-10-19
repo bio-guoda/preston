@@ -35,8 +35,8 @@ public class RegistryReaderDataONETest {
         ArrayList<Triple> nodes = new ArrayList<>();
         RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), nodes::add);
         reader.on(toStatement(Seeds.DATA_ONE, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        Assert.assertThat(nodes.size(), is(5));
-        assertThat(getVersionSource(nodes.get(4)).getIRIString(), is(FIRST_PAGE));
+        Assert.assertThat(nodes.size(), is(6));
+        assertThat(getVersionSource(nodes.get(5)).getIRIString(), is(FIRST_PAGE));
     }
 
     @Test
@@ -75,7 +75,7 @@ public class RegistryReaderDataONETest {
 
         reader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(42));
+        Assert.assertThat(nodes.size(), is(43));
         Triple secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=1000&rows=1000>"));
     }
@@ -97,7 +97,7 @@ public class RegistryReaderDataONETest {
 
         reader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(42));
+        Assert.assertThat(nodes.size(), is(43));
         Triple secondPage = nodes.get(nodes.size() - 1);
         assertThat(secondPage.toString(), startsWith("<http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=1000&rows=1000> <http://purl.org/pav/hasVersion> _:"));
     }
@@ -118,7 +118,7 @@ public class RegistryReaderDataONETest {
 
         reader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(42));
+        Assert.assertThat(nodes.size(), is(43));
         Triple secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=1000&rows=1000>"));
     }
@@ -154,7 +154,7 @@ public class RegistryReaderDataONETest {
     public void nextPage() {
         List<Triple> nodes = new ArrayList<Triple>();
         RegistryReaderDataONE.emitNextPage(0, 10, nodes::add, "https://bla/?rows=2&start=8");
-        assertThat(nodes.size(), is(2));
+        assertThat(nodes.size(), is(3));
         assertThat(nodes.get(1).getSubject().toString(), is("<https://bla/?rows=10&start=0>"));
     }
 
@@ -167,7 +167,7 @@ public class RegistryReaderDataONETest {
 
         RegistryReaderDataONE.parse(testNode, refNodes::add, getClass().getResourceAsStream(DATAONE_FIRST_JSON), toIRI("http://example.org/"));
 
-        assertThat(refNodes.size(), is(42));
+        assertThat(refNodes.size(), is(43));
 
         Triple refNode = refNodes.get(0);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/KM_CUDM.20160202> ."));
@@ -190,6 +190,9 @@ public class RegistryReaderDataONETest {
 
         lastRefNode = refNodes.get(refNodes.size() - 1);
         assertThat(lastRefNode.toString(), startsWith("<http://example.org/?start=1000&rows=1000> <http://purl.org/pav/hasVersion> _:"));
+
+        lastRefNode = refNodes.get(refNodes.size() - 3);
+        assertThat(lastRefNode.toString(), is("<http://example.org/?start=1000&rows=1000> <http://purl.org/pav/createdBy> <https://dataone.org> ."));
 
     }
 

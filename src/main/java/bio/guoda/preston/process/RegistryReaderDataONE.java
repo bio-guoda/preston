@@ -142,6 +142,7 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
 
     private static void emitPageRequest(StatementEmitter emitter, IRI nextPage) {
         Stream.of(
+                toStatement(nextPage, CREATED_BY, Seeds.DATA_ONE),
                 toStatement(nextPage, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
                 toStatement(nextPage, HAS_VERSION, toBlank()))
                 .forEach(emitter::emit);

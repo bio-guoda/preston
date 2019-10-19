@@ -84,6 +84,7 @@ public class RegistryReaderALA extends ProcessorReadOnly {
 
     private static void emitPageRequest(StatementEmitter emitter, IRI nextPage) {
         Stream.of(
+                toStatement(nextPage, CREATED_BY, Seeds.ALA),
                 toStatement(nextPage, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
                 toStatement(nextPage, HAS_VERSION, toBlank()))
                 .forEach(emitter::emit);
