@@ -1,10 +1,7 @@
 package bio.guoda.preston.process;
 
-import org.apache.commons.rdf.api.IRI;
+import bio.guoda.preston.store.KeyValueStoreReadOnly;
 
-import java.io.IOException;
-import java.io.InputStream;
+public interface BlobStoreReadOnly extends KeyValueStoreReadOnly {
 
-public interface BlobStoreReadOnly {
-    InputStream get(IRI key) throws IOException;
 }
