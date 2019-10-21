@@ -8,6 +8,7 @@ import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import org.apache.commons.rdf.api.IRI;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,17 +66,17 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
     private static class NullKeyValueStore implements KeyValueStore {
 
         @Override
-        public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
+        public IRI put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
             return null;
         }
 
         @Override
-        public void put(String key, InputStream is) throws IOException {
+        public void put(IRI key, InputStream is) throws IOException {
 
         }
 
         @Override
-        public InputStream get(String key) throws IOException {
+        public InputStream get(IRI key) throws IOException {
             return null;
         }
     }

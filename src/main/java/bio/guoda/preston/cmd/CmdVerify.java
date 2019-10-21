@@ -64,7 +64,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
                         if (is != null) {
                             if (skipHashVerification) {
                                 // try a shortcut via filesystem
-                                URI uri = getKeyToPathLocal().toPath(iri.getIRIString());
+                                URI uri = getKeyToPathLocal().toPath(iri);
                                 fileSize = new File(uri).length();
                                 if (fileSize == 0) {
                                     try (CountingOutputStream counting = new CountingOutputStream(new NullOutputStream())) {
@@ -87,7 +87,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
                         verifiedMap.put(iri.getIRIString(), state);
                         String iriString = iri.getIRIString();
                         System.out.println(iriString + "\t" +
-                                getKeyToPathLocal().toPath(iriString) + "\t" +
+                                getKeyToPathLocal().toPath(iri) + "\t" +
                                 (OK_STATES.contains(state) ? "OK" : "FAIL") + "\t" +
                                 state + "\t" +
                                 fileSize);

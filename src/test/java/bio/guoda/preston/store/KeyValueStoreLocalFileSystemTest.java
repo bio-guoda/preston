@@ -1,7 +1,9 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.rdf.api.IRI;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,11 +20,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 public class KeyValueStoreLocalFileSystemTest {
 
-    public static final String SOME_HASH = "hash://sha256/1234567890123456789012345678901234567890123456789012345678901234";
+    public static final IRI SOME_HASH = RefNodeFactory.toIRI("hash://sha256/1234567890123456789012345678901234567890123456789012345678901234");
     private Path path;
 
     @Before
@@ -48,10 +52,11 @@ public class KeyValueStoreLocalFileSystemTest {
     @Test(expected = IllegalArgumentException.class)
     public void writeKeyTooShort() throws IOException {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()));
-        filePersistence.get("something");
-        filePersistence.put("something", IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
+        IRI somethingIRI = RefNodeFactory.toIRI("something");
+        filePersistence.get(somethingIRI);
+        filePersistence.put(somethingIRI, IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
 
-        assertThat(TestUtil.toUTF8(filePersistence.get("something")), is("some value"));
+        assertThat(TestUtil.toUTF8(filePersistence.get(somethingIRI)), is("some value"));
 
     }
 
@@ -76,12 +81,9 @@ public class KeyValueStoreLocalFileSystemTest {
         };
 
         assertFalse(wasClosed.get());
-        filePersistence.put(new KeyGeneratingStream() {
-            @Override
-            public String generateKeyWhileStreaming(InputStream is, OutputStream os) throws IOException {
-                IOUtils.copy(is, os);
-                return SOME_HASH;
-            }
+        filePersistence.put((is, os) -> {
+            IOUtils.copy(is, os);
+            return SOME_HASH;
         }, wrappedContentStream);
 
         assertFalse(wasClosed.get());

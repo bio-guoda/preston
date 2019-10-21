@@ -1,6 +1,7 @@
 package bio.guoda.preston.store;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.rdf.api.IRI;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,7 +26,7 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
 
 
     @Override
-    public void put(String key, InputStream source) throws IOException {
+    public void put(IRI key, InputStream source) throws IOException {
         try (InputStream is = source) {
             URI filePath = keyToPath.toPath(key);
             if (!getDataFile(filePath).exists()) {
@@ -56,11 +57,11 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
      * @return
      * @throws IOException
      */
-    public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
+    public IRI put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
         FileUtils.forceMkdir(tmpDir);
         File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
         FileOutputStream os = FileUtils.openOutputStream(tmpFile);
-        String key = keyGeneratingStream.generateKeyWhileStreaming(is, os);
+        IRI key = keyGeneratingStream.generateKeyWhileStreaming(is, os);
         try (InputStream tmpIs = FileUtils.openInputStream(tmpFile)) {
             put(key, tmpIs);
         } finally {
@@ -70,7 +71,7 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
     }
 
     @Override
-    public InputStream get(String key) throws IOException {
+    public InputStream get(IRI key) throws IOException {
         File dataFile = getDataFile(keyToPath.toPath(key));
         return dataFile.exists() ? FileUtils.openInputStream(dataFile) : null;
     }

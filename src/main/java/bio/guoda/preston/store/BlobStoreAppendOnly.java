@@ -26,15 +26,13 @@ public class BlobStoreAppendOnly implements BlobStore {
     // write-once, read-many
     @Override
     public IRI putBlob(InputStream is) throws IOException {
-        return RefNodeFactory.toIRI(URI.create(keyValueStore.put((is1, os1) -> {
-            IRI key = Hasher.calcSHA256(is1, os1, shouldCloseInputStream);
-            return key.getIRIString();
-        }, is)));
+        return keyValueStore.put(
+                (is1, os1) -> Hasher.calcSHA256(is1, os1, shouldCloseInputStream), is);
     }
 
     @Override
     public InputStream get(IRI key) throws IOException {
-        return key == null ? null : keyValueStore.get(key.getIRIString());
+        return key == null ? null : keyValueStore.get(key);
     }
 
 }

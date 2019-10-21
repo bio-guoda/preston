@@ -2,6 +2,7 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.Hasher;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.rdf.api.IRI;
 
 import java.net.URI;
 
@@ -9,14 +10,14 @@ public class HashKeyUtil {
 
     public static final int EXPECTED_LENGTH = 64 + Hasher.getHashPrefix().length();
 
-    public static void validateHashKey(String hashKey) {
+    public static void validateHashKey(IRI hashKey) {
         if (!isValidHashKey(hashKey)) {
-            throw new IllegalArgumentException("expected id [" + hashKey + "] of [" + EXPECTED_LENGTH + "] characters, instead got [" + hashKey.length() + "] characters.");
+            throw new IllegalArgumentException("expected id [" + hashKey + "] of [" + EXPECTED_LENGTH + "] characters, instead got [" + hashKey.getIRIString().length() + "] characters.");
         }
     }
 
-    public static boolean isValidHashKey(String hashKey) {
-        return StringUtils.length(hashKey) == EXPECTED_LENGTH;
+    public static boolean isValidHashKey(IRI hashKey) {
+        return StringUtils.length(hashKey.getIRIString()) == EXPECTED_LENGTH;
     }
 
     public static URI insertSlashIfNeeded(URI uri, String suffix) {

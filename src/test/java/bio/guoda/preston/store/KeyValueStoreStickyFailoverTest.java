@@ -1,6 +1,8 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -35,7 +37,7 @@ public class KeyValueStoreStickyFailoverTest {
                 key -> null
         ));
 
-        assertNull(failover.get("anything"));
+        assertNull(failover.get(RefNodeFactory.toIRI("anything")));
     }
 
     @Test(expected = IOException.class)
@@ -58,7 +60,7 @@ public class KeyValueStoreStickyFailoverTest {
             AtomicBoolean calledPrior = new AtomicBoolean(false);
 
             @Override
-            public InputStream get(String key) throws IOException {
+            public InputStream get(IRI key) throws IOException {
                 assertFalse(calledPrior.get());
                 calledPrior.set(true);
                 throw new IOException("boom!");
@@ -75,7 +77,7 @@ public class KeyValueStoreStickyFailoverTest {
     }
 
     public void assertHello(KeyValueStoreStickyFailover failover) throws IOException {
-        InputStream inputStream = failover.get("something");
+        InputStream inputStream = failover.get(RefNodeFactory.toIRI("something"));
         String actual = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
 
         assertThat(actual, is("hello"));

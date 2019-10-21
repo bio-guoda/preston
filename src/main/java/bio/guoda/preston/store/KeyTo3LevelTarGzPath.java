@@ -2,6 +2,7 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.Hasher;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.rdf.api.IRI;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -15,14 +16,16 @@ public class KeyTo3LevelTarGzPath implements KeyToPath {
     }
 
     @Override
-    public URI toPath(String key) {
+    public URI toPath(IRI key) {
         HashKeyUtil.validateHashKey(key);
 
-        int offset = Hasher.getHashPrefix().length();
-        String u0 = key.substring(offset + 0, offset + 2);
-        String u1 = key.substring(offset + 2, offset + 4);
+        String keyStr = key.getIRIString();
 
-        String suffix = StringUtils.join(Arrays.asList(u0, u1, key.substring(offset)), "/");
+        int offset = Hasher.getHashPrefix().length();
+        String u0 = keyStr.substring(offset + 0, offset + 2);
+        String u1 = keyStr.substring(offset + 2, offset + 4);
+
+        String suffix = StringUtils.join(Arrays.asList(u0, u1, keyStr.substring(offset)), "/");
         URI uri = HashKeyUtil.insertSlashIfNeeded(baseURI, "preston-" + u0 + ".tar.gz!/" + suffix);
         return URI.create("tgz:" + uri.toString());
     }

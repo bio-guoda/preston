@@ -1,5 +1,7 @@
 package bio.guoda.preston.store;
 
+import org.apache.commons.rdf.api.IRI;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,17 +15,17 @@ public class KeyValueStoreWithFallback implements KeyValueStore {
     }
 
     @Override
-    public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
+    public IRI put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
         return primary.put(keyGeneratingStream, is);
     }
 
     @Override
-    public void put(String key, InputStream is) throws IOException {
+    public void put(IRI key, InputStream is) throws IOException {
         primary.put(key, is);
     }
 
     @Override
-    public InputStream get(String key) throws IOException {
+    public InputStream get(IRI key) throws IOException {
         InputStream is = primary.get(key);
         if (is == null) {
             is = readOnlyFallback.get(key);

@@ -18,7 +18,7 @@ public class KeyValueStoreRemoteHTTP implements KeyValueStoreReadOnly {
     }
 
     @Override
-    public InputStream get(String key) throws IOException {
+    public InputStream get(IRI key) throws IOException {
         IRI uri = RefNodeFactory.toIRI(keyToPath.toPath(key));
         return dereferencer.dereference(uri);
     }

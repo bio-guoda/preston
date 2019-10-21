@@ -71,9 +71,8 @@ public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStre
         String lastHashElem = hashPathElem[hashPathElem.length - 1];
 
         String hashString = "hash://sha256/" + lastHashElem;
-        return HashKeyUtil.isValidHashKey(hashString)
-                ? RefNodeFactory.toIRI(hashString)
-                : null;
+        IRI hashKey = RefNodeFactory.toIRI(hashString);
+        return HashKeyUtil.isValidHashKey(hashKey) ? hashKey : null;
     }
 
 }

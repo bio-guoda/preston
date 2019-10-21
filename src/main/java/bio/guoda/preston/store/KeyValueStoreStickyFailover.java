@@ -1,5 +1,7 @@
 package bio.guoda.preston.store;
 
+import org.apache.commons.rdf.api.IRI;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -19,7 +21,7 @@ public class KeyValueStoreStickyFailover implements KeyValueStoreReadOnly {
     }
 
     @Override
-    public InputStream get(String key) throws IOException {
+    public InputStream get(IRI key) throws IOException {
         AtomicReference<Exception> lastException = new AtomicReference<>();
         // try last successful first
         try {
