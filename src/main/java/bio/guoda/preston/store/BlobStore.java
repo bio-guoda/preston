@@ -11,6 +11,4 @@ public interface BlobStore extends BlobStoreReadOnly {
 
     IRI putBlob(InputStream is) throws IOException;
 
-    IRI putBlob(RDFTerm entity) throws IOException;
-
 }

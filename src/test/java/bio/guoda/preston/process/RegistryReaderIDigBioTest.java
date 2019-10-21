@@ -53,11 +53,6 @@ public class RegistryReaderIDigBioTest {
             }
 
             @Override
-            public IRI putBlob(RDFTerm entity) throws IOException {
-                return null;
-            }
-
-            @Override
             public InputStream get(IRI key) throws IOException {
                 return publishersInputStream();
             }

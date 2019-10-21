@@ -62,25 +62,6 @@ public class BlobStoreAppendOnlyTest {
         assertTrue(wasClosed.get());
     }
 
-    @Test
-    public void putURI() throws IOException {
-        BlobStore blobStore = new BlobStoreAppendOnly(getTestPersistence());
-        IRI key = blobStore.putBlob(RefNodeFactory.toIRI("pesto:123"));
-        assertThat(key.getIRIString(), is("hash://sha256/02707ce2db146bfe983e40cca527240cd46b6e8723710757c4c24f0d2adb8b7c"));
-        InputStream inputStream = blobStore.get(key);
-        assertThat(TestUtil.toUTF8(inputStream), is("pesto:123"));
-    }
-
-    @Test
-    public void putBlank() throws IOException {
-        BlobStore blobStore = new BlobStoreAppendOnly(getTestPersistence());
-        BlankNode entity = RefNodeFactory.toBlank();
-        IRI key = blobStore.putBlob(entity);
-        InputStream inputStream = blobStore.get(key);
-        entity.uniqueReference();
-        assertThat(TestUtil.toUTF8(inputStream), is("_:" + entity.uniqueReference()));
-    }
-
     static KeyValueStore getTestPersistence() {
         return new KeyValueStore() {
             private final Map<String, String> lookup = new TreeMap<>();

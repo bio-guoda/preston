@@ -1,9 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.StatementStore;
@@ -101,11 +99,6 @@ public class ReplayUtilTest {
         return new BlobStore() {
             @Override
             public IRI putBlob(InputStream is) throws IOException {
-                throw new IllegalArgumentException();
-            }
-
-            @Override
-            public IRI putBlob(RDFTerm entity) throws IOException {
                 throw new IllegalArgumentException();
             }
 
