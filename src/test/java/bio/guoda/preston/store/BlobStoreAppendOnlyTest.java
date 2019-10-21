@@ -62,7 +62,7 @@ public class BlobStoreAppendOnlyTest {
 
     static KeyValueStore getTestPersistence() {
         return new KeyValueStore() {
-            private final Map<IRI, String> lookup = new TreeMap<>();
+            private final Map<String, String> lookup = new TreeMap<>();
 
             @Override
             public IRI put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
@@ -75,12 +75,12 @@ public class BlobStoreAppendOnlyTest {
 
             @Override
             public void put(IRI key, InputStream is) throws IOException {
-                lookup.putIfAbsent(key, TestUtil.toUTF8(is));
+                lookup.putIfAbsent(key.getIRIString(), TestUtil.toUTF8(is));
             }
 
             @Override
             public InputStream get(IRI key) throws IOException {
-                String input = lookup.get(key);
+                String input = lookup.get(key.getIRIString());
                 return input == null ? null : IOUtils.toInputStream(input, StandardCharsets.UTF_8);
             }
         };
