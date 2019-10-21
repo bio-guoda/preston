@@ -46,7 +46,8 @@ public class KeyValueStoreCopyingTest {
             public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 String key = keyGeneratingStream.generateKeyWhileStreaming(is, os);
-                cache.put(key, IOUtils.toString(os.toByteArray(), StandardCharsets.UTF_8.name()));
+                String value = IOUtils.toString(os.toByteArray(), StandardCharsets.UTF_8.name());
+                cache.putIfAbsent(key, value);
                 return key;
             }
 
