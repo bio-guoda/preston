@@ -13,11 +13,6 @@ public class KeyValueStoreCopying implements KeyValueStore {
     }
 
     @Override
-    public void put(String key, String value) throws IOException {
-        targetKeyValueStore.put(key, value);
-    }
-
-    @Override
     public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
         return targetKeyValueStore.put(keyGeneratingStream, is);
     }

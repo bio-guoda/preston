@@ -1,9 +1,7 @@
 package bio.guoda.preston.store;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.IRI;
-import bio.guoda.preston.model.RefNodeFactory;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -65,14 +63,6 @@ public class BlobStoreAppendOnlyTest {
     static KeyValueStore getTestPersistence() {
         return new KeyValueStore() {
             private final Map<String, String> lookup = new TreeMap<>();
-
-            @Override
-            public void put(String key, String value) throws IOException {
-                if (lookup.containsKey(key) && !value.equals(lookup.get(key))) {
-                    throw new IOException("can't overwrite with value [" + value + "]");
-                }
-                lookup.putIfAbsent(key, value);
-            }
 
             @Override
             public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {

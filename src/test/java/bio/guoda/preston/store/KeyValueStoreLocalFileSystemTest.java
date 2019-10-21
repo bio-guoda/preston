@@ -39,7 +39,7 @@ public class KeyValueStoreLocalFileSystemTest {
     public void write() throws IOException {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()));
         assertNull(filePersistence.get(SOME_HASH));
-        filePersistence.put(SOME_HASH, "some value");
+        filePersistence.put(SOME_HASH, IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
 
         assertThat(TestUtil.toUTF8(filePersistence.get(SOME_HASH)), is("some value"));
 
@@ -49,7 +49,7 @@ public class KeyValueStoreLocalFileSystemTest {
     public void writeKeyTooShort() throws IOException {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()));
         filePersistence.get("something");
-        filePersistence.put("something", "some value");
+        filePersistence.put("something", IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
 
         assertThat(TestUtil.toUTF8(filePersistence.get("something")), is("some value"));
 

@@ -13,11 +13,6 @@ public class KeyValueStoreWithFallback implements KeyValueStore {
     }
 
     @Override
-    public void put(String key, String value) throws IOException {
-        primary.put(key, value);
-    }
-
-    @Override
     public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
         return primary.put(keyGeneratingStream, is);
     }

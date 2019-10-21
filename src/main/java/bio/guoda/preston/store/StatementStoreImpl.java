@@ -25,7 +25,8 @@ public class StatementStoreImpl implements StatementStore {
     public void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException {
         // write-once, read-many
         IRI key = calculateKeyFor(queryKey);
-        keyValueStore.put(key.getIRIString(), value instanceof IRI ? ((IRI) value).getIRIString() : value.toString());
+        String strValue = value instanceof IRI ? ((IRI) value).getIRIString() : value.toString();
+        keyValueStore.put(key.getIRIString(), IOUtils.toInputStream(strValue, StandardCharsets.UTF_8));
     }
 
     protected static IRI calculateKeyFor(Pair<RDFTerm, RDFTerm> unhashedKeyPair) {

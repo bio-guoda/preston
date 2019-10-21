@@ -63,10 +63,6 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
     }
 
     private static class NullKeyValueStore implements KeyValueStore {
-        @Override
-        public void put(String key, String value) throws IOException {
-
-        }
 
         @Override
         public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {

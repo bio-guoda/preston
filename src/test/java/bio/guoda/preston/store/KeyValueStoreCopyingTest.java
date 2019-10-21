@@ -21,10 +21,6 @@ public class KeyValueStoreCopyingTest {
     @Test
     public void copyTo() throws IOException {
         KeyValueStore testSourceStore = new KeyValueStore() {
-            @Override
-            public void put(String key, String value) throws IOException {
-
-            }
 
             @Override
             public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
@@ -45,11 +41,6 @@ public class KeyValueStoreCopyingTest {
 
         KeyValueStoreCopying store = new KeyValueStoreCopying(testSourceStore, new KeyValueStore() {
 
-
-            @Override
-            public void put(String key, String value) throws IOException {
-                cache.putIfAbsent(key, value);
-            }
 
             @Override
             public String put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {

@@ -1,14 +1,12 @@
 package bio.guoda.preston.store;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 
 
 public class KeyValueStoreLocalFileSystem implements KeyValueStore {
@@ -25,11 +23,6 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
         return new File(filePath);
     }
 
-
-    @Override
-    public void put(String key, String value) throws IOException {
-        put(key, IOUtils.toInputStream(value, StandardCharsets.UTF_8));
-    }
 
     @Override
     public void put(String key, InputStream source) throws IOException {
