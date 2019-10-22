@@ -39,7 +39,7 @@ public class KeyValueStoreCopyingTest {
                 return IOUtils.toInputStream(key + "-value", StandardCharsets.UTF_8);
             }
         };
-        final Map<IRI, String> cache = new HashMap<>();
+        final Map<String, String> cache = new HashMap<>();
 
         KeyValueStoreCopying store = new KeyValueStoreCopying(testSourceStore, new KeyValueStore() {
 
@@ -49,28 +49,28 @@ public class KeyValueStoreCopyingTest {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 IRI key = keyGeneratingStream.generateKeyWhileStreaming(is, os);
                 String value = IOUtils.toString(os.toByteArray(), StandardCharsets.UTF_8.name());
-                cache.putIfAbsent(key, value);
+                cache.putIfAbsent(key.getIRIString(), value);
                 return key;
             }
 
             @Override
             public void put(IRI key, InputStream is) throws IOException {
-                cache.putIfAbsent(key, IOUtils.toString(is, StandardCharsets.UTF_8));
+                cache.putIfAbsent(key.getIRIString(), IOUtils.toString(is, StandardCharsets.UTF_8));
             }
 
             @Override
             public InputStream get(IRI key) throws IOException {
-                String value = cache.get(key);
+                String value = cache.get(key.getIRIString());
                 return StringUtils.isBlank(value) ? null : IOUtils.toInputStream(value, StandardCharsets.UTF_8);
             }
         });
 
-        assertThat(cache.get(RefNodeFactory.toIRI("foo")), Is.is(not("foo-value")));
+        assertThat(cache.get("foo"), Is.is(not("<foo>-value")));
 
         InputStream barStream = store.get(RefNodeFactory.toIRI("foo"));
 
         IOUtils.copy(barStream, new NullOutputStream());
-        assertThat(cache.get(RefNodeFactory.toIRI("foo")), Is.is("foo-value"));
+        assertThat(cache.get("foo"), Is.is("<foo>-value"));
 
 
     }
