@@ -13,7 +13,7 @@
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <project.build.testResourceEncoding>UTF-8</project.build.testResourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <jackson.version>2.9.10</jackson.version>
+        <jackson.version>2.10.0</jackson.version>
     </properties>
 
     <dependencies>
