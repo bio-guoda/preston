@@ -58,8 +58,9 @@ public class Persisting extends PersistingLocal {
         if (hasRemote()) {
             Stream<KeyToPath> keyToPathStream =
                     getRemoteURIs().stream().flatMap(uri -> Stream.of(
-                            new KeyTo1LevelPath(uri),
-                            new KeyTo3LevelPath(uri)));
+                            new KeyTo3LevelPath(uri),
+                            new KeyTo1LevelPath(uri)
+                    ));
 
             List<KeyValueStoreReadOnly> keyValueStoreRemotes =
                     supportTarGzDiscovery

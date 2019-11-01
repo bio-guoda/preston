@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.DerefState;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.commons.rdf.api.IRI;
 
@@ -56,7 +57,7 @@ public class DerefProgressLogger implements DerefProgressListener {
     public void logProgress(IRI dataURI, DerefState derefState, long read, long total) {
         StringBuilder builder = new StringBuilder();
         builder.append("\r[");
-        builder.append(dataURI.getIRIString());
+        builder.append(StringUtils.abbreviateMiddle(dataURI.getIRIString(), "...", 50));
         builder.append("] ");
         builder.append(total > 0 ? String.format("%3.1f", 100.0 * read / total) : "?");
         builder.append("% of ");

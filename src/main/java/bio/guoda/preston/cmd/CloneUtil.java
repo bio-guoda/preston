@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
@@ -25,9 +24,15 @@ public class CloneUtil {
     }
 
     public static void clone(KeyValueStore blobKeyValueStore, KeyValueStore provenanceLogKeyValueStore, KeyValueStore provenanceLogIndexKeyValueStore) {
-        final BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(blobKeyValueStore);
-        final BlobStoreReadOnly provenanceLogStore = new BlobStoreAppendOnly(provenanceLogKeyValueStore);
-        final StatementStoreReadOnly provenanceLogIndex = new StatementStoreImpl(provenanceLogIndexKeyValueStore);
+        final BlobStoreReadOnly blobStore
+                = new BlobStoreAppendOnly(blobKeyValueStore);
+
+        final BlobStoreReadOnly provenanceLogStore
+                = new BlobStoreAppendOnly(provenanceLogKeyValueStore);
+
+        final StatementStoreReadOnly provenanceLogIndex
+                = new StatementStoreImpl(provenanceLogIndexKeyValueStore);
+
         StatementListener statementListener = blobToucher(blobStore);
         attemptReplay(provenanceLogStore,
                 provenanceLogIndex,

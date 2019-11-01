@@ -41,4 +41,26 @@ public class DerefProgressLoggerTest {
 
     }
 
+    @Test
+    public void logSomethingLong() throws UnsupportedEncodingException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(out, true, StandardCharsets.UTF_8.name());
+
+        DerefProgressLogger logger = new DerefProgressLogger(printStream);
+        logger.setUpdateStepBytes(1);
+        logger.onProgress(
+                RefNodeFactory.toIRI("https://example.org/veryloooooooooooooooooooooooooooooooooooooooooooooooooooooooooong"),
+                DerefState.START, 10, 1024);
+        logger.onProgress(
+                RefNodeFactory.toIRI("https://example.org/veryloooooooooooooooooooooooooooooooooooooooooooooooooooooooooong"),
+                DerefState.BUSY, 10, 1024);
+
+        String[] lines = StringUtils.split(out.toString(StandardCharsets.UTF_8.name()), '\r');
+
+        assertThat(lines[0], Is.is(
+                "[https://example.org/very...ooooooooooooooooooooong] 1.0% of 1 kB at ? MB/s ETA: < 1 minute"));
+
+
+    }
+
 }
