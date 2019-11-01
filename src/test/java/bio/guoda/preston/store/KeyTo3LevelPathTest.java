@@ -34,4 +34,13 @@ public class KeyTo3LevelPathTest {
 
     }
 
+    @Test
+    public void internetArchive() {
+        IRI key = RefNodeFactory.toIRI("hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c");
+        URI baseURI = URI.create("https://archive.org/download/biodiversity-dataset-archives/data.zip/data");
+        URI actualPath = new KeyTo3LevelPath(baseURI)
+                .toPath(key);
+        assertThat(actualPath.toString(), Is.is("https://archive.org/download/biodiversity-dataset-archives/data.zip/data/29/d3/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c"));
+    }
+
 }

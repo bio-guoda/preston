@@ -1,20 +1,19 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.store.DereferencerContentAddressed;
-import bio.guoda.preston.store.KeyTo3LevelPath;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Triple;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.Resources;
 import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.Archiver;
+import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.DereferencerContentAddressed;
+import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.StatementStoreImpl;
 import bio.guoda.preston.store.TestUtil;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Triple;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
