@@ -4,6 +4,7 @@ import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
@@ -26,7 +27,9 @@ public class StatementStoreImpl implements StatementStore {
         // write-once, read-many
         IRI key = calculateKeyFor(queryKey);
         String strValue = value instanceof IRI ? ((IRI) value).getIRIString() : value.toString();
-        keyValueStore.put(key, IOUtils.toInputStream(strValue, StandardCharsets.UTF_8));
+        if (StringUtils.isNotBlank(strValue)) {
+            keyValueStore.put(key, IOUtils.toInputStream(strValue, StandardCharsets.UTF_8));
+        }
     }
 
     protected static IRI calculateKeyFor(Pair<RDFTerm, RDFTerm> unhashedKeyPair) {
