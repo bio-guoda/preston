@@ -23,19 +23,19 @@ public class CloneUtil {
         clone(keyValueStore, keyValueStore, keyValueStore);
     }
 
-    public static void clone(KeyValueStore blobKeyValueStore, KeyValueStore provenanceLogKeyValueStore, KeyValueStore provenanceLogIndexKeyValueStore) {
+    public static void clone(KeyValueStore blobKeyValueStore, KeyValueStore provenanceLogKeyValueStore, KeyValueStore provenanceIndexKeyValueStore) {
         final BlobStoreReadOnly blobStore
                 = new BlobStoreAppendOnly(blobKeyValueStore);
 
         final BlobStoreReadOnly provenanceLogStore
                 = new BlobStoreAppendOnly(provenanceLogKeyValueStore);
 
-        final StatementStoreReadOnly provenanceLogIndex
-                = new StatementStoreImpl(provenanceLogIndexKeyValueStore);
+        final StatementStoreReadOnly provenanceIndex
+                = new StatementStoreImpl(provenanceIndexKeyValueStore);
 
         StatementListener statementListener = blobToucher(blobStore);
         attemptReplay(provenanceLogStore,
-                provenanceLogIndex,
+                provenanceIndex,
                 statementListener);
     }
 

@@ -1,6 +1,7 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.model.RefNodeFactory;
+import com.ctc.wstx.sr.ValidatingStreamReader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -66,42 +67,47 @@ public class KeyValueStoreLocalFileSystemTest {
     }
 
     @Test
-    public void writeStream() throws IOException {
-        AtomicLong beforeCount = new AtomicLong(0);
-        AtomicLong afterCount = new AtomicLong(0);
-        List<IRI> pathRequests = new ArrayList<>();
+    public void writeStreamAlwaysRejecting() throws IOException {
+
+        AtomicBoolean isAccepting = new AtomicBoolean(false);
+
+        KeyValueStoreLocalFileSystem filePersistence = assertExpectedAccepting(isAccepting);
+
+        assertThat(TestUtil.toUTF8(filePersistence.get(SOME_HASH)), is(nullValue()));
+
+    }
+
+    @Test
+    public void writeStreamAlwaysAccepting() throws IOException {
+
+        AtomicBoolean isAccepting = new AtomicBoolean(true);
+
+        KeyValueStoreLocalFileSystem filePersistence = assertExpectedAccepting(isAccepting);
+
+        assertThat(TestUtil.toUTF8(filePersistence.get(SOME_HASH)), is("some content"));
+
+    }
+
+    private KeyValueStoreLocalFileSystem assertExpectedAccepting(AtomicBoolean isAccepting) throws IOException {
         AtomicBoolean isAsserting = new AtomicBoolean(true);
-        StringBuffer sequence = new StringBuffer();
+
+        KeyValueStreamFactory keyValueStreamFactory = (key, is) -> new ValidatingKeyValueStream() {
+            @Override
+            public InputStream getValueStream() {
+                return is;
+            }
+
+            @Override
+            public boolean acceptValueStreamForKey(IRI key) {
+                return isAccepting.get();
+            }
+        };
 
         KeyValueStoreLocalFileSystem filePersistence =
                 new KeyValueStoreLocalFileSystem(
                         new File(path.toFile(), "tmp"),
-                        new KeyToPath() {
-                            private KeyToPath keyToPath = new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI());
-                            @Override
-                            public URI toPath(IRI key) {
-                                if (!isAsserting.get()) {
-                                    sequence.append("toPath");
-                                    pathRequests.add(key);
-                                }
-                                return keyToPath.toPath(key);
-                            }
-                        }
-        ,
-                        new KeyValueStoreLocalFileSystem.KeyValueStoreListener() {
-
-                            @Override
-                            public void beforePut(IRI key, long valueSizeInBytes) {
-                                beforeCount.addAndGet(valueSizeInBytes);
-                                sequence.append("-beforePut-");
-                            }
-
-                            @Override
-                            public void afterPut(IRI key, long valueSizeInBytes) {
-                                afterCount.addAndGet(valueSizeInBytes);
-                                sequence.append("-afterPut");
-                            }
-                        });
+                        new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()),
+                        keyValueStreamFactory);
 
         assertThat(filePersistence.get(SOME_HASH), is(nullValue()));
         final InputStream someContentStream = IOUtils.toInputStream("some content", StandardCharsets.UTF_8);
@@ -131,19 +137,7 @@ public class KeyValueStoreLocalFileSystemTest {
         isAsserting.set(true);
 
         assertFalse(wasClosed.get());
-
-        assertThat(TestUtil.toUTF8(filePersistence.get(SOME_HASH)), is("some content"));
-
-        long valueLength = (long) IOUtils.toByteArray(filePersistence.get(SOME_HASH)).length;
-        assertThat(afterCount.get(), is(valueLength));
-        assertThat(beforeCount.get(), is(12L));
-
-        assertThat(pathRequests.size(), is(2));
-        assertThat(pathRequests.get(0), is(SOME_HASH));
-        assertThat(pathRequests.get(1), is(SOME_HASH));
-        assertThat(sequence.toString(), is("toPath-beforePut-toPath-afterPut"));
-
-
+        return filePersistence;
     }
 
 }
