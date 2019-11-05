@@ -13,12 +13,10 @@ public class ValidatingKeyValueStreamSHA256IRI implements ValidatingKeyValueStre
 
     private final static Pattern SHA_256_PATTERN = Pattern.compile("hash://sha256/([a-z0-9]){64}");
 
-    private final IRI key;
     private final ByteArrayOutputStream baos;
     private final InputStream value;
 
-    public ValidatingKeyValueStreamSHA256IRI(IRI key, InputStream value) {
-        this.key = key;
+    public ValidatingKeyValueStreamSHA256IRI(InputStream value) {
         this.baos = new ByteArrayOutputStream();
         this.value = new TeeInputStream(new BoundedInputStream(value, 79), baos);
     }

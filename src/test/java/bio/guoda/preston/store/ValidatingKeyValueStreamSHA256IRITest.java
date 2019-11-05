@@ -21,7 +21,7 @@ public class ValidatingKeyValueStreamSHA256IRITest {
         IRI iri = Hasher.calcSHA256("bla");
         InputStream is = IOUtils.toInputStream(iri.getIRIString(), StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
-        ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(somekey, is);
+        ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(is);
         IOUtils.copy(someiri.getValueStream(), new NullOutputStream());
 
         assertThat(someiri.acceptValueStreamForKey(somekey), Is.is(true));
@@ -31,7 +31,7 @@ public class ValidatingKeyValueStreamSHA256IRITest {
     public void tooShort() throws IOException {
         InputStream is = IOUtils.toInputStream("short", StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
-        ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(somekey, is);
+        ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(is);
         IOUtils.copy(someiri.getValueStream(), new NullOutputStream());
 
         assertThat(someiri.acceptValueStreamForKey(somekey), Is.is(false));
@@ -42,7 +42,7 @@ public class ValidatingKeyValueStreamSHA256IRITest {
         IRI iri = Hasher.calcSHA256("bla");
         InputStream is = IOUtils.toInputStream(iri.getIRIString() + "toolong", StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
-        ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(somekey, is);
+        ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(is);
         IOUtils.copy(someiri.getValueStream(), new NullOutputStream());
 
         assertThat(someiri.acceptValueStreamForKey(somekey), Is.is(false));

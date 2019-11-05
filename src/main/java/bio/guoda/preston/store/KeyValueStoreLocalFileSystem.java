@@ -54,7 +54,6 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
                             }
                         }
                     }
-
                 } catch (IOException ex) {
                     FileUtils.deleteQuietly(tmpDestFile);
                     FileUtils.deleteQuietly(destFile);
@@ -99,24 +98,15 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
     public static class AcceptingKeyValueStreamFactory implements KeyValueStreamFactory {
         @Override
         public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
-            return new ValidatingKeyValueStream() {
-                @Override
-                public InputStream getValueStream() {
-                    return is;
-                }
-
-                @Override
-                public boolean acceptValueStreamForKey(IRI key) {
-                    return true;
-                }
-            };
+            return new ValidatingKeyValueStreamContentAddressed(is);
         }
     }
 
     public static class KeyValueStreamFactorySHA256Values implements KeyValueStreamFactory {
         @Override
         public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
-            return new ValidatingKeyValueStreamSHA256IRI(key, is);
+            return new ValidatingKeyValueStreamSHA256IRI(is);
         }
     }
+
 }

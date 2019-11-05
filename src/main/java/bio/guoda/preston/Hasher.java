@@ -32,11 +32,15 @@ public final class Hasher {
     public static IRI calcSHA256(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
         try {
             MessageDigest md = createDigest(is, os, shouldCloseInputStream);
-            String format = String.format("%064x", new BigInteger(1, md.digest()));
-            return toHashURI(format);
+            return toHashURI(md);
         } catch (IOException | NoSuchAlgorithmException var9) {
             throw new IOException("failed to cache dataset", var9);
         }
+    }
+
+    public static IRI toHashURI(MessageDigest md) {
+        String format = String.format("%064x", new BigInteger(1, md.digest()));
+        return toHashURI(format);
     }
 
     private static MessageDigest createDigest(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws NoSuchAlgorithmException, IOException {
