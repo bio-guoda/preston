@@ -57,15 +57,15 @@ public class Archiver extends VersionProcessor {
 
     private void putVersion(IRI versionSource, BlankNodeOrIRI newVersion) throws IOException {
         Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
-        emit(toStatement(newVersion,
-                GENERATED_AT_TIME,
-                nowLiteral));
 
         if (activityCtx != null) {
             emit(toStatement(newVersion,
                     WAS_GENERATED_BY,
                     activityCtx.getActivity()));
             IRI downloadActivity = toIRI(UUID.randomUUID());
+            emit(toStatement(downloadActivity,
+                    GENERATED_AT_TIME,
+                    nowLiteral));
             emit(toStatement(newVersion,
                     toIRI("http://www.w3.org/ns/prov#qualifiedGeneration"),
                     downloadActivity));
