@@ -76,9 +76,9 @@ public class ContentResolverTest {
         assertFalse(refNodes.isEmpty());
         assertThat(refNodes.size(), is(7));
 
-        assertThat(refNodes.get(1).getPredicate(), is(RefNodeConstants.WAS_GENERATED_BY));
-        assertThat(refNodes.get(1).getObject(), is(TestUtil.getTestCrawlContext().getActivity()));
-
+        assertThat(refNodes.get(0).getPredicate(), is(RefNodeConstants.WAS_GENERATED_BY));
+        assertThat(refNodes.get(0).getObject(), is(TestUtil.getTestCrawlContext().getActivity()));
+        
         String expectedHash = "50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
         String expectedValue = "https://example.org";
 
