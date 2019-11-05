@@ -14,7 +14,7 @@ public class ValidatingKeyValueStreamContentAddressed implements ValidatingKeyVa
 
     public ValidatingKeyValueStreamContentAddressed(InputStream value) {
         try {
-            this.value = new MessageDigestCalculatingInputStream(value, "SHA-256");
+            this.value = new MessageDigestCalculatingInputStream(value, Hasher.getHashAlgorithm());
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException("failed to instantiate hash algorithm", e);
         }

@@ -17,10 +17,6 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
 
     private final KeyValueStreamFactory keyValueStreamFactory;
 
-    public KeyValueStoreLocalFileSystem(File tmpDir, KeyToPath keyToPath) {
-        this(tmpDir, keyToPath, new ValidatingKeyValueStreamContentAddressedFactory());
-    }
-
     public KeyValueStoreLocalFileSystem(File tmpDir, KeyToPath keyToPath, KeyValueStreamFactory keyValueStreamFactory) {
         this.tmpDir = tmpDir;
         this.keyToPath = keyToPath;
@@ -35,7 +31,7 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
     @Override
     public void put(IRI key, InputStream value) throws IOException {
         try (InputStream is = value) {
-            URI filePathBeforeCopy = keyToPath.toPath(key);
+            URI filePathBeforeCopy = getPathForKey(key);
             if (!getDataFile(filePathBeforeCopy).exists()) {
                 File tmpDestFile = getDataFile(URI.create(filePathBeforeCopy.toString() + ".tmp"));
                 tmpDestFile.deleteOnExit();
@@ -46,6 +42,8 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
 
                     if (validating.acceptValueStreamForKey(key)) {
                         put(key, tmpDestFile);
+                    } else {
+                        FileUtils.deleteQuietly(tmpDestFile);
                     }
                 } catch (IOException ex) {
                     FileUtils.deleteQuietly(tmpDestFile);
@@ -56,6 +54,10 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
         } finally {
             value.close();
         }
+    }
+
+    private URI getPathForKey(IRI key) {
+        return keyToPath.toPath(key);
     }
 
 
@@ -81,12 +83,12 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
 
     @Override
     public InputStream get(IRI key) throws IOException {
-        File dataFile = getDataFile(keyToPath.toPath(key));
+        File dataFile = getDataFile(getPathForKey(key));
         return dataFile.exists() ? FileUtils.openInputStream(dataFile) : null;
     }
 
     private void put(IRI key, File tmpDestFile) throws IOException {
-        URI filePathAfterCopy = keyToPath.toPath(key);
+        URI filePathAfterCopy = getPathForKey(key);
         File destFile = getDataFile(filePathAfterCopy);
         if (!destFile.exists()) {
             FileUtils.forceMkdirParent(destFile);

@@ -44,7 +44,7 @@ public final class Hasher {
     }
 
     private static MessageDigest createDigest(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws NoSuchAlgorithmException, IOException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        MessageDigest md = MessageDigest.getInstance(getHashAlgorithm());
         DigestInputStream digestInputStream = new DigestInputStream(is, md);
         IOUtils.copy(digestInputStream, os);
         if (shouldCloseInputStream) {
@@ -53,6 +53,10 @@ public final class Hasher {
         os.flush();
         os.close();
         return md;
+    }
+
+    public static String getHashAlgorithm() {
+        return "SHA-256";
     }
 
     public static IRI toHashURI(String sha256Hash) {
