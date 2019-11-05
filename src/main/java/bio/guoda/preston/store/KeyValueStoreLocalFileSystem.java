@@ -45,14 +45,7 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
                     FileUtils.copyToFile(validating.getValueStream(), tmpDestFile);
 
                     if (validating.acceptValueStreamForKey(key)) {
-                        URI filePathAfterCopy = keyToPath.toPath(key);
-                        destFile = getDataFile(filePathAfterCopy);
-                        if (!destFile.exists()) {
-                            FileUtils.forceMkdirParent(destFile);
-                            if (!tmpDestFile.renameTo(destFile)) {
-                                throw new IOException("failed to rename tmp file from [" + tmpDestFile.getAbsolutePath() + "] to [" + destFile.getAbsolutePath() + "]");
-                            }
-                        }
+                        put(key, tmpDestFile);
                     }
                 } catch (IOException ex) {
                     FileUtils.deleteQuietly(tmpDestFile);
@@ -75,10 +68,11 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
     public IRI put(KeyGeneratingStream keyGeneratingStream, InputStream value) throws IOException {
         FileUtils.forceMkdir(tmpDir);
         File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
+        tmpFile.deleteOnExit();
         FileOutputStream os = FileUtils.openOutputStream(tmpFile);
         IRI key = keyGeneratingStream.generateKeyWhileStreaming(value, os);
-        try (InputStream tmpIs = FileUtils.openInputStream(tmpFile)) {
-            put(key, tmpIs);
+        try {
+            put(key, tmpFile);
         } finally {
             FileUtils.deleteQuietly(tmpFile);
         }
@@ -89,6 +83,17 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
     public InputStream get(IRI key) throws IOException {
         File dataFile = getDataFile(keyToPath.toPath(key));
         return dataFile.exists() ? FileUtils.openInputStream(dataFile) : null;
+    }
+
+    private void put(IRI key, File tmpDestFile) throws IOException {
+        URI filePathAfterCopy = keyToPath.toPath(key);
+        File destFile = getDataFile(filePathAfterCopy);
+        if (!destFile.exists()) {
+            FileUtils.forceMkdirParent(destFile);
+            if (!tmpDestFile.renameTo(destFile)) {
+                throw new IOException("failed to rename tmp file from [" + tmpDestFile.getAbsolutePath() + "] to [" + destFile.getAbsolutePath() + "]");
+            }
+        }
     }
 
     private KeyValueStreamFactory getKeyValueStreamFactory() {
