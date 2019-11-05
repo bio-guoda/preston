@@ -7,6 +7,7 @@ import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
+import bio.guoda.preston.store.KeyValueStreamFactory;
 import com.beust.jcommander.Parameter;
 import org.apache.commons.io.FileUtils;
 import sun.misc.Signal;
@@ -42,8 +43,8 @@ public class PersistingLocal extends Cmd {
         return data;
     }
 
-    protected KeyValueStore getKeyValueStore() {
-        KeyValueStore primary = new KeyValueStoreLocalFileSystem(getTmpDir(), getKeyToPathLocal());
+    protected KeyValueStore getKeyValueStore(KeyValueStreamFactory keyValueStreamFactory) {
+        KeyValueStore primary = new KeyValueStoreLocalFileSystem(getTmpDir(), getKeyToPathLocal(), keyValueStreamFactory);
         KeyValueStoreReadOnly fallback = new KeyValueStoreLocalFileSystem(getTmpDir(), new KeyTo5LevelPath(getDefaultDataDir().toURI()));
         return new KeyValueStoreWithFallback(primary, fallback);
     }

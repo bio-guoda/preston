@@ -19,10 +19,6 @@ import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 public class CloneUtil {
     private static final Log LOG = LogFactory.getLog(CloneUtil.class);
 
-    public static void clone(KeyValueStore keyValueStore) {
-        clone(keyValueStore, keyValueStore, keyValueStore);
-    }
-
     public static void clone(KeyValueStore blobKeyValueStore, KeyValueStore provenanceLogKeyValueStore, KeyValueStore provenanceIndexKeyValueStore) {
         final BlobStoreReadOnly blobStore
                 = new BlobStoreAppendOnly(blobKeyValueStore);

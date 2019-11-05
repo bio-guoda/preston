@@ -11,10 +11,12 @@ import bio.guoda.preston.store.KeyTo3LevelTarGzPath;
 import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreRemoteHTTP;
 import bio.guoda.preston.store.KeyValueStoreStickyFailover;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
+import bio.guoda.preston.store.KeyValueStreamFactory;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.URIConverter;
 import org.apache.commons.rdf.api.IRI;
@@ -53,7 +55,7 @@ public class Persisting extends PersistingLocal {
     }
 
     @Override
-    protected KeyValueStore getKeyValueStore() {
+    protected KeyValueStore getKeyValueStore(KeyValueStreamFactory kvStreamFactory) {
         KeyValueStore store;
         if (hasRemote()) {
             Stream<KeyToPath> keyToPathStream =
@@ -71,15 +73,15 @@ public class Persisting extends PersistingLocal {
 
             if (noLocalCache) {
                 store = new KeyValueStoreWithFallback(
-                        super.getKeyValueStore(),
+                        super.getKeyValueStore(kvStreamFactory),
                         failover);
             } else {
                 store = new KeyValueStoreCopying(
                         failover,
-                        super.getKeyValueStore());
+                        super.getKeyValueStore(kvStreamFactory));
             }
         } else {
-            store = super.getKeyValueStore();
+            store = super.getKeyValueStore(kvStreamFactory);
         }
         return store;
     }
@@ -99,7 +101,7 @@ public class Persisting extends PersistingLocal {
         return getRemoteURIs().stream().map(uri ->
                 noLocalCache
                         ? this.remoteWithTarGz(uri)
-                        : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore()));
+                        : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory())));
     }
 
     private KeyValueStoreRemoteHTTP remoteWith(KeyToPath keyToPath) {

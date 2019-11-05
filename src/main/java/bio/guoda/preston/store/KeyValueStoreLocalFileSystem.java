@@ -96,7 +96,7 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
         return keyValueStreamFactory;
     }
 
-    private static class AcceptingKeyValueStreamFactory implements KeyValueStreamFactory {
+    public static class AcceptingKeyValueStreamFactory implements KeyValueStreamFactory {
         @Override
         public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
             return new ValidatingKeyValueStream() {
@@ -110,6 +110,13 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
                     return true;
                 }
             };
+        }
+    }
+
+    public static class KeyValueStreamFactorySHA256Values implements KeyValueStreamFactory {
+        @Override
+        public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
+            return new ValidatingKeyValueStreamSHA256IRI(key, is);
         }
     }
 }

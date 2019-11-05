@@ -1,5 +1,7 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.converters.URIConverter;
@@ -27,7 +29,8 @@ public class CmdClone extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        CloneUtil.clone(getKeyValueStore());
+        KeyValueStore keyValueStore = getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory());
+        CloneUtil.clone(keyValueStore, keyValueStore, getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
     }
 
 }

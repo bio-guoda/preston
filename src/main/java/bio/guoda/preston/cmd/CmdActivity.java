@@ -16,6 +16,7 @@ import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
 import bio.guoda.preston.store.VersionUtil;
@@ -64,11 +65,11 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
     @Override
     public void run() {
-        KeyValueStore blobKeyValueStore = getKeyValueStore();
+        KeyValueStore blobKeyValueStore = getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory());
 
         BlobStore blobStore = new BlobStoreAppendOnly(blobKeyValueStore);
 
-        KeyValueStore logRelationsStore = getKeyValueStore();
+        KeyValueStore logRelationsStore = getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values());
 
         run(blobStore, new StatementStoreImpl(logRelationsStore));
     }

@@ -38,29 +38,66 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         File tmp = getTmpDir();
 
         if (ArchiveType.data_prov_provindex.equals(getArchiveType())) {
-            KeyValueStore copyingKeyValueStore = new KeyValueStoreCopying(
-                    getKeyValueStore(),
-                    new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI())));
-            CloneUtil.clone(copyingKeyValueStore);
+            copyAll(target, tmp);
         } else if (ArchiveType.data.equals(getArchiveType())) {
-            KeyValueStore copyingKeyValueStoreBlob = new KeyValueStoreCopying(
-                    getKeyValueStore(),
-                    new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI())));
-            CloneUtil.clone(copyingKeyValueStoreBlob, getKeyValueStore(), getKeyValueStore());
+            copyDataOnly(target, tmp);
         } else if (ArchiveType.prov.equals(getArchiveType())) {
-            KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
-                    getKeyValueStore(),
-                    new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI())));
-            CloneUtil.clone(new NullKeyValueStore(), copyingKeyValueStoreProv, getKeyValueStore());
+            copyProvLogsOnly(target, tmp);
         } else if (ArchiveType.provindex.equals(getArchiveType())) {
-            KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
-                    getKeyValueStore(),
-                    new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI())));
-            CloneUtil.clone(new NullKeyValueStore(), getKeyValueStore(), copyingKeyValueStoreProv);
+            copyProvIndexOnly(target, tmp);
         } else {
             throw new IllegalStateException("unsupport archive type [" + getArchiveType().name() + "]");
         }
 
+    }
+
+    public void copyAll(File target, File tmp) {
+        KeyValueStore copyingKeyValueStore = new KeyValueStoreCopying(
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()),
+                new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI()), new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()));
+
+        KeyValueStore copyingKeyValueStoreIndex = new KeyValueStoreCopying(
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()),
+                new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI()), new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
+
+        CloneUtil.clone(copyingKeyValueStore, copyingKeyValueStore, copyingKeyValueStoreIndex);
+    }
+
+    private void copyProvIndexOnly(File target, File tmp) {
+        KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()),
+                new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI()), new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()));
+
+        CloneUtil.clone(
+                new NullKeyValueStore(),
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()),
+                copyingKeyValueStoreProv
+        );
+    }
+
+    private void copyProvLogsOnly(File target, File tmp) {
+        KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()),
+                new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI()), new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()));
+
+        CloneUtil.clone(
+                new NullKeyValueStore(),
+                copyingKeyValueStoreProv,
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values())
+        );
+    }
+
+    private void copyDataOnly(File target, File tmp) {
+        KeyValueStore copyingKeyValueStoreBlob = new KeyValueStoreCopying(
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()),
+                new KeyValueStoreLocalFileSystem(tmp,
+                        new KeyTo3LevelPath(target.toURI()),
+                        new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()));
+
+        CloneUtil.clone(
+                copyingKeyValueStoreBlob,
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()),
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
     }
 
     private static class NullKeyValueStore implements KeyValueStore {
