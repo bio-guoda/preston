@@ -63,4 +63,26 @@ public class DerefProgressLoggerTest {
 
     }
 
+    @Test
+    public void logSomethingLongWithNoTotalLength() throws UnsupportedEncodingException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(out, true, StandardCharsets.UTF_8.name());
+
+        DerefProgressLogger logger = new DerefProgressLogger(printStream);
+        logger.setUpdateStepBytes(1);
+        logger.onProgress(
+                RefNodeFactory.toIRI("https://example.org/very"),
+                DerefState.START, 1024, -1);
+        logger.onProgress(
+                RefNodeFactory.toIRI("https://example.org/very"),
+                DerefState.BUSY, 1024, -1);
+
+        String[] lines = StringUtils.split(out.toString(StandardCharsets.UTF_8.name()), '\r');
+
+        assertThat(lines[0], Is.is(
+                "[https://example.org/very] 1 kB at ? MB/s"));
+
+
+    }
+
 }

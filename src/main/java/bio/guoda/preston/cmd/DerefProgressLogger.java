@@ -59,19 +59,13 @@ public class DerefProgressLogger implements DerefProgressListener {
         builder.append("\r[");
         builder.append(StringUtils.abbreviateMiddle(dataURI.getIRIString(), "...", 50));
         builder.append("] ");
-        builder.append(total > 0 ? String.format("%3.1f", 100.0 * read / total) : "?");
-        builder.append("% of ");
-        if (total < 1024) {
-            builder.append(total);
-            builder.append(" bytes at ");
-        } else if (total < 1024 * 1024) {
-            builder.append(total / 1024);
-            builder.append(" kB at ");
-        } else if (total > 1024 * 1024) {
-            builder.append(total / (1024 * 1024));
-            builder.append(" MB at ");
+        if (total > 0) {
+            builder.append(String.format("%3.1f", 100.0 * read / total));
+            builder.append("% of ");
+            appendSize(total, builder);
+        } else {
+            appendSize(read, builder);
         }
-
         double elapsedTime = stopWatch.getSplitTime() / 1000.0;
         String rateInMBPerSecond = elapsedTime > 0 ? String.format("%.2f", read / (1024 * 1024.0 * elapsedTime)) : "?";
         String etaInMinutes = elapsedTime > 1 ? String.format("+%.0f minutes", total * (elapsedTime / (read * 60.0))) : "< 1 minute";
@@ -80,7 +74,7 @@ public class DerefProgressLogger implements DerefProgressListener {
         if (DerefState.DONE.equals(derefState)) {
             builder.append(" completed in ");
             builder.append(elapsedTime / 60.0 < 1.0 ? "< 1 minute" : String.format("%.0f minute(s)", elapsedTime / 60.0));
-        } else {
+        } else if (total > 0) {
             builder.append(" ETA: ");
             builder.append(etaInMinutes);
         }
@@ -90,6 +84,19 @@ public class DerefProgressLogger implements DerefProgressListener {
         }
         out.print(builder.toString());
         lastRead.set(read);
+    }
+
+    public void appendSize(long read, StringBuilder builder) {
+        if (read < 1024) {
+            builder.append(read);
+            builder.append(" bytes at ");
+        } else if (read < 1024 * 1024) {
+            builder.append(read / 1024);
+            builder.append(" kB at ");
+        } else if (read > 1024 * 1024) {
+            builder.append(read / (1024 * 1024));
+            builder.append(" MB at ");
+        }
     }
 
     public long getUpdateStepBytes() {
