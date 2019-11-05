@@ -152,7 +152,7 @@ public class ArchiverTest {
         assertTrue(triedDereferencing.get());
         assertThat(nodes.size(), Is.is(7));
 
-        assertThat(nodes.get(2).toString(), startsWith("<hash://sha256/bla> <http://www.w3.org/ns/prov#qualifiedGeneration> "));
+        assertThat(nodes.get(1).toString(), startsWith("<hash://sha256/bla> <http://www.w3.org/ns/prov#qualifiedGeneration> "));
         String s = nodes.get(3).getSubject().toString();
         String qualifiedGeneration = s.substring(1, s.length() - 1);
         assertThat(nodes.get(3), is(toStatement(toIRI(qualifiedGeneration), IS_A, toIRI("http://www.w3.org/ns/prov#Generation"))));
