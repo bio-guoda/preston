@@ -26,7 +26,7 @@ public class CmdList extends LoggingPersisting implements Runnable {
         StatementListener listener = StatementLogFactory.createPrintingLogger(getLogMode(), System.out, handler);
 
         attemptReplay(
-                new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory())),
+                new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory())),
                 new StatementStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values())),
                 new CmdContext(this, listener));
     }

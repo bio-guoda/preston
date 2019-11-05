@@ -49,7 +49,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
 
     @Override
     public void run() {
-        final BlobStore blobStore = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()));
+        final BlobStore blobStore = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
         final StatementStore statementPersistence = new StatementStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
 
         Map<String, State> verifiedMap = new TreeMap<>();

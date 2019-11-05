@@ -101,7 +101,7 @@ public class Persisting extends PersistingLocal {
         return getRemoteURIs().stream().map(uri ->
                 noLocalCache
                         ? this.remoteWithTarGz(uri)
-                        : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory())));
+                        : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory())));
     }
 
     private KeyValueStoreRemoteHTTP remoteWith(KeyToPath keyToPath) {

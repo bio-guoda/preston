@@ -65,7 +65,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
     @Override
     public void run() {
-        KeyValueStore blobKeyValueStore = getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory());
+        KeyValueStore blobKeyValueStore = getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory());
 
         BlobStore blobStore = new BlobStoreAppendOnly(blobKeyValueStore);
 

@@ -18,7 +18,7 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
     private final KeyValueStreamFactory keyValueStreamFactory;
 
     public KeyValueStoreLocalFileSystem(File tmpDir, KeyToPath keyToPath) {
-        this(tmpDir, keyToPath, new AcceptingKeyValueStreamFactory());
+        this(tmpDir, keyToPath, new ValidatingKeyValueStreamContentAddressedFactory());
     }
 
     public KeyValueStoreLocalFileSystem(File tmpDir, KeyToPath keyToPath, KeyValueStreamFactory keyValueStreamFactory) {
@@ -95,7 +95,7 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
         return keyValueStreamFactory;
     }
 
-    public static class AcceptingKeyValueStreamFactory implements KeyValueStreamFactory {
+    public static class ValidatingKeyValueStreamContentAddressedFactory implements KeyValueStreamFactory {
         @Override
         public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
             return new ValidatingKeyValueStreamContentAddressed(is);

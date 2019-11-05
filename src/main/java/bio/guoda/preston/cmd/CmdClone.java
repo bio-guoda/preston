@@ -29,7 +29,7 @@ public class CmdClone extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        KeyValueStore keyValueStore = getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory());
+        KeyValueStore keyValueStore = getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory());
         CloneUtil.clone(keyValueStore, keyValueStore, getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
     }
 

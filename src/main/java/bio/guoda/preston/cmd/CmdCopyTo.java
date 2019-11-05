@@ -53,8 +53,8 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     public void copyAll(File target, File tmp) {
         KeyValueStore copyingKeyValueStore = new KeyValueStoreCopying(
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()),
-                new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI()), new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()));
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()),
+                new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI()), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
 
         KeyValueStore copyingKeyValueStoreIndex = new KeyValueStoreCopying(
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()),
@@ -65,20 +65,20 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     private void copyProvIndexOnly(File target, File tmp) {
         KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()),
-                new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI()), new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()));
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()),
+                new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI()), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
 
         CloneUtil.clone(
                 new NullKeyValueStore(),
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()),
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()),
                 copyingKeyValueStoreProv
         );
     }
 
     private void copyProvLogsOnly(File target, File tmp) {
         KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()),
-                new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI()), new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()));
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()),
+                new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI()), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
 
         CloneUtil.clone(
                 new NullKeyValueStore(),
@@ -89,14 +89,14 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     private void copyDataOnly(File target, File tmp) {
         KeyValueStore copyingKeyValueStoreBlob = new KeyValueStoreCopying(
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()),
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()),
                 new KeyValueStoreLocalFileSystem(tmp,
                         new KeyTo3LevelPath(target.toURI()),
-                        new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()));
+                        new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
 
         CloneUtil.clone(
                 copyingKeyValueStoreBlob,
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.AcceptingKeyValueStreamFactory()),
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()),
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
     }
 
