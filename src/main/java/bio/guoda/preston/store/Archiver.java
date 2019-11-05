@@ -63,12 +63,12 @@ public class Archiver extends VersionProcessor {
                     WAS_GENERATED_BY,
                     activityCtx.getActivity()));
             IRI downloadActivity = toIRI(UUID.randomUUID());
-            emit(toStatement(downloadActivity,
-                    GENERATED_AT_TIME,
-                    nowLiteral));
             emit(toStatement(newVersion,
                     toIRI("http://www.w3.org/ns/prov#qualifiedGeneration"),
                     downloadActivity));
+            emit(toStatement(downloadActivity,
+                    GENERATED_AT_TIME,
+                    nowLiteral));
             emit(toStatement(downloadActivity,
                     IS_A,
                     toIRI("http://www.w3.org/ns/prov#Generation")));
