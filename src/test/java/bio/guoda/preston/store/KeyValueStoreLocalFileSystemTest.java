@@ -46,13 +46,53 @@ public class KeyValueStoreLocalFileSystemTest {
     }
 
     @Test
-    public void write() throws IOException {
-        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()));
+    public void writeAlwaysAccepting() throws IOException {
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
+                new File(path.toFile(), "tmp"),
+                new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()),
+                getAlwaysAccepting()
+        );
+
         assertNull(filePersistence.get(SOME_HASH));
         filePersistence.put(SOME_HASH, IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
 
         assertThat(TestUtil.toUTF8(filePersistence.get(SOME_HASH)), is("some value"));
 
+    }
+
+    @Test
+    public void writeDefault() throws IOException {
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
+                new File(path.toFile(), "tmp"),
+                new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI())
+        );
+
+        IRI someValueKey = RefNodeFactory.toIRI("hash://sha256/ab3d07f3169ccbd0ed6c4b45de21519f9f938c72d24124998aab949ce83bb51b");
+        assertNull(filePersistence.get(someValueKey));
+        filePersistence.put(someValueKey, IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
+
+        assertThat(TestUtil.toUTF8(filePersistence.get(someValueKey)), is("some value"));
+
+    }
+
+    public KeyValueStreamFactory getAlwaysAccepting() {
+        return new KeyValueStreamFactory() {
+
+            @Override
+            public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
+                return new ValidatingKeyValueStream() {
+                    @Override
+                    public InputStream getValueStream() {
+                        return is;
+                    }
+
+                    @Override
+                    public boolean acceptValueStreamForKey(IRI key) {
+                        return true;
+                    }
+                };
+            }
+        };
     }
 
     @Test(expected = IllegalArgumentException.class)
