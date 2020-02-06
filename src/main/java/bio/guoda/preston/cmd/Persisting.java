@@ -118,13 +118,7 @@ public class Persisting extends PersistingLocal {
     }
 
     public static Dereferencer<InputStream> getDerefStream(final DerefProgressListener listener) {
-        return new Dereferencer<InputStream>() {
-
-            @Override
-            public InputStream dereference(IRI uri) throws IOException {
-                return Resources.asInputStreamIgnore404(uri, listener);
-            }
-        };
+        return uri -> Resources.asInputStreamIgnore404(uri, listener);
     }
 
     private KeyValueStoreRemoteHTTP remoteWithTarGz(URI baseURI) {

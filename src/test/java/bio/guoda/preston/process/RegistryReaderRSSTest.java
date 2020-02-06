@@ -153,5 +153,34 @@ public class RegistryReaderRSSTest {
         assertThat(nodes.size(), is(1128));
     }
 
+    @Test
+    public void parseVertNetIPTRSS() throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
+        IRI parent = RefNodeFactory.toIRI("http://example.org");
+        List<Triple> nodes = new ArrayList<>();
+        StatementEmitter emitter = nodes::add;
+        InputStream is = getClass().getResourceAsStream("vertnet-ipt-rss.xml");
+
+        assertNotNull(is);
+
+        RegistryReaderRSS.parseRssFeed(parent, emitter, is);
+
+        boolean hasEML = false;
+        boolean hasEMLLink = false;
+        boolean hasDWCA = false;
+        boolean hasDWCALink = false;
+        for (Triple node : nodes) {
+            hasEML = hasEML || node.getObject().toString().equals("\"application/eml\"");
+            hasDWCA = hasDWCA || node.getObject().toString().equals("\"application/dwca\"");
+            hasEMLLink = hasEMLLink || node.getObject().toString().equals("<http://ipt.vertnet.org:8080/ipt/eml.do?r=ucm_egg>");
+            hasDWCALink = hasDWCALink || node.getObject().toString().equals("<http://ipt.vertnet.org:8080/ipt/archive.do?r=ucm_egg>");
+        }
+
+        assertTrue(hasEML);
+        assertTrue(hasEMLLink);
+        assertTrue(hasDWCA);
+        assertTrue(hasDWCALink);
+        assertThat(nodes.size(), is(1849));
+    }
+
 
 }
