@@ -1,16 +1,14 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
+import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -35,30 +33,44 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
     @Override
     public void on(Triple statement) {
         if (hasVersionAvailable(statement)) {
-            parse((IRI) getVersion(statement));
+            parse((IRI) getVersion(statement), this, this);
         }
 
     }
 
-    private void parse(IRI iri) {
+    protected static void parse(IRI iri, StatementEmitter emitter, KeyValueStoreReadOnly readOnlyStore) {
         try {
             // first parse document to check whether it is valid
-            InputStream in = get(iri);
-            if (in != null) {
-                new XmlMapper().readTree(in);
-                /// then parse
-                parseRssFeed(iri, this, in);
-            }
-        } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
+            checkParsebleXml(iri, readOnlyStore);
+            // then parse
+            parseRssFeed(iri, emitter, readOnlyStore);
+        } catch (IOException e) {
             // ignore - opportunistic parsing attempt
         }
     }
 
-    static void parseRssFeed(final IRI parent1, StatementEmitter emitter, InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    private static void parseRssFeed(IRI iri, StatementEmitter emitter, KeyValueStoreReadOnly readOnlyStore) throws IOException {
+        try (InputStream in2 = readOnlyStore.get(iri)) {
+            if (in2 != null) {
+                /// then parse
+                parseRssFeed(iri, emitter, in2);
+            }
+        }
+    }
+
+    private static void checkParsebleXml(IRI iri, KeyValueStoreReadOnly readOnlyStore) throws IOException {
+        try (InputStream in = readOnlyStore.get(iri)) {
+            if (in != null) {
+                new XmlMapper().readTree(in);
+            }
+        }
+    }
+
+    private static void parseRssFeed(final IRI parent1, StatementEmitter emitter, InputStream resourceAsStream) throws IOException {
 
         XPathHandler handler = new XPathHandler() {
             @Override
-            public void evaluateXPath(StatementEmitter emitter, NodeList nodeList) throws XPathExpressionException {
+            public void evaluateXPath(StatementEmitter emitter, NodeList nodeList) {
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     boolean isDWCA = false;
                     URI linkURL = null;

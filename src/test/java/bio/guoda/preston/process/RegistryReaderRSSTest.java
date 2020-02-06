@@ -1,16 +1,12 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,19 +15,24 @@ import java.util.stream.Collectors;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 public class RegistryReaderRSSTest {
 
     @Test
-    public void parseFeeds() throws XMLStreamException, IOException, ParserConfigurationException, SAXException, XPathExpressionException {
+    public void incomingFeed() {
+
+    }
+
+    @Test
+    public void parseFeeds() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Triple> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
-        InputStream is = getClass().getResourceAsStream("torch-portal-rss.xml");
 
-        RegistryReaderRSS.parseRssFeed(parent, emitter, is);
+        KeyValueStoreReadOnly readOnlyStore = (IRI key) -> getClass().getResourceAsStream("torch-portal-rss.xml");
+
+        RegistryReaderRSS.parse(parent, emitter, readOnlyStore);
 
         assertThat(nodes.size(), is(28));
 
@@ -50,13 +51,13 @@ public class RegistryReaderRSSTest {
 
 
     @Test
-    public void parseArthopodEasyFeeds() throws XMLStreamException, IOException, ParserConfigurationException, SAXException, XPathExpressionException {
+    public void parseArthopodEasyFeeds() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Triple> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
-        InputStream is = getClass().getResourceAsStream("arthropodEasyCapture.xml");
+        KeyValueStoreReadOnly readOnlyStore = (IRI key) -> getClass().getResourceAsStream("arthropodEasyCapture.xml");
 
-        RegistryReaderRSS.parseRssFeed(parent, emitter, is);
+        RegistryReaderRSS.parse(parent, emitter, readOnlyStore);
 
         assertThat(nodes.size(), is(21));
 
@@ -80,14 +81,16 @@ public class RegistryReaderRSSTest {
         assertThat(actual, is(expected));
     }
 
+
+
     @Test
-    public void parseSymbiotaFeeds() throws XMLStreamException, IOException, ParserConfigurationException, SAXException, XPathExpressionException {
+    public void parseSymbiotaFeeds() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Triple> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
-        InputStream is = getClass().getResourceAsStream("symbiota-rss.xml");
 
-        RegistryReaderRSS.parseRssFeed(parent, emitter, is);
+
+        RegistryReaderRSS.parse(parent, emitter, (IRI key) -> getClass().getResourceAsStream("symbiota-rss.xml"));
 
         assertThat(nodes.size(), is(189));
 
@@ -114,26 +117,23 @@ public class RegistryReaderRSSTest {
     }
 
     @Test
-    public void parseIntermountainFeeds() throws XMLStreamException, IOException, ParserConfigurationException, SAXException, XPathExpressionException {
+    public void parseIntermountainFeeds() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Triple> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
-        InputStream is = getClass().getResourceAsStream("intermountain-biota-rss.xml");
 
-        RegistryReaderRSS.parseRssFeed(parent, emitter, is);
+        RegistryReaderRSS.parse(parent, emitter, (IRI key) -> getClass().getResourceAsStream("intermountain-biota-rss.xml"));
 
         assertThat(nodes.size(), is(84));
     }
 
     @Test
-    public void parseIPTRSS() throws XMLStreamException, IOException, ParserConfigurationException, SAXException, XPathExpressionException {
+    public void parseIPTRSS() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Triple> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
-        InputStream is = getClass().getResourceAsStream("ipt-norway-rss.xml");
-        assertNotNull(is);
 
-        RegistryReaderRSS.parseRssFeed(parent, emitter, is);
+        RegistryReaderRSS.parse(parent, emitter, (IRI key) -> getClass().getResourceAsStream("ipt-norway-rss.xml"));
 
         boolean hasEML = false;
         boolean hasEMLLink = false;
@@ -154,15 +154,12 @@ public class RegistryReaderRSSTest {
     }
 
     @Test
-    public void parseVertNetIPTRSS() throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
+    public void parseVertNetIPTRSS() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Triple> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
-        InputStream is = getClass().getResourceAsStream("vertnet-ipt-rss.xml");
 
-        assertNotNull(is);
-
-        RegistryReaderRSS.parseRssFeed(parent, emitter, is);
+        RegistryReaderRSS.parse(parent, emitter, (IRI key) -> getClass().getResourceAsStream("vertnet-ipt-rss.xml"));
 
         boolean hasEML = false;
         boolean hasEMLLink = false;
