@@ -98,7 +98,7 @@ public class ReplayUtilTest {
     public BlobStore getBlobStore() {
         return new BlobStore() {
             @Override
-            public IRI putBlob(InputStream is) throws IOException {
+            public IRI put(InputStream is) throws IOException {
                 throw new IllegalArgumentException();
             }
 

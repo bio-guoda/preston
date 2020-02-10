@@ -246,7 +246,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                 printStream = null;
 
                 try (FileInputStream is = new FileInputStream(tmpArchive)) {
-                    IRI newVersion = blobStore.putBlob(is);
+                    IRI newVersion = blobStore.put(is);
                     RefNodeFactory.nowDateTimeLiteral();
 
                     IRI previousVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), statementStore);

@@ -51,7 +51,7 @@ public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStre
                                         break;
                                     }
                                 } else {
-                                    blobStore.putBlob(tarInputStream);
+                                    blobStore.put(tarInputStream);
                                 }
                             }
                         }

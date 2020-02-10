@@ -9,6 +9,6 @@ import java.io.InputStream;
 
 public interface BlobStore extends BlobStoreReadOnly {
 
-    IRI putBlob(InputStream is) throws IOException;
+    IRI put(InputStream is) throws IOException;
 
 }

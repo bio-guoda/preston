@@ -48,7 +48,7 @@ public class RegistryReaderIDigBioTest {
         BlobStore blob = new BlobStore() {
 
             @Override
-            public IRI putBlob(InputStream is) throws IOException {
+            public IRI put(InputStream is) throws IOException {
                 return null;
             }
 
