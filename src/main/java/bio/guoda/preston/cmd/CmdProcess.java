@@ -18,7 +18,7 @@ import java.util.Queue;
  * See https://github.com/bio-guoda/preston/issues/15 .
  */
 
-@Parameters(separators = "= ", commandDescription = "(re-)process tracked biodiversity dataset graph using stdin")
+@Parameters(separators = "= ", commandDescription = "offline (re-)processing of tracked biodiversity dataset graph using stdin")
 public class CmdProcess extends CmdActivity {
 
     @Override

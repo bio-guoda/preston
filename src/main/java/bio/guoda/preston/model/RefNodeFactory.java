@@ -86,13 +86,13 @@ public class RefNodeFactory {
         return rdf.createBlankNode();
     }
 
-    public static boolean isBlankOrSkolemizedBlank(BlankNodeOrIRI iri) {
+    public static boolean isBlankOrSkolemizedBlank(RDFTerm iri) {
         //see https://www.w3.org/TR/rdf11-concepts/#section-skolemization
         return iri != null &&
                 (iri instanceof BlankNode || isSkolemizedBlank(iri));
     }
 
-    public static boolean isSkolemizedBlank(BlankNodeOrIRI iri) {
+    public static boolean isSkolemizedBlank(RDFTerm iri) {
         //see https://www.w3.org/TR/rdf11-concepts/#section-skolemization
         return iri.toString().contains(SKOLEMIZATION_PATH);
     }

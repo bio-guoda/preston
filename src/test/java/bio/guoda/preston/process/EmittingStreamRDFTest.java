@@ -1,6 +1,9 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.cmd.ProcessorState;
+import bio.guoda.preston.model.RefNodeFactory;
+import com.sun.xml.internal.bind.api.impl.NameConverter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.Triple;
@@ -12,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static org.junit.Assert.*;
 
 public class EmittingStreamRDFTest {
@@ -29,6 +33,25 @@ public class EmittingStreamRDFTest {
         assertThat(triples.size(), Is.is(1));
 
         assertThat(triples.get(0).getObject().ntriplesString(), Is.is("<http://www.w3.org/ns/prov#SoftwareAgent>"));
+
+    }
+
+    @Test
+    public void emitWithBlankNode() {
+        List<Triple> triples = new ArrayList<>();
+
+        String nquad = "<https://example.org> <http://purl.org/pav/hasVersion> _:ae63fa95-362c-38b5-b74f-203f8d7f92b3 .";
+
+        new EmittingStreamRDF(new StatementEmitter() {
+            @Override
+            public void emit(Triple statement) {
+                triples.add(statement);
+            }
+        }).parseAndEmit(IOUtils.toInputStream(nquad, StandardCharsets.UTF_8));
+
+        assertThat(triples.size(), Is.is(1));
+
+        assertThat(RefNodeFactory.isBlankOrSkolemizedBlank(triples.get(0).getObject()), Is.is(true));
 
     }
 
