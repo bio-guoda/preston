@@ -1,9 +1,7 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.cmd.ProcessorState;
 import bio.guoda.preston.model.RefNodeFactory;
-import com.sun.xml.internal.bind.api.impl.NameConverter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.Triple;
@@ -15,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class EmittingStreamRDFTest {
 
