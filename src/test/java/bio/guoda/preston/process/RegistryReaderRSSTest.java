@@ -20,11 +20,6 @@ import static org.junit.Assert.assertThat;
 public class RegistryReaderRSSTest {
 
     @Test
-    public void incomingFeed() {
-
-    }
-
-    @Test
     public void parseFeeds() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Triple> nodes = new ArrayList<>();
