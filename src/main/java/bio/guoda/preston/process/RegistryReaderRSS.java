@@ -25,8 +25,8 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class RegistryReaderRSS extends ProcessorReadOnly {
-    public RegistryReaderRSS(BlobStoreReadOnly testBlobStore, StatementListener listener) {
-        super(testBlobStore, listener);
+    public RegistryReaderRSS(BlobStoreReadOnly blobStore, StatementListener listener) {
+        super(blobStore, listener);
 
     }
 
