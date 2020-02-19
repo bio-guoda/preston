@@ -30,7 +30,7 @@ public class RegistryReaderRSSTest {
         ArrayList<Triple> nodes = new ArrayList<>();
         StatementListener registryReader = new RegistryReaderRSS(TestUtil.getTestBlobStore(), nodes::add);
 
-        registryReader.on(toStatement(toIRI("donaldduck"), HAS_VERSION, toIRI("hash")));
+        registryReader.on(toStatement(toIRI("donaldduck"), HAS_VERSION, toIRI("somehash")));
         assertThat(nodes.size(), is(0));
     }
 
@@ -40,12 +40,13 @@ public class RegistryReaderRSSTest {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
+                assertThat(key, is(toIRI("somehash")));
                 return getClass().getResourceAsStream("vertnet-ipt-rss.xml");
             }
         };
         StatementListener registryReader = new RegistryReaderRSS(blobStore, nodes::add);
 
-        registryReader.on(toStatement(toIRI("daisyduck"), HAS_VERSION, toIRI("hash")));
+        registryReader.on(toStatement(toIRI("daisyduck"), HAS_VERSION, toIRI("somehash")));
         assertThat(nodes.size(), is(1849));
     }
 
