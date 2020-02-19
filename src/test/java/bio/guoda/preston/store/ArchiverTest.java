@@ -156,7 +156,7 @@ public class ArchiverTest {
         String s = nodes.get(3).getSubject().toString();
         String qualifiedGeneration = s.substring(1, s.length() - 1);
         assertThat(nodes.get(3), is(toStatement(toIRI(qualifiedGeneration), IS_A, toIRI("http://www.w3.org/ns/prov#Generation"))));
-        assertThat(nodes.get(4), is(toStatement(toIRI(qualifiedGeneration), toIRI("http://www.w3.org/ns/prov#activity"), testCrawlContext.getActivity())));
+        assertThat(nodes.get(4), is(toStatement(toIRI(qualifiedGeneration), toIRI("http://www.w3.org/ns/prov#wasInformedBy"), testCrawlContext.getActivity())));
         assertThat(nodes.get(5), is(toStatement(toIRI(qualifiedGeneration), toIRI("http://www.w3.org/ns/prov#used"), toIRI("http://some"))));
         assertThat(nodes.get(6).toString(), is("<http://some> <http://purl.org/pav/hasVersion> <hash://sha256/bla> ."));
     }
