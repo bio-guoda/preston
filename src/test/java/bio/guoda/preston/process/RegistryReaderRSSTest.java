@@ -2,16 +2,22 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
+import bio.guoda.preston.store.TestUtil;
+
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.Is.is;
@@ -20,8 +26,17 @@ import static org.junit.Assert.assertThat;
 public class RegistryReaderRSSTest {
 
     @Test
+    public void onNotRSSVersion() {
+        ArrayList<Triple> nodes = new ArrayList<>();
+        StatementListener registryReader = new RegistryReaderRSS(TestUtil.getTestBlobStore(), nodes::add);
+
+        registryReader.on(toStatement(toIRI("donaldduck"), HAS_VERSION, toIRI("hash")));
+        assertThat(nodes.size(), is(0));
+    }
+
+    @Test
     public void parseFeeds() throws IOException {
-        IRI parent = RefNodeFactory.toIRI("http://example.org");
+        IRI parent = toIRI("http://example.org");
         List<Triple> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
 
@@ -172,6 +187,14 @@ public class RegistryReaderRSSTest {
         assertTrue(hasDWCA);
         assertTrue(hasDWCALink);
         assertThat(nodes.size(), is(1849));
+    }
+
+    private IRI createTestNode() {
+        try {
+            return toIRI(getClass().getResource("vertnet-ipt-rss.xml").toURI());
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
 
