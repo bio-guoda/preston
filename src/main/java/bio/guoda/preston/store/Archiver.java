@@ -73,7 +73,7 @@ public class Archiver extends VersionProcessor {
                     IS_A,
                     toIRI("http://www.w3.org/ns/prov#Generation")));
             emit(toStatement(downloadActivity,
-                    toIRI("http://www.w3.org/ns/prov#activity"),
+                    toIRI("http://www.w3.org/ns/prov#wasInformedBy"),
                     (activityCtx.getActivity())));
             emit(toStatement(downloadActivity,
                     toIRI("http://www.w3.org/ns/prov#used"),
