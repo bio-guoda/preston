@@ -9,7 +9,7 @@ import org.apache.commons.rdf.api.Triple;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +32,21 @@ public class RegistryReaderRSSTest {
 
         registryReader.on(toStatement(toIRI("donaldduck"), HAS_VERSION, toIRI("hash")));
         assertThat(nodes.size(), is(0));
+    }
+
+    @Test
+    public void onRSSVersion() {
+        ArrayList<Triple> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return getClass().getResourceAsStream("vertnet-ipt-rss.xml");
+            }
+        };
+        StatementListener registryReader = new RegistryReaderRSS(blobStore, nodes::add);
+
+        registryReader.on(toStatement(toIRI("daisyduck"), HAS_VERSION, toIRI("hash")));
+        assertThat(nodes.size(), is(1849));
     }
 
     @Test
@@ -187,14 +202,6 @@ public class RegistryReaderRSSTest {
         assertTrue(hasDWCA);
         assertTrue(hasDWCALink);
         assertThat(nodes.size(), is(1849));
-    }
-
-    private IRI createTestNode() {
-        try {
-            return toIRI(getClass().getResource("vertnet-ipt-rss.xml").toURI());
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException(e);
-        }
     }
 
 
