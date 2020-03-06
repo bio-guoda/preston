@@ -4,6 +4,7 @@ import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
+import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDF;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
@@ -13,6 +14,7 @@ import org.apache.commons.rdf.simple.Types;
 import bio.guoda.preston.DateUtil;
 
 import java.net.URI;
+import java.util.Optional;
 import java.util.UUID;
 
 import static bio.guoda.preston.RefNodeConstants.*;
@@ -114,5 +116,13 @@ public class RefNodeFactory {
 
     public static Literal nowDateTimeLiteral() {
         return toDateTime(DateUtil.now());
+    }
+
+    public static Optional<BlankNodeOrIRI> graphNameOf(TripleLike triple) {
+        Optional<BlankNodeOrIRI> graphName = Optional.empty();
+        if (triple instanceof Quad) {
+            graphName = ((Quad)triple).getGraphName();
+        }
+        return graphName;
     }
 }
