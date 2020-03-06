@@ -9,7 +9,6 @@ import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.TripleLike;
 
 import java.io.IOException;

@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
+import static bio.guoda.preston.TripleMatcher.hasTriple;
 import static bio.guoda.preston.model.RefNodeFactory.isBlankOrSkolemizedBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
@@ -154,9 +155,9 @@ public class ArchiverTest {
         assertThat(nodes.get(1).toString(), startsWith("<hash://sha256/bla> <http://www.w3.org/ns/prov#qualifiedGeneration> "));
         String s = nodes.get(3).getSubject().toString();
         String qualifiedGeneration = s.substring(1, s.length() - 1);
-        assertThat(nodes.get(3), is(toStatement(toIRI(qualifiedGeneration), IS_A, toIRI("http://www.w3.org/ns/prov#Generation"))));
-        assertThat(nodes.get(4), is(toStatement(toIRI(qualifiedGeneration), toIRI("http://www.w3.org/ns/prov#wasInformedBy"), testCrawlContext.getActivity())));
-        assertThat(nodes.get(5), is(toStatement(toIRI(qualifiedGeneration), toIRI("http://www.w3.org/ns/prov#used"), toIRI("http://some"))));
+        assertThat(nodes.get(3), hasTriple(toStatement(toIRI(qualifiedGeneration), IS_A, toIRI("http://www.w3.org/ns/prov#Generation"))));
+        assertThat(nodes.get(4), hasTriple(toStatement(toIRI(qualifiedGeneration), toIRI("http://www.w3.org/ns/prov#wasInformedBy"), testCrawlContext.getActivity())));
+        assertThat(nodes.get(5), hasTriple(toStatement(toIRI(qualifiedGeneration), toIRI("http://www.w3.org/ns/prov#used"), toIRI("http://some"))));
         assertThat(nodes.get(6).toString(), is("<http://some> <http://purl.org/pav/hasVersion> <hash://sha256/bla> ."));
     }
 
