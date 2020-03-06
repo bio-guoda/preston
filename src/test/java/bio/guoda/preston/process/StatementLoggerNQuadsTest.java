@@ -30,4 +30,22 @@ public class StatementLoggerNQuadsTest {
                 is("<source> <relation> \"target\" .\n"));
     }
 
+    @Test
+    public void relationWithGraphLabel() {
+        IRI source = RefNodeFactory.toIRI("source");
+        IRI relation = RefNodeFactory.toIRI("relation");
+        RDFTerm target = RefNodeFactory.toLiteral("target");
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        new StatementLoggerNQuads(new PrintStream(out)).on(RefNodeFactory.toStatementWithGraphName(
+                RefNodeFactory.toIRI("someGraphLabel"),
+                source,
+                relation,
+                target));
+
+
+        assertThat(StringUtils.toEncodedString(out.toByteArray(), StandardCharsets.UTF_8),
+                is("<source> <relation> \"target\" <someGraphLabel> .\n"));
+    }
+
 }

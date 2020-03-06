@@ -1,6 +1,5 @@
 package bio.guoda.preston.process;
 
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.TripleLike;
 
 import java.io.PrintStream;

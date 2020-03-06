@@ -79,6 +79,10 @@ public class RefNodeFactory {
         return rdf.createQuad(null, subject, predicate, object);
     }
 
+    public static TripleLike toStatementWithGraphName(BlankNodeOrIRI graphName, BlankNodeOrIRI subject, IRI predicate, RDFTerm object) {
+        return rdf.createQuad(graphName, subject, predicate, object);
+    }
+
     public static BlankNode toBlank(String name) {
         return rdf.createBlankNode(name);
     }
