@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
+import org.apache.commons.rdf.api.TripleLike;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
     }
 
     @Override
-    public void on(Triple statement) {
+    public void on(TripleLike statement) {
         if (Seeds.BHL.equals(statement.getSubject())
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
             Stream.of(

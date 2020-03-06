@@ -6,6 +6,7 @@ import bio.guoda.preston.cmd.Logger;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.process.StatementLoggerTSV;
+import org.apache.commons.rdf.api.TripleLike;
 
 import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicLong;
@@ -35,7 +36,7 @@ public class StatementLogFactory {
                 AtomicLong count = new AtomicLong(1);
 
                 @Override
-                public void on(Triple statement) {
+                public void on(TripleLike statement) {
                     long index = count.getAndIncrement();
                     if ((index % 80) == 0) {
                         out.println();

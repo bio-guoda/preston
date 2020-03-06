@@ -27,6 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
+import org.apache.commons.rdf.api.TripleLike;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -84,8 +85,8 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
             archivingLogger.start();
 
-            final Queue<Triple> statementQueue =
-                    new ConcurrentLinkedQueue<Triple>() {
+            final Queue<TripleLike> statementQueue =
+                    new ConcurrentLinkedQueue<TripleLike>() {
                         {
                             addAll(findActivityInfo(ctx));
                             addPreviousVersionReference();
@@ -118,9 +119,9 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         }
     }
 
-    abstract void initQueue(Queue<Triple> statementQueue, ActivityContext ctx);
+    abstract void initQueue(Queue<TripleLike> statementQueue, ActivityContext ctx);
 
-    abstract void processQueue(Queue<Triple> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners);
+    abstract void processQueue(Queue<TripleLike> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners);
 
 
     private Stream<StatementListener> createLoggers(ArchivingLogger archivingLogger, StatementListener printingLogger) {
@@ -157,7 +158,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
         };
     }
-    static List<Triple> findActivityInfo(ActivityContext activity) {
+    static List<TripleLike> findActivityInfo(ActivityContext activity) {
 
         IRI crawlActivity = activity.getActivity();
 
@@ -226,7 +227,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         }
 
         @Override
-        public void on(Triple statement) {
+        public void on(TripleLike statement) {
             if (listener != null) {
                 listener.on(statement);
             }

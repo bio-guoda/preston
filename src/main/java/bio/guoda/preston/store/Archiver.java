@@ -10,6 +10,7 @@ import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Triple;
+import org.apache.commons.rdf.api.TripleLike;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -38,7 +39,7 @@ public class Archiver extends VersionProcessor {
     }
 
     @Override
-    void handleBlankVersion(Triple statement, BlankNode blankVersion) throws IOException {
+    void handleBlankVersion(TripleLike statement, BlankNode blankVersion) throws IOException {
         IRI versionSource = getVersionSource(statement);
         if (getDereferencer() != null) {
             IRI newVersion = null;

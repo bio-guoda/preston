@@ -1,8 +1,8 @@
 package bio.guoda.preston.process;
 
 
-import org.apache.commons.rdf.api.Triple;
+import org.apache.commons.rdf.api.TripleLike;
 
 public interface StatementEmitter {
-    void emit(Triple statement);
+    void emit(TripleLike statement);
 }

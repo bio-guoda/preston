@@ -3,9 +3,9 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;
-
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
+import org.apache.commons.rdf.api.TripleLike;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class RegistryReaderRSSTest {
 
     @Test
     public void onNotRSSVersion() {
-        ArrayList<Triple> nodes = new ArrayList<>();
+        ArrayList<TripleLike> nodes = new ArrayList<>();
         StatementListener registryReader = new RegistryReaderRSS(TestUtil.getTestBlobStore(), nodes::add);
 
         registryReader.on(toStatement(toIRI("donaldduck"), HAS_VERSION, toIRI("somehash")));
@@ -36,7 +36,7 @@ public class RegistryReaderRSSTest {
 
     @Test
     public void onRSSVersion() {
-        ArrayList<Triple> nodes = new ArrayList<>();
+        ArrayList<TripleLike> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -53,7 +53,7 @@ public class RegistryReaderRSSTest {
     @Test
     public void parseFeeds() throws IOException {
         IRI parent = toIRI("http://example.org");
-        List<Triple> nodes = new ArrayList<>();
+        List<TripleLike> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
 
         KeyValueStoreReadOnly readOnlyStore = (IRI key) -> getClass().getResourceAsStream("torch-portal-rss.xml");
@@ -79,7 +79,7 @@ public class RegistryReaderRSSTest {
     @Test
     public void parseArthopodEasyFeeds() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
-        List<Triple> nodes = new ArrayList<>();
+        List<TripleLike> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
         KeyValueStoreReadOnly readOnlyStore = (IRI key) -> getClass().getResourceAsStream("arthropodEasyCapture.xml");
 
@@ -112,7 +112,7 @@ public class RegistryReaderRSSTest {
     @Test
     public void parseSymbiotaFeeds() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
-        List<Triple> nodes = new ArrayList<>();
+        List<TripleLike> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
 
 
@@ -145,7 +145,7 @@ public class RegistryReaderRSSTest {
     @Test
     public void parseIntermountainFeeds() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
-        List<Triple> nodes = new ArrayList<>();
+        List<TripleLike> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
 
         RegistryReaderRSS.parse(parent, emitter, (IRI key) -> getClass().getResourceAsStream("intermountain-biota-rss.xml"));
@@ -156,7 +156,7 @@ public class RegistryReaderRSSTest {
     @Test
     public void parseIPTRSS() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
-        List<Triple> nodes = new ArrayList<>();
+        List<TripleLike> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
 
         RegistryReaderRSS.parse(parent, emitter, (IRI key) -> getClass().getResourceAsStream("ipt-norway-rss.xml"));
@@ -165,7 +165,7 @@ public class RegistryReaderRSSTest {
         boolean hasEMLLink = false;
         boolean hasDWCA = false;
         boolean hasDWCALink = false;
-        for (Triple node : nodes) {
+        for (TripleLike node : nodes) {
             hasEML = hasEML || node.getObject().toString().equals("\"application/eml\"");
             hasDWCA = hasDWCA || node.getObject().toString().equals("\"application/dwca\"");
             hasEMLLink = hasEMLLink || node.getObject().toString().equals("<https://data.gbif.no/ipt/eml.do?r=ethopia-trees>");
@@ -182,7 +182,7 @@ public class RegistryReaderRSSTest {
     @Test
     public void parseVertNetIPTRSS() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
-        List<Triple> nodes = new ArrayList<>();
+        List<TripleLike> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
 
         RegistryReaderRSS.parse(parent, emitter, (IRI key) -> getClass().getResourceAsStream("vertnet-ipt-rss.xml"));
@@ -191,7 +191,7 @@ public class RegistryReaderRSSTest {
         boolean hasEMLLink = false;
         boolean hasDWCA = false;
         boolean hasDWCALink = false;
-        for (Triple node : nodes) {
+        for (TripleLike node : nodes) {
             hasEML = hasEML || node.getObject().toString().equals("\"application/eml\"");
             hasDWCA = hasDWCA || node.getObject().toString().equals("\"application/dwca\"");
             hasEMLLink = hasEMLLink || node.getObject().toString().equals("<http://ipt.vertnet.org:8080/ipt/eml.do?r=ucm_egg>");

@@ -7,6 +7,7 @@ import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.RDF;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
+import org.apache.commons.rdf.api.TripleLike;
 import org.apache.commons.rdf.simple.SimpleRDF;
 import org.apache.commons.rdf.simple.Types;
 import bio.guoda.preston.DateUtil;
@@ -53,12 +54,12 @@ public class RefNodeFactory {
         return rdf.createLiteral(dateTime, Types.XSD_DATETIME);
     }
 
-    public static boolean hasVersionStatement(Triple statement) {
+    public static boolean hasVersionStatement(TripleLike statement) {
         return HAS_VERSION.equals(statement.getPredicate())
                 || HAS_PREVIOUS_VERSION.equals(statement.getPredicate());
     }
 
-    public static IRI getVersionSource(Triple statement) {
+    public static IRI getVersionSource(TripleLike statement) {
         IRI versionSource = null;
         if (hasVersionStatement(statement)) {
             versionSource = (IRI) statement.getSubject();
@@ -66,7 +67,7 @@ public class RefNodeFactory {
         return versionSource;
     }
 
-    public static BlankNodeOrIRI getVersion(Triple statement) {
+    public static BlankNodeOrIRI getVersion(TripleLike statement) {
         BlankNodeOrIRI version = null;
         if (hasVersionStatement(statement)) {
             version = (BlankNodeOrIRI) statement.getObject();
@@ -74,8 +75,8 @@ public class RefNodeFactory {
         return version;
     }
 
-    public static Triple toStatement(BlankNodeOrIRI subject, IRI predicate, RDFTerm object) {
-        return rdf.createTriple(subject, predicate, object);
+    public static TripleLike toStatement(BlankNodeOrIRI subject, IRI predicate, RDFTerm object) {
+        return rdf.createQuad(toBlank(), subject, predicate, object);
     }
 
     public static BlankNode toBlank(String name) {
@@ -102,7 +103,7 @@ public class RefNodeFactory {
         return toIRI("https://deeplinker.bio/" + SKOLEMIZATION_PATH + subj.uniqueReference());
     }
 
-    public static boolean hasVersionAvailable(Triple statement) {
+    public static boolean hasVersionAvailable(TripleLike statement) {
         return hasVersionStatement(statement)
                 && !isBlankOrSkolemizedBlank(getVersion(statement));
     }

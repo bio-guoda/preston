@@ -1,12 +1,12 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.Seeds;
 import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.apache.commons.rdf.api.Triple;
-import bio.guoda.preston.Seeds;
-import bio.guoda.preston.store.TestUtil;
+import org.apache.commons.rdf.api.TripleLike;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +26,6 @@ import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
-import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
@@ -34,7 +33,7 @@ import static org.junit.Assert.assertNull;
 
 public class RegistryReaderBioCASETest {
 
-    private ArrayList<Triple> nodes;
+    private ArrayList<TripleLike> nodes;
     private StatementListener registryReader;
 
     @Before

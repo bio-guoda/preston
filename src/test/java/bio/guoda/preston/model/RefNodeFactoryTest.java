@@ -1,13 +1,17 @@
 package bio.guoda.preston.model;
 
-import org.apache.commons.rdf.api.Literal;
-import org.apache.commons.rdf.api.Triple;
 import bio.guoda.preston.RefNodeConstants;
+import org.apache.commons.rdf.api.Literal;
+import org.apache.commons.rdf.api.TripleLike;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static bio.guoda.preston.model.RefNodeFactory.*;
+import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
+import static bio.guoda.preston.model.RefNodeFactory.toBlank;
+import static bio.guoda.preston.model.RefNodeFactory.toDateTime;
+import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -22,7 +26,7 @@ public class RefNodeFactoryTest {
 
     @Test
     public void hasContent() {
-        Triple statement = toStatement(toIRI("http://some"),
+        TripleLike statement = toStatement(toIRI("http://some"),
                 RefNodeConstants.HAS_VERSION,
                 toBlank());
         assertFalse(hasVersionAvailable(statement));

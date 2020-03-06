@@ -5,6 +5,7 @@ import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.TestUtil;
+import org.apache.commons.rdf.api.TripleLike;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,7 +28,7 @@ public class RegistryReaderGBIFTest {
 
     @Test
     public void onSeed() {
-        ArrayList<Triple> nodes = new ArrayList<>();
+        ArrayList<TripleLike> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
         registryReaderGBIF.on(toStatement(Seeds.GBIF, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         Assert.assertThat(nodes.size(), is(6));
@@ -36,7 +37,7 @@ public class RegistryReaderGBIFTest {
 
     @Test
     public void onEmptyPage() {
-        ArrayList<Triple> nodes = new ArrayList<>();
+        ArrayList<TripleLike> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
 
         registryReaderGBIF.on(toStatement(toIRI("https://api.gbif.org/v1/dataset"),
@@ -47,7 +48,7 @@ public class RegistryReaderGBIFTest {
 
     @Test
     public void onNotSeed() {
-        ArrayList<Triple> nodes = new ArrayList<>();
+        ArrayList<TripleLike> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = toLiteral("bla");
         registryReaderGBIF.on(toStatement(Seeds.GBIF, toIRI("http://example.org"), bla));
@@ -56,7 +57,7 @@ public class RegistryReaderGBIFTest {
 
     @Test
     public void onContinuation() {
-        ArrayList<Triple> nodes = new ArrayList<>();
+        ArrayList<TripleLike> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -66,22 +67,22 @@ public class RegistryReaderGBIFTest {
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
 
 
-        Triple firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset"), HAS_VERSION, createTestNode());
+        TripleLike firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset"), HAS_VERSION, createTestNode());
 
         registryReaderGBIF.on(firstPage);
 
         Assert.assertThat(nodes.size(), is(60973));
         assertThat(nodes.get(17-1).toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2> <http://purl.org/pav/createdBy> <https://gbif.org> ."));
         assertThat(nodes.get(18-1).toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
-        Triple secondPage = nodes.get(19 - 1);
+        TripleLike secondPage = nodes.get(19 - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<https://api.gbif.org/v1/dataset?offset=2&limit=2>"));
-        Triple lastPage = nodes.get(nodes.size() - 1);
+        TripleLike lastPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(lastPage).toString(), is("<https://api.gbif.org/v1/dataset?offset=40638&limit=2>"));
     }
 
     @Test
     public void onContinuationSearchOrSuggestion() {
-        ArrayList<Triple> nodes = new ArrayList<>();
+        ArrayList<TripleLike> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -91,18 +92,18 @@ public class RegistryReaderGBIFTest {
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
 
 
-        Triple firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset/suggest"), HAS_VERSION, createTestNode());
+        TripleLike firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset/suggest"), HAS_VERSION, createTestNode());
 
         registryReaderGBIF.on(firstPage);
 
         Assert.assertThat(nodes.size(), is(4));
-        Triple lastItem = nodes.get(nodes.size() - 1);
+        TripleLike lastItem = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(lastItem).toString(), is("<https://api.gbif.org/v1/dataset/b7010c1b-8013-4a3c-a43b-4309a91f9629>"));
     }
 
     @Test
     public void onContinuationSuggestion() {
-        ArrayList<Triple> nodes = new ArrayList<>();
+        ArrayList<TripleLike> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -112,18 +113,18 @@ public class RegistryReaderGBIFTest {
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
 
 
-        Triple firstPage = toStatement(toIRI("http://api.gbif.org/v1/dataset/suggest?q=Amazon&amp;type=OCCURRENCE"), HAS_VERSION, createTestNode());
+        TripleLike firstPage = toStatement(toIRI("http://api.gbif.org/v1/dataset/suggest?q=Amazon&amp;type=OCCURRENCE"), HAS_VERSION, createTestNode());
 
         registryReaderGBIF.on(firstPage);
 
         Assert.assertThat(nodes.size(), is(40));
-        Triple lastItem = nodes.get(nodes.size() - 1);
+        TripleLike lastItem = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(lastItem).toString(), is("<https://api.gbif.org/v1/dataset/663199f1-3528-4289-8069-d27552f62f10>"));
     }
 
     @Test
     public void onContinuationWithQuery() {
-        ArrayList<Triple> nodes = new ArrayList<>();
+        ArrayList<TripleLike> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -133,20 +134,20 @@ public class RegistryReaderGBIFTest {
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
 
 
-        Triple firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR"), HAS_VERSION, createTestNode());
+        TripleLike firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR"), HAS_VERSION, createTestNode());
 
         registryReaderGBIF.on(firstPage);
 
         Assert.assertThat(nodes.size(), is(60973));
-        Triple secondPage = nodes.get(19 - 1);
+        TripleLike secondPage = nodes.get(19 - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR&offset=2&limit=2>"));
-        Triple lastPage = nodes.get(nodes.size() - 1);
+        TripleLike lastPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(lastPage).toString(), is("<https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR&offset=40638&limit=2>"));
     }
 
     @Test
     public void onSingle() {
-        ArrayList<Triple> nodes = new ArrayList<>();
+        ArrayList<TripleLike> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -156,18 +157,18 @@ public class RegistryReaderGBIFTest {
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
 
 
-        Triple firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset"), HAS_VERSION, createTestNode());
+        TripleLike firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset"), HAS_VERSION, createTestNode());
 
         registryReaderGBIF.on(firstPage);
 
         Assert.assertThat(nodes.size(), is(5));
-        Triple secondPage = nodes.get(nodes.size() - 1);
+        TripleLike secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<http://plazi.cs.umb.edu/GgServer/dwca/2924FFB8FFC7C76B4B0B503BFFD8D973.zip>"));
     }
 
     @Test
     public void nextPage() {
-        List<Triple> nodes = new ArrayList<Triple>();
+        List<TripleLike> nodes = new ArrayList<>();
         RegistryReaderGBIF.emitNextPage(0, 10, nodes::add, "https://bla/?limit=2&offset=8");
         assertThat(nodes.size(), is(3));
         assertThat(nodes.get(1).getSubject().toString(), is("<https://bla/?limit=10&offset=0>"));
@@ -176,7 +177,7 @@ public class RegistryReaderGBIFTest {
     @Test
     public void parseDatasets() throws IOException {
 
-        final List<Triple> refNodes = new ArrayList<>();
+        final List<TripleLike> refNodes = new ArrayList<>();
 
         IRI testNode = createTestNode();
 
@@ -184,7 +185,7 @@ public class RegistryReaderGBIFTest {
 
         assertThat(refNodes.size(), is(60973));
 
-        Triple refNode = refNodes.get(0);
+        TripleLike refNode = refNodes.get(0);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <6555005d-4594-4a3e-be33-c70e587b63d7> ."));
 
         refNode = refNodes.get(1);
@@ -211,7 +212,7 @@ public class RegistryReaderGBIFTest {
         refNode = refNodes.get(8);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <d0df772d-78f4-4602-acf2-7d768798f632> ."));
 
-        Triple lastRefNode = refNodes.get(refNodes.size() - 2);
+        TripleLike lastRefNode = refNodes.get(refNodes.size() - 2);
         assertThat(lastRefNode.toString(), is("<http://example.org/?offset=40638&limit=2> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
 
         lastRefNode = refNodes.get(refNodes.size() - 1);

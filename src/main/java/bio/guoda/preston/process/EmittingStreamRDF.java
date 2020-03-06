@@ -50,13 +50,17 @@ public class EmittingStreamRDF {
         Iterator<Quad> iteratorQuads = new IteratorResourceClosing<>(iteratorNQuads, inputStream);
         while (context.shouldKeepProcessing() && iteratorQuads.hasNext()) {
             Quad nextQuad = iteratorQuads.next();
-            copyOnEmit(JenaRDF.asQuad(rdf, nextQuad).asTriple());
+            copyOnEmit(JenaRDF.asQuad(rdf, nextQuad));
         }
     }
 
 
-    private void copyOnEmit(Triple triple) {
-        Triple copyOfTriple = rdfSimple.createTriple(triple.getSubject(), triple.getPredicate(), triple.getObject());
+    private void copyOnEmit(org.apache.commons.rdf.api.Quad triple) {
+        org.apache.commons.rdf.api.Quad copyOfTriple = rdfSimple.createQuad(
+                triple.getGraphName().orElse(null),
+                triple.getSubject(),
+                triple.getPredicate(),
+                triple.getObject());
         emitter.emit(copyOfTriple);
     }
 

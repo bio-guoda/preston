@@ -9,6 +9,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.Seeds;
+import org.apache.commons.rdf.api.TripleLike;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +50,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     }
 
     @Override
-    public void on(Triple statement) {
+    public void on(TripleLike statement) {
         if (Seeds.GBIF.equals(statement.getSubject())
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
             Stream.of(

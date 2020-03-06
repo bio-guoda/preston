@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.Triple;
+import org.apache.commons.rdf.api.TripleLike;
 
 import java.io.IOException;
 
@@ -21,7 +22,7 @@ public abstract class VersionProcessor extends StatementProcessor {
     }
 
     @Override
-    public void on(Triple statement) {
+    public void on(TripleLike statement) {
         try {
             BlankNodeOrIRI version = getVersion(statement);
             if (version instanceof BlankNode) {
@@ -36,6 +37,6 @@ public abstract class VersionProcessor extends StatementProcessor {
 
     }
 
-    abstract void handleBlankVersion(Triple statement, BlankNode blankVersion) throws IOException;
+    abstract void handleBlankVersion(TripleLike statement, BlankNode blankVersion) throws IOException;
 
 }

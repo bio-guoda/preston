@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
+import org.apache.commons.rdf.api.TripleLike;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    public static IRI mostRecentVersionForStatement(Triple statement) {
+    public static IRI mostRecentVersionForStatement(TripleLike statement) {
         IRI mostRecentVersion = null;
         RDFTerm mostRecentTerm = null;
         if (statement.getPredicate().equals(HAS_PREVIOUS_VERSION)) {

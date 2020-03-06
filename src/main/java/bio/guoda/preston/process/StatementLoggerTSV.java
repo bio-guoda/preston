@@ -2,6 +2,7 @@ package bio.guoda.preston.process;
 
 import org.apache.commons.rdf.api.Triple;
 import bio.guoda.preston.RDFUtil;
+import org.apache.commons.rdf.api.TripleLike;
 
 import java.io.PrintStream;
 
@@ -14,7 +15,7 @@ public class StatementLoggerTSV implements StatementListener {
     }
 
     @Override
-    public void on(Triple statement) {
+    public void on(TripleLike statement) {
         String subject = RDFUtil.getValueFor(statement.getSubject());
         String predicate = RDFUtil.getValueFor(statement.getPredicate());
         String object = RDFUtil.getValueFor(statement.getObject());

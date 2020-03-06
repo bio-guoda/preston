@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Triple;
+import org.apache.commons.rdf.api.TripleLike;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +23,7 @@ import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.ORGANIZATION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static bio.guoda.preston.model.RefNodeFactory.fromUUID;
 import static bio.guoda.preston.model.RefNodeFactory.getVersion;
 import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
 import static bio.guoda.preston.model.RefNodeFactory.toBlank;
@@ -30,7 +31,6 @@ import static bio.guoda.preston.model.RefNodeFactory.toContentType;
 import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
-import static bio.guoda.preston.model.RefNodeFactory.fromUUID;
 
 public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
@@ -43,7 +43,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     }
 
     @Override
-    public void on(Triple statement) {
+    public void on(TripleLike statement) {
         if (statement.getSubject().equals(Seeds.IDIGBIO)
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
             Stream.of(toStatement(Seeds.IDIGBIO, IS_A, ORGANIZATION),
@@ -57,7 +57,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         }
     }
 
-    public void parse(Triple statement, IRI toBeParsed) {
+    public void parse(TripleLike statement, IRI toBeParsed) {
         if (statement.getSubject().equals(IDIGBIO_REGISTRY)) {
             parsePublishers(toBeParsed);
         }

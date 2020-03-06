@@ -6,7 +6,7 @@ import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.store.BlobStore;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.BlankNode;
-import org.apache.commons.rdf.api.Triple;
+import org.apache.commons.rdf.api.TripleLike;
 
 import java.util.Queue;
 
@@ -22,17 +22,17 @@ import java.util.Queue;
 public class CmdProcess extends CmdActivity {
 
     @Override
-    void initQueue(Queue<Triple> statementQueue, ActivityContext ctx) {
+    void initQueue(Queue<TripleLike> statementQueue, ActivityContext ctx) {
         // no initial seeds
     }
 
     @Override
-    void processQueue(Queue<Triple> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
+    void processQueue(Queue<TripleLike> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
         handleQueuedMessages(statementQueue, listeners);
 
         StatementEmitter emitter = new StatementEmitter() {
             @Override
-            public void emit(Triple statement) {
+            public void emit(TripleLike statement) {
                 handleStatement(statement, listeners);
                 handleQueuedMessages(statementQueue, listeners);
             }
@@ -47,7 +47,7 @@ public class CmdProcess extends CmdActivity {
     }
 
 
-    private void handleStatement(Triple statement, StatementListener[] listeners) {
+    private void handleStatement(TripleLike statement, StatementListener[] listeners) {
         if (!(statement.getSubject() instanceof BlankNode) && !(statement.getObject() instanceof BlankNode)) {
             for (StatementListener listener : listeners) {
                 listener.on(statement);
@@ -55,9 +55,9 @@ public class CmdProcess extends CmdActivity {
         }
     }
 
-    private void handleQueuedMessages(Queue<Triple> statementQueue1, StatementListener[] listeners) {
+    private void handleQueuedMessages(Queue<TripleLike> statementQueue1, StatementListener[] listeners) {
         while (!statementQueue1.isEmpty()) {
-            Triple polled = statementQueue1.poll();
+            TripleLike polled = statementQueue1.poll();
             handleStatement(polled, listeners);
         }
     }

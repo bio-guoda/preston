@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
+import org.apache.commons.rdf.api.TripleLike;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -55,7 +56,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     }
 
     @Override
-    public void on(Triple statement) {
+    public void on(TripleLike statement) {
         if (Seeds.BIOCASE.equals(statement.getSubject())
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
             Stream.of(
