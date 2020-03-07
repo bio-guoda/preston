@@ -1,10 +1,9 @@
 package bio.guoda.preston.process;
 
-import org.apache.commons.io.output.NullOutputStream;
+import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
-import bio.guoda.preston.model.RefNodeFactory;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -17,7 +16,7 @@ import static org.hamcrest.core.Is.is;
 public class StatementLoggerTSVTest {
 
     @Test
-    public void relation() {
+    public void relationWithoutGraphName() {
         IRI source = RefNodeFactory.toIRI("source");
         IRI relation = RefNodeFactory.toIRI("relation");
         RDFTerm target = RefNodeFactory.toDateTime("2018-01-01");
@@ -28,7 +27,25 @@ public class StatementLoggerTSVTest {
 
 
         assertThat(StringUtils.toEncodedString(out.toByteArray(), StandardCharsets.UTF_8),
-                is("source\trelation\t2018-01-01\n"));
+                is("source\trelation\t2018-01-01\t\n"));
+    }
+
+    @Test
+    public void relationWithGraphName() {
+        IRI source = RefNodeFactory.toIRI("source");
+        IRI relation = RefNodeFactory.toIRI("relation");
+        RDFTerm target = RefNodeFactory.toDateTime("2018-01-01");
+
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        new StatementLoggerTSV(new PrintStream(out)).on(RefNodeFactory.toStatementWithGraphName(
+                RefNodeFactory.toIRI("someGraphName"),
+                source,
+                relation,
+                target));
+
+        assertThat(StringUtils.toEncodedString(out.toByteArray(), StandardCharsets.UTF_8),
+                is("source\trelation\t2018-01-01\tsomeGraphName\n"));
     }
 
 }
