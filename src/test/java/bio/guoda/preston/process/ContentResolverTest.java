@@ -14,7 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,14 +62,14 @@ public class ContentResolverTest {
 
     @Test
     public void cacheContent() throws IOException, URISyntaxException {
-        ArrayList<TripleLike> refNodes = new ArrayList<>();
+        ArrayList<Quad> refNodes = new ArrayList<>();
 
         StatementListener listener = createStatementStore(refNodes::add);
 
 
         URI testURI = getClass().getResource("test.txt").toURI();
         IRI providedNode = RefNodeFactory.toIRI(testURI);
-        TripleLike relation = RefNodeFactory.toStatement(providedNode, RefNodeConstants.HAS_VERSION, RefNodeFactory.toBlank());
+        Quad relation = RefNodeFactory.toStatement(providedNode, RefNodeConstants.HAS_VERSION, RefNodeFactory.toBlank());
 
         listener.on(relation);
 
@@ -83,7 +83,7 @@ public class ContentResolverTest {
         String expectedHash = "50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
         String expectedValue = "https://example.org";
 
-        TripleLike cachedNode = refNodes.get(6);
+        Quad cachedNode = refNodes.get(6);
         assertContentWith(cachedNode, expectedHash, expectedValue);
         InputStream inputStream = blobStore.get((IRI) cachedNode.getObject());
         assertNotNull(inputStream);
@@ -102,7 +102,7 @@ public class ContentResolverTest {
         FileUtils.deleteQuietly(tempDir.toFile());
     }
 
-    private void assertContentWith(TripleLike cachedNode, String expectedHash, String expectedValue) throws IOException {
+    private void assertContentWith(Quad cachedNode, String expectedHash, String expectedValue) throws IOException {
         String expectedSHA256 = "hash://sha256/" + expectedHash;
         assertThat(((IRI)cachedNode.getObject()).getIRIString(), is(expectedSHA256));
 

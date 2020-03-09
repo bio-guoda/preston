@@ -6,7 +6,7 @@ import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void onSeed() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = RefNodeFactory.toLiteral("bla");
         reader.on(RefNodeFactory.toStatement(Seeds.IDIGBIO, WAS_ASSOCIATED_WITH, bla));
@@ -34,7 +34,7 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void onNotSeed() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = RefNodeFactory.toLiteral("bla");
         reader.on(RefNodeFactory.toStatement(Seeds.IDIGBIO, RefNodeFactory.toIRI("https://example.org/bla"), bla));
@@ -44,7 +44,7 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void onRegistry() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         BlobStore blob = new BlobStore() {
 
             @Override
@@ -66,7 +66,7 @@ public class RegistryReaderIDigBioTest {
     public void parsePublishers() throws IOException {
 
         IRI providedParent = RefNodeFactory.fromUUID("someRegistryUUID");
-        final List<TripleLike> nodes = new ArrayList<>();
+        final List<Quad> nodes = new ArrayList<>();
 
         InputStream is = publishersInputStream();
 
@@ -74,7 +74,7 @@ public class RegistryReaderIDigBioTest {
 
         assertThat(nodes.size(), is(312));
 
-        TripleLike node = nodes.get(0);
+        Quad node = nodes.get(0);
         assertThat(node.toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <51290816-f682-4e38-a06c-03bf5df2442d> ."));
 
         node = nodes.get(1);

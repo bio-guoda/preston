@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,7 +43,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     }
 
     @Override
-    public void on(TripleLike statement) {
+    public void on(Quad statement) {
         if (statement.getSubject().equals(Seeds.IDIGBIO)
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
             Stream.of(toStatement(Seeds.IDIGBIO, IS_A, ORGANIZATION),
@@ -57,7 +57,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         }
     }
 
-    public void parse(TripleLike statement, IRI toBeParsed) {
+    public void parse(Quad statement, IRI toBeParsed) {
         if (statement.getSubject().equals(IDIGBIO_REGISTRY)) {
             parsePublishers(toBeParsed);
         }

@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Triple;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,7 +47,7 @@ public class RegistryReaderALA extends ProcessorReadOnly {
     }
 
     @Override
-    public void on(TripleLike statement) {
+    public void on(Quad statement) {
         if (Seeds.ALA.equals(statement.getSubject())
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
             Stream.of(

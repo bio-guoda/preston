@@ -5,7 +5,7 @@ import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.QuadLike;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -32,7 +32,7 @@ public class RefNodeFactoryTest {
 
     @Test
     public void hasContent() {
-        TripleLike statement = toStatement(toIRI("http://some"),
+        Quad statement = toStatement(toIRI("http://some"),
                 RefNodeConstants.HAS_VERSION,
                 toBlank());
         assertFalse(hasVersionAvailable(statement));
@@ -47,9 +47,9 @@ public class RefNodeFactoryTest {
     }
 
     @Test
-    public void graphLabelForTripleLike() {
+    public void graphLabelForQuad() {
         IRI someLabel = toIRI("someLabel");
-        TripleLike triple = RefNodeFactory.toStatementWithGraphName(someLabel, toIRI("subj"), toIRI("verb"), toIRI("obj"));
+        Quad triple = RefNodeFactory.toStatementWithGraphName(someLabel, toIRI("subj"), toIRI("verb"), toIRI("obj"));
 
         Optional<BlankNodeOrIRI> graphName = RefNodeFactory.graphNameOf(triple);
         assertTrue(graphName.isPresent());
@@ -57,8 +57,8 @@ public class RefNodeFactoryTest {
     }
 
     @Test
-    public void graphLabelForTripleLikeNoGraphName() {
-        TripleLike triple = RefNodeFactory.toStatement(toIRI("subj"), toIRI("verb"), toIRI("obj"));
+    public void graphLabelForQuadNoGraphName() {
+        Quad triple = RefNodeFactory.toStatement(toIRI("subj"), toIRI("verb"), toIRI("obj"));
 
         Optional<BlankNodeOrIRI> graphName = RefNodeFactory.graphNameOf(triple);
         assertFalse(graphName.isPresent());

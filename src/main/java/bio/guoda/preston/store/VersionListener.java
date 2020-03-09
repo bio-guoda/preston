@@ -1,11 +1,11 @@
 package bio.guoda.preston.store;
 
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 
 public interface VersionListener {
 
-    void on(TripleLike statement) throws IOException;
+    void on(Quad statement) throws IOException;
 
 }

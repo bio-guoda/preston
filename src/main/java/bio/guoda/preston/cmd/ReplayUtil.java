@@ -8,7 +8,7 @@ import bio.guoda.preston.store.StatementStoreReadOnly;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,8 +49,8 @@ public final class ReplayUtil {
                               final StatementStoreReadOnly provenanceLogIndex,
                               final CmdContext ctx) {
 
-        final Queue<TripleLike> statementQueue =
-                new ConcurrentLinkedQueue<TripleLike>() {{
+        final Queue<Quad> statementQueue =
+                new ConcurrentLinkedQueue<Quad>() {{
                     add(toStatement(ctx.getProvRoot(), HAS_VERSION, toBlank()));
                 }};
 

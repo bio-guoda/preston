@@ -6,7 +6,7 @@ import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +21,7 @@ public class VersionRetriever implements StatementListener {
     }
 
     @Override
-    public void on(TripleLike statement) {
+    public void on(Quad statement) {
         IRI mostRecentVersion = VersionUtil.mostRecentVersionForStatement(statement);
         if (mostRecentVersion != null) {
             touchMostRecentVersion(mostRecentVersion);

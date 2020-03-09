@@ -4,7 +4,7 @@ import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class VersionedRDFChainEmitterTest {
 
     @Test
     public void replayArchive() {
-        List<TripleLike> nodes = new ArrayList<>();
+        List<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = createBlobStore();
         VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, nodes::add);
         reader.on(RefNodeFactory
@@ -52,7 +52,7 @@ public class VersionedRDFChainEmitterTest {
 
     @Test
     public void replayArchiveMultipleVersions() {
-        List<TripleLike> nodes = new ArrayList<>();
+        List<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = createBlobStore();
         VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, nodes::add);
         reader.on(RefNodeFactory
@@ -96,7 +96,7 @@ public class VersionedRDFChainEmitterTest {
         final StringBuilder actual = new StringBuilder();
         new VersionedRDFChainEmitter(testStore, new StatementListener() {
             @Override
-            public void on(TripleLike statement) {
+            public void on(Quad statement) {
                 actual.append(statement.toString());
                 actual.append("\n");
             }

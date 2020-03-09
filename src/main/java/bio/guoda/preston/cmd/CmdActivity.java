@@ -27,7 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -85,8 +85,8 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
             archivingLogger.start();
 
-            final Queue<TripleLike> statementQueue =
-                    new ConcurrentLinkedQueue<TripleLike>() {
+            final Queue<Quad> statementQueue =
+                    new ConcurrentLinkedQueue<Quad>() {
                         {
                             addAll(findActivityInfo(ctx));
                             addPreviousVersionReference();
@@ -119,9 +119,9 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         }
     }
 
-    abstract void initQueue(Queue<TripleLike> statementQueue, ActivityContext ctx);
+    abstract void initQueue(Queue<Quad> statementQueue, ActivityContext ctx);
 
-    abstract void processQueue(Queue<TripleLike> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners);
+    abstract void processQueue(Queue<Quad> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners);
 
 
     private Stream<StatementListener> createLoggers(ArchivingLogger archivingLogger, StatementListener printingLogger) {
@@ -158,7 +158,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
         };
     }
-    static List<TripleLike> findActivityInfo(ActivityContext activity) {
+    static List<Quad> findActivityInfo(ActivityContext activity) {
 
         IRI crawlActivity = activity.getActivity();
 
@@ -227,7 +227,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         }
 
         @Override
-        public void on(TripleLike statement) {
+        public void on(Quad statement) {
             if (listener != null) {
                 listener.on(statement);
             }

@@ -6,7 +6,7 @@ import bio.guoda.preston.process.StatementListener;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ public class ArchiverTest {
     @Test
     public void putContentThatFailsToDownload() throws IOException {
         BlankNode blank = toBlank();
-        TripleLike statement
+        Quad statement
                 = toStatement(toIRI(URI.create("http://some")),
                 HAS_VERSION,
                 blank);
@@ -69,7 +69,7 @@ public class ArchiverTest {
     private StatementListener createVersionLogger(final StatementStore versionStore) {
         return new StatementListener() {
             @Override
-            public void on(TripleLike statement) {
+            public void on(Quad statement) {
 
                 if (HAS_VERSION.equals(statement.getPredicate())) {
                     try {
@@ -85,7 +85,7 @@ public class ArchiverTest {
     @Test
     public void doNotDereferenceSkolemizedBlank() throws IOException {
         IRI skolemizedBlank = toSkolemizedBlank(toBlank());
-        TripleLike statement = toStatement(toIRI(URI.create("http://some")),
+        Quad statement = toStatement(toIRI(URI.create("http://some")),
                 HAS_VERSION,
                 skolemizedBlank);
 
@@ -98,7 +98,7 @@ public class ArchiverTest {
 
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
-        List<TripleLike> nodes = new ArrayList<>();
+        List<Quad> nodes = new ArrayList<>();
 
         StatementStoreImpl versionStore = new StatementStoreImpl(testKeyValueStore);
 
@@ -123,7 +123,7 @@ public class ArchiverTest {
 
     @Test
     public void includeGenerationActivity() throws IOException {
-        TripleLike statement = toStatement(toIRI(URI.create("http://some")),
+        Quad statement = toStatement(toIRI(URI.create("http://some")),
                 HAS_VERSION,
                 toBlank());
 
@@ -136,7 +136,7 @@ public class ArchiverTest {
 
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
-        List<TripleLike> nodes = new ArrayList<>();
+        List<Quad> nodes = new ArrayList<>();
 
         StatementStoreImpl versionStore = new StatementStoreImpl(testKeyValueStore);
 
@@ -165,7 +165,7 @@ public class ArchiverTest {
     public void putContentThatNeedsDownload() throws IOException {
         BlankNode blank = toBlank();
 
-        TripleLike statement
+        Quad statement
                 = toStatement(toIRI(URI.create("http://some")),
                 HAS_VERSION,
                 blank);
@@ -192,7 +192,7 @@ public class ArchiverTest {
 
     @Test
     public void putNewVersionOfContent() throws IOException {
-        TripleLike statement = toStatement(SOME_IRI, HAS_VERSION, toBlank());
+        Quad statement = toStatement(SOME_IRI, HAS_VERSION, toBlank());
 
         KeyValueStore keyValueStore = TestUtil.getTestPersistence();
         StatementStore versionStore = new StatementStoreImpl(keyValueStore);
@@ -216,7 +216,7 @@ public class ArchiverTest {
 
     @Test
     public void archiveLastestTwo() throws IOException {
-        TripleLike statement = toStatement(SOME_IRI, HAS_VERSION, toBlank());
+        Quad statement = toStatement(SOME_IRI, HAS_VERSION, toBlank());
 
         KeyValueStore keyValueStore = TestUtil.getTestPersistence();
         StatementStore versionStore = new StatementStoreImpl(keyValueStore);

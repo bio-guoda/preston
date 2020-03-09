@@ -5,7 +5,7 @@ import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,7 +30,7 @@ public class RegistryReaderBHLTest {
 
     @Test
     public void onSeed() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderBHL registryReader = new RegistryReaderBHL(TestUtil.getTestBlobStore(), nodes::add);
         registryReader.on(toStatement(Seeds.BHL, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         Assert.assertThat(nodes.size(), is(5));
@@ -39,7 +39,7 @@ public class RegistryReaderBHLTest {
 
     @Test
     public void onEmptyPage() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderBHL registryReader = new RegistryReaderBHL(TestUtil.getTestBlobStore(), nodes::add);
 
         registryReader.on(toStatement(toIRI("https://api.gbif.org/v1/dataset"),
@@ -50,7 +50,7 @@ public class RegistryReaderBHLTest {
 
     @Test
     public void onNotSeed() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderBHL registryReader = new RegistryReaderBHL(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = toLiteral("bla");
         registryReader.on(toStatement(Seeds.BHL, toIRI("http://example.org"), bla));
@@ -65,20 +65,20 @@ public class RegistryReaderBHLTest {
                 return getClass().getResourceAsStream("bhl_item.txt");
             }
         };
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderBHL registryReader = new RegistryReaderBHL(blobStore, nodes::add);
 
 
-        TripleLike firstPage = toStatement(toIRI("https://www.biodiversitylibrary.org/data/item.txt"), HAS_VERSION, createTestNode());
+        Quad firstPage = toStatement(toIRI("https://www.biodiversitylibrary.org/data/item.txt"), HAS_VERSION, createTestNode());
 
         registryReader.on(firstPage);
 
         Assert.assertThat(nodes.size(), is(36));
-        TripleLike mimeType = nodes.get(nodes.size() - 2);
+        Quad mimeType = nodes.get(nodes.size() - 2);
         assertThat(mimeType.getSubject().toString(), is("<https://archive.org/download/mobot31753002306964/mobot31753002306964_djvu.txt>"));
         assertThat(mimeType.getPredicate().toString(), is("<http://purl.org/dc/elements/1.1/format>"));
         assertThat(mimeType.getObject().toString(), is("\"text/plain;charset=UTF-8\""));
-        TripleLike secondPage = nodes.get(nodes.size() - 1);
+        Quad secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<https://archive.org/download/mobot31753002306964/mobot31753002306964_djvu.txt>"));
     }
 

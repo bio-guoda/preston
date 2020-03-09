@@ -3,7 +3,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.cmd.ProcessorState;
 import org.apache.commons.rdf.api.Triple;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 
 public abstract class StatementProcessor implements StatementListener, StatementEmitter {
 
@@ -20,7 +20,7 @@ public abstract class StatementProcessor implements StatementListener, Statement
     }
 
     @Override
-    public void emit(TripleLike statement) {
+    public void emit(Quad statement) {
         for (StatementListener listener : listeners) {
             listener.on(statement);
         }

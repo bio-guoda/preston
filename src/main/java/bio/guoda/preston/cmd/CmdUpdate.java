@@ -10,7 +10,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class CmdUpdate extends CmdActivity {
 
 
     @Override
-    void initQueue(Queue<TripleLike> statementQueue, ActivityContext ctx) {
+    void initQueue(Queue<Quad> statementQueue, ActivityContext ctx) {
         if (IRIs.isEmpty()) {
             statementQueue.addAll(generateSeeds(ctx.getActivity()));
         } else {
@@ -48,7 +48,7 @@ public class CmdUpdate extends CmdActivity {
     }
 
     @Override
-    void processQueue(Queue<TripleLike> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
+    void processQueue(Queue<Quad> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
         StatementListener processor = createActivityProcessor(blobStore, ctx, listeners);
 
         while (!statementQueue.isEmpty()) {
@@ -70,7 +70,7 @@ public class CmdUpdate extends CmdActivity {
     }
 
 
-    private List<TripleLike> generateSeeds(final IRI crawlActivity) {
+    private List<Quad> generateSeeds(final IRI crawlActivity) {
         return seedUrls.stream()
                 .map((String uriString) -> toStatement(toIRI(uriString), WAS_ASSOCIATED_WITH, crawlActivity))
                 .collect(Collectors.toList());

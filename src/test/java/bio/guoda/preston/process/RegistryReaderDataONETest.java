@@ -5,7 +5,7 @@ import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -33,7 +33,7 @@ public class RegistryReaderDataONETest {
 
     @Test
     public void onSeed() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), nodes::add);
         reader.on(toStatement(Seeds.DATA_ONE, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         Assert.assertThat(nodes.size(), is(6));
@@ -42,7 +42,7 @@ public class RegistryReaderDataONETest {
 
     @Test
     public void onEmptyPage() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), nodes::add);
 
         reader.on(toStatement(toIRI(FIRST_PAGE),
@@ -53,7 +53,7 @@ public class RegistryReaderDataONETest {
 
     @Test
     public void onNotSeed() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = toLiteral("bla");
         reader.on(toStatement(Seeds.DATA_ONE, toIRI("http://example.org"), bla));
@@ -62,7 +62,7 @@ public class RegistryReaderDataONETest {
 
     @Test
     public void onContinuation() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -72,19 +72,19 @@ public class RegistryReaderDataONETest {
         RegistryReaderDataONE reader = new RegistryReaderDataONE(blobStore, nodes::add);
 
 
-        TripleLike firstPage = toStatement(toIRI(FIRST_PAGE), HAS_VERSION, createTestNode());
+        Quad firstPage = toStatement(toIRI(FIRST_PAGE), HAS_VERSION, createTestNode());
 
         reader.on(firstPage);
 
         Assert.assertThat(nodes.size(), is(43));
-        TripleLike secondPage = nodes.get(nodes.size() - 1);
+        Quad secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=1000&rows=1000>"));
     }
 
 
     @Test
     public void onContinuationWithQuery() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -94,18 +94,18 @@ public class RegistryReaderDataONETest {
         RegistryReaderDataONE reader = new RegistryReaderDataONE(blobStore, nodes::add);
 
 
-        TripleLike firstPage = toStatement(toIRI(FIRST_PAGE), HAS_VERSION, createTestNode());
+        Quad firstPage = toStatement(toIRI(FIRST_PAGE), HAS_VERSION, createTestNode());
 
         reader.on(firstPage);
 
         Assert.assertThat(nodes.size(), is(43));
-        TripleLike secondPage = nodes.get(nodes.size() - 1);
+        Quad secondPage = nodes.get(nodes.size() - 1);
         assertThat(secondPage.toString(), startsWith("<http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=1000&rows=1000> <http://purl.org/pav/hasVersion> _:"));
     }
 
     @Test
     public void onSolrResults() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -115,18 +115,18 @@ public class RegistryReaderDataONETest {
         RegistryReaderDataONE reader = new RegistryReaderDataONE(blobStore, nodes::add);
 
 
-        TripleLike firstPage = toStatement(toIRI(FIRST_PAGE), HAS_VERSION, createTestNode());
+        Quad firstPage = toStatement(toIRI(FIRST_PAGE), HAS_VERSION, createTestNode());
 
         reader.on(firstPage);
 
         Assert.assertThat(nodes.size(), is(43));
-        TripleLike secondPage = nodes.get(nodes.size() - 1);
+        Quad secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=1000&rows=1000>"));
     }
 
     @Test
     public void onObjectLocationList() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -135,24 +135,24 @@ public class RegistryReaderDataONETest {
         };
         RegistryReaderDataONE reader = new RegistryReaderDataONE(blobStore, nodes::add);
 
-        TripleLike firstPage = toStatement(toIRI("https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FKM_CUDM.20160202"), HAS_VERSION, createTestNode());
+        Quad firstPage = toStatement(toIRI("https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FKM_CUDM.20160202"), HAS_VERSION, createTestNode());
 
         reader.on(firstPage);
 
         Assert.assertThat(nodes.size(), is(20));
-        TripleLike identifierMemberStatement = nodes.get(1);
+        Quad identifierMemberStatement = nodes.get(1);
         assertThat(identifierMemberStatement.toString(), is("<aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/NOMBIN.20150515> <http://www.w3.org/ns/prov#hadMember> <https://dataone.tern.org.au/mn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515> ."));
-        TripleLike locationType = nodes.get(2);
+        Quad locationType = nodes.get(2);
         assertThat(locationType.toString(), is("<https://dataone.tern.org.au/mn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515> <http://purl.org/dc/elements/1.1/format> \"application/eml\" ."));
-        TripleLike locationVersion = nodes.get(3);
+        Quad locationVersion = nodes.get(3);
         assertThat(locationVersion.toString(), startsWith("<https://dataone.tern.org.au/mn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515> <http://purl.org/pav/hasVersion> _:"));
-        TripleLike nodeIdentifierMemberStatement = nodes.get(4);
+        Quad nodeIdentifierMemberStatement = nodes.get(4);
         assertThat(nodeIdentifierMemberStatement.toString(), is("<urn:node:CN> <http://www.w3.org/ns/prov#hadMember> <aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/NOMBIN.20150515> ."));
     }
 
     @Test
     public void nextPage() {
-        List<TripleLike> nodes = new ArrayList<>();
+        List<Quad> nodes = new ArrayList<>();
         RegistryReaderDataONE.emitNextPage(0, 10, nodes::add, "https://bla/?rows=2&start=8");
         assertThat(nodes.size(), is(3));
         assertThat(nodes.get(1).getSubject().toString(), is("<https://bla/?rows=10&start=0>"));
@@ -161,7 +161,7 @@ public class RegistryReaderDataONETest {
     @Test
     public void parseDatasets() throws IOException {
 
-        final List<TripleLike> refNodes = new ArrayList<>();
+        final List<Quad> refNodes = new ArrayList<>();
 
         IRI testNode = createTestNode();
 
@@ -169,7 +169,7 @@ public class RegistryReaderDataONETest {
 
         assertThat(refNodes.size(), is(43));
 
-        TripleLike refNode = refNodes.get(0);
+        Quad refNode = refNodes.get(0);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/KM_CUDM.20160202> ."));
 
         refNode = refNodes.get(1);
@@ -185,7 +185,7 @@ public class RegistryReaderDataONETest {
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <aekos.org.au/collection/sa.gov.au/DEWNR_ROADSIDEVEG/45.20160201> ."));
 
 
-        TripleLike lastRefNode = refNodes.get(refNodes.size() - 2);
+        Quad lastRefNode = refNodes.get(refNodes.size() - 2);
         assertThat(lastRefNode.toString(), is("<http://example.org/?start=1000&rows=1000> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
 
         lastRefNode = refNodes.get(refNodes.size() - 1);

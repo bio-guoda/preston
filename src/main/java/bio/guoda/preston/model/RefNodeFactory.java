@@ -8,7 +8,7 @@ import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDF;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Triple;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.simple.SimpleRDF;
 import org.apache.commons.rdf.simple.Types;
 import bio.guoda.preston.DateUtil;
@@ -56,12 +56,12 @@ public class RefNodeFactory {
         return rdf.createLiteral(dateTime, Types.XSD_DATETIME);
     }
 
-    public static boolean hasVersionStatement(TripleLike statement) {
+    public static boolean hasVersionStatement(Quad statement) {
         return HAS_VERSION.equals(statement.getPredicate())
                 || HAS_PREVIOUS_VERSION.equals(statement.getPredicate());
     }
 
-    public static IRI getVersionSource(TripleLike statement) {
+    public static IRI getVersionSource(Quad statement) {
         IRI versionSource = null;
         if (hasVersionStatement(statement)) {
             versionSource = (IRI) statement.getSubject();
@@ -69,7 +69,7 @@ public class RefNodeFactory {
         return versionSource;
     }
 
-    public static BlankNodeOrIRI getVersion(TripleLike statement) {
+    public static BlankNodeOrIRI getVersion(Quad statement) {
         BlankNodeOrIRI version = null;
         if (hasVersionStatement(statement)) {
             version = (BlankNodeOrIRI) statement.getObject();
@@ -77,11 +77,11 @@ public class RefNodeFactory {
         return version;
     }
 
-    public static TripleLike toStatement(BlankNodeOrIRI subject, IRI predicate, RDFTerm object) {
+    public static Quad toStatement(BlankNodeOrIRI subject, IRI predicate, RDFTerm object) {
         return rdf.createQuad(null, subject, predicate, object);
     }
 
-    public static TripleLike toStatementWithGraphName(BlankNodeOrIRI graphName, BlankNodeOrIRI subject, IRI predicate, RDFTerm object) {
+    public static Quad toStatementWithGraphName(BlankNodeOrIRI graphName, BlankNodeOrIRI subject, IRI predicate, RDFTerm object) {
         return rdf.createQuad(graphName, subject, predicate, object);
     }
 
@@ -109,7 +109,7 @@ public class RefNodeFactory {
         return toIRI("https://deeplinker.bio/" + SKOLEMIZATION_PATH + subj.uniqueReference());
     }
 
-    public static boolean hasVersionAvailable(TripleLike statement) {
+    public static boolean hasVersionAvailable(Quad statement) {
         return hasVersionStatement(statement)
                 && !isBlankOrSkolemizedBlank(getVersion(statement));
     }
@@ -118,7 +118,7 @@ public class RefNodeFactory {
         return toDateTime(DateUtil.now());
     }
 
-    public static Optional<BlankNodeOrIRI> graphNameOf(TripleLike triple) {
+    public static Optional<BlankNodeOrIRI> graphNameOf(Quad triple) {
         Optional<BlankNodeOrIRI> graphName = Optional.empty();
         if (triple instanceof Quad) {
             graphName = ((Quad)triple).getGraphName();

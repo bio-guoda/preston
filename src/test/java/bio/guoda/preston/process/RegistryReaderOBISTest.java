@@ -4,7 +4,7 @@ import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,7 +30,7 @@ public class RegistryReaderOBISTest {
 
     @Test
     public void onSeed() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderOBIS registryReader = new RegistryReaderOBIS(TestUtil.getTestBlobStore(), nodes::add);
         registryReader.on(toStatement(Seeds.OBIS, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         Assert.assertThat(nodes.size(), is(5));
@@ -39,7 +39,7 @@ public class RegistryReaderOBISTest {
 
     @Test
     public void onEmptyPage() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderOBIS registryReader = new RegistryReaderOBIS(TestUtil.getTestBlobStore(), nodes::add);
 
         registryReader.on(toStatement(toIRI("https://api.gbif.org/v1/dataset"),
@@ -50,7 +50,7 @@ public class RegistryReaderOBISTest {
 
     @Test
     public void onNotSeed() {
-        ArrayList<TripleLike> nodes = new ArrayList<>();
+        ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderOBIS registryReader = new RegistryReaderOBIS(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = toLiteral("bla");
         registryReader.on(toStatement(Seeds.GBIF, toIRI("http://example.org"), bla));
@@ -60,7 +60,7 @@ public class RegistryReaderOBISTest {
     @Test
     public void parseDatasets() throws IOException {
 
-        final List<TripleLike> refNodes = new ArrayList<>();
+        final List<Quad> refNodes = new ArrayList<>();
 
         IRI testNode = createTestNode();
 
@@ -68,7 +68,7 @@ public class RegistryReaderOBISTest {
 
         assertThat(refNodes.size(), is(12));
 
-        TripleLike refNode = refNodes.get(0);
+        Quad refNode = refNodes.get(0);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <4354345d-7faf-4376-b326-ffbc04b6b0cd> ."));
 
         refNode = refNodes.get(1);

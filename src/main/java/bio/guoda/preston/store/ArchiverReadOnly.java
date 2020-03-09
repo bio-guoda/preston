@@ -4,7 +4,7 @@ import bio.guoda.preston.process.StatementListener;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 
@@ -20,7 +20,7 @@ public class ArchiverReadOnly extends VersionProcessor {
     }
 
     @Override
-    void handleBlankVersion(TripleLike statement, BlankNode blankVersion) throws IOException {
+    void handleBlankVersion(Quad statement, BlankNode blankVersion) throws IOException {
         IRI versionSource = getVersionSource(statement);
         VersionUtil.findMostRecentVersion(versionSource, getProvenanceLogIndex(), this::emit);
     }

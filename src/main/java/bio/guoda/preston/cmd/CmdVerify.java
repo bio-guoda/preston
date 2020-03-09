@@ -15,7 +15,7 @@ import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
 
         StatementListener statementListener = new StatementListener() {
             @Override
-            public void on(TripleLike statement) {
+            public void on(Quad statement) {
                 final IRI iri = VersionUtil.mostRecentVersionForStatement(statement);
                 if (iri != null && !verifiedMap.containsKey(iri.getIRIString())) {
                     State state = State.MISSING;

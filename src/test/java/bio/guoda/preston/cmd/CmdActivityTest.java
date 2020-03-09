@@ -2,7 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class CmdActivityTest {
 
         IRI someCrawlActivity = toIRI("http://example.org/crawl");
 
-        List<TripleLike> crawlInfo = CmdActivity.findActivityInfo(new ActivityContext() {
+        List<Quad> crawlInfo = CmdActivity.findActivityInfo(new ActivityContext() {
             @Override
             public IRI getActivity() {
                 return someCrawlActivity;

@@ -6,7 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.apache.jena.shared.JenaException;
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class VersionedRDFChainEmitter extends ProcessorReadOnly {
     }
 
     @Override
-    public void on(TripleLike statement) {
+    public void on(Quad statement) {
         IRI version = VersionUtil.mostRecentVersionForStatement(statement);
         emitProvenanceLogVersion(version);
     }

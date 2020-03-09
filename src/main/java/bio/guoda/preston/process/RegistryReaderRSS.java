@@ -5,7 +5,7 @@ import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -31,7 +31,7 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
     }
 
     @Override
-    public void on(TripleLike statement) {
+    public void on(Quad statement) {
         if (hasVersionAvailable(statement)) {
             parse((IRI) getVersion(statement), this, this);
         }

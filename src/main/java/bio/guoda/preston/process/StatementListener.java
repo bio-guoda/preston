@@ -1,7 +1,7 @@
 package bio.guoda.preston.process;
 
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 
 public interface StatementListener {
-    void on(TripleLike statement);
+    void on(Quad statement);
 }

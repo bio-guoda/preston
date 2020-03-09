@@ -1,6 +1,6 @@
 package bio.guoda.preston.process;
 
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 
 import java.io.PrintStream;
 
@@ -13,7 +13,7 @@ public class StatementLoggerNQuads implements StatementListener {
     }
 
     @Override
-    public void on(TripleLike statement) {
+    public void on(Quad statement) {
         out.println(statement.toString());
     }
 

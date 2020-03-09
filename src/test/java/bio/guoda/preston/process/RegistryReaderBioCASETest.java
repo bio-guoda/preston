@@ -6,7 +6,7 @@ import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.apache.commons.rdf.api.TripleLike;
+import org.apache.commons.rdf.api.Quad;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +33,7 @@ import static org.junit.Assert.assertNull;
 
 public class RegistryReaderBioCASETest {
 
-    private ArrayList<TripleLike> nodes;
+    private ArrayList<Quad> nodes;
     private StatementListener registryReader;
 
     @Before
