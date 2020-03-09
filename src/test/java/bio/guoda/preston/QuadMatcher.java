@@ -9,19 +9,19 @@ import org.hamcrest.TypeSafeMatcher;
 
 public class QuadMatcher extends TypeSafeMatcher<Quad> {
 
-    private final Quad triple;
+    private final Quad quad;
 
-    private QuadMatcher(Quad triple) {
-        this.triple = triple;
+    private QuadMatcher(Quad quad) {
+        this.quad = quad;
     }
 
     @Override
     protected boolean matchesSafely(Quad item) {
-        return triple != null
-                && item.getGraphName().equals(triple.getGraphName())
-                && StringUtils.equals(item.getSubject().ntriplesString(), triple.getSubject().ntriplesString())
-                && StringUtils.equals(item.getPredicate().ntriplesString(), triple.getPredicate().ntriplesString())
-                && StringUtils.equals(item.getObject().ntriplesString(), triple.getObject().ntriplesString());
+        return quad != null
+                && item.getGraphName().equals(quad.getGraphName())
+                && StringUtils.equals(item.getSubject().ntriplesString(), quad.getSubject().ntriplesString())
+                && StringUtils.equals(item.getPredicate().ntriplesString(), quad.getPredicate().ntriplesString())
+                && StringUtils.equals(item.getObject().ntriplesString(), quad.getObject().ntriplesString());
     }
 
     @Override
@@ -30,8 +30,8 @@ public class QuadMatcher extends TypeSafeMatcher<Quad> {
     }
 
     @Factory
-    public static Matcher<Quad> hasQuad(Quad triple) {
-        return new QuadMatcher(triple);
+    public static Matcher<Quad> hasQuad(Quad quad) {
+        return new QuadMatcher(quad);
     }
 
 }

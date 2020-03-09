@@ -19,8 +19,8 @@ public class TripleMatcherTest {
         IRI verb = toIRI("verb");
         IRI obj = toIRI("obj");
         TripleLike quad = new SimpleRDF().createQuad(null, subj, verb, obj);
-        TripleLike triple = new SimpleRDF().createTriple(subj, verb, obj);
-        assertThat(quad, hasTriple(triple));
+        TripleLike otherQuad = new SimpleRDF().createTriple(subj, verb, obj);
+        assertThat(quad, hasTriple(otherQuad));
     }
 
     @Test
@@ -29,8 +29,8 @@ public class TripleMatcherTest {
         IRI verb = toIRI("verb");
         IRI obj = toIRI("obj");
         TripleLike quad = new SimpleRDF().createQuad(null, subj, verb, obj);
-        TripleLike triple = new SimpleRDF().createTriple(toIRI("otherSubj"), verb, obj);
-        assertThat(quad, not(hasTriple(triple)));
+        TripleLike otherQuad = new SimpleRDF().createTriple(toIRI("otherSubj"), verb, obj);
+        assertThat(quad, not(hasTriple(otherQuad)));
     }
 
     @Test

@@ -59,10 +59,10 @@ public class RefNodeFactoryTest {
 
     @Test
     public void graphLabelForQuadNoGraphName() {
-        Quad triple = RefNodeFactory.toStatement(toIRI("subj"), toIRI("verb"), toIRI("obj"));
+        Quad quad = RefNodeFactory.toStatement(toIRI("subj"), toIRI("verb"), toIRI("obj"));
 
-        assertNotNull(triple);
-        Optional<BlankNodeOrIRI> graphName = triple.getGraphName();
+        assertNotNull(quad);
+        Optional<BlankNodeOrIRI> graphName = quad.getGraphName();
         assertFalse(graphName.isPresent());
     }
 

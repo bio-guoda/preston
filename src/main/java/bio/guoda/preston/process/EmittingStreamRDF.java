@@ -55,12 +55,12 @@ public class EmittingStreamRDF {
     }
 
 
-    private void copyOnEmit(org.apache.commons.rdf.api.Quad triple) {
+    private void copyOnEmit(org.apache.commons.rdf.api.Quad quad) {
         org.apache.commons.rdf.api.Quad copyOfTriple = rdfSimple.createQuad(
-                triple.getGraphName().orElse(null),
-                triple.getSubject(),
-                triple.getPredicate(),
-                triple.getObject());
+                quad.getGraphName().orElse(null),
+                quad.getSubject(),
+                quad.getPredicate(),
+                quad.getObject());
         emitter.emit(copyOfTriple);
     }
 
