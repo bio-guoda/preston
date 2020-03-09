@@ -92,9 +92,7 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
         File destFile = getDataFile(filePathAfterCopy);
         if (!destFile.exists()) {
             FileUtils.forceMkdirParent(destFile);
-            if (!tmpDestFile.renameTo(destFile)) {
-                throw new IOException("failed to rename tmp file from [" + tmpDestFile.getAbsolutePath() + "] to [" + destFile.getAbsolutePath() + "]");
-            }
+            FileUtils.moveFile(tmpDestFile, destFile);
         }
     }
 
