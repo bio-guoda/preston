@@ -49,9 +49,10 @@ public class RefNodeFactoryTest {
     @Test
     public void graphLabelForQuad() {
         IRI someLabel = toIRI("someLabel");
-        Quad triple = RefNodeFactory.toStatementWithGraphName(someLabel, toIRI("subj"), toIRI("verb"), toIRI("obj"));
+        Quad quad = RefNodeFactory.toStatementWithGraphName(someLabel, toIRI("subj"), toIRI("verb"), toIRI("obj"));
 
-        Optional<BlankNodeOrIRI> graphName = RefNodeFactory.graphNameOf(triple);
+        assertNotNull(quad);
+        Optional<BlankNodeOrIRI> graphName = quad.getGraphName();
         assertTrue(graphName.isPresent());
         assertThat(graphName.get(), is(toIRI("someLabel")));
     }
@@ -60,7 +61,8 @@ public class RefNodeFactoryTest {
     public void graphLabelForQuadNoGraphName() {
         Quad triple = RefNodeFactory.toStatement(toIRI("subj"), toIRI("verb"), toIRI("obj"));
 
-        Optional<BlankNodeOrIRI> graphName = RefNodeFactory.graphNameOf(triple);
+        assertNotNull(triple);
+        Optional<BlankNodeOrIRI> graphName = triple.getGraphName();
         assertFalse(graphName.isPresent());
     }
 

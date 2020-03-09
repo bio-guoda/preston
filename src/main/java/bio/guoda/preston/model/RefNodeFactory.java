@@ -118,11 +118,4 @@ public class RefNodeFactory {
         return toDateTime(DateUtil.now());
     }
 
-    public static Optional<BlankNodeOrIRI> graphNameOf(Quad triple) {
-        Optional<BlankNodeOrIRI> graphName = Optional.empty();
-        if (triple instanceof Quad) {
-            graphName = ((Quad)triple).getGraphName();
-        }
-        return graphName;
-    }
 }

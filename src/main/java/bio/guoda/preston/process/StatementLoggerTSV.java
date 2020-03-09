@@ -21,7 +21,7 @@ public class StatementLoggerTSV implements StatementListener {
         String subject = RDFUtil.getValueFor(statement.getSubject());
         String predicate = RDFUtil.getValueFor(statement.getPredicate());
         String object = RDFUtil.getValueFor(statement.getObject());
-        Optional<BlankNodeOrIRI> blankNodeOrIRI = RefNodeFactory.graphNameOf(statement);
+        Optional<BlankNodeOrIRI> blankNodeOrIRI = statement.getGraphName();
 
         String graphName = blankNodeOrIRI.isPresent()
                 ? RDFUtil.getValueFor(blankNodeOrIRI.get())
