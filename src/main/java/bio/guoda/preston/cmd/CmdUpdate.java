@@ -51,11 +51,7 @@ public class CmdUpdate extends CmdActivity {
 
     @Override
     void processQueue(Queue<Quad> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
-        Archiver archiver = new Archiver(
-                new DereferencerContentAddressed(Resources::asInputStream, blobStore),
-                ctx,
-                statementQueue::add);
-        StatementListener processor = createActivityProcessor(blobStore, ctx, (StatementListener[]) Stream.concat(Stream.of(listeners), Stream.of(archiver)).toArray());
+        StatementListener processor = createActivityProcessor(blobStore, ctx, listeners);
 
         while (!statementQueue.isEmpty()) {
             processor.on(statementQueue.poll());
