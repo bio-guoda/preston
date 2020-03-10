@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.Resources;
 import bio.guoda.preston.Seeds;
+import bio.guoda.preston.process.ActivityTracker;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
@@ -49,7 +51,11 @@ public class CmdUpdate extends CmdActivity {
 
     @Override
     void processQueue(Queue<Quad> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
-        StatementListener processor = createActivityProcessor(blobStore, ctx, listeners);
+        Archiver archiver = new Archiver(
+                new DereferencerContentAddressed(Resources::asInputStream, blobStore),
+                ctx,
+                statementQueue::add);
+        StatementListener processor = createActivityProcessor(blobStore, ctx, (StatementListener[]) Stream.concat(Stream.of(listeners), Stream.of(archiver)).toArray());
 
         while (!statementQueue.isEmpty()) {
             processor.on(statementQueue.poll());
@@ -63,10 +69,7 @@ public class CmdUpdate extends CmdActivity {
 
 
     private StatementListener createActivityProcessor(BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
-        return new Archiver(
-                new DereferencerContentAddressed(Resources::asInputStream, blobStore),
-                ctx,
-                listeners);
+        return new ActivityTracker(listeners);
     }
 
 
