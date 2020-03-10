@@ -105,20 +105,13 @@ public class ArchiverTest {
         Archiver relationStore = new Archiver(
                 dereferencer,
                 TestUtil.getTestCrawlContext(),
-                nodes::add,
-                createVersionLogger(versionStore));
+                nodes::add
+        );
 
         relationStore.on(statement);
 
         assertFalse(triedDereferencing.get());
-        assertThat(nodes.size(), Is.is(1));
-        assertThat(nodes.get(0).getObject().ntriplesString(), containsString("/.well-known/genid/"));
-
-        // dereference subject
-        IRI contentHash = versionStore.get(
-                Pair.of(toIRI(URI.create("http://some")), HAS_VERSION));
-
-        assertThat(contentHash.getIRIString(), containsString("/.well-known/genid/"));
+        assertTrue(nodes.isEmpty());
     }
 
     @Test
