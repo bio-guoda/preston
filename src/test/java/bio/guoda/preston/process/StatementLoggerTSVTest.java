@@ -38,7 +38,7 @@ public class StatementLoggerTSVTest {
 
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        new StatementLoggerTSV(new PrintStream(out)).on(RefNodeFactory.toStatementWithGraphName(
+        new StatementLoggerTSV(new PrintStream(out)).on(RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI("someGraphName"),
                 source,
                 relation,

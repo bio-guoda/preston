@@ -4,7 +4,6 @@ import bio.guoda.preston.RefNodeConstants;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
-import org.apache.commons.rdf.api.QuadLike;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
@@ -15,7 +14,6 @@ import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toDateTime;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertFalse;
@@ -49,7 +47,7 @@ public class RefNodeFactoryTest {
     @Test
     public void graphLabelForQuad() {
         IRI someLabel = toIRI("someLabel");
-        Quad quad = RefNodeFactory.toStatementWithGraphName(someLabel, toIRI("subj"), toIRI("verb"), toIRI("obj"));
+        Quad quad = RefNodeFactory.toStatement(someLabel, toIRI("subj"), toIRI("verb"), toIRI("obj"));
 
         assertNotNull(quad);
         Optional<BlankNodeOrIRI> graphName = quad.getGraphName();

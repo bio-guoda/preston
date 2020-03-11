@@ -37,7 +37,7 @@ public class StatementLoggerNQuadsTest {
         RDFTerm target = RefNodeFactory.toLiteral("target");
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        new StatementLoggerNQuads(new PrintStream(out)).on(RefNodeFactory.toStatementWithGraphName(
+        new StatementLoggerNQuads(new PrintStream(out)).on(RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI("someGraphLabel"),
                 source,
                 relation,
