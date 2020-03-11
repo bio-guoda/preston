@@ -21,7 +21,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.File;
@@ -74,7 +73,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     protected void run(BlobStore blobStore, StatementStore logRelations) {
         ActivityContext ctx = createNewActivityContext(getActivityDescription());
 
-        final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, logRelations, ctx);
+        final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, logRelations);
         try {
             Runtime.getRuntime().addShutdownHook(new LoggerExitHook(archivingLogger));
 
@@ -212,15 +211,13 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     private class ArchivingLogger implements StatementListener {
         private final BlobStore blobStore;
         private final StatementStore statementStore;
-        private final ActivityContext ctx;
         File tmpArchive;
         PrintStream printStream;
         StatementListener listener;
 
-        public ArchivingLogger(BlobStore blobStore, StatementStore statementStore, ActivityContext ctx) {
+        public ArchivingLogger(BlobStore blobStore, StatementStore statementStore) {
             this.blobStore = blobStore;
             this.statementStore = statementStore;
-            this.ctx = ctx;
             tmpArchive = null;
             printStream = null;
             listener = null;
