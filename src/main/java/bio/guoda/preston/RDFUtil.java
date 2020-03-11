@@ -14,6 +14,10 @@ import org.apache.jena.sparql.core.Quad;
 
 import java.io.InputStream;
 import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static org.apache.jena.riot.system.RiotLib.createParserProfile;
 import static org.apache.jena.riot.system.RiotLib.factoryRDF;
@@ -35,5 +39,9 @@ public class RDFUtil {
         ParserProfile profile = createParserProfile(factory, ErrorHandlerFactory.errorHandlerStd, false);
         profile.setIRIResolver(IRIResolver.createNoResolve());
         return RiotParsers.createIteratorNQuads(inputStream, (StreamRDF) null, profile);
+    }
+
+    public static Stream<Quad> asQuadStream(InputStream inputStream) {
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(asQuads(inputStream), Spliterator.ORDERED), false)
     }
 }
