@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.StatementStore;
 import com.github.jsonldjava.core.JsonLdError;
@@ -10,6 +11,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
+import org.apache.jena.riot.lang.LabelToNode;
+import org.apache.jena.riot.lang.RiotParsers;
+import org.apache.jena.riot.system.ErrorHandlerFactory;
+import org.apache.jena.riot.system.FactoryRDF;
+import org.apache.jena.riot.system.IRIResolver;
+import org.apache.jena.riot.system.ParserProfile;
+import org.apache.jena.riot.system.RiotLib;
+import org.apache.jena.riot.system.StreamRDF;
+import org.apache.jena.sparql.core.Quad;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -17,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -46,22 +57,20 @@ public class CmdUpdateTest {
         String provenanceLog = IOUtils.toString(mostRecentBlob.toByteArray(), StandardCharsets.UTF_8.toString());
 
         assertThat(provenanceLog, startsWith("<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent>"));
-        String firstLine = provenanceLog.split("\n")[0];
 
-        RDFDataset parse = new NQuadRDFParser().parse(firstLine);
+        Stream<Quad> quads = RDFUtil.asQuadStream(IOUtils.toInputStream(provenanceLog, StandardCharsets.UTF_8));
 
-        assertThat(parse, is(notNullValue()));
-
-        Stream<String> graphNamesIgnoreDefault = parse
-                .graphNames()
-                .stream()
-                .filter(x -> !StringUtils.equals(x, "@default"));
+        Stream<String> graphNamesIgnoreDefault = quads
+                .map(x -> x.getGraph().toString())
+                .filter(x -> !StringUtils.equals(x, "urn:x-arq:DefaultGraphNode"));
 
         long count = graphNamesIgnoreDefault
                 .map(UUID::fromString)
+                .distinct()
                 .count();
         assertThat(count, is(1L));
     }
+
 
     private static class BlobStoreNull implements BlobStore {
 
