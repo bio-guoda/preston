@@ -49,7 +49,7 @@ public class CmdUpdateTest {
         String provenanceLog = IOUtils.toString(mostRecentBlob.toByteArray(), StandardCharsets.UTF_8.toString());
 
         assertThat(provenanceLog, startsWith("<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent>"));
-        String firstLine = provenanceLog.split("\n")[1];
+        String firstLine = provenanceLog.split("\n")[0];
 
         RDFDataset parse = new NQuadRDFParser().parse(firstLine);
 
@@ -67,7 +67,7 @@ public class CmdUpdateTest {
     }
 
     private static class BlobStoreNull implements BlobStore {
-        
+
         @Override
         public IRI put(InputStream is) throws IOException {
             mostRecentBlob = new ByteArrayOutputStream();
