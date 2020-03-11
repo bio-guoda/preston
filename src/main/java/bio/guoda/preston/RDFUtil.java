@@ -42,6 +42,6 @@ public class RDFUtil {
     }
 
     public static Stream<Quad> asQuadStream(InputStream inputStream) {
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(asQuads(inputStream), Spliterator.ORDERED), false)
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(asQuads(inputStream), Spliterator.ORDERED), false);
     }
 }
