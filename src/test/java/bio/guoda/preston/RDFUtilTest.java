@@ -1,7 +1,7 @@
 package bio.guoda.preston;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.sparql.core.Quad;
+import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class RDFUtilTest {
 
@@ -20,10 +20,11 @@ public class RDFUtilTest {
         List<Quad> collect = quadStream.collect(Collectors.toList());
         assertThat(collect.size(), is(1));
         Quad quad = collect.get(0);
-        assertThat(quad.getObject().toString(), is("obj"));
-        assertThat(quad.getPredicate().toString(), is("verb"));
-        assertThat(quad.getSubject().toString(), is("subj"));
-        assertThat(quad.getGraph().toString(), is("graph"));
+        assertThat(quad.getObject().toString(), is("<obj>"));
+        assertThat(quad.getPredicate().toString(), is("<verb>"));
+        assertThat(quad.getSubject().toString(), is("<subj>"));
+        assertThat(quad.getGraphName().isPresent(), is(true));
+        assertThat(quad.getGraphName().get().toString(), is("<graph>"));
     }
 
 }

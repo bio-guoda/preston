@@ -2,7 +2,9 @@ package bio.guoda.preston;
 
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
+import org.apache.commons.rdf.api.RDF;
 import org.apache.commons.rdf.api.RDFTerm;
+import org.apache.commons.rdf.jena.JenaRDF;
 import org.apache.jena.riot.lang.LabelToNode;
 import org.apache.jena.riot.lang.RiotParsers;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
@@ -23,11 +25,14 @@ import static org.apache.jena.riot.system.RiotLib.createParserProfile;
 import static org.apache.jena.riot.system.RiotLib.factoryRDF;
 
 public class RDFUtil {
+
+    public static final RDF RDF_FACTORY = new JenaRDF();
+
     public static String getValueFor(RDFTerm entity) {
         String value = null;
         if (entity instanceof IRI) {
             value = ((IRI) entity).getIRIString();
-        } else if (entity instanceof Literal){
+        } else if (entity instanceof Literal) {
             value = ((Literal) entity).getLexicalForm();
         }
         value = (value == null) ? entity.toString() : value;
@@ -41,7 +46,10 @@ public class RDFUtil {
         return RiotParsers.createIteratorNQuads(inputStream, (StreamRDF) null, profile);
     }
 
-    public static Stream<Quad> asQuadStream(InputStream inputStream) {
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(asQuads(inputStream), Spliterator.ORDERED), false);
+    public static Stream<org.apache.commons.rdf.api.Quad> asQuadStream(InputStream inputStream) {
+        return StreamSupport.stream(
+                Spliterators.spliteratorUnknownSize(asQuads(inputStream), Spliterator.ORDERED), false)
+                .map(q -> JenaRDF.asQuad(RDF_FACTORY, q)
+                );
     }
 }

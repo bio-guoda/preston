@@ -58,10 +58,10 @@ public class CmdUpdateTest {
 
         assertThat(provenanceLog, startsWith("<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent>"));
 
-        Stream<Quad> quads = RDFUtil.asQuadStream(IOUtils.toInputStream(provenanceLog, StandardCharsets.UTF_8));
+        Stream<org.apache.commons.rdf.api.Quad> quads = RDFUtil.asQuadStream(IOUtils.toInputStream(provenanceLog, StandardCharsets.UTF_8));
 
         Stream<String> graphNamesIgnoreDefault = quads
-                .map(x -> x.getGraph().toString())
+                .map(x -> x.getGraphName().toString())
                 .filter(x -> !StringUtils.equals(x, "urn:x-arq:DefaultGraphNode"));
 
         long count = graphNamesIgnoreDefault
