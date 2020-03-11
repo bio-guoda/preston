@@ -16,15 +16,14 @@ public class RDFUtilTest {
 
     @Test
     public void asQuadStream() {
-        Stream<org.apache.commons.rdf.api.Quad> quadStream = RDFUtil.asQuadStream(IOUtils.toInputStream("<subj> <verb> <obj> <graph> .", StandardCharsets.UTF_8));
-        List<org.apache.commons.rdf.api.Quad> collect = quadStream.collect(Collectors.toList());
+        Stream<Quad> quadStream = RDFUtil.asQuadStream(IOUtils.toInputStream("<subj> <verb> <obj> <graph> .", StandardCharsets.UTF_8));
+        List<Quad> collect = quadStream.collect(Collectors.toList());
         assertThat(collect.size(), is(1));
-        org.apache.commons.rdf.api.Quad quad = collect.get(0);
+        Quad quad = collect.get(0);
         assertThat(quad.getObject().toString(), is("obj"));
         assertThat(quad.getPredicate().toString(), is("verb"));
         assertThat(quad.getSubject().toString(), is("subj"));
-        assertThat(quad.getGraphName().isPresent(), is(true));
-        assertThat(quad.getGraphName().get(), is("graph"));
+        assertThat(quad.getGraph().toString(), is("graph"));
     }
 
 }

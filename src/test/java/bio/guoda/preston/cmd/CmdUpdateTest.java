@@ -44,7 +44,7 @@ public class CmdUpdateTest {
     private static ByteArrayOutputStream mostRecentBlob;
 
     @Test
-    public void doUpdate() throws IOException, JsonLdError {
+    public void doUpdate() throws IOException {
         assertThat(putAttemptCount.get(), Is.is(0));
         assertThat(putLogVersionAttemptCount.get(), Is.is(0));
         new CmdUpdate().run(
