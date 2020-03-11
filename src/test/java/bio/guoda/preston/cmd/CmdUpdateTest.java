@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.StatementStore;
 import com.github.jsonldjava.core.JsonLdError;
@@ -11,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.apache.commons.rdf.simple.SimpleRDF;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -19,7 +17,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
