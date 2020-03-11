@@ -70,7 +70,7 @@ The examples below assume that you've created a shortcut ```preston``` to ```jav
 
 #### `update`
 
-The ```update``` command updates your local biodiversity dataset graph using remote resources. By default, Preston uses GBIF, iDigBio and BioCASe to retrieve associated registries and data archives. The output is statements, expressed in nquads (or nquad-like tsv). An in depth discussion of rdf, nquads and related topics are beyond the current scope. However, with a little patience, you can probably figure out what Preston is trying to communicate. 
+The ```update``` command updates your local biodiversity dataset graph using remote resources. By default, Preston uses GBIF, iDigBio and BioCASe to retrieve associated registries and data archives. The output is statements, expressed in nquads (or nquad-like tsv). An in depth discussion of rdf, nquads and related topics are beyond the current scope. However, with a little patience, you can probably figure out what Preston is trying to communicate.
 
 For instance:
 
