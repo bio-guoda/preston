@@ -61,7 +61,8 @@ public class CmdUpdateTest {
         Stream<org.apache.commons.rdf.api.Quad> quads = RDFUtil.asQuadStream(IOUtils.toInputStream(provenanceLog, StandardCharsets.UTF_8));
 
         Stream<String> graphNamesIgnoreDefault = quads
-                .map(x -> x.getGraphName().toString())
+                .filter(x -> x.getGraphName().isPresent())
+                .map(x -> ((IRI)x.getGraphName().get()).getIRIString())
                 .filter(x -> !StringUtils.equals(x, "urn:x-arq:DefaultGraphNode"));
 
         long count = graphNamesIgnoreDefault
