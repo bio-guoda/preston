@@ -11,9 +11,6 @@ import org.apache.jena.sparql.core.Quad;
 import java.io.InputStream;
 import java.util.Iterator;
 
-import static org.apache.jena.riot.system.RiotLib.createParserProfile;
-import static org.apache.jena.riot.system.RiotLib.factoryRDF;
-
 public class EmittingStreamRDF {
     private final RDF rdf = new JenaRDF();
     private final RDF rdfSimple = new SimpleRDF();

@@ -47,8 +47,8 @@ public class RDFUtil {
     }
 
     public static Stream<org.apache.commons.rdf.api.Quad> asQuadStream(InputStream inputStream) {
-        return StreamSupport.stream(
-                Spliterators.spliteratorUnknownSize(asQuads(inputStream), Spliterator.ORDERED), false)
+        return StreamSupport
+                .stream(Spliterators.spliteratorUnknownSize(asQuads(inputStream), Spliterator.ORDERED), false)
                 .map(q -> JenaRDF.asQuad(RDF_FACTORY, q)
                 );
     }
