@@ -166,25 +166,25 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         String version = Preston.getVersion(null);
         String versionString = version == null ? "" : (" (Version " + Preston.getVersion() + ")");
         return Arrays.asList(
-                toStatement(PRESTON, IS_A, SOFTWARE_AGENT),
-                toStatement(PRESTON, IS_A, AGENT),
-                toStatement(PRESTON, DESCRIPTION, toEnglishLiteral("Preston is a software program that finds, archives and provides access to biodiversity datasets.")),
+                toStatement(crawlActivity, PRESTON, IS_A, SOFTWARE_AGENT),
+                toStatement(crawlActivity, PRESTON, IS_A, AGENT),
+                toStatement(crawlActivity, PRESTON, DESCRIPTION, toEnglishLiteral("Preston is a software program that finds, archives and provides access to biodiversity datasets.")),
 
 
-                toStatement(crawlActivity, IS_A, ACTIVITY),
-                toStatement(crawlActivity, DESCRIPTION, toEnglishLiteral(activity.getDescription())),
-                toStatement(crawlActivity, toIRI("http://www.w3.org/ns/prov#startedAtTime"), RefNodeFactory.nowDateTimeLiteral()),
-                toStatement(crawlActivity, toIRI("http://www.w3.org/ns/prov#wasStartedBy"), PRESTON),
+                toStatement(crawlActivity, crawlActivity, IS_A, ACTIVITY),
+                toStatement(crawlActivity, crawlActivity, DESCRIPTION, toEnglishLiteral(activity.getDescription())),
+                toStatement(crawlActivity, crawlActivity, toIRI("http://www.w3.org/ns/prov#startedAtTime"), RefNodeFactory.nowDateTimeLiteral()),
+                toStatement(crawlActivity, crawlActivity, toIRI("http://www.w3.org/ns/prov#wasStartedBy"), PRESTON),
 
 
-                toStatement(PRESTON_DOI_IRI, USED_BY, crawlActivity),
-                toStatement(PRESTON_DOI_IRI, IS_A, toIRI("http://purl.org/dc/dcmitype/Software")),
-                toStatement(PRESTON_DOI_IRI,
+                toStatement(crawlActivity, PRESTON_DOI_IRI, USED_BY, crawlActivity),
+                toStatement(crawlActivity, PRESTON_DOI_IRI, IS_A, toIRI("http://purl.org/dc/dcmitype/Software")),
+                toStatement(crawlActivity, PRESTON_DOI_IRI,
                         toIRI("http://purl.org/dc/terms/bibliographicCitation"),
                         toEnglishLiteral("Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2019. Preston: a biodiversity dataset tracker" + versionString + " [Software]. Zenodo. http://doi.org/10.5281/zenodo.1410543")),
 
-                toStatement(ARCHIVE, IS_A, ENTITY),
-                toStatement(ARCHIVE, DESCRIPTION, toEnglishLiteral("A biodiversity dataset graph archive."))
+                toStatement(crawlActivity, ARCHIVE, IS_A, ENTITY),
+                toStatement(crawlActivity, ARCHIVE, DESCRIPTION, toEnglishLiteral("A biodiversity dataset graph archive."))
         );
     }
 

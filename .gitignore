@@ -4,3 +4,6 @@ target/*
 data/*
 tmp/*
 datasets/*
+.classpath
+.project
+.settings/*
