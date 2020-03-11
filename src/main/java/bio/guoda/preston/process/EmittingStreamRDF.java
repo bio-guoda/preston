@@ -1,18 +1,11 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.cmd.ProcessorState;
 import org.apache.commons.rdf.api.RDF;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.jena.JenaRDF;
 import org.apache.commons.rdf.simple.SimpleRDF;
 import org.apache.jena.atlas.iterator.IteratorResourceClosing;
-import org.apache.jena.riot.lang.LabelToNode;
-import org.apache.jena.riot.lang.RiotParsers;
-import org.apache.jena.riot.system.ErrorHandlerFactory;
-import org.apache.jena.riot.system.FactoryRDF;
-import org.apache.jena.riot.system.IRIResolver;
-import org.apache.jena.riot.system.ParserProfile;
-import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.sparql.core.Quad;
 
 import java.io.InputStream;
@@ -43,10 +36,7 @@ public class EmittingStreamRDF {
     }
 
     public void parseAndEmit(InputStream inputStream) {
-        FactoryRDF factory = factoryRDF(LabelToNode.createScopeByGraph());
-        ParserProfile profile = createParserProfile(factory, ErrorHandlerFactory.errorHandlerStd, false);
-        profile.setIRIResolver(IRIResolver.createNoResolve());
-        Iterator<Quad> iteratorNQuads = RiotParsers.createIteratorNQuads(inputStream, (StreamRDF) null, profile);
+        Iterator<Quad> iteratorNQuads = RDFUtil.asQuads(inputStream);
         Iterator<Quad> iteratorQuads = new IteratorResourceClosing<>(iteratorNQuads, inputStream);
         while (context.shouldKeepProcessing() && iteratorQuads.hasNext()) {
             Quad nextQuad = iteratorQuads.next();
