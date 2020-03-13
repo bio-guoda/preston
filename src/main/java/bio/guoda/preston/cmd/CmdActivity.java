@@ -1,7 +1,6 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.Preston;
-import bio.guoda.preston.Resources;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.RegistryReaderALA;
@@ -14,13 +13,20 @@ import bio.guoda.preston.process.RegistryReaderOBIS;
 import bio.guoda.preston.process.RegistryReaderRSS;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
-import bio.guoda.preston.store.*;
+import bio.guoda.preston.store.BlobStore;
+import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.StatementStore;
+import bio.guoda.preston.store.StatementStoreImpl;
+import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.File;
@@ -73,7 +79,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     protected void run(BlobStore blobStore, StatementStore logRelations) {
         ActivityContext ctx = createNewActivityContext(getActivityDescription());
 
-        final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, logRelations);
+        final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, logRelations, ctx);
         try {
             Runtime.getRuntime().addShutdownHook(new LoggerExitHook(archivingLogger));
 
@@ -89,7 +95,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                         private void addPreviousVersionReference() throws IOException {
                             IRI mostRecentVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), logRelations);
                             if (mostRecentVersion != null) {
-                                add(toStatement(mostRecentVersion, USED_BY, ctx.getActivity()));
+                                add(toStatement(ctx.getActivity(), mostRecentVersion, USED_BY, ctx.getActivity()));
                             }
                         }
                     };
@@ -99,7 +105,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
             StatementListener printingLogger = StatementLogFactory.createPrintingLogger(getLogMode(), System.out);
 
             StatementListener[] listeners = Stream.concat(
-                    createProcessors(blobStore, ctx, statementQueue::add),
+                    createProcessors(blobStore, statementQueue::add),
                     createLoggers(archivingLogger, printingLogger)
             ).toArray(StatementListener[]::new);
 
@@ -124,7 +130,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                 archivingLogger);
     }
 
-    private static Stream<StatementListener> createProcessors(BlobStore blobStore, ActivityContext ctx, StatementListener queueAsListener) {
+    private static Stream<StatementListener> createProcessors(BlobStore blobStore, StatementListener queueAsListener) {
         return Stream.of(
                 new RegistryReaderIDigBio(blobStore, queueAsListener),
                 new RegistryReaderGBIF(blobStore, queueAsListener),
@@ -133,12 +139,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                 new RegistryReaderRSS(blobStore, queueAsListener),
                 new RegistryReaderBHL(blobStore, queueAsListener),
                 new RegistryReaderOBIS(blobStore, queueAsListener),
-                new RegistryReaderALA(blobStore, queueAsListener),
-                new Archiver(
-                        new DereferencerContentAddressed(Resources::asInputStream, blobStore),
-                        ctx,
-                        queueAsListener
-                )
+                new RegistryReaderALA(blobStore, queueAsListener)
         );
     }
 
@@ -211,13 +212,15 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     private class ArchivingLogger implements StatementListener {
         private final BlobStore blobStore;
         private final StatementStore statementStore;
+        private final ActivityContext ctx;
         File tmpArchive;
         PrintStream printStream;
         StatementListener listener;
 
-        public ArchivingLogger(BlobStore blobStore, StatementStore statementStore) {
+        public ArchivingLogger(BlobStore blobStore, StatementStore statementStore, ActivityContext ctx) {
             this.blobStore = blobStore;
             this.statementStore = statementStore;
+            this.ctx = ctx;
             tmpArchive = null;
             printStream = null;
             listener = null;

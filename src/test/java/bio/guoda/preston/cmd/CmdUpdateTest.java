@@ -3,23 +3,11 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.StatementStore;
-import com.github.jsonldjava.core.JsonLdError;
-import com.github.jsonldjava.core.RDFDataset;
-import com.github.jsonldjava.impl.NQuadRDFParser;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.apache.jena.riot.lang.LabelToNode;
-import org.apache.jena.riot.lang.RiotParsers;
-import org.apache.jena.riot.system.ErrorHandlerFactory;
-import org.apache.jena.riot.system.FactoryRDF;
-import org.apache.jena.riot.system.IRIResolver;
-import org.apache.jena.riot.system.ParserProfile;
-import org.apache.jena.riot.system.RiotLib;
-import org.apache.jena.riot.system.StreamRDF;
-import org.apache.jena.sparql.core.Quad;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -27,13 +15,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
 
@@ -57,6 +45,8 @@ public class CmdUpdateTest {
         String provenanceLog = IOUtils.toString(mostRecentBlob.toByteArray(), StandardCharsets.UTF_8.toString());
 
         assertThat(provenanceLog, startsWith("<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent>"));
+
+        assertThat(provenanceLog, not(containsString(" _:")));
 
         Stream<org.apache.commons.rdf.api.Quad> quads = RDFUtil.asQuadStream(IOUtils.toInputStream(provenanceLog, StandardCharsets.UTF_8));
 

@@ -27,6 +27,9 @@ public abstract class VersionProcessor extends StatementProcessor {
             BlankNodeOrIRI version = getVersion(statement);
             if (version instanceof BlankNode) {
                 handleBlankVersion(statement, (BlankNode) version);
+            } else {
+                emit(statement);
+
             }
         } catch (Throwable e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);

@@ -1,26 +1,26 @@
 package bio.guoda.preston.cmd;
 
-import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
-import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
-import static bio.guoda.preston.model.RefNodeFactory.toBlank;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import bio.guoda.preston.Resources;
+import bio.guoda.preston.Seeds;
+import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.store.Archiver;
+import bio.guoda.preston.store.BlobStore;
+import bio.guoda.preston.store.DereferencerContentAddressed;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
+import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Quad;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
-
-import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Quad;
-
-import bio.guoda.preston.Seeds;
-import bio.guoda.preston.process.ActivityTracker;
-import bio.guoda.preston.process.StatementListener;
-import bio.guoda.preston.store.BlobStore;
+import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static bio.guoda.preston.model.RefNodeFactory.toBlank;
+import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 @Parameters(separators = "= ", commandDescription = "update biodiversity dataset graph")
 public class CmdUpdate extends CmdActivity {
@@ -62,13 +62,16 @@ public class CmdUpdate extends CmdActivity {
 
 
     private StatementListener createActivityProcessor(BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
-        return new ActivityTracker(listeners);
+        return new Archiver(
+                new DereferencerContentAddressed(Resources::asInputStream, blobStore),
+                ctx,
+                listeners);
     }
 
 
     private List<Quad> generateSeeds(final IRI crawlActivity) {
         return seedUrls.stream()
-                .map((String uriString) -> toStatement(crawlActivity, toIRI(uriString), WAS_ASSOCIATED_WITH, crawlActivity))
+                .map((String uriString) -> toStatement(toIRI(uriString), WAS_ASSOCIATED_WITH, crawlActivity))
                 .collect(Collectors.toList());
     }
 
