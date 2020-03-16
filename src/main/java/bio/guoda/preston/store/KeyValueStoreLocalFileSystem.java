@@ -88,6 +88,9 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
     }
 
     private void put(IRI key, File tmpDestFile) throws IOException {
+        if (!tmpDestFile.exists()) {
+            throw new IOException("cannot store a file that does not exist");
+        }
         URI filePathAfterCopy = getPathForKey(key);
         File destFile = getDataFile(filePathAfterCopy);
         if (!destFile.exists()) {
