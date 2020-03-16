@@ -33,7 +33,7 @@ public class CmdActivityTest {
 
         assertFalse(crawlInfo.isEmpty());
 
-        crawlInfo.forEach(System.out::quad);
+        crawlInfo.forEach(quad -> System.out.print(quad + "\n"));
     }
 
     @Test
