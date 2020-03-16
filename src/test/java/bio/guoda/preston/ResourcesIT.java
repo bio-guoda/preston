@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-public class ResourcesTest {
+public class ResourcesIT {
 
     @Test
     public void irelandServerPickyAboutContentHeaderWithJSON() throws IOException {
