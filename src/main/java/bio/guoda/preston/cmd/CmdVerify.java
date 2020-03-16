@@ -88,11 +88,11 @@ public class CmdVerify extends PersistingLocal implements Runnable {
                     } finally {
                         verifiedMap.put(iri.getIRIString(), state);
                         String iriString = iri.getIRIString();
-                        System.out.println(iriString + "\t" +
+                        System.out.print(iriString + "\t" +
                                 getKeyToPathLocal().toPath(iri) + "\t" +
                                 (OK_STATES.contains(state) ? "OK" : "FAIL") + "\t" +
                                 state + "\t" +
-                                fileSize);
+                                fileSize + "\n");
                     }
                 }
             }

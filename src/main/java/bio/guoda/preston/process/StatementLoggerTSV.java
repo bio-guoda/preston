@@ -27,7 +27,7 @@ public class StatementLoggerTSV implements StatementListener {
                 ? RDFUtil.getValueFor(blankNodeOrIRI.get())
                 : "";
 
-        out.println(subject + "\t" + predicate + "\t" + object + "\t" + graphName);
+        out.print(subject + "\t" + predicate + "\t" + object + "\t" + graphName + "\n");
     }
 
 }

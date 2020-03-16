@@ -14,7 +14,7 @@ public class StatementLoggerNQuads implements StatementListener {
 
     @Override
     public void on(Quad statement) {
-        out.println(statement.toString());
+        out.print(statement.toString() + "\n");
     }
 
 }

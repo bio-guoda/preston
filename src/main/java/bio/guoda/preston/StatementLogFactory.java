@@ -39,7 +39,7 @@ public class StatementLogFactory {
                 public void on(Quad statement) {
                     long index = count.getAndIncrement();
                     if ((index % 80) == 0) {
-                        out.println();
+                        out.print("\n");
                     } else {
                         out.print(".");
                     }

@@ -12,7 +12,7 @@ public class CmdSeeds implements Runnable {
         Seeds.AVAILABLE
                 .stream()
                 .map(IRI::getIRIString)
-                .forEach(System.out::println);
+                .forEach(x -> System.out.print(x + "\n"));
     }
 
 }

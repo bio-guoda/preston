@@ -54,7 +54,7 @@ public class CmdGet extends Persisting implements Runnable {
         try {
             InputStream input = blobStore.get(RefNodeFactory.toIRI(hash));
             if (input == null) {
-                System.err.println("not found: [" + hash + "]");
+                System.err.print("not found: [" + hash + "]\n");
                 exit(1);
             }
             copyIfNoError(input, System.out);
