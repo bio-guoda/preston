@@ -32,7 +32,8 @@ public class KeyValueStoreLocalFileSystemTest {
 
     @Before
     public void init() throws IOException {
-        path = Files.createTempDirectory(Paths.get(new File("target").toURI()), "test");
+        File tempDirectory = FileUtils.getTempDirectory();
+        path = Files.createTempDirectory(Paths.get(tempDirectory.toURI()), "test");
     }
 
     @After
