@@ -70,9 +70,11 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
     public IRI put(KeyGeneratingStream keyGeneratingStream, InputStream value) throws IOException {
         FileUtils.forceMkdir(tmpDir);
         File tmpFile = File.createTempFile("cacheFile", ".tmp", tmpDir);
-        tmpFile.deleteOnExit();
-        FileOutputStream os = FileUtils.openOutputStream(tmpFile);
-        IRI key = keyGeneratingStream.generateKeyWhileStreaming(value, os);
+        IRI key;
+        try (FileOutputStream os = FileUtils.openOutputStream(tmpFile)) {
+            key = keyGeneratingStream.generateKeyWhileStreaming(value, os);
+            os.flush();
+        }
         try {
             put(key, tmpFile);
         } finally {
