@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.assertTrue;
 
-public class PersistingTest {
+public class PersistingIT {
 
     @Test
     public void loggingDerefStream() throws IOException {
