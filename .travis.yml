@@ -1,4 +1,7 @@
 language: java
+os:
+- linux
+- windows
 jdk:
 - openjdk8
 install: mvn --version
