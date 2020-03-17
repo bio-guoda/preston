@@ -58,28 +58,41 @@ public class Archiver extends VersionProcessor {
     private void putVersion(IRI versionSource, BlankNodeOrIRI newVersion) throws IOException {
         Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
 
+        IRI activityGraph = activityCtx.getActivity();
+        IRI downloadActivity = toIRI(UUID.randomUUID());
         if (activityCtx != null) {
-            emit(toStatement(newVersion,
+            emit(toStatement(
+                    activityGraph,
+                    newVersion,
                     WAS_GENERATED_BY,
                     activityCtx.getActivity()));
-            IRI downloadActivity = toIRI(UUID.randomUUID());
-            emit(toStatement(newVersion,
+            emit(toStatement(
+                    activityGraph,
+                    newVersion,
                     toIRI("http://www.w3.org/ns/prov#qualifiedGeneration"),
                     downloadActivity));
-            emit(toStatement(downloadActivity,
+            emit(toStatement(
+                    activityGraph,
+                    downloadActivity,
                     GENERATED_AT_TIME,
                     nowLiteral));
-            emit(toStatement(downloadActivity,
+            emit(toStatement(
+                    activityGraph,
+                    downloadActivity,
                     IS_A,
                     toIRI("http://www.w3.org/ns/prov#Generation")));
-            emit(toStatement(downloadActivity,
+            emit(toStatement(
+                    activityGraph,
+                    downloadActivity,
                     toIRI("http://www.w3.org/ns/prov#wasInformedBy"),
                     (activityCtx.getActivity())));
-            emit(toStatement(downloadActivity,
+            emit(toStatement(
+                    activityGraph,
+                    downloadActivity,
                     toIRI("http://www.w3.org/ns/prov#used"),
                     versionSource));
         }
-        emit(toStatement(versionSource, HAS_VERSION, newVersion));
+        emit(toStatement(activityGraph, versionSource, HAS_VERSION, newVersion));
     }
 
     private Dereferencer<IRI> getDereferencer() {
