@@ -158,7 +158,7 @@ public class ArchiverTest {
         assertThat(nodes.get(3), hasTriple(toStatement(toIRI(qualifiedGeneration), IS_A, toIRI("http://www.w3.org/ns/prov#Generation"))));
         assertThat(nodes.get(4), hasTriple(toStatement(toIRI(qualifiedGeneration), toIRI("http://www.w3.org/ns/prov#wasInformedBy"), testCrawlContext.getActivity())));
         assertThat(nodes.get(5), hasTriple(toStatement(toIRI(qualifiedGeneration), toIRI("http://www.w3.org/ns/prov#used"), toIRI("http://some"))));
-        assertThat(nodes.get(6).toString(), is("<http://some> <http://purl.org/pav/hasVersion> <hash://sha256/bla> ."));
+        assertThat(nodes.get(6), hasTriple(toStatement(toIRI("http://some"), toIRI("http://purl.org/pav/hasVersion"), toIRI("hash://sha256/bla"))));
     }
 
     @Test
