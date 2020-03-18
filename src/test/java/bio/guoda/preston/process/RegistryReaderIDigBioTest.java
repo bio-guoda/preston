@@ -70,7 +70,7 @@ public class RegistryReaderIDigBioTest {
 
         InputStream is = publishersInputStream();
 
-        RegistryReaderIDigBio.parsePublishers(providedParent, nodes::add, is);
+        RegistryReaderIDigBio.parsePublishers(providedParent, null, nodes::add, is);
 
         assertThat(nodes.size(), is(312));
 

@@ -2,17 +2,20 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.Seeds;
+import bio.guoda.preston.model.RefNodeFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
@@ -46,12 +49,14 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (statement.getSubject().equals(Seeds.IDIGBIO)
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
-            Stream.of(toStatement(Seeds.IDIGBIO, IS_A, ORGANIZATION),
-                    toStatement(IDIGBIO_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of RSS Feeds that point to publishers of Darwin Core archives, and EML descriptors.")),
-                    toStatement(IDIGBIO_REGISTRY, CREATED_BY, Seeds.IDIGBIO),
-                    toStatement(IDIGBIO_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
-                    toStatement(IDIGBIO_REGISTRY, HAS_VERSION, toBlank()))
+            BlankNodeOrIRI activity = ActivityTracking.beginInformedActivity(this, statement.getGraphName());
+            Stream.of(toStatement(activity, Seeds.IDIGBIO, IS_A, ORGANIZATION),
+                    toStatement(activity, IDIGBIO_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of RSS Feeds that point to publishers of Darwin Core archives, and EML descriptors.")),
+                    toStatement(activity, IDIGBIO_REGISTRY, CREATED_BY, Seeds.IDIGBIO),
+                    toStatement(activity, IDIGBIO_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
+                    toStatement(activity, IDIGBIO_REGISTRY, HAS_VERSION, toBlank()))
                     .forEach(this::emit);
+            ActivityTracking.endInformedActivity(this, activity);
         } else if (hasVersionAvailable(statement)) {
             parse(statement, (IRI) getVersion(statement));
         }
@@ -59,36 +64,37 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     public void parse(Quad statement, IRI toBeParsed) {
         if (statement.getSubject().equals(IDIGBIO_REGISTRY)) {
-            parsePublishers(toBeParsed);
+            BlankNodeOrIRI activity = statement.getGraphName().orElse(null);
+            parsePublishers(toBeParsed, activity);
         }
     }
 
-    static void parsePublishers(IRI parent, StatementEmitter emitter, InputStream is) throws IOException {
+    static void parsePublishers(IRI parent, BlankNodeOrIRI activity, StatementEmitter emitter, InputStream is) throws IOException {
         JsonNode r = new ObjectMapper().readTree(is);
         if (r.has("items") && r.get("items").isArray()) {
             for (JsonNode item : r.get("items")) {
                 String publisherUUID = item.get("uuid").asText();
                 IRI refNodePublisher = fromUUID(publisherUUID);
-                emitter.emit(toStatement(parent, HAD_MEMBER, refNodePublisher));
+                emitter.emit(toStatement(activity, parent, HAD_MEMBER, refNodePublisher));
                 JsonNode data = item.get("data");
                 if (item.has("data")) {
                     String rssFeedUrl = data.has("rss_url") ? data.get("rss_url").asText() : null;
                     if (StringUtils.isNotBlank(rssFeedUrl)) {
                         IRI refNodeFeed = toIRI(rssFeedUrl);
-                        emitter.emit(toStatement(refNodePublisher, HAD_MEMBER, refNodeFeed));
-                        emitter.emit(toStatement(refNodeFeed, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_RSS)));
-                        emitter.emit(toStatement(refNodeFeed, HAS_VERSION, toBlank()));
+                        emitter.emit(toStatement(activity, refNodePublisher, HAD_MEMBER, refNodeFeed));
+                        emitter.emit(toStatement(activity, refNodeFeed, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_RSS)));
+                        emitter.emit(toStatement(activity, refNodeFeed, HAS_VERSION, toBlank()));
                     }
                 }
             }
         }
     }
 
-    private void parsePublishers(IRI refNode) {
+    private void parsePublishers(IRI refNode, BlankNodeOrIRI activity) {
         try {
             InputStream is = get(refNode);
             if (is != null) {
-                parsePublishers(refNode, this, is);
+                parsePublishers(refNode, activity, this, is);
             }
         } catch (IOException e) {
             LOG.warn("failed to parse [" + refNode.toString() + "]", e);
