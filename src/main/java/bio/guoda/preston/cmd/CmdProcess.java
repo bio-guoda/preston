@@ -9,6 +9,7 @@ import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.Quad;
 
 import java.util.Queue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Command to (re-) process biodiversity dataset graph by providing some existing provenance logs.
@@ -20,6 +21,8 @@ import java.util.Queue;
 
 @Parameters(separators = "= ", commandDescription = "offline (re-)processing of tracked biodiversity dataset graph using stdin")
 public class CmdProcess extends CmdActivity {
+
+    private static AtomicBoolean online = new AtomicBoolean(true);
 
     @Override
     void initQueue(Queue<Quad> statementQueue, ActivityContext ctx) {
@@ -48,7 +51,7 @@ public class CmdProcess extends CmdActivity {
 
 
     private void handleStatement(Quad statement, StatementListener[] listeners) {
-        if (!(statement.getSubject() instanceof BlankNode) && !(statement.getObject() instanceof BlankNode)) {
+        if (online.get() || (!(statement.getSubject() instanceof BlankNode) && !(statement.getObject() instanceof BlankNode))) {
             for (StatementListener listener : listeners) {
                 listener.on(statement);
             }

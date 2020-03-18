@@ -2,7 +2,6 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.Seeds;
-import bio.guoda.preston.model.RefNodeFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +14,6 @@ import org.apache.commons.rdf.api.Quad;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
@@ -49,14 +47,13 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (statement.getSubject().equals(Seeds.IDIGBIO)
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
-            BlankNodeOrIRI activity = ActivityTracking.beginInformedActivity(this, statement.getGraphName());
-            Stream.of(toStatement(activity, Seeds.IDIGBIO, IS_A, ORGANIZATION),
-                    toStatement(activity, IDIGBIO_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of RSS Feeds that point to publishers of Darwin Core archives, and EML descriptors.")),
-                    toStatement(activity, IDIGBIO_REGISTRY, CREATED_BY, Seeds.IDIGBIO),
-                    toStatement(activity, IDIGBIO_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
-                    toStatement(activity, IDIGBIO_REGISTRY, HAS_VERSION, toBlank()))
-                    .forEach(this::emit);
-            ActivityTracking.endInformedActivity(this, activity);
+            Stream<Quad> quadStream = Stream.of(toStatement(Seeds.IDIGBIO, IS_A, ORGANIZATION),
+                    toStatement(IDIGBIO_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of RSS Feeds that point to publishers of Darwin Core archives, and EML descriptors.")),
+                    toStatement(IDIGBIO_REGISTRY, CREATED_BY, Seeds.IDIGBIO),
+                    toStatement(IDIGBIO_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
+                    toStatement(IDIGBIO_REGISTRY, HAS_VERSION, toBlank()));
+
+            ActivityTracking.emitAsNewActivity(quadStream, this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)) {
             parse(statement, (IRI) getVersion(statement));
         }
