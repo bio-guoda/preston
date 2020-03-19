@@ -13,7 +13,9 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -53,23 +55,27 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (Seeds.GBIF.equals(statement.getSubject())
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
+            List<Quad> nodes = new ArrayList<>();
             Stream.of(
                     toStatement(Seeds.GBIF, IS_A, ORGANIZATION),
                     toStatement(RegistryReaderGBIF.GBIF_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of Darwin Core archives, and EML descriptors.")),
                     toStatement(RegistryReaderGBIF.GBIF_REGISTRY, CREATED_BY, Seeds.GBIF))
-                    .forEach(this::emit);
-            emitPageRequest(this, GBIF_REGISTRY);
+                    .forEach(nodes::add);
+            emitPageRequest(nodes::add, GBIF_REGISTRY);
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(GBIF_API_URL_PART)) {
+            List<Quad> nodes = new ArrayList<>();
             try {
                 IRI currentPage = (IRI) getVersion(statement);
                 InputStream is = get(currentPage);
                 if (is != null) {
-                    parse(currentPage, this, is, getVersionSource(statement));
+                    parse(currentPage, nodes::add, is, getVersionSource(statement));
                 }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
 
