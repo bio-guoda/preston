@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static bio.guoda.preston.RefNodeConstants.*;
@@ -31,8 +32,9 @@ public class RegistryReaderGBIFTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
         registryReaderGBIF.on(toStatement(Seeds.GBIF, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        Assert.assertThat(nodes.size(), is(6));
-        assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://api.gbif.org/v1/dataset"));
+        assertThat(new HashSet<>(nodes).size(), is(5));
+        Assert.assertThat(nodes.size(), is(5));
+        assertThat(getVersionSource(nodes.get(4)).getIRIString(), is("https://api.gbif.org/v1/dataset"));
     }
 
     @Test

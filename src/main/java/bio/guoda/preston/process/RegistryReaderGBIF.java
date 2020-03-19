@@ -58,9 +58,9 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
             List<Quad> nodes = new ArrayList<>();
             Stream.of(
                     toStatement(Seeds.GBIF, IS_A, ORGANIZATION),
-                    toStatement(RegistryReaderGBIF.GBIF_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of Darwin Core archives, and EML descriptors.")),
-                    toStatement(RegistryReaderGBIF.GBIF_REGISTRY, CREATED_BY, Seeds.GBIF))
-                    .forEach(nodes::add);
+                    toStatement(RegistryReaderGBIF.GBIF_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of Darwin Core archives, and EML descriptors."))
+                    ).forEach(nodes::add);
+
             emitPageRequest(nodes::add, GBIF_REGISTRY);
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
