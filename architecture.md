@@ -65,71 +65,117 @@ On succesfully saving the content into the blob store, a unique identifier is re
         3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362
 ```
 
-With the file path being derived from the hash of the data itself, you can now easily locate the content by its hash. For instance, on the server at https://deeplinker.bio , the nginx webserver is configured such that you can retrieve the said datafile by requesting https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 . Note that this content hash is "real" and you can download the copy (or version) of the content that was served by https://search.idigbio.org/v2/search/publishers at some point in the past. So, using the blob store, we know have a way to easily access content as long as we know the content hash.  
+With the file path being derived from the hash of the data itself, you can now easily locate the content by its hash. For instance, on the server at https://deeplinker.bio , the nginx webserver is configured such that you can retrieve the said datafile by requesting https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 . Note that this content hash is "real" and you can download the copy (or version) of the content that was served by https://search.idigbio.org/v2/search/publishers at some point in the past. So, using the blob store, we know have a way to easily access content as long as we know the content hash.
 
 ## `simplified hexastore`
 
-The simplified hexastore contains relationships that connect resources with their content using predicates (or verbs). The relationship is stored by combining a hashed "hasVersion" relationship (or predicate) with the hashed resource url. This combination is now turned into a unique identifier also, by adding the two hash urls and hashing the result. For example:
+The simplified hexastore keeps an index of the immutable versions of the biodiversity dataset graph provenance over time. This index allows to traverse from the first version of the provenance to the next. The index is created by hashing a query (what is the next version?) and storing the hash of the answer as the content hash uri of the related provenance log. The query hash calculated stored by combining the hashed resource uri with a hashed "hasVersion" relationship (aka predicate, verb). This combination is now turned into a unique identifier also, by adding the two hash urls and hashing the result. For example, the query for the first version of a biodiversity dataset graph is always:
 
 ```
 sha256(
-  sha256(<https://search.idigbio.org/v2/search/publishers>)
+  sha256(<0659a54f-b713-4f86-a917-5be166a14110>)
   + sha256(<http://purl.org/pav/hasVersion>)
 ) -->
 
 sha256(
-  hash://sha256/3edfe376ce9a6602fec3a6d3fa30d1d97bbf7a768fb855c8c75eeab389e1e3ef
+  hash://sha256/1a9158fc90d1b38fe7fa71118daa88861c0d40761e4c1452c64e069c35617271
   + hash://sha256/0b658d6c9e2f6275fee7c564a229798c56031c020ded04c1040e30d2527f1806
 ) -->
 
 hash://sha256/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e 
 ```
 
-Note that on a *nix command line, you can calculate the hashes using the `sha256sum` program like:
-```console
-$ echo -n "https://search.idigbio.org/v2/search/publishers" | sha256sum
-3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  -
-```
+where ```<0659a54f-b713-4f86-a917-5be166a14110>``` uniquely identifies the (abstract) concept of a biodiversity dataset graph. This is a hardcoded value that is referenced in all Preston provenance logs.
 
-So, lets say that the archiver has dereferenced the publisher url to content with the hash identifier ```hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362``` . Now the archiver stores the publisher/hasVersion hash as a key with value ```hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362``` into the statement (or relationstore) store. With this, we can retrieve the first version of the deferenced publisher content by lookup up the content of the ```hash://sha256/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e``` . This effectively implements a simplified version of a hexastore in which queries (e.g., what is the content hash of the content retrieve from https://search.idigbio.org/v2/search/publisher ? ) can be answered by dereferencing (or downloading) the content of the combined hash key of publisher url and hasVersion term. You can do this now using https://deeplinker.bio/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e .
-
-The simplified hexastore itself uses the same folder structure as the blob store to store the value associated with the hash key like:
-
-```
-a2/
-    1d/
-        a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e
-```
-
-As you might have seen, deeplinker.bio, resolves https://deeplinker.bio/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e to hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 . The latter hash can now be used to resolves to the specific version of https://search.idigbio.org/v2/search/publishers . Using curl, jq, and head, the first the lines of the json content can be shown: 
+On a Linux command line, you can calculate the hashes using the `sha256sum` program like:
 
 ```console
-$ curl --silent https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 \
-    | jq . \
-    | head -n10
-{
-  "itemCount": 78,
-  "items": [
-    {
-      "uuid": "51290816-f682-4e38-a06c-03bf5df2442d",
-      "type": "publishers",
-      "etag": "8042902af0c83d7de00d42711bd3e4420c44452a",
-      "data": {
-        "rss_url": "https://www.morphosource.org/rss/ms.rss",
-        "name": "MorphoSource RSS feed",
+$ echo -n "0659a54f-b713-4f86-a917-5be166a14110" | sha256sum
+1a9158fc90d1b38fe7fa71118daa88861c0d40761e4c1452c64e069c35617271  -
+```
+
+and
+
+```console
+$ echo -n "http://purl.org/pav/hasVersion" | sha256sum
+0b658d6c9e2f6275fee7c564a229798c56031c020ded04c1040e30d2527f1806  -
+```
+
+and computing the query hash by combining the hashes:
+
+```console
+$ echo -n "hash://sha256/1a9158fc90d1b38fe7fa71118daa88861c0d40761e4c1452c64e069c35617271hash://sha256/0b658d6c9e2f6275fee7c564a229798c56031c020ded04c1040e30d2527f1806" | sha256sum
+2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a  -
+```
+
+On saving a Preston provenance log for the first time, Preston puts the content hash uri of that provenance log (e.g., hash://sha256/c253...) in a file with name hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 (the query hash) into the statement (or relation,version) store. With this, on requesting content associated with hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a, the content hash uri of the first provenance log (i.e., hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55) is returned. The content of the first version can now be retrieved via the content store.
+
+The next version in the provenance history can be retrieved using:
+
+```
+sha256(
+  sha256(<http://purl.org/pav/previousVersion>)
+  + sha256(<hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55>)
+  + 
+) -->
+
+sha256(
+  hash://sha256/718cc4ed3f9f39852e185e8712d775ac95d798ac7795c4adc98e4b73fd4528b8
+  + hash://sha256/130ae3d05860975b540e6572b3a5d7bb8fbd7e1b7d62416ae654354b59e87c77
+) -->
+
+hash://sha256/7ebb008412baaac3afcc8af68b796bf4ca98f367cfd61a815eee82cdffeab196 
+```
+
+Continuing this pattern, all available provenance log versions can be traversed until a query result is empty or generates a 404 not found error. This simplified hexastore enables the ```history``` command:
+
+```
+$ preston history --remote https://deeplinker.bio | head -n2
+<0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/pav/hasVersion> <hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55> .
+<hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d> <http://purl.org/pav/previousVersion> <hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55> .
+```
+
+The simplified hexastore uses the same folder structure as the blob store to store the value associated with the hash key like:
+
+```
+2a/
+    5d/
+        2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a
+```
+
+As you might have seen, deeplinker.bio, resolves ```https://deeplinker.bio/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a``` to a response with content ```hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55``` . The latter hash can now be used to resolves to the first version of the provenance log version history . Using curl, head, the first the lines of the first provenance log content can be shown: 
+
+```console
+$ curl --silent https://deeplinker.bio/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 \
+    | head
+<https://preston.guoda.org> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> .
+<https://preston.guoda.org> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> .
+<https://preston.guoda.org> <http://purl.org/dc/terms/description> "Preston is a software program that finds, archives and provides access to biodiversity datasets."@en .
+<1d711945-d205-4663-b534-6d706b8b77b6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> .
+<1d711945-d205-4663-b534-6d706b8b77b6> <http://purl.org/dc/terms/description> "A crawl event that discovers biodiversity archives."@en .
+<1d711945-d205-4663-b534-6d706b8b77b6> <http://www.w3.org/ns/prov#startedAtTime> "2018-09-04T07:29:11.130Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 ...
 ```
 
-Perhaps unsurprisingly, the sha256 hash of this content is the same is before:
+Perhaps unsurprisingly, the sha256 content hash of the provenance log version remains the same:
 
 ```
-$ curl --silent https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 | sha256sum
-3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362  -
+$ curl --silent https://deeplinker.bio/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 | sha256sum
+c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55  -
 ```
+
+The simplified hexastore is intended as a pragmatic way to discover a history of provenance logs. The integrity of this history can be verified because every successive provenance log version references the preceeding one using a statement like:
+
+```
+<hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55> <http://www.w3.org/ns/prov#usedBy> <4e540f45-d7a1-40d6-a2b8-f623f1c1d566> .
+```
+
+where ```4e540f45-d7a1-40d6-a2b8-f623f1c1d566``` uniquely identifies a specific crawl activity. This statement can be found on line 11 in provenance log identified by [hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d](https://deeplinker.bio/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d) .
+
 
 ## summary 
 
-[Preson](https://github.com/bio-guoda/preston) combines a [`crawler`](#crawler), [`content handlers`](#content-handlers), and an [`archiver`](#archiver) with a [`blob store`](#blob-store) and [`simplified hexastore`](#simplified-hexastore) to implement a relatively simple scheme to establish an immutable, versioned, provenance of a biodiversity dataset graph and associated the content of datasets and their registries over time. By using a hashes to uniquely identify both dereferenced (or downloaded) content and simply queries (what content was downloaded from a specific url?) a simple file structure can be used to serve content and answer queries. Because the hashing schemes are applied consistently, each and every preston based blob and hexastore can be used to reliably retrieve content as well as query provenance of that content.
+[Preston](https://github.com/bio-guoda/preston) combines a [`crawler`](#crawler), [`content handlers`](#content-handlers), and an [`archiver`](#archiver) with a [`blob store`](#blob-store) and [`simplified hexastore`](#simplified-hexastore) to implement a scheme to establish an immutable, versioned, provenance of a biodiversity dataset graph over time. By using a hashes to uniquely identify both dereferenced (or downloaded) content and simply queries (what content was downloaded from a specific url?) a simple file structure can be used to serve content and answer queries. Because the hashing schemes are applied consistently, each and every preston based blob and hexastore can be used to reliably retrieve content as well as query provenance of that content.
 
 
 ## examples
