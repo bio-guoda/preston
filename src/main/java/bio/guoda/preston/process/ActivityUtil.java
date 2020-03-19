@@ -41,9 +41,10 @@ public class ActivityUtil {
                 .forEach(emitter::emit);
     }
 
-    public static void emitAsNewActivity(Stream<Quad> quadStream, StatementEmitter emitter, Optional<BlankNodeOrIRI> parentActivity) {
+    public static BlankNodeOrIRI emitAsNewActivity(Stream<Quad> quadStream, StatementEmitter emitter, Optional<BlankNodeOrIRI> parentActivity) {
         BlankNodeOrIRI activity = beginInformedActivity(emitter, parentActivity);
         emitWithActivityName(quadStream, emitter, activity);
         endInformedActivity(emitter, activity);
+        return activity;
     }
 }
