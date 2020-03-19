@@ -14,6 +14,7 @@ import org.apache.commons.rdf.api.Quad;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
@@ -52,8 +53,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                     toStatement(IDIGBIO_REGISTRY, CREATED_BY, Seeds.IDIGBIO),
                     toStatement(IDIGBIO_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
                     toStatement(IDIGBIO_REGISTRY, HAS_VERSION, toBlank()));
-
-            ActivityTracking.emitAsNewActivity(quadStream, this, statement.getGraphName());
+            ActivityUtil.emitAsNewActivity(quadStream, this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)) {
             parse(statement, (IRI) getVersion(statement));
         }
@@ -61,37 +61,38 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     public void parse(Quad statement, IRI toBeParsed) {
         if (statement.getSubject().equals(IDIGBIO_REGISTRY)) {
-            BlankNodeOrIRI activity = statement.getGraphName().orElse(null);
-            parsePublishers(toBeParsed, activity);
+            ArrayList<Quad> nodes = new ArrayList<Quad>();
+            parsePublishers(toBeParsed, nodes::add);
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
 
-    static void parsePublishers(IRI parent, BlankNodeOrIRI activity, StatementEmitter emitter, InputStream is) throws IOException {
+    static void parsePublishers(IRI parent, StatementEmitter emitter, InputStream is) throws IOException {
         JsonNode r = new ObjectMapper().readTree(is);
         if (r.has("items") && r.get("items").isArray()) {
             for (JsonNode item : r.get("items")) {
                 String publisherUUID = item.get("uuid").asText();
                 IRI refNodePublisher = fromUUID(publisherUUID);
-                emitter.emit(toStatement(activity, parent, HAD_MEMBER, refNodePublisher));
+                emitter.emit(toStatement(parent, HAD_MEMBER, refNodePublisher));
                 JsonNode data = item.get("data");
                 if (item.has("data")) {
                     String rssFeedUrl = data.has("rss_url") ? data.get("rss_url").asText() : null;
                     if (StringUtils.isNotBlank(rssFeedUrl)) {
                         IRI refNodeFeed = toIRI(rssFeedUrl);
-                        emitter.emit(toStatement(activity, refNodePublisher, HAD_MEMBER, refNodeFeed));
-                        emitter.emit(toStatement(activity, refNodeFeed, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_RSS)));
-                        emitter.emit(toStatement(activity, refNodeFeed, HAS_VERSION, toBlank()));
+                        emitter.emit(toStatement(refNodePublisher, HAD_MEMBER, refNodeFeed));
+                        emitter.emit(toStatement(refNodeFeed, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_RSS)));
+                        emitter.emit(toStatement(refNodeFeed, HAS_VERSION, toBlank()));
                     }
                 }
             }
         }
     }
 
-    private void parsePublishers(IRI refNode, BlankNodeOrIRI activity) {
+    private void parsePublishers(IRI refNode, StatementEmitter emitter) {
         try {
             InputStream is = get(refNode);
             if (is != null) {
-                parsePublishers(refNode, activity, this, is);
+                parsePublishers(refNode, emitter, is);
             }
         } catch (IOException e) {
             LOG.warn("failed to parse [" + refNode.toString() + "]", e);
