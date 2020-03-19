@@ -25,12 +25,7 @@ public class ActivityUtilTest {
         List<Quad> listQuads = new ArrayList<>();
         Optional<BlankNodeOrIRI> sourceActivity = Optional.of(toIRI("activityIRI"));
 
-        BlankNodeOrIRI newActivity = ActivityUtil.beginInformedActivity(new StatementEmitter() {
-            @Override
-            public void emit(Quad statement) {
-                listQuads.add(statement);
-            }
-        }, sourceActivity);
+        BlankNodeOrIRI newActivity = ActivityUtil.beginInformedActivity(listQuads::add, sourceActivity);
 
         assertThat(newActivity, is(toIRI("activityIRI")));
 //        assertThat(listQuads.size(), greaterThan(0));
@@ -42,12 +37,7 @@ public class ActivityUtilTest {
         List<Quad> listQuads = new ArrayList<>();
         BlankNodeOrIRI activity = toIRI("someActivity");
 
-        ActivityUtil.endInformedActivity(new StatementEmitter() {
-            @Override
-            public void emit(Quad statement) {
-                listQuads.add(statement);
-            }
-        }, activity);
+        ActivityUtil.endInformedActivity(listQuads::add, activity);
 
         assertThat(listQuads.size(), is(0));
     }
@@ -58,12 +48,7 @@ public class ActivityUtilTest {
         BlankNodeOrIRI activity = toIRI("activityIRI");
         Quad unlabeledStatement = toStatement(toIRI("cats"), toIRI("are"), toIRI("small"));
 
-        ActivityUtil.emitWithActivityName(Stream.of(unlabeledStatement), new StatementEmitter() {
-            @Override
-            public void emit(Quad statement) {
-                listQuads.add(statement);
-            }
-        }, activity);
+        ActivityUtil.emitWithActivityName(Stream.of(unlabeledStatement), listQuads::add, activity);
 
         assertThat(listQuads.size(), is(1));
         assertThat(listQuads.get(0), is(toStatement(activity, unlabeledStatement.getSubject(), unlabeledStatement.getPredicate(), unlabeledStatement.getObject())));
@@ -76,12 +61,7 @@ public class ActivityUtilTest {
         Quad first = toStatement(toIRI("cats"), toIRI("are"), toIRI("small"));
         Stream<Quad> unlabeledStatements = Stream.of(first);
 
-        BlankNodeOrIRI newActivity = ActivityUtil.emitAsNewActivity(unlabeledStatements, new StatementEmitter() {
-            @Override
-            public void emit(Quad statement) {
-                listQuads.add(statement);
-            }
-        }, Optional.of(parentActivity));
+        BlankNodeOrIRI newActivity = ActivityUtil.emitAsNewActivity(unlabeledStatements, listQuads::add, Optional.of(parentActivity));
 
         assertThat(listQuads.size(), greaterThan(0));
         assertTrue(listQuads.contains(toStatement(newActivity, first.getSubject(), first.getPredicate(), first.getObject())));
