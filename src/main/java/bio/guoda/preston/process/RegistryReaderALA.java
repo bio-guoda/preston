@@ -14,7 +14,9 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -50,36 +52,42 @@ public class RegistryReaderALA extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (Seeds.ALA.equals(statement.getSubject())
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
+            List<Quad> nodes = new ArrayList<Quad>();
             Stream.of(
                     toStatement(Seeds.ALA, IS_A, ORGANIZATION),
                     toStatement(Seeds.ALA, DESCRIPTION, toEnglishLiteral("The Atlas of Living Australia (ALA) is a collaborative, digital, open infrastructure that pulls together Australian biodiversity data from multiple sources, making it accessible and reusable.")),
                     toStatement(RegistryReaderALA.ALA_REGISTRY, CREATED_BY, Seeds.ALA))
-                    .forEach(this::emit);
-            emitPageRequest(this, ALA_REGISTRY);
+                    .forEach(nodes::add);
+            emitPageRequest(nodes::add, ALA_REGISTRY);
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(ALA_API_URL_PART)) {
 
+            List<Quad> nodes = new ArrayList<Quad>();
             IRI currentPage = (IRI) getVersion(statement);
             try (InputStream is = get(currentPage)) {
                 if (is != null) {
-                    parse(this, is);
+                    parse(nodes::add, is);
                 }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement)
                 .toString()
                 .startsWith("<https://collections.ala.org.au/ws/dataResource/")) {
 
+            List<Quad> nodes = new ArrayList<Quad>();
             IRI currentPage = (IRI) getVersion(statement);
             try (InputStream is = get(currentPage)) {
                 if (is != null) {
-                    parseResource(this, is);
+                    parseResource(nodes::add, is);
                 }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
 
