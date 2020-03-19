@@ -2,7 +2,6 @@ package bio.guoda.preston.process;
 
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.Quad;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ import static org.junit.Assert.assertThat;
 public class ActivityUtilTest {
 
     @Test
-    public void createActivity() {
+    public void startActivity() {
         List<Quad> listQuads = new ArrayList<>();
         Optional<BlankNodeOrIRI> sourceActivity = Optional.of(toIRI("activityIRI"));
         BlankNodeOrIRI newActivity = ActivityUtil.beginInformedActivity(new StatementEmitter() {
@@ -34,6 +33,20 @@ public class ActivityUtilTest {
         assertThat(newActivity, is(toIRI("activityIRI")));
         assertThat(listQuads.size(), greaterThan(0));
         assertThat(listQuads.get(0), is(toStatement(toIRI("activityIRI"), IS_A, ACTIVITY)));
+    }
+
+    @Test
+    public void endActivity() {
+        List<Quad> listQuads = new ArrayList<>();
+        BlankNodeOrIRI activity = toIRI("someActivity");
+        ActivityUtil.endInformedActivity(new StatementEmitter() {
+            @Override
+            public void emit(Quad statement) {
+                listQuads.add(statement);
+            }
+        }, activity);
+
+        assertThat(listQuads.size(), is(0));
     }
 
     @Test
@@ -50,15 +63,5 @@ public class ActivityUtilTest {
 
         assertThat(listQuads.size(), is(1));
         assertThat(listQuads.get(0), is(toStatement(activity, unlabeledStatement.getSubject(), unlabeledStatement.getPredicate(), unlabeledStatement.getObject())));
-    }
-
-    @Test
-    public void startActivity() {
-
-    }
-
-    @Test
-    public void endActivity() {
-
     }
 }
