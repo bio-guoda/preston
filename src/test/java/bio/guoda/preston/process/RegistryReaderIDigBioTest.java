@@ -65,7 +65,7 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void parsePublishers() throws IOException {
 
-        IRI providedParent = RefNodeFactory.fromUUID("someRegistryUUID");
+        IRI providedParent = RefNodeFactory.toIRI("someRegistryUUID");
         final List<Quad> nodes = new ArrayList<>();
 
         InputStream is = publishersInputStream();

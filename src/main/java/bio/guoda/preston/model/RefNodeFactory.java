@@ -24,10 +24,6 @@ public class RefNodeFactory {
     private static final RDF rdf = new SimpleRDF();
     private static final String SKOLEMIZATION_PATH = ".well-known/genid/";
 
-    public static IRI fromUUID(String publisherUUID) {
-        return toIRI(publisherUUID);
-    }
-
     public static IRI toIRI(String urlString) {
         return rdf.createIRI(urlString);
     }

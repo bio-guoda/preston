@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
@@ -25,7 +24,6 @@ import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.ORGANIZATION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
-import static bio.guoda.preston.model.RefNodeFactory.fromUUID;
 import static bio.guoda.preston.model.RefNodeFactory.getVersion;
 import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
 import static bio.guoda.preston.model.RefNodeFactory.toBlank;
@@ -72,7 +70,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         if (r.has("items") && r.get("items").isArray()) {
             for (JsonNode item : r.get("items")) {
                 String publisherUUID = item.get("uuid").asText();
-                IRI refNodePublisher = fromUUID(publisherUUID);
+                IRI refNodePublisher = toIRI(publisherUUID);
                 emitter.emit(toStatement(parent, HAD_MEMBER, refNodePublisher));
                 JsonNode data = item.get("data");
                 if (item.has("data")) {

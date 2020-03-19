@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
@@ -24,7 +23,6 @@ import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.ORGANIZATION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
-import static bio.guoda.preston.model.RefNodeFactory.fromUUID;
 import static bio.guoda.preston.model.RefNodeFactory.getVersion;
 import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
@@ -87,7 +85,7 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
     private static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
         if (result.has("id")) {
             String uuid = result.get("id").asText();
-            IRI datasetUUID = fromUUID(uuid);
+            IRI datasetUUID = toIRI(uuid);
             emitter.emit(toStatement(currentPage, HAD_MEMBER, datasetUUID));
             if (result.has("archive")) {
                 emitArchive(emitter, result, datasetUUID);

@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Triple;
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.Seeds;
 import org.apache.commons.rdf.api.Quad;
@@ -33,7 +32,6 @@ import static bio.guoda.preston.model.RefNodeFactory.toContentType;
 import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
-import static bio.guoda.preston.model.RefNodeFactory.fromUUID;
 
 public class RegistryReaderGBIF extends ProcessorReadOnly {
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
@@ -140,7 +138,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     public static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
         if (result.has("key")) {
             String uuid = result.get("key").asText();
-            IRI datasetUUID = fromUUID(uuid);
+            IRI datasetUUID = toIRI(uuid);
             emitter.emit(toStatement(currentPage, HAD_MEMBER, datasetUUID));
             if (result.has("doi")) {
                 String doi = result.get("doi").asText();

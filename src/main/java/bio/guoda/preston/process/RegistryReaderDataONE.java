@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -16,7 +15,6 @@ import org.w3c.dom.NodeList;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +36,6 @@ import static bio.guoda.preston.model.RefNodeFactory.toContentType;
 import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
-import static bio.guoda.preston.model.RefNodeFactory.fromUUID;
 
 public class RegistryReaderDataONE extends ProcessorReadOnly {
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
@@ -194,7 +191,7 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
     public static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
         if (result.has("identifier")) {
             String uuid = result.get("identifier").asText();
-            IRI datasetUUID = fromUUID(uuid);
+            IRI datasetUUID = toIRI(uuid);
             emitter.emit(toStatement(currentPage, HAD_MEMBER, datasetUUID));
 
             if (result.has("dataUrl")) {
