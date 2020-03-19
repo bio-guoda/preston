@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -50,24 +51,27 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (Seeds.BHL.equals(statement.getSubject())
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
-            Stream.of(
+            Stream<Quad> nodes = Stream.of(
                     toStatement(Seeds.BHL, IS_A, ORGANIZATION),
                     toStatement(RegistryReaderBHL.BHL_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a list of items (aka volumes) of works included in the Biodiversity Heritage Library.")),
                     toStatement(RegistryReaderBHL.BHL_REGISTRY, CREATED_BY, Seeds.BHL),
                     toStatement(RegistryReaderBHL.BHL_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.TSV)),
                     toStatement(RegistryReaderBHL.BHL_REGISTRY, HAS_VERSION, toBlank())
-            ).forEach(this::emit);
+            );
+            ActivityUtil.emitAsNewActivity(nodes, this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(BHL_API_URL_PART)) {
+            ArrayList<Quad> nodes = new ArrayList<Quad>();
             try {
                 IRI version = (IRI) getVersion(statement);
                 InputStream in = get(version);
                 if (in != null) {
-                    parse(this, in, version);
+                    parse(nodes::add, in, version);
                 }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
 
