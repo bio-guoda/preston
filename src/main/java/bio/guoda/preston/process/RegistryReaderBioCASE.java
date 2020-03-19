@@ -9,7 +9,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -20,25 +19,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
-import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
-import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
-import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
-import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
-import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
-import static bio.guoda.preston.model.RefNodeFactory.getVersion;
-import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
-import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
-import static bio.guoda.preston.model.RefNodeFactory.toBlank;
-import static bio.guoda.preston.model.RefNodeFactory.toContentType;
-import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeConstants.*;
+import static bio.guoda.preston.model.RefNodeFactory.*;
 
 public class RegistryReaderBioCASE extends ProcessorReadOnly {
     private static final Log LOG = LogFactory.getLog(RegistryReaderBioCASE.class);
@@ -59,11 +47,12 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (Seeds.BIOCASE.equals(statement.getSubject())
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
-            Stream.of(
+            Stream<Quad> nodes = Stream.of(
                     toStatement(RegistryReaderBioCASE.BIO_CASE_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of RSS Feeds that point to publishers of Darwin Core archives, and EML descriptors.")),
                     toStatement(RegistryReaderBioCASE.BIO_CASE_REGISTRY, CREATED_BY, Seeds.BIOCASE),
                     toStatement(BIO_CASE_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
-                    toStatement(BIO_CASE_REGISTRY, HAS_VERSION, toBlank())).forEach(this::emit);
+                    toStatement(BIO_CASE_REGISTRY, HAS_VERSION, toBlank()));
+            ActivityUtil.emitAsNewActivity(nodes, this, statement.getGraphName());
 
         } else if (hasVersionAvailable(statement)) {
             try {
@@ -81,12 +70,12 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
                     if (version instanceof IRI) {
                         InputStream content = get((IRI) version);
                         if (content != null) {
-                            parse.parse(content, this, registryVersion);
+                            List<Quad> nodes = new ArrayList<>();
+                            parse.parse(content, nodes::add, registryVersion);
+                            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
                         }
                     }
                 }
-
-
             } catch (IOException e) {
                 LOG.warn("failed to read from " + getVersion(statement).toString(), e);
             }

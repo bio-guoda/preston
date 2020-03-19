@@ -42,7 +42,7 @@ public class CmdUpdate extends CmdActivity {
         if (IRIs.isEmpty()) {
             statementQueue.addAll(generateSeeds(ctx.getActivity()));
         } else {
-            IRIs.forEach(iri -> statementQueue.add(toStatement(toIRI(iri), HAS_VERSION, toBlank())));
+            IRIs.forEach(iri -> statementQueue.add(toStatement(ctx.getActivity(), toIRI(iri), HAS_VERSION, toBlank())));
         }
     }
 
@@ -71,7 +71,7 @@ public class CmdUpdate extends CmdActivity {
 
     private List<Quad> generateSeeds(final IRI crawlActivity) {
         return seedUrls.stream()
-                .map((String uriString) -> toStatement(toIRI(uriString), WAS_ASSOCIATED_WITH, crawlActivity))
+                .map((String uriString) -> toStatement(crawlActivity, toIRI(uriString), WAS_ASSOCIATED_WITH, crawlActivity))
                 .collect(Collectors.toList());
     }
 

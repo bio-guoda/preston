@@ -7,12 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
@@ -46,12 +48,12 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (statement.getSubject().equals(Seeds.IDIGBIO)
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
-            Stream.of(toStatement(Seeds.IDIGBIO, IS_A, ORGANIZATION),
+            Stream<Quad> quadStream = Stream.of(toStatement(Seeds.IDIGBIO, IS_A, ORGANIZATION),
                     toStatement(IDIGBIO_REGISTRY, DESCRIPTION, toEnglishLiteral("Provides a registry of RSS Feeds that point to publishers of Darwin Core archives, and EML descriptors.")),
                     toStatement(IDIGBIO_REGISTRY, CREATED_BY, Seeds.IDIGBIO),
                     toStatement(IDIGBIO_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
-                    toStatement(IDIGBIO_REGISTRY, HAS_VERSION, toBlank()))
-                    .forEach(this::emit);
+                    toStatement(IDIGBIO_REGISTRY, HAS_VERSION, toBlank()));
+            ActivityUtil.emitAsNewActivity(quadStream, this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)) {
             parse(statement, (IRI) getVersion(statement));
         }
@@ -59,7 +61,9 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     public void parse(Quad statement, IRI toBeParsed) {
         if (statement.getSubject().equals(IDIGBIO_REGISTRY)) {
-            parsePublishers(toBeParsed);
+            ArrayList<Quad> nodes = new ArrayList<Quad>();
+            parsePublishers(toBeParsed, nodes::add);
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
 
@@ -84,11 +88,11 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         }
     }
 
-    private void parsePublishers(IRI refNode) {
+    private void parsePublishers(IRI refNode, StatementEmitter emitter) {
         try {
             InputStream is = get(refNode);
             if (is != null) {
-                parsePublishers(refNode, this, is);
+                parsePublishers(refNode, emitter, is);
             }
         } catch (IOException e) {
             LOG.warn("failed to parse [" + refNode.toString() + "]", e);

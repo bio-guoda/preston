@@ -41,4 +41,7 @@ public class RefNodeConstants {
     public static final IRI WAS_ASSOCIATED_WITH = toIRI("http://www.w3.org/ns/prov#wasAssociatedWith");
     public static final IRI IS_A = toIRI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
     public static final IRI CREATED_BY = toIRI("http://purl.org/pav/createdBy");
+    public static final IRI WAS_INFORMED_BY = toIRI("http://www.w3.org/ns/prov#wasInformedBy");
+    public static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
+    public static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
 }

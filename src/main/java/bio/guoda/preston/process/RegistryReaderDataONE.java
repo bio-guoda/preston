@@ -16,6 +16,8 @@ import org.w3c.dom.NodeList;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -60,35 +62,41 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (Seeds.DATA_ONE.equals(statement.getSubject())
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
+            ArrayList<Quad> nodes = new ArrayList<Quad>();
             Stream.of(
                     toStatement(Seeds.DATA_ONE, IS_A, ORGANIZATION),
                     toStatement(RegistryReaderDataONE.DATA_ONE_REGISTRY, DESCRIPTION, toEnglishLiteral("Data Observation Network for Earth (DataONE) is the foundation of new innovative environmental science through a distributed framework and sustainable cyberinfrastructure that meets the needs of science and society for open, persistent, robust, and secure access to well-described and easily discovered Earth observational data. DataONE provides a registry EML descriptors.")),
                     toStatement(RegistryReaderDataONE.DATA_ONE_REGISTRY, CREATED_BY, Seeds.DATA_ONE))
-                    .forEach(this::emit);
-            emitPageRequest(this, DATA_ONE_REGISTRY);
+                    .forEach(nodes::add);
+            emitPageRequest(nodes::add, DATA_ONE_REGISTRY);
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(DATA_ONE_URL_QUERY_PREFIX)) {
+            ArrayList<Quad> nodes = new ArrayList<Quad>();
             try {
                 IRI currentPage = (IRI) getVersion(statement);
                 InputStream in = get(currentPage);
                 if (in != null) {
-                    parse(currentPage, this, in, getVersionSource(statement));
+                    parse(currentPage, nodes::add, in, getVersionSource(statement));
                 }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(DATA_ONE_URL_RESOLVE_PREFIX)) {
+            ArrayList<Quad> nodes = new ArrayList<Quad>();
             try {
                 IRI currentPage = (IRI) getVersion(statement);
-                parseObjectLocationList(get(currentPage));
+                parseObjectLocationList(nodes::add, get(currentPage));
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
 
-    private void parseObjectLocationList(InputStream inputStream) throws IOException {
+    private void parseObjectLocationList(StatementEmitter emitter, InputStream inputStream) throws IOException {
 
         XMLUtil.handleXPath("//identifier", new XPathHandler() {
             @Override
@@ -126,7 +134,7 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
                 }
 
             }
-        }, this, inputStream);
+        }, emitter, inputStream);
     }
 
     static void emitNextPage(int offset, int limit, StatementEmitter emitter, String versionSourceURI) {

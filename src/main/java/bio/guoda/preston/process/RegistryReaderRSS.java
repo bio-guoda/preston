@@ -12,7 +12,9 @@ import org.w3c.dom.NodeList;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
@@ -33,7 +35,11 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
     @Override
     public void on(Quad statement) {
         if (hasVersionAvailable(statement)) {
-            parse((IRI) getVersion(statement), this, this);
+            List<Quad> nodes = new ArrayList<>();
+            parse((IRI) getVersion(statement), nodes::add, this);
+            if (!nodes.isEmpty()) { // Since this is opportunistic, only record an activity if something was produced
+                ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+            }
         }
 
     }

@@ -12,6 +12,8 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
@@ -46,24 +48,27 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (Seeds.OBIS.equals(statement.getSubject())
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
-            Stream.of(
+            Stream<Quad> nodes = Stream.of(
                     toStatement(Seeds.OBIS, IS_A, ORGANIZATION),
                     toStatement(Seeds.OBIS, DESCRIPTION, toEnglishLiteral("OBIS is a global open-access data and information clearing-house on marine biodiversity for science, conservation and sustainable development.")),
                     toStatement(RegistryReaderOBIS.OBIS_REGISTRY, CREATED_BY, Seeds.OBIS),
                     toStatement(RegistryReaderOBIS.OBIS_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
                     toStatement(RegistryReaderOBIS.OBIS_REGISTRY, HAS_VERSION, toBlank())
-            ).forEach(this::emit);
+            );
+            ActivityUtil.emitAsNewActivity(nodes, this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(OBIS_API_URL_PART)) {
+            List<Quad> nodes = new ArrayList<>();
             try {
                 IRI currentPage = (IRI) getVersion(statement);
                 InputStream is = get(currentPage);
                 if (is != null) {
-                    parse(currentPage, this, is);
+                    parse(currentPage, nodes::add, is);
                 }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
 
