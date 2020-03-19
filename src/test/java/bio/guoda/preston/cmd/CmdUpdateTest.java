@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
+import org.apache.commons.rdf.api.Quad;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -15,8 +16,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -48,18 +53,20 @@ public class CmdUpdateTest {
 
         assertThat(provenanceLog, not(containsString(" _:")));
 
-        Stream<org.apache.commons.rdf.api.Quad> quads = RDFUtil.asQuadStream(IOUtils.toInputStream(provenanceLog, StandardCharsets.UTF_8));
+        List<Quad> quads = RDFUtil.asQuadStream(IOUtils.toInputStream(provenanceLog, StandardCharsets.UTF_8)).collect(Collectors.toList());
 
-        Stream<String> graphNamesIgnoreDefault = quads
+        Stream<String> graphNamesIgnoreDefault = quads.stream()
                 .filter(x -> x.getGraphName().isPresent())
                 .map(x -> ((IRI)x.getGraphName().get()).getIRIString())
                 .filter(x -> !StringUtils.equals(x, "urn:x-arq:DefaultGraphNode"));
 
-        long count = graphNamesIgnoreDefault
+        assertThat(graphNamesIgnoreDefault.count(), is(quads.size()));
+
+        long unique = graphNamesIgnoreDefault
                 .map(UUID::fromString)
                 .distinct()
                 .count();
-        assertThat(count, is(1L));
+        assertThat(unique, is(1L));
     }
 
 
