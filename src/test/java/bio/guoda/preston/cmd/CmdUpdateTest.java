@@ -55,14 +55,14 @@ public class CmdUpdateTest {
 
         List<Quad> quads = RDFUtil.asQuadStream(IOUtils.toInputStream(provenanceLog, StandardCharsets.UTF_8)).collect(Collectors.toList());
 
-        Stream<String> graphNamesIgnoreDefault = quads.stream()
+        List<String> graphNamesIgnoreDefault = quads.stream()
                 .filter(x -> x.getGraphName().isPresent())
                 .map(x -> ((IRI)x.getGraphName().get()).getIRIString())
-                .filter(x -> !StringUtils.equals(x, "urn:x-arq:DefaultGraphNode"));
+                .filter(x -> !StringUtils.equals(x, "urn:x-arq:DefaultGraphNode")).collect(Collectors.toList());
 
-        assertThat(graphNamesIgnoreDefault.count(), is(quads.size()));
+        assertThat(graphNamesIgnoreDefault.size(), is(quads.size()));
 
-        long unique = graphNamesIgnoreDefault
+        long unique = graphNamesIgnoreDefault.stream()
                 .map(UUID::fromString)
                 .distinct()
                 .count();
