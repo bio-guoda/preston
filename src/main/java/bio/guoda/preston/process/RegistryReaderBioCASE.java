@@ -55,7 +55,6 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
             ActivityUtil.emitAsNewActivity(nodes, this, statement.getGraphName());
 
         } else if (hasVersionAvailable(statement)) {
-            List<Quad> nodes = new ArrayList<Quad>();
             try {
                 EmittingParser parse = null;
                 BlankNodeOrIRI registryVersion = getVersion(statement);
@@ -71,14 +70,15 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
                     if (version instanceof IRI) {
                         InputStream content = get((IRI) version);
                         if (content != null) {
+                            List<Quad> nodes = new ArrayList<>();
                             parse.parse(content, nodes::add, registryVersion);
+                            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
                         }
                     }
                 }
             } catch (IOException e) {
                 LOG.warn("failed to read from " + getVersion(statement).toString(), e);
             }
-            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
 
     }
