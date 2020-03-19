@@ -11,11 +11,11 @@ import java.util.stream.Stream;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
-public class ActivityTracking {
+public class ActivityUtil {
 
-    public static BlankNodeOrIRI beginInformedActivity(StatementEmitter emitter, Optional<BlankNodeOrIRI> sourceActivity) {
+    public static BlankNodeOrIRI beginInformedActivity(StatementEmitter emitter, Optional<BlankNodeOrIRI> parentActivity) {
         List<Quad> statements = new LinkedList<Quad>();
-        BlankNodeOrIRI newActivity = sourceActivity.orElse(null);
+        BlankNodeOrIRI newActivity = parentActivity.orElse(null);
 //        IRI newActivity = toIRI(UUID.randomUUID());
 
 //        statements.add(toStatement(newActivity, newActivity, IS_A, ACTIVITY));
@@ -41,8 +41,8 @@ public class ActivityTracking {
                 .forEach(emitter::emit);
     }
 
-    public static void emitAsNewActivity(Stream<Quad> quadStream, StatementEmitter emitter, Optional<BlankNodeOrIRI> graphName) {
-        BlankNodeOrIRI activity = beginInformedActivity(emitter, graphName);
+    public static void emitAsNewActivity(Stream<Quad> quadStream, StatementEmitter emitter, Optional<BlankNodeOrIRI> parentActivity) {
+        BlankNodeOrIRI activity = beginInformedActivity(emitter, parentActivity);
         emitWithActivityName(quadStream, emitter, activity);
         endInformedActivity(emitter, activity);
     }
