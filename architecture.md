@@ -174,7 +174,7 @@ The simplified hexastore is intended as a pragmatic way to discover a history of
 
 where ```4e540f45-d7a1-40d6-a2b8-f623f1c1d566``` uniquely identifies a specific crawl activity. This statement can be found on line 11 in provenance log identified by [hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d](https://deeplinker.bio/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d) .
 
-For more information about hexastores, please see reference [Weiss et al. 2008](#weiss2008) .
+For more information about hexastores, please see reference [Weiss et al. 2008](#weiss2008) . Also see a related issue [```trying to understand the simplified hexastore #52```](https://github.com/bio-guoda/preston/issues/52) for an exchange on this simplified hexastore. 
 
 ## summary 
 
