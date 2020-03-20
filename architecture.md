@@ -69,7 +69,7 @@ With the file path being derived from the hash of the data itself, you can now e
 
 ## `simplified hexastore`
 
-The simplified hexastore keeps an index of the immutable versions of the biodiversity dataset graph provenance over time. This index allows to traverse from the first version of the provenance to the next. The index is created by hashing a query (what is the next version?) and associating this query hash to the content hash uri of the related provenance log version. 
+The simplified hexastore ([Weiss et al. 2008](#weiss2008)) keeps an index of the immutable versions of the biodiversity dataset graph provenance over time. This index allows to traverse from the first version of the provenance to the next. The index is created by hashing a query (what is the next version?) and associating this query hash to the content hash uri of the related provenance log version. 
 
 The query hash is calculated by combining the hashed resource uri with a hashed version relationship (e.g., ```hasVersion``` or ```previousVersion```). These two hash uri are appended and the result is hashed again to create a unique query hash uri. For example, the query for the first version of a biodiversity dataset graph is always:
 
@@ -174,6 +174,8 @@ The simplified hexastore is intended as a pragmatic way to discover a history of
 
 where ```4e540f45-d7a1-40d6-a2b8-f623f1c1d566``` uniquely identifies a specific crawl activity. This statement can be found on line 11 in provenance log identified by [hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d](https://deeplinker.bio/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d) .
 
+For more information about hexastores, please see reference [Weiss et al. 2008](#weiss2008) .
+
 ## summary 
 
 [Preston](https://github.com/bio-guoda/preston) combines a [`crawler`](#crawler), [`content handlers`](#content-handlers), and an [`archiver`](#archiver) with a [`blob store`](#blob-store) and [`simplified hexastore`](#simplified-hexastore) to implement a scheme to establish an immutable, versioned, provenance of a biodiversity dataset graph over time. By using a hashes to uniquely identify both dereferenced (or downloaded) content and simply queries (what content was downloaded from a specific url?) a simple file structure can be used to serve content and answer queries. Because the hashing schemes are applied consistently, each and every preston based blob and hexastore can be used to reliably retrieve content as well as query provenance of that content.
@@ -202,4 +204,10 @@ resource (subject)  | 0659a54f-b713-4f86-a917-5be166a14110 (uuid of the biodiver
 relationship (predicate) |  http://purl.org/pav/hasVersion
 search key (subject+predicate)	 | hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a
 content hash (object)	| hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 (resolved via [deeplinker.bio](https://deeplinker.bio/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a)).
+
+## References
+
+### Weiss2008
+Weiss, C., Karras, P. and Bernstein, A., 2008. Hexastore: sextuple indexing for semantic web data management. Proceedings of the VLDB Endowment, 1(1), pp.1008-1019. Also see [https://people.csail.mit.edu/tdanford/6830papers/weiss-hexastore.pdf](https://people.csail.mit.edu/tdanford/6830papers/weiss-hexastore.pdf) .
+
 
