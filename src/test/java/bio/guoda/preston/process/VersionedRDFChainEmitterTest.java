@@ -27,7 +27,7 @@ public class VersionedRDFChainEmitterTest {
         BlobStoreReadOnly blobStore = createBlobStore();
         VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, nodes::add);
         reader.on(RefNodeFactory
-                .toStatement(RefNodeConstants.ARCHIVE, RefNodeConstants.HAS_VERSION, SOME));
+                .toStatement(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, RefNodeConstants.HAS_VERSION, SOME));
 
         assertThat(nodes.size(), Is.is(10));
 
@@ -56,7 +56,7 @@ public class VersionedRDFChainEmitterTest {
         BlobStoreReadOnly blobStore = createBlobStore();
         VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, nodes::add);
         reader.on(RefNodeFactory
-                .toStatement(RefNodeConstants.ARCHIVE, RefNodeConstants.HAS_VERSION, RefNodeFactory.toIRI("http://some")));
+                .toStatement(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, RefNodeConstants.HAS_VERSION, RefNodeFactory.toIRI("http://some")));
         reader.on(RefNodeFactory
                 .toStatement(OTHER, RefNodeConstants.HAS_PREVIOUS_VERSION, RefNodeFactory.toIRI("http://some")));
 

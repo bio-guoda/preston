@@ -11,7 +11,7 @@ public class CmdContext implements ProcessorContext {
     private StatementListener[] listeners;
 
     CmdContext(ProcessorState state, StatementListener... listeners) {
-        this(state, RefNodeConstants.ARCHIVE, listeners);
+        this(state, RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, listeners);
     }
 
     CmdContext(ProcessorState state, IRI provRoot, StatementListener... listeners) {

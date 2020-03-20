@@ -38,7 +38,7 @@ public class CmdActivityTest {
 
     @Test
     public void staticUUIDs() {
-        String uuid = RefNodeConstants.ARCHIVE_COLLECTION.toString();
+        String uuid = RefNodeConstants.BIODIVERSITY_DATASET_GRAPH_UUID.toString();
 
         assertThat(uuid, Is.is("0659a54f-b713-4f86-a917-5be166a14110"));
 

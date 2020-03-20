@@ -39,7 +39,7 @@ public class StatementStoreImplTest {
 
     @Test
     public void calculateRootArchiveQueryKey() {
-        IRI iri = StatementStoreImpl.calculateKeyFor(Pair.of(RefNodeConstants.ARCHIVE, RefNodeConstants.HAS_VERSION));
+        IRI iri = StatementStoreImpl.calculateKeyFor(Pair.of(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, RefNodeConstants.HAS_VERSION));
         assertThat(iri.getIRIString(),
                 is("hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a"));
     }

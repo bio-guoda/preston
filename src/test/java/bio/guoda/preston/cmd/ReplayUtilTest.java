@@ -83,7 +83,7 @@ public class ReplayUtilTest {
             @Override
             public IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException {
                 if (queryKey.getRight().equals(RefNodeConstants.HAS_VERSION)
-                        && queryKey.getLeft().equals(RefNodeConstants.ARCHIVE)) {
+                        && queryKey.getLeft().equals(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH)) {
                     return TEST_KEY_IRI;
                 } else if (queryKey.getLeft().equals(RefNodeConstants.HAS_PREVIOUS_VERSION)
                         && queryKey.getRight().equals(TEST_KEY_IRI)) {

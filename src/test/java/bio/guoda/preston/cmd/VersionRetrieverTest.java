@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
+import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static org.junit.Assert.assertThat;
@@ -24,7 +24,7 @@ public class VersionRetrieverTest {
     public void retrieveSingleVersionFail() {
         new VersionRetriever(key -> {
             throw new IllegalArgumentException();
-        }).on(RefNodeFactory.toStatement(ARCHIVE, HAS_VERSION, RefNodeFactory.toIRI("some")));
+        }).on(RefNodeFactory.toStatement(BIODIVERSITY_DATASET_GRAPH, HAS_VERSION, RefNodeFactory.toIRI("some")));
     }
 
     @Test
@@ -37,7 +37,7 @@ public class VersionRetrieverTest {
                 requested.add(key);
                 return IOUtils.toInputStream("hello!", StandardCharsets.UTF_8);
             }
-        }).on(RefNodeFactory.toStatement(ARCHIVE, HAS_VERSION, some));
+        }).on(RefNodeFactory.toStatement(BIODIVERSITY_DATASET_GRAPH, HAS_VERSION, some));
 
         assertThat(requested.size(), Is.is(1));
         assertThat(requested.get(0), Is.is(some));
@@ -55,7 +55,7 @@ public class VersionRetrieverTest {
                 return IOUtils.toInputStream("hello!", StandardCharsets.UTF_8);
             }
         });
-        retriever.on(RefNodeFactory.toStatement(ARCHIVE, HAS_VERSION, some));
+        retriever.on(RefNodeFactory.toStatement(BIODIVERSITY_DATASET_GRAPH, HAS_VERSION, some));
         retriever.on(RefNodeFactory.toStatement(other, HAS_PREVIOUS_VERSION, some));
 
         assertThat(requested.size(), Is.is(2));

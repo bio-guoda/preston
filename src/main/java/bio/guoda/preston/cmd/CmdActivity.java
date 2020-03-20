@@ -26,7 +26,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.File;
@@ -43,7 +42,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.AGENT;
-import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
+import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
 import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
@@ -183,8 +182,8 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                         toIRI("http://purl.org/dc/terms/bibliographicCitation"),
                         toEnglishLiteral("Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2019. Preston: a biodiversity dataset tracker" + versionString + " [Software]. Zenodo. http://doi.org/10.5281/zenodo.1410543")),
 
-                toStatement(crawlActivity, ARCHIVE, IS_A, ENTITY),
-                toStatement(crawlActivity, ARCHIVE, DESCRIPTION, toEnglishLiteral("A biodiversity dataset graph archive."))
+                toStatement(crawlActivity, BIODIVERSITY_DATASET_GRAPH, IS_A, ENTITY),
+                toStatement(crawlActivity, BIODIVERSITY_DATASET_GRAPH, DESCRIPTION, toEnglishLiteral("A biodiversity dataset graph archive."))
         );
     }
 
@@ -252,7 +251,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
                     IRI previousVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), statementStore);
                     if (previousVersion == null) {
-                        statementStore.put(Pair.of(ARCHIVE, HAS_VERSION), newVersion);
+                        statementStore.put(Pair.of(BIODIVERSITY_DATASET_GRAPH, HAS_VERSION), newVersion);
                     } else {
                         statementStore.put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
                     }

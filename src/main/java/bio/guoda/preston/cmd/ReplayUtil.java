@@ -17,7 +17,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
+import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.toBlank;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
@@ -30,7 +30,7 @@ public final class ReplayUtil {
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
                               final StatementStoreReadOnly provenanceLogIndex,
                               StatementListener... listeners) {
-        attemptReplay(provenanceLogStore, provenanceLogIndex, ARCHIVE, listeners);
+        attemptReplay(provenanceLogStore, provenanceLogIndex, BIODIVERSITY_DATASET_GRAPH, listeners);
     }
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,

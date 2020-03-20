@@ -21,14 +21,13 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.URIConverter;
 import org.apache.commons.rdf.api.IRI;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.RefNodeConstants.ARCHIVE;
+import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 
 public class Persisting extends PersistingLocal {
 
@@ -40,7 +39,7 @@ public class Persisting extends PersistingLocal {
 
     private boolean supportTarGzDiscovery = true;
 
-    private final IRI provenanceRoot = ARCHIVE;
+    private final IRI provenanceRoot = BIODIVERSITY_DATASET_GRAPH;
 
     public IRI getProvenanceRoot() {
         return this.provenanceRoot;
