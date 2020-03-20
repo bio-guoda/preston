@@ -69,7 +69,7 @@ With the file path being derived from the hash of the data itself, you can now e
 
 ## `simplified hexastore`
 
-The simplified hexastore keeps an index of the immutable versions of the biodiversity dataset graph provenance over time. This index allows to traverse from the first version of the provenance to the next. The index is created by hashing a query (what is the next version?) and storing the hash of the answer as the content hash uri of the related provenance log. The query hash calculated stored by combining the hashed resource uri with a hashed "hasVersion" relationship (aka predicate, verb). This combination is now turned into a unique identifier also, by adding the two hash urls and hashing the result. For example, the query for the first version of a biodiversity dataset graph is always:
+The simplified hexastore keeps an index of the immutable versions of the biodiversity dataset graph provenance over time. This index allows to traverse from the first version of the provenance to the next. The index is created by hashing a query (what is the next version?) and storing the hash of the answer as the content hash uri of the related provenance log. The query hash is calculated by combining the hashed resource uri with a hashed version relationship (e.g., ```hasVersion``` or ```previousVersion```). These two hash uri are appended and the result is hashed again to create a unique query hash uri. For example, the query for the first version of a biodiversity dataset graph is always:
 
 ```
 sha256(
@@ -108,7 +108,7 @@ $ echo -n "hash://sha256/1a9158fc90d1b38fe7fa71118daa88861c0d40761e4c1452c64e069
 2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a  -
 ```
 
-On saving a Preston provenance log for the first time, Preston puts the content hash uri of that provenance log (e.g., hash://sha256/c253...) in a file with name hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 (the query hash) into the statement (or relation,version) store. With this, on requesting content associated with hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a, the content hash uri of the first provenance log (i.e., hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55) is returned. The content of the first version can now be retrieved via the content store.
+On saving a Preston provenance log for the first time, Preston puts the content hash uri of that provenance log (e.g., ```hash://sha256/c253...```) in a file with name ```hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55``` (the query hash) into the statement (or relation,version) store. With this, on requesting content associated with ```hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a```, the content hash uri of the first provenance log (i.e., ```hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55```) is returned. The content of the first version can now be retrieved via the content store. This means that the first provenance log version of any Preston observatory can be retrieved by resolving ```hash://sha256/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e``` . In order words, if a hash ```a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e``` is found anywhere in a data archive, the chances are pretty high that the archive is a contains Preston provenance logs.
 
 The next version in the provenance history can be retrieved using:
 
@@ -172,7 +172,6 @@ The simplified hexastore is intended as a pragmatic way to discover a history of
 
 where ```4e540f45-d7a1-40d6-a2b8-f623f1c1d566``` uniquely identifies a specific crawl activity. This statement can be found on line 11 in provenance log identified by [hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d](https://deeplinker.bio/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d) .
 
-
 ## summary 
 
 [Preston](https://github.com/bio-guoda/preston) combines a [`crawler`](#crawler), [`content handlers`](#content-handlers), and an [`archiver`](#archiver) with a [`blob store`](#blob-store) and [`simplified hexastore`](#simplified-hexastore) to implement a scheme to establish an immutable, versioned, provenance of a biodiversity dataset graph over time. By using a hashes to uniquely identify both dereferenced (or downloaded) content and simply queries (what content was downloaded from a specific url?) a simple file structure can be used to serve content and answer queries. Because the hashing schemes are applied consistently, each and every preston based blob and hexastore can be used to reliably retrieve content as well as query provenance of that content.
@@ -180,7 +179,7 @@ where ```4e540f45-d7a1-40d6-a2b8-f623f1c1d566``` uniquely identifies a specific 
 
 ## examples
 
-The example below show some example of how to query for versions of things in a Preston file structure or web accessible store.  
+The example below show some example of how to query for versions of things in a Preston file structure or web accessible store.
 
 ### eBird
 eBird is the biggest collection of occurrence data that I know of. ~10GB.
