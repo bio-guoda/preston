@@ -21,8 +21,7 @@ public class ActivityUtil {
     private static final boolean emitStartedAt = false;
     private static final boolean emitEndedAt = false;
 
-    private static BlankNodeOrIRI beginInformedActivity(StatementEmitter emitter, Optional<BlankNodeOrIRI> sourceActivity) {
-        BlankNodeOrIRI newActivity = toIRI(UUID.randomUUID());
+    private static void beginInformedActivity(StatementEmitter emitter, BlankNodeOrIRI newActivity, Optional<BlankNodeOrIRI> sourceActivity) {
         emitter.emit(toStatement(newActivity, newActivity, IS_A, ACTIVITY));
 
         if (sourceActivity.isPresent()) {
@@ -32,8 +31,6 @@ public class ActivityUtil {
         if (emitStartedAt) {
             emitter.emit(toStatement(newActivity, newActivity, STARTED_AT_TIME, RefNodeFactory.nowDateTimeLiteral()));
         }
-
-        return newActivity;
     }
 
     private static void endInformedActivity(StatementEmitter emitter, BlankNodeOrIRI activity) {
@@ -48,9 +45,14 @@ public class ActivityUtil {
     }
 
     public static BlankNodeOrIRI emitAsNewActivity(Stream<Quad> quadStream, StatementEmitter emitter, Optional<BlankNodeOrIRI> parentActivity) {
-        BlankNodeOrIRI activity = beginInformedActivity(emitter, parentActivity);
-        emitWithActivityName(quadStream, emitter, activity);
-        endInformedActivity(emitter, activity);
-        return activity;
+        BlankNodeOrIRI newActivity = toIRI(UUID.randomUUID());
+        emitAsNamedActivity(quadStream, emitter, parentActivity, newActivity);
+        return newActivity;
+    }
+
+    public static void emitAsNamedActivity(Stream<Quad> quadStream, StatementEmitter emitter, Optional<BlankNodeOrIRI> parentActivity, BlankNodeOrIRI activityName) {
+        beginInformedActivity(emitter, activityName, parentActivity);
+        emitWithActivityName(quadStream, emitter, activityName);
+        endInformedActivity(emitter, activityName);
     }
 }
