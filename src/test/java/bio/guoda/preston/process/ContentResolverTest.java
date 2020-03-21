@@ -12,6 +12,7 @@ import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
@@ -30,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -68,8 +70,8 @@ public class ContentResolverTest {
 
 
         URI testURI = getClass().getResource("test.txt").toURI();
-        IRI providedNode = RefNodeFactory.toIRI(testURI);
-        Quad relation = RefNodeFactory.toStatement(providedNode, RefNodeConstants.HAS_VERSION, RefNodeFactory.toBlank());
+        IRI providedNode = toIRI(testURI);
+        Quad relation = RefNodeFactory.toStatement(TestUtil.getTestCrawlContext().getActivity(), providedNode, RefNodeConstants.HAS_VERSION, RefNodeFactory.toBlank());
 
         listener.on(relation);
 
@@ -77,8 +79,10 @@ public class ContentResolverTest {
         assertFalse(refNodes.isEmpty());
         assertThat(refNodes.size(), is(7));
 
+        BlankNodeOrIRI activity = refNodes.get(0).getGraphName().get();
+
         assertThat(refNodes.get(0).getPredicate(), is(RefNodeConstants.WAS_GENERATED_BY));
-        assertThat(refNodes.get(0).getObject(), is(TestUtil.getTestCrawlContext().getActivity()));
+        assertThat(refNodes.get(0).getObject(), is(activity));
         
         String expectedHash = "50d7a905e3046b88638362cc34a31a1ae534766ca55e3aa397951efe653b062b";
         String expectedValue = "https://example.org";
