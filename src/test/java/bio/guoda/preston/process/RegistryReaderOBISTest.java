@@ -33,8 +33,8 @@ public class RegistryReaderOBISTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderOBIS registryReader = new RegistryReaderOBIS(TestUtil.getTestBlobStore(), nodes::add);
         registryReader.on(toStatement(Seeds.OBIS, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        Assert.assertThat(nodes.size(), is(5));
-        assertThat(getVersionSource(nodes.get(4)).getIRIString(), is("https://api.obis.org/v3/dataset"));
+        Assert.assertThat(nodes.size(), is(6));
+        assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://api.obis.org/v3/dataset"));
     }
 
     @Test
