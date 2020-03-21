@@ -3,9 +3,8 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.RDFTerm;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.rdf.api.RDFTerm;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,8 +14,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
+import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static bio.guoda.preston.TripleMatcher.hasTriple;
 import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
@@ -36,8 +38,8 @@ public class RegistryReaderDataONETest {
         ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), nodes::add);
         reader.on(toStatement(Seeds.DATA_ONE, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        Assert.assertThat(nodes.size(), is(6));
-        assertThat(getVersionSource(nodes.get(5)).getIRIString(), is(FIRST_PAGE));
+        Assert.assertThat(nodes.size(), is(7));
+        assertThat(getVersionSource(nodes.get(6)).getIRIString(), is(FIRST_PAGE));
     }
 
     @Test
@@ -48,7 +50,7 @@ public class RegistryReaderDataONETest {
         reader.on(toStatement(toIRI(FIRST_PAGE),
                 HAS_VERSION,
                 toIRI("https://some")));
-        assertThat(nodes.size(), is(0));
+        assertThat(nodes.size(), is(1));
     }
 
     @Test
@@ -76,7 +78,7 @@ public class RegistryReaderDataONETest {
 
         reader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(43));
+        Assert.assertThat(nodes.size(), is(44));
         Quad secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=1000&rows=1000>"));
     }
@@ -98,7 +100,7 @@ public class RegistryReaderDataONETest {
 
         reader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(43));
+        Assert.assertThat(nodes.size(), is(44));
         Quad secondPage = nodes.get(nodes.size() - 1);
         assertThat(secondPage.toString(), startsWith("<http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=1000&rows=1000> <http://purl.org/pav/hasVersion> _:"));
     }
@@ -119,7 +121,7 @@ public class RegistryReaderDataONETest {
 
         reader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(43));
+        Assert.assertThat(nodes.size(), is(44));
         Quad secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=1000&rows=1000>"));
     }
@@ -139,15 +141,17 @@ public class RegistryReaderDataONETest {
 
         reader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(20));
-        Quad identifierMemberStatement = nodes.get(1);
-        assertThat(identifierMemberStatement.toString(), is("<aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/NOMBIN.20150515> <http://www.w3.org/ns/prov#hadMember> <https://dataone.tern.org.au/mn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515> ."));
-        Quad locationType = nodes.get(2);
-        assertThat(locationType.toString(), is("<https://dataone.tern.org.au/mn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515> <http://purl.org/dc/elements/1.1/format> \"application/eml\" ."));
-        Quad locationVersion = nodes.get(3);
-        assertThat(locationVersion.toString(), startsWith("<https://dataone.tern.org.au/mn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515> <http://purl.org/pav/hasVersion> _:"));
-        Quad nodeIdentifierMemberStatement = nodes.get(4);
-        assertThat(nodeIdentifierMemberStatement.toString(), is("<urn:node:CN> <http://www.w3.org/ns/prov#hadMember> <aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/NOMBIN.20150515> ."));
+        Assert.assertThat(nodes.size(), is(21));
+        Quad identifierMemberStatement = nodes.get(2);
+        assertThat(identifierMemberStatement, hasTriple(toStatement(toIRI("aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/NOMBIN.20150515"), HAD_MEMBER, toIRI("https://dataone.tern.org.au/mn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515"))));
+        Quad locationType = nodes.get(3);
+        assertThat(locationType, hasTriple(toStatement(toIRI("https://dataone.tern.org.au/mn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515"), HAS_FORMAT, toLiteral("application/eml"))));
+        Quad locationVersion = nodes.get(4);
+        assertThat(locationVersion.getSubject(), is(toIRI("https://dataone.tern.org.au/mn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515")));
+        assertThat(locationVersion.getPredicate(), is(HAS_VERSION));
+        assertThat(locationVersion.getObject().toString(), startsWith("_:"));
+        Quad nodeIdentifierMemberStatement = nodes.get(5);
+        assertThat(nodeIdentifierMemberStatement, hasTriple(toStatement(toIRI("urn:node:CN"), HAD_MEMBER, toIRI("aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/NOMBIN.20150515"))));
     }
 
     @Test
