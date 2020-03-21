@@ -5,8 +5,8 @@ import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.rdf.api.RDFTerm;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class RegistryReaderIDigBioTest {
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = RefNodeFactory.toLiteral("bla");
         reader.on(RefNodeFactory.toStatement(Seeds.IDIGBIO, WAS_ASSOCIATED_WITH, bla));
-        assertThat(nodes.size(), is(5));
+        assertThat(nodes.size(), is(6));
     }
 
     @Test
