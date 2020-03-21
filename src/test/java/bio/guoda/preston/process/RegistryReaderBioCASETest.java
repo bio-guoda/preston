@@ -46,8 +46,8 @@ public class RegistryReaderBioCASETest {
     public void onSeed() {
         RDFTerm bla = toLiteral("bla");
         registryReader.on(toStatement(Seeds.BIOCASE, WAS_ASSOCIATED_WITH, bla));
-        Assert.assertThat(nodes.size(), is(4));
-        assertThat(((IRI) getVersionSource(nodes.get(3))).getIRIString(), is(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT));
+        Assert.assertThat(nodes.size(), is(5));
+        assertThat(((IRI) getVersionSource(nodes.get(4))).getIRIString(), is(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT));
     }
 
     @Test
@@ -97,16 +97,16 @@ public class RegistryReaderBioCASETest {
         registryReader.on(toStatement(toIRI(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT), HAS_VERSION, refNode));
 
         assertFalse(nodes.isEmpty());
-        assertThat(nodes.get(0).getSubject(), is(refNode));
-        assertThat(nodes.get(0).getPredicate(), is(RefNodeConstants.HAD_MEMBER));
-        assertThat(nodes.get(0).getObject().toString(), is("<http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=GFBio_ColiFauna&inventory=1>"));
+        assertThat(nodes.get(1).getSubject(), is(refNode));
+        assertThat(nodes.get(1).getPredicate(), is(RefNodeConstants.HAD_MEMBER));
+        assertThat(nodes.get(1).getObject().toString(), is("<http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=GFBio_ColiFauna&inventory=1>"));
 
-        assertThat(nodes.get(1).getObject().toString(), is("\"text/xml\""));
-        assertThat(nodes.get(1).getPredicate(), is(RefNodeConstants.HAS_FORMAT));
-        assertThat(nodes.get(1).getSubject().toString(), is("<http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=GFBio_ColiFauna&inventory=1>"));
-
-        assertThat(nodes.get(2).getPredicate(), is(HAS_VERSION));
+        assertThat(nodes.get(2).getObject().toString(), is("\"text/xml\""));
+        assertThat(nodes.get(2).getPredicate(), is(RefNodeConstants.HAS_FORMAT));
         assertThat(nodes.get(2).getSubject().toString(), is("<http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=GFBio_ColiFauna&inventory=1>"));
+
+        assertThat(nodes.get(3).getPredicate(), is(HAS_VERSION));
+        assertThat(nodes.get(3).getSubject().toString(), is("<http://ww3.bgbm.org/biocase/pywrapper.cgi?dsa=GFBio_ColiFauna&inventory=1>"));
 
     }
 
@@ -137,17 +137,17 @@ public class RegistryReaderBioCASETest {
 
         registryReader.on(toStatement(toIRI("http://something/pywrapper.cgi?dsa="), HAS_VERSION, someHash));
 
-        assertThat(nodes.size(), is(3));
-        assertThat(nodes.get(0).getPredicate(), is(RefNodeConstants.HAD_MEMBER));
-        assertThat(nodes.get(0).getSubject(), is(someHash));
+        assertThat(nodes.size(), is(4));
+        assertThat(nodes.get(1).getPredicate(), is(RefNodeConstants.HAD_MEMBER));
+        assertThat(nodes.get(1).getSubject(), is(someHash));
         String zipArchive = "<http://ww3.bgbm.org/biocase/downloads/GFBio_ColiFauna/Coleoptera%20observations%20in%20orchards%20of%20South%20Western%20Germany.ABCD_2.06.zip>";
-        assertThat(nodes.get(0).getObject().toString(), is(zipArchive));
+        assertThat(nodes.get(1).getObject().toString(), is(zipArchive));
 
-        assertThat(nodes.get(1).getPredicate(), is(RefNodeConstants.HAS_FORMAT));
-        assertThat(nodes.get(1).getSubject().toString(), is(zipArchive));
-        assertThat(nodes.get(1).getObject().toString(), is("\"application/abcda\""));
+        assertThat(nodes.get(2).getPredicate(), is(RefNodeConstants.HAS_FORMAT));
+        assertThat(nodes.get(2).getSubject().toString(), is(zipArchive));
+        assertThat(nodes.get(2).getObject().toString(), is("\"application/abcda\""));
 
-        assertThat(getVersionSource(nodes.get(2)).getIRIString(), is("http://ww3.bgbm.org/biocase/downloads/GFBio_ColiFauna/Coleoptera%20observations%20in%20orchards%20of%20South%20Western%20Germany.ABCD_2.06.zip"));
+        assertThat(getVersionSource(nodes.get(3)).getIRIString(), is("http://ww3.bgbm.org/biocase/downloads/GFBio_ColiFauna/Coleoptera%20observations%20in%20orchards%20of%20South%20Western%20Germany.ABCD_2.06.zip"));
     }
 
     @Test
