@@ -2,6 +2,7 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.cmd.ActivityContext;
 import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,6 +13,7 @@ import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 import static bio.guoda.preston.RefNodeConstants.GENERATED_AT_TIME;
@@ -50,47 +52,48 @@ public class Archiver extends VersionProcessor {
                 if (newVersion == null) {
                     newVersion = toSkolemizedBlank(blankVersion);
                 }
-                putVersion(versionSource, newVersion);
+                putVersion(versionSource, newVersion, this, statement.getGraphName());
             }
         }
     }
 
-    private void putVersion(IRI versionSource, BlankNodeOrIRI newVersion) throws IOException {
+    private void putVersion(IRI versionSource, BlankNodeOrIRI newVersion, StatementEmitter emitter, Optional<BlankNodeOrIRI> sourceActivity) {
         Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
 
-        IRI activityGraph = activityCtx.getActivity();
         IRI downloadActivity = toIRI(UUID.randomUUID());
-        emit(toStatement(
-                activityGraph,
+        emitter.emit(toStatement(
+                downloadActivity,
                 newVersion,
                 WAS_GENERATED_BY,
-                activityCtx.getActivity()));
-        emit(toStatement(
-                activityGraph,
+                downloadActivity));
+        emitter.emit(toStatement(
+                downloadActivity,
                 newVersion,
                 toIRI("http://www.w3.org/ns/prov#qualifiedGeneration"),
                 downloadActivity));
-        emit(toStatement(
-                activityGraph,
+        emitter.emit(toStatement(
+                downloadActivity,
                 downloadActivity,
                 GENERATED_AT_TIME,
                 nowLiteral));
-        emit(toStatement(
-                activityGraph,
+        emitter.emit(toStatement(
+                downloadActivity,
                 downloadActivity,
                 IS_A,
                 toIRI("http://www.w3.org/ns/prov#Generation")));
-        emit(toStatement(
-                activityGraph,
+        if (sourceActivity.isPresent()) {
+            emitter.emit(toStatement(
+                    downloadActivity,
+                    downloadActivity,
+                    toIRI("http://www.w3.org/ns/prov#wasInformedBy"),
+                    sourceActivity.get()));
+        }
+        emitter.emit(toStatement(
                 downloadActivity,
-                toIRI("http://www.w3.org/ns/prov#wasInformedBy"),
-                (activityCtx.getActivity())));
-        emit(toStatement(
-                activityGraph,
                 downloadActivity,
                 toIRI("http://www.w3.org/ns/prov#used"),
                 versionSource));
-        emit(toStatement(activityGraph, versionSource, HAS_VERSION, newVersion));
+        emitter.emit(toStatement(downloadActivity, versionSource, HAS_VERSION, newVersion));
     }
 
     private Dereferencer<IRI> getDereferencer() {
