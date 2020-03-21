@@ -3,9 +3,8 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.RDFTerm;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.rdf.api.RDFTerm;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
@@ -23,8 +21,6 @@ import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.StringEndsWith.endsWith;
-import static org.hamcrest.core.StringStartsWith.startsWith;
 
 public class RegistryReaderBHLTest {
 
@@ -33,8 +29,8 @@ public class RegistryReaderBHLTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderBHL registryReader = new RegistryReaderBHL(TestUtil.getTestBlobStore(), nodes::add);
         registryReader.on(toStatement(Seeds.BHL, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        Assert.assertThat(nodes.size(), is(5));
-        assertThat(getVersionSource(nodes.get(4)).getIRIString(), is("https://www.biodiversitylibrary.org/data/item.txt"));
+        Assert.assertThat(nodes.size(), is(6));
+        assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://www.biodiversitylibrary.org/data/item.txt"));
     }
 
     @Test
@@ -73,7 +69,7 @@ public class RegistryReaderBHLTest {
 
         registryReader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(36));
+        Assert.assertThat(nodes.size(), is(37));
         Quad mimeType = nodes.get(nodes.size() - 2);
         assertThat(mimeType.getSubject().toString(), is("<https://archive.org/download/mobot31753002306964/mobot31753002306964_djvu.txt>"));
         assertThat(mimeType.getPredicate().toString(), is("<http://purl.org/dc/elements/1.1/format>"));
