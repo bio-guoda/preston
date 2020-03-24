@@ -47,6 +47,7 @@ public class ActivityUtil {
     public static BlankNodeOrIRI emitAsNewActivity(Stream<Quad> quadStream, StatementEmitter emitter, Optional<BlankNodeOrIRI> parentActivity) {
         BlankNodeOrIRI newActivity = toIRI(UUID.randomUUID());
         emitAsNamedActivity(quadStream, emitter, parentActivity, newActivity);
+        endInformedActivity(emitter, newActivity);
         return newActivity;
     }
 
