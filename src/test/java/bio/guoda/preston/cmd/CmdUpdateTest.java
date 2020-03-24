@@ -61,16 +61,16 @@ public class CmdUpdateTest {
 
         assertThat(graphNamesIgnoreDefault.size(), is(quads.size()));
 
-        long unique = graphNamesIgnoreDefault.stream()
+        long numActivities = graphNamesIgnoreDefault.stream()
                 .map(UUID::fromString)
                 .distinct()
                 .count();
-        assertThat(unique, greaterThan(1L));
+        assertThat(numActivities, greaterThan(1L));
 
-        long informed = quads.stream()
+        long numInformedActivities = quads.stream()
                 .filter(x -> x.getPredicate().equals(WAS_INFORMED_BY))
                 .count();
-        assertThat(informed, is(unique - 1)); // Only the first activity should lack WAS_INFORMED_BY
+        assertThat(numInformedActivities, is(numActivities - 1));
     }
 
 
