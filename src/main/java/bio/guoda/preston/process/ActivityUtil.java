@@ -33,11 +33,11 @@ public class ActivityUtil {
 
     public static BlankNodeOrIRI emitAsNewActivity(Stream<Quad> quadStream, StatementEmitter emitter, Optional<BlankNodeOrIRI> parentActivity) {
         BlankNodeOrIRI newActivity = toIRI(UUID.randomUUID());
-        emitAsNamedActivity(quadStream, emitter, parentActivity, newActivity);
+        emitAsNewNamedActivity(quadStream, emitter, parentActivity, newActivity);
         return newActivity;
     }
 
-    public static void emitAsNamedActivity(Stream<Quad> quadStream, StatementEmitter emitter, Optional<BlankNodeOrIRI> parentActivity, BlankNodeOrIRI activityName) {
+    public static void emitAsNewNamedActivity(Stream<Quad> quadStream, StatementEmitter emitter, Optional<BlankNodeOrIRI> parentActivity, BlankNodeOrIRI activityName) {
         beginInformedActivity(emitter, activityName, parentActivity);
         emitWithActivityName(quadStream, emitter, activityName);
         endInformedActivity(emitter, activityName);
