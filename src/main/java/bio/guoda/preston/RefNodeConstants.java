@@ -31,6 +31,9 @@ public class RefNodeConstants {
     public static final UUID BIODIVERSITY_DATASET_GRAPH_UUID = UUID.fromString("0659a54f-b713-4f86-a917-5be166a14110");
     public static final IRI BIODIVERSITY_DATASET_GRAPH = toIRI(BIODIVERSITY_DATASET_GRAPH_UUID.toString());
 
+    public static final IRI STARTED_AT_TIME = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#startedAtTime"));
+    public static final IRI ENDED_AT_TIME = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#endedAtTime"));
+
     public static final IRI USED_BY = toIRI("http://www.w3.org/ns/prov#usedBy");
     public static final IRI AGENT = toIRI("http://www.w3.org/ns/prov#Agent");
     public static final IRI SOFTWARE_AGENT = toIRI("http://www.w3.org/ns/prov#SoftwareAgent");

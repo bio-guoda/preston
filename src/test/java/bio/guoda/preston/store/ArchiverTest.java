@@ -123,7 +123,9 @@ public class ArchiverTest {
 
     @Test
     public void includeGenerationActivity() throws IOException {
-        Quad statement = toStatement(toIRI(URI.create("http://some")),
+        ActivityContext testCrawlContext = TestUtil.getTestCrawlContext();
+        Quad statement = toStatement(testCrawlContext.getActivity(),
+                toIRI(URI.create("http://some")),
                 HAS_VERSION,
                 toBlank());
 
@@ -140,7 +142,6 @@ public class ArchiverTest {
 
         StatementStoreImpl versionStore = new StatementStoreImpl(testKeyValueStore);
 
-        ActivityContext testCrawlContext = TestUtil.getTestCrawlContext();
         Archiver relationStore = new Archiver(
                 dereferencer,
                 testCrawlContext,

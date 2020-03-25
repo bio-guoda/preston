@@ -46,7 +46,7 @@ public class RegistryReaderRSSTest {
         StatementListener registryReader = new RegistryReaderRSS(blobStore, nodes::add);
 
         registryReader.on(toStatement(toIRI("daisyduck"), HAS_VERSION, toIRI("somehash")));
-        assertThat(nodes.size(), is(1849));
+        assertThat(nodes.size(), is(1850));
     }
 
     @Test

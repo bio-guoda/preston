@@ -7,8 +7,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.rdf.api.RDFTerm;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -16,18 +16,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static bio.guoda.preston.RefNodeConstants.WAS_INFORMED_BY;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
 public class CmdUpdateTest {
@@ -62,11 +61,16 @@ public class CmdUpdateTest {
 
         assertThat(graphNamesIgnoreDefault.size(), is(quads.size()));
 
-        long unique = graphNamesIgnoreDefault.stream()
+        long numActivities = graphNamesIgnoreDefault.stream()
                 .map(UUID::fromString)
                 .distinct()
                 .count();
-        assertThat(unique, is(1L));
+        assertThat(numActivities, greaterThan(1L));
+
+        long numInformedActivities = quads.stream()
+                .filter(x -> x.getPredicate().equals(WAS_INFORMED_BY))
+                .count();
+        assertThat(numInformedActivities, is(numActivities - 1));
     }
 
 

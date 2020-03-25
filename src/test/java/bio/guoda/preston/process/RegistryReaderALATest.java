@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.Seeds;
+import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
@@ -15,8 +16,12 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import static bio.guoda.preston.MimeTypes.MIME_TYPE_JSON;
+import static bio.guoda.preston.RefNodeConstants.ACTIVITY;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static bio.guoda.preston.TripleMatcher.hasTriple;
 import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
@@ -32,8 +37,8 @@ public class RegistryReaderALATest {
         ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), nodes::add);
         registryReader.on(toStatement(Seeds.ALA, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        Assert.assertThat(nodes.size(), is(6));
-        assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://collections.ala.org.au/ws/dataResource?status=dataAvailable"));
+        Assert.assertThat(nodes.size(), is(7));
+        assertThat(getVersionSource(nodes.get(6)).getIRIString(), is("https://collections.ala.org.au/ws/dataResource?status=dataAvailable"));
     }
 
     @Test
@@ -44,7 +49,7 @@ public class RegistryReaderALATest {
         registryReader.on(toStatement(toIRI("https://collections.ala.org.au/ws/dataResource?status=dataAvailable&resourceType=records"),
                 HAS_VERSION,
                 toIRI("https://some")));
-        assertThat(nodes.size(), is(0));
+        assertThat(nodes.size(), is(1));
     }
 
     @Test
@@ -72,11 +77,11 @@ public class RegistryReaderALATest {
 
         registryReader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(3981));
+        Assert.assertThat(nodes.size(), is(3982));
         Quad secondPage = nodes.get(nodes.size() - 3);
-        assertThat(secondPage.toString(), is("<https://collections.ala.org.au/ws/dataResource/dr8052> <http://purl.org/pav/createdBy> <https://ala.org.au> ."));
+        assertThat(secondPage, hasTriple(toStatement(toIRI("https://collections.ala.org.au/ws/dataResource/dr8052"), toIRI("http://purl.org/pav/createdBy"), toIRI("https://ala.org.au"))));
         secondPage = nodes.get(nodes.size() - 2);
-        assertThat(secondPage.toString(), is("<https://collections.ala.org.au/ws/dataResource/dr8052> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
+        assertThat(secondPage, hasTriple(toStatement(toIRI("https://collections.ala.org.au/ws/dataResource/dr8052"), toIRI("http://purl.org/dc/elements/1.1/format"), RefNodeFactory.toLiteral(MIME_TYPE_JSON))));
         Quad thirdPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(thirdPage).toString(), is("<https://collections.ala.org.au/ws/dataResource/dr8052>"));
     }
