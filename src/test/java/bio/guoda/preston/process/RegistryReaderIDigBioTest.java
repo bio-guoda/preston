@@ -2,7 +2,6 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -29,7 +28,7 @@ public class RegistryReaderIDigBioTest {
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), nodes::add);
         RDFTerm bla = RefNodeFactory.toLiteral("bla");
         reader.on(RefNodeFactory.toStatement(Seeds.IDIGBIO, WAS_ASSOCIATED_WITH, bla));
-        assertThat(nodes.size(), is(6));
+        assertThat(nodes.size(), is(10));
     }
 
     @Test
@@ -45,21 +44,52 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void onRegistry() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        BlobStore blob = new BlobStore() {
-
-            @Override
-            public IRI put(InputStream is) throws IOException {
-                return null;
-            }
-
-            @Override
-            public InputStream get(IRI key) throws IOException {
-                return publishersInputStream();
-            }
-        };
+        BlobStoreReadOnly blob = key -> publishersInputStream();
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, nodes::add);
-        reader.on(RefNodeFactory.toStatement(RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/publishers"), HAS_VERSION, RefNodeFactory.toIRI("http://something")));
+
+        reader.on(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/publishers"),
+                HAS_VERSION,
+                RefNodeFactory.toIRI("http://something")));
+
         assertThat(nodes.size(), not(is(0)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void onIncompleteRecordSets() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blob = key -> incompleteRecordsetInputStream();
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, nodes::add);
+
+        reader.on(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/recordsets?limit=10000"),
+                HAS_VERSION,
+                RefNodeFactory.toIRI("http://something")));
+
+        assertThat(nodes.size(), not(is(0)));
+    }
+
+    @Test
+    public void onCompleteListOfRecordSets() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blob = key -> completeRecordsetInputStream();
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, nodes::add);
+
+        reader.on(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/recordsets?limit=10000"),
+                HAS_VERSION,
+                RefNodeFactory.toIRI("http://something")));
+
+        assertThat(nodes.size(), is(659));
+
+        assertThat(nodes.get(2).toString(), startsWith("<d2e46893-099f-45eb-9a76-d2a66f43bec8> <http://www.w3.org/ns/prov#hadMember> <http://www.snib.mx/iptconabio/eml.do?r=SNIB-HC022> <"));
+        assertThat(nodes.get(3).toString(), startsWith("<http://www.snib.mx/iptconabio/eml.do?r=SNIB-HC022> <http://purl.org/dc/elements/1.1/format> \"application/eml\" <"));
+        assertThat(nodes.get(4).toString(), startsWith("<http://www.snib.mx/iptconabio/eml.do?r=SNIB-HC022> <http://purl.org/pav/hasVersion> _:"));
+
+        assertThat(nodes.get(5).toString(), startsWith("<d2e46893-099f-45eb-9a76-d2a66f43bec8> <http://www.w3.org/ns/prov#hadMember> <http://www.snib.mx/iptconabio/archive.do?r=SNIB-HC022> <"));
+        assertThat(nodes.get(6).toString(), startsWith("<http://www.snib.mx/iptconabio/archive.do?r=SNIB-HC022> <http://purl.org/dc/elements/1.1/format> \"application/dwca\" <"));
+        assertThat(nodes.get(7).toString(), startsWith("<http://www.snib.mx/iptconabio/archive.do?r=SNIB-HC022> <http://purl.org/pav/hasVersion> _:"));
+
     }
 
     @Test
@@ -103,8 +133,16 @@ public class RegistryReaderIDigBioTest {
 
     }
 
-    public InputStream publishersInputStream() {
+    private InputStream publishersInputStream() {
         return getClass().getResourceAsStream("idigbio-publishers.json");
+    }
+
+    public InputStream incompleteRecordsetInputStream() {
+        return getClass().getResourceAsStream("idigbio-recordsets-incomplete.json");
+    }
+
+    public InputStream completeRecordsetInputStream() {
+        return getClass().getResourceAsStream("idigbio-recordsets-complete.json");
     }
 
 }

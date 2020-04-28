@@ -46,9 +46,9 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
 
     protected static void parse(IRI iri, StatementEmitter emitter, KeyValueStoreReadOnly readOnlyStore) {
         try {
-            // first parse document to check whether it is valid
+            // first parsePublishers document to check whether it is valid
             checkParsebleXml(iri, readOnlyStore);
-            // then parse
+            // then parsePublishers
             parseRssFeed(iri, emitter, readOnlyStore);
         } catch (IOException e) {
             // ignore - opportunistic parsing attempt
@@ -58,7 +58,7 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
     private static void parseRssFeed(IRI iri, StatementEmitter emitter, KeyValueStoreReadOnly readOnlyStore) throws IOException {
         try (InputStream in2 = readOnlyStore.get(iri)) {
             if (in2 != null) {
-                /// then parse
+                /// then parsePublishers
                 parseRssFeed(iri, emitter, in2);
             }
         }
