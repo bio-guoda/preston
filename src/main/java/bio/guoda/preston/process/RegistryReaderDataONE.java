@@ -190,8 +190,8 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
 
     public static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
         if (result.has("identifier")) {
-            String uuid = result.get("identifier").asText();
-            IRI datasetUUID = toIRI(uuid);
+            String identifier = result.get("identifier").asText();
+            IRI datasetUUID = toIRI(identifier);
             emitter.emit(toStatement(currentPage, HAD_MEMBER, datasetUUID));
 
             if (result.has("dataUrl")) {
