@@ -8,8 +8,8 @@ import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.Quad;
 
+import java.io.InputStream;
 import java.util.Queue;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Command to (re-) process biodiversity dataset graph by providing some existing provenance logs.
@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Parameters(separators = "= ", commandDescription = "offline (re-)processing of tracked biodiversity dataset graph using stdin")
 public class CmdProcess extends CmdActivity {
 
-    private static AtomicBoolean online = new AtomicBoolean(true);
+    private InputStream is = System.in;
 
     @Override
     void initQueue(Queue<Quad> statementQueue, ActivityContext ctx) {
@@ -33,14 +33,11 @@ public class CmdProcess extends CmdActivity {
     void processQueue(Queue<Quad> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
         handleQueuedMessages(statementQueue, listeners);
 
-        StatementEmitter emitter = new StatementEmitter() {
-            @Override
-            public void emit(Quad statement) {
-                handleStatement(statement, listeners);
-                handleQueuedMessages(statementQueue, listeners);
-            }
+        StatementEmitter emitter = statement -> {
+            handleStatement(statement, listeners);
+            handleQueuedMessages(statementQueue, listeners);
         };
-        new EmittingStreamRDF(emitter, this).parseAndEmit(System.in);
+        new EmittingStreamRDF(emitter, this).parseAndEmit(getInputStream());
 
     }
 
@@ -51,7 +48,7 @@ public class CmdProcess extends CmdActivity {
 
 
     private void handleStatement(Quad statement, StatementListener[] listeners) {
-        if (online.get() || (!(statement.getSubject() instanceof BlankNode) && !(statement.getObject() instanceof BlankNode))) {
+        if ((!(statement.getSubject() instanceof BlankNode) && !(statement.getObject() instanceof BlankNode))) {
             for (StatementListener listener : listeners) {
                 listener.on(statement);
             }
@@ -65,4 +62,10 @@ public class CmdProcess extends CmdActivity {
         }
     }
 
+    public void setInputStream(InputStream inputStream) {
+        this.is = inputStream;
+    }
+    private InputStream getInputStream() {
+        return(this.is);
+    }
 }
