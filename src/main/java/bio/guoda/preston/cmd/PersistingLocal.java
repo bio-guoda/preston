@@ -10,12 +10,9 @@ import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.KeyValueStreamFactory;
 import com.beust.jcommander.Parameter;
 import org.apache.commons.io.FileUtils;
-import sun.misc.Signal;
-import sun.misc.SignalHandler;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PersistingLocal extends Cmd {
 
