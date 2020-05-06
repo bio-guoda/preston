@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.store.BlobStore;
@@ -46,6 +47,10 @@ public class CmdVerify extends PersistingLocal implements Runnable {
 
     @Parameter(names = {"--skip-hash-verification"}, description = "do not verify hash, just check availability")
     private Boolean skipHashVerification = false;
+
+
+    @Parameter(names = {"--hash-algorithm"}, description = "hash algorithm used for verification")
+    private HashType hashType = HashType.SHA256;
 
 
     @Override

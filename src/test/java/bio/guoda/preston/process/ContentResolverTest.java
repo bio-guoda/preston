@@ -14,7 +14,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.After;
 import org.junit.Before;
@@ -113,7 +112,7 @@ public class ContentResolverTest {
         String label = cachedNode.getObject().toString();
         assertThat(label, is("<hash://sha256/" + expectedHash + ">"));
 
-        InputStream inputStream = blobStore.get(Hasher.toHashURI(expectedHash));
+        InputStream inputStream = blobStore.get(Hasher.toSHA256IRI(expectedHash));
 
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is(expectedValue));
     }
