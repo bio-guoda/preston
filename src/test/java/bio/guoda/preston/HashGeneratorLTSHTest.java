@@ -13,7 +13,7 @@ public class HashGeneratorLTSHTest {
 
     @Test
     public void calculateAndDiffHashSimilarStreaming() throws IOException {
-        assertHashOutcomes(new HashGeneratorLTSH());
+        assertHashSimilar(new HashGeneratorLTSH());
     }
 
     @Test
@@ -47,7 +47,7 @@ public class HashGeneratorLTSHTest {
         assertThat(diff, is(795));
     }
 
-    private void assertHashOutcomes(HashGenerator<String> hasher) throws IOException {
+    private void assertHashSimilar(HashGenerator<String> hasher) throws IOException {
         String complete = "/bio/guoda/preston/process/idigbio-recordsets-complete.json";
 
         String hash = hasher.hash(getClass().getResourceAsStream(complete));
@@ -60,11 +60,11 @@ public class HashGeneratorLTSHTest {
 
         String incomplete1 = "/bio/guoda/preston/process/idigbio-recordsets-incomplete.json";
 
-        IRI iri2 = bio.guoda.preston.Hasher.calcSHA256(getClass().getResourceAsStream(incomplete1));
-        assertThat(iri2.getIRIString(), is("hash://sha256/6985609de9dd5487e181a635da5ef04601f0478196929a85d105f1a838e9e1f6"));
-
         String otherHash = hasher.hash(getClass().getResourceAsStream(incomplete1));
         assertThat(otherHash, is("f7c4d824c9a50ea305c621a9bdd94583e25052972e447c047f4c8b5c4feee2fbafa3dd"));
+
+        IRI iri2 = bio.guoda.preston.Hasher.calcSHA256(getClass().getResourceAsStream(incomplete1));
+        assertThat(iri2.getIRIString(), is("hash://sha256/6985609de9dd5487e181a635da5ef04601f0478196929a85d105f1a838e9e1f6"));
 
         Tlsh h1 = Tlsh.fromTlshStr(hash);
         Tlsh h2 = Tlsh.fromTlshStr(otherHash);

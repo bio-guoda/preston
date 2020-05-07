@@ -9,8 +9,8 @@ public final class HashGeneratorFactory {
         HashGenerator<IRI> generator = null;
         if (HashType.SHA256.equals(type)) {
             generator = Hasher.createSHA256HashIRIGenerator();
-        } else if (HashType.LTSH.equals(type)) {
-            generator = new HashGeneratorLTSHashIRI();
+        } else if (HashType.TLSH.equals(type)) {
+            generator = new HashGeneratorTLSHashIRI();
         }
         if (generator == null) {
             throw new NotImplementedException();

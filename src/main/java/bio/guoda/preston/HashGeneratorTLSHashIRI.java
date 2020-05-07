@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class HashGeneratorLTSHashIRI implements HashGenerator<IRI> {
+public class HashGeneratorTLSHashIRI implements HashGenerator<IRI> {
     @Override
     public IRI hash(InputStream is) throws IOException {
         return hash(is, new NullOutputStream());
@@ -26,10 +26,10 @@ public class HashGeneratorLTSHashIRI implements HashGenerator<IRI> {
     @Override
     public IRI hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
         String hexEncodedHash = calculateLTSH(is, os, shouldCloseInputStream);
-        return Hasher.toHashIRI(HashType.LTSH, hexEncodedHash);
+        return Hasher.toHashIRI(HashType.TLSH, hexEncodedHash);
     }
 
-    public static String calculateLTSH(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
+    static String calculateLTSH(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
         TlshCreator tlshCreator = new TlshCreator();
         IOUtils.copy(new TLSHInputStream(is, tlshCreator), os);
         if (!tlshCreator.isValid()) {

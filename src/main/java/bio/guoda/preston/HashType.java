@@ -2,7 +2,7 @@ package bio.guoda.preston;
 
 public enum HashType {
     SHA256("hash://sha256/"),
-    LTSH("hash://ltsh/");
+    TLSH("hash://tlsh/");
 
 
     private final String prefix;

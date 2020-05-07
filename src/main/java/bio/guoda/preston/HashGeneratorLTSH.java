@@ -19,7 +19,7 @@ public class HashGeneratorLTSH implements HashGenerator<String> {
 
     @Override
     public String hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
-        return HashGeneratorLTSHashIRI.calculateLTSH(is, os, shouldCloseInputStream);
+        return HashGeneratorTLSHashIRI.calculateLTSH(is, os, shouldCloseInputStream);
     }
 
 }

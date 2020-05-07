@@ -25,7 +25,7 @@ public class CmdVerifyTest {
     @Test
     public void verifyShaLTSH() {
         CmdVerify cmdVerify = new CmdVerify();
-        cmdVerify.setHashType(HashType.LTSH);
+        cmdVerify.setHashType(HashType.TLSH);
         cmdVerify.run();
     }
 
