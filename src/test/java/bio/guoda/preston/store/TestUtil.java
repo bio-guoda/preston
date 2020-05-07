@@ -45,7 +45,7 @@ public class TestUtil {
         // this causes issues when using hashes that reply on byte sequences.
         // https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
         String s = IOUtils.toString(is, StandardCharsets.UTF_8);
-        String replace = StringUtils.replace(s, "\r\n", "\r");
+        String replace = StringUtils.replace(s, "\r\n", "\n");
         return IOUtils.toInputStream(replace, StandardCharsets.UTF_8);
     }
 }
