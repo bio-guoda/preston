@@ -22,7 +22,7 @@ public class HashGeneratorLTSHTest {
         assertNotSimilarHashes(hasher);
     }
 
-    private void assertNotSimilarHashes(HashGenerator hasher) throws IOException {
+    private void assertNotSimilarHashes(HashGenerator<String> hasher) throws IOException {
         String complete = "/bio/guoda/preston/process/idigbio-recordsets-complete.json";
         String hash = hasher.hash(getClass().getResourceAsStream(complete));
 
@@ -44,7 +44,7 @@ public class HashGeneratorLTSHTest {
         assertThat(diff, is(795));
     }
 
-    private void assertHashOutcomes(HashGenerator hasher) throws IOException {
+    private void assertHashOutcomes(HashGenerator<String> hasher) throws IOException {
         String complete = "/bio/guoda/preston/process/idigbio-recordsets-complete.json";
 
         String hash = hasher.hash(getClass().getResourceAsStream(complete));

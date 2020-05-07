@@ -1,5 +1,7 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashGenerator;
+import bio.guoda.preston.HashGeneratorFactory;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.process.StatementListener;
@@ -15,7 +17,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.File;
@@ -55,6 +56,9 @@ public class CmdVerify extends PersistingLocal implements Runnable {
 
     @Override
     public void run() {
+
+        final HashGenerator<IRI> hashGenerator = new HashGeneratorFactory().create(hashType);
+
         final BlobStore blobStore = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
         final StatementStore statementPersistence = new StatementStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
 
@@ -68,6 +72,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
                     State state = State.MISSING;
                     long fileSize = 0;
                     try (InputStream is = blobStore.get(iri)) {
+                        IRI calculatedHashIRI = null;
                         if (is != null) {
                             if (skipHashVerification) {
                                 // try a shortcut via filesystem
@@ -82,22 +87,24 @@ public class CmdVerify extends PersistingLocal implements Runnable {
                                 state = State.CONTENT_PRESENT_HASH_NOT_VERIFIED;
                             } else {
                                 try (CountingOutputStream counting = new CountingOutputStream(new NullOutputStream())) {
-                                    IRI hashIRI = Hasher.calcSHA256(is, counting);
-                                    state = hashIRI.equals(iri) ? State.CONTENT_PRESENT_VALID_HASH : State.CONTENT_PRESENT_INVALID_HASH;
+                                    calculatedHashIRI = hashGenerator.hash(is, counting);
+                                    state = calculatedHashIRI.equals(iri) ? State.CONTENT_PRESENT_VALID_HASH : State.CONTENT_PRESENT_INVALID_HASH;
                                     fileSize = counting.getByteCount();
                                 }
                             }
                         }
+                        System.out.print(iri.getIRIString() + "\t" +
+                                getKeyToPathLocal().toPath(iri) + "\t" +
+                                (OK_STATES.contains(state) ? "OK" : "FAIL") + "\t" +
+                                state + "\t" +
+                                fileSize + "\t" +
+                                (calculatedHashIRI == null ? "" : calculatedHashIRI.getIRIString()) +
+                                "\n");
+
                     } catch (IOException e) {
                         //
                     } finally {
                         verifiedMap.put(iri.getIRIString(), state);
-                        String iriString = iri.getIRIString();
-                        System.out.print(iriString + "\t" +
-                                getKeyToPathLocal().toPath(iri) + "\t" +
-                                (OK_STATES.contains(state) ? "OK" : "FAIL") + "\t" +
-                                state + "\t" +
-                                fileSize + "\n");
                     }
                 }
             }
@@ -105,6 +112,10 @@ public class CmdVerify extends PersistingLocal implements Runnable {
         CmdContext ctx = new CmdContext(this, statementListener);
 
         attemptReplay(blobStore, statementPersistence, ctx);
+    }
+
+    public void setHashType(HashType hashType) {
+        this.hashType = hashType;
     }
 
 }

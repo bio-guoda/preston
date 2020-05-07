@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import org.junit.Test;
 
 public class CmdVerifyTest {
@@ -14,6 +15,18 @@ public class CmdVerifyTest {
 //            }
 //        });
 
+    }
+
+    @Test
+    public void verifySha256() {
+        new CmdVerify().run();
+    }
+
+    @Test
+    public void verifyShaLTSH() {
+        CmdVerify cmdVerify = new CmdVerify();
+        cmdVerify.setHashType(HashType.LTSH);
+        cmdVerify.run();
     }
 
 }

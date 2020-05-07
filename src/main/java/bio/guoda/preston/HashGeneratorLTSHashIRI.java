@@ -5,25 +5,26 @@ import com.trendmicro.tlsh.TlshCreator;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.rdf.api.IRI;
 
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class HashGeneratorLTSH implements HashGenerator<String> {
+public class HashGeneratorLTSHashIRI implements HashGenerator<IRI> {
     @Override
-    public String hash(InputStream is) throws IOException {
+    public IRI hash(InputStream is) throws IOException {
         return hash(is, new NullOutputStream());
     }
 
     @Override
-    public String hash(InputStream is, OutputStream os) throws IOException {
+    public IRI hash(InputStream is, OutputStream os) throws IOException {
         return hash(is, os, true);
     }
 
     @Override
-    public String hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
+    public IRI hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
         TlshCreator tlshCreator = new TlshCreator();
         IOUtils.copy(new TLSHInputStream(is, tlshCreator), os);
         if (!tlshCreator.isValid()) {
@@ -33,7 +34,7 @@ public class HashGeneratorLTSH implements HashGenerator<String> {
             is.close();
         }
         Tlsh hash = tlshCreator.getHash();
-        return StringUtils.lowerCase(hash.getEncoded());
+        return Hasher.toHashIRI(HashType.LTSH, StringUtils.lowerCase(hash.getEncoded()));
     }
 
     private static class TLSHInputStream extends FilterInputStream {

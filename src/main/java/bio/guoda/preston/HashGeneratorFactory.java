@@ -1,15 +1,16 @@
 package bio.guoda.preston;
 
+import org.apache.commons.rdf.api.IRI;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public final class HashGeneratorFactory {
 
-    HashGenerator create(HashType type) {
-        HashGenerator generator = null;
+    public HashGenerator<IRI> create(HashType type) {
+        HashGenerator<IRI> generator = null;
         if (HashType.SHA256.equals(type)) {
-            generator = Hasher.createSHA256HashGenerator();
+            generator = Hasher.createSHA256HashIRIGenerator();
         } else if (HashType.LTSH.equals(type)) {
-            generator = new HashGeneratorLTSH();
+            generator = new HashGeneratorLTSHashIRI();
         }
         if (generator == null) {
             throw new NotImplementedException();

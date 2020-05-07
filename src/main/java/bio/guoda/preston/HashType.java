@@ -1,13 +1,17 @@
 package bio.guoda.preston;
 
 public enum HashType {
-    SHA256("sha256"),
-    LTSH("ltsh");
+    SHA256("hash://sha256/"),
+    LTSH("hash://ltsh/");
 
 
-    private final String name;
+    private final String prefix;
 
-    HashType(String name) {
-        this.name = name;
+    HashType(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 }

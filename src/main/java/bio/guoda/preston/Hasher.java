@@ -29,8 +29,8 @@ public final class Hasher {
         return calcSHA256(is, new NullOutputStream(), true);
     }
 
-    public static HashGenerator createSHA256HashGenerator() {
-        return new HashGenerator() {
+    public static HashGenerator<String> createSHA256HashGenerator() {
+        return new HashGenerator<String>() {
 
             @Override
             public String hash(InputStream is) throws IOException {
@@ -45,6 +45,26 @@ public final class Hasher {
             @Override
             public String hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
                 return calcSHA256String(is, os, shouldCloseInputStream);
+            }
+        };
+    }
+
+    public static HashGenerator<IRI> createSHA256HashIRIGenerator() {
+        return new HashGenerator<IRI>() {
+
+            @Override
+            public IRI hash(InputStream is) throws IOException {
+                return hash(is, new NullOutputStream());
+            }
+
+            @Override
+            public IRI hash(InputStream is, OutputStream os) throws IOException {
+                return hash(is, os, true);
+            }
+
+            @Override
+            public IRI hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
+                return Hasher.toSHA256IRI(calcSHA256String(is, os, shouldCloseInputStream));
             }
         };
     }
@@ -91,10 +111,14 @@ public final class Hasher {
     }
 
     public static IRI toSHA256IRI(String sha256Hash) {
-        return RefNodeFactory.toIRI(URI.create(getHashPrefix() + sha256Hash));
+        return toHashIRI(HashType.SHA256, sha256Hash);
+    }
+
+    public static IRI toHashIRI(HashType type, String hash) {
+        return RefNodeFactory.toIRI(URI.create(type.getPrefix() + hash));
     }
 
     public static String getHashPrefix() {
-        return "hash://sha256/";
+        return HashType.SHA256.getPrefix();
     }
 }
