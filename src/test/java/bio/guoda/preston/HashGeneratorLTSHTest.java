@@ -48,14 +48,15 @@ public class HashGeneratorLTSHTest {
         String complete = "/bio/guoda/preston/process/idigbio-recordsets-complete.json";
 
         String hash = hasher.hash(getClass().getResourceAsStream(complete));
+        assertThat(hash, is("1ac4d824c9a50ea305c621a9bdd94583e25052972e447c047f4c8b5c4feee2fbafa3dd"));
 
 
         IRI iri = bio.guoda.preston.Hasher.calcSHA256(getClass().getResourceAsStream(complete));
         assertThat(iri.getIRIString(), is("hash://sha256/0931a831be557bfedd27b0068d9a0a9f14c1b92cbf9199e8ba79e04d0a6baedc"));
-        assertThat(hash, is("1ac4d824c9a50ea305c621a9bdd94583e25052972e447c047f4c8b5c4feee2fbafa3dd"));
 
 
         String incomplete1 = "/bio/guoda/preston/process/idigbio-recordsets-incomplete.json";
+
         IRI iri2 = bio.guoda.preston.Hasher.calcSHA256(getClass().getResourceAsStream(incomplete1));
         assertThat(iri2.getIRIString(), is("hash://sha256/6985609de9dd5487e181a635da5ef04601f0478196929a85d105f1a838e9e1f6"));
 
