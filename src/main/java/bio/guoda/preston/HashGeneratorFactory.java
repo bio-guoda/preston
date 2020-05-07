@@ -10,6 +10,8 @@ public final class HashGeneratorFactory {
             generator = Hasher.createSHA256HashIRIGenerator();
         } else if (HashType.TLSH.equals(type)) {
             generator = new HashGeneratorTLSHashIRI();
+        } else if (HashType.TLSH_TIKA.equals(type)) {
+            generator = new HashGeneratorTLSHTika();
         }
         if (generator == null) {
             throw new IllegalArgumentException("unsupported hash type: [" + type + "]");
