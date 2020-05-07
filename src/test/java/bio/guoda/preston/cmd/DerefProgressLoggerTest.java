@@ -79,8 +79,10 @@ public class DerefProgressLoggerTest {
 
         String[] lines = StringUtils.split(out.toString(StandardCharsets.UTF_8.name()), '\r');
 
-        assertThat(lines[0], Is.is(
-                "[https://example.org/very] 1 kB at ? MB/s"));
+        assertThat(lines[0], startsWith(
+                "[https://example.org/very] 1 kB at "));
+        assertThat(lines[0], endsWith(
+                " MB/s"));
 
 
     }
