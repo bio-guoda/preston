@@ -6,11 +6,11 @@ public final class HashGeneratorFactory {
 
     public HashGenerator<IRI> create(HashType type) {
         HashGenerator<IRI> generator = null;
-        if (HashType.SHA256.equals(type)) {
+        if (HashType.sha256.equals(type)) {
             generator = Hasher.createSHA256HashIRIGenerator();
-        } else if (HashType.TLSH.equals(type)) {
+        } else if (HashType.tlsh.equals(type)) {
             generator = new HashGeneratorTLSHashIRI();
-        } else if (HashType.TLSH_TIKA.equals(type)) {
+        } else if (HashType.tika.equals(type)) {
             generator = new HashGeneratorTLSHTika();
         }
         if (generator == null) {

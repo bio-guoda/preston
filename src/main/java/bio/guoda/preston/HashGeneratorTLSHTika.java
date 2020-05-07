@@ -33,7 +33,7 @@ public class HashGeneratorTLSHTika extends HashGeneratorTLSHashIRI {
         Reader reader = new Tika(config).parse(is);
         ReaderInputStream tikaIs = new ReaderInputStream(reader, StandardCharsets.UTF_8);
         String hexEncodedHash = calculateLTSH(tikaIs, os, shouldCloseInputStream);
-        return Hasher.toHashIRI(HashType.TLSH_TIKA, StringUtils.substring(hexEncodedHash, 3));
+        return Hasher.toHashIRI(HashType.tika, StringUtils.substring(hexEncodedHash, 3));
     }
 
     static String calculateLTSH(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {

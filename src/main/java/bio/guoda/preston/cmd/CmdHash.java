@@ -24,7 +24,7 @@ public class CmdHash implements Runnable {
     private OutputStream os = System.out;
 
     @Parameter(names = {"--hash-algorithm", "--algo", "-a"}, description = "hash algorithm used for verification")
-    private HashType hashType = HashType.SHA256;
+    private HashType hashType = HashType.sha256;
 
     public void setInputStream(InputStream inputStream) {
         this.is = inputStream;

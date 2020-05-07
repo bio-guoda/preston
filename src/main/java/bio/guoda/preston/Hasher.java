@@ -95,7 +95,7 @@ public final class Hasher {
     }
 
     public static IRI toSHA256IRI(String sha256Hash) {
-        return toHashIRI(HashType.SHA256, sha256Hash);
+        return toHashIRI(HashType.sha256, sha256Hash);
     }
 
     public static IRI toHashIRI(HashType type, String hash) {
@@ -103,7 +103,7 @@ public final class Hasher {
     }
 
     public static String getHashPrefix() {
-        return HashType.SHA256.getPrefix();
+        return HashType.sha256.getPrefix();
     }
 
 }

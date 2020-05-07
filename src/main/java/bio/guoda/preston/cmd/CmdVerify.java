@@ -3,7 +3,6 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.HashGenerator;
 import bio.guoda.preston.HashGeneratorFactory;
 import bio.guoda.preston.HashType;
-import bio.guoda.preston.Hasher;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
@@ -51,7 +50,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
 
 
     @Parameter(names = {"--hash-algorithm"}, description = "hash algorithm used for verification")
-    private HashType hashType = HashType.SHA256;
+    private HashType hashType = HashType.sha256;
 
 
     @Override
