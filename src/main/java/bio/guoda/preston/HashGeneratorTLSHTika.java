@@ -4,7 +4,6 @@ import com.trendmicro.tlsh.Tlsh;
 import com.trendmicro.tlsh.TlshCreator;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ReaderInputStream;
-import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.tika.Tika;
@@ -16,12 +15,15 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
-public class HashGeneratorTLSHashIRI extends HashGeneratorAbstract<IRI> {
+public class HashGeneratorTLSHTika extends HashGeneratorTLSHashIRI {
 
     @Override
     public IRI hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
-        String hexEncodedHash = calculateLTSH(is, os, shouldCloseInputStream);
-        return Hasher.toHashIRI(HashType.TLSH, StringUtils.substring(hexEncodedHash, 3));
+        // apply text extractor Apache Tika to handle zip files or other non-text formats
+        Reader reader = new Tika().parse(is);
+        ReaderInputStream tikaIs = new ReaderInputStream(reader, StandardCharsets.UTF_8);
+        String hexEncodedHash = calculateLTSH(tikaIs, os, shouldCloseInputStream);
+        return Hasher.toHashIRI(HashType.TLSH_TIKA, StringUtils.substring(hexEncodedHash, 3));
     }
 
     static String calculateLTSH(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {

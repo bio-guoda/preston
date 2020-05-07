@@ -5,6 +5,7 @@ import com.trendmicro.tlsh.Tlsh;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -25,7 +26,8 @@ public class HashGeneratorTLSHTest {
     private void assertNotSimilarHashes(HashGenerator<String> hasher) throws IOException {
         String complete = "/bio/guoda/preston/process/idigbio-recordsets-complete.json";
 
-        String hash = hasher.hash(TestUtil.filterLineFeedFromTextInputStream(getClass().getResourceAsStream(complete)));
+        InputStream resourceAsStream = getClass().getResourceAsStream(complete);
+        String hash = hasher.hash(TestUtil.filterLineFeedFromTextInputStream(resourceAsStream));
         assertThat(hash, is("1ac4d824c9a50ea305c621a9bdd94583e25052972e447c047f4c8b5c4feee2fbafa3dd"));
 
         String incomplete1 = "/bio/guoda/preston/process/intermountain-biota-rss.xml";
