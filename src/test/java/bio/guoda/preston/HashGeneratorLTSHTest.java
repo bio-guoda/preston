@@ -18,7 +18,7 @@ public class HashGeneratorLTSHTest {
 
     @Test
     public void calculateAndDiffHashNotSimilarStreaming() throws IOException {
-        HashGenerator hasher = new HashGeneratorLTSH();
+        HashGenerator<String> hasher = new HashGeneratorLTSH();
         assertNotSimilarHashes(hasher);
     }
 

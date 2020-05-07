@@ -25,6 +25,11 @@ public class HashGeneratorLTSHashIRI implements HashGenerator<IRI> {
 
     @Override
     public IRI hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
+        String hexEncodedHash = calculateLTSH(is, os, shouldCloseInputStream);
+        return Hasher.toHashIRI(HashType.LTSH, hexEncodedHash);
+    }
+
+    public static String calculateLTSH(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
         TlshCreator tlshCreator = new TlshCreator();
         IOUtils.copy(new TLSHInputStream(is, tlshCreator), os);
         if (!tlshCreator.isValid()) {
@@ -34,7 +39,7 @@ public class HashGeneratorLTSHashIRI implements HashGenerator<IRI> {
             is.close();
         }
         Tlsh hash = tlshCreator.getHash();
-        return Hasher.toHashIRI(HashType.LTSH, StringUtils.lowerCase(hash.getEncoded()));
+        return StringUtils.lowerCase(hash.getEncoded());
     }
 
     private static class TLSHInputStream extends FilterInputStream {
