@@ -7,6 +7,9 @@ import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.tika.Tika;
+import org.apache.tika.config.TikaConfig;
+import org.apache.tika.exception.TikaException;
+import org.xml.sax.SAXException;
 
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -20,7 +23,14 @@ public class HashGeneratorTLSHTika extends HashGeneratorTLSHashIRI {
     @Override
     public IRI hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
         // apply text extractor Apache Tika to handle zip files or other non-text formats
-        Reader reader = new Tika().parse(is);
+        TikaConfig config;
+        try {
+            config = new TikaConfig(getClass().getResourceAsStream("/bio/guoda/preston/tika-config.xml"));
+        } catch (TikaException | SAXException e) {
+            throw new IOException("failed to configure tika streaming");
+        }
+
+        Reader reader = new Tika(config).parse(is);
         ReaderInputStream tikaIs = new ReaderInputStream(reader, StandardCharsets.UTF_8);
         String hexEncodedHash = calculateLTSH(tikaIs, os, shouldCloseInputStream);
         return Hasher.toHashIRI(HashType.TLSH_TIKA, StringUtils.substring(hexEncodedHash, 3));

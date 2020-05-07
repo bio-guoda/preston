@@ -102,6 +102,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>com.trendmicro</groupId>
             <artifactId>tlsh</artifactId>
