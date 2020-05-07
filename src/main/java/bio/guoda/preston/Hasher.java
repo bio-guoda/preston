@@ -50,23 +50,7 @@ public final class Hasher {
     }
 
     public static HashGenerator<IRI> createSHA256HashIRIGenerator() {
-        return new HashGenerator<IRI>() {
-
-            @Override
-            public IRI hash(InputStream is) throws IOException {
-                return hash(is, new NullOutputStream());
-            }
-
-            @Override
-            public IRI hash(InputStream is, OutputStream os) throws IOException {
-                return hash(is, os, true);
-            }
-
-            @Override
-            public IRI hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
-                return Hasher.toSHA256IRI(calcSHA256String(is, os, shouldCloseInputStream));
-            }
-        };
+        return new HashGeneratorSHA256();
     }
 
     public static IRI calcSHA256(InputStream is, OutputStream os) throws IOException {
@@ -121,4 +105,5 @@ public final class Hasher {
     public static String getHashPrefix() {
         return HashType.SHA256.getPrefix();
     }
+
 }
