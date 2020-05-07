@@ -1,6 +1,7 @@
 package bio.guoda.preston.store;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import bio.guoda.preston.cmd.ActivityContext;
 import bio.guoda.preston.process.BlobStoreReadOnly;
@@ -37,5 +38,14 @@ public class TestUtil {
             }
 
         };
+    }
+
+    public static InputStream filterLineFeedFromTextInputStream(InputStream is) throws IOException {
+        // Git client for windows is configured to insert \r (carriage returns) when checking out text files ; See e.g., https://github.com/nodejs/node/pull/20754
+        // this causes issues when using hashes that reply on byte sequences.
+        // https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
+        String s = IOUtils.toString(is, StandardCharsets.UTF_8);
+        String replace = StringUtils.replace(s, "\r\n", "\r");
+        return IOUtils.toInputStream(replace, StandardCharsets.UTF_8);
     }
 }

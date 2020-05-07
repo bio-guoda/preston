@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class HashGeneratorLTSH implements HashGenerator<String> {
+public class HashGeneratorTLSH implements HashGenerator<String> {
     @Override
     public String hash(InputStream is) throws IOException {
         return hash(is, new NullOutputStream());

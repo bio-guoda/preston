@@ -1,7 +1,7 @@
 package bio.guoda.preston;
 
+import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
@@ -18,30 +18,12 @@ import static org.junit.Assert.*;
 public class HashGeneratorSHA256Test {
 
     @Test
-    public void hashTextFromStagedTestResource() throws IOException {
-        InputStream is = getClass().getResourceAsStream("/bio/guoda/preston/process/idigbio-recordsets-complete.json");
+    public void hashTextFromResource() throws IOException {
+        String name = "/bio/guoda/preston/process/idigbio-recordsets-complete.json";
+        InputStream is = TestUtil.filterLineFeedFromTextInputStream(getClass().getResourceAsStream(name));
         IRI hash = new HashGeneratorSHA256().hash(is);
         assertThat(hash.getIRIString(), is("hash://sha256/0931a831be557bfedd27b0068d9a0a9f14c1b92cbf9199e8ba79e04d0a6baedc"));
-    };
-
-    @Test
-    public void hashTextFromStagedTestResourceRemovingCarriageReturnIntroducedByWindowsGitSettings() throws IOException {
-        // Git client for windows is configured to insert \r (carriage returns) when checking out text files ; See e.g., https://github.com/nodejs/node/pull/20754
-        // this causes issues when using hashes that reply on byte sequences.
-        InputStream is = getClass().getResourceAsStream("/bio/guoda/preston/process/idigbio-recordsets-complete.json");
-        String s = IOUtils.toString(is, StandardCharsets.UTF_8);
-        String replace = StringUtils.replace(s, "\r", "");
-        IRI hash = new HashGeneratorSHA256().hash(IOUtils.toInputStream(replace, StandardCharsets.UTF_8));
-        assertThat(hash.getIRIString(), is("hash://sha256/0931a831be557bfedd27b0068d9a0a9f14c1b92cbf9199e8ba79e04d0a6baedc"));
-    };
-
-    @Test
-    public void hashTextFromSourceTestResource() throws IOException, URISyntaxException {
-        URL resource = getClass().getResource("/bio/guoda/preston/process/idigbio-recordsets-complete.json");
-        URI originalResource = URI.create(resource.toURI().toString().replace("target/test-classes/bio", "src/test/resources/bio"));
-        IRI hash = new HashGeneratorSHA256().hash(originalResource.toURL().openStream());
-        assertThat(hash.getIRIString(), is("hash://sha256/0931a831be557bfedd27b0068d9a0a9f14c1b92cbf9199e8ba79e04d0a6baedc"));
-    };
+    }
 
     @Test
     public void hashTextFromString() throws IOException {
