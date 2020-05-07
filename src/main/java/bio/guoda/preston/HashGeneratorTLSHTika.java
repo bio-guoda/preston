@@ -20,8 +20,20 @@ import java.nio.charset.StandardCharsets;
 
 public class HashGeneratorTLSHTika extends HashGeneratorTLSHashIRI {
 
+    private static Tika tika = null;
+
     @Override
     public IRI hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
+        if (tika == null) {
+            tika = getTika();
+        }
+        Reader reader = tika.parse(is);
+        ReaderInputStream tikaIs = new ReaderInputStream(reader, StandardCharsets.UTF_8);
+        String hexEncodedHash = calculateLTSH(tikaIs, os, shouldCloseInputStream);
+        return Hasher.toHashIRI(HashType.tika, StringUtils.substring(hexEncodedHash, 3));
+    }
+
+    public Tika getTika() throws IOException {
         // apply text extractor Apache Tika to handle zip files or other non-text formats
         TikaConfig config;
         try {
@@ -30,10 +42,7 @@ public class HashGeneratorTLSHTika extends HashGeneratorTLSHashIRI {
             throw new IOException("failed to configure tika streaming");
         }
 
-        Reader reader = new Tika(config).parse(is);
-        ReaderInputStream tikaIs = new ReaderInputStream(reader, StandardCharsets.UTF_8);
-        String hexEncodedHash = calculateLTSH(tikaIs, os, shouldCloseInputStream);
-        return Hasher.toHashIRI(HashType.tika, StringUtils.substring(hexEncodedHash, 3));
+        return new Tika(config);
     }
 
     static String calculateLTSH(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
