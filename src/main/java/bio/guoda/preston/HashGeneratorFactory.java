@@ -1,7 +1,6 @@
 package bio.guoda.preston;
 
 import org.apache.commons.rdf.api.IRI;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public final class HashGeneratorFactory {
 
@@ -13,7 +12,7 @@ public final class HashGeneratorFactory {
             generator = new HashGeneratorTLSHashIRI();
         }
         if (generator == null) {
-            throw new NotImplementedException();
+            throw new IllegalArgumentException("unsupported hash type: [" + type + "]");
         }
         return generator;
     }
