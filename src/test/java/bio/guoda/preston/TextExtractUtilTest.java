@@ -19,20 +19,21 @@ public class TextExtractUtilTest {
     @Test
     public void extractTextFromDwCA() throws IOException {
         Tika tika = new Tika();
-        InputStream resourceAsStream = getClass().getResourceAsStream("/bio/guoda/preston/plazidwca.zip");
-
-        assertNotNull(resourceAsStream);
-        Reader reader = tika.parse(resourceAsStream);
-        readerOutputContainsString(reader, "Phylogeny of Calyptraeotheres");
+        try (InputStream resourceAsStream = getClass().getResourceAsStream("/bio/guoda/preston/plazidwca.zip")) {
+            assertNotNull(resourceAsStream);
+            Reader reader = tika.parse(resourceAsStream);
+            readerOutputContainsString(reader, "Phylogeny of Calyptraeotheres");
+        }
     }
 
     @Test
     public void extractTextFromTarGz() throws IOException {
         Tika tika = new Tika();
-        InputStream resourceAsStream = getClass().getResourceAsStream("/preston-1a.tar.gz");
-        assertNotNull(resourceAsStream);
-        Reader reader = tika.parse(resourceAsStream);
-        readerOutputContainsString(reader, "Constitution of the Human Brain");
+        try (InputStream resourceAsStream = getClass().getResourceAsStream("/preston-1a.tar.gz")) {
+            assertNotNull(resourceAsStream);
+            Reader reader = tika.parse(resourceAsStream);
+            readerOutputContainsString(reader, "Constitution of the Human Brain");
+        }
     }
 
     public void readerOutputContainsString(Reader reader, String someString) throws IOException {
