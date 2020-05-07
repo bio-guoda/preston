@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -14,9 +17,17 @@ import static org.junit.Assert.*;
 public class HashGeneratorSHA256Test {
 
     @Test
-    public void hashTextFromResource() throws IOException {
+    public void hashTextFromStagedTestResource() throws IOException {
         InputStream is = getClass().getResourceAsStream("/bio/guoda/preston/process/idigbio-recordsets-complete.json");
         IRI hash = new HashGeneratorSHA256().hash(is);
+        assertThat(hash.getIRIString(), is("hash://sha256/0931a831be557bfedd27b0068d9a0a9f14c1b92cbf9199e8ba79e04d0a6baedc"));
+    };
+
+    @Test
+    public void hashTextFromSourceTestResource() throws IOException, URISyntaxException {
+        URL resource = getClass().getResource("/bio/guoda/preston/process/idigbio-recordsets-complete.json");
+        URI originalResource = URI.create(resource.toURI().toString().replace("target/test-classes/bio", "src/test/resources/bio"));
+        IRI hash = new HashGeneratorSHA256().hash(originalResource.toURL().openStream());
         assertThat(hash.getIRIString(), is("hash://sha256/0931a831be557bfedd27b0068d9a0a9f14c1b92cbf9199e8ba79e04d0a6baedc"));
     };
 
