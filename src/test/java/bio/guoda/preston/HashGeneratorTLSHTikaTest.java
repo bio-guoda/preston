@@ -17,7 +17,7 @@ public class HashGeneratorTLSHTikaTest {
     @Test
     public void calculateLTSHash() throws IOException {
         IRI hash = new HashGeneratorTLSHTika().hash(getClass().getResourceAsStream(DWCA));
-        assertThat(hash.getIRIString(), is("hash://tlsh-tika/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f"));
+        assertThat(hash.getIRIString(), is("hash://tika/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f"));
     }
 
     @Test
@@ -32,7 +32,7 @@ public class HashGeneratorTLSHTikaTest {
     public void inputStreamClosed() throws IOException {
         InputStream resourceAsStream1 = getClass().getResourceAsStream(DWCA);
         IRI hash = new HashGeneratorTLSHTika().hash(resourceAsStream1);
-        assertThat(hash.getIRIString(), is("hash://tlsh-tika/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f"));
+        assertThat(hash.getIRIString(), is("hash://tika/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f"));
         resourceAsStream1.read();
     }
 
