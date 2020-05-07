@@ -22,12 +22,12 @@ public class HashGeneratorTLSHashIRITest {
         resourceAsStream.read();
     }
 
-    public InputStream assertExpectedHash() throws IOException {
-        String complete = "/bio/guoda/preston/process/idigbio-recordsets-complete.json";
+    private InputStream assertExpectedHash() throws IOException {
+        String complete = "/bio/guoda/preston/dwca-20180905.zip";
 
         InputStream resourceAsStream = getClass().getResourceAsStream(complete);
         IRI hash = new HashGeneratorTLSHashIRI().hash(resourceAsStream);
-        assertThat(hash.getIRIString(), is("hash://tlsh/1ac4d824c9a50ea305c621a9bdd94583e25052972e447c047f4c8b5c4feee2fbafa3dd"));
+        assertThat(hash.getIRIString(), is("hash://tlsh/2d6423681883b2b6f3366674b3914a9142a378ad1f41f6641bc84cfa30bb715d7dedc8"));
         return resourceAsStream;
     }
 
