@@ -178,9 +178,6 @@ public class TlshCreator {
 
 		for (int i = offset; i < offset + len; i++, fed_len++) {
 			int i1 = data[i] & 0xFF;
-			if (j < 0) {
-				System.out.println("j [" + j + "], with data_len [" + data_len + "]");
-			}
 			slide_window[j] = i1;
 
 			if (fed_len >= 4) {
