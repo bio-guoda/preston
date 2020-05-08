@@ -69,9 +69,9 @@ public class CmdVerify extends PersistingLocal implements Runnable {
                 final IRI iri = VersionUtil.mostRecentVersionForStatement(statement);
                 if (iri != null && !verifiedMap.containsKey(iri.getIRIString())) {
                     State state = State.MISSING;
+                    IRI calculatedHashIRI = null;
                     long fileSize = 0;
                     try (InputStream is = blobStore.get(iri)) {
-                        IRI calculatedHashIRI = null;
                         if (is != null) {
                             if (skipHashVerification) {
                                 // try a shortcut via filesystem
@@ -92,6 +92,10 @@ public class CmdVerify extends PersistingLocal implements Runnable {
                                 }
                             }
                         }
+                    } catch (IOException e) {
+                        //
+                    } finally {
+                        verifiedMap.put(iri.getIRIString(), state);
                         System.out.print(iri.getIRIString() + "\t" +
                                 getKeyToPathLocal().toPath(iri) + "\t" +
                                 (OK_STATES.contains(state) ? "OK" : "FAIL") + "\t" +
@@ -99,11 +103,6 @@ public class CmdVerify extends PersistingLocal implements Runnable {
                                 fileSize + "\t" +
                                 (calculatedHashIRI == null ? "" : calculatedHashIRI.getIRIString()) +
                                 "\n");
-
-                    } catch (IOException e) {
-                        //
-                    } finally {
-                        verifiedMap.put(iri.getIRIString(), state);
                     }
                 }
             }

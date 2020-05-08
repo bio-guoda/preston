@@ -1,10 +1,12 @@
 package bio.guoda.preston;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
@@ -14,6 +16,11 @@ public class HashGeneratorTLSHashIRITest {
 
     private static final String DWCA = "/bio/guoda/preston/dwca-20180905.zip";
     private static final String DWCA_REPACKAGED = "/bio/guoda/preston/dwca-20180905-repackaged.zip";
+
+    @Test(expected = IOException.class)
+    public void calculateLTSHashTooShort() throws IOException {
+        new HashGeneratorTLSHashIRI().hash(IOUtils.toInputStream("hello", StandardCharsets.UTF_8));
+    }
 
     @Test
     public void calculateLTSHash() throws IOException {
