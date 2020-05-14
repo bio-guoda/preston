@@ -10,7 +10,7 @@ public final class HashGeneratorFactory {
             generator = Hasher.createSHA256HashIRIGenerator();
         } else if (HashType.tlsh.equals(type)) {
             generator = new HashGeneratorTLSHashIRI();
-        } else if (HashType.tika.equals(type)) {
+        } else if (HashType.tika_tlsh.equals(type)) {
             generator = new HashGeneratorTLSHTika();
         }
         if (generator == null) {

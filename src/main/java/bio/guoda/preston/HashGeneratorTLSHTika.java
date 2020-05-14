@@ -30,7 +30,7 @@ public class HashGeneratorTLSHTika extends HashGeneratorTLSHashIRI {
         Reader reader = tika.parse(is);
         ReaderInputStream tikaIs = new ReaderInputStream(reader, StandardCharsets.UTF_8);
         String hexEncodedHash = calculateLTSH(tikaIs, os, shouldCloseInputStream);
-        return Hasher.toHashIRI(HashType.tika, StringUtils.substring(hexEncodedHash, 3));
+        return Hasher.toHashIRI(HashType.tika_tlsh, StringUtils.substring(hexEncodedHash, 3));
     }
 
     public Tika getTika() throws IOException {

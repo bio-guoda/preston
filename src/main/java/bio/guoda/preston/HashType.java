@@ -2,7 +2,7 @@ package bio.guoda.preston;
 
 public enum HashType {
     sha256("hash://sha256/"),
-    tika("hash://tika/"),
+    tika_tlsh("hash://tika-tlsh/"),
     tlsh("hash://tlsh/");
 
     private final String prefix;

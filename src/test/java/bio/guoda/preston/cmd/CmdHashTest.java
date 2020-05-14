@@ -53,11 +53,11 @@ public class CmdHashTest {
         cmdHash.setInputStream(getClass().getResourceAsStream("/bio/guoda/preston/dwca-20180905.zip"));
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         cmdHash.setOutputStream(out);
-        cmdHash.setHashAlgorithm(HashType.tika);
+        cmdHash.setHashAlgorithm(HashType.tika_tlsh);
         cmdHash.run();
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
-                is("hash://tika/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f\n"));
+                is("hash://tika-tlsh/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f\n"));
     }
 
 }
