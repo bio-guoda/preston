@@ -2,7 +2,6 @@ package bio.guoda.preston.process;
 
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.apache.commons.rdf.api.Triple;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.Quad;
@@ -20,6 +19,7 @@ import static bio.guoda.preston.MimeTypes.MIME_TYPE_JSON;
 import static bio.guoda.preston.RefNodeConstants.*;
 import static bio.guoda.preston.TripleMatcher.hasTriple;
 import static bio.guoda.preston.model.RefNodeFactory.*;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringEndsWith.endsWith;
@@ -149,6 +149,57 @@ public class RegistryReaderGBIFTest {
         assertThat(getVersionSource(lastPage).toString(), is("<https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR&offset=40638&limit=2>"));
     }
 
+
+    @Test
+    public void onOccurrenceDownload() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                if (key.getIRIString().endsWith("json")) {
+                    return getClass().getResourceAsStream("gbif-download-api.json");
+                } else {
+                    throw new IOException("kaboom!");
+                }
+            }
+        };
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+
+
+
+        Quad doiLink = toStatement(toIRI("https://api.gbif.org/v1/occurrence/download/0062961-200221144449610"),
+                HAS_VERSION,
+                toIRI("hash://json"));
+
+        registryReaderGBIF.on(doiLink);
+
+        Assert.assertThat(nodes.size(), is(5));
+        Quad secondStatement = nodes.get(1);
+        assertThat(secondStatement.toString(), startsWith("<hash://json> <http://www.w3.org/ns/prov#hadMember> <http://api.gbif.org/v1/occurrence/download/request/0062961-200221144449610.zip> "));
+    }
+
+    @Test
+    public void onOccurrenceDownloadArchive() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                throw new IOException("kaboom!");
+            }
+        };
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+
+
+
+        Quad doiLink = toStatement(toIRI("https://api.gbif.org/v1/occurrence/download/request/0062961-200221144449610.zip"),
+                HAS_VERSION,
+                toIRI("hash://json"));
+
+        registryReaderGBIF.on(doiLink);
+
+        Assert.assertThat(nodes.size(), is(0));
+    }
+
     @Test
     public void onSingle() {
         ArrayList<Quad> nodes = new ArrayList<>();
@@ -221,6 +272,34 @@ public class RegistryReaderGBIFTest {
 
         lastRefNode = refNodes.get(refNodes.size() - 1);
         assertThat(lastRefNode.toString(), startsWith("<http://example.org/?offset=40638&limit=2> <http://purl.org/pav/hasVersion> "));
+
+    }
+
+    @Test
+    public void parseOccurrenceDownload() throws IOException {
+        final List<Quad> refNodes = new ArrayList<>();
+        IRI testNode = createTestNode();
+
+        RegistryReaderGBIF.parseOccurrenceDownload(
+                testNode,
+                refNodes::add,
+                getClass().getResourceAsStream("gbif-download-api.json"),
+                toIRI("http://example.org/"));
+
+        assertThat(refNodes.size(), is(4));
+
+        Quad refNode = refNodes.get(0);
+        assertThat(refNode.toString(), containsString("/bio/guoda/preston/process/gbifdatasets.json> <http://www.w3.org/ns/prov#hadMember> <http://api.gbif.org/v1/occurrence/download/request/0062961-200221144449610.zip> "));
+
+        refNode = refNodes.get(1);
+        assertThat(refNode.toString(), containsString("<http://api.gbif.org/v1/occurrence/download/request/0062961-200221144449610.zip> <http://purl.org/pav/hasVersion> "));
+
+        refNode = refNodes.get(2);
+        assertThat(refNode.toString(), containsString("/bio/guoda/preston/process/gbifdatasets.json> <http://www.w3.org/ns/prov#hadMember> <https://doi.org/10.15468/dl.4n9w6m> "));
+
+        refNode = refNodes.get(3);
+        assertThat(refNode.toString(), startsWith("<http://api.gbif.org/v1/occurrence/download/request/0062961-200221144449610.zip> <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> <https://doi.org/10.15468/dl.4n9w6m> "));
+
 
     }
 

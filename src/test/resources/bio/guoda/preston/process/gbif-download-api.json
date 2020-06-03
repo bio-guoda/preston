@@ -1,0 +1,22 @@
+{
+  "key": "0062961-200221144449610",
+  "doi": "10.15468/dl.4n9w6m",
+  "license": "http://creativecommons.org/licenses/by-nc/4.0/legalcode",
+  "request": {
+    "predicate": {
+      "type": "equals",
+      "key": "TAXON_KEY",
+      "value": "4167110"
+    },
+    "sendNotification": true,
+    "format": "DWCA"
+  },
+  "created": "2020-05-14T08:24:00.109+0000",
+  "modified": "2020-05-14T08:24:55.864+0000",
+  "eraseAfter": "2020-11-14T08:24:00.044+0000",
+  "status": "SUCCEEDED",
+  "downloadLink": "http://api.gbif.org/v1/occurrence/download/request/0062961-200221144449610.zip",
+  "size": 33353,
+  "totalRecords": 39,
+  "numberDatasets": 8
+}

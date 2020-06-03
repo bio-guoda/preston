@@ -1,0 +1,1125 @@
+
+<!DOCTYPE html>
+
+<!--[if !IE]> -->
+<html lang="en" class="not_ie" ng-app="portal"  >
+<!-- <![endif]-->
+<!--[if IE]>
+<html lang="en" class="ie" ng-app="portal">
+<![endif]-->
+
+<head ng-controller="headCtrl as head">
+
+    <title ng-bind="head.getTitle('Download')">Download</title>
+
+
+
+    <link rel="alternate" hreflang="en" href="https://www.gbif.org/occurrence/download/0062961-200221144449610" />
+
+
+
+    <link rel="alternate" hreflang="zh" href="https://www.gbif.org/zh/occurrence/download/0062961-200221144449610" />
+
+
+
+    <link rel="alternate" hreflang="zh-tw" href="https://www.gbif.org/zh-tw/occurrence/download/0062961-200221144449610" />
+
+
+
+    <link rel="alternate" hreflang="fr" href="https://www.gbif.org/fr/occurrence/download/0062961-200221144449610" />
+
+
+
+    <link rel="alternate" hreflang="ja" href="https://www.gbif.org/ja/occurrence/download/0062961-200221144449610" />
+
+
+
+    <link rel="alternate" hreflang="pt" href="https://www.gbif.org/pt/occurrence/download/0062961-200221144449610" />
+
+
+
+    <link rel="alternate" hreflang="ru" href="https://www.gbif.org/ru/occurrence/download/0062961-200221144449610" />
+
+
+
+    <link rel="alternate" hreflang="uk" href="https://www.gbif.org/uk/occurrence/download/0062961-200221144449610" />
+
+
+
+    <link rel="alternate" hreflang="es" href="https://www.gbif.org/es/occurrence/download/0062961-200221144449610" />
+
+
+    <link rel="alternate" hreflang="x-default" href="https://www.gbif.org/occurrence/download/0062961-200221144449610" />
+
+
+    <meta property="fb:app_id" content="" />
+
+    <meta property="og:title" content="Download" />
+
+
+
+
+
+    <meta property="og:description" content="Global Biodiversity Information Facility. Free and Open Access to Biodiversity Data." />
+
+
+
+
+
+    <meta charset="UTF-8">
+
+    <!-- If IE use the latest rendering engine -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Set the page to the width of the device and set the zoom level -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4c9e45">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="msapplication-TileColor" content="#00a300">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+    <meta name="theme-color" content="#4c9e45">
+
+    <link rel="stylesheet" type="text/css" href="/css/vendor/vendor.css?v=1591176917565">
+
+    <link rel="stylesheet" type="text/css" href="/css/base/shared/style/index.css?v=1591176917565">
+
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=PT+Serif:400i" rel="stylesheet">
+
+    <!--[if !IE]> -->
+    <!-- <![endif]-->
+
+    <!--[if IE]>
+
+    <![endif]-->
+
+    <!--[if lt IE 9]>
+
+    <![endif]-->
+
+    <script>
+    function attachGoogleAnalytics() {
+        console.log('Terms accepted. Attach Google analytics');
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-42057855-4', {'siteSpeedSampleRate': 10});
+        ga('send', 'pageview');
+        window.gbifHasSentGoogleAnalyticsForThisUrl = window.location.href;
+    }
+</script>
+
+    <noscript>
+        <style>
+        body {display: block !important}
+        .no-js-enabled {display: block !important}
+        .no-js-enabled {position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(120,181,120,0.99);color:#fff;z-index:9999;text-align:center}
+        .no-js-enabled span{position:relative;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);}
+    </style>
+    </noscript>
+
+
+
+
+
+
+
+</head>
+<body class="
+
+
+"
+      ng-init="portal.urlPrefix='';BUILD_VERSION=1591176917565"
+      ng-class="{'hasDrawer': portal.getDrawer()}"
+      ng-controller="portalCtrl as portal">
+
+<div class="no-js-enabled" style="display: none"><span>We’re sorry, but GBIF doesn’t work properly without JavaScript enabled.</span></div>
+<div class="ie-splash" style="display:none"><span>Our website has detected that you are using an outdated insecure browser that will prevent you from using the site. We suggest you upgrade to a modern browser.</span></div>
+
+
+<div class="stickyNav rtl-supported"
+     ng-class="{'mobileMenu--active': nav.mobileMenuActive, 'mainMenu--firstLevelActive': nav.activeMenu, hasOffset: nav.scrollOffset > 0}"
+     ng-controller="navCtrl as nav">
+    <div class="stickyNav__container">
+        <a ng-href="/" id="block-logo" class="gbif-logo">
+            <svg viewBox="90 239.1 539.7 523.9" xmlns="http://www.w3.org/2000/svg">
+                <path class="gbif-logo-svg"
+                      d="M325.5,495.4c0-89.7,43.8-167.4,174.2-167.4C499.6,417.9,440.5,495.4,325.5,495.4"/>
+                <path class="gbif-logo-svg" d="M534.3,731c24.4,0,43.2-3.5,62.4-10.5c0-71-42.4-121.8-117.2-158.4c-57.2-28.7-127.7-43.6-192.1-43.6
+	c28.2-84.6,7.6-189.7-19.7-247.4c-30.3,60.4-49.2,164-20.1,248.3c-57.1,4.2-102.4,29.1-121.6,61.9c-1.4,2.5-4.4,7.8-2.6,8.8
+	c1.4,0.7,3.6-1.5,4.9-2.7c20.6-19.1,47.9-28.4,74.2-28.4c60.7,0,103.4,50.3,133.7,80.5C401.3,704.3,464.8,731.2,534.3,731"/>
+            </svg>
+        </a>
+
+        <div class="stickyNav__actions">
+            <a href="" class="stickyNav__actions__action gb-icon-heartbeat stickyNav__actions__action--notification ng-cloak" ng-click="nav.toggleNotifications()" ng-if="nav.notifications.count > 0" ng-class="{'is-info': nav.notifications.severity == 'INFO'}"></a>
+            <a href="" class="stickyNav__actions__action gb-icon-heartbeat" ng-href="{{ portal.urlPrefix }}/health" ng-if="!nav.notifications || nav.notifications.count == 0"></a>
+
+            <a href="" class="stickyNav__actions__action gb-icon-translate" ng-click="nav.toggleLanguage()"></a>
+
+            <a href="" class="stickyNav__actions__action gb-icon-search2" ng-click="nav.toggleSearch()"></a>
+            <a href="" class="stickyNav__actions__action gb-icon-bubble" ng-click="nav.toggleFeedback()" ng-class="{'stickyNav__actions__action--notification': nav.commentCount}"></a>
+            <a href="" class="stickyNav__actions__menu gb-icon-menu" ng-click="nav.toggleMobileMenu()" ng-class="{'gb-icon-close_L': nav.mobileMenuActive, 'gb-icon-menu': !nav.mobileMenuActive}"></a>
+            <a class="stickyNav__actions__login" href="" ng-click="nav.toggleUserMenu()">
+                <span class="service-menu__button hoverBox">
+                    <div class="inline-block">
+                        <span class="ng-cloak">{{nav.loginGreeting}}</span>
+                    </div>
+                </span>
+            </a>
+        </div>
+        <div class="mainNavigation" ng-class="{'isActive': nav.mobileMenuActive}">
+            <nav class="mainMenu" click-outside="nav.toggleMenu()">
+                <ul>
+
+
+                    <li class="mainMenu--hasChild mainMenu__firstLevel "
+                        ng-class="{'mainMenu--childActive': nav.activeMenu == 'Get data'}"
+                    >
+                        <a class=" mainMenu__parentItem" href=""
+                           ng-click="nav.toggleMenu('Get data')" dir="auto">Get data</a>
+                        <ul class="mainMenu__childGroup">
+                            <li class="mainMenu__columns">
+                                <nav><h2></h2>
+                                    <ul class="mainMenu__childItem">
+
+                                        <li >
+                                            <a dir="auto" href="/occurrence/search">Occurrences
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a dir="auto" href="/species/search">Species
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a dir="auto" href="/dataset/search">Datasets
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a dir="auto" href="/analytics/global">Trends
+
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                            </li>
+                        </ul>
+                    </li>
+
+
+
+
+
+                    <li class="mainMenu--hasChild mainMenu__firstLevel mainMenu--hasGrandChild >"
+                        ng-class="{'mainMenu--childActive': nav.activeMenu == 'How-to'}"
+                    >
+                        <a class=" mainMenu__parentItem" href=""
+                           ng-click="nav.toggleMenu('How-to')" dir="auto">How-to</a>
+                        <ul class="mainMenu__childGroup">
+
+                            <li class="mainMenu__columns" >
+                                <nav><h2 dir="auto">Share data</h2>
+                                    <ul class="mainMenu__childItem">
+
+                                        <li >
+                                            <a href="/publishing-data" dir="auto">Quick-start guide
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/dataset-classes" dir="auto">Dataset classes
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/article/4qfLORxmM8kYOIwSYSMc2M/data-hosting" dir="auto">Data hosting
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/standards" dir="auto">Standards
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/become-a-publisher" dir="auto">Become a publisher
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/data-quality-requirements" dir="auto">Data quality
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/data-papers" dir="auto">Data papers
+
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                            </li>
+
+                            <li class="mainMenu__columns" >
+                                <nav><h2 dir="auto">Use data</h2>
+                                    <ul class="mainMenu__childItem">
+
+                                        <li >
+                                            <a href="/resource/search?contentType=dataUse" dir="auto">Featured data use
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/citation-guidelines" dir="auto">Citation guidelines
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/resource/search?contentType=literature" dir="auto">GBIF citations
+
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
+
+
+                    <li class="mainMenu--hasChild mainMenu__firstLevel mainMenu--hasGrandChild >"
+                        ng-class="{'mainMenu--childActive': nav.activeMenu == 'Tools'}"
+                    >
+                        <a class=" mainMenu__parentItem" href=""
+                           ng-click="nav.toggleMenu('Tools')" dir="auto">Tools</a>
+                        <ul class="mainMenu__childGroup">
+
+                            <li class="mainMenu__columns" >
+                                <nav><h2 dir="auto">Publishers</h2>
+                                    <ul class="mainMenu__childItem">
+
+                                        <li >
+                                            <a href="/ipt" dir="auto">IPT
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/tools/data-validator" dir="auto">Data validator
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/suggest-dataset" dir="auto">Suggest a dataset
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/grscicoll" dir="auto">Scientific Collections
+
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                            </li>
+
+                            <li class="mainMenu__columns" >
+                                <nav><h2 dir="auto">Users</h2>
+                                    <ul class="mainMenu__childItem">
+
+                                        <li >
+                                            <a href="/developer/summary" dir="auto">GBIF API
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/data-processing" dir="auto">Data processing
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/tool/81747" dir="auto">rgbif
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/tool/81279" dir="auto">MAXENT
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/resource/search?contentType=tool" dir="auto">Tools catalogue
+
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                            </li>
+
+                            <li class="mainMenu__columns" >
+                                <nav><h2 dir="auto">GBIF labs</h2>
+                                    <ul class="mainMenu__childItem">
+
+                                        <li >
+                                            <a href="/tools/species-lookup" dir="auto">Species matching
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/tools/name-parser" dir="auto">Name parser
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/tools/sequence-id" dir="auto">Sequence ID
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/tools/observation-trends" dir="auto">Relative observation trends
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="https://data-blog.gbif.org/" dir="auto">GBIF data blog
+
+                                                <span class="gb-icon-link"></span>
+
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
+
+
+                    <li class="mainMenu--hasChild mainMenu__firstLevel mainMenu--hasGrandChild >"
+                        ng-class="{'mainMenu--childActive': nav.activeMenu == 'Community'}"
+                    >
+                        <a class=" mainMenu__parentItem" href=""
+                           ng-click="nav.toggleMenu('Community')" dir="auto">Community</a>
+                        <ul class="mainMenu__childGroup">
+
+                            <li class="mainMenu__columns" >
+                                <nav><h2 dir="auto">Network</h2>
+                                    <ul class="mainMenu__childItem">
+
+                                        <li >
+                                            <a href="/the-gbif-network" dir="auto">Participants
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/article/T5SQrMJAU1OdFtHTNOWgN/" dir="auto">Nodes
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/publisher/search" dir="auto">Publishers
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/contact-us/directory?group=nsg" dir="auto">Network contacts
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="https://discourse.gbif.org/" dir="auto">Community forum
+
+                                                <span class="gb-icon-link"></span>
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="https://www.allianceforbio.org" dir="auto">alliance for biodiversity knowledge
+
+                                                <span class="gb-icon-link"></span>
+
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                            </li>
+
+                            <li class="mainMenu__columns" >
+                                <nav><h2 dir="auto">Volunteers</h2>
+                                    <ul class="mainMenu__childItem">
+
+                                        <li >
+                                            <a href="/article/5SExsCfj7UaUkMCsuc6Oec" dir="auto">Mentors
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/article/6dNF1d0tgcI4cmqeoS2sQ4" dir="auto">Ambassadors
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/translators" dir="auto">Translators
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/citizen-science" dir="auto">Citizen scientists
+
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                            </li>
+
+                            <li class="mainMenu__columns" >
+                                <nav><h2 dir="auto">Activities</h2>
+                                    <ul class="mainMenu__childItem">
+
+                                        <li >
+                                            <a href="/article/7sL3m3zzN5MUuaOuEhtLuZ/" dir="auto">Capacity enhancement
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/article/2IE7tH4dlcik1BnmniIPAc/" dir="auto">Training and e-Learning
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/resource/search?contentType=programme" dir="auto">Programmes &amp; projects
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="http://living-atlases.gbif.org/" dir="auto">Living Atlases
+
+                                                <span class="gb-icon-link"></span>
+
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
+
+
+                    <li class="mainMenu--hasChild mainMenu__firstLevel mainMenu--hasGrandChild >"
+                        ng-class="{'mainMenu--childActive': nav.activeMenu == 'About'}"
+                    >
+                        <a class=" mainMenu__parentItem" href=""
+                           ng-click="nav.toggleMenu('About')" dir="auto">About</a>
+                        <ul class="mainMenu__childGroup">
+
+                            <li class="mainMenu__columns" >
+                                <nav><h2 dir="auto">Inside GBIF</h2>
+                                    <ul class="mainMenu__childItem">
+
+                                        <li >
+                                            <a href="/what-is-gbif" dir="auto">What is GBIF?
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/become-member" dir="auto">Become a member
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/governance" dir="auto">Governance
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/funders" dir="auto">Funders
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/partners" dir="auto">Partnerships
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/strategic-plan" dir="auto">Implementation plan
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/contact-us" dir="auto">Contacts
+
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                            </li>
+
+                            <li class="mainMenu__columns" >
+                                <nav><h2 dir="auto">News &amp; outreach</h2>
+                                    <ul class="mainMenu__childItem">
+
+                                        <li >
+                                            <a href="/resource/search?contentType=news" dir="auto">News
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/newsletters" dir="auto">Newsletters and lists
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/resource/search?contentType=event" dir="auto">Events
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/article/1G82GL7jw08kS0g6k6MuSa" dir="auto">Ebbe Nielsen Challenge
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/article/44SftFORi0A6mwGK4sgAKW/" dir="auto">Young Researchers Award
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="/science-review" dir="auto">Science Review
+
+                                            </a>
+                                        </li>
+
+                                        <li >
+                                            <a href="https://discourse.gbif.org/" dir="auto">Community forum
+
+                                                <span class="gb-icon-link"></span>
+
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
+                    <li class="mainMenu__firstLevel hide-on-laptop">
+                        <a class="mainMenu__parentItem" dir="auto" href="/user/profile"><span translate="profile.userProfile">User profile</span> <span ng-bind="nav.loginGreeting" class="mainMenu__greenText m-l-1"></span></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+</div>
+
+
+
+<div id="site-wrapper" class="site-wrapper">
+
+
+    <div feedback></div>
+
+
+    <div notifications></div>
+
+
+    <div user-menu></div>
+
+
+    <div menu-search></div>
+
+    <div language-menu></div>
+
+
+    <main id="main" class="main" role="main" ui-view>
+        <div class="site-content">
+
+
+            <div class="site-content__page">
+                <div>
+
+                    <script>
+        var gb = gb || {};
+        gb.downloadKey = {
+            key: '0062961-200221144449610',
+            doi: '10.15468/dl.4n9w6m',
+            status: 'SUCCEEDED'
+        };
+    </script>
+                    <article class="wrapper-horizontal-stripes downloadKey"
+                             ng-controller="occurrenceDownloadKeyCtrl as downloadKey"
+                             ng-init="downloadKey.setInitials(0,500, '0062961-200221144449610')">
+                        <div class="horizontal-stripe article-header  article-header--tabbed white-background">
+                            <div class="container--desktop">
+                                <div class="row">
+                                    <header class="col-xs-12 text-center">
+                                        <nav class="article-header__category article-header__category--deep">
+                                            <span class="article-header__category__upper">Download</span>
+                                            <span class="article-header__category__lower">14 May 2020</span>
+                                        </nav>
+
+                                        <h1 class="text-center ng-cloak" dir="auto">
+
+
+                                            <span translate="downloadKey.nOccurrencesDownloaded" translate-values="{NUMBER: 39 , NUMBER_FORMATTED: '{{ 39 | localNumber }}' } "> </span>
+
+
+                                        </h1>
+
+                                        <div class="m-t-1" dir="ltr">
+
+                                            <a href="https://doi.org/10.15468/dl.4n9w6m" class="doi"><span>DOI</span><span>10.15468/dl.4n9w6m</span></a>
+
+                                        </div>
+                                    </header>
+                                </div>
+                            </div>
+
+                            <div class="container--normal">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="tabs__wrapper">
+                                            <div class="tabs__actions">
+                                                <ul>
+                                                    <li class="tab tab-right">
+
+                                                <span>
+                                                    <a href="http://api.gbif.org/v1/occurrence/download/request/0062961-200221144449610.zip" class="gb-button--brand">Download</a>
+                                                </span>
+
+                                                    </li>
+
+
+                                                </ul>
+                                            </div>
+                                            <nav class="tabs tabs--noBorder"></nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="horizontal-stripe light-background">
+                            <div class="container--normal">
+                                <section>
+                                    <h3 class="card-header">
+                                        <span translate="downloadKey.filterApplied" translate-values="{DATE: '14 May 2020' }">&nbsp;</span>
+
+                                        <a href="/occurrence/search?taxon_key=4167110"
+                                           class="pull-right inherit discreet p-r-1">Rerun query</a>
+
+                                    </h3>
+                                    <div class="card  card--spaced">
+
+                                        <div class="card__stripe rtl-supported">
+
+
+                                            <div class="card__stripe">
+                                                <div class="card__content">
+                                                    <dl class="inline">
+                                                        <div>
+                                                            <dt>Citation</dt>
+                                                            <dd dir="ltr">
+                                                                GBIF.org (14 May 2020) GBIF Occurrence Download  https://doi.org/10.15468/dl.4n9w6m
+                                                            </dd>
+                                                        </div>
+
+                                                        <div>
+                                                            <dt>License</dt>
+                                                            <dd>
+                                                                <license link="http://creativecommons.org/licenses/by-nc/4.0/legalcode"></license>
+                                                            </dd>
+                                                        </div>
+
+
+                                                        <div>
+                                                            <dt>File</dt>
+                                                            <dd>
+                                                                <span><span dir="ltr">33 KB</span> Darwin Core Archive</span>
+                                                            </dd>
+                                                        </div>
+                                                        <div>
+                                                            <dt>Involved datasets</dt>
+                                                            <dd class="ng-cloak">
+                                                                <a href="#datasets">{{ 8 | localNumber}}</a>
+                                                            </dd>
+                                                        </div>
+
+                                                    </dl>
+                                                    <div>
+                                                        <div dir="auto" ng-bind-html="'downloadKey.readDatauseAndTerms' | translate | md2html"></div>
+                                                        <div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="card__stripe card__stripe--light ng-cloak" ng-if="downloadKey.isUsersDownload">
+                                                <div class="card__content discreet">
+                                                    <div class="card">
+                                                        <div class="card__stripe">
+                                                            <div class="card__content">
+                                                                <div ng-bind-html="'downloadKey.downloadDeletionWarning' | translate:{DATE: (downloadKey.download.eraseAfter | momentFormat:'LL')} | md2html"></div>
+                                                                <div ng-bind-html="'downloadKey.aboutDeletionPolicy' | translate | md2html"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card__stripe card__stripe--actions ng-cloak" ng-if="downloadKey.download">
+                                                            <a class="gb-button--flat text-uppercase" ng-href="mailto:communication@gbif.org?subject=Usage of download {{ downloadKey.key }}&body=Download {{ portal.env.domain }}/occurrence/download/{{ downloadKey.key }} has been used and cited in: " translate="downloadKey.tellUs"></a>
+
+                                                            <a href="" ng-click="downloadKey.postponeDeletion()" ng-if="downloadKey.willBeDeletedSoon" class="gb-button--flat text-uppercase" translate="downloadKey.postpone"></a>
+                                                            <a href="" ng-click="downloadKey.deleteDownload()" ng-if="!downloadKey.readyForDeletion" class="gb-button--flat text-error text-uppercase" translate="downloadKey.deleteDownload"></a>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="card__stripe--light">
+                                            <div class="card__content predicateContainer">
+
+
+                                                <div class="toggle small">
+                                                    <a href="" class="inherit discreet" ng-if="downloadKey.HUMAN"
+                                                       ng-click="downloadKey.HUMAN = false">API</a>
+                                                    <a href="" class="inherit discreet ng-cloak" ng-if="!downloadKey.HUMAN"
+                                                       ng-click="downloadKey.HUMAN = true">Human</a>
+                                                </div>
+
+
+                                                <div class="predicates  isSimplePredicate "
+                                                     ng-show="downloadKey.HUMAN">
+
+
+                                                    <div class="leaf">
+                                                        <span dir="auto" class="node">Scientific name</span>
+                                                        <span dir="auto" class="node-value">Rhododendron acuminatum Hook.f.</span>
+                                                    </div>
+
+
+                                                </div>
+
+                                                <div ng-show="!downloadKey.HUMAN" class="ng-cloak">
+                                                    <div>
+                                                        To repeat the download on todays data using the API you can use below query.
+                                                        <a href="/developer/occurrence#predicates">Read more</a></div>
+                                                    <pre>
+                                            <code>
+{
+  "type": "equals",
+  "key": "TAXON_KEY",
+  "value": "4167110"
+}
+                                            </code>
+                                        </pre>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+
+                                <section class="m-t-2 rtl-bootstrap">
+                                    <span class="relative-anchor-offset"><a id="datasets"></a></span>
+                                    <h3 class="card-header"><span translate="downloadKey.nConstituentDatasets" translate-values="{NUMBER: 8, NUMBER_FORMATTED: (8 | localNumber) }"></span></h3>
+                                    <div class="card">
+                                        <div class="card__stripe">
+                                            <div class="stripeList">
+                                                <ul>
+
+                                                    <li>
+                                                        <a href="/dataset/c1aaedc7-b5ba-4baf-9112-ec70637e242e">
+                                                            <div dir="ltr" class="pull-right">
+                                                                <span class="numberBadge ">1</span>
+                                                            </div>
+                                                            <div class="title"  dir="auto">
+                                                                Sammlung Clemens Borneo Herbarium Hamburgense HBG
+                                                            </div>
+                                                            <span dir="ltr" class="meta meta--hoverOnly">10.15468/qk3k54</span>
+                                                            <span class="meta--right meta--hoverOnly" tx="downloadKey.nRecordsAtTime" tx-nr="1"></span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="/dataset/821cc27a-e3bb-4bc5-ac34-89ada245069d">
+                                                            <div dir="ltr" class="pull-right">
+                                                                <span class="numberBadge ">1</span>
+                                                            </div>
+                                                            <div class="title"  dir="auto">
+                                                                NMNH Extant Specimen Records
+                                                            </div>
+                                                            <span dir="ltr" class="meta meta--hoverOnly">10.15468/hnhrg3</span>
+                                                            <span class="meta--right meta--hoverOnly" tx="downloadKey.nRecordsAtTime" tx-nr="1"></span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="/dataset/b5cdf794-8fa4-4a85-8b26-755d087bf531">
+                                                            <div dir="ltr" class="pull-right">
+                                                                <span class="numberBadge ">2</span>
+                                                            </div>
+                                                            <div class="title"  dir="auto">
+                                                                The vascular plants collection (P) at the Herbarium of the Muséum national d&#39;Histoire Naturelle (MNHN - Paris)
+                                                            </div>
+                                                            <span dir="ltr" class="meta meta--hoverOnly">10.15468/nc6rxy</span>
+                                                            <span class="meta--right meta--hoverOnly" tx="downloadKey.nRecordsAtTime" tx-nr="2"></span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="/dataset/bf2a4bf0-5f31-11de-b67e-b8a03c50a862">
+                                                            <div dir="ltr" class="pull-right">
+                                                                <span class="numberBadge ">16</span>
+                                                            </div>
+                                                            <div class="title"  dir="auto">
+                                                                Royal Botanic Garden Edinburgh Herbarium (E)
+                                                            </div>
+                                                            <span dir="ltr" class="meta meta--hoverOnly">10.15468/ypoair</span>
+                                                            <span class="meta--right meta--hoverOnly" tx="downloadKey.nRecordsAtTime" tx-nr="16"></span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="/dataset/15f819bd-6612-4447-854b-14d12ee1022d">
+                                                            <div dir="ltr" class="pull-right">
+                                                                <span class="numberBadge ">12</span>
+                                                            </div>
+                                                            <div class="title"  dir="auto">
+                                                                Naturalis Biodiversity Center (NL) - Botany
+                                                            </div>
+                                                            <span dir="ltr" class="meta meta--hoverOnly">10.15468/ib5ypt</span>
+                                                            <span class="meta--right meta--hoverOnly" tx="downloadKey.nRecordsAtTime" tx-nr="12"></span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="/dataset/7adf20e0-c955-11de-95c0-b8a03c50a862">
+                                                            <div dir="ltr" class="pull-right">
+                                                                <span class="numberBadge ">4</span>
+                                                            </div>
+                                                            <div class="title"  dir="auto">
+                                                                Royal Botanic Garden Edinburgh Living Plant Collections (E)
+                                                            </div>
+                                                            <span dir="ltr" class="meta meta--hoverOnly">10.15468/bkzv1l</span>
+                                                            <span class="meta--right meta--hoverOnly" tx="downloadKey.nRecordsAtTime" tx-nr="4"></span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="/dataset/cd6e21c8-9e8a-493a-8a76-fbf7862069e5">
+                                                            <div dir="ltr" class="pull-right">
+                                                                <span class="numberBadge ">2</span>
+                                                            </div>
+                                                            <div class="title"  dir="auto">
+                                                                Royal Botanic Gardens, Kew - Herbarium Specimens
+                                                            </div>
+                                                            <span dir="ltr" class="meta meta--hoverOnly">10.15468/ly60bx</span>
+                                                            <span class="meta--right meta--hoverOnly" tx="downloadKey.nRecordsAtTime" tx-nr="2"></span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="/dataset/040c5662-da76-4782-a48e-cdea1892d14c">
+                                                            <div dir="ltr" class="pull-right">
+                                                                <span class="numberBadge ">1</span>
+                                                            </div>
+                                                            <div class="title"  dir="auto">
+                                                                International Barcode of Life project (iBOL)
+                                                            </div>
+                                                            <span dir="ltr" class="meta meta--hoverOnly">10.15468/inygc6</span>
+                                                            <span class="meta--right meta--hoverOnly" tx="downloadKey.nRecordsAtTime" tx-nr="1"></span>
+                                                        </a>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </section>
+
+
+
+                            </div>
+                        </div>
+                    </article>
+
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <footer class="site-footer wrapper-horizontal-stripes">
+        <div class="horizontal-stripe light-background site-footer__upper">
+            <div class="container--normal">
+                <nav class="site-footer__menu">
+                    <div>
+                        <a href="/what-is-gbif">What is GBIF?</a>
+                        <a href="/developer/summary">API</a>
+                        <a href="/faq">FAQ</a>
+                        <a href="/newsletters">Newsletter</a>
+                        <a href="/terms/privacy-policy">Privacy</a>
+                        <a href="/terms">Terms and agreements</a>
+                        <a href="/citation-guidelines">Citation</a>
+                        <a href="/code-of-conduct">Code of Conduct</a>
+                        <a href="/acknowledgements">Acknowledgements</a>
+                    </div>
+                    <div>
+                        <a href="/contact-us">Contact</a>
+                        <span>
+                            <span href=""><span>GBIF Secretariat </span>Universitetsparken 15</span>
+                            <span href="">DK-2100 Copenhagen Ø</span>
+                            <span href="">Denmark</span>
+                        </span>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <div class="horizontal-stripe site-footer__lower">
+            <div class="container--normal text-center">
+                <img src="/img/full_logo_white.svg">
+                <div class="site-footer__social">
+                    <a href="https://www.facebook.com/gbifnews" class="btn btn-lg btn-circle"><i class="gb-icon-facebook"></i></a>
+                    <a href="https://twitter.com/GBIF" class="btn btn-lg btn-circle"><i class="gb-icon-twitter"></i></a>
+                    <a href="https://www.linkedin.com/company/global-biodiversity-information-facility" class="btn btn-lg btn-circle"><i class="gb-icon-linkedin"></i></a>
+                    <a href="https://www.youtube.com/user/GBIFvideo" class="btn btn-lg btn-circle"><i class="gb-icon-youtube"></i></a>
+                    <a href="https://vimeo.com/gbif" class="btn btn-lg btn-circle"><i class="gb-icon-vimeo"></i></a>
+                    <a href="https://www.instagram.com/gbifs/" class="btn btn-lg btn-circle"><i class="gb-icon-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+    <div terms></div>
+    <div gdpr></div>
+</div>
+<div gb-help-overlay></div>
+
+<script type="text/ng-template" id="dropdown.html">
+    <a href="" dir="auto">
+        <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+    </a>
+</script>
+
+<script>
+    window.gb = window.gb || {};
+    window.gb.locale = 'en';
+
+    window.gb.urlPrefix = '';
+    window.gb.buildVersion = '1591176917565';
+
+</script>
+
+<script src="/js/environment.js?v=1591176917565"></script>
+<script src="/js/base/vendor.js?v=1591176917565"></script>
+<script src="/js/base/custom.js?v=1591176917565"></script>
+
+
+
+</body>
+</html>
