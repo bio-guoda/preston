@@ -1,11 +1,14 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.store.TestUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -19,15 +22,53 @@ import static org.hamcrest.core.Is.is;
 public class RegistryReaderDOITest {
 
     @Test
-    public void onGBIFDoiNoPage() {
+    public void onGBIFDoiWithLandingPage() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderDOI registryReader = new RegistryReaderDOI(TestUtil.getTestBlobStore(), nodes::add);
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                if (!StringUtils.equals(key.getIRIString(),
+                        toIRI("some://hash").getIRIString())) {
+                    throw new IOException("kaboom!");
+                }
+                return getClass().getResourceAsStream("gbif-download-page.html");
+            }
+        };
+
+        RegistryReaderDOI registryReader = new RegistryReaderDOI(blobStore, nodes::add);
         registryReader.on(toStatement(toIRI("https://doi.org/10.15468/dl.4n9w6m"), HAS_VERSION, toIRI("some://hash")));
 
-        assertThat(new HashSet<>(nodes).size(), is(1));
-        assertThat(nodes.get(0).toString(), is("https://api.gbif.org/v1/dataset"));
+        assertThat(new HashSet<>(nodes).size(), is(2));
+        assertThat(nodes.get(1).toString(), startsWith("<https://api.gbif.org/v1/occurrence/download/0062961-200221144449610> <http://purl.org/pav/hasVersion> "));
 
-        Assert.assertThat(nodes.size(), is(6));
+    }
+
+    @Test
+    public void onNonGBIFDoi() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = key -> {
+            throw new IOException("kaboom!");
+        };
+
+        RegistryReaderDOI registryReader = new RegistryReaderDOI(blobStore, nodes::add);
+        registryReader.on(toStatement(toIRI("https://doi.org/10.1234/dl.4n9w6m"), HAS_VERSION, toIRI("some://hash")));
+
+        assertThat(new HashSet<>(nodes).size(), is(0));
+
+    }
+
+    @Test
+    public void onGBIFDoiNoPage() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = key -> {
+            throw new IOException("kaboom!");
+        };
+
+        RegistryReaderDOI registryReader = new RegistryReaderDOI(blobStore, nodes::add);
+        registryReader.on(toStatement(toIRI("https://doi.org/10.15468/dl.4n9w6m"), HAS_VERSION, toIRI("some://hash")));
+
+        assertThat(new HashSet<>(nodes).size(), is(0));
+
     }
 
     @Test
