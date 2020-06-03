@@ -1,10 +1,8 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
