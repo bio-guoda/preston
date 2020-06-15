@@ -10,16 +10,16 @@ import java.io.InputStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class HashGeneratorTLSHTest {
+public class HashGeneratorTLSHVanillaTest {
 
     @Test
     public void calculateAndDiffHashSimilarStreaming() throws IOException {
-        assertHashSimilar(new HashGeneratorTLSH());
+        assertHashSimilar(new HashGeneratorTLSHVanilla());
     }
 
     @Test
     public void calculateAndDiffHashNotSimilarStreaming() throws IOException {
-        HashGenerator<String> hasher = new HashGeneratorTLSH();
+        HashGenerator<String> hasher = new HashGeneratorTLSHVanilla();
         assertNotSimilarHashes(hasher);
     }
 
