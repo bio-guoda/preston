@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.cmd.ActivityContext;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.StatementEmitter;
@@ -91,7 +92,7 @@ public class Archiver extends VersionProcessor {
         emitter.emit(toStatement(
                 downloadActivity,
                 downloadActivity,
-                toIRI("http://www.w3.org/ns/prov#used"),
+                RefNodeConstants.USED,
                 versionSource));
         emitter.emit(toStatement(downloadActivity, versionSource, HAS_VERSION, newVersion));
     }

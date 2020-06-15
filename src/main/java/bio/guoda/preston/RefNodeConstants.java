@@ -27,6 +27,7 @@ public class RefNodeConstants {
 
     public static final IRI GENERATED_AT_TIME = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#generatedAtTime"));
     public static final IRI WAS_GENERATED_BY = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasGeneratedBy"));
+    public static final IRI WAS_DERIVED_FROM = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasDerivedFrom"));
 
     public static final UUID BIODIVERSITY_DATASET_GRAPH_UUID = UUID.fromString("0659a54f-b713-4f86-a917-5be166a14110");
     public static final IRI BIODIVERSITY_DATASET_GRAPH = toIRI(BIODIVERSITY_DATASET_GRAPH_UUID.toString());
@@ -46,4 +47,5 @@ public class RefNodeConstants {
     public static final IRI WAS_INFORMED_BY = toIRI("http://www.w3.org/ns/prov#wasInformedBy");
     public static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
     public static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
+    public static final IRI USED = toIRI("http://www.w3.org/ns/prov#used");
 }

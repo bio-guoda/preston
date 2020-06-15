@@ -14,7 +14,7 @@ import static org.hamcrest.core.Is.is;
 
 public class HashGeneratorTLSHTruncatedTest {
 
-    private static final String DWCA = "/bio/guoda/preston/dwca-20180905.zip";
+    public static final String DWCA = "/bio/guoda/preston/dwca-20180905.zip";
     private static final String DWCA_REPACKAGED = "/bio/guoda/preston/dwca-20180905-repackaged.zip";
 
     @Test(expected = IOException.class)
