@@ -130,7 +130,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                 archivingLogger);
     }
 
-    private static Stream<StatementListener> createProcessors(BlobStore blobStore, StatementListener queueAsListener) {
+    protected Stream<StatementListener> createProcessors(BlobStore blobStore, StatementListener queueAsListener) {
         return Stream.of(
                 new RegistryReaderIDigBio(blobStore, queueAsListener),
                 new RegistryReaderGBIF(blobStore, queueAsListener),

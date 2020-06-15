@@ -58,6 +58,7 @@ public class CmdLine {
                 .addCommand("clone", new CmdClone(), "pull")
                 .addCommand("update", new CmdUpdate(), "track")
                 .addCommand("process", new CmdProcess(), "handle")
+                .addCommand("tika", new CmdTika(), "tika-tlsh")
                 .addCommand("history", new CmdHistory())
                 .addCommand("version", new CmdVersion())
                 .addCommand("test", new CmdVerify(), "verify", "check", "validate")
