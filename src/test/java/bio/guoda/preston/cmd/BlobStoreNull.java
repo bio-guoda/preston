@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BlobStoreNull implements BlobStore {
 
     public final AtomicInteger putAttemptCount = new AtomicInteger(0);
+    public final AtomicInteger getAttemptCount = new AtomicInteger(0);
     public ByteArrayOutputStream mostRecentBlob;
 
 
@@ -25,6 +26,7 @@ public class BlobStoreNull implements BlobStore {
 
     @Override
     public InputStream get(IRI key) throws IOException {
+        getAttemptCount.incrementAndGet();
         return null;
     }
 }
