@@ -41,7 +41,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     public static final String RECORDSETS_URI = "https://search.idigbio.org/v2/search/recordsets";
     public static final IRI IDIGBIO_RECORDSETS_REGISTRY = toIRI(URI.create(RECORDSETS_URI + "?limit=10000"));
 
-    public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, StatementListener listener) {
+    public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, StatementsListener listener) {
         super(blobStore, listener);
     }
 

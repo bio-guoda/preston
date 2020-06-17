@@ -12,7 +12,7 @@ public abstract class ProcessorReadOnly extends StatementProcessor implements Ke
 
     private final BlobStoreReadOnly blobStoreReadOnly;
 
-    public ProcessorReadOnly(BlobStoreReadOnly blobStoreReadOnly, StatementListener... listeners) {
+    public ProcessorReadOnly(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         this(blobStoreReadOnly, new ProcessorState() {
 
             @Override
@@ -21,7 +21,7 @@ public abstract class ProcessorReadOnly extends StatementProcessor implements Ke
             }
         }, listeners);
     }
-    public ProcessorReadOnly(BlobStoreReadOnly blobStoreReadOnly, ProcessorState state, StatementListener... listeners) {
+    public ProcessorReadOnly(BlobStoreReadOnly blobStoreReadOnly, ProcessorState state, StatementsListener... listeners) {
         super(state, listeners);
         Objects.requireNonNull(blobStoreReadOnly);
         this.blobStoreReadOnly = blobStoreReadOnly;

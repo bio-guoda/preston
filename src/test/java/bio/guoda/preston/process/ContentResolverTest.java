@@ -51,7 +51,7 @@ public class ContentResolverTest {
         this.blobStore = new BlobStoreAppendOnly(persistence);
     }
 
-    private Archiver createStatementStore(StatementListener... listeners) {
+    private Archiver createStatementStore(StatementsListener... listeners) {
         return new Archiver(new DereferencerContentAddressed(Resources::asInputStream, blobStore), TestUtil.getTestCrawlContext(), listeners);
     }
 
@@ -65,7 +65,12 @@ public class ContentResolverTest {
     public void cacheContent() throws IOException, URISyntaxException {
         ArrayList<Quad> refNodes = new ArrayList<>();
 
-        StatementListener listener = createStatementStore(refNodes::add);
+        StatementsListener listener = createStatementStore(new StatementsListenerAdapter() {
+            @Override
+            public void on(Quad statement) {
+                refNodes.add(statement);
+            }
+        });
 
 
         URI testURI = getClass().getResource("test.txt").toURI();

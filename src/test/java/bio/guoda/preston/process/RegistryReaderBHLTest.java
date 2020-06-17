@@ -27,7 +27,7 @@ public class RegistryReaderBHLTest {
     @Test
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderBHL registryReader = new RegistryReaderBHL(TestUtil.getTestBlobStore(), nodes::add);
+        RegistryReaderBHL registryReader = new RegistryReaderBHL(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
         registryReader.on(toStatement(Seeds.BHL, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         Assert.assertThat(nodes.size(), is(6));
         assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://www.biodiversitylibrary.org/data/item.txt"));
@@ -36,7 +36,7 @@ public class RegistryReaderBHLTest {
     @Test
     public void onEmptyPage() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderBHL registryReader = new RegistryReaderBHL(TestUtil.getTestBlobStore(), nodes::add);
+        RegistryReaderBHL registryReader = new RegistryReaderBHL(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
 
         registryReader.on(toStatement(toIRI("https://api.gbif.org/v1/dataset"),
                 HAS_VERSION,
@@ -47,7 +47,7 @@ public class RegistryReaderBHLTest {
     @Test
     public void onNotSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderBHL registryReader = new RegistryReaderBHL(TestUtil.getTestBlobStore(), nodes::add);
+        RegistryReaderBHL registryReader = new RegistryReaderBHL(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
         RDFTerm bla = toLiteral("bla");
         registryReader.on(toStatement(Seeds.BHL, toIRI("http://example.org"), bla));
         assertThat(nodes.size(), is(0));
@@ -62,7 +62,7 @@ public class RegistryReaderBHLTest {
             }
         };
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderBHL registryReader = new RegistryReaderBHL(blobStore, nodes::add);
+        RegistryReaderBHL registryReader = new RegistryReaderBHL(blobStore, TestUtil.testListener(nodes));
 
 
         Quad firstPage = toStatement(toIRI("https://www.biodiversitylibrary.org/data/item.txt"), HAS_VERSION, createTestNode());

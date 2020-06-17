@@ -6,21 +6,21 @@ import org.apache.commons.rdf.api.Quad;
 
 public abstract class StatementProcessor extends StatementsListenerEmitterAdapter implements StatementsListener, StatementsEmitter {
 
-    private final StatementListener[] listeners;
+    private final StatementsListener[] listeners;
     private final ProcessorState state;
 
-    public StatementProcessor(StatementListener... listeners) {
+    public StatementProcessor(StatementsListener... listeners) {
         this(() -> true, listeners);
     }
 
-    public StatementProcessor(ProcessorState state, StatementListener... listeners) {
+    public StatementProcessor(ProcessorState state, StatementsListener... listeners) {
         this.listeners = listeners;
         this.state = state;
     }
 
     @Override
     public void emit(Quad statement) {
-        for (StatementListener listener : listeners) {
+        for (StatementsListener listener : listeners) {
             listener.on(statement);
         }
     }

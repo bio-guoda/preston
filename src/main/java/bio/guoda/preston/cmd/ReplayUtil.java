@@ -1,7 +1,6 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.BlobStoreReadOnly;
-import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.process.VersionedRDFChainEmitter;
@@ -69,10 +68,10 @@ public final class ReplayUtil {
         VersionedRDFChainEmitter provenanceLogEmitter = new VersionedRDFChainEmitter(
                 provenanceLogStore,
                 ctx.getState(),
-                statementListeners.toArray(new StatementListener[0])
+                statementListeners.toArray(new StatementsListener[0])
         );
 
-        StatementListener offlineArchive = new ArchiverReadOnly(
+        StatementsListener offlineArchive = new ArchiverReadOnly(
                 provenanceLogIndex,
                 provenanceLogEmitter);
 

@@ -2,7 +2,7 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.cmd.ActivityContext;
 import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNode;
@@ -30,7 +30,6 @@ import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
@@ -51,7 +50,7 @@ public class ArchiverTest {
         };
 
         final StatementStoreImpl versionStore = new StatementStoreImpl(TestUtil.getTestPersistence());
-        StatementListener versionLogger = createVersionLogger(versionStore);
+        StatementsListener versionLogger = createVersionLogger(versionStore);
 
         Archiver relationStore = new Archiver(
                 dereferencer,
@@ -67,7 +66,7 @@ public class ArchiverTest {
         assertTrue(isBlankOrSkolemizedBlank(contentHash));
     }
 
-    private StatementListener createVersionLogger(final StatementStore versionStore) {
+    private StatementsListener createVersionLogger(final StatementStore versionStore) {
         return new StatementsListenerAdapter() {
             @Override
             public void on(Quad statement) {
@@ -106,7 +105,7 @@ public class ArchiverTest {
         Archiver relationStore = new Archiver(
                 dereferencer,
                 TestUtil.getTestCrawlContext(),
-                nodes::add,
+                TestUtil.testListener(nodes),
                 createVersionLogger(versionStore));
 
         relationStore.on(statement);
@@ -146,7 +145,7 @@ public class ArchiverTest {
         Archiver relationStore = new Archiver(
                 dereferencer,
                 testCrawlContext,
-                nodes::add,
+                TestUtil.testListener(nodes),
                 createVersionLogger(versionStore));
 
         relationStore.on(statement);

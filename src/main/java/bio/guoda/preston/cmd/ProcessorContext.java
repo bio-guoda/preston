@@ -1,9 +1,9 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListener;
 
 public interface ProcessorContext {
     ProcessorState getState();
 
-    StatementListener[] getListeners();
+    StatementsListener[] getListeners();
 }

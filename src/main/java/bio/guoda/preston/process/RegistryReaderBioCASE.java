@@ -39,7 +39,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     // https://bms.gfbio.org/services/data-sources/
 
 
-    public RegistryReaderBioCASE(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
+    public RegistryReaderBioCASE(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
     }
 

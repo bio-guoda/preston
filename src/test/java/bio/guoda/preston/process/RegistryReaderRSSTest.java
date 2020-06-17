@@ -27,7 +27,7 @@ public class RegistryReaderRSSTest {
     @Test
     public void onNotRSSVersion() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        StatementListener registryReader = new RegistryReaderRSS(TestUtil.getTestBlobStore(), nodes::add);
+        StatementsListener registryReader = new RegistryReaderRSS(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
 
         registryReader.on(toStatement(toIRI("donaldduck"), HAS_VERSION, toIRI("somehash")));
         assertThat(nodes.size(), is(0));
@@ -43,14 +43,14 @@ public class RegistryReaderRSSTest {
                 return getClass().getResourceAsStream("vertnet-ipt-rss.xml");
             }
         };
-        StatementListener registryReader = new RegistryReaderRSS(blobStore, nodes::add);
+        StatementsListener registryReader = new RegistryReaderRSS(blobStore, TestUtil.testListener(nodes));
 
         registryReader.on(toStatement(toIRI("daisyduck"), HAS_VERSION, toIRI("somehash")));
         assertThat(nodes.size(), is(1850));
     }
 
     @Test
-    public void parseFeeds() throws IOException {
+    public void parseFeeds() {
         IRI parent = toIRI("http://example.org");
         List<Quad> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;
@@ -76,7 +76,7 @@ public class RegistryReaderRSSTest {
 
 
     @Test
-    public void parseArthopodEasyFeeds() throws IOException {
+    public void parseArthopodEasyFeeds() {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Quad> nodes = new ArrayList<>();
         StatementEmitter emitter = nodes::add;

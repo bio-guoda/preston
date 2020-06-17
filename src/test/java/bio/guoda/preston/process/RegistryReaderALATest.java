@@ -4,9 +4,8 @@ import bio.guoda.preston.Seeds;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.RDFTerm;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.rdf.api.RDFTerm;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -17,9 +16,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import static bio.guoda.preston.MimeTypes.MIME_TYPE_JSON;
-import static bio.guoda.preston.RefNodeConstants.ACTIVITY;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
-import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
 import static bio.guoda.preston.TripleMatcher.hasTriple;
 import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
@@ -35,7 +32,7 @@ public class RegistryReaderALATest {
     @Test
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), nodes::add);
+        RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
         registryReader.on(toStatement(Seeds.ALA, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         Assert.assertThat(nodes.size(), is(7));
         assertThat(getVersionSource(nodes.get(6)).getIRIString(), is("https://collections.ala.org.au/ws/dataResource?status=dataAvailable"));
@@ -44,7 +41,7 @@ public class RegistryReaderALATest {
     @Test
     public void onEmptyPage() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), nodes::add);
+        RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
 
         registryReader.on(toStatement(toIRI("https://collections.ala.org.au/ws/dataResource?status=dataAvailable&resourceType=records"),
                 HAS_VERSION,
@@ -55,7 +52,7 @@ public class RegistryReaderALATest {
     @Test
     public void onNotSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), nodes::add);
+        RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
         RDFTerm bla = toLiteral("bla");
         registryReader.on(toStatement(Seeds.GBIF, toIRI("http://example.org"), bla));
         assertThat(nodes.size(), is(0));
@@ -70,7 +67,7 @@ public class RegistryReaderALATest {
                 return getClass().getResourceAsStream("ala-dataresource-reg.json");
             }
         };
-        RegistryReaderALA registryReader = new RegistryReaderALA(blobStore, nodes::add);
+        RegistryReaderALA registryReader = new RegistryReaderALA(blobStore, TestUtil.testListener(nodes));
 
 
         Quad firstPage = toStatement(toIRI("https://collections.ala.org.au/ws/dataResource?status=dataAvailable"), HAS_VERSION, createTestNode());
@@ -95,7 +92,7 @@ public class RegistryReaderALATest {
                 return getClass().getResourceAsStream("ala-dataresource.json");
             }
         };
-        RegistryReaderALA registryReader = new RegistryReaderALA(blobStore, nodes::add);
+        RegistryReaderALA registryReader = new RegistryReaderALA(blobStore, TestUtil.testListener(nodes));
 
 
         Quad firstPage = toStatement(toIRI("https://collections.ala.org.au/ws/dataResource/dr6504"), HAS_VERSION, createTestNode());
@@ -118,7 +115,7 @@ public class RegistryReaderALATest {
                 return getClass().getResourceAsStream("ala-dataresource-dwca.json");
             }
         };
-        RegistryReaderALA registryReader = new RegistryReaderALA(blobStore, nodes::add);
+        RegistryReaderALA registryReader = new RegistryReaderALA(blobStore, TestUtil.testListener(nodes));
 
 
         Quad firstPage = toStatement(toIRI("https://collections.ala.org.au/ws/dataResource/dr6504"), HAS_VERSION, createTestNode());

@@ -1,7 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
@@ -23,7 +23,7 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
         // do not attempt to dig tiny provenance log history files out of tar.gz balls
         setSupportTarGzDiscovery(false);
 
-        StatementListener logger = StatementLogFactory.createPrintingLogger(getLogMode());
+        StatementsListener logger = StatementLogFactory.createPrintingLogger(getLogMode());
 
         StatementStore statementStore = new StatementStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
         AtomicBoolean foundHistory = new AtomicBoolean(false);

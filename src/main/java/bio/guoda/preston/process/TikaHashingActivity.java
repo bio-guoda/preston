@@ -18,7 +18,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class TikaHashingActivity extends ProcessorReadOnly {
 
-    public TikaHashingActivity(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
+    public TikaHashingActivity(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
     }
 

@@ -38,7 +38,7 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
     private final Log LOG = LogFactory.getLog(RegistryReaderOBIS.class);
     private static final IRI OBIS_REGISTRY = toIRI(OBIS_DATASET_REGISTRY_STRING);
 
-    public RegistryReaderOBIS(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
+    public RegistryReaderOBIS(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
     }
 

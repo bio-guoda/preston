@@ -51,7 +51,7 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
     private final Log LOG = LogFactory.getLog(RegistryReaderDataONE.class);
     public static final IRI DATA_ONE_REGISTRY = toIRI(DATA_ONE_REGISTRY_STRING);
 
-    public RegistryReaderDataONE(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
+    public RegistryReaderDataONE(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
     }
 

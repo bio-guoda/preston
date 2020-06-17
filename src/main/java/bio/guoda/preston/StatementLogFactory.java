@@ -1,24 +1,22 @@
 package bio.guoda.preston;
 
 import bio.guoda.preston.cmd.LogErrorHandler;
-import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.process.StatementsListenerAdapter;
-import org.apache.commons.rdf.api.Triple;
 import bio.guoda.preston.cmd.Logger;
-import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.process.StatementLoggerTSV;
+import bio.guoda.preston.process.StatementsListener;
+import bio.guoda.preston.process.StatementsListenerAdapter;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class StatementLogFactory {
-    public static StatementListener createPrintingLogger(Logger logMode) {
+    public static StatementsListener createPrintingLogger(Logger logMode) {
         return createPrintingLogger(logMode, System.out);
     }
 
-    public static StatementListener createPrintingLogger(Logger logMode, final PrintStream out) {
+    public static StatementsListener createPrintingLogger(Logger logMode, final PrintStream out) {
         return createPrintingLogger(logMode, out, new LogErrorHandler() {
             @Override
             public void handleError() {

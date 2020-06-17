@@ -16,11 +16,11 @@ public class VersionedRDFChainEmitter extends ProcessorReadOnly {
 
     private static final Log LOG = LogFactory.getLog(VersionedRDFChainEmitter.class);
 
-    public VersionedRDFChainEmitter(BlobStoreReadOnly blobStoreReadOnly, StatementListener... listeners) {
+    public VersionedRDFChainEmitter(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
     }
 
-    public VersionedRDFChainEmitter(BlobStoreReadOnly blobStoreReadOnly, ProcessorState state, StatementListener... listeners) {
+    public VersionedRDFChainEmitter(BlobStoreReadOnly blobStoreReadOnly, ProcessorState state, StatementsListener... listeners) {
         super(blobStoreReadOnly, state, listeners);
     }
 

@@ -50,7 +50,7 @@ public class TikaHashingActivityTest {
                 return IOUtils.toInputStream("bla", StandardCharsets.UTF_8);
 
             }
-        }, nodes::add);
+        }, TestUtil.testListener(nodes));
 
         tikaHashing.on(toStatement(
                 RefNodeFactory.toIRI("foo:bar"),
@@ -76,7 +76,7 @@ public class TikaHashingActivityTest {
                 return getClass().getResourceAsStream(HashGeneratorTLSHTruncatedTest.DWCA);
 
             }
-        }, nodes::add);
+        }, TestUtil.testListener(nodes));
 
         tikaHashing.on(toStatement(
                 RefNodeFactory.toIRI("graph:name"),
@@ -102,7 +102,7 @@ public class TikaHashingActivityTest {
                 return getClass().getResourceAsStream(HashGeneratorTLSHTruncatedTest.DWCA);
 
             }
-        }, nodes::add);
+        }, TestUtil.testListener(nodes));
 
         tikaHashing.on(toStatement(
                 RefNodeFactory.toIRI("graph:name"),
@@ -129,7 +129,7 @@ public class TikaHashingActivityTest {
                 return getClass().getResourceAsStream(HashGeneratorTLSHTruncatedTest.DWCA);
 
             }
-        }, nodes::add);
+        }, TestUtil.testListener(nodes));
 
         tikaHashing.on(toStatement(
                 RefNodeFactory.toIRI("graph:name"),

@@ -25,7 +25,7 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), nodes::add);
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
         RDFTerm bla = RefNodeFactory.toLiteral("bla");
         reader.on(RefNodeFactory.toStatement(Seeds.IDIGBIO, WAS_ASSOCIATED_WITH, bla));
         assertThat(nodes.size(), is(10));
@@ -34,7 +34,7 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void onNotSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), nodes::add);
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
         RDFTerm bla = RefNodeFactory.toLiteral("bla");
         reader.on(RefNodeFactory.toStatement(Seeds.IDIGBIO, RefNodeFactory.toIRI("https://example.org/bla"), bla));
         assertThat(nodes.size(), is(0));
@@ -45,7 +45,7 @@ public class RegistryReaderIDigBioTest {
     public void onRegistry() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blob = key -> publishersInputStream();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, nodes::add);
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
 
         reader.on(RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/publishers"),
@@ -59,7 +59,7 @@ public class RegistryReaderIDigBioTest {
     public void onIncompleteRecordSets() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blob = key -> incompleteRecordsetInputStream();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, nodes::add);
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
 
         reader.on(RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/recordsets?limit=10000"),
@@ -73,7 +73,7 @@ public class RegistryReaderIDigBioTest {
     public void onCompleteListOfRecordSets() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blob = key -> completeRecordsetInputStream();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, nodes::add);
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
 
         reader.on(RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/recordsets?limit=10000"),
@@ -100,7 +100,7 @@ public class RegistryReaderIDigBioTest {
 
         InputStream is = publishersInputStream();
 
-        RegistryReaderIDigBio.parsePublishers(providedParent, nodes::add, is);
+        RegistryReaderIDigBio.parsePublishers(providedParent, TestUtil.testEmitter(nodes), is);
 
         assertThat(nodes.size(), is(312));
 

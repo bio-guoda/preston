@@ -32,7 +32,7 @@ public class RegistryReaderGBIFTest {
     @Test
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
         registryReaderGBIF.on(toStatement(Seeds.GBIF, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         assertThat(new HashSet<>(nodes).size(), is(6));
         Assert.assertThat(nodes.size(), is(6));
@@ -42,7 +42,7 @@ public class RegistryReaderGBIFTest {
     @Test
     public void onEmptyPage() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
 
         registryReaderGBIF.on(toStatement(toIRI("https://api.gbif.org/v1/dataset"),
                 HAS_VERSION,
@@ -53,7 +53,7 @@ public class RegistryReaderGBIFTest {
     @Test
     public void onNotSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
         RDFTerm bla = toLiteral("bla");
         registryReaderGBIF.on(toStatement(Seeds.GBIF, toIRI("http://example.org"), bla));
         assertThat(nodes.size(), is(0));
@@ -68,7 +68,7 @@ public class RegistryReaderGBIFTest {
                 return getClass().getResourceAsStream(GBIFDATASETS_JSON);
             }
         };
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtil.testListener(nodes));
 
 
         Quad firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset"), HAS_VERSION, createTestNode());
@@ -93,7 +93,7 @@ public class RegistryReaderGBIFTest {
                 return getClass().getResourceAsStream("gbif-dataset-search-results.json");
             }
         };
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtil.testListener(nodes));
 
 
         Quad firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset/suggest"), HAS_VERSION, createTestNode());
@@ -114,7 +114,7 @@ public class RegistryReaderGBIFTest {
                 return getClass().getResourceAsStream("gbif-suggest.json");
             }
         };
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtil.testListener(nodes));
 
 
         Quad firstPage = toStatement(toIRI("http://api.gbif.org/v1/dataset/suggest?q=Amazon&amp;type=OCCURRENCE"), HAS_VERSION, createTestNode());
@@ -135,7 +135,7 @@ public class RegistryReaderGBIFTest {
                 return getClass().getResourceAsStream(GBIFDATASETS_JSON);
             }
         };
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtil.testListener(nodes));
 
 
         Quad firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR"), HAS_VERSION, createTestNode());
@@ -163,7 +163,7 @@ public class RegistryReaderGBIFTest {
                 }
             }
         };
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtil.testListener(nodes));
 
 
 
@@ -187,7 +187,7 @@ public class RegistryReaderGBIFTest {
                 throw new IOException("kaboom!");
             }
         };
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtil.testListener(nodes));
 
 
 
@@ -209,7 +209,7 @@ public class RegistryReaderGBIFTest {
                 return getClass().getResourceAsStream("gbif-dataset-single.json");
             }
         };
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, nodes::add);
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtil.testListener(nodes));
 
 
         Quad firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset"), HAS_VERSION, createTestNode());

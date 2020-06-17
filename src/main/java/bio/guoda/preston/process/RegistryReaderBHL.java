@@ -43,7 +43,7 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
     private final Log LOG = LogFactory.getLog(RegistryReaderBHL.class);
     public static final IRI BHL_REGISTRY = toIRI(BHL_DATASET_REGISTRY_STRING);
 
-    public RegistryReaderBHL(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
+    public RegistryReaderBHL(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
     }
 

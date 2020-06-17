@@ -5,8 +5,8 @@ import bio.guoda.preston.Seeds;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.rdf.api.RDFTerm;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,12 +34,12 @@ import static org.junit.Assert.assertNull;
 public class RegistryReaderBioCASETest {
 
     private ArrayList<Quad> nodes;
-    private StatementListener registryReader;
+    private StatementsListener registryReader;
 
     @Before
     public void init() {
         nodes = new ArrayList<>();
-        registryReader = new RegistryReaderBioCASE(TestUtil.getTestBlobStore(), nodes::add);
+        registryReader = new RegistryReaderBioCASE(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class RegistryReaderBioCASETest {
         InputStream providers = getClass().getResourceAsStream("biocase-providers.json");
 
         IRI someHash = toIRI("hash://sha256/123");
-        RegistryReaderBioCASE.parseProviders(providers, nodes::add, someHash);
+        RegistryReaderBioCASE.parseProviders(providers, TestUtil.testEmitter(nodes), someHash);
 
         assertFalse(nodes.isEmpty());
         assertThat(nodes.get(0).getPredicate(), is(HAD_MEMBER));
@@ -93,7 +93,7 @@ public class RegistryReaderBioCASETest {
                 return getClass().getResourceAsStream("biocase-providers.json");
             }
         };
-        registryReader = new RegistryReaderBioCASE(blobStore, nodes::add);
+        registryReader = new RegistryReaderBioCASE(blobStore, TestUtil.testListener(nodes));
         registryReader.on(toStatement(toIRI(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT), HAS_VERSION, refNode));
 
         assertFalse(nodes.isEmpty());
@@ -115,7 +115,7 @@ public class RegistryReaderBioCASETest {
     public void parseDatasets() throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
         InputStream datasets = getClass().getResourceAsStream("biocase-datasets.xml");
 
-        RegistryReaderBioCASE.parseDatasetInventory(datasets, nodes::add, RefNodeFactory.toIRI("http://example.org"));
+        RegistryReaderBioCASE.parseDatasetInventory(datasets, TestUtil.testEmitter(nodes), RefNodeFactory.toIRI("http://example.org"));
 
         assertThat(nodes.size(), is(3));
         assertThat(nodes.get(0).toString(), is("<http://example.org> <http://www.w3.org/ns/prov#hadMember> <http://ww3.bgbm.org/biocase/downloads/GFBio_ColiFauna/Coleoptera%20observations%20in%20orchards%20of%20South%20Western%20Germany.ABCD_2.06.zip> ."));
@@ -133,7 +133,7 @@ public class RegistryReaderBioCASETest {
             public InputStream get(IRI key) throws IOException {
                 return getClass().getResourceAsStream("biocase-datasets.xml");
             }
-        }, nodes::add);
+        }, TestUtil.testListener(nodes));
 
         registryReader.on(toStatement(toIRI("http://something/pywrapper.cgi?dsa="), HAS_VERSION, someHash));
 
@@ -155,7 +155,7 @@ public class RegistryReaderBioCASETest {
         // example from https://wiki.bgbm.org/bps/index.php/Archiving
         InputStream datasets = getClass().getResourceAsStream("biocase-datasets-example.xml");
 
-        RegistryReaderBioCASE.parseDatasetInventory(datasets, nodes::add, RefNodeFactory.toIRI("http://example.org"));
+        RegistryReaderBioCASE.parseDatasetInventory(datasets, TestUtil.testEmitter(nodes), RefNodeFactory.toIRI("http://example.org"));
 
         assertThat(nodes.size(), is(6));
         assertThat(nodes.get(0).toString(), is("<http://example.org> <http://www.w3.org/ns/prov#hadMember> <http://ww3.bgbm.org/biocase/downloads/Herbar/Herbarium%20Berolinense.ABCD_2.06.zip> ."));

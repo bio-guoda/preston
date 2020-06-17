@@ -1,14 +1,20 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.cmd.ActivityContext;
+import bio.guoda.preston.process.BlobStoreReadOnly;
+import bio.guoda.preston.process.StatementsEmitter;
+import bio.guoda.preston.process.StatementsEmitterAdapter;
+import bio.guoda.preston.process.StatementsListener;
+import bio.guoda.preston.process.StatementsListenerAdapter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
-import bio.guoda.preston.cmd.ActivityContext;
-import bio.guoda.preston.process.BlobStoreReadOnly;
+import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 
@@ -47,5 +53,38 @@ public class TestUtil {
         String s = IOUtils.toString(is, StandardCharsets.UTF_8);
         String replace = StringUtils.replace(s, "\r\n", "\n");
         return IOUtils.toInputStream(replace, StandardCharsets.UTF_8);
+    }
+
+    public static StatementsListener testListener(List<Quad> nodes) {
+        return new TestListener(nodes);
+    }
+
+    public static StatementsEmitter testEmitter(List<Quad> nodes) {
+        return new TestEmitter(nodes);
+    }
+
+    public static class TestListener extends StatementsListenerAdapter {
+        private final List<Quad> nodes;
+
+        public TestListener(List<Quad> nodes) {
+            this.nodes = nodes;
+        }
+
+        @Override
+        public void on(Quad statement) {
+            nodes.add(statement);
+        }
+    }
+    public static class TestEmitter extends StatementsEmitterAdapter {
+        private final List<Quad> nodes;
+
+        public TestEmitter(List<Quad> nodes) {
+            this.nodes = nodes;
+        }
+
+        @Override
+        public void emit(Quad statement) {
+            nodes.add(statement);
+        }
     }
 }

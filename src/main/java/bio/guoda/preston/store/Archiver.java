@@ -4,7 +4,7 @@ import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.cmd.ActivityContext;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.StatementEmitter;
-import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.BlankNode;
@@ -34,7 +34,7 @@ public class Archiver extends VersionProcessor {
 
     private final Dereferencer<IRI> dereferencer;
 
-    public Archiver(Dereferencer<IRI> dereferencer, ActivityContext activityCtx, StatementListener... listener) {
+    public Archiver(Dereferencer<IRI> dereferencer, ActivityContext activityCtx, StatementsListener... listener) {
         super(listener);
         this.activityCtx = activityCtx;
         this.dereferencer = dereferencer;

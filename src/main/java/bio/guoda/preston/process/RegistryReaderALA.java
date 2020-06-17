@@ -42,7 +42,7 @@ public class RegistryReaderALA extends ProcessorReadOnly {
     private final Log LOG = LogFactory.getLog(RegistryReaderALA.class);
     private static final IRI ALA_REGISTRY = toIRI(ALA_DATASET_REGISTRY_STRING);
 
-    public RegistryReaderALA(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
+    public RegistryReaderALA(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
     }
 

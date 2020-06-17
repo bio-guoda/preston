@@ -12,8 +12,8 @@ import bio.guoda.preston.process.RegistryReaderGBIF;
 import bio.guoda.preston.process.RegistryReaderIDigBio;
 import bio.guoda.preston.process.RegistryReaderOBIS;
 import bio.guoda.preston.process.RegistryReaderRSS;
-import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
+import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
@@ -103,12 +103,17 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
             initQueue(statementQueue, ctx);
 
-            StatementListener printingLogger = StatementLogFactory.createPrintingLogger(getLogMode(), System.out);
+            StatementsListener printingLogger = StatementLogFactory.createPrintingLogger(getLogMode(), System.out);
 
-            StatementListener[] listeners = Stream.concat(
-                    createProcessors(blobStore, statementQueue::add),
+            StatementsListener[] listeners = Stream.concat(
+                    createProcessors(blobStore, new StatementsListenerAdapter() {
+                        @Override
+                        public void on(Quad statement) {
+                            statementQueue.add(statement);
+                        }
+                    }),
                     createLoggers(archivingLogger, printingLogger)
-            ).toArray(StatementListener[]::new);
+            ).toArray(StatementsListener[]::new);
 
             processQueue(statementQueue, blobStore, ctx, listeners);
 
@@ -122,16 +127,19 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
     abstract void initQueue(Queue<Quad> statementQueue, ActivityContext ctx);
 
-    abstract void processQueue(Queue<Quad> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners);
+    abstract void processQueue(Queue<Quad> statementQueue,
+                               BlobStore blobStore,
+                               ActivityContext ctx,
+                               StatementsListener[] listeners);
 
 
-    private Stream<StatementListener> createLoggers(ArchivingLogger archivingLogger, StatementListener printingLogger) {
+    private Stream<StatementsListener> createLoggers(ArchivingLogger archivingLogger, StatementsListener printingLogger) {
         return Stream.of(
                 printingLogger,
                 archivingLogger);
     }
 
-    protected Stream<StatementListener> createProcessors(BlobStore blobStore, StatementListener queueAsListener) {
+    protected Stream<StatementsListener> createProcessors(BlobStore blobStore, StatementsListener queueAsListener) {
         return Stream.of(
                 new RegistryReaderIDigBio(blobStore, queueAsListener),
                 new RegistryReaderGBIF(blobStore, queueAsListener),
@@ -217,7 +225,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         private final ActivityContext ctx;
         File tmpArchive;
         PrintStream printStream;
-        StatementListener listener;
+        StatementsListener listener;
 
         public ArchivingLogger(BlobStore blobStore, StatementStore statementStore, ActivityContext ctx) {
             this.blobStore = blobStore;

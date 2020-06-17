@@ -1,7 +1,6 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsListener;
 import org.apache.commons.rdf.api.IRI;
 

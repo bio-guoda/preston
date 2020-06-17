@@ -2,7 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.Resources;
 import bio.guoda.preston.Seeds;
-import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.DereferencerContentAddressed;
@@ -47,8 +47,11 @@ public class CmdUpdate extends CmdActivity {
     }
 
     @Override
-    void processQueue(Queue<Quad> statementQueue, BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
-        StatementListener processor = createActivityProcessor(blobStore, ctx, listeners);
+    void processQueue(Queue<Quad> statementQueue,
+                      BlobStore blobStore,
+                      ActivityContext ctx,
+                      StatementsListener[] listeners) {
+        StatementsListener processor = createActivityProcessor(blobStore, ctx, listeners);
 
         while (!statementQueue.isEmpty()) {
             processor.on(statementQueue.poll());
@@ -61,7 +64,8 @@ public class CmdUpdate extends CmdActivity {
     }
 
 
-    private StatementListener createActivityProcessor(BlobStore blobStore, ActivityContext ctx, StatementListener[] listeners) {
+    private StatementsListener createActivityProcessor(BlobStore blobStore, ActivityContext ctx,
+                                                      StatementsListener[] listeners) {
         return new Archiver(
                 new DereferencerContentAddressed(Resources::asInputStream, blobStore),
                 ctx,

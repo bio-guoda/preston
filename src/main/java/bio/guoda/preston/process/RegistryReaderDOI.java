@@ -45,7 +45,7 @@ public class RegistryReaderDOI extends ProcessorReadOnly {
     public static final String GBIF_DOI_PART = "10.15468/";
     private final Log LOG = LogFactory.getLog(RegistryReaderDOI.class);
 
-    public RegistryReaderDOI(BlobStoreReadOnly blobStoreReadOnly, StatementListener listener) {
+    public RegistryReaderDOI(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
     }
 
