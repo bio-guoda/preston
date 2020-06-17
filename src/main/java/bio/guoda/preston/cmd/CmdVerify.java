@@ -4,6 +4,9 @@ import bio.guoda.preston.HashGenerator;
 import bio.guoda.preston.HashGeneratorFactory;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListener;
+import bio.guoda.preston.process.StatementsListenerAdapter;
+import bio.guoda.preston.process.StatementsListenerEmitterAdapter;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
@@ -63,7 +66,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
 
         Map<String, State> verifiedMap = new TreeMap<>();
 
-        StatementListener statementListener = new StatementListener() {
+        StatementsListener statementListener = new StatementsListenerAdapter() {
             @Override
             public void on(Quad statement) {
                 final IRI iri = VersionUtil.mostRecentVersionForStatement(statement);

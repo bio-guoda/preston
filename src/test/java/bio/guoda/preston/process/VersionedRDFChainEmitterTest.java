@@ -94,7 +94,7 @@ public class VersionedRDFChainEmitterTest {
             }
         };
         final StringBuilder actual = new StringBuilder();
-        new VersionedRDFChainEmitter(testStore, new StatementListener() {
+        new VersionedRDFChainEmitter(testStore, new StatementsListenerAdapter() {
             @Override
             public void on(Quad statement) {
                 actual.append(statement.toString());

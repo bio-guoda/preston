@@ -3,6 +3,7 @@ package bio.guoda.preston.store;
 import bio.guoda.preston.cmd.ActivityContext;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListenerAdapter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.IRI;
@@ -67,7 +68,7 @@ public class ArchiverTest {
     }
 
     private StatementListener createVersionLogger(final StatementStore versionStore) {
-        return new StatementListener() {
+        return new StatementsListenerAdapter() {
             @Override
             public void on(Quad statement) {
 

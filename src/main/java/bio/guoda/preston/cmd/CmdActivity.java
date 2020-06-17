@@ -14,6 +14,7 @@ import bio.guoda.preston.process.RegistryReaderOBIS;
 import bio.guoda.preston.process.RegistryReaderRSS;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
+import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStore;
@@ -210,7 +211,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         }
     }
 
-    private class ArchivingLogger implements StatementListener {
+    private class ArchivingLogger extends StatementsListenerAdapter {
         private final BlobStore blobStore;
         private final StatementStore statementStore;
         private final ActivityContext ctx;

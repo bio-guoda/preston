@@ -2,6 +2,8 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListener;
+import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.process.VersionedRDFChainEmitter;
 import bio.guoda.preston.store.ArchiverReadOnly;
 import bio.guoda.preston.store.StatementStoreReadOnly;
@@ -29,14 +31,14 @@ public final class ReplayUtil {
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
                               final StatementStoreReadOnly provenanceLogIndex,
-                              StatementListener... listeners) {
+                              StatementsListener... listeners) {
         attemptReplay(provenanceLogStore, provenanceLogIndex, BIODIVERSITY_DATASET_GRAPH, listeners);
     }
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
                               final StatementStoreReadOnly provenanceLogIndex,
                               final IRI provRoot,
-                              StatementListener... listeners) {
+                              StatementsListener... listeners) {
         attemptReplay(provenanceLogStore, provenanceLogIndex, new CmdContext(new ProcessorState() {
             @Override
             public boolean shouldKeepProcessing() {
@@ -55,8 +57,13 @@ public final class ReplayUtil {
                 }};
 
         AtomicBoolean receivedSomething = new AtomicBoolean(false);
-        List<StatementListener> statementListeners = new ArrayList<>(Arrays.asList(ctx.getListeners()));
-        statementListeners.add(statement -> receivedSomething.set(true));
+        List<StatementsListener> statementListeners = new ArrayList<>(Arrays.asList(ctx.getListeners()));
+        statementListeners.add(new StatementsListenerAdapter() {
+            @Override
+            public void on(Quad statement) {
+                receivedSomething.set(true);
+            }
+        });
 
         // lookup previous provenance log versions with the intent to replay
         VersionedRDFChainEmitter provenanceLogEmitter = new VersionedRDFChainEmitter(

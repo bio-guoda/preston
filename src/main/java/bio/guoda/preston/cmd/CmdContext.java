@@ -2,19 +2,20 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListener;
 import org.apache.commons.rdf.api.IRI;
 
 public class CmdContext implements ProcessorContext {
 
     private final ProcessorState state;
     private IRI provRoot;
-    private StatementListener[] listeners;
+    private StatementsListener[] listeners;
 
-    CmdContext(ProcessorState state, StatementListener... listeners) {
+    CmdContext(ProcessorState state, StatementsListener... listeners) {
         this(state, RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, listeners);
     }
 
-    CmdContext(ProcessorState state, IRI provRoot, StatementListener... listeners) {
+    CmdContext(ProcessorState state, IRI provRoot, StatementsListener... listeners) {
         this.state = state;
         this.provRoot = provRoot;
         this.listeners = listeners;
@@ -26,7 +27,7 @@ public class CmdContext implements ProcessorContext {
     }
 
     @Override
-    public StatementListener[] getListeners() {
+    public StatementsListener[] getListeners() {
         return listeners;
     }
 

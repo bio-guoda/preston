@@ -2,6 +2,8 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListener;
+import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.StatementStoreImpl;
@@ -10,6 +12,7 @@ import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,21 +32,25 @@ public class CloneUtil {
         final StatementStoreReadOnly provenanceIndex
                 = new StatementStoreImpl(provenanceIndexKeyValueStore);
 
-        StatementListener statementListener = blobToucher(blobStore);
+        StatementsListener statementListener = blobToucher(blobStore);
         attemptReplay(provenanceLogStore,
                 provenanceIndex,
                 statementListener);
     }
 
-    private static StatementListener blobToucher(final BlobStoreReadOnly blobStore) {
+    private static StatementsListener blobToucher(final BlobStoreReadOnly blobStore) {
         // touch blob, to let keyValueStore know about it
-        return (StatementListener) statement -> {
-            IRI mostRecent = VersionUtil.mostRecentVersionForStatement(statement);
-            if (mostRecent != null) {
-                try (InputStream is = blobStore.get(mostRecent)) {
-                } catch (IOException e) {
-                    LOG.warn("failed to copy [" + mostRecent + "]");
+        return new StatementsListenerAdapter() {
+            @Override
+            public void on(Quad statement) {
+                IRI mostRecent = VersionUtil.mostRecentVersionForStatement(statement);
+                if (mostRecent != null) {
+                    try (InputStream is = blobStore.get(mostRecent)) {
+                    } catch (IOException e) {
+                        LOG.warn("failed to copy [" + mostRecent + "]");
+                    }
                 }
+
             }
         };
     }

@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,7 +12,7 @@ import org.apache.commons.rdf.api.Quad;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class VersionRetriever implements StatementListener {
+public class VersionRetriever extends StatementsListenerAdapter {
     private static final Log LOG = LogFactory.getLog(VersionRetriever.class);
 
     private final BlobStoreReadOnly blobStore;

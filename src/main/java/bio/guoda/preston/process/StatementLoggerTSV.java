@@ -8,7 +8,7 @@ import org.apache.commons.rdf.api.Quad;
 import java.io.PrintStream;
 import java.util.Optional;
 
-public class StatementLoggerTSV implements StatementListener {
+public class StatementLoggerTSV extends StatementsListenerAdapter {
 
     private final PrintStream out;
 

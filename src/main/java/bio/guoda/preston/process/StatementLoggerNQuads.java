@@ -4,7 +4,7 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.io.PrintStream;
 
-public class StatementLoggerNQuads implements StatementListener {
+public class StatementLoggerNQuads extends StatementsListenerAdapter {
 
     private final PrintStream out;
 

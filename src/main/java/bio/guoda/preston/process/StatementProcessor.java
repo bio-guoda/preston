@@ -2,11 +2,9 @@ package bio.guoda.preston.process;
 
 
 import bio.guoda.preston.cmd.ProcessorState;
-import org.apache.commons.rdf.api.BlankNodeOrIRI;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
 
-public abstract class StatementProcessor implements StatementListener, StatementEmitter {
+public abstract class StatementProcessor extends StatementsListenerEmitterAdapter implements StatementsListener, StatementsEmitter {
 
     private final StatementListener[] listeners;
     private final ProcessorState state;
