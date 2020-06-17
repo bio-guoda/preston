@@ -12,6 +12,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -38,16 +39,19 @@ public class CmdUpdate extends CmdActivity {
 
 
     @Override
-    void initQueue(Queue<Quad> statementQueue, ActivityContext ctx) {
+    void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
         if (IRIs.isEmpty()) {
-            statementQueue.addAll(generateSeeds(ctx.getActivity()));
+            statementQueue.add(generateSeeds(ctx.getActivity()));
         } else {
-            IRIs.forEach(iri -> statementQueue.add(toStatement(ctx.getActivity(), toIRI(iri), HAS_VERSION, toBlank())));
+            IRIs.forEach(iri -> {
+                Quad quad = toStatement(ctx.getActivity(), toIRI(iri), HAS_VERSION, toBlank());
+                statementQueue.add(Collections.singletonList(quad));
+            });
         }
     }
 
     @Override
-    void processQueue(Queue<Quad> statementQueue,
+    void processQueue(Queue<List<Quad>> statementQueue,
                       BlobStore blobStore,
                       ActivityContext ctx,
                       StatementsListener[] listeners) {

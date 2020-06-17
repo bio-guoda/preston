@@ -9,7 +9,10 @@ import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Command to (re-) process biodiversity dataset graph by providing some existing provenance logs.
@@ -25,12 +28,12 @@ public class CmdProcess extends CmdActivity {
     private InputStream is = System.in;
 
     @Override
-    void initQueue(Queue<Quad> statementQueue, ActivityContext ctx) {
+    void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
         // no initial seeds
     }
 
     @Override
-    void processQueue(Queue<Quad> statementQueue,
+    void processQueue(Queue<List<Quad>> statementQueue,
                       BlobStore blobStore,
                       ActivityContext ctx,
                       StatementsListener[] listeners) {
@@ -58,10 +61,16 @@ public class CmdProcess extends CmdActivity {
         }
     }
 
-    private void handleQueuedMessages(Queue<Quad> statementQueue1, StatementsListener[] listeners) {
+    private void handleQueuedMessages(Queue<List<Quad>> statementQueue1, StatementsListener[] listeners) {
         while (!statementQueue1.isEmpty()) {
-            Quad polled = statementQueue1.poll();
-            handleStatement(polled, listeners);
+            List<Quad> polled = statementQueue1.poll();
+            Stream<Quad> quadStream = polled.stream().filter(statement ->
+                    (!(statement.getSubject() instanceof BlankNode) && !(statement.getObject() instanceof BlankNode)));
+
+            List<Quad> nonBlankStatements = quadStream.collect(Collectors.toList());
+            for (StatementsListener listener : listeners) {
+                listener.on(nonBlankStatements);
+            }
         }
     }
 

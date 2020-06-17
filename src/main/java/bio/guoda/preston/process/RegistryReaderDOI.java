@@ -68,7 +68,7 @@ public class RegistryReaderDOI extends ProcessorReadOnly {
         }
     }
 
-    static void parseGBIFDownloadHtmlPage(Quad statement, InputStream is, StatementEmitter emitter) throws IOException {
+    static void parseGBIFDownloadHtmlPage(Quad statement, InputStream is, StatementsEmitter emitter) throws IOException {
         String htmlPage = IOUtils.toString(is, StandardCharsets.UTF_8.name());
         String[] split = htmlPage.split("key:\\s+");
         if (split.length > 1) {

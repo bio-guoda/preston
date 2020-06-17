@@ -15,7 +15,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class ActivityUtil {
 
-    private static void beginInformedActivity(StatementEmitter emitter, BlankNodeOrIRI newActivity, Optional<BlankNodeOrIRI> sourceActivity) {
+    private static void beginInformedActivity(StatementsEmitter emitter, BlankNodeOrIRI newActivity, Optional<BlankNodeOrIRI> sourceActivity) {
         emitter.emit(toStatement(newActivity, newActivity, IS_A, ACTIVITY));
 
         if (sourceActivity.isPresent()) {
@@ -26,18 +26,18 @@ public class ActivityUtil {
     private static void endInformedActivity(StatementEmitter emitter, BlankNodeOrIRI activity) {
     }
 
-    private static void emitWithActivityName(Stream<Quad> quadStream, StatementEmitter emitter, BlankNodeOrIRI activity) {
+    private static void emitWithActivityName(Stream<Quad> quadStream, StatementsEmitter emitter, BlankNodeOrIRI activity) {
         quadStream.map(quad -> toStatement(activity, quad.getSubject(), quad.getPredicate(), quad.getObject()))
                 .forEach(emitter::emit);
     }
 
-    public static BlankNodeOrIRI emitAsNewActivity(Stream<Quad> quadStream, StatementEmitter emitter, Optional<BlankNodeOrIRI> parentActivity) {
+    public static BlankNodeOrIRI emitAsNewActivity(Stream<Quad> quadStream, StatementsEmitter emitter, Optional<BlankNodeOrIRI> parentActivity) {
         BlankNodeOrIRI newActivity = toIRI(UUID.randomUUID());
         emitAsNewNamedActivity(quadStream, emitter, parentActivity, newActivity);
         return newActivity;
     }
 
-    public static void emitAsNewNamedActivity(Stream<Quad> quadStream, StatementEmitter emitter, Optional<BlankNodeOrIRI> parentActivity, BlankNodeOrIRI activityName) {
+    public static void emitAsNewNamedActivity(Stream<Quad> quadStream, StatementsEmitter emitter, Optional<BlankNodeOrIRI> parentActivity, BlankNodeOrIRI activityName) {
         beginInformedActivity(emitter, activityName, parentActivity);
         emitWithActivityName(quadStream, emitter, activityName);
         endInformedActivity(emitter, activityName);

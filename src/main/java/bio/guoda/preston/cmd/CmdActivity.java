@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
@@ -86,17 +87,17 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
             archivingLogger.start();
 
-            final Queue<Quad> statementQueue =
-                    new ConcurrentLinkedQueue<Quad>() {
+            final Queue<List<Quad>> statementQueue =
+                    new ConcurrentLinkedQueue<List<Quad>>() {
                         {
-                            addAll(findActivityInfo(ctx));
+                            add(findActivityInfo(ctx));
                             addPreviousVersionReference();
                         }
 
                         private void addPreviousVersionReference() throws IOException {
                             IRI mostRecentVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), logRelations);
                             if (mostRecentVersion != null) {
-                                add(toStatement(ctx.getActivity(), mostRecentVersion, USED_BY, ctx.getActivity()));
+                                add(Collections.singletonList(toStatement(ctx.getActivity(), mostRecentVersion, USED_BY, ctx.getActivity())));
                             }
                         }
                     };
@@ -106,9 +107,14 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
             StatementsListener printingLogger = StatementLogFactory.createPrintingLogger(getLogMode(), System.out);
 
             StatementsListener[] listeners = Stream.concat(
-                    createProcessors(blobStore, new StatementsListenerAdapter() {
+                    createProcessors(blobStore, new StatementsListener() {
                         @Override
                         public void on(Quad statement) {
+                            on(Collections.singletonList(statement));
+                        }
+
+                        @Override
+                        public void on(List<Quad> statement) {
                             statementQueue.add(statement);
                         }
                     }),
@@ -125,9 +131,9 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         }
     }
 
-    abstract void initQueue(Queue<Quad> statementQueue, ActivityContext ctx);
+    abstract void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx);
 
-    abstract void processQueue(Queue<Quad> statementQueue,
+    abstract void processQueue(Queue<List<Quad>> statementQueue,
                                BlobStore blobStore,
                                ActivityContext ctx,
                                StatementsListener[] listeners);
