@@ -137,10 +137,10 @@ public class TikaHashingActivityTest {
                 toIRI("foo:bar"),
                 aContentHash));
 
-        Assert.assertThat(nodes.size(), is(10));
-        Assert.assertThat(nodes.get(4).toString(), startsWith("<hash://tika-tlsh/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f> <http://www.w3.org/ns/prov#wasGeneratedBy>"));
-        Assert.assertThat(nodes.get(9).toString(), startsWith("<hash://tika-tlsh/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f> <http://www.w3.org/ns/prov#wasGeneratedBy>"));
-        Assert.assertThat(nodes.get(9).toString(), is(not(nodes.get(4).toString())));
+        Assert.assertThat(nodes.size(), is(8));
+        Assert.assertThat(nodes.get(3).toString(), startsWith("<hash://tika-tlsh/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f> <http://www.w3.org/ns/prov#wasGeneratedBy>"));
+        Assert.assertThat(nodes.get(7).toString(), startsWith("<hash://tika-tlsh/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f> <http://www.w3.org/ns/prov#wasGeneratedBy>"));
+        Assert.assertThat(nodes.get(7).toString(), is(not(nodes.get(3).toString())));
 
     }
 
@@ -148,9 +148,8 @@ public class TikaHashingActivityTest {
         Assert.assertThat(nodes.get(0).toString(), containsString("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity>"));
         Assert.assertThat(nodes.get(1).toString(), containsString("<http://www.w3.org/ns/prov#wasInformedBy> <graph:name>"));
         Assert.assertThat(nodes.get(2).toString(), startsWith("<hash://tika-tlsh/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/blabla> "));
-        Assert.assertThat(nodes.get(3).toString(), containsString("<http://www.w3.org/ns/prov#used> <hash://sha256/blabla>"));
-        Assert.assertThat(nodes.get(4).toString(), startsWith("<hash://tika-tlsh/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f> <http://www.w3.org/ns/prov#wasGeneratedBy>"));
-        Assert.assertThat(nodes.size(), is(5));
+        Assert.assertThat(nodes.get(3).toString(), startsWith("<hash://tika-tlsh/532a4237d1782aa7576f40d213f91ce46b1fb886498bebcedc507680db323a9415f> <http://www.w3.org/ns/prov#wasGeneratedBy>"));
+        Assert.assertThat(nodes.size(), is(4));
     }
 
 

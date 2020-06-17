@@ -24,8 +24,11 @@ public class TikaHashingActivity extends ProcessorReadOnly {
 
     @Override
     public void on(Quad statement) {
-        handleTerm(statement, statement.getObject());
-        handleTerm(statement, statement.getSubject());
+        RDFTerm subject = statement.getSubject();
+        if (!(subject instanceof IRI && ((IRI) subject).getIRIString().startsWith("hash://tika-tlsh/"))) {
+            handleTerm(statement, subject);
+            handleTerm(statement, statement.getObject());
+        }
     }
 
     public void handleTerm(Quad statement, RDFTerm obj) {
@@ -43,7 +46,6 @@ public class TikaHashingActivity extends ProcessorReadOnly {
                 IRI activityUUID = toIRI(UUID.randomUUID());
                 Stream<Quad> quadStream = Stream.of(
                         toStatement(tikaIRI, RefNodeConstants.WAS_DERIVED_FROM, sourceIRI),
-                        toStatement(activityUUID, RefNodeConstants.USED, sourceIRI),
                         toStatement(tikaIRI, RefNodeConstants.WAS_GENERATED_BY, activityUUID));
 
                 ActivityUtil.emitAsNewNamedActivity(quadStream, this, statement.getGraphName(), activityUUID);
