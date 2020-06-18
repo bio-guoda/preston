@@ -23,7 +23,7 @@ public class ActivityUtil {
         }
     }
 
-    private static void endInformedActivity(StatementEmitter emitter, BlankNodeOrIRI activity) {
+    private static void endInformedActivity(StatementsEmitter emitter, BlankNodeOrIRI activity) {
     }
 
     private static void emitWithActivityName(Stream<Quad> quadStream, StatementsEmitter emitter, BlankNodeOrIRI activity) {

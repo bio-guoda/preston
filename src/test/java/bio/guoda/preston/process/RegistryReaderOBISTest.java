@@ -65,7 +65,7 @@ public class RegistryReaderOBISTest {
 
         IRI testNode = createTestNode();
 
-        RegistryReaderOBIS.parse(testNode, refNodes::add, getClass().getResourceAsStream(OBIS_DATASETS_JSON));
+        RegistryReaderOBIS.parse(testNode, TestUtil.testEmitter(refNodes), getClass().getResourceAsStream(OBIS_DATASETS_JSON));
 
         assertThat(refNodes.size(), is(12));
 

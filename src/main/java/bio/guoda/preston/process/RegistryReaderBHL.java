@@ -66,7 +66,12 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
                 IRI version = (IRI) getVersion(statement);
                 InputStream in = get(version);
                 if (in != null) {
-                    parse(nodes::add, in, version);
+                    parse(new StatementsEmitterAdapter() {
+                        @Override
+                        public void emit(Quad statement) {
+                            nodes.add(statement);
+                        }
+                    }, in, version);
                 }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
@@ -75,7 +80,7 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
         }
     }
 
-    static void parse(StatementEmitter emitter, InputStream in, IRI version) throws IOException {
+    static void parse(StatementsEmitter emitter, InputStream in, IRI version) throws IOException {
         InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(reader);
         String header = bufferedReader.readLine();
@@ -88,7 +93,7 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
         }
     }
 
-    private static void handleBarCodes(BufferedReader bufferedReader, int barCodeIndex, StatementEmitter emitter, IRI versionSource) throws IOException {
+    private static void handleBarCodes(BufferedReader bufferedReader, int barCodeIndex, StatementsEmitter emitter, IRI versionSource) throws IOException {
         String line;
         while ((line = bufferedReader.readLine()) != null) {
             String[] values = StringUtils.split(line, '\t');
@@ -103,7 +108,7 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
         }
     }
 
-    private static void submit(StatementEmitter emitter, IRI versionSource, String barCode, String ext, String fileFormat) {
+    private static void submit(StatementsEmitter emitter, IRI versionSource, String barCode, String ext, String fileFormat) {
         IRI ocrText = toIRI("https://archive.org/download/" + barCode + "/" + barCode + "_djvu" + ext);
         Stream.of(
                 toStatement(versionSource, HAD_MEMBER, toIRI(barCode)),

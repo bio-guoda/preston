@@ -1,7 +1,8 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.EmittingStreamRDF;
-import bio.guoda.preston.process.StatementEmitter;
+import bio.guoda.preston.process.StatementsEmitter;
+import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStore;
 import com.beust.jcommander.Parameters;
@@ -39,9 +40,12 @@ public class CmdProcess extends CmdActivity {
                       StatementsListener[] listeners) {
         handleQueuedMessages(statementQueue, listeners);
 
-        StatementEmitter emitter = statement -> {
-            handleStatement(statement, listeners);
-            handleQueuedMessages(statementQueue, listeners);
+        StatementsEmitter emitter = new StatementsEmitterAdapter() {
+            @Override
+            public void emit(Quad statement) {
+                handleStatement(statement, listeners);
+                handleQueuedMessages(statementQueue, listeners);
+            }
         };
         new EmittingStreamRDF(emitter, this).parseAndEmit(getInputStream());
 

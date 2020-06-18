@@ -56,7 +56,12 @@ public class RegistryReaderALA extends ProcessorReadOnly {
                     toStatement(Seeds.ALA, DESCRIPTION, toEnglishLiteral("The Atlas of Living Australia (ALA) is a collaborative, digital, open infrastructure that pulls together Australian biodiversity data from multiple sources, making it accessible and reusable.")),
                     toStatement(RegistryReaderALA.ALA_REGISTRY, CREATED_BY, Seeds.ALA))
                     .forEach(nodes::add);
-            emitPageRequest(nodes::add, ALA_REGISTRY);
+            emitPageRequest(new StatementsEmitterAdapter() {
+                @Override
+                public void emit(Quad statement) {
+                    nodes.add(statement);
+                }
+            }, ALA_REGISTRY);
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(ALA_API_URL_PART)) {
@@ -65,7 +70,12 @@ public class RegistryReaderALA extends ProcessorReadOnly {
             IRI currentPage = (IRI) getVersion(statement);
             try (InputStream is = get(currentPage)) {
                 if (is != null) {
-                    parse(nodes::add, is);
+                    parse(new StatementsEmitterAdapter() {
+                        @Override
+                        public void emit(Quad statement) {
+                            nodes.add(statement);
+                        }
+                    }, is);
                 }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
@@ -80,7 +90,12 @@ public class RegistryReaderALA extends ProcessorReadOnly {
             IRI currentPage = (IRI) getVersion(statement);
             try (InputStream is = get(currentPage)) {
                 if (is != null) {
-                    parseResource(nodes::add, is);
+                    parseResource(new StatementsEmitterAdapter() {
+                        @Override
+                        public void emit(Quad statement) {
+                            nodes.add(statement);
+                        }
+                    }, is);
                 }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
@@ -89,7 +104,7 @@ public class RegistryReaderALA extends ProcessorReadOnly {
         }
     }
 
-    private static void emitPageRequest(StatementEmitter emitter, IRI nextPage) {
+    private static void emitPageRequest(StatementsEmitter emitter, IRI nextPage) {
         Stream.of(
                 toStatement(nextPage, CREATED_BY, Seeds.ALA),
                 toStatement(nextPage, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
@@ -97,7 +112,7 @@ public class RegistryReaderALA extends ProcessorReadOnly {
                 .forEach(emitter::emit);
     }
 
-    static void parse(StatementEmitter emitter, InputStream in) throws IOException {
+    static void parse(StatementsEmitter emitter, InputStream in) throws IOException {
         JsonNode registry = new ObjectMapper().readTree(in);
         if (registry != null) {
             for (JsonNode item : registry) {
@@ -112,7 +127,7 @@ public class RegistryReaderALA extends ProcessorReadOnly {
 
     }
 
-    static void parseResource(StatementEmitter emitter, InputStream in) throws IOException {
+    static void parseResource(StatementsEmitter emitter, InputStream in) throws IOException {
         JsonNode resource = new ObjectMapper().readTree(in);
         if (resource != null) {
             Set<IRI> IRIs = new HashSet<>();
@@ -143,7 +158,7 @@ public class RegistryReaderALA extends ProcessorReadOnly {
         }
     }
 
-    private static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
+    private static void parseIndividualDataset(IRI currentPage, StatementsEmitter emitter, JsonNode result) {
         if (result.has("id")) {
             String uuid = result.get("id").asText();
             IRI datasetUUID = toIRI(uuid);
@@ -154,7 +169,7 @@ public class RegistryReaderALA extends ProcessorReadOnly {
         }
     }
 
-    private static void emitArchive(StatementEmitter emitter, JsonNode result, IRI datasetUUID) {
+    private static void emitArchive(StatementsEmitter emitter, JsonNode result, IRI datasetUUID) {
         String urlString = result.get("archive").asText();
         IRI dataArchive = toIRI(urlString);
         emitter.emit(toStatement(datasetUUID, HAD_MEMBER, dataArchive));

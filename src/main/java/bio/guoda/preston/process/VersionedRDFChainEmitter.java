@@ -49,7 +49,7 @@ public class VersionedRDFChainEmitter extends ProcessorReadOnly {
         parseAndEmit(inputStream, this);
     }
 
-    public void parseAndEmit(InputStream inputStream, final StatementEmitter emitter) {
+    public void parseAndEmit(InputStream inputStream, final StatementsEmitter emitter) {
         new EmittingStreamRDF(emitter, getState())
                 .parseAndEmit(inputStream);
     }

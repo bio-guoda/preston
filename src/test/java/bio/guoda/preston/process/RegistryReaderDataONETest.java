@@ -169,7 +169,7 @@ public class RegistryReaderDataONETest {
 
         IRI testNode = createTestNode();
 
-        RegistryReaderDataONE.parse(testNode, refNodes::add, getClass().getResourceAsStream(DATAONE_FIRST_JSON), toIRI("http://example.org/"));
+        RegistryReaderDataONE.parse(testNode, TestUtil.testEmitter(refNodes), getClass().getResourceAsStream(DATAONE_FIRST_JSON), toIRI("http://example.org/"));
 
         assertThat(refNodes.size(), is(43));
 

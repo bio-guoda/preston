@@ -70,7 +70,12 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     private void attemptToParseAsPublishers(Quad statement, IRI toBeParsed) {
         if (StringUtils.contains(statement.getSubject().ntriplesString(), PUBLISHERS_URI)) {
             ArrayList<Quad> nodes = new ArrayList<>();
-            parsePublishers(toBeParsed, nodes::add);
+            parsePublishers(toBeParsed, new StatementsEmitterAdapter() {
+                @Override
+                public void emit(Quad statement) {
+                    nodes.add(statement);
+                }
+            });
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
@@ -78,12 +83,17 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
    private void attemptToParseAsRecordSets(Quad statement, IRI toBeParsed) {
         if (StringUtils.contains(statement.getSubject().ntriplesString(), RECORDSETS_URI)) {
             ArrayList<Quad> nodes = new ArrayList<>();
-            parseRecordSets(toBeParsed, nodes::add);
+            parseRecordSets(toBeParsed, new StatementsEmitterAdapter() {
+                @Override
+                public void emit(Quad statement) {
+                    nodes.add(statement);
+                }
+            });
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
 
-    static void parsePublishers(IRI parent, StatementEmitter emitter, InputStream is) throws IOException {
+    static void parsePublishers(IRI parent, StatementsEmitter emitter, InputStream is) throws IOException {
         AtomicInteger itemCounter = new AtomicInteger();
         JsonNode r = new ObjectMapper().readTree(is);
         if (r.has("items") && r.get("items").isArray()) {
@@ -107,7 +117,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         verifyItemCount(r, itemCounter);
     }
 
-    private static void parseRecordSets(IRI parent, StatementEmitter emitter, InputStream is) throws IOException {
+    private static void parseRecordSets(IRI parent, StatementsEmitter emitter, InputStream is) throws IOException {
         JsonNode r = new ObjectMapper().readTree(is);
         AtomicInteger itemCounter = new AtomicInteger();
 
@@ -149,7 +159,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         }
     }
 
-    private void parsePublishers(IRI refNode, StatementEmitter emitter) {
+    private void parsePublishers(IRI refNode, StatementsEmitter emitter) {
         try {
             InputStream is = get(refNode);
             if (is != null) {
@@ -160,7 +170,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         }
     }
 
-    private void parseRecordSets(IRI refNode, StatementEmitter emitter) {
+    private void parseRecordSets(IRI refNode, StatementsEmitter emitter) {
         try {
             InputStream is = get(refNode);
             if (is != null) {

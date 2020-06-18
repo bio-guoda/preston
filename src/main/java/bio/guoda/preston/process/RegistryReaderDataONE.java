@@ -65,7 +65,12 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
                     toStatement(RegistryReaderDataONE.DATA_ONE_REGISTRY, DESCRIPTION, toEnglishLiteral("Data Observation Network for Earth (DataONE) is the foundation of new innovative environmental science through a distributed framework and sustainable cyberinfrastructure that meets the needs of science and society for open, persistent, robust, and secure access to well-described and easily discovered Earth observational data. DataONE provides a registry EML descriptors.")),
                     toStatement(RegistryReaderDataONE.DATA_ONE_REGISTRY, CREATED_BY, Seeds.DATA_ONE))
                     .forEach(nodes::add);
-            emitPageRequest(nodes::add, DATA_ONE_REGISTRY);
+            emitPageRequest(new StatementsEmitterAdapter() {
+                @Override
+                public void emit(Quad statement) {
+                    nodes.add(statement);
+                }
+            }, DATA_ONE_REGISTRY);
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(DATA_ONE_URL_QUERY_PREFIX)) {
@@ -74,7 +79,12 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
                 IRI currentPage = (IRI) getVersion(statement);
                 InputStream in = get(currentPage);
                 if (in != null) {
-                    parse(currentPage, nodes::add, in, getVersionSource(statement));
+                    parse(currentPage, new StatementsEmitterAdapter() {
+                        @Override
+                        public void emit(Quad statement) {
+                            nodes.add(statement);
+                        }
+                    }, in, getVersionSource(statement));
                 }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
@@ -139,7 +149,7 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
         }, emitter, inputStream);
     }
 
-    static void emitNextPage(int offset, int limit, StatementEmitter emitter, String versionSourceURI) {
+    static void emitNextPage(int offset, int limit, StatementsEmitter emitter, String versionSourceURI) {
         String nextPageURL = versionSourceURI;
         nextPageURL = StringUtils.replacePattern(nextPageURL, "rows=[0-9]*", "rows=" + limit);
         nextPageURL = StringUtils.replacePattern(nextPageURL, "start=[0-9]*", "start=" + offset);
@@ -151,7 +161,7 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
         emitPageRequest(emitter, nextPage);
     }
 
-    private static void emitPageRequest(StatementEmitter emitter, IRI nextPage) {
+    private static void emitPageRequest(StatementsEmitter emitter, IRI nextPage) {
         Stream.of(
                 toStatement(nextPage, CREATED_BY, Seeds.DATA_ONE),
                 toStatement(nextPage, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
@@ -159,7 +169,7 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
                 .forEach(emitter::emit);
     }
 
-    static void parse(IRI currentPage, StatementEmitter emitter, InputStream in, IRI versionSource) throws IOException {
+    static void parse(IRI currentPage, StatementsEmitter emitter, InputStream in, IRI versionSource) throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(in);
         if (jsonNode != null) {
             if (jsonNode.has("response")) {
@@ -193,7 +203,7 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
 
     }
 
-    public static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
+    public static void parseIndividualDataset(IRI currentPage, StatementsEmitter emitter, JsonNode result) {
         if (result.has("identifier")) {
             String identifier = result.get("identifier").asText();
             IRI datasetUUID = toIRI(identifier);
@@ -205,7 +215,7 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
         }
     }
 
-    public static void handleEndpoints(StatementEmitter emitter, JsonNode doc, IRI datasetUUID) {
+    public static void handleEndpoints(StatementsEmitter emitter, JsonNode doc, IRI datasetUUID) {
         if (doc.has("dataUrl")) {
             String urlString = doc.get("dataUrl").asText();
             IRI dataArchive = toIRI(urlString);

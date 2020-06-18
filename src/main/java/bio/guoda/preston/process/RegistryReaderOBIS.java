@@ -61,7 +61,12 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
                 IRI currentPage = (IRI) getVersion(statement);
                 InputStream is = get(currentPage);
                 if (is != null) {
-                    parse(currentPage, nodes::add, is);
+                    parse(currentPage, new StatementsEmitterAdapter() {
+                        @Override
+                        public void emit(Quad statement) {
+                            nodes.add(statement);
+                        }
+                    }, is);
                 }
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
@@ -70,7 +75,7 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
         }
     }
 
-    static void parse(IRI currentPage, StatementEmitter emitter, InputStream in) throws IOException {
+    static void parse(IRI currentPage, StatementsEmitter emitter, InputStream in) throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(in);
         if (jsonNode != null) {
             if (jsonNode.has("results")) {
@@ -82,7 +87,7 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
 
     }
 
-    private static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
+    private static void parseIndividualDataset(IRI currentPage, StatementsEmitter emitter, JsonNode result) {
         if (result.has("id")) {
             String uuid = result.get("id").asText();
             IRI datasetUUID = toIRI(uuid);
@@ -93,7 +98,7 @@ public class RegistryReaderOBIS extends ProcessorReadOnly {
         }
     }
 
-    private static void emitArchive(StatementEmitter emitter, JsonNode result, IRI datasetUUID) {
+    private static void emitArchive(StatementsEmitter emitter, JsonNode result, IRI datasetUUID) {
         String urlString = result.get("archive").asText();
         IRI dataArchive = toIRI(urlString);
         emitter.emit(toStatement(datasetUUID, HAD_MEMBER, dataArchive));

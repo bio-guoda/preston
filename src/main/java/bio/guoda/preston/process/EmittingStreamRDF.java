@@ -14,10 +14,10 @@ import java.util.Iterator;
 public class EmittingStreamRDF {
     private final RDF rdf = new JenaRDF();
     private final RDF rdfSimple = new SimpleRDF();
-    private final StatementEmitter emitter;
+    private final StatementsEmitter emitter;
     private final ProcessorState context;
 
-    public EmittingStreamRDF(StatementEmitter emitter) {
+    public EmittingStreamRDF(StatementsEmitter emitter) {
         this(emitter, new ProcessorState() {
 
             @Override
@@ -27,7 +27,7 @@ public class EmittingStreamRDF {
         });
     }
 
-    public EmittingStreamRDF(StatementEmitter emitter, ProcessorState processorState) {
+    public EmittingStreamRDF(StatementsEmitter emitter, ProcessorState processorState) {
         this.emitter = emitter;
         this.context = processorState;
     }

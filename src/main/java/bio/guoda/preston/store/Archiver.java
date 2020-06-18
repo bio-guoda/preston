@@ -3,7 +3,7 @@ package bio.guoda.preston.store;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.cmd.ActivityContext;
 import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.process.StatementEmitter;
+import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -58,7 +58,7 @@ public class Archiver extends VersionProcessor {
         }
     }
 
-    private void putVersion(IRI versionSource, BlankNodeOrIRI newVersion, StatementEmitter emitter, Optional<BlankNodeOrIRI> sourceActivity) {
+    private void putVersion(IRI versionSource, BlankNodeOrIRI newVersion, StatementsEmitter emitter, Optional<BlankNodeOrIRI> sourceActivity) {
         Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
 
         IRI downloadActivity = toIRI(UUID.randomUUID());

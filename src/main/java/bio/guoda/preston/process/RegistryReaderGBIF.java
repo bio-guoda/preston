@@ -65,7 +65,12 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                             toEnglishLiteral("Provides a registry of Darwin Core archives, and EML descriptors."))
             ).forEach(nodes::add);
 
-            emitPageRequest(nodes::add, GBIF_REGISTRY);
+            emitPageRequest(new StatementsEmitterAdapter() {
+                @Override
+                public void emit(Quad statement) {
+                    nodes.add(statement);
+                }
+            }, GBIF_REGISTRY);
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(GBIF_API_DATASET_PART)) {
@@ -83,7 +88,12 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
             IRI currentPage = (IRI) getVersion(statement);
             InputStream is = get(currentPage);
             if (is != null) {
-                parseOccurrenceDownload(currentPage, nodes::add, is, getVersionSource(statement));
+                parseOccurrenceDownload(currentPage, new StatementsEmitterAdapter() {
+                    @Override
+                    public void emit(Quad statement) {
+                        nodes.add(statement);
+                    }
+                }, is, getVersionSource(statement));
             }
         } catch (IOException e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);
@@ -97,7 +107,12 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
             IRI currentPage = (IRI) getVersion(statement);
             InputStream is = get(currentPage);
             if (is != null) {
-                parse(currentPage, nodes::add, is, getVersionSource(statement));
+                parse(currentPage, new StatementsEmitterAdapter() {
+                    @Override
+                    public void emit(Quad statement) {
+                        nodes.add(statement);
+                    }
+                }, is, getVersionSource(statement));
             }
         } catch (IOException e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);
@@ -105,7 +120,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
     }
 
-    static void emitNextPage(int offset, int limit, StatementEmitter emitter, String versionSourceURI) {
+    static void emitNextPage(int offset, int limit, StatementsEmitter emitter, String versionSourceURI) {
         String nextPageURL = versionSourceURI;
         nextPageURL = StringUtils.replacePattern(nextPageURL, "limit=[0-9]*", "limit=" + limit);
         nextPageURL = StringUtils.replacePattern(nextPageURL, "offset=[0-9]*", "offset=" + offset);
@@ -117,7 +132,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         emitPageRequest(emitter, nextPage);
     }
 
-    private static void emitPageRequest(StatementEmitter emitter, IRI nextPage) {
+    private static void emitPageRequest(StatementsEmitter emitter, IRI nextPage) {
         Stream.of(
                 toStatement(nextPage, CREATED_BY, Seeds.GBIF),
                 toStatement(nextPage, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
@@ -125,7 +140,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 .forEach(emitter::emit);
     }
 
-    static void parse(IRI currentPage, StatementEmitter emitter, InputStream in, IRI versionSource) throws IOException {
+    static void parse(IRI currentPage, StatementsEmitter emitter, InputStream in, IRI versionSource) throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(in);
         if (jsonNode != null) {
             if (jsonNode.has("results")) {
@@ -163,7 +178,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 || (!jsonNode.has("endOfRecords") || jsonNode.get("endOfRecords").asBoolean(true));
     }
 
-    static void parseOccurrenceDownload(IRI currentPage, StatementEmitter emitter, InputStream in, IRI versionSource) throws IOException {
+    static void parseOccurrenceDownload(IRI currentPage, StatementsEmitter emitter, InputStream in, IRI versionSource) throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(in);
         if (jsonNode != null) {
             if (jsonNode.has("downloadLink")) {
@@ -185,7 +200,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     }
 
 
-    public static void parseIndividualDataset(IRI currentPage, StatementEmitter emitter, JsonNode result) {
+    public static void parseIndividualDataset(IRI currentPage, StatementsEmitter emitter, JsonNode result) {
         if (result.has("key")) {
             String uuid = result.get("key").asText();
             IRI datasetUUID = toIRI(uuid);
@@ -203,7 +218,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         }
     }
 
-    public static void handleEndpoints(StatementEmitter emitter, JsonNode result, IRI datasetUUID) {
+    public static void handleEndpoints(StatementsEmitter emitter, JsonNode result, IRI datasetUUID) {
         for (JsonNode endpoint : result.get("endpoints")) {
             if (endpoint.has("url") && endpoint.has("type")) {
                 String urlString = endpoint.get("url").asText();

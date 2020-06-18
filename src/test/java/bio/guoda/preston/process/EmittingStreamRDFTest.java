@@ -21,7 +21,7 @@ public class EmittingStreamRDFTest {
     @Test
     public void emitQuad() {
         List<Quad> quads = new ArrayList<>();
-        new EmittingStreamRDF(new StatementEmitter() {
+        new EmittingStreamRDF(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 quads.add(statement);
@@ -40,7 +40,7 @@ public class EmittingStreamRDFTest {
 
         String nquad = "<https://example.org> <http://purl.org/pav/hasVersion> _:ae63fa95-362c-38b5-b74f-203f8d7f92b3 .";
 
-        new EmittingStreamRDF(new StatementEmitter() {
+        new EmittingStreamRDF(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 quads.add(statement);
@@ -56,7 +56,7 @@ public class EmittingStreamRDFTest {
     @Test
     public void emitQuadURIWithUUID() {
         List<Quad> quads = new ArrayList<>();
-        new EmittingStreamRDF(new StatementEmitter() {
+        new EmittingStreamRDF(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 quads.add(statement);
@@ -74,7 +74,7 @@ public class EmittingStreamRDFTest {
         AtomicInteger counter = new AtomicInteger(0);
         List<Quad> quads = new ArrayList<>();
         String line0 = "<https://preston.guoda.org> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> .";
-        new EmittingStreamRDF(new StatementEmitter() {
+        new EmittingStreamRDF(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 quads.add(statement);
@@ -95,7 +95,7 @@ public class EmittingStreamRDFTest {
     @Test
     public void emitQuadNeverStart() {
         List<Quad> quads = new ArrayList<>();
-        new EmittingStreamRDF(new StatementEmitter() {
+        new EmittingStreamRDF(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 quads.add(statement);

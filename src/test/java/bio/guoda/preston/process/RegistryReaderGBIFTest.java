@@ -224,7 +224,7 @@ public class RegistryReaderGBIFTest {
     @Test
     public void nextPage() {
         List<Quad> nodes = new ArrayList<>();
-        RegistryReaderGBIF.emitNextPage(0, 10, nodes::add, "https://bla/?limit=2&offset=8");
+        RegistryReaderGBIF.emitNextPage(0, 10, TestUtil.testEmitter(nodes), "https://bla/?limit=2&offset=8");
         assertThat(nodes.size(), is(3));
         assertThat(nodes.get(1).getSubject().toString(), is("<https://bla/?limit=10&offset=0>"));
     }
@@ -236,7 +236,7 @@ public class RegistryReaderGBIFTest {
 
         IRI testNode = createTestNode();
 
-        RegistryReaderGBIF.parse(testNode, refNodes::add, getClass().getResourceAsStream(GBIFDATASETS_JSON), toIRI("http://example.org/"));
+        RegistryReaderGBIF.parse(testNode, TestUtil.testEmitter(refNodes), getClass().getResourceAsStream(GBIFDATASETS_JSON), toIRI("http://example.org/"));
 
         assertThat(refNodes.size(), is(60973));
 
@@ -282,7 +282,7 @@ public class RegistryReaderGBIFTest {
 
         RegistryReaderGBIF.parseOccurrenceDownload(
                 testNode,
-                refNodes::add,
+                TestUtil.testEmitter(refNodes),
                 getClass().getResourceAsStream("gbif-download-api.json"),
                 toIRI("http://example.org/"));
 
