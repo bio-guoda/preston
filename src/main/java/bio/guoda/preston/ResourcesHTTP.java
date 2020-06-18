@@ -19,6 +19,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -32,15 +33,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Resources {
-    public static final List<Integer> REDIRECT_CODES = Arrays.asList(301, 302, 303);
+public class ResourcesHTTP {
+    private static final List<Integer> REDIRECT_CODES = Arrays.asList(301, 302, 303);
     private static CloseableHttpClient httpClient = null;
     private static CloseableHttpClient redirectingHttpClient = null;
 
     public static InputStream asInputStreamOfflineOnly(IRI dataIRI) throws IOException {
         InputStream is = null;
         URI uri = URI.create(dataIRI.getIRIString());
-        if (StringUtils.equals("file", uri.getScheme())) {
+        if (StringUtils.equals("file", uri.getScheme())
+                && new File(uri).exists()) {
             is = uri.toURL().openStream();
         }
         return is;
@@ -71,7 +73,9 @@ public class Resources {
     }
 
 
-    public static InputStream asInputStream(IRI dataURI, List<Integer> ignoreCodes, DerefProgressListener listener) throws IOException {
+    public static InputStream asInputStream(IRI dataURI,
+                                            List<Integer> ignoreCodes,
+                                            DerefProgressListener listener) throws IOException {
         InputStream is = asInputStreamOfflineOnly(dataURI);
         if (is == null) {
             HttpGet get = new HttpGet(URI.create(dataURI.getIRIString()));

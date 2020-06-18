@@ -1,7 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.DerefProgressListener;
-import bio.guoda.preston.Resources;
+import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.DereferencerContentAddressedTarGZ;
@@ -13,7 +13,7 @@ import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
-import bio.guoda.preston.store.KeyValueStoreRemoteHTTP;
+import bio.guoda.preston.store.KeyValueStoreWithDereferencing;
 import bio.guoda.preston.store.KeyValueStoreStickyFailover;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.KeyValueStreamFactory;
@@ -85,8 +85,8 @@ public class Persisting extends PersistingLocal {
         return store;
     }
 
-    private Stream<KeyValueStoreRemoteHTTP> defaultRemotePathSupport(Stream<KeyToPath> keyToPathStream) {
-        return keyToPathStream.map(this::remoteWith);
+    private Stream<KeyValueStoreReadOnly> defaultRemotePathSupport(Stream<KeyToPath> keyToPathStream) {
+        return keyToPathStream.map(this::withStoreAt);
     }
 
     private List<KeyValueStoreReadOnly> includeTarGzSupport(Stream<KeyToPath> keyToPathStream) {
@@ -96,15 +96,15 @@ public class Persisting extends PersistingLocal {
         ).collect(Collectors.toList());
     }
 
-    private Stream<KeyValueStoreRemoteHTTP> tarGzRemotePathSupport() {
+    private Stream<KeyValueStoreWithDereferencing> tarGzRemotePathSupport() {
         return getRemoteURIs().stream().map(uri ->
                 noLocalCache
                         ? this.remoteWithTarGz(uri)
                         : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory())));
     }
 
-    private KeyValueStoreRemoteHTTP remoteWith(KeyToPath keyToPath) {
-        return new KeyValueStoreRemoteHTTP(keyToPath, getDerefStream());
+    private KeyValueStoreWithDereferencing withStoreAt(KeyToPath keyToPath) {
+        return new KeyValueStoreWithDereferencing(keyToPath, getDerefStream());
     }
 
     protected void setSupportTarGzDiscovery(boolean supportTarGzDiscovery) {
@@ -117,16 +117,16 @@ public class Persisting extends PersistingLocal {
     }
 
     public static Dereferencer<InputStream> getDerefStream(final DerefProgressListener listener) {
-        return uri -> Resources.asInputStreamIgnore404(uri, listener);
+        return uri -> ResourcesHTTP.asInputStreamIgnore404(uri, listener);
     }
 
-    private KeyValueStoreRemoteHTTP remoteWithTarGz(URI baseURI) {
-        return new KeyValueStoreRemoteHTTP(new KeyTo3LevelTarGzPath(baseURI),
+    private KeyValueStoreWithDereferencing remoteWithTarGz(URI baseURI) {
+        return new KeyValueStoreWithDereferencing(new KeyTo3LevelTarGzPath(baseURI),
                 new DereferencerContentAddressedTarGZ(getDerefStream()));
     }
 
-    private KeyValueStoreRemoteHTTP remoteWithTarGzCacheAll(URI baseURI, KeyValueStore keyValueStore) {
-        return new KeyValueStoreRemoteHTTP(new KeyTo3LevelTarGzPath(baseURI),
+    private KeyValueStoreWithDereferencing remoteWithTarGzCacheAll(URI baseURI, KeyValueStore keyValueStore) {
+        return new KeyValueStoreWithDereferencing(new KeyTo3LevelTarGzPath(baseURI),
                 new DereferencerContentAddressedTarGZ(getDerefStream(), new BlobStoreAppendOnly(keyValueStore, false)));
     }
 

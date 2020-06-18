@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-public class KeyValueStoreRemoteHTTP implements KeyValueStoreReadOnly {
+public class KeyValueStoreWithDereferencing implements KeyValueStoreReadOnly {
 
     private final KeyToPath keyToPath;
     private final Dereferencer<InputStream> dereferencer;
 
-    public KeyValueStoreRemoteHTTP(KeyToPath keyToPath, Dereferencer<InputStream> dereferencer) {
+    public KeyValueStoreWithDereferencing(KeyToPath keyToPath, Dereferencer<InputStream> dereferencer) {
         this.keyToPath = keyToPath;
         this.dereferencer = dereferencer;
     }

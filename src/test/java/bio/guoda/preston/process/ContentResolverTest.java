@@ -2,7 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.Resources;
+import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
@@ -52,7 +52,7 @@ public class ContentResolverTest {
     }
 
     private Archiver createStatementStore(StatementsListener... listeners) {
-        return new Archiver(new DereferencerContentAddressed(Resources::asInputStream, blobStore), TestUtil.getTestCrawlContext(), listeners);
+        return new Archiver(new DereferencerContentAddressed(ResourcesHTTP::asInputStream, blobStore), TestUtil.getTestCrawlContext(), listeners);
     }
 
     @After

@@ -18,11 +18,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-public class ResourcesIT {
+public class ResourcesHTTPIT {
 
     @Test
     public void irelandServerPickyAboutContentHeaderWithJSON() throws IOException {
-        try (InputStream is = Resources.asInputStream(RefNodeFactory.toIRI(URI.create("http://gbif.biodiversityireland.ie/HareSurveyOfIreland0607.zip")))) {
+        try (InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("http://gbif.biodiversityireland.ie/HareSurveyOfIreland0607.zip")))) {
             IOUtils.copy(is, new NullOutputStream());
         }
     }
@@ -31,7 +31,7 @@ public class ResourcesIT {
     public void irelandServerPickyAboutContentHeaderWithJSON404Ignore() throws IOException {
         final AtomicBoolean gotBusyMessage = new AtomicBoolean(false);
         final AtomicBoolean gotDoneMessage = new AtomicBoolean(false);
-        try (InputStream is = Resources.asInputStreamIgnore404(RefNodeFactory.toIRI(URI.create("http://gbif.biodiversityireland.ie/HareSurveyOfIreland0607.zip")), new DerefProgressListener() {
+        try (InputStream is = ResourcesHTTP.asInputStreamIgnore404(RefNodeFactory.toIRI(URI.create("http://gbif.biodiversityireland.ie/HareSurveyOfIreland0607.zip")), new DerefProgressListener() {
             @Override
             public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
                 if (DerefState.BUSY.equals(derefState)) {
@@ -57,7 +57,7 @@ public class ResourcesIT {
                 gotDoneMessage.set(true);
             }
         };
-        try (InputStream is = Resources.asInputStreamIgnore404(dataURI, listener)) {
+        try (InputStream is = ResourcesHTTP.asInputStreamIgnore404(dataURI, listener)) {
             IOUtils.copy(is, new NullOutputStream());
         }
         assertThat(gotDoneMessage.get(), Is.is(true));
@@ -66,7 +66,7 @@ public class ResourcesIT {
 
     @Test
     public void dataOneObjectLocationList() throws IOException {
-        try (InputStream is = Resources.asInputStream(RefNodeFactory.toIRI(URI.create("https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FJTH_BMW.20160629")))) {
+        try (InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FJTH_BMW.20160629")))) {
             StringWriter output = new StringWriter();
             IOUtils.copy(is, output, StandardCharsets.UTF_8);
             assertThat(output.getBuffer().toString(), CoreMatchers.containsString("objectLocationList"));

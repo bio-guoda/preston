@@ -1,6 +1,6 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.Resources;
+import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.Archiver;
@@ -71,7 +71,7 @@ public class CmdUpdate extends CmdActivity {
     private StatementsListener createActivityProcessor(BlobStore blobStore, ActivityContext ctx,
                                                       StatementsListener[] listeners) {
         return new Archiver(
-                new DereferencerContentAddressed(Resources::asInputStream, blobStore),
+                new DereferencerContentAddressed(ResourcesHTTP::asInputStream, blobStore),
                 ctx,
                 listeners);
     }

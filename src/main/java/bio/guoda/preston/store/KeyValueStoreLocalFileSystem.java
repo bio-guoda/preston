@@ -10,23 +10,17 @@ import java.io.InputStream;
 import java.net.URI;
 
 
-public class KeyValueStoreLocalFileSystem implements KeyValueStore {
+public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemReadOnly implements KeyValueStore {
 
     private final File tmpDir;
-    private final KeyToPath keyToPath;
 
     private final KeyValueStreamFactory keyValueStreamFactory;
 
     public KeyValueStoreLocalFileSystem(File tmpDir, KeyToPath keyToPath, KeyValueStreamFactory keyValueStreamFactory) {
+        super(keyToPath);
         this.tmpDir = tmpDir;
-        this.keyToPath = keyToPath;
         this.keyValueStreamFactory = keyValueStreamFactory;
     }
-
-    private static File getDataFile(URI filePath) {
-        return new File(filePath);
-    }
-
 
     @Override
     public void put(IRI key, InputStream value) throws IOException {
@@ -56,9 +50,6 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
         }
     }
 
-    private URI getPathForKey(IRI key) {
-        return keyToPath.toPath(key);
-    }
 
 
     /**
@@ -83,11 +74,6 @@ public class KeyValueStoreLocalFileSystem implements KeyValueStore {
         return key;
     }
 
-    @Override
-    public InputStream get(IRI key) throws IOException {
-        File dataFile = getDataFile(getPathForKey(key));
-        return dataFile.exists() ? FileUtils.openInputStream(dataFile) : null;
-    }
 
     private void put(IRI key, File tmpDestFile) throws IOException {
         if (!tmpDestFile.exists()) {

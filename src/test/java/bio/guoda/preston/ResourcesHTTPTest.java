@@ -1,0 +1,38 @@
+package bio.guoda.preston;
+
+import bio.guoda.preston.model.RefNodeFactory;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.*;
+
+public class ResourcesHTTPTest {
+
+    @Test
+    public void getLocalFile() throws URISyntaxException, IOException {
+        URL resource = getClass().getResource("/bio/guoda/preston/plazidwca.zip");
+        try (InputStream inputStream = ResourcesHTTP.asInputStreamOfflineOnly(RefNodeFactory.toIRI(resource.toURI()))) {
+            assertThat(inputStream, is(not(nullValue())));
+        }
+    }
+
+    @Test
+    public void getNonExistingLocalFile() throws IOException {
+        URL resource = getClass().getResource("/bio/guoda/preston/plazidwca.zip");
+        URI nonExistingResource = URI.create(resource.toExternalForm() + "does-not-exist");
+        assertThat(new File(nonExistingResource).exists(), is(false));
+        try (InputStream inputStream = ResourcesHTTP.asInputStreamOfflineOnly(RefNodeFactory.toIRI(nonExistingResource))) {
+            assertThat(inputStream, is(nullValue()));
+        }
+    }
+
+}
