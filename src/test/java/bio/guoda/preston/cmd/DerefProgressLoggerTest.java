@@ -31,8 +31,8 @@ public class DerefProgressLoggerTest {
 
         String[] lines = StringUtils.split(out.toString(StandardCharsets.UTF_8.name()), '\r');
 
-        assertThat(lines[0], Is.is(
-                "[https://example.org] 1.0% of 1 kB at ? MB/s ETA: < 1 minute"));
+        assertThat(lines[0], startsWith("[https://example.org] 1.0% of 1 kB at "));
+        assertThat(lines[0], endsWith(" MB/s ETA: < 1 minute"));
         assertThat(lines[1], startsWith("[https://example.org] 2.0% of 1 kB at"));
         assertThat(lines[1], endsWith("MB/s ETA: < 1 minute"));
 
