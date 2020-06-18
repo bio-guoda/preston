@@ -12,6 +12,8 @@ import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystemReadOnly;
+import bio.guoda.preston.store.KeyValueStoreProtocolAware;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreWithDereferencing;
 import bio.guoda.preston.store.KeyValueStoreStickyFailover;
@@ -24,6 +26,7 @@ import org.apache.commons.rdf.api.IRI;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -103,8 +106,11 @@ public class Persisting extends PersistingLocal {
                         : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory())));
     }
 
-    private KeyValueStoreWithDereferencing withStoreAt(KeyToPath keyToPath) {
-        return new KeyValueStoreWithDereferencing(keyToPath, getDerefStream());
+    private KeyValueStoreReadOnly withStoreAt(KeyToPath keyToPath) {
+        return new KeyValueStoreProtocolAware(new TreeMap<String, KeyValueStoreReadOnly>() {{
+            put("http", new KeyValueStoreWithDereferencing(keyToPath, getDerefStream()));
+            put("file:", new KeyValueStoreLocalFileSystemReadOnly(keyToPath));
+        }});
     }
 
     protected void setSupportTarGzDiscovery(boolean supportTarGzDiscovery) {
