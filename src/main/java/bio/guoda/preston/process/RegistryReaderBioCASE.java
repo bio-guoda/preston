@@ -25,8 +25,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.RefNodeConstants.*;
-import static bio.guoda.preston.model.RefNodeFactory.*;
+import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
+import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
+import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
+import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
+import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static bio.guoda.preston.model.RefNodeFactory.getVersion;
+import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
+import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
+import static bio.guoda.preston.model.RefNodeFactory.toBlank;
+import static bio.guoda.preston.model.RefNodeFactory.toContentType;
+import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
+import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
+import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class RegistryReaderBioCASE extends ProcessorReadOnly {
     private static final Log LOG = LogFactory.getLog(RegistryReaderBioCASE.class);
@@ -71,7 +84,12 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
                         InputStream content = get((IRI) version);
                         if (content != null) {
                             List<Quad> nodes = new ArrayList<>();
-                            parse.parse(content, nodes::add, registryVersion);
+                            parse.parse(content, new StatementsEmitterAdapter() {
+                                @Override
+                                public void emit(Quad statement) {
+                                    nodes.add(statement);
+                                }
+                            }, registryVersion);
                             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
                         }
                     }
@@ -84,7 +102,7 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     }
 
 
-    public static void parseProviders(InputStream providers, StatementEmitter emitter, BlankNodeOrIRI datasetRegistryVersion) throws IOException {
+    public static void parseProviders(InputStream providers, StatementsEmitter emitter, BlankNodeOrIRI datasetRegistryVersion) throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(providers);
         if (jsonNode.isArray()) {
             for (JsonNode provider : jsonNode) {
@@ -119,10 +137,10 @@ public class RegistryReaderBioCASE extends ProcessorReadOnly {
     }
 
 
-    public static void parseDatasetInventory(InputStream datasets, StatementEmitter emitter, final BlankNodeOrIRI datasetRegistryEntryVersion) throws IOException {
+    public static void parseDatasetInventory(InputStream datasets, StatementsEmitter emitter, final BlankNodeOrIRI datasetRegistryEntryVersion) throws IOException {
         XMLUtil.handleXPath("//dsi:archive", new XPathHandler() {
             @Override
-            public void evaluateXPath(StatementEmitter emitter, NodeList nodeList) throws XPathExpressionException {
+            public void evaluateXPath(StatementsEmitter emitter, NodeList nodeList) throws XPathExpressionException {
 
                 Map<String, String> mapping = new HashMap<String, String>() {{
                     put("http://www.tdwg.org/schemas/abcd/2.06", MimeTypes.MIME_TYPE_ABCDA);

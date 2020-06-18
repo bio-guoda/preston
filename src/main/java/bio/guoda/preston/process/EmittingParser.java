@@ -7,5 +7,5 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public interface EmittingParser {
-    void parse(InputStream is, StatementEmitter emitter, BlankNodeOrIRI versionSource) throws IOException;
+    void parse(InputStream is, StatementsEmitter emitter, BlankNodeOrIRI versionSource) throws IOException;
 }

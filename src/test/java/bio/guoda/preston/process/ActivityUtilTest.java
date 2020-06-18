@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
@@ -26,7 +27,7 @@ public class ActivityUtilTest {
         Quad first = toStatement(toIRI("cats"), toIRI("are"), toIRI("small"));
         Stream<Quad> unlabeledStatements = Stream.of(first);
 
-        final BlankNodeOrIRI newActivity = ActivityUtil.emitAsNewActivity(unlabeledStatements, nodes::add, Optional.empty());
+        final BlankNodeOrIRI newActivity = ActivityUtil.emitAsNewActivity(unlabeledStatements, TestUtil.testEmitter(nodes), Optional.empty());
 
         assertTrue(isUUID(newActivity));
 
@@ -42,7 +43,7 @@ public class ActivityUtilTest {
         Quad first = toStatement(toIRI("cats"), toIRI("are"), toIRI("small"));
         Stream<Quad> unlabeledStatements = Stream.of(first);
 
-        final BlankNodeOrIRI newActivity = ActivityUtil.emitAsNewActivity(unlabeledStatements, nodes::add, Optional.of(sourceActivity));
+        final BlankNodeOrIRI newActivity = ActivityUtil.emitAsNewActivity(unlabeledStatements, TestUtil.testEmitter(nodes), Optional.of(sourceActivity));
 
         assertTrue(isUUID(newActivity));
 

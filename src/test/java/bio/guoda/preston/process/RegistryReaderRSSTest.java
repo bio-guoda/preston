@@ -53,7 +53,7 @@ public class RegistryReaderRSSTest {
     public void parseFeeds() {
         IRI parent = toIRI("http://example.org");
         List<Quad> nodes = new ArrayList<>();
-        StatementEmitter emitter = nodes::add;
+        StatementsEmitter emitter = TestUtil.testEmitter(nodes);
 
         KeyValueStoreReadOnly readOnlyStore = (IRI key) -> getClass().getResourceAsStream("torch-portal-rss.xml");
 
@@ -79,7 +79,7 @@ public class RegistryReaderRSSTest {
     public void parseArthopodEasyFeeds() {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Quad> nodes = new ArrayList<>();
-        StatementEmitter emitter = nodes::add;
+        StatementsEmitter emitter = TestUtil.testEmitter(nodes);
         KeyValueStoreReadOnly readOnlyStore = (IRI key) -> getClass().getResourceAsStream("arthropodEasyCapture.xml");
 
         RegistryReaderRSS.parse(parent, emitter, readOnlyStore);
@@ -112,7 +112,7 @@ public class RegistryReaderRSSTest {
     public void parseSymbiotaFeeds() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Quad> nodes = new ArrayList<>();
-        StatementEmitter emitter = nodes::add;
+        StatementsEmitter emitter = TestUtil.testEmitter(nodes);
 
 
         RegistryReaderRSS.parse(parent, emitter, (IRI key) -> getClass().getResourceAsStream("symbiota-rss.xml"));
@@ -145,7 +145,7 @@ public class RegistryReaderRSSTest {
     public void parseIntermountainFeeds() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Quad> nodes = new ArrayList<>();
-        StatementEmitter emitter = nodes::add;
+        StatementsEmitter emitter = TestUtil.testEmitter(nodes);
 
         RegistryReaderRSS.parse(parent, emitter, (IRI key) -> getClass().getResourceAsStream("intermountain-biota-rss.xml"));
 
@@ -156,7 +156,7 @@ public class RegistryReaderRSSTest {
     public void parseIPTRSS() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Quad> nodes = new ArrayList<>();
-        StatementEmitter emitter = nodes::add;
+        StatementsEmitter emitter = TestUtil.testEmitter(nodes);
 
         RegistryReaderRSS.parse(parent, emitter, (IRI key) -> getClass().getResourceAsStream("ipt-norway-rss.xml"));
 
@@ -182,7 +182,7 @@ public class RegistryReaderRSSTest {
     public void parseVertNetIPTRSS() throws IOException {
         IRI parent = RefNodeFactory.toIRI("http://example.org");
         List<Quad> nodes = new ArrayList<>();
-        StatementEmitter emitter = nodes::add;
+        StatementsEmitter emitter = TestUtil.testEmitter(nodes);
 
         RegistryReaderRSS.parse(parent, emitter, (IRI key) -> getClass().getResourceAsStream("vertnet-ipt-rss.xml"));
 

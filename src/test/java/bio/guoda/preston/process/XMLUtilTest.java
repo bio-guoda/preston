@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import org.apache.commons.rdf.api.Quad;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.NodeList;
@@ -18,11 +19,14 @@ public class XMLUtilTest {
     public void feedNonXMLErrorPage() throws IOException {
         XMLUtil.handleXPath("//", new XPathHandler() {
             @Override
-            public void evaluateXPath(StatementEmitter emitter, NodeList evaluate) throws XPathExpressionException {
+            public void evaluateXPath(StatementsEmitter emitter, NodeList evaluate) throws XPathExpressionException {
 
             }
-        }, statement -> {
+        }, new StatementsEmitterAdapter() {
+            @Override
+            public void emit(Quad statement) {
 
+            }
         }, getNonXMLErrorPage());
     }
 

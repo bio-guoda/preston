@@ -73,7 +73,7 @@ public class RegistryReaderDOITest {
     @Test
     public void parseGBIFDownloadPage() throws IOException {
         ArrayList<Quad> nodes = new ArrayList<>();
-       StatementEmitter emitter = nodes::add;
+       StatementsEmitter emitter = TestUtil.testEmitter(nodes);
 
         Quad versionStatement = toStatement(toIRI(
                 "https://doi.org/10.15468/dl.4n9w6m"),

@@ -36,7 +36,12 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (hasVersionAvailable(statement)) {
             List<Quad> nodes = new ArrayList<>();
-            parse((IRI) getVersion(statement), nodes::add, this);
+            parse((IRI) getVersion(statement), new StatementsEmitterAdapter() {
+                @Override
+                public void emit(Quad statement) {
+                    nodes.add(statement);
+                }
+            }, this);
             if (!nodes.isEmpty()) { // Since this is opportunistic, only record an activity if something was produced
                 ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
             }
@@ -44,7 +49,7 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
 
     }
 
-    protected static void parse(IRI iri, StatementEmitter emitter, KeyValueStoreReadOnly readOnlyStore) {
+    protected static void parse(IRI iri, StatementsEmitter emitter, KeyValueStoreReadOnly readOnlyStore) {
         try {
             // first parsePublishers document to check whether it is valid
             checkParsebleXml(iri, readOnlyStore);
@@ -55,7 +60,7 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
         }
     }
 
-    private static void parseRssFeed(IRI iri, StatementEmitter emitter, KeyValueStoreReadOnly readOnlyStore) throws IOException {
+    private static void parseRssFeed(IRI iri, StatementsEmitter emitter, KeyValueStoreReadOnly readOnlyStore) throws IOException {
         try (InputStream in2 = readOnlyStore.get(iri)) {
             if (in2 != null) {
                 /// then parsePublishers
@@ -72,11 +77,11 @@ public class RegistryReaderRSS extends ProcessorReadOnly {
         }
     }
 
-    private static void parseRssFeed(final IRI parent1, StatementEmitter emitter, InputStream resourceAsStream) throws IOException {
+    private static void parseRssFeed(final IRI parent1, StatementsEmitter emitter, InputStream resourceAsStream) throws IOException {
 
         XPathHandler handler = new XPathHandler() {
             @Override
-            public void evaluateXPath(StatementEmitter emitter, NodeList nodeList) {
+            public void evaluateXPath(StatementsEmitter emitter, NodeList nodeList) {
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     boolean isDWCA = false;
                     URI linkURL = null;

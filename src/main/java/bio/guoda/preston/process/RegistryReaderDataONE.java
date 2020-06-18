@@ -85,7 +85,12 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
             ArrayList<Quad> nodes = new ArrayList<Quad>();
             try {
                 IRI currentPage = (IRI) getVersion(statement);
-                parseObjectLocationList(nodes::add, get(currentPage));
+                parseObjectLocationList(new StatementsEmitterAdapter() {
+                    @Override
+                    public void emit(Quad statement) {
+                        nodes.add(statement);
+                    }
+                }, get(currentPage));
             } catch (IOException e) {
                 LOG.warn("failed to handle [" + statement.toString() + "]", e);
             }
@@ -93,11 +98,11 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
         }
     }
 
-    private void parseObjectLocationList(StatementEmitter emitter, InputStream inputStream) throws IOException {
+    private void parseObjectLocationList(StatementsEmitter emitter, InputStream inputStream) throws IOException {
 
         XMLUtil.handleXPath("//identifier", new XPathHandler() {
             @Override
-            public void evaluateXPath(StatementEmitter emitter, NodeList nodeList) throws XPathExpressionException {
+            public void evaluateXPath(StatementsEmitter emitter, NodeList nodeList) throws XPathExpressionException {
 
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     Node item = nodeList.item(i);
