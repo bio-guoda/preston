@@ -7,7 +7,6 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -25,8 +24,8 @@ import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 
-@Ignore
 public class RegistryReaderALATest {
 
     @Test
@@ -99,10 +98,10 @@ public class RegistryReaderALATest {
 
         registryReader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(2));
-        Quad first = nodes.get(0);
+        Assert.assertThat(nodes.size(), is(3));
+        Quad first = nodes.get(1);
         assertThat(getVersionSource(first).toString(), is("<http://biocache.ala.org.au/archives/dr6504/dr6504_ror_dwca.zip>"));
-        Quad second = nodes.get(1);
+        Quad second = nodes.get(2);
         assertThat(getVersionSource(second).toString(), is("<https://biocache.ala.org.au/archives/dr6504/dr6504_ror_dwca.zip>"));
     }
 
@@ -122,11 +121,11 @@ public class RegistryReaderALATest {
 
         registryReader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(2));
-        Quad first = nodes.get(0);
-        assertThat(first.toString(), is("<https://biocache.ala.org.au/archives/gbif/dr382/dr382.zip> <http://purl.org/dc/elements/1.1/format> \"application/dwca\" ."));
-        Quad second = nodes.get(1);
-        assertThat(getVersionSource(second).toString(), is("<https://biocache.ala.org.au/archives/gbif/dr382/dr382.zip>"));
+        Assert.assertThat(nodes.size(), is(3));
+        Quad first = nodes.get(1);
+        assertThat(first.toString(), startsWith("<https://biocache.ala.org.au/archives/gbif/dr382/dr382.zip> <http://purl.org/dc/elements/1.1/format> \"application/dwca\" "));
+        Quad second = nodes.get(2);
+        assertThat(getVersionSource(second).toString(), startsWith("<https://biocache.ala.org.au/archives/gbif/dr382/dr382.zip>"));
     }
 
     private IRI createTestNode() {

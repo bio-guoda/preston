@@ -75,6 +75,9 @@ public class RefNodeFactory {
         return rdf.createQuad(null, subject, predicate, object);
     }
 
+    public static Quad toStatement(BlankNodeOrIRI graphName, Quad quad) {
+        return rdf.createQuad(graphName, quad.getSubject(), quad.getPredicate(), quad.getObject());
+    }
     public static Quad toStatement(BlankNodeOrIRI graphName, BlankNodeOrIRI subject, IRI predicate, RDFTerm object) {
         return rdf.createQuad(graphName, subject, predicate, object);
     }

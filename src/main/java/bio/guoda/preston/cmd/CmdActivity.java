@@ -114,8 +114,8 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                         }
 
                         @Override
-                        public void on(List<Quad> statement) {
-                            statementQueue.add(statement);
+                        public void on(List<Quad> statements) {
+                            statementQueue.add(statements);
                         }
                     }),
                     createLoggers(archivingLogger, printingLogger)

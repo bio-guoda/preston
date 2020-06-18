@@ -30,8 +30,8 @@ import static org.hamcrest.core.StringStartsWith.startsWith;
 
 public class RegistryReaderDataONETest {
 
-    public static final String FIRST_PAGE = "http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=0&rows=100";
-    public static final String DATAONE_FIRST_JSON = "dataone-first.json";
+    private static final String FIRST_PAGE = "http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=0&rows=100";
+    private static final String DATAONE_FIRST_JSON = "dataone-first.json";
 
     @Test
     public void onSeed() {

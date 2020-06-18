@@ -10,6 +10,7 @@ import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -43,11 +44,17 @@ public class CmdProcess extends CmdActivity {
         StatementsEmitter emitter = new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
-                handleStatement(statement, listeners);
+                emit(Collections.singletonList(statement));
+            }
+
+            @Override
+            public void emit(List<Quad> statements) {
+                handleNonBlankMessages(statements, listeners);
                 handleQueuedMessages(statementQueue, listeners);
             }
         };
-        new EmittingStreamRDF(emitter, this).parseAndEmit(getInputStream());
+        new EmittingStreamRDF(emitter, this)
+                .parseAndEmit(getInputStream());
 
     }
 
@@ -56,31 +63,31 @@ public class CmdProcess extends CmdActivity {
         return "An event that (re-) processes existing biodiversity datasets graphs and their provenance.";
     }
 
-
-    private void handleStatement(Quad statement, StatementsListener[] listeners) {
-        if ((!(statement.getSubject() instanceof BlankNode) && !(statement.getObject() instanceof BlankNode))) {
-            for (StatementsListener listener : listeners) {
-                listener.on(statement);
-            }
-        }
-    }
-
     private void handleQueuedMessages(Queue<List<Quad>> statementQueue1, StatementsListener[] listeners) {
         while (!statementQueue1.isEmpty()) {
             List<Quad> polled = statementQueue1.poll();
-            Stream<Quad> quadStream = polled.stream().filter(statement ->
-                    (!(statement.getSubject() instanceof BlankNode) && !(statement.getObject() instanceof BlankNode)));
-
-            List<Quad> nonBlankStatements = quadStream.collect(Collectors.toList());
-            for (StatementsListener listener : listeners) {
-                listener.on(nonBlankStatements);
-            }
+            handleNonBlankMessages(polled, listeners);
         }
+    }
+
+    private void handleNonBlankMessages(List<Quad> statements, StatementsListener[] listeners) {
+        List<Quad> nonBlankStatements = nonBlankStatements(statements);
+        for (StatementsListener listener : listeners) {
+            listener.on(nonBlankStatements);
+        }
+    }
+
+    private List<Quad> nonBlankStatements(List<Quad> polled) {
+        Stream<Quad> quadStream = polled.stream().filter(statement ->
+                (!(statement.getSubject() instanceof BlankNode) && !(statement.getObject() instanceof BlankNode)));
+
+        return quadStream.collect(Collectors.toList());
     }
 
     public void setInputStream(InputStream inputStream) {
         this.is = inputStream;
     }
+
     private InputStream getInputStream() {
         return(this.is);
     }

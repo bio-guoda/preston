@@ -7,6 +7,8 @@ import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -22,21 +24,34 @@ public class TikaHashingActivity extends ProcessorReadOnly {
 
     @Override
     public void on(Quad statement) {
-        RDFTerm subject = statement.getSubject();
-        if (!(subject instanceof IRI && ((IRI) subject).getIRIString().startsWith("hash://tika-tlsh/"))) {
-            handleTerm(statement, subject);
-            handleTerm(statement, statement.getObject());
+        on(Collections.singletonList(statement));
+    }
+
+    private void handleHashes(Quad statement) {
+        handleTerm(statement, statement.getSubject());
+        handleTerm(statement, statement.getObject());
+    }
+
+    @Override
+    public void on(List<Quad> statement) {
+        if (statement.stream().noneMatch(q -> {
+            RDFTerm subject = q.getSubject();
+            return (subject instanceof IRI
+                    && ((IRI) subject).getIRIString().startsWith("hash://tika-tlsh/"));
+        })) {
+            for (Quad quad : statement) {
+                handleHashes(quad);
+            }
         }
     }
 
-    public void handleTerm(Quad statement, RDFTerm obj) {
+    private void handleTerm(Quad statement, RDFTerm obj) {
         if (obj instanceof IRI) {
             handleIRI(statement, (IRI) obj);
         }
     }
 
-    public void handleIRI(Quad statement, IRI obj) {
-        IRI sourceIRI = obj;
+    private void handleIRI(Quad statement, IRI sourceIRI) {
         if (sourceIRI.getIRIString().startsWith("hash://sha256/")) {
             try {
                 IRI tikaIRI = new HashGeneratorTikaTLSH().hash(get(sourceIRI));
@@ -44,6 +59,7 @@ public class TikaHashingActivity extends ProcessorReadOnly {
                 IRI activityUUID = toIRI(UUID.randomUUID());
                 Stream<Quad> quadStream = Stream.of(
                         toStatement(tikaIRI, RefNodeConstants.WAS_DERIVED_FROM, sourceIRI),
+                        toStatement(activityUUID, RefNodeConstants.USED, sourceIRI),
                         toStatement(tikaIRI, RefNodeConstants.WAS_GENERATED_BY, activityUUID));
 
                 ActivityUtil.emitAsNewActivity(quadStream, this, statement.getGraphName(), activityUUID);

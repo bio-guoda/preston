@@ -4,6 +4,9 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.cmd.ProcessorState;
 import org.apache.commons.rdf.api.Quad;
 
+import java.util.Collections;
+import java.util.List;
+
 public abstract class StatementProcessor extends StatementsListenerEmitterAdapter implements StatementsListener, StatementsEmitter {
 
     private final StatementsListener[] listeners;
@@ -20,8 +23,13 @@ public abstract class StatementProcessor extends StatementsListenerEmitterAdapte
 
     @Override
     public void emit(Quad statement) {
+        emit(Collections.singletonList(statement));
+    }
+
+    @Override
+    public void emit(List<Quad> statements) {
         for (StatementsListener listener : listeners) {
-            listener.on(statement);
+            listener.on(statements);
         }
     }
 
