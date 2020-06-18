@@ -5,6 +5,7 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.ACTIVITY;
@@ -15,31 +16,28 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class ActivityUtil {
 
-    private static void beginInformedActivity(StatementsEmitter emitter, BlankNodeOrIRI newActivity, Optional<BlankNodeOrIRI> sourceActivity) {
-        emitter.emit(toStatement(newActivity, newActivity, IS_A, ACTIVITY));
+    private static Stream<Quad> beginInformedActivity(StatementsEmitter emitter, BlankNodeOrIRI newActivity, Optional<BlankNodeOrIRI> sourceActivity) {
+        Stream<Quad> quadStream = Stream.of(toStatement(newActivity, newActivity, IS_A, ACTIVITY));
 
-        if (sourceActivity.isPresent()) {
-            emitter.emit(toStatement(newActivity, newActivity, WAS_INFORMED_BY, sourceActivity.get()));
-        }
+        return sourceActivity
+                .map(activity -> Stream.concat(quadStream, Stream.of(toStatement(newActivity, newActivity, WAS_INFORMED_BY, activity))))
+                .orElse(quadStream);
     }
-
-    private static void endInformedActivity(StatementsEmitter emitter, BlankNodeOrIRI activity) {
-    }
-
+    
     private static void emitWithActivityName(Stream<Quad> quadStream, StatementsEmitter emitter, BlankNodeOrIRI activity) {
         quadStream.map(quad -> toStatement(activity, quad.getSubject(), quad.getPredicate(), quad.getObject()))
+                .collect(Collectors.toList())
                 .forEach(emitter::emit);
     }
 
     public static BlankNodeOrIRI emitAsNewActivity(Stream<Quad> quadStream, StatementsEmitter emitter, Optional<BlankNodeOrIRI> parentActivity) {
         BlankNodeOrIRI newActivity = toIRI(UUID.randomUUID());
-        emitAsNewNamedActivity(quadStream, emitter, parentActivity, newActivity);
+        emitAsNewActivity(quadStream, emitter, parentActivity, newActivity);
         return newActivity;
     }
 
-    public static void emitAsNewNamedActivity(Stream<Quad> quadStream, StatementsEmitter emitter, Optional<BlankNodeOrIRI> parentActivity, BlankNodeOrIRI activityName) {
-        beginInformedActivity(emitter, activityName, parentActivity);
-        emitWithActivityName(quadStream, emitter, activityName);
-        endInformedActivity(emitter, activityName);
+    public static void emitAsNewActivity(Stream<Quad> activityStatements, StatementsEmitter emitter, Optional<BlankNodeOrIRI> parentActivity, BlankNodeOrIRI activityName) {
+        Stream<Quad> activityStart = beginInformedActivity(emitter, activityName, parentActivity);
+        emitWithActivityName(Stream.concat(activityStart, activityStatements), emitter, activityName);
     }
 }

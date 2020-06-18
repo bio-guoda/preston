@@ -2,11 +2,9 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashGeneratorTikaTLSH;
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.apache.jena.ontology.OntDocumentManager;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -48,7 +46,7 @@ public class TikaHashingActivity extends ProcessorReadOnly {
                         toStatement(tikaIRI, RefNodeConstants.WAS_DERIVED_FROM, sourceIRI),
                         toStatement(tikaIRI, RefNodeConstants.WAS_GENERATED_BY, activityUUID));
 
-                ActivityUtil.emitAsNewNamedActivity(quadStream, this, statement.getGraphName(), activityUUID);
+                ActivityUtil.emitAsNewActivity(quadStream, this, statement.getGraphName(), activityUUID);
 
             } catch (IOException e) {
                 // problem calculating tika-hash
