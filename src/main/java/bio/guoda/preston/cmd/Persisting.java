@@ -12,6 +12,7 @@ import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystemReadOnly;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreStickyFailover;
 import bio.guoda.preston.store.KeyValueStoreWithDereferencing;
@@ -19,9 +20,15 @@ import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.KeyValueStreamFactory;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.URIConverter;
+import jdk.internal.util.xml.impl.Input;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
@@ -109,10 +116,10 @@ public class Persisting extends PersistingLocal {
     }
 
     private KeyValueStoreReadOnly withStoreAt(URI baseURI, KeyToPath keyToPath) {
-        return withStoreAt(baseURI, keyToPath, getDerefStream());
+        return withStoreAt(keyToPath, getDerefStream(baseURI));
     }
 
-    private KeyValueStoreReadOnly withStoreAt(URI baseURI, KeyToPath keyToPath, Dereferencer<InputStream> dereferencer) {
+    private KeyValueStoreReadOnly withStoreAt(KeyToPath keyToPath, Dereferencer<InputStream> dereferencer) {
         return new KeyValueStoreWithDereferencing(keyToPath, dereferencer);
     }
 
@@ -121,22 +128,28 @@ public class Persisting extends PersistingLocal {
     }
 
 
-    public static Dereferencer<InputStream> getDerefStream() {
-        return getDerefStream(new DerefProgressLogger());
+    public static Dereferencer<InputStream> getDerefStream(URI baseURI) {
+        Dereferencer<InputStream> dereferencer;
+        if (StringUtils.equalsAnyIgnoreCase(baseURI.getScheme(), "file")) {
+            dereferencer = uri -> IOUtils.buffer(new FileInputStream(new File(URI.create(uri.getIRIString()))));
+        } else {
+            dereferencer = getDerefStreamHTTP(new DerefProgressLogger());
+        }
+        return dereferencer;
     }
 
-    public static Dereferencer<InputStream> getDerefStream(final DerefProgressListener listener) {
+    public static Dereferencer<InputStream> getDerefStreamHTTP(final DerefProgressListener listener) {
         return uri -> ResourcesHTTP.asInputStreamIgnore404(uri, listener);
     }
 
     private KeyValueStoreReadOnly remoteWithTarGz(URI baseURI) {
-        return withStoreAt(baseURI, new KeyTo3LevelTarGzPath(baseURI),
-                new DereferencerContentAddressedTarGZ(getDerefStream()));
+        return withStoreAt(new KeyTo3LevelTarGzPath(baseURI),
+                new DereferencerContentAddressedTarGZ(getDerefStream(baseURI)));
     }
 
     private KeyValueStoreReadOnly remoteWithTarGzCacheAll(URI baseURI, KeyValueStore keyValueStore) {
-        DereferencerContentAddressedTarGZ dereferencer = new DereferencerContentAddressedTarGZ(getDerefStream(), new BlobStoreAppendOnly(keyValueStore, false));
-        return withStoreAt(baseURI, new KeyTo3LevelTarGzPath(baseURI), dereferencer);
+        DereferencerContentAddressedTarGZ dereferencer = new DereferencerContentAddressedTarGZ(getDerefStream(baseURI), new BlobStoreAppendOnly(keyValueStore, false));
+        return withStoreAt(new KeyTo3LevelTarGzPath(baseURI), dereferencer);
     }
 
 
