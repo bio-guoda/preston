@@ -56,6 +56,10 @@ public class Persisting extends PersistingLocal {
         return getRemoteURIs() != null && !getRemoteURIs().isEmpty();
     }
 
+    protected void setNoLocalCache(Boolean noLocalCache) {
+        this.noLocalCache = noLocalCache;
+    }
+
     @Override
     protected KeyValueStore getKeyValueStore(KeyValueStreamFactory kvStreamFactory) {
         KeyValueStore store;

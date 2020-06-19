@@ -60,6 +60,7 @@ public class PersistingTest {
     public void githubPlainFolder() throws IOException {
 
         Persisting persisting = new Persisting();
+        persisting.setNoLocalCache(true);
         persisting.setRemoteURIs(Collections.singletonList(URI.create("https://raw.githubusercontent.com/bio-guoda/preston-amazon/master/data/")));
 
         KeyValueStore keyValueStore = persisting.getKeyValueStore(KeyValueStoreLocalFileSystemTest.getAlwaysAccepting());
@@ -74,13 +75,15 @@ public class PersistingTest {
     public void gitHubTarGz() throws IOException {
 
         Persisting persisting = new Persisting();
-        persisting.setRemoteURIs(Collections.singletonList(URI.create("https://raw.githubusercontent.com/bio-guoda/preston/a1ed84137408c866656028148babda770b1d6278/src/test/resources/")));
+        persisting.setRemoteURIs(Collections.singletonList(URI.create("https://raw.githubusercontent.com/bio-guoda/preston/346c2f16bdeff39b385ed86717015bf69f0301d4/src/test/resources/")));
+        persisting.setNoLocalCache(true);
 
         KeyValueStore keyValueStore = persisting.getKeyValueStore(KeyValueStoreLocalFileSystemTest.getAlwaysAccepting());
         InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/a12dd6335e7803027da3007e26926c5c946fea9803a5eb07908d978998d933da"));
         assertNotNull(inputStream);
 
-        assertThat(org.apache.cxf.helpers.IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()), StringStartsWith.startsWith("{\"key\":\"58414378-4fb2-47e0-8dd5-8b55d5c77117\""));
+        assertThat(org.apache.cxf.helpers.IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()),
+                StringStartsWith.startsWith("THE EVOLUTION OF MAN"));
 
     }
 
