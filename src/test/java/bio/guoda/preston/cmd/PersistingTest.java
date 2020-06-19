@@ -70,7 +70,6 @@ public class PersistingTest {
 
     @Test
     public void githubPlainFolder() throws IOException {
-
         Persisting persisting = new Persisting();
         persisting.setNoLocalCache(true);
         persisting.setRemoteURIs(Collections.singletonList(URI.create("https://raw.githubusercontent.com/bio-guoda/preston-amazon/master/data/")));
