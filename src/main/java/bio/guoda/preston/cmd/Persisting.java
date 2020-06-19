@@ -19,6 +19,7 @@ import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.KeyValueStreamFactory;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.URIConverter;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.InputStream;
@@ -61,10 +62,10 @@ public class Persisting extends PersistingLocal {
     protected KeyValueStore getKeyValueStore(KeyValueStreamFactory kvStreamFactory) {
         KeyValueStore store;
         if (hasRemote()) {
-            Stream<KeyToPath> keyToPathStream =
+            Stream<Pair<URI,KeyToPath>> keyToPathStream =
                     getRemoteURIs().stream().flatMap(uri -> Stream.of(
-                            new KeyTo3LevelPath(uri),
-                            new KeyTo1LevelPath(uri)
+                            Pair.of(uri, new KeyTo3LevelPath(uri)),
+                            Pair.of(uri, new KeyTo1LevelPath(uri))
                     ));
 
             List<KeyValueStoreReadOnly> keyValueStoreRemotes =
@@ -89,11 +90,11 @@ public class Persisting extends PersistingLocal {
         return store;
     }
 
-    private Stream<KeyValueStoreReadOnly> defaultRemotePathSupport(Stream<KeyToPath> keyToPathStream) {
-        return keyToPathStream.map(this::withStoreAt);
+    private Stream<KeyValueStoreReadOnly> defaultRemotePathSupport(Stream<Pair<URI, KeyToPath>> keyToPathStream) {
+        return keyToPathStream.map(x -> this.withStoreAt(x.getKey(), x.getValue()));
     }
 
-    private List<KeyValueStoreReadOnly> includeTarGzSupport(Stream<KeyToPath> keyToPathStream) {
+    private List<KeyValueStoreReadOnly> includeTarGzSupport(Stream<Pair<URI,KeyToPath>> keyToPathStream) {
         return Stream.concat(
                 defaultRemotePathSupport(keyToPathStream),
                 tarGzRemotePathSupport()
@@ -107,11 +108,11 @@ public class Persisting extends PersistingLocal {
                         : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory())));
     }
 
-    private KeyValueStoreReadOnly withStoreAt(KeyToPath keyToPath) {
-        return withStoreAt(keyToPath, getDerefStream());
+    private KeyValueStoreReadOnly withStoreAt(URI baseURI, KeyToPath keyToPath) {
+        return withStoreAt(baseURI, keyToPath, getDerefStream());
     }
 
-    private KeyValueStoreReadOnly withStoreAt(KeyToPath keyToPath, Dereferencer<InputStream> dereferencer) {
+    private KeyValueStoreReadOnly withStoreAt(URI baseURI, KeyToPath keyToPath, Dereferencer<InputStream> dereferencer) {
         return new KeyValueStoreWithDereferencing(keyToPath, dereferencer);
     }
 
@@ -129,13 +130,13 @@ public class Persisting extends PersistingLocal {
     }
 
     private KeyValueStoreReadOnly remoteWithTarGz(URI baseURI) {
-        return withStoreAt(new KeyTo3LevelTarGzPath(baseURI),
+        return withStoreAt(baseURI, new KeyTo3LevelTarGzPath(baseURI),
                 new DereferencerContentAddressedTarGZ(getDerefStream()));
     }
 
     private KeyValueStoreReadOnly remoteWithTarGzCacheAll(URI baseURI, KeyValueStore keyValueStore) {
         DereferencerContentAddressedTarGZ dereferencer = new DereferencerContentAddressedTarGZ(getDerefStream(), new BlobStoreAppendOnly(keyValueStore, false));
-        return withStoreAt(new KeyTo3LevelTarGzPath(baseURI), dereferencer);
+        return withStoreAt(baseURI, new KeyTo3LevelTarGzPath(baseURI), dereferencer);
     }
 
 
