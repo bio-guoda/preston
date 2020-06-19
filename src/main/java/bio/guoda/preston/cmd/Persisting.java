@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -128,7 +129,10 @@ public class Persisting extends PersistingLocal {
     public static Dereferencer<InputStream> getDerefStream(URI baseURI) {
         Dereferencer<InputStream> dereferencer;
         if (StringUtils.equalsAnyIgnoreCase(baseURI.getScheme(), "file")) {
-            dereferencer = uri -> IOUtils.buffer(new FileInputStream(new File(URI.create(uri.getIRIString()))));
+            dereferencer = uri -> {
+                File file = new File(URI.create(uri.getIRIString()));
+                return file.exists() ? IOUtils.buffer(new FileInputStream(file)) : null;
+            };
         } else {
             dereferencer = getDerefStreamHTTP(new DerefProgressLogger());
         }
