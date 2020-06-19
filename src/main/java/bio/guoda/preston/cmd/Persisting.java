@@ -37,10 +37,10 @@ import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 public class Persisting extends PersistingLocal {
 
     @Parameter(names = {"--remote", "--remotes", "--include", "--repos", "--repositories"}, description = "included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)", converter = URIConverter.class, validateWith = URIValidator.class)
-    private List<URI> remoteURIs;
+    private List<URI> repositoryURIs;
 
-    @Parameter(names = {"--no-cache"}, description = "disable local content cache")
-    private Boolean noLocalCache = false;
+    @Parameter(names = {"--no-cache", "--disable-cache"}, description = "disable local content cache")
+    private Boolean disableCache = false;
 
     private boolean supportTarGzDiscovery = true;
 
@@ -50,24 +50,24 @@ public class Persisting extends PersistingLocal {
         return this.provenanceRoot;
     }
 
-    protected List<URI> getRemoteURIs() {
-        return remoteURIs;
+    protected List<URI> getRepositoryURIs() {
+        return repositoryURIs;
     }
 
-    protected boolean hasRemote() {
-        return getRemoteURIs() != null && !getRemoteURIs().isEmpty();
+    protected boolean hasRepositoryDependencies() {
+        return getRepositoryURIs() != null && !getRepositoryURIs().isEmpty();
     }
 
-    protected void setNoLocalCache(Boolean noLocalCache) {
-        this.noLocalCache = noLocalCache;
+    protected void setDisableCache(Boolean disableCache) {
+        this.disableCache = disableCache;
     }
 
     @Override
     protected KeyValueStore getKeyValueStore(KeyValueStreamFactory kvStreamFactory) {
         KeyValueStore store;
-        if (hasRemote()) {
+        if (hasRepositoryDependencies()) {
             Stream<Pair<URI,KeyToPath>> keyToPathStream =
-                    getRemoteURIs().stream().flatMap(uri -> Stream.of(
+                    getRepositoryURIs().stream().flatMap(uri -> Stream.of(
                             Pair.of(uri, new KeyTo3LevelPath(uri)),
                             Pair.of(uri, new KeyTo1LevelPath(uri))
                     ));
@@ -79,7 +79,7 @@ public class Persisting extends PersistingLocal {
 
             KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
 
-            if (noLocalCache) {
+            if (disableCache) {
                 store = new KeyValueStoreWithFallback(
                         super.getKeyValueStore(kvStreamFactory),
                         failover);
@@ -106,8 +106,8 @@ public class Persisting extends PersistingLocal {
     }
 
     private Stream<KeyValueStoreReadOnly> tarGzRemotePathSupport() {
-        return getRemoteURIs().stream().map(uri ->
-                noLocalCache
+        return getRepositoryURIs().stream().map(uri ->
+                disableCache
                         ? this.remoteWithTarGz(uri)
                         : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory())));
     }
@@ -153,7 +153,7 @@ public class Persisting extends PersistingLocal {
     }
 
 
-    public void setRemoteURIs(List<URI> remoteURIs) {
-        this.remoteURIs = remoteURIs;
+    public void setRepositoryURIs(List<URI> repositoryURIs) {
+        this.repositoryURIs = repositoryURIs;
     }
 }
