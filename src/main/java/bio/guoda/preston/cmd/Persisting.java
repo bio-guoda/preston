@@ -36,7 +36,7 @@ import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 
 public class Persisting extends PersistingLocal {
 
-    @Parameter(names = {"--remote", "--remotes", "--include", "--depends-on", "--use"}, description = "included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)", converter = URIConverter.class, validateWith = URIValidator.class)
+    @Parameter(names = {"--remote", "--remotes", "--include", "--repos", "--repositories"}, description = "included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)", converter = URIConverter.class, validateWith = URIValidator.class)
     private List<URI> remoteURIs;
 
     @Parameter(names = {"--no-cache"}, description = "disable local content cache")
