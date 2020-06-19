@@ -68,22 +68,16 @@ public class KeyValueStoreLocalFileSystemTest {
 
     }
 
-    public KeyValueStreamFactory getAlwaysAccepting() {
-        return new KeyValueStreamFactory() {
+    public static KeyValueStreamFactory getAlwaysAccepting() {
+        return (key, is) -> new ValidatingKeyValueStream() {
+            @Override
+            public InputStream getValueStream() {
+                return is;
+            }
 
             @Override
-            public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
-                return new ValidatingKeyValueStream() {
-                    @Override
-                    public InputStream getValueStream() {
-                        return is;
-                    }
-
-                    @Override
-                    public boolean acceptValueStreamForKey(IRI key) {
-                        return true;
-                    }
-                };
+            public boolean acceptValueStreamForKey(IRI key) {
+                return true;
             }
         };
     }

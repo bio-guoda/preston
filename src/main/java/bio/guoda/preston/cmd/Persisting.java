@@ -107,10 +107,11 @@ public class Persisting extends PersistingLocal {
     }
 
     private KeyValueStoreReadOnly withStoreAt(KeyToPath keyToPath) {
-        return new KeyValueStoreProtocolAware(new TreeMap<String, KeyValueStoreReadOnly>() {{
-            put("http", new KeyValueStoreWithDereferencing(keyToPath, getDerefStream()));
-            put("file:", new KeyValueStoreLocalFileSystemReadOnly(keyToPath));
-        }});
+        return new KeyValueStoreWithDereferencing(keyToPath, getDerefStream());
+//        return new KeyValueStoreProtocolAware(new TreeMap<String, KeyValueStoreReadOnly>() {{
+//            put("http", new KeyValueStoreWithDereferencing(keyToPath, getDerefStream()));
+//            put("file:", new KeyValueStoreLocalFileSystemReadOnly(keyToPath));
+//        }});
     }
 
     protected void setSupportTarGzDiscovery(boolean supportTarGzDiscovery) {
@@ -137,4 +138,7 @@ public class Persisting extends PersistingLocal {
     }
 
 
+    public void setRemoteURIs(List<URI> remoteURIs) {
+        this.remoteURIs = remoteURIs;
+    }
 }

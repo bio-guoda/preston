@@ -29,7 +29,7 @@ public class TextExtractUtilTest {
     @Test
     public void extractTextFromTarGz() throws IOException {
         Tika tika = new Tika();
-        try (InputStream resourceAsStream = getClass().getResourceAsStream("/preston-1a.tar.gz")) {
+        try (InputStream resourceAsStream = getClass().getResourceAsStream("/preston-a1.tar.gz")) {
             assertNotNull(resourceAsStream);
             Reader reader = tika.parse(resourceAsStream);
             readerOutputContainsString(reader, "Constitution of the Human Brain");
