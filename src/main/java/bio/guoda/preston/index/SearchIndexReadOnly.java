@@ -3,7 +3,9 @@ package bio.guoda.preston.index;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.search.Explanation;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.NGramPhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TopFieldDocs;
@@ -16,7 +18,7 @@ import java.io.IOException;
 public class SearchIndexReadOnly implements SearchIndexReadable {
 
     private DirectoryReader indexReader;
-    private IndexSearcher indexSearcher;
+    protected IndexSearcher indexSearcher;
     private QueryBuilder queryBuilder;
 
     public SearchIndexReadOnly(Directory directory, Analyzer analyzer) throws IOException {
@@ -32,8 +34,8 @@ public class SearchIndexReadOnly implements SearchIndexReadable {
 
     @Override
     public TopFieldDocs find(String key, String value, int maxHits) throws IOException {
-        Query query = queryBuilder.createPhraseQuery(key, value);
-        return indexSearcher.search(query, maxHits, Sort.RELEVANCE);
+        Query query = queryBuilder.createBooleanQuery(key, value);
+        return indexSearcher.search(query, maxHits, Sort.RELEVANCE, true);
     }
 
     @Override

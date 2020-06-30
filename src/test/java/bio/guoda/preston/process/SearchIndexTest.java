@@ -91,7 +91,7 @@ public class SearchIndexTest {
         assertThat(hits.totalHits.value, is(0L));
     }
 
-    private Directory createIndexStore() throws IOException {
+    public static Directory createIndexStore() throws IOException {
         TemporaryFolder tmp = new TemporaryFolder();
         tmp.create();
         String tmpPath = tmp.getRoot().getPath();
