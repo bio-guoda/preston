@@ -1,13 +1,12 @@
-package bio.guoda.preston.process;
+package bio.guoda.preston.index;
 
-import bio.guoda.preston.index.SearchIndexReadOnly;
-import bio.guoda.preston.index.SearchIndexReadable;
-import bio.guoda.preston.index.SearchIndexWritable;
-import bio.guoda.preston.index.SearchIndexWriteOnly;
+import bio.guoda.preston.index.SearchIndex;
+import bio.guoda.preston.index.SearchIndexImpl;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TopFieldDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -32,16 +31,13 @@ public class SearchIndexTest {
         Document doc = new Document();
         doc.add(new TextField(key, value, Field.Store.YES));
 
-        SearchIndexWritable writeOnlyIndex = new SearchIndexWriteOnly(indexStore, analyzer);
-        writeOnlyIndex.put(doc);
-        writeOnlyIndex.close();
+        SearchIndex index = new SearchIndexImpl(indexStore, analyzer);
+        index.put(doc);
 
-        SearchIndexReadable readOnlyIndex = new SearchIndexReadOnly(indexStore, analyzer);
-        TopFieldDocs hits = readOnlyIndex.find(key, value, 2);
-
+        TopFieldDocs hits = index.find(key, value, 2);
         assertThat(hits.totalHits.value, is(1L));
 
-        Document firstHit = readOnlyIndex.get(hits.scoreDocs[0].doc);
+        Document firstHit = index.get(hits.scoreDocs[0].doc);
         assertThat(firstHit.get(key), is(value));
     }
 
@@ -55,20 +51,17 @@ public class SearchIndexTest {
         Document doc = new Document();
         doc.add(new TextField(key, value, Field.Store.YES));
 
-        SearchIndexWritable writeOnlyIndex = new SearchIndexWriteOnly(indexStore, analyzer);
-        writeOnlyIndex.put(doc);
-        writeOnlyIndex.put(doc);
-        writeOnlyIndex.close();
+        SearchIndex index = new SearchIndexImpl(indexStore, analyzer);
+        index.put(doc);
+        index.put(doc);
 
-        SearchIndexReadable readOnlyIndex = new SearchIndexReadOnly(indexStore, analyzer);
-        TopFieldDocs hits = readOnlyIndex.find(key, value, 3);
-
+        TopFieldDocs hits = index.find(key, value, 3);
         assertThat(hits.totalHits.value, is(2L));
 
-        Document firstHit = readOnlyIndex.get(hits.scoreDocs[0].doc);
+        Document firstHit = index.get(hits.scoreDocs[0].doc);
         assertThat(firstHit.get(key), is(value));
 
-        Document secondHit = readOnlyIndex.get(hits.scoreDocs[0].doc);
+        Document secondHit = index.get(hits.scoreDocs[0].doc);
         assertThat(secondHit.get(key), is(value));
     }
 
@@ -82,11 +75,8 @@ public class SearchIndexTest {
         Document doc = new Document();
         doc.add(new TextField(key, value, Field.Store.YES));
 
-        SearchIndexWritable writeOnlyIndex = new SearchIndexWriteOnly(indexStore, analyzer);
-        writeOnlyIndex.close();
-
-        SearchIndexReadable readOnlyIndex = new SearchIndexReadOnly(indexStore, analyzer);
-        TopFieldDocs hits = readOnlyIndex.find(key, value, 1);
+        SearchIndex index = new SearchIndexImpl(indexStore, analyzer);
+        TopFieldDocs hits = index.find(key, value, 1);
 
         assertThat(hits.totalHits.value, is(0L));
     }
