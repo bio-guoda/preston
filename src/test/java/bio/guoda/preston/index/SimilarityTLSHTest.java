@@ -52,7 +52,6 @@ public class SimilarityTLSHTest {
         SearchIndex index = new SearchIndexImpl(SearchIndexTest.createIndexStore(), TokenizerTLSHTest.getAnalyzer());
         index.put(docNotSimilar);
         index.put(docSimilar);
-        index.close();
 
         TopFieldDocs hits = index.find(key, tlshQuery, 3);
 
