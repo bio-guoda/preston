@@ -18,9 +18,6 @@ public class SimilarContentFinder extends ProcessorReadOnly {
 
     @Override
     public void on(Quad statement) {
-        String subjectStr = statement.getSubject().ntriplesString();
-        String objectStr = statement.getSubject().ntriplesString();
-
         if (statement.getPredicate().equals(WAS_DERIVED_FROM) &&
                 statement.getSubject().ntriplesString().startsWith(HashType.tika_tlsh.getPrefix()) &&
                 statement.getObject().ntriplesString().startsWith(HashType.sha256.getPrefix())) {
