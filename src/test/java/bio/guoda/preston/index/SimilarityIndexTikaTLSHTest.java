@@ -1,6 +1,8 @@
 package bio.guoda.preston.index;
 
-import org.hamcrest.generator.qdox.model.util.OrderedMap;
+import org.apache.commons.collections4.OrderedMap;
+import org.apache.commons.collections4.map.ListOrderedMap;
+import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
@@ -18,7 +20,7 @@ public class SimilarityIndexTikaTLSHTest {
         index.indexHashPair(toIRI("hash://sha256/blah2"), toIRI("hash://tika-tlsh/124"));
         index.indexHashPair(toIRI("hash://sha256/blah3"), toIRI("hash://tika-tlsh/789"));
 
-        OrderedMap scores = new OrderedMap();
+        OrderedMap<IRI, Float> scores = new ListOrderedMap<>();
         index.getSimilarContents(toIRI("hash://tika-tlsh/123"), 3)
                 .forEach(hit -> scores.put(hit.getSHA256(), hit.getScore()));
 
