@@ -52,7 +52,7 @@ public class SimilarityIndexTikaTLSH {
 
         try {
             Directory indexStore = FSDirectory.open(Paths.get(getTmpDir() + File.pathSeparator + "index"));
-            index = new SearchIndexImpl(indexStore, analyzer);
+            index = new SearchIndexImpl(indexStore, analyzer, new TLSHSimilarity());
         } catch (IOException e) {
             throw new RuntimeException("Failed create an on-disk search index.", e);
         }
