@@ -21,6 +21,7 @@ public class SearchIndexImpl implements SearchIndex {
     public SearchIndexImpl(Directory directory, Analyzer analyzer, Similarity similarity) throws IOException {
         indexWriterConfig = new IndexWriterConfig(analyzer);
         indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+        indexWriterConfig.setSimilarity(similarity);
         indexWriter = new IndexWriter(directory, indexWriterConfig);
 
         indexWriter.commit(); // Must save the index to disk before creating a reader
