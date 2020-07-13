@@ -22,12 +22,15 @@ public class RefNodeConstants {
 
     public static final IRI HAS_TYPE = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#type"));
 
+    public static final IRI HAS_VALUE = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#value"));
+
     public static final IRI HAS_VERSION = RefNodeFactory.toIRI(URI.create("http://purl.org/pav/hasVersion"));
     public static final IRI HAS_PREVIOUS_VERSION = RefNodeFactory.toIRI(URI.create("http://purl.org/pav/previousVersion"));
 
     public static final IRI GENERATED_AT_TIME = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#generatedAtTime"));
     public static final IRI WAS_GENERATED_BY = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasGeneratedBy"));
     public static final IRI WAS_DERIVED_FROM = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasDerivedFrom"));
+    public static final IRI QUALIFIED_GENERATION = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#qualifiedGeneration"));
 
     public static final UUID BIODIVERSITY_DATASET_GRAPH_UUID = UUID.fromString("0659a54f-b713-4f86-a917-5be166a14110");
     public static final IRI BIODIVERSITY_DATASET_GRAPH = toIRI(BIODIVERSITY_DATASET_GRAPH_UUID.toString());

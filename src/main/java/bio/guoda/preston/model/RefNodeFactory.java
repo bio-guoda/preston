@@ -38,6 +38,10 @@ public class RefNodeFactory {
         return rdf.createLiteral(str);
     }
 
+    public static Literal toLiteral(String str, IRI dataType) {
+        return rdf.createLiteral(str, dataType);
+    }
+
     public static Literal toEnglishLiteral(String str) {
         return rdf.createLiteral(str, "en");
     }
