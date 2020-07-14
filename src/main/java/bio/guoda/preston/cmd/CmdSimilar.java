@@ -2,19 +2,21 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.SimilarContentFinder;
 import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.process.TikaHashingActivity;
 import bio.guoda.preston.store.BlobStore;
 import com.beust.jcommander.Parameters;
 
+import java.io.File;
 import java.util.stream.Stream;
 
 @Parameters(separators = "= ", commandDescription = "Describes similarity between contents identified by hash://sha256 IRIs according to their hash://tika-tlsh IRIs")
 public class CmdSimilar extends CmdProcess {
 
+    private String localIndexDir = getLocalTmpDir() + File.pathSeparator + "index";
+
     @Override
     protected Stream<StatementsListener> createProcessors(BlobStore blobStore, StatementsListener queueAsListener) {
         return Stream.of(
-                new SimilarContentFinder(blobStore, queueAsListener)
+                new SimilarContentFinder(blobStore, queueAsListener, getDataDir(localIndexDir))
         );
     }
 

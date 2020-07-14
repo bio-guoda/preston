@@ -4,7 +4,9 @@ import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.simple.Types;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,10 +26,13 @@ import static org.hamcrest.core.Is.is;
 
 public class SimilarContentFinderTest {
 
+    @Rule
+    public TemporaryFolder tmpDir = new TemporaryFolder();
+
     @Test
-    public void oneContent() {
+    public void oneContent() throws IOException {
         ArrayList<Quad> nodes = new ArrayList<>();
-        StatementProcessor processor = new SimilarContentFinder(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
+        StatementProcessor processor = new SimilarContentFinder(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes), tmpDir.newFolder());
 
         processor.on(Stream.of(
                 toStatement(toIRI("hash://tika-tlsh/fff"), WAS_DERIVED_FROM, toIRI("hash://sha256/aaa"))
@@ -37,9 +42,9 @@ public class SimilarContentFinderTest {
     }
 
     @Test
-    public void similarContent() {
+    public void similarContent() throws IOException {
         ArrayList<Quad> nodes = new ArrayList<>();
-        StatementProcessor processor = new SimilarContentFinder(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
+        StatementProcessor processor = new SimilarContentFinder(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes), tmpDir.newFolder());
 
         IRI content1 = toIRI("hash://sha256/aaa");
         IRI tlsh1 = toIRI("hash://tika-tlsh/beef");
@@ -61,14 +66,14 @@ public class SimilarContentFinderTest {
         assertThat(nodes.get(2).getPredicate(), is(QUALIFIED_GENERATION));
         IRI generationId = (IRI)nodes.get(2).getObject();
 
-        assertThat(nodes.get(3), hasTriple(toStatement(generationId, USED, content1)));
-        assertThat(nodes.get(4), hasTriple(toStatement(generationId, USED, content2)));
+        assertThat(nodes.get(3), hasTriple(toStatement(generationId, USED, content2)));
+        assertThat(nodes.get(4), hasTriple(toStatement(generationId, USED, content1)));
     }
 
     @Test
-    public void differentContent() {
+    public void differentContent() throws IOException {
         ArrayList<Quad> nodes = new ArrayList<>();
-        StatementProcessor processor = new SimilarContentFinder(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
+        StatementProcessor processor = new SimilarContentFinder(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes), tmpDir.newFolder());
 
         processor.on(Stream.of(
                 toStatement(toIRI("hash://tika-tlsh/fff"), WAS_DERIVED_FROM, toIRI("hash://sha256/aaa")),

@@ -3,7 +3,11 @@ package bio.guoda.preston.index;
 import org.apache.commons.collections4.OrderedMap;
 import org.apache.commons.collections4.map.ListOrderedMap;
 import org.apache.commons.rdf.api.IRI;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import java.io.IOException;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static org.hamcrest.CoreMatchers.is;
@@ -12,9 +16,12 @@ import static org.junit.Assert.assertThat;
 
 public class SimilarityIndexTikaTLSHTest {
 
+    @Rule
+    public TemporaryFolder tmpDir = new TemporaryFolder();
+
     @Test
-    public void getSimilarContents() {
-        SimilarityIndexTikaTLSH index = new SimilarityIndexTikaTLSH();
+    public void getSimilarContents() throws IOException {
+        SimilarityIndexTikaTLSH index = new SimilarityIndexTikaTLSH(tmpDir.newFolder());
 
         index.indexHashPair(toIRI("hash://sha256/blah1"), toIRI("hash://tika-tlsh/123"));
         index.indexHashPair(toIRI("hash://sha256/blah2"), toIRI("hash://tika-tlsh/124"));
