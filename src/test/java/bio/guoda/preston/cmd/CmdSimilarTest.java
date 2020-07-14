@@ -24,10 +24,10 @@ public class CmdSimilarTest {
     @Test
     public void twoSimilarContents() throws IOException {
         IRI contentHash1 = toIRI("hash://sha256/blabla");
-        IRI similarityHash1 = toIRI("hash://tika-tlsh/abc");
+        IRI similarityHash1 = toIRI("hash://tika-tlsh/22c9a6d80630687c345faa7e08a4bff27d26b6370ce21781c493d474bf765a7548c");
 
         IRI contentHash2 = toIRI("hash://sha256/blublub");
-        IRI similarityHash2 = toIRI("hash://tika-tlsh/def");
+        IRI similarityHash2 = toIRI("hash://tika-tlsh/22c9a6d80630687c345faa7e08a4bff27d26b6370ce21781c493d474bf765a7548d");
 
         BlobStoreNull blobStoreNull = new BlobStoreNull();
         StatementStoreNull statementStoreNull = new StatementStoreNull();
