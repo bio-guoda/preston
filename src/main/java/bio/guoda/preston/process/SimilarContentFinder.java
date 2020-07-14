@@ -7,6 +7,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.simple.Types;
 
+import java.io.File;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -26,9 +27,9 @@ public class SimilarContentFinder extends ProcessorReadOnly {
 
     private final SimilarityIndexTikaTLSH similarityIndex;
 
-    public SimilarContentFinder(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
+    public SimilarContentFinder(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener, File indexDir) {
         super(blobStoreReadOnly, listener);
-        similarityIndex = new SimilarityIndexTikaTLSH();
+        similarityIndex = new SimilarityIndexTikaTLSH(indexDir);
     }
 
     @Override

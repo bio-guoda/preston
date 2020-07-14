@@ -13,13 +13,11 @@ import org.apache.lucene.store.FSDirectory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static com.sun.jmx.snmp.defaults.DefaultPaths.getTmpDir;
 
 public class SimilarityIndexTikaTLSH {
 
@@ -41,7 +39,7 @@ public class SimilarityIndexTikaTLSH {
         public float getScore() { return score; }
     }
 
-    public SimilarityIndexTikaTLSH() {
+    public SimilarityIndexTikaTLSH(File indexDir) {
         Analyzer analyzer = new Analyzer() {
             @Override
             protected TokenStreamComponents createComponents(String fieldName) {
@@ -51,7 +49,7 @@ public class SimilarityIndexTikaTLSH {
         };
 
         try {
-            Directory indexStore = FSDirectory.open(Paths.get(getTmpDir() + File.pathSeparator + "index"));
+            Directory indexStore = FSDirectory.open(indexDir.toPath());
             index = new SearchIndexImpl(indexStore, analyzer, new TLSHSimilarity());
         } catch (IOException e) {
             throw new RuntimeException("Failed create an on-disk search index.", e);
