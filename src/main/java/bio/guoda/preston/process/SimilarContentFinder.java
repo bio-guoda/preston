@@ -22,14 +22,21 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class SimilarContentFinder extends ProcessorReadOnly {
 
-    private static final float MIN_SIMILARITY_SCORE = 0.5f;
-    private final int MAX_HITS = 10;
+    private float similarityThreshold;
+    private int maxHits;
 
     private final SimilarityIndexTikaTLSH similarityIndex;
 
-    public SimilarContentFinder(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener, File indexDir) {
+    public SimilarContentFinder(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener, File indexDir, int maxHits, float similarityThreshold) {
         super(blobStoreReadOnly, listener);
+        this.maxHits = maxHits;
+        this.similarityThreshold = similarityThreshold;
+
         similarityIndex = new SimilarityIndexTikaTLSH(indexDir);
+    }
+
+    public SimilarContentFinder(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener, File indexDir) {
+        this(blobStoreReadOnly, listener, indexDir, 10, 0f);
     }
 
     @Override
@@ -42,9 +49,9 @@ public class SimilarContentFinder extends ProcessorReadOnly {
             IRI shaHash = (IRI)statement.getObject();
 
             similarityIndex.indexHashPair(shaHash, tlshHash);
-            similarityIndex.getSimilarContents(tlshHash, MAX_HITS + 1)
+            similarityIndex.getSimilarContents(tlshHash, maxHits + 1)
                     .filter(hit -> !hit.getSHA256().equals(shaHash))
-                    .filter(hit -> hit.getScore() >= MIN_SIMILARITY_SCORE)
+                    .filter(hit -> hit.getScore() >= similarityThreshold)
                     .forEach(hit -> emitSimilarityRelationship(shaHash, hit.getSHA256(), hit.getScore(), statement.getGraphName()));
         }
     }

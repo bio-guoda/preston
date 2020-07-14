@@ -32,7 +32,7 @@ public class SimilarContentFinderTest {
     @Test
     public void oneContent() throws IOException {
         ArrayList<Quad> nodes = new ArrayList<>();
-        StatementProcessor processor = new SimilarContentFinder(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes), tmpDir.newFolder());
+        StatementProcessor processor = new SimilarContentFinder(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes), tmpDir.newFolder(), 10, 0f);
 
         processor.on(Stream.of(
                 toStatement(toIRI("hash://tika-tlsh/fff"), WAS_DERIVED_FROM, toIRI("hash://sha256/aaa"))
@@ -44,7 +44,7 @@ public class SimilarContentFinderTest {
     @Test
     public void similarContent() throws IOException {
         ArrayList<Quad> nodes = new ArrayList<>();
-        StatementProcessor processor = new SimilarContentFinder(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes), tmpDir.newFolder());
+        StatementProcessor processor = new SimilarContentFinder(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes), tmpDir.newFolder(), 10, 0f);
 
         IRI content1 = toIRI("hash://sha256/aaa");
         IRI tlsh1 = toIRI("hash://tika-tlsh/beef");
@@ -73,7 +73,7 @@ public class SimilarContentFinderTest {
     @Test
     public void differentContent() throws IOException {
         ArrayList<Quad> nodes = new ArrayList<>();
-        StatementProcessor processor = new SimilarContentFinder(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes), tmpDir.newFolder());
+        StatementProcessor processor = new SimilarContentFinder(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes), tmpDir.newFolder(), 10, 0f);
 
         processor.on(Stream.of(
                 toStatement(toIRI("hash://tika-tlsh/fff"), WAS_DERIVED_FROM, toIRI("hash://sha256/aaa")),
