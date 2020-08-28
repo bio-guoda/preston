@@ -6,6 +6,8 @@ import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.DereferencerContentAddressedTarGZ;
 import bio.guoda.preston.store.KeyTo1LevelPath;
+import bio.guoda.preston.store.KeyTo1LevelSoftwareHeritageAutoDetectPath;
+import bio.guoda.preston.store.KeyTo1LevelSoftwareHeritagePath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelTarGzPath;
 import bio.guoda.preston.store.KeyToPath;
@@ -69,7 +71,9 @@ public class Persisting extends PersistingLocal {
             Stream<Pair<URI,KeyToPath>> keyToPathStream =
                     getRepositoryURIs().stream().flatMap(uri -> Stream.of(
                             Pair.of(uri, new KeyTo3LevelPath(uri)),
-                            Pair.of(uri, new KeyTo1LevelPath(uri))
+                            Pair.of(uri, new KeyTo1LevelPath(uri)),
+                            Pair.of(uri, new KeyTo1LevelSoftwareHeritagePath(uri)),
+                            Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri))
                     ));
 
             List<KeyValueStoreReadOnly> keyValueStoreRemotes =

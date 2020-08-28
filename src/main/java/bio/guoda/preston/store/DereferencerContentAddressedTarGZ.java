@@ -66,7 +66,7 @@ public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStre
         return inputStream;
     }
 
-    public IRI extractHashURI(String hashPath) {
+    private IRI extractHashURI(String hashPath) {
         String[] hashPathElem = hashPath.split("/");
         String lastHashElem = hashPathElem[hashPathElem.length - 1];
 
