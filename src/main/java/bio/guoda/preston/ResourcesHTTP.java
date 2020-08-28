@@ -49,7 +49,7 @@ public class ResourcesHTTP {
     }
 
     public static InputStream asInputStreamIgnore404(IRI dataURI, DerefProgressListener derefProgressListener) throws IOException {
-        return asInputStream(dataURI, Collections.singletonList(404), derefProgressListener);
+        return asInputStream(dataURI, Arrays.asList(400,404), derefProgressListener);
     }
 
     public static InputStream asInputStreamIgnore404(IRI dataURI) throws IOException {
