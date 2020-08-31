@@ -50,7 +50,7 @@ public class CmdGet extends Persisting implements Runnable {
         exit(0);
     }
 
-    public void handleHash(BlobStoreReadOnly blobStore, String hash) throws IOException {
+    protected void handleHash(BlobStoreReadOnly blobStore, String hash) throws IOException {
         try {
             InputStream input = blobStore.get(RefNodeFactory.toIRI(hash));
             if (input == null) {
@@ -64,7 +64,7 @@ public class CmdGet extends Persisting implements Runnable {
         }
     }
 
-    private void copyIfNoError(InputStream proxyIs, PrintStream out) throws IOException {
+    protected void copyIfNoError(InputStream proxyIs, PrintStream out) throws IOException {
         byte[] buffer = new byte[4096];
         int n;
         while (this.shouldKeepProcessing() && !out.checkError() && EOF != (n = proxyIs.read(buffer))) {

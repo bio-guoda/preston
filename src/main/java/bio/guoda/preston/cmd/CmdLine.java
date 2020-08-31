@@ -48,7 +48,7 @@ public class CmdLine {
         }
     }
 
-    JCommander buildCommander() {
+    private JCommander buildCommander() {
         return JCommander.newBuilder()
                 .addObject(new CommandMain())
                 .addCommand("ls", new CmdList(), "log", "logs")
@@ -64,6 +64,7 @@ public class CmdLine {
                 .addCommand("version", new CmdVersion())
                 .addCommand("test", new CmdVerify(), "verify", "check", "validate")
                 .addCommand("seeds", new CmdSeeds())
+                .addCommand("text", new CmdText(), "extract-text")
                 .build();
     }
 
