@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
@@ -19,15 +18,18 @@ public class TikaUtilTest {
     @Test
     public void dwca2text() throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        TikaUtil.copyText(getClass().getResourceAsStream("/bio/guoda/preston/dwca-20180905.zip"), out);
+        try (final InputStream resourceAsStream = getClass().getResourceAsStream("/bio/guoda/preston/dwca-20180905.zip")) {
+            TikaUtil.copyText(resourceAsStream, out);
+        }
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), containsString("Cerastes cerastes"));
     }
 
     @Test
     public void text2text() throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final InputStream is = IOUtils.toInputStream("hello", StandardCharsets.UTF_8.name());
-        TikaUtil.copyText(is, out);
+        try (final InputStream is = IOUtils.toInputStream("hello", StandardCharsets.UTF_8.name())) {
+            TikaUtil.copyText(is, out);
+        }
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
                 Is.is("hello\n"));
     }
@@ -35,7 +37,9 @@ public class TikaUtilTest {
     @Test
     public void rss2text() throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        TikaUtil.copyText(getClass().getResourceAsStream("/bio/guoda/preston/process/arthropodEasyCapture.xml"), out);
+        try (final InputStream resourceAsStream = getClass().getResourceAsStream("/bio/guoda/preston/process/arthropodEasyCapture.xml")) {
+            TikaUtil.copyText(resourceAsStream, out);
+        }
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
                 startsWith("Arthropod Easy Capture (AMNH)\n"));
     }
@@ -43,7 +47,9 @@ public class TikaUtilTest {
     @Test
     public void xml2text() throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        TikaUtil.copyText(getClass().getResourceAsStream("/bio/guoda/preston/process/biocase-datasets.xml"), out);
+        try (final InputStream is = getClass().getResourceAsStream("/bio/guoda/preston/process/biocase-datasets.xml")) {
+            TikaUtil.copyText(is, out);
+        }
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
                 containsString(" OK\n" +
                         "   2018-08-31T22:29:51.910000\n"));
