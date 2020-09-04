@@ -33,7 +33,7 @@ public class CmdSimilarTest {
         cmdSimilar.setInputStream(new ByteArrayInputStream(new byte[0]));
         cmdSimilar.run(blobStoreNull, statementStoreNull);
 
-        assertThat(FileUtils.exists((new File(cmdSimilar.getIndexPath()))), is(false));
+        assertThat(FileUtils.exists((new File(cmdSimilar.getIndexPath())).getAbsoluteFile()), is(false));
     }
 
     @Test
