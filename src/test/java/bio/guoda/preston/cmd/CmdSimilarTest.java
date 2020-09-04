@@ -7,6 +7,7 @@ import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
@@ -20,6 +21,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class CmdSimilarTest {
+
+    @Test
+    public void cleanTmpFiles() throws Throwable {
+        BlobStoreNull blobStoreNull = new BlobStoreNull();
+        StatementStoreNull statementStoreNull = new StatementStoreNull();
+
+        CmdSimilar cmdSimilar = new CmdSimilar();
+
+        cmdSimilar.setInputStream(new ByteArrayInputStream(new byte[0]));
+        cmdSimilar.run(blobStoreNull, statementStoreNull);
+
+        assertThat((new File(cmdSimilar.getLocalIndexPath())).exists(), is(false));
+    }
 
     @Test
     public void twoSimilarContents() throws IOException {
