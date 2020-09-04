@@ -10,6 +10,7 @@ import com.beust.jcommander.converters.FloatConverter;
 import com.beust.jcommander.converters.IntegerConverter;
 import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -23,22 +24,22 @@ public class CmdSimilar extends CmdProcess {
     @Parameter(names = {"--thresh", "--threshold", "--similarity-threshold"}, description = "minimum similarity score required for a content similarity to be recorded", converter = FloatConverter.class)
     private float similarityThreshold = 100f;
 
-    private String localIndexPath = Paths.get(getLocalTmpDir(), UUID.randomUUID().toString()).toString();
+    private String indexPath = Paths.get(getLocalTmpDir(), UUID.randomUUID().toString()).toString();
 
     @Override
     protected void run(BlobStore blobStore, StatementStore logRelations) {
         super.run(blobStore, logRelations);
-        FileUtils.deleteQuietly(getDataDir(localIndexPath));
+        FileUtils.deleteQuietly(new File(indexPath));
     }
 
-    public String getLocalIndexPath() {
-        return localIndexPath;
+    public String getIndexPath() {
+        return indexPath;
     }
 
     @Override
     protected Stream<StatementsListener> createProcessors(BlobStore blobStore, StatementsListener queueAsListener) {
         return Stream.of(
-                new SimilarContentFinder(blobStore, queueAsListener, getDataDir(localIndexPath), maxHits, similarityThreshold)
+                new SimilarContentFinder(blobStore, queueAsListener, getDataDir(indexPath), maxHits, similarityThreshold)
         );
     }
 

@@ -4,6 +4,7 @@ import bio.guoda.preston.RDFUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.cxf.helpers.FileUtils;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -23,7 +24,7 @@ import static org.hamcrest.core.Is.is;
 public class CmdSimilarTest {
 
     @Test
-    public void cleanTmpFiles() throws Throwable {
+    public void cleanTmpFiles() {
         BlobStoreNull blobStoreNull = new BlobStoreNull();
         StatementStoreNull statementStoreNull = new StatementStoreNull();
 
@@ -32,7 +33,7 @@ public class CmdSimilarTest {
         cmdSimilar.setInputStream(new ByteArrayInputStream(new byte[0]));
         cmdSimilar.run(blobStoreNull, statementStoreNull);
 
-        assertThat((new File(cmdSimilar.getLocalIndexPath())).exists(), is(false));
+        assertThat(FileUtils.exists((new File(cmdSimilar.getIndexPath()))), is(false));
     }
 
     @Test
