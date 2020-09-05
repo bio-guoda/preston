@@ -29,7 +29,7 @@ public class CmdSimilar extends CmdProcess {
     @Override
     protected void run(BlobStore blobStore, StatementStore logRelations) {
         super.run(blobStore, logRelations);
-        FileUtils.deleteQuietly(new File(indexPath));
+        FileUtils.deleteQuietly((new File(indexPath)).getAbsoluteFile());
     }
 
     public String getIndexPath() {
