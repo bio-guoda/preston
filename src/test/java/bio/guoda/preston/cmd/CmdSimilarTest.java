@@ -4,7 +4,7 @@ import bio.guoda.preston.RDFUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.cxf.helpers.FileUtils;
+import org.apache.tika.utils.SystemUtils;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -20,11 +20,14 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assume.assumeFalse;
 
 public class CmdSimilarTest {
 
     @Test
     public void cleanTmpFiles() {
+        assumeFalse(SystemUtils.IS_OS_WINDOWS);
+
         BlobStoreNull blobStoreNull = new BlobStoreNull();
         StatementStoreNull statementStoreNull = new StatementStoreNull();
 
