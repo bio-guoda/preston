@@ -26,8 +26,6 @@ public class CmdSimilarTest {
 
     @Test
     public void cleanTmpFiles() {
-        assumeFalse(SystemUtils.IS_OS_WINDOWS);
-
         BlobStoreNull blobStoreNull = new BlobStoreNull();
         StatementStoreNull statementStoreNull = new StatementStoreNull();
 
