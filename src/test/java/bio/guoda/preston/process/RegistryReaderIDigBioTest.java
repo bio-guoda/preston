@@ -12,10 +12,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -93,6 +95,167 @@ public class RegistryReaderIDigBioTest {
     }
 
     @Test
+    public void onCompleteListOfRecords() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blob = key -> completeRecordsInputStream();
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+
+        reader.on(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10000"),
+                HAS_VERSION,
+                RefNodeFactory.toIRI("http://something")));
+
+        assertThat(nodes.size(), is(18));
+
+    }
+
+    @Test
+    public void onIncompleteListOfRecordsCustomLimit() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("idigbio-records-incomplete.json");
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+
+        reader.on(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10"),
+                HAS_VERSION,
+                RefNodeFactory.toIRI("http://something")));
+
+        assertThat(nodes.size(), is(19));
+        assertThat(nodes.get(18).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=10&offset=2>"));
+    }
+
+    @Test
+    public void doNotPageOnIncompleteListOfRecordsWithExplicitOffset() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("idigbio-records-incomplete.json");
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+
+        reader.on(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2"),
+                HAS_VERSION,
+                RefNodeFactory.toIRI("http://something")));
+
+        assertThat(nodes.size(), is(18));
+    }
+
+    @Test
+    public void resolveMediaRecordUUID() {
+        final IRI pageIRI = RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2");
+
+        final IRI mediaIRI = RegistryReaderIDigBio.resolveMediaUUID(pageIRI, UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"));
+
+        assertThat(mediaIRI.getIRIString(), is("https://search.idigbio.org/v2/view/mediarecords/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"));
+    }
+
+    @Test
+    public void resolveMediaRecordThumbnail() {
+        final IRI pageIRI = RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2");
+
+        final IRI mediaIRI = RegistryReaderIDigBio.resolveMediaThumbnail(pageIRI, UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"));
+
+        assertThat(mediaIRI.getIRIString(), is("https://api.idigbio.org/v2/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=thumbnail"));
+    }
+
+    @Test
+    public void resolveMediaRecordWebView() {
+        final IRI pageIRI = RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2");
+
+        final IRI mediaIRI = RegistryReaderIDigBio.resolveMediaWebView(pageIRI, UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"));
+
+        assertThat(mediaIRI.getIRIString(), is("https://api.idigbio.org/v2/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=webview"));
+    }
+
+    @Test
+    public void resolveMediaRecordFullSize() {
+        final IRI pageIRI = RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2");
+
+        final IRI mediaIRI = RegistryReaderIDigBio.resolveMediaFullSize(pageIRI, UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"));
+
+        assertThat(mediaIRI.getIRIString(), is("https://api.idigbio.org/v2/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=fullsize"));
+    }
+
+    @Test
+    public void resolveMediaRecordUUIDUnsupportedPageId() {
+        final IRI pageIRI = RefNodeFactory.toIRI("https://search.idigbio.org/v2/bla/records?limit=10&offset=2");
+        final IRI mediaIRI = RegistryReaderIDigBio.resolveMediaUUID(pageIRI, UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"));
+        assertThat(mediaIRI, is(nullValue()));
+    }
+
+    @Test
+    public void onIncompleteListOfRecordsMultiplePages() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("idigbio-records-incomplete.json");
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+
+        reader.on(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=1"),
+                HAS_VERSION,
+                RefNodeFactory.toIRI("http://something")));
+
+        assertThat(nodes.size(), is(27));
+        assertThat(nodes.get(27 - 9).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=1&offset=2>"));
+        assertThat(nodes.get(27 - 1).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=1&offset=10>"));
+    }
+
+    @Test
+    public void parseRecords() throws IOException {
+
+        IRI providedParent = RefNodeFactory.toIRI("someRegistryUUID");
+        final List<Quad> nodes = new ArrayList<>();
+
+        InputStream is = completeRecordsInputStream();
+        IRI providedPageIRI = RefNodeFactory.toIRI("https://search.something/search/record?foo=bar");
+
+        RegistryReaderIDigBio.parseRecords(providedParent, TestUtil.testEmitter(nodes), is, providedPageIRI);
+
+        assertThat(nodes.size(), is(17));
+
+        assertThat(nodes.get(0).toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <e6c5dffc-4ad1-4d9d-800f-5796baec1f65> ."));
+
+        assertThat(nodes.get(1).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
+
+        assertThat(nodes.get(2).toString(), startsWith("<https://search.something/view/mediarecords/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(3).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=thumbnail> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(4).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=webview> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(5).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=fullsize> <http://purl.org/pav/hasVersion> _:"));
+
+        assertThat(nodes.get(6).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <66caac8d-d00c-4d68-9a5c-450e2608d0b5> ."));
+
+        assertThat(nodes.get(7).toString(), startsWith("<https://search.something/view/mediarecords/66caac8d-d00c-4d68-9a5c-450e2608d0b5> <http://purl.org/pav/hasVersion> _:"));
+
+        assertThat(nodes.get(11).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <00ba0ad7-a11a-4b9f-90b4-299b7949a232> ."));
+
+        assertThat(nodes.get(12).toString(), startsWith("<https://search.something/view/mediarecords/00ba0ad7-a11a-4b9f-90b4-299b7949a232> <http://purl.org/pav/hasVersion> _:"));
+
+        assertThat(nodes.get(16).toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <db16bf3a-550b-4204-92e4-bbc71c96c772> ."));
+
+    }
+
+    @Test
+    public void parseMediaRecord() throws IOException {
+
+        IRI providedParent = RefNodeFactory.toIRI("someContentIRI");
+        final List<Quad> nodes = new ArrayList<>();
+
+        InputStream is = mediaRecordInputStream();
+        IRI providedPageIRI = RefNodeFactory.toIRI("https://something/search/record?foo=bar");
+
+        RegistryReaderIDigBio.parseMediaRecord(providedParent, TestUtil.testEmitter(nodes), is, providedPageIRI);
+
+        assertThat(nodes.size(), is(4));
+
+        assertThat(nodes.get(0).toString(), is("<someContentIRI> <http://www.w3.org/ns/prov#hadMember> <45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
+
+        assertThat(nodes.get(1).toString(), startsWith("<http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> <http://purl.org/pav/hasVersion> _:"));
+
+        assertThat(nodes.get(2).toString(), is("<45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://rs.tdwg.org/ac/terms/accessURI> <http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> ."));
+
+        assertThat(nodes.get(3).toString(), is("<http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> <http://xmlns.com/foaf/0.1/depicts> <e6c5dffc-4ad1-4d9d-800f-5796baec1f65> ."));
+
+    }
+
+
+    @Test
     public void parsePublishers() throws IOException {
 
         IRI providedParent = RefNodeFactory.toIRI("someRegistryUUID");
@@ -133,6 +296,7 @@ public class RegistryReaderIDigBioTest {
 
     }
 
+
     private InputStream publishersInputStream() {
         return getClass().getResourceAsStream("idigbio-publishers.json");
     }
@@ -144,5 +308,14 @@ public class RegistryReaderIDigBioTest {
     public InputStream completeRecordsetInputStream() {
         return getClass().getResourceAsStream("idigbio-recordsets-complete.json");
     }
+
+    public InputStream completeRecordsInputStream() {
+        return getClass().getResourceAsStream("idigbio-records-complete.json");
+    }
+
+    public InputStream mediaRecordInputStream() {
+        return getClass().getResourceAsStream("idigbio-mediarecord.json");
+    }
+
 
 }
