@@ -2,6 +2,8 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.Seeds;
+import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.util.ResultPagerUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +16,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
@@ -36,10 +41,18 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     private final static Log LOG = LogFactory.getLog(RegistryReaderIDigBio.class);
+
     public static final String PUBLISHERS_URI = "https://search.idigbio.org/v2/search/publishers";
     public static final IRI IDIGBIO_PUBLISHER_REGISTRY = toIRI(URI.create(PUBLISHERS_URI + "?limit=10000"));
+
     public static final String RECORDSETS_URI = "https://search.idigbio.org/v2/search/recordsets";
     public static final IRI IDIGBIO_RECORDSETS_REGISTRY = toIRI(URI.create(RECORDSETS_URI + "?limit=10000"));
+
+    public static final String RECORDS_URI = "https://search.idigbio.org/v2/search/records";
+
+    public static final String MEDIA_RECORDS_URI = "https://search.idigbio.org/v2/view/mediarecords/";
+
+    public static final Pattern SEARCH_API_IRI_MATCHER = Pattern.compile("(.*//)(search\\.)(.*)(/search/.*$)");
 
     public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, StatementsListener listener) {
         super(blobStore, listener);
@@ -64,6 +77,8 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         } else if (hasVersionAvailable(statement)) {
             attemptToParseAsPublishers(statement, (IRI) getVersion(statement));
             attemptToParseAsRecordSets(statement, (IRI) getVersion(statement));
+            attemptToParseAsRecords(statement, (IRI) getVersion(statement));
+            attemptToParseAsMediaRecord(statement, (IRI) getVersion(statement));
         }
     }
 
@@ -80,7 +95,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         }
     }
 
-   private void attemptToParseAsRecordSets(Quad statement, IRI toBeParsed) {
+    private void attemptToParseAsRecordSets(Quad statement, IRI toBeParsed) {
         if (StringUtils.contains(statement.getSubject().ntriplesString(), RECORDSETS_URI)) {
             ArrayList<Quad> nodes = new ArrayList<>();
             parseRecordSets(toBeParsed, new StatementsEmitterAdapter() {
@@ -89,6 +104,33 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                     nodes.add(statement);
                 }
             });
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+        }
+    }
+
+    private void attemptToParseAsRecords(Quad statement, IRI resourceIRI) {
+        if (StringUtils.contains(statement.getSubject().ntriplesString(), RECORDS_URI)
+                && !StringUtils.contains(statement.getSubject().ntriplesString(), RECORDSETS_URI)) {
+            ArrayList<Quad> nodes = new ArrayList<>();
+            parseRecords(resourceIRI, new StatementsEmitterAdapter() {
+                @Override
+                public void emit(Quad statement) {
+                    nodes.add(statement);
+                }
+            }, (IRI) statement.getSubject());
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+        }
+    }
+
+    private void attemptToParseAsMediaRecord(Quad statement, IRI resourceIRI) {
+        if (StringUtils.contains(statement.getSubject().ntriplesString(), MEDIA_RECORDS_URI)) {
+            ArrayList<Quad> nodes = new ArrayList<>();
+            parseMediaRecord(resourceIRI, new StatementsEmitterAdapter() {
+                @Override
+                public void emit(Quad statement) {
+                    nodes.add(statement);
+                }
+            }, (IRI) statement.getSubject());
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
@@ -150,11 +192,127 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         verifyItemCount(r, itemCounter);
     }
 
+    static void parseRecords(IRI resourceIRI, StatementsEmitter emitter, InputStream is, IRI pageIRI) throws IOException {
+        JsonNode r = new ObjectMapper().readTree(is);
+        AtomicInteger itemCounter = new AtomicInteger();
+
+
+        if (r.has("items") && r.get("items").isArray()) {
+            for (JsonNode item : r.get("items")) {
+                itemCounter.incrementAndGet();
+                String recordUUID = item.get("uuid").asText();
+                IRI recordIRI = toIRI(UUID.fromString(recordUUID));
+                emitter.emit(toStatement(resourceIRI, HAD_MEMBER, recordIRI));
+                JsonNode indexTerms = item.get("indexTerms");
+                if (item.has("indexTerms")) {
+                    String recordSetUUID = indexTerms.has("recondset") ? indexTerms.get("recordset").asText() : null;
+                    if (StringUtils.isNotBlank(recordSetUUID)) {
+                        emitter.emit(toStatement(toIRI(UUID.fromString(recordSetUUID)), HAD_MEMBER, recordIRI));
+                    }
+
+                    if (indexTerms.has("mediarecords")) {
+                        final JsonNode mediarecords = indexTerms.get("mediarecords");
+                        for (JsonNode mediarecord : mediarecords) {
+                            if (mediarecord.isValueNode()) {
+                                final UUID mediaUUID = UUID.fromString(mediarecord.asText());
+                                emitter.emit(toStatement(recordIRI, HAD_MEMBER, toIRI(mediaUUID)));
+                                IRI mediaRecordIRI = resolveMediaUUID(pageIRI, mediaUUID);
+                                if (mediaRecordIRI != null) {
+                                    emitter.emit(toStatement(mediaRecordIRI, HAS_VERSION, RefNodeFactory.toBlank()));
+                                    emitter.emit(toStatement(resolveMediaThumbnail(pageIRI, mediaUUID), HAS_VERSION, RefNodeFactory.toBlank()));
+                                    emitter.emit(toStatement(resolveMediaWebView(pageIRI, mediaUUID), HAS_VERSION, RefNodeFactory.toBlank()));
+                                    emitter.emit(toStatement(resolveMediaFullSize(pageIRI, mediaUUID), HAS_VERSION, RefNodeFactory.toBlank()));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        final Long recordsFound = itemCounter.longValue();
+        if (recordsFound > 0 && r.has("itemCount")) {
+            final JsonNode itemCount = r.get("itemCount");
+            if (itemCount.isNumber()) {
+                Long recordsTotal = itemCount.asLong();
+                ResultPagerUtil.emitPageRequests(pageIRI, recordsTotal, recordsFound, emitter);
+            }
+        }
+    }
+
+    static void parseMediaRecord(IRI resourceIRI, StatementsEmitter emitter, InputStream is, IRI pageIRI) throws IOException {
+        JsonNode item = new ObjectMapper().readTree(is);
+        String recordUUID = item.get("uuid").asText();
+        IRI recordIRI = toIRI(UUID.fromString(recordUUID));
+        emitter.emit(toStatement(resourceIRI, HAD_MEMBER, recordIRI));
+        JsonNode indexTerms = item.get("indexTerms");
+        if (item.has("indexTerms")) {
+            if (indexTerms.has("records")) {
+                String accessURI = indexTerms.has("accessuri") ? indexTerms.get("accessuri").asText() : null;
+                if (StringUtils.isNotBlank(accessURI)) {
+                    emitter.emit(toStatement(toIRI(accessURI), HAS_VERSION, RefNodeFactory.toBlank()));
+                    emitter.emit(toStatement(recordIRI, toIRI("http://rs.tdwg.org/ac/terms/accessURI"), toIRI(accessURI)));
+                }
+
+                JsonNode records = indexTerms.get("records");
+                for (JsonNode record : records) {
+                    String specimenRecordUUID = record.isValueNode() ? record.asText() : null;
+                    if (StringUtils.isNotBlank(specimenRecordUUID)) {
+                        emitter.emit(toStatement(toIRI(accessURI), toIRI("http://xmlns.com/foaf/0.1/depicts"), toIRI(specimenRecordUUID)));
+                    }
+                }
+            }
+
+            if (indexTerms.has("mediarecords")) {
+                final JsonNode mediarecords = indexTerms.get("mediarecords");
+                for (JsonNode mediarecord : mediarecords) {
+                    if (mediarecord.isValueNode()) {
+                        final UUID mediaUUID = UUID.fromString(mediarecord.asText());
+                        emitter.emit(toStatement(recordIRI, HAD_MEMBER, toIRI(mediaUUID)));
+                        IRI mediaRecordIRI = resolveMediaUUID(pageIRI, mediaUUID);
+                        if (mediaRecordIRI != null) {
+                            emitter.emit(toStatement(mediaRecordIRI, HAS_VERSION, RefNodeFactory.toBlank()));
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    static IRI resolveMediaUUID(IRI pageIRI, UUID mediaRecordUUID) {
+        final String iriString = pageIRI.getIRIString();
+        final Matcher matcher = SEARCH_API_IRI_MATCHER.matcher(iriString);
+        return matcher.find()
+                ? RefNodeFactory.toIRI(matcher.group(1) + matcher.group(2) + matcher.group(3) + "/view/mediarecords/" + mediaRecordUUID.toString())
+                : null;
+    }
+
+    static IRI resolveMediaThumbnail(IRI pageIRI, UUID mediaRecordUUID) {
+        return resolveMediaURLOfSize(pageIRI, mediaRecordUUID, "thumbnail");
+    }
+
+    static IRI resolveMediaWebView(IRI pageIRI, UUID mediaRecordUUID) {
+        return resolveMediaURLOfSize(pageIRI, mediaRecordUUID, "webview");
+    }
+
+    private static IRI resolveMediaURLOfSize(IRI pageIRI, UUID mediaRecordUUID, String sizeType) {
+        final String iriString = pageIRI.getIRIString();
+        final Matcher matcher = SEARCH_API_IRI_MATCHER.matcher(iriString);
+        return matcher.find()
+                ? RefNodeFactory.toIRI(matcher.group(1) + "api." + matcher.group(3) + "/media/" + mediaRecordUUID.toString() + "?size=" + sizeType)
+                : null;
+    }
+
+    static IRI resolveMediaFullSize(IRI pageIRI, UUID mediaRecordUUID) {
+        return resolveMediaURLOfSize(pageIRI, mediaRecordUUID, "fullsize");
+    }
+
     private static void verifyItemCount(JsonNode r, AtomicInteger itemCounter) {
         if (r.has("itemCount") && r.get("itemCount").isIntegralNumber()) {
             int itemCount = r.get("itemCount").asInt();
             if (itemCount != itemCounter.get()) {
-                throw new IllegalArgumentException("paging not supported, but more pages are needed: got [" + itemCounter.get() +"], but expected [" + itemCount + "]");
+                throw new IllegalArgumentException("paging not supported, but more pages are needed: got [" + itemCounter.get() + "], but expected [" + itemCount + "]");
             }
         }
     }
@@ -178,6 +336,28 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
             }
         } catch (IOException e) {
             LOG.warn("failed to parse recordsets [" + refNode.toString() + "]", e);
+        }
+    }
+
+    private void parseRecords(IRI refNode, StatementsEmitter emitter, IRI pageIRI) {
+        try {
+            InputStream is = get(refNode);
+            if (is != null) {
+                parseRecords(refNode, emitter, is, pageIRI);
+            }
+        } catch (IOException e) {
+            LOG.warn("failed to parse records [" + refNode.toString() + "]", e);
+        }
+    }
+
+    private void parseMediaRecord(IRI refNode, StatementsEmitter emitter, IRI pageIRI) {
+        try {
+            InputStream is = get(refNode);
+            if (is != null) {
+                parseMediaRecord(refNode, emitter, is, pageIRI);
+            }
+        } catch (IOException e) {
+            LOG.warn("failed to parse records [" + refNode.toString() + "]", e);
         }
     }
 
