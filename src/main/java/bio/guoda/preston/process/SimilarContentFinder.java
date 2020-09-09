@@ -7,7 +7,9 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.simple.Types;
 
+import java.io.Closeable;
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -20,7 +22,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
-public class SimilarContentFinder extends ProcessorReadOnly {
+public class SimilarContentFinder extends ProcessorReadOnly implements Closeable {
 
     private float similarityThreshold;
     private int maxHits;
@@ -67,5 +69,10 @@ public class SimilarContentFinder extends ProcessorReadOnly {
                 this,
                 parentActivity
         );
+    }
+
+    @Override
+    public void close() throws IOException {
+        similarityIndex.close();
     }
 }

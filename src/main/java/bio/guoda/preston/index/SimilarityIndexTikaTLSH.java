@@ -11,6 +11,7 @@ import org.apache.lucene.search.TopFieldDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -19,12 +20,17 @@ import java.util.stream.Stream;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 
-public class SimilarityIndexTikaTLSH {
+public class SimilarityIndexTikaTLSH implements Closeable {
 
     private static final String FIELD_SHA256 = "sha256";
     private static final String FIELD_TIKA_TLSH = "tika-tlsh";
 
     private SearchIndex index;
+
+    @Override
+    public void close() throws IOException {
+        index.close();
+    }
 
     public static class ScoredHit {
         private IRI sha256;

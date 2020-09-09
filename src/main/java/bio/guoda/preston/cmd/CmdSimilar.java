@@ -11,6 +11,7 @@ import com.beust.jcommander.converters.IntegerConverter;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -25,11 +26,19 @@ public class CmdSimilar extends CmdProcess {
     private float similarityThreshold = 100f;
 
     private String indexPath = Paths.get(getLocalTmpDir(), UUID.randomUUID().toString()).toString();
+    private SimilarContentFinder similarContentFinder;
 
     @Override
     protected void run(BlobStore blobStore, StatementStore logRelations) {
         super.run(blobStore, logRelations);
-        FileUtils.deleteQuietly((new File(indexPath)).getAbsoluteFile());
+
+        try {
+            similarContentFinder.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to close search index.", e);
+        } finally {
+            FileUtils.deleteQuietly(new File(indexPath));
+        }
     }
 
     public String getIndexPath() {
@@ -38,8 +47,9 @@ public class CmdSimilar extends CmdProcess {
 
     @Override
     protected Stream<StatementsListener> createProcessors(BlobStore blobStore, StatementsListener queueAsListener) {
+        similarContentFinder = new SimilarContentFinder(blobStore, queueAsListener, getDataDir(indexPath), maxHits, similarityThreshold);
         return Stream.of(
-                new SimilarContentFinder(blobStore, queueAsListener, getDataDir(indexPath), maxHits, similarityThreshold)
+                similarContentFinder
         );
     }
 

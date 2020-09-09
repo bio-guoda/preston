@@ -4,7 +4,6 @@ import bio.guoda.preston.RDFUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.tika.utils.SystemUtils;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -20,7 +19,6 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assume.assumeFalse;
 
 public class CmdSimilarTest {
 
@@ -34,7 +32,7 @@ public class CmdSimilarTest {
         cmdSimilar.setInputStream(new ByteArrayInputStream(new byte[0]));
         cmdSimilar.run(blobStoreNull, statementStoreNull);
 
-        assertThat((new File(cmdSimilar.getIndexPath())).getAbsoluteFile().exists(), is(false));
+        assertThat((new File(cmdSimilar.getIndexPath())).exists(), is(false));
     }
 
     @Test
