@@ -11,15 +11,20 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static bio.guoda.preston.model.RefNodeFactory.*;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 public class RegistryReaderIDigBioTest {
@@ -28,8 +33,8 @@ public class RegistryReaderIDigBioTest {
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
-        RDFTerm bla = RefNodeFactory.toLiteral("bla");
-        reader.on(RefNodeFactory.toStatement(Seeds.IDIGBIO, WAS_ASSOCIATED_WITH, bla));
+        RDFTerm bla = toLiteral("bla");
+        reader.on(toStatement(Seeds.IDIGBIO, WAS_ASSOCIATED_WITH, bla));
         assertThat(nodes.size(), is(10));
     }
 
@@ -37,8 +42,8 @@ public class RegistryReaderIDigBioTest {
     public void onNotSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
-        RDFTerm bla = RefNodeFactory.toLiteral("bla");
-        reader.on(RefNodeFactory.toStatement(Seeds.IDIGBIO, RefNodeFactory.toIRI("https://example.org/bla"), bla));
+        RDFTerm bla = toLiteral("bla");
+        reader.on(toStatement(Seeds.IDIGBIO, toIRI("https://example.org/bla"), bla));
         assertThat(nodes.size(), is(0));
     }
 
@@ -49,10 +54,10 @@ public class RegistryReaderIDigBioTest {
         BlobStoreReadOnly blob = key -> publishersInputStream();
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
 
-        reader.on(RefNodeFactory.toStatement(
-                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/publishers"),
+        reader.on(toStatement(
+                toIRI("https://search.idigbio.org/v2/search/publishers"),
                 HAS_VERSION,
-                RefNodeFactory.toIRI("http://something")));
+                toIRI("http://something")));
 
         assertThat(nodes.size(), not(is(0)));
     }
@@ -63,10 +68,10 @@ public class RegistryReaderIDigBioTest {
         BlobStoreReadOnly blob = key -> incompleteRecordsetInputStream();
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
 
-        reader.on(RefNodeFactory.toStatement(
-                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/recordsets?limit=10000"),
+        reader.on(toStatement(
+                toIRI("https://search.idigbio.org/v2/search/recordsets?limit=10000"),
                 HAS_VERSION,
-                RefNodeFactory.toIRI("http://something")));
+                toIRI("http://something")));
 
         assertThat(nodes.size(), not(is(0)));
     }
@@ -77,10 +82,10 @@ public class RegistryReaderIDigBioTest {
         BlobStoreReadOnly blob = key -> completeRecordsetInputStream();
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
 
-        reader.on(RefNodeFactory.toStatement(
-                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/recordsets?limit=10000"),
+        reader.on(toStatement(
+                toIRI("https://search.idigbio.org/v2/search/recordsets?limit=10000"),
                 HAS_VERSION,
-                RefNodeFactory.toIRI("http://something")));
+                toIRI("http://something")));
 
         assertThat(nodes.size(), is(659));
 
@@ -95,15 +100,38 @@ public class RegistryReaderIDigBioTest {
     }
 
     @Test
+    public void onRecordSetView() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("idigbio-recordset.json");
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+
+        reader.on(toStatement(
+                toIRI("https://search.idigbio.org/v2/view/recordsets/ba77d411-4179-4dbd-b6c1-39b8a71ae795"),
+                HAS_VERSION,
+                toIRI("http://something")));
+
+        assertThat(nodes.size(), is(8));
+
+        assertThat(nodes.get(2).toString(), startsWith("<ba77d411-4179-4dbd-b6c1-39b8a71ae795> <http://www.w3.org/ns/prov#hadMember> <http://ipt.vertnet.org:8080/ipt/eml.do?r=uwbm_invertpaleo> <"));
+        assertThat(nodes.get(3).toString(), startsWith("<http://ipt.vertnet.org:8080/ipt/eml.do?r=uwbm_invertpaleo> <http://purl.org/dc/elements/1.1/format> \"application/eml\" <"));
+        assertThat(nodes.get(4).toString(), startsWith("<http://ipt.vertnet.org:8080/ipt/eml.do?r=uwbm_invertpaleo> <http://purl.org/pav/hasVersion> _:"));
+
+        assertThat(nodes.get(5).toString(), startsWith("<ba77d411-4179-4dbd-b6c1-39b8a71ae795> <http://www.w3.org/ns/prov#hadMember> <http://ipt.vertnet.org:8080/ipt/archive.do?r=uwbm_invertpaleo> <"));
+        assertThat(nodes.get(6).toString(), startsWith("<http://ipt.vertnet.org:8080/ipt/archive.do?r=uwbm_invertpaleo> <http://purl.org/dc/elements/1.1/format> \"application/dwca\" <"));
+        assertThat(nodes.get(7).toString(), startsWith("<http://ipt.vertnet.org:8080/ipt/archive.do?r=uwbm_invertpaleo> <http://purl.org/pav/hasVersion> _:"));
+
+    }
+
+    @Test
     public void onCompleteListOfRecords() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blob = key -> completeRecordsInputStream();
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
 
-        reader.on(RefNodeFactory.toStatement(
-                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10000"),
+        reader.on(toStatement(
+                toIRI("https://search.idigbio.org/v2/search/records?limit=10000"),
                 HAS_VERSION,
-                RefNodeFactory.toIRI("http://something")));
+                toIRI("http://something")));
 
         assertThat(nodes.size(), is(20));
 
@@ -115,10 +143,10 @@ public class RegistryReaderIDigBioTest {
         BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("idigbio-records-incomplete.json");
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
 
-        reader.on(RefNodeFactory.toStatement(
-                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10"),
+        reader.on(toStatement(
+                toIRI("https://search.idigbio.org/v2/search/records?limit=10"),
                 HAS_VERSION,
-                RefNodeFactory.toIRI("http://something")));
+                toIRI("http://something")));
 
         assertThat(nodes.size(), is(21));
         assertThat(nodes.get(20).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=10&offset=2>"));
@@ -130,17 +158,17 @@ public class RegistryReaderIDigBioTest {
         BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("idigbio-records-incomplete.json");
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
 
-        reader.on(RefNodeFactory.toStatement(
-                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2"),
+        reader.on(toStatement(
+                toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2"),
                 HAS_VERSION,
-                RefNodeFactory.toIRI("http://something")));
+                toIRI("http://something")));
 
         assertThat(nodes.size(), is(20));
     }
 
     @Test
     public void resolveMediaRecordUUID() {
-        final IRI pageIRI = RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2");
+        final IRI pageIRI = toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2");
 
         final IRI mediaIRI = RegistryReaderIDigBio.resolveMediaUUID(pageIRI, UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"));
 
@@ -149,7 +177,7 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void resolveMediaRecordThumbnail() {
-        final IRI pageIRI = RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2");
+        final IRI pageIRI = toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2");
 
         final IRI mediaIRI = RegistryReaderIDigBio.resolveMediaThumbnail(pageIRI, UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"));
 
@@ -158,7 +186,7 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void resolveMediaRecordWebView() {
-        final IRI pageIRI = RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2");
+        final IRI pageIRI = toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2");
 
         final IRI mediaIRI = RegistryReaderIDigBio.resolveMediaWebView(pageIRI, UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"));
 
@@ -167,7 +195,7 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void resolveMediaRecordFullSize() {
-        final IRI pageIRI = RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2");
+        final IRI pageIRI = toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2");
 
         final IRI mediaIRI = RegistryReaderIDigBio.resolveMediaFullSize(pageIRI, UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"));
 
@@ -176,7 +204,7 @@ public class RegistryReaderIDigBioTest {
 
     @Test
     public void resolveMediaRecordUUIDUnsupportedPageId() {
-        final IRI pageIRI = RefNodeFactory.toIRI("https://search.idigbio.org/v2/bla/records?limit=10&offset=2");
+        final IRI pageIRI = toIRI("https://search.idigbio.org/v2/bla/records?limit=10&offset=2");
         final IRI mediaIRI = RegistryReaderIDigBio.resolveMediaUUID(pageIRI, UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"));
         assertThat(mediaIRI, is(nullValue()));
     }
@@ -187,10 +215,10 @@ public class RegistryReaderIDigBioTest {
         BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("idigbio-records-incomplete.json");
         RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
 
-        reader.on(RefNodeFactory.toStatement(
-                RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/records?limit=1"),
+        reader.on(toStatement(
+                toIRI("https://search.idigbio.org/v2/search/records?limit=1"),
                 HAS_VERSION,
-                RefNodeFactory.toIRI("http://something")));
+                toIRI("http://something")));
 
         assertThat(nodes.size(), is(29));
         assertThat(nodes.get(29 - 9).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=1&offset=2>"));
@@ -200,11 +228,11 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void parseRecords() throws IOException {
 
-        IRI providedParent = RefNodeFactory.toIRI("someRegistryUUID");
+        IRI providedParent = toIRI("someRegistryUUID");
         final List<Quad> nodes = new ArrayList<>();
 
         InputStream is = completeRecordsInputStream();
-        IRI providedPageIRI = RefNodeFactory.toIRI("https://search.something/search/record?foo=bar");
+        IRI providedPageIRI = toIRI("https://search.something/search/record?foo=bar");
 
         RegistryReaderIDigBio.parseRecords(providedParent, TestUtil.testEmitter(nodes), is, providedPageIRI);
 
@@ -234,11 +262,11 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void parseMediaRecord() throws IOException {
 
-        IRI providedParent = RefNodeFactory.toIRI("someContentIRI");
+        IRI providedParent = toIRI("someContentIRI");
         final List<Quad> nodes = new ArrayList<>();
 
         InputStream is = mediaRecordInputStream();
-        IRI providedPageIRI = RefNodeFactory.toIRI("https://something/search/record?foo=bar");
+        IRI providedPageIRI = toIRI("https://something/search/record?foo=bar");
 
         RegistryReaderIDigBio.parseMediaRecord(providedParent, TestUtil.testEmitter(nodes), is, providedPageIRI);
 
@@ -258,7 +286,7 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void parsePublishers() throws IOException {
 
-        IRI providedParent = RefNodeFactory.toIRI("someRegistryUUID");
+        IRI providedParent = toIRI("someRegistryUUID");
         final List<Quad> nodes = new ArrayList<>();
 
         InputStream is = publishersInputStream();
@@ -317,5 +345,48 @@ public class RegistryReaderIDigBioTest {
         return getClass().getResourceAsStream("idigbio-mediarecord.json");
     }
 
+    @Test
+    public void isNotRecordSetSearchRequest() {
+        final String urlString = "https://search.idigbio.org/v2/view/recordsets/ba77d411-4179-4dbd-b6c1-39b8a71ae795";
+        assertFalse(RegistryReaderIDigBio.isRecordSetSearchEndpoint(toIRI(urlString)));
+    }
+
+    @Test
+    public void isRecordSetSearchRequest() {
+        final String urlString = "https://search.idigbio.org/v2/search/recordsets";
+        assertTrue(RegistryReaderIDigBio.isRecordSetSearchEndpoint(toIRI(urlString)));
+    }
+
+    @Test
+    public void isRecordSetViewRequest() {
+        final String urlString = "https://search.idigbio.org/v2/view/recordsets/ba77d411-4179-4dbd-b6c1-39b8a71ae795";
+        assertTrue(RegistryReaderIDigBio.isRecordSetViewEndpoint(toIRI(urlString)));
+    }
+
+    @Test
+    public void isNotRecordSetViewRequest() {
+        final String urlString = "https://search.idigbio.org/v2/search/recordsets";
+        assertFalse(RegistryReaderIDigBio.isRecordSetViewEndpoint(toIRI(urlString)));
+    }
+
+    @Test
+    public void emitNonCachedIRI() {
+        final ArrayList<Quad> nodes = new ArrayList<>();
+        final StatementsEmitter cachingEmitter = RegistryReaderIDigBio.createCachingEmitter(nodes, new HashSet<>());
+        final Quad quad = RefNodeFactory.toStatement(RefNodeFactory.toIRI("https://example.org/"), HAS_VERSION, toBlank());
+        cachingEmitter.emit(Collections.singletonList(quad));
+        cachingEmitter.emit(Collections.singletonList(quad));
+        assertThat(nodes.size(), is(2));
+    }
+
+    @Test
+    public void doNotEmitNonCachedIRI() {
+        final ArrayList<Quad> statements = new ArrayList<>();
+        final StatementsEmitter cachingEmitter = RegistryReaderIDigBio.createCachingEmitter(statements, new HashSet<>());
+        final Quad quad = RefNodeFactory.toStatement(RefNodeFactory.toIRI("https://search.idigbio.org/v2/view/recordsets/ba77d411-4179-4dbd-b6c1-39b8a71ae795"), HAS_VERSION, toBlank());
+        cachingEmitter.emit(Collections.singletonList(quad));
+        cachingEmitter.emit(Collections.singletonList(quad));
+        assertThat(statements.size(), is(1));
+    }
 
 }

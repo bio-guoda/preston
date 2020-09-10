@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.util.ResultPagerUtil;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -17,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -47,6 +51,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     public static final IRI IDIGBIO_PUBLISHER_REGISTRY = toIRI(URI.create(PUBLISHERS_URI + "?limit=10000"));
 
     public static final String RECORDSETS_URI = "https://search.idigbio.org/v2/search/recordsets";
+    public static final String RECORDSETS_VIEW_URI = "https://search.idigbio.org/v2/view/recordsets/";
     public static final IRI IDIGBIO_RECORDSETS_REGISTRY = toIRI(URI.create(RECORDSETS_URI + "?limit=10000"));
 
     public static final String RECORDS_URI = "https://search.idigbio.org/v2/search/records";
@@ -54,9 +59,16 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     public static final String MEDIA_RECORDS_URI = "https://search.idigbio.org/v2/view/mediarecords/";
 
     public static final Pattern SEARCH_API_IRI_MATCHER = Pattern.compile("(.*//)(search\\.)(.*)(/search/.*$)");
+    private final Set<String> requestedRecordSetViews;
+
 
     public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, StatementsListener listener) {
+        this(blobStore, listener, new HashSet<>());
+    }
+
+    public RegistryReaderIDigBio(BlobStoreReadOnly blobStore, StatementsListener listener, Set<String> iriCache) {
         super(blobStore, listener);
+        requestedRecordSetViews = iriCache;
     }
 
     @Override
@@ -77,7 +89,8 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
             ActivityUtil.emitAsNewActivity(quadStream, this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)) {
             attemptToParseAsPublishers(statement, (IRI) getVersion(statement));
-            attemptToParseAsRecordSets(statement, (IRI) getVersion(statement));
+            attemptToParseAsRecordSetsSearchResults(statement, (IRI) getVersion(statement));
+            attemptToParseAsRecordSetsView(statement, (IRI) getVersion(statement));
             attemptToParseAsRecords(statement, (IRI) getVersion(statement));
             attemptToParseAsMediaRecord(statement, (IRI) getVersion(statement));
         }
@@ -87,45 +100,27 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         final BlankNodeOrIRI subject = statement.getSubject();
         if (isPublisherEndpoint(subject)) {
             ArrayList<Quad> nodes = new ArrayList<>();
-            parsePublishers(toBeParsed, new StatementsEmitterAdapter() {
-                @Override
-                public void emit(Quad statement) {
-                    nodes.add(statement);
-                }
-            });
+            parsePublishers(toBeParsed, createCachingEmitter(nodes));
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
 
-    private void attemptToParseAsRecordSets(Quad statement, IRI toBeParsed) {
+    private void attemptToParseAsRecordSetsSearchResults(Quad statement, IRI toBeParsed) {
         final BlankNodeOrIRI subject = statement.getSubject();
-        if (isRecordSetEndpoint(subject)) {
+        if (isRecordSetSearchEndpoint(subject)) {
             ArrayList<Quad> nodes = new ArrayList<>();
-            parseRecordSets(toBeParsed, new StatementsEmitterAdapter() {
-                @Override
-                public void emit(Quad statement) {
-                    nodes.add(statement);
-                }
-            });
+            parseRecordSets(toBeParsed, createCachingEmitter(nodes));
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
 
-    public static boolean isMediaRecordEndpoint(BlankNodeOrIRI subject) {
-        return StringUtils.contains(subject.ntriplesString(), MEDIA_RECORDS_URI);
-    }
-
-    public static boolean isPublisherEndpoint(BlankNodeOrIRI subject) {
-        return StringUtils.contains(subject.ntriplesString(), PUBLISHERS_URI);
-    }
-
-    public static boolean isRecordSetEndpoint(BlankNodeOrIRI subject) {
-        return StringUtils.contains(subject.ntriplesString(), RECORDSETS_URI);
-    }
-
-    public static boolean isRecordsEndpoint(BlankNodeOrIRI subject) {
-        return StringUtils.contains(subject.ntriplesString(), RECORDS_URI)
-                && !isRecordSetEndpoint(subject);
+    private void attemptToParseAsRecordSetsView(Quad statement, IRI toBeParsed) {
+        final BlankNodeOrIRI subject = statement.getSubject();
+        if (isRecordSetViewEndpoint(subject)) {
+            ArrayList<Quad> nodes = new ArrayList<>();
+            parseRecordSetView(toBeParsed, createCachingEmitter(nodes));
+            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+        }
     }
 
 
@@ -133,12 +128,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         final BlankNodeOrIRI subject = statement.getSubject();
         if (isRecordsEndpoint(subject)) {
             ArrayList<Quad> nodes = new ArrayList<>();
-            parseRecords(resourceIRI, new StatementsEmitterAdapter() {
-                @Override
-                public void emit(Quad statement) {
-                    nodes.add(statement);
-                }
-            }, (IRI) statement.getSubject());
+            parseRecords(resourceIRI, createCachingEmitter(nodes), (IRI) statement.getSubject());
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
@@ -147,14 +137,40 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         final BlankNodeOrIRI subject = statement.getSubject();
         if (isMediaRecordEndpoint(subject)) {
             ArrayList<Quad> nodes = new ArrayList<>();
-            parseMediaRecord(resourceIRI, new StatementsEmitterAdapter() {
-                @Override
-                public void emit(Quad statement) {
-                    nodes.add(statement);
-                }
-            }, (IRI) subject);
+            parseMediaRecord(resourceIRI, createCachingEmitter(nodes), (IRI) subject);
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
+    }
+
+    private StatementsEmitter createCachingEmitter(ArrayList<Quad> nodes) {
+        return createCachingEmitter(nodes, RegistryReaderIDigBio.this.requestedRecordSetViews);
+    }
+
+    static StatementsEmitter createCachingEmitter(ArrayList<Quad> nodes, Set<String> requestedRecordSetViews1) {
+        final Set<String> requestedRecordSetViews = requestedRecordSetViews1;
+        return new StatementsEmitterAdapter() {
+            @Override
+            public void emit(Quad statement) {
+                if (shouldRequest(statement, requestedRecordSetViews)) {
+                    nodes.add(statement);
+                }
+            }
+        };
+    }
+
+    public static boolean shouldRequest(Quad statement, Set<String> requestedRecordSetViews) {
+        boolean shouldRequest = true;
+        if (isRecordSetViewEndpoint(statement.getSubject())
+                && RefNodeConstants.HAS_VERSION.equals(statement.getPredicate())
+                && statement.getObject() instanceof BlankNode) {
+            final String recordsetViewUrl = statement.getSubject().ntriplesString();
+            if (requestedRecordSetViews.contains(recordsetViewUrl)) {
+                shouldRequest = false;
+            } else {
+                requestedRecordSetViews.add(recordsetViewUrl);
+            }
+        }
+        return shouldRequest;
     }
 
 
@@ -189,36 +205,39 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         if (r.has("items") && r.get("items").isArray()) {
             for (JsonNode item : r.get("items")) {
                 itemCounter.incrementAndGet();
-                String recordSetUUID = item.get("uuid").asText();
-                IRI refNodeRecordSet = toIRI(recordSetUUID);
-                emitter.emit(toStatement(parent, HAD_MEMBER, refNodeRecordSet));
-                JsonNode data = item.get("data");
-                if (item.has("data")) {
-                    String emlURL = data.has("eml_link") ? data.get("eml_link").asText() : null;
-                    if (StringUtils.isNotBlank(emlURL)) {
-                        IRI refNodeFeed = toIRI(emlURL);
-                        emitter.emit(toStatement(refNodeRecordSet, HAD_MEMBER, refNodeFeed));
-                        emitter.emit(toStatement(refNodeFeed, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_EML)));
-                        emitter.emit(toStatement(refNodeFeed, HAS_VERSION, toBlank()));
-                    }
-                    String dwcaURL = data.has("link") ? data.get("link").asText() : null;
-                    if (StringUtils.isNotBlank(dwcaURL)) {
-                        IRI refNodeFeed = toIRI(dwcaURL);
-                        emitter.emit(toStatement(refNodeRecordSet, HAD_MEMBER, refNodeFeed));
-                        emitter.emit(toStatement(refNodeFeed, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_DWCA)));
-                        emitter.emit(toStatement(refNodeFeed, HAS_VERSION, toBlank()));
-                    }
-                }
+                parseRecordSet(parent, emitter, item);
             }
         }
 
         verifyItemCount(r, itemCounter);
     }
 
+    private static void parseRecordSet(IRI parent, StatementsEmitter emitter, JsonNode item) {
+        String recordSetUUID = item.get("uuid").asText();
+        IRI refNodeRecordSet = toIRI(recordSetUUID);
+        emitter.emit(toStatement(parent, HAD_MEMBER, refNodeRecordSet));
+        JsonNode data = item.get("data");
+        if (item.has("data")) {
+            String emlURL = data.has("eml_link") ? data.get("eml_link").asText() : null;
+            if (StringUtils.isNotBlank(emlURL)) {
+                IRI refNodeFeed = toIRI(emlURL);
+                emitter.emit(toStatement(refNodeRecordSet, HAD_MEMBER, refNodeFeed));
+                emitter.emit(toStatement(refNodeFeed, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_EML)));
+                emitter.emit(toStatement(refNodeFeed, HAS_VERSION, toBlank()));
+            }
+            String dwcaURL = data.has("link") ? data.get("link").asText() : null;
+            if (StringUtils.isNotBlank(dwcaURL)) {
+                IRI refNodeFeed = toIRI(dwcaURL);
+                emitter.emit(toStatement(refNodeRecordSet, HAD_MEMBER, refNodeFeed));
+                emitter.emit(toStatement(refNodeFeed, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_DWCA)));
+                emitter.emit(toStatement(refNodeFeed, HAS_VERSION, toBlank()));
+            }
+        }
+    }
+
     static void parseRecords(IRI resourceIRI, StatementsEmitter emitter, InputStream is, IRI pageIRI) throws IOException {
         JsonNode r = new ObjectMapper().readTree(is);
         AtomicInteger itemCounter = new AtomicInteger();
-
 
         if (r.has("items") && r.get("items").isArray()) {
             for (JsonNode item : r.get("items")) {
@@ -226,30 +245,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                 String recordUUID = item.get("uuid").asText();
                 IRI recordIRI = toIRI(UUID.fromString(recordUUID));
                 emitter.emit(toStatement(resourceIRI, HAD_MEMBER, recordIRI));
-                JsonNode indexTerms = item.get("indexTerms");
-                if (item.has("indexTerms")) {
-                    String recordSetUUID = indexTerms.has("recordset") ? indexTerms.get("recordset").asText() : null;
-                    if (StringUtils.isNotBlank(recordSetUUID)) {
-                        emitter.emit(toStatement(toIRI(UUID.fromString(recordSetUUID)), HAD_MEMBER, recordIRI));
-                    }
-
-                    if (indexTerms.has("mediarecords")) {
-                        final JsonNode mediarecords = indexTerms.get("mediarecords");
-                        for (JsonNode mediarecord : mediarecords) {
-                            if (mediarecord.isValueNode()) {
-                                final UUID mediaUUID = UUID.fromString(mediarecord.asText());
-                                emitter.emit(toStatement(recordIRI, HAD_MEMBER, toIRI(mediaUUID)));
-                                IRI mediaRecordIRI = resolveMediaUUID(pageIRI, mediaUUID);
-                                if (mediaRecordIRI != null) {
-                                    emitter.emit(toStatement(mediaRecordIRI, HAS_VERSION, RefNodeFactory.toBlank()));
-                                    emitter.emit(toStatement(resolveMediaThumbnail(pageIRI, mediaUUID), HAS_VERSION, RefNodeFactory.toBlank()));
-                                    emitter.emit(toStatement(resolveMediaWebView(pageIRI, mediaUUID), HAS_VERSION, RefNodeFactory.toBlank()));
-                                    emitter.emit(toStatement(resolveMediaFullSize(pageIRI, mediaUUID), HAS_VERSION, RefNodeFactory.toBlank()));
-                                }
-                            }
-                        }
-                    }
-                }
+                handleIndexedItem(emitter, pageIRI, item, recordIRI);
             }
         }
 
@@ -259,6 +255,44 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
             if (itemCount.isNumber()) {
                 Long recordsTotal = itemCount.asLong();
                 ResultPagerUtil.emitPageRequests(pageIRI, recordsTotal, recordsFound, emitter);
+            }
+        }
+    }
+
+    private static void handleAttribution(StatementsEmitter emitter, IRI pageIRI, JsonNode item, IRI recordIRI) {
+        JsonNode attribution = item.get("attribution");
+        if (item.has("attribution")) {
+            String recordsetUUID = attribution.has("uuid") ? attribution.get("uuid").asText() : null;
+            if (StringUtils.isNotBlank(recordsetUUID)) {
+                final String recordsetUrl = "https://search.idigbio.org/v2/view/recordsets/" + recordsetUUID;
+                emitter.emit(toStatement(toIRI(recordsetUrl), HAS_VERSION, RefNodeFactory.toBlank()));
+            }
+        }
+    }
+
+    private static void handleIndexedItem(StatementsEmitter emitter, IRI pageIRI, JsonNode item, IRI recordIRI) {
+        JsonNode indexTerms = item.get("indexTerms");
+        if (item.has("indexTerms")) {
+            String recordSetUUID = indexTerms.has("recordset") ? indexTerms.get("recordset").asText() : null;
+            if (StringUtils.isNotBlank(recordSetUUID)) {
+                emitter.emit(toStatement(toIRI(UUID.fromString(recordSetUUID)), HAD_MEMBER, recordIRI));
+            }
+
+            if (indexTerms.has("mediarecords")) {
+                final JsonNode mediarecords = indexTerms.get("mediarecords");
+                for (JsonNode mediarecord : mediarecords) {
+                    if (mediarecord.isValueNode()) {
+                        final UUID mediaUUID = UUID.fromString(mediarecord.asText());
+                        emitter.emit(toStatement(recordIRI, HAD_MEMBER, toIRI(mediaUUID)));
+                        IRI mediaRecordIRI = resolveMediaUUID(pageIRI, mediaUUID);
+                        if (mediaRecordIRI != null) {
+                            emitter.emit(toStatement(mediaRecordIRI, HAS_VERSION, RefNodeFactory.toBlank()));
+                            emitter.emit(toStatement(resolveMediaThumbnail(pageIRI, mediaUUID), HAS_VERSION, RefNodeFactory.toBlank()));
+                            emitter.emit(toStatement(resolveMediaWebView(pageIRI, mediaUUID), HAS_VERSION, RefNodeFactory.toBlank()));
+                            emitter.emit(toStatement(resolveMediaFullSize(pageIRI, mediaUUID), HAS_VERSION, RefNodeFactory.toBlank()));
+                        }
+                    }
+                }
             }
         }
     }
@@ -362,6 +396,18 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         }
     }
 
+    private void parseRecordSetView(IRI refNode, StatementsEmitter emitter) {
+        try {
+            InputStream is = get(refNode);
+            if (is != null) {
+                JsonNode r = new ObjectMapper().readTree(is);
+                parseRecordSet(refNode, emitter, r);
+            }
+        } catch (IOException e) {
+            LOG.warn("failed to parse recordsets [" + refNode.toString() + "]", e);
+        }
+    }
+
     private void parseRecords(IRI refNode, StatementsEmitter emitter, IRI pageIRI) {
         try {
             InputStream is = get(refNode);
@@ -383,5 +429,27 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
             LOG.warn("failed to parse records [" + refNode.toString() + "]", e);
         }
     }
+
+    public static boolean isMediaRecordEndpoint(BlankNodeOrIRI subject) {
+        return StringUtils.contains(subject.ntriplesString(), MEDIA_RECORDS_URI);
+    }
+
+    public static boolean isPublisherEndpoint(BlankNodeOrIRI subject) {
+        return StringUtils.contains(subject.ntriplesString(), PUBLISHERS_URI);
+    }
+
+    public static boolean isRecordSetSearchEndpoint(BlankNodeOrIRI subject) {
+        return StringUtils.contains(subject.ntriplesString(), RECORDSETS_URI);
+    }
+
+    public static boolean isRecordSetViewEndpoint(BlankNodeOrIRI subject) {
+        return StringUtils.contains(subject.ntriplesString(), RECORDSETS_VIEW_URI);
+    }
+
+    public static boolean isRecordsEndpoint(BlankNodeOrIRI subject) {
+        return StringUtils.contains(subject.ntriplesString(), RECORDS_URI)
+                && !isRecordSetSearchEndpoint(subject);
+    }
+
 
 }
