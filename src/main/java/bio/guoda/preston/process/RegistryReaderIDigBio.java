@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
@@ -83,7 +84,8 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     }
 
     private void attemptToParseAsPublishers(Quad statement, IRI toBeParsed) {
-        if (StringUtils.contains(statement.getSubject().ntriplesString(), PUBLISHERS_URI)) {
+        final BlankNodeOrIRI subject = statement.getSubject();
+        if (isPublisherEndpoint(subject)) {
             ArrayList<Quad> nodes = new ArrayList<>();
             parsePublishers(toBeParsed, new StatementsEmitterAdapter() {
                 @Override
@@ -96,7 +98,8 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     }
 
     private void attemptToParseAsRecordSets(Quad statement, IRI toBeParsed) {
-        if (StringUtils.contains(statement.getSubject().ntriplesString(), RECORDSETS_URI)) {
+        final BlankNodeOrIRI subject = statement.getSubject();
+        if (isRecordSetEndpoint(subject)) {
             ArrayList<Quad> nodes = new ArrayList<>();
             parseRecordSets(toBeParsed, new StatementsEmitterAdapter() {
                 @Override
@@ -108,9 +111,27 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         }
     }
 
+    public static boolean isMediaRecordEndpoint(BlankNodeOrIRI subject) {
+        return StringUtils.contains(subject.ntriplesString(), MEDIA_RECORDS_URI);
+    }
+
+    public static boolean isPublisherEndpoint(BlankNodeOrIRI subject) {
+        return StringUtils.contains(subject.ntriplesString(), PUBLISHERS_URI);
+    }
+
+    public static boolean isRecordSetEndpoint(BlankNodeOrIRI subject) {
+        return StringUtils.contains(subject.ntriplesString(), RECORDSETS_URI);
+    }
+
+    public static boolean isRecordsEndpoint(BlankNodeOrIRI subject) {
+        return StringUtils.contains(subject.ntriplesString(), RECORDS_URI)
+                && !isRecordSetEndpoint(subject);
+    }
+
+
     private void attemptToParseAsRecords(Quad statement, IRI resourceIRI) {
-        if (StringUtils.contains(statement.getSubject().ntriplesString(), RECORDS_URI)
-                && !StringUtils.contains(statement.getSubject().ntriplesString(), RECORDSETS_URI)) {
+        final BlankNodeOrIRI subject = statement.getSubject();
+        if (isRecordsEndpoint(subject)) {
             ArrayList<Quad> nodes = new ArrayList<>();
             parseRecords(resourceIRI, new StatementsEmitterAdapter() {
                 @Override
@@ -123,17 +144,19 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
     }
 
     private void attemptToParseAsMediaRecord(Quad statement, IRI resourceIRI) {
-        if (StringUtils.contains(statement.getSubject().ntriplesString(), MEDIA_RECORDS_URI)) {
+        final BlankNodeOrIRI subject = statement.getSubject();
+        if (isMediaRecordEndpoint(subject)) {
             ArrayList<Quad> nodes = new ArrayList<>();
             parseMediaRecord(resourceIRI, new StatementsEmitterAdapter() {
                 @Override
                 public void emit(Quad statement) {
                     nodes.add(statement);
                 }
-            }, (IRI) statement.getSubject());
+            }, (IRI) subject);
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         }
     }
+
 
     static void parsePublishers(IRI parent, StatementsEmitter emitter, InputStream is) throws IOException {
         AtomicInteger itemCounter = new AtomicInteger();
@@ -205,7 +228,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                 emitter.emit(toStatement(resourceIRI, HAD_MEMBER, recordIRI));
                 JsonNode indexTerms = item.get("indexTerms");
                 if (item.has("indexTerms")) {
-                    String recordSetUUID = indexTerms.has("recondset") ? indexTerms.get("recordset").asText() : null;
+                    String recordSetUUID = indexTerms.has("recordset") ? indexTerms.get("recordset").asText() : null;
                     if (StringUtils.isNotBlank(recordSetUUID)) {
                         emitter.emit(toStatement(toIRI(UUID.fromString(recordSetUUID)), HAD_MEMBER, recordIRI));
                     }

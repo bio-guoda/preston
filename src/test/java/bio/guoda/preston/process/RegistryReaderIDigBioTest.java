@@ -105,7 +105,7 @@ public class RegistryReaderIDigBioTest {
                 HAS_VERSION,
                 RefNodeFactory.toIRI("http://something")));
 
-        assertThat(nodes.size(), is(18));
+        assertThat(nodes.size(), is(20));
 
     }
 
@@ -120,8 +120,8 @@ public class RegistryReaderIDigBioTest {
                 HAS_VERSION,
                 RefNodeFactory.toIRI("http://something")));
 
-        assertThat(nodes.size(), is(19));
-        assertThat(nodes.get(18).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=10&offset=2>"));
+        assertThat(nodes.size(), is(21));
+        assertThat(nodes.get(20).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=10&offset=2>"));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class RegistryReaderIDigBioTest {
                 HAS_VERSION,
                 RefNodeFactory.toIRI("http://something")));
 
-        assertThat(nodes.size(), is(18));
+        assertThat(nodes.size(), is(20));
     }
 
     @Test
@@ -192,9 +192,9 @@ public class RegistryReaderIDigBioTest {
                 HAS_VERSION,
                 RefNodeFactory.toIRI("http://something")));
 
-        assertThat(nodes.size(), is(27));
-        assertThat(nodes.get(27 - 9).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=1&offset=2>"));
-        assertThat(nodes.get(27 - 1).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=1&offset=10>"));
+        assertThat(nodes.size(), is(29));
+        assertThat(nodes.get(29 - 9).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=1&offset=2>"));
+        assertThat(nodes.get(29 - 1).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=1&offset=10>"));
     }
 
     @Test
@@ -208,26 +208,26 @@ public class RegistryReaderIDigBioTest {
 
         RegistryReaderIDigBio.parseRecords(providedParent, TestUtil.testEmitter(nodes), is, providedPageIRI);
 
-        assertThat(nodes.size(), is(17));
+        assertThat(nodes.size(), is(19));
 
         assertThat(nodes.get(0).toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <e6c5dffc-4ad1-4d9d-800f-5796baec1f65> ."));
 
-        assertThat(nodes.get(1).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
+        assertThat(nodes.get(2).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
 
-        assertThat(nodes.get(2).toString(), startsWith("<https://search.something/view/mediarecords/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://purl.org/pav/hasVersion> _:"));
-        assertThat(nodes.get(3).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=thumbnail> <http://purl.org/pav/hasVersion> _:"));
-        assertThat(nodes.get(4).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=webview> <http://purl.org/pav/hasVersion> _:"));
-        assertThat(nodes.get(5).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=fullsize> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(3).toString(), startsWith("<https://search.something/view/mediarecords/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(4).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=thumbnail> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(5).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=webview> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(6).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=fullsize> <http://purl.org/pav/hasVersion> _:"));
 
-        assertThat(nodes.get(6).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <66caac8d-d00c-4d68-9a5c-450e2608d0b5> ."));
+        assertThat(nodes.get(7).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <66caac8d-d00c-4d68-9a5c-450e2608d0b5> ."));
 
-        assertThat(nodes.get(7).toString(), startsWith("<https://search.something/view/mediarecords/66caac8d-d00c-4d68-9a5c-450e2608d0b5> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(8).toString(), startsWith("<https://search.something/view/mediarecords/66caac8d-d00c-4d68-9a5c-450e2608d0b5> <http://purl.org/pav/hasVersion> _:"));
 
-        assertThat(nodes.get(11).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <00ba0ad7-a11a-4b9f-90b4-299b7949a232> ."));
+        assertThat(nodes.get(12).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <00ba0ad7-a11a-4b9f-90b4-299b7949a232> ."));
 
-        assertThat(nodes.get(12).toString(), startsWith("<https://search.something/view/mediarecords/00ba0ad7-a11a-4b9f-90b4-299b7949a232> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(13).toString(), startsWith("<https://search.something/view/mediarecords/00ba0ad7-a11a-4b9f-90b4-299b7949a232> <http://purl.org/pav/hasVersion> _:"));
 
-        assertThat(nodes.get(16).toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <db16bf3a-550b-4204-92e4-bbc71c96c772> ."));
+        assertThat(nodes.get(17).toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <db16bf3a-550b-4204-92e4-bbc71c96c772> ."));
 
     }
 
