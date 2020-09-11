@@ -310,7 +310,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     static void parseMediaRecord(IRI resourceIRI, StatementsEmitter emitter, InputStream is, IRI pageIRI) throws IOException {
         JsonNode item = new ObjectMapper().readTree(is);
-        emitAttribution(emitter, item);
+        handleAttribution(emitter, item);
         String recordUUID = item.get("uuid").asText();
         IRI recordIRI = toIRI(UUID.fromString(recordUUID));
         emitter.emit(toStatement(resourceIRI, HAD_MEMBER, recordIRI));

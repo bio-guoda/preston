@@ -273,7 +273,7 @@ public class RegistryReaderIDigBioTest {
 
         assertThat(nodes.size(), is(5));
 
-        assertThat(nodes.get(0).toString(), startsWith("<https://search.idigbio.org/v2/view/recordsets/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(0).toString(), startsWith("<https://search.idigbio.org/v2/view/recordsets/ba77d411-4179-4dbd-b6c1-39b8a71ae795> <http://purl.org/pav/hasVersion> _:"));
         assertThat(nodes.get(1).toString(), is("<someContentIRI> <http://www.w3.org/ns/prov#hadMember> <45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
 
         assertThat(nodes.get(2).toString(), startsWith("<http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> <http://purl.org/pav/hasVersion> _:"));
