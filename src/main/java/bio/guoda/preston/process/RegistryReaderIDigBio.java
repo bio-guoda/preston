@@ -258,19 +258,13 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
             }
         }
 
-        handleAttribution(emitter, r);
-
     }
 
     private static void handleAttribution(StatementsEmitter emitter, JsonNode item) {
         JsonNode attribution = item.get("attribution");
         if (item.has("attribution")) {
-            emitAttribution(emitter, attribution);
+            emitRequestForRecordSet(emitter, (attribution != null && attribution.has("uuid")) ? attribution.get("uuid").asText() : null);
         }
-    }
-
-    private static void emitAttribution(StatementsEmitter emitter, JsonNode attribution) {
-        emitRequestForRecordSet(emitter, (attribution != null && attribution.has("uuid")) ? attribution.get("uuid").asText() : null);
     }
 
     private static void emitRequestForRecordSet(StatementsEmitter emitter, String recordsetUUID) {
