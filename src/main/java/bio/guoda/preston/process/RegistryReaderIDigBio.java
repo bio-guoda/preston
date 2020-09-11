@@ -257,16 +257,26 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                 ResultPagerUtil.emitPageRequests(pageIRI, recordsTotal, recordsFound, emitter);
             }
         }
+
+        handleAttribution(emitter, r);
+
     }
 
-    private static void handleAttribution(StatementsEmitter emitter, IRI pageIRI, JsonNode item, IRI recordIRI) {
+    private static void handleAttribution(StatementsEmitter emitter, JsonNode item) {
         JsonNode attribution = item.get("attribution");
         if (item.has("attribution")) {
-            String recordsetUUID = attribution.has("uuid") ? attribution.get("uuid").asText() : null;
-            if (StringUtils.isNotBlank(recordsetUUID)) {
-                final String recordsetUrl = "https://search.idigbio.org/v2/view/recordsets/" + recordsetUUID;
-                emitter.emit(toStatement(toIRI(recordsetUrl), HAS_VERSION, RefNodeFactory.toBlank()));
-            }
+            emitAttribution(emitter, attribution);
+        }
+    }
+
+    private static void emitAttribution(StatementsEmitter emitter, JsonNode attribution) {
+        emitRequestForRecordSet(emitter, (attribution != null && attribution.has("uuid")) ? attribution.get("uuid").asText() : null);
+    }
+
+    private static void emitRequestForRecordSet(StatementsEmitter emitter, String recordsetUUID) {
+        if (StringUtils.isNotBlank(recordsetUUID)) {
+            final String recordsetUrl = "https://search.idigbio.org/v2/view/recordsets/" + recordsetUUID;
+            emitter.emit(toStatement(toIRI(recordsetUrl), HAS_VERSION, RefNodeFactory.toBlank()));
         }
     }
 
@@ -276,6 +286,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
             String recordSetUUID = indexTerms.has("recordset") ? indexTerms.get("recordset").asText() : null;
             if (StringUtils.isNotBlank(recordSetUUID)) {
                 emitter.emit(toStatement(toIRI(UUID.fromString(recordSetUUID)), HAD_MEMBER, recordIRI));
+                emitRequestForRecordSet(emitter, recordSetUUID);
             }
 
             if (indexTerms.has("mediarecords")) {
@@ -299,6 +310,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     static void parseMediaRecord(IRI resourceIRI, StatementsEmitter emitter, InputStream is, IRI pageIRI) throws IOException {
         JsonNode item = new ObjectMapper().readTree(is);
+        emitAttribution(emitter, item);
         String recordUUID = item.get("uuid").asText();
         IRI recordIRI = toIRI(UUID.fromString(recordUUID));
         emitter.emit(toStatement(resourceIRI, HAD_MEMBER, recordIRI));

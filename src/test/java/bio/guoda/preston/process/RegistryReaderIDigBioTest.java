@@ -133,7 +133,7 @@ public class RegistryReaderIDigBioTest {
                 HAS_VERSION,
                 toIRI("http://something")));
 
-        assertThat(nodes.size(), is(20));
+        assertThat(nodes.size(), is(21));
 
     }
 
@@ -148,8 +148,8 @@ public class RegistryReaderIDigBioTest {
                 HAS_VERSION,
                 toIRI("http://something")));
 
-        assertThat(nodes.size(), is(21));
-        assertThat(nodes.get(20).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=10&offset=2>"));
+        assertThat(nodes.size(), is(22));
+        assertThat(nodes.get(21).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=10&offset=2>"));
     }
 
     @Test
@@ -163,7 +163,7 @@ public class RegistryReaderIDigBioTest {
                 HAS_VERSION,
                 toIRI("http://something")));
 
-        assertThat(nodes.size(), is(20));
+        assertThat(nodes.size(), is(21));
     }
 
     @Test
@@ -220,9 +220,9 @@ public class RegistryReaderIDigBioTest {
                 HAS_VERSION,
                 toIRI("http://something")));
 
-        assertThat(nodes.size(), is(29));
-        assertThat(nodes.get(29 - 9).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=1&offset=2>"));
-        assertThat(nodes.get(29 - 1).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=1&offset=10>"));
+        assertThat(nodes.size(), is(30));
+        assertThat(nodes.get(30 - 9).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=1&offset=2>"));
+        assertThat(nodes.get(30 - 1).getSubject().ntriplesString(), is("<https://search.idigbio.org/v2/search/records?limit=1&offset=10>"));
     }
 
     @Test
@@ -236,26 +236,27 @@ public class RegistryReaderIDigBioTest {
 
         RegistryReaderIDigBio.parseRecords(providedParent, TestUtil.testEmitter(nodes), is, providedPageIRI);
 
-        assertThat(nodes.size(), is(19));
+        assertThat(nodes.size(), is(21));
 
         assertThat(nodes.get(0).toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <e6c5dffc-4ad1-4d9d-800f-5796baec1f65> ."));
 
-        assertThat(nodes.get(2).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
+        assertThat(nodes.get(3).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
+        assertThat(nodes.get(2).toString(), startsWith("<https://search.idigbio.org/v2/view/recordsets/ba77d411-4179-4dbd-b6c1-39b8a71ae795> <http://purl.org/pav/hasVersion> _:"));
 
-        assertThat(nodes.get(3).toString(), startsWith("<https://search.something/view/mediarecords/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://purl.org/pav/hasVersion> _:"));
-        assertThat(nodes.get(4).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=thumbnail> <http://purl.org/pav/hasVersion> _:"));
-        assertThat(nodes.get(5).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=webview> <http://purl.org/pav/hasVersion> _:"));
-        assertThat(nodes.get(6).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=fullsize> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(4).toString(), startsWith("<https://search.something/view/mediarecords/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(5).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=thumbnail> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(6).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=webview> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(7).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=fullsize> <http://purl.org/pav/hasVersion> _:"));
 
-        assertThat(nodes.get(7).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <66caac8d-d00c-4d68-9a5c-450e2608d0b5> ."));
+        assertThat(nodes.get(8).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <66caac8d-d00c-4d68-9a5c-450e2608d0b5> ."));
 
-        assertThat(nodes.get(8).toString(), startsWith("<https://search.something/view/mediarecords/66caac8d-d00c-4d68-9a5c-450e2608d0b5> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(9).toString(), startsWith("<https://search.something/view/mediarecords/66caac8d-d00c-4d68-9a5c-450e2608d0b5> <http://purl.org/pav/hasVersion> _:"));
 
-        assertThat(nodes.get(12).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <00ba0ad7-a11a-4b9f-90b4-299b7949a232> ."));
+        assertThat(nodes.get(13).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <00ba0ad7-a11a-4b9f-90b4-299b7949a232> ."));
 
-        assertThat(nodes.get(13).toString(), startsWith("<https://search.something/view/mediarecords/00ba0ad7-a11a-4b9f-90b4-299b7949a232> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(14).toString(), startsWith("<https://search.something/view/mediarecords/00ba0ad7-a11a-4b9f-90b4-299b7949a232> <http://purl.org/pav/hasVersion> _:"));
 
-        assertThat(nodes.get(17).toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <db16bf3a-550b-4204-92e4-bbc71c96c772> ."));
+        assertThat(nodes.get(18).toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <db16bf3a-550b-4204-92e4-bbc71c96c772> ."));
 
     }
 
@@ -270,15 +271,17 @@ public class RegistryReaderIDigBioTest {
 
         RegistryReaderIDigBio.parseMediaRecord(providedParent, TestUtil.testEmitter(nodes), is, providedPageIRI);
 
-        assertThat(nodes.size(), is(4));
+        assertThat(nodes.size(), is(5));
 
-        assertThat(nodes.get(0).toString(), is("<someContentIRI> <http://www.w3.org/ns/prov#hadMember> <45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
+        assertThat(nodes.get(0).toString(), startsWith("<https://search.idigbio.org/v2/view/recordsets/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(1).toString(), is("<someContentIRI> <http://www.w3.org/ns/prov#hadMember> <45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
 
-        assertThat(nodes.get(1).toString(), startsWith("<http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> <http://purl.org/pav/hasVersion> _:"));
+        assertThat(nodes.get(2).toString(), startsWith("<http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> <http://purl.org/pav/hasVersion> _:"));
 
-        assertThat(nodes.get(2).toString(), is("<45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://rs.tdwg.org/ac/terms/accessURI> <http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> ."));
+        assertThat(nodes.get(3).toString(), is("<45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://rs.tdwg.org/ac/terms/accessURI> <http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> ."));
 
-        assertThat(nodes.get(3).toString(), is("<http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> <http://xmlns.com/foaf/0.1/depicts> <e6c5dffc-4ad1-4d9d-800f-5796baec1f65> ."));
+        assertThat(nodes.get(4).toString(), is("<http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> <http://xmlns.com/foaf/0.1/depicts> <e6c5dffc-4ad1-4d9d-800f-5796baec1f65> ."));
+
 
     }
 
