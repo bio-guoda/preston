@@ -30,7 +30,7 @@ public class VersionedRDFChainEmitter extends ProcessorReadOnly {
         emitProvenanceLogVersion(version);
     }
 
-    public void emitProvenanceLogVersion(IRI version) {
+    private void emitProvenanceLogVersion(IRI version) {
         if (version != null) {
             try {
                 InputStream inputStream = get(version);

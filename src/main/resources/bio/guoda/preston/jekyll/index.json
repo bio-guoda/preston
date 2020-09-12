@@ -1,0 +1,5 @@
+---
+---
+{%- for page in site.pages -%}
+{{ page.idigbio | jsonify | strip_newlines }}
+{% endfor %}

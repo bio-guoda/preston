@@ -1,11 +1,16 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListener;
+import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyGeneratingStream;
 import bio.guoda.preston.store.KeyTo1LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.StatementStoreImpl;
+import bio.guoda.preston.util.JekyllUtil;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.IRI;
@@ -13,6 +18,8 @@ import org.apache.commons.rdf.api.IRI;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
+import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 
 @Parameters(separators = "= ", commandDescription = "Copy biodiversity dataset graph")
 public class CmdCopyTo extends LoggingPersisting implements Runnable {
@@ -32,23 +39,41 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
     public void run() {
         File source = getDefaultDataDir();
         File target = Persisting.getDataDir(targetDir);
-        if (source.equals(target)) {
-            throw new IllegalArgumentException("source dir [" + source.getAbsolutePath() + "] must be different from target dir [" + target.getAbsolutePath() + "].");
-        }
-        File tmp = getTmpDir();
-
-        if (ArchiveType.data_prov_provindex.equals(getArchiveType())) {
-            copyAll(target, tmp);
-        } else if (ArchiveType.data.equals(getArchiveType())) {
-            copyDataOnly(target, tmp);
-        } else if (ArchiveType.prov.equals(getArchiveType())) {
-            copyProvLogsOnly(target, tmp);
-        } else if (ArchiveType.provindex.equals(getArchiveType())) {
-            copyProvIndexOnly(target, tmp);
+        if (ArchiveType.jekyll.equals(getArchiveType())) {
+            generateJekyllSiteContent(target);
         } else {
-            throw new IllegalStateException("unsupport archive type [" + getArchiveType().name() + "]");
+            if (source.equals(target)) {
+                throw new IllegalArgumentException("source dir [" + source.getAbsolutePath() + "] must be different from target dir [" + target.getAbsolutePath() + "].");
+            }
+            File tmp = getTmpDir();
+
+            if (ArchiveType.data_prov_provindex.equals(getArchiveType())) {
+                copyAll(target, tmp);
+            } else if (ArchiveType.data.equals(getArchiveType())) {
+                copyDataOnly(target, tmp);
+            } else if (ArchiveType.prov.equals(getArchiveType())) {
+                copyProvLogsOnly(target, tmp);
+            } else if (ArchiveType.provindex.equals(getArchiveType())) {
+                copyProvIndexOnly(target, tmp);
+            } else {
+                throw new IllegalStateException("unsupport archive type [" + getArchiveType().name() + "]");
+            }
         }
 
+    }
+
+    private void generateJekyllSiteContent(File target) {
+        final BlobStoreAppendOnly provenanceLogStore = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
+        final StatementsListener listener;
+        try {
+            listener = JekyllUtil.createJekyllSiteGenerator(provenanceLogStore, target);
+        } catch (IOException e) {
+            throw new RuntimeException("failed to create jekyll site content", e);
+        }
+        attemptReplay(
+                provenanceLogStore,
+                new StatementStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values())),
+                new CmdContext(this, listener));
     }
 
     public void copyAll(File target, File tmp) {

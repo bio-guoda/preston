@@ -1,0 +1,122 @@
+---
+layout: "mediarecord"
+id: "45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"
+permalink: "/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"
+idigbio:
+  uuid: "45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"
+  type: "mediarecords"
+  etag: "545a622ee4624168e48e784b9de1ee858977eff6"
+  data:
+    dcterms:type: "StillImage"
+    dcterms:modified: "2018-09-28 13:38:33"
+    ac:subtype: "Photograph"
+    dc:type: "StillImage"
+    dcterms:title: "UWBM_IP_66034_2.jpg"
+    ac:digitizationDate: "2016-11-04 02:41:34"
+    dcterms:format: "image/jpeg"
+    ac:associatedSpecimenReference: "http://www.burkemuseum.org/collections/search/results.php?GUID=UWBM:InvertebratePaleontology:66034"
+    dc:format: "image/jpeg"
+    coreid: "urn:catalog:UWBM:InvertebratePaleontology:66034"
+    dcterms:identifier: "UWBM:InvertebratePaleontology:UWBM_IP_66034_2.jpg"
+    ac:metadataLanguage: "en"
+    dcterms:rights: "© 2020 Burke Museum, University of Washington"
+    ac:taxonCoverage: "Strombidae"
+    ac:accessURI: "http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg"
+    dc:rights: "© 2020 Burke Museum, University of Washington"
+    dwc:scientificName: "Rimella supraplicata (Gabb, 1864)"
+    ac:variant: "ac:Best Quality"
+  indexTerms:
+    hasSpecimen: true
+    uuid: "45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"
+    format: "image/jpeg"
+    recordset: "ba77d411-4179-4dbd-b6c1-39b8a71ae795"
+    dqs: 0.36363636363636365
+    modified: "2018-09-28T13:38:33+00:00"
+    mediatype: "images"
+    records:
+    - "e6c5dffc-4ad1-4d9d-800f-5796baec1f65"
+    etag: "545a622ee4624168e48e784b9de1ee858977eff6"
+    flags:
+    - "dwc_basisofrecord_invalid"
+    indexData:
+      dc:type: "StillImage"
+      idigbio:etag: "545a622ee4624168e48e784b9de1ee858977eff6"
+      idigbio:uuid: "45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"
+      coreid: "urn:catalog:UWBM:InvertebratePaleontology:66034"
+      dcterms:identifier: "UWBM:InvertebratePaleontology:UWBM_IP_66034_2.jpg"
+      idigbio:recordIds:
+      - "ba77d411-4179-4dbd-b6c1-39b8a71ae795\\media\\uwbm:invertebratepaleontology:uwbm_ip_66034_2.jpg"
+      idigbio:dateModified: "2020-07-24T21:02:46.652716"
+      ac:metadataLanguage: "en"
+      ac:variant: "ac:Best Quality"
+      idigbio:parent: "ba77d411-4179-4dbd-b6c1-39b8a71ae795"
+      dcterms:type: "StillImage"
+      ac:subtype: "Photograph"
+      dcterms:title: "UWBM_IP_66034_2.jpg"
+      ac:digitizationDate: "2016-11-04 02:41:34"
+      dcterms:format: "image/jpeg"
+      ac:associatedSpecimenReference: "http://www.burkemuseum.org/collections/search/results.php?GUID=UWBM:InvertebratePaleontology:66034"
+      dc:format: "image/jpeg"
+      dcterms:rights: "© 2020 Burke Museum, University of Washington"
+      ac:taxonCoverage: "Strombidae"
+      ac:accessURI: "http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg"
+      dcterms:modified: "2018-09-28 13:38:33"
+      dwc:scientificName: "Rimella supraplicata (Gabb, 1864)"
+      idigbio:siblings:
+        record:
+        - "e6c5dffc-4ad1-4d9d-800f-5796baec1f65"
+      dc:rights: "© 2020 Burke Museum, University of Washington"
+    recordids:
+    - "ba77d411-4179-4dbd-b6c1-39b8a71ae795\\media\\uwbm:invertebratepaleontology:uwbm_ip_66034_2.jpg"
+    type: "stillimage"
+    datemodified: "2020-07-24T21:02:46.652716+00:00"
+    accessuri: "http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg"
+  attribution:
+    uuid: "ba77d411-4179-4dbd-b6c1-39b8a71ae795"
+    name: "UWBM Invertebrate Paleontology Collection"
+    description: "The Burke Museum Invertebrate Paleontology and Micropaleontology\
+      \ Collections include 3.6 million specimens and include invertebrate, foraminifera\
+      \ and trace fossils, dating from the Cambrian (around 530 million years ago)\
+      \ to the Quaternary (10,000 years ago). The Burke Museum Invertebrate Paleontology\
+      \ Collection is a member of the NSF-funded Thematic Collection Network (TCN),\
+      \ the Eastern Pacific Invertebrate Communities of the Cenozoic era (EPICC),\
+      \ award number 1503678, and is currently working to digitize its collection."
+    url: "http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology"
+    emllink: "http://ipt.vertnet.org:8080/ipt/eml.do?r=uwbm_invertpaleo"
+    archivelink: "http://ipt.vertnet.org:8080/ipt/archive.do?r=uwbm_invertpaleo"
+    contacts:
+    - first_name: "Ron"
+      last_name: "Eng"
+      role: "Geology & Paleontology Collections Manager"
+      email: "rceng@u.washington.edu"
+    - first_name: "Ron"
+      last_name: "Eng"
+      role: "Geology & Paleontology Collections Manager"
+      email: "rceng@u.washington.edu"
+    - first_name: "Laura"
+      last_name: "Russell"
+      role: "VertNet Programmer"
+      email: "larussell@vertnet.org"
+    - first_name: "David"
+      last_name: "Bloom"
+      role: "VertNet Coordinator"
+      email: "dbloom@vertnet.org"
+    - first_name: "John"
+      last_name: "Wieczorek"
+      role: "Information Architect"
+      email: "tuco@berkeley.edu"
+    - first_name: "Ben"
+      last_name: "Legler"
+      email: "blegler@uw.edu"
+    - first_name: "Sara"
+      last_name: "Legler"
+      role: "Burke Museum EPICC Coordinator"
+      email: "slegler@uw.edu"
+    - first_name: "Ron"
+      last_name: "Eng"
+      role: "Geology & Paleontology Collections Manager"
+      email: "rceng@u.washington.edu"
+    data_rights: "CC0"
+    publisher: "842a2bb5-d705-4d6c-8401-abf3ca28c05d"
+    totalCount: 23295
+---

@@ -1,0 +1,23 @@
+<tr>
+    {% assign thumbnail_url_online = mediarecord.uuid | prepend: "https://api.idigbio.org/v2/media/" | append: "?size=thumbnail" %}
+    {% assign fullsize_url_online = mediarecord.uuid | prepend: "https://api.idigbio.org/v2/media/" | append: "?size=fullsize" %}
+    {% assign mediarecord_online = mediarecord.uuid | prepend: "https://www.idigbio.org/portal/mediarecords/" %}
+    <td>
+        <a href="{{ mediarecord_online }}"><img src="{{ thumbnail_url_online }}"/></a>
+        <br/>
+        <a href="{{ fullsize_url_online }}">idigbio fullsize image</a>
+    </td>
+    <td>
+        {% assign thumbnail_url_offline = site.data.content | where: "url", thumbnail_url_online | first %}
+        {% assign hash = thumbnail_url_offline.hash | remove: "hash://sha256/"  %}
+        {% assign hash_first2 = hash | slice: 0,2 %}
+        {% assign hash_second2 = hash | slice: 2,2 %}
+        {% assign thumbnail_local = hash | prepend: "/" | prepend: hash_second2 | prepend: "/" | prepend: hash_first2 | prepend: "../../data/" %}
+        <a href="{{ thumbnail_local }}"><img src="{{ thumbnail_local }}"/></a>
+
+        {% assign fullsize_url_offline = site.data.content | where: "url", fullsize_url_online | first %}
+        {% assign fullsize_hash = fullsize_url_offline.hash %}
+        <br/>
+        <a href="https://hash-archive.org/sources/{{ fullsize_hash }}">fullsize image locations</a>
+    </td>
+</tr>

@@ -1,0 +1,22 @@
+---
+layout: default
+---
+<div class="home">
+  <p> {{ page.idigbio.uuid }} </p>
+  <p> {{ page.idigbio.type }} </p>
+  <table>
+    <thead>
+    <tr>
+      <th>online (location-based)</th>
+      <th>offline (content-based)</th>
+    </tr>
+    </thead>
+    <tdata>
+      {% assign mediarecord = page.idigbio %}
+      {% include media.html mediarecord=mediarecord %}
+    </tdata>
+  </table>
+
+  <p> {{ page.idigbio | jsonify }}</p>
+
+</div>

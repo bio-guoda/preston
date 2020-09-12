@@ -4,5 +4,6 @@ public enum ArchiveType {
     data_prov_provindex,
     provindex,
     prov,
-    data
+    data,
+    jekyll
 }
