@@ -1,6 +1,7 @@
 package bio.guoda.preston.util;
 
 import bio.guoda.preston.DateUtil;
+import bio.guoda.preston.Preston;
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.model.RefNodeFactory;
@@ -10,6 +11,8 @@ import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerTSV;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
+import bio.guoda.preston.store.StatementStore;
+import bio.guoda.preston.store.VersionUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -24,7 +27,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.joda.time.DateTime;
@@ -38,8 +40,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -53,16 +53,7 @@ import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
 public class JekyllUtil {
     public static StatementsListener createJekyllSiteGenerator(BlobStoreReadOnly store, File jekyllDir) throws IOException {
 
-        final Stream<String> strings = staticFileTemplates();
-
-        final List<Pair<String, File>> collect = strings.map(x -> {
-            final String filename = StringUtils.replace(x, "/bio/guoda/preston/jekyll/", "");
-            return Pair.of(x, new File(jekyllDir, filename));
-        }).collect(Collectors.toList());
-
-        for (Pair<String, File> stringFilePair : collect) {
-            FileUtils.copyToFile(JekyllUtil.class.getResourceAsStream(stringFilePair.getKey()), stringFilePair.getValue());
-        }
+        copyStatic(jekyllDir);
 
         final File posts = new File(jekyllDir, "pages");
         try {
@@ -84,22 +75,16 @@ public class JekyllUtil {
         return createPageGenerators(store, posts, versionLogger);
     }
 
-    public static void copyStatic(File jekyllDir, String subdir, List<String> filenames) throws IOException {
+    public static void copyStatic(File jekyllDir) throws IOException {
+        final Stream<String> strings = staticFileTemplates();
 
-        final File resourceFolder =
-                StringUtils.isBlank(subdir)
-                ? jekyllDir :
-                new File(jekyllDir, subdir);
+        final List<Pair<String, File>> collect = strings.map(x -> {
+            final String filename = StringUtils.replace(x, "/bio/guoda/preston/jekyll/", "");
+            return Pair.of(x, new File(jekyllDir, filename));
+        }).collect(Collectors.toList());
 
-        final String resourceFolderString = StringUtils.isBlank(subdir) ? "" : (subdir + "/");
-        final String prefix = "/bio/guoda/preston/jekyll/" + resourceFolderString;
-
-        for (String filename : filenames) {
-            final File destination = new File(resourceFolder, filename);
-            FileUtils.forceMkdirParent(destination);
-            FileUtils.copyToFile(
-                    JekyllUtil.class.getResourceAsStream(prefix + filename),
-                    destination);
+        for (Pair<String, File> stringFilePair : collect) {
+            FileUtils.copyToFile(JekyllUtil.class.getResourceAsStream(stringFilePair.getKey()), stringFilePair.getValue());
         }
     }
 
@@ -197,8 +182,30 @@ public class JekyllUtil {
 
     static Stream<String> staticFileTemplates() {
         Reflections reflections = new Reflections("bio.guoda.preston.jekyll", new ResourcesScanner());
-        Set<String> resourceList = reflections.getResources(Pattern.compile(".*\\.((md)|(json)|(html))"));
+        Set<String> resourceList = reflections.getResources(
+                Pattern.compile(".*\\.((md)|(json)|(html)|(png))"));
         return resourceList.stream().map(x -> "/" + x);
+    }
+
+    public static void writeVersionFile(File target, AtomicReference<DateTime> lastCrawlTime, StatementStore statementStore, IRI provenanceRoot) {
+        final File data = new File(new File(target, "_data"), "version.yml");
+        try {
+            FileUtils.forceMkdirParent(data);
+            try (final FileOutputStream out = new FileOutputStream(data)) {
+                final IRI mostRecentVersion = VersionUtil.findMostRecentVersion(provenanceRoot, statementStore);
+                final YAMLMapper yamlMapper = new YAMLMapper();
+                final ObjectNode objectNode = yamlMapper.createObjectNode();
+                objectNode.put("archive", mostRecentVersion.getIRIString());
+                objectNode.put("preston", Preston.getVersion());
+                final DateTime dateTime = lastCrawlTime.get();
+                if (dateTime != null) {
+                    objectNode.put("created_at", dateTime.toString());
+                }
+                yamlMapper.writeValue(out, objectNode);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("failed to traverse version history", e);
+        }
     }
 
     public enum RecordType {

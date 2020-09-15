@@ -245,7 +245,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                 String recordUUID = item.get("uuid").asText();
                 IRI recordIRI = toIRI(UUID.fromString(recordUUID));
                 emitter.emit(toStatement(resourceIRI, HAD_MEMBER, recordIRI));
-                handleIndexedItem(emitter, pageIRI, item, recordIRI);
+                handleIndexedRecordItem(emitter, pageIRI, item, recordIRI);
             }
         }
 
@@ -274,13 +274,12 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
         }
     }
 
-    private static void handleIndexedItem(StatementsEmitter emitter, IRI pageIRI, JsonNode item, IRI recordIRI) {
+    private static void handleIndexedRecordItem(StatementsEmitter emitter, IRI pageIRI, JsonNode item, IRI recordIRI) {
         JsonNode indexTerms = item.get("indexTerms");
         if (item.has("indexTerms")) {
             String recordSetUUID = indexTerms.has("recordset") ? indexTerms.get("recordset").asText() : null;
             if (StringUtils.isNotBlank(recordSetUUID)) {
                 emitter.emit(toStatement(toIRI(UUID.fromString(recordSetUUID)), HAD_MEMBER, recordIRI));
-                emitRequestForRecordSet(emitter, recordSetUUID);
             }
 
             if (indexTerms.has("mediarecords")) {
@@ -304,7 +303,6 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
     static void parseMediaRecord(IRI resourceIRI, StatementsEmitter emitter, InputStream is, IRI pageIRI) throws IOException {
         JsonNode item = new ObjectMapper().readTree(is);
-        handleAttribution(emitter, item);
         String recordUUID = item.get("uuid").asText();
         IRI recordIRI = toIRI(UUID.fromString(recordUUID));
         emitter.emit(toStatement(resourceIRI, HAD_MEMBER, recordIRI));
