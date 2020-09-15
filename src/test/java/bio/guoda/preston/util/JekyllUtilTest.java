@@ -135,7 +135,6 @@ public class JekyllUtilTest {
         assertThat(expectedLayoutDir.isDirectory(), Is.is(true));
         assertThat(new File(expectedLayoutDir, "mediarecord.html").exists(), Is.is(true));
         assertThat(new File(expectedLayoutDir, "record.html").exists(), Is.is(true));
-        assertThat(new File(expectedLayoutDir, "recordset.html").exists(), Is.is(true));
 
         checkPageUUID(jekyllDir, "d2e46893-099f-45eb-9a76-d2a66f43bec8.md");
         checkPageUUID(jekyllDir, "ba77d411-4179-4dbd-b6c1-39b8a71ae795.md");
