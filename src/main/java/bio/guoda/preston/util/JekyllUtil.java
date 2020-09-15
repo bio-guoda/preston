@@ -10,8 +10,13 @@ import bio.guoda.preston.process.StatementLoggerTSV;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.io.CharacterEscapes;
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
@@ -166,18 +171,24 @@ public class JekyllUtil {
         if (item.has("uuid")) {
             final String uuid = item.get("uuid").asText();
             try (final OutputStream os = factory.outputStreamFor(UUID.fromString(uuid))) {
-                final ObjectNode jekyllFrontMatterNode = objectMapper.createObjectNode();
-                jekyllFrontMatterNode.put("layout", pageType.name());
-                jekyllFrontMatterNode.put("id", uuid);
-                jekyllFrontMatterNode.put("permalink", "/" + uuid);
-                jekyllFrontMatterNode.set("idigbio", item);
-                YAMLFactory jsonFactory = new YAMLFactory();
-                jsonFactory.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
-                final YAMLMapper yamlMapper = new YAMLMapper(jsonFactory);
-                yamlMapper.writeValue(os, jekyllFrontMatterNode);
-                org.apache.commons.io.IOUtils.write("---\n", os, StandardCharsets.UTF_8);
+                final ObjectNode frontMatter = objectMapper.createObjectNode();
+                frontMatter.put("layout", pageType.name());
+                frontMatter.put("id", uuid);
+                frontMatter.put("permalink", "/" + uuid);
+                frontMatter.set("idigbio", item);
+
+                writeFrontMatter(os, frontMatter);
             }
         }
+    }
+
+    static void writeFrontMatter(OutputStream os, ObjectNode jekyllFrontMatterNode) throws IOException {
+        YAMLFactory jsonFactory = new YAMLFactory();
+        jsonFactory.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+        final ObjectWriter writer = new YAMLMapper(jsonFactory)
+                .writer(new DefaultPrettyPrinter().withObjectIndenter(new DefaultIndenter().withLinefeed("\n")));
+        writer.writeValue(os, jekyllFrontMatterNode);
+        org.apache.commons.io.IOUtils.write("---\n", os, StandardCharsets.UTF_8);
     }
 
     public enum RecordType {

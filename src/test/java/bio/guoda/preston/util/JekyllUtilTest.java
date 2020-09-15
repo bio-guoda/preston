@@ -5,6 +5,8 @@ import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -57,7 +59,7 @@ public class JekyllUtilTest {
 
         assertThat(osMap.size(), Is.is(1));
 
-        final String actual = osMap.get(UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4")).toString("UTF-8");
+        final String actual = StringUtils.toEncodedString(osMap.get(UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4")).toByteArray(), StandardCharsets.UTF_8);
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("/bio/guoda/preston/process/jekyll/mediarecord.md"), StandardCharsets.UTF_8.name())));
     }
 
@@ -135,6 +137,18 @@ public class JekyllUtilTest {
         assertThat(urlContentVersion.exists(), Is.is(true));
         assertThat(urlContentVersion.isFile(), Is.is(true));
 
+    }
+
+    @Test
+    public void writeFrontMatter() throws IOException {
+        final ObjectNode node = new ObjectMapper().createObjectNode();
+        node.put("foo", "bar");
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+        JekyllUtil.writeFrontMatter(os, node);
+        assertThat(new String(os.toByteArray(), StandardCharsets.UTF_8.name()), Is.is(
+                "---\n" +
+                "foo: \"bar\"\n" +
+                "---\n"));
     }
 
     @Test
