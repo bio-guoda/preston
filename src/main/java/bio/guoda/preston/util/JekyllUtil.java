@@ -1,6 +1,7 @@
 package bio.guoda.preston.util;
 
 import bio.guoda.preston.DateUtil;
+import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.BlobStoreReadOnly;
@@ -10,13 +11,11 @@ import bio.guoda.preston.process.StatementLoggerTSV;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.io.CharacterEscapes;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
@@ -29,6 +28,8 @@ import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.joda.time.DateTime;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,8 +41,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,15 +53,16 @@ import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
 public class JekyllUtil {
     public static StatementsListener createJekyllSiteGenerator(BlobStoreReadOnly store, File jekyllDir) throws IOException {
 
-        final String subdir = "_layouts";
-        final List<String> filenames = Stream.of(RecordType.mediarecord, RecordType.record, RecordType.recordset)
-                .map(x -> x.name() + ".html")
-                .collect(Collectors.toList());
-        copyStatic(jekyllDir, subdir, filenames);
+        final Stream<String> strings = staticFileTemplates();
 
+        final List<Pair<String, File>> collect = strings.map(x -> {
+            final String filename = StringUtils.replace(x, "/bio/guoda/preston/jekyll/", "");
+            return Pair.of(x, new File(jekyllDir, filename));
+        }).collect(Collectors.toList());
 
-        copyStatic(jekyllDir, "_includes", Collections.singletonList("media.html"));
-        copyStatic(jekyllDir, "", Arrays.asList("index.md", "index.json"));
+        for (Pair<String, File> stringFilePair : collect) {
+            FileUtils.copyToFile(JekyllUtil.class.getResourceAsStream(stringFilePair.getKey()), stringFilePair.getValue());
+        }
 
         final File posts = new File(jekyllDir, "pages");
         try {
@@ -191,6 +195,12 @@ public class JekyllUtil {
         org.apache.commons.io.IOUtils.write("---\n", os, StandardCharsets.UTF_8);
     }
 
+    static Stream<String> staticFileTemplates() {
+        Reflections reflections = new Reflections("bio.guoda.preston.jekyll", new ResourcesScanner());
+        Set<String> resourceList = reflections.getResources(Pattern.compile(".*\\.((md)|(json)|(html))"));
+        return resourceList.stream().map(x -> "/" + x);
+    }
+
     public enum RecordType {
         recordset,
         mediarecord,
@@ -223,10 +233,8 @@ public class JekyllUtil {
             if (RefNodeConstants.STARTED_AT_TIME.equals(statement.getPredicate())) {
                 final BlankNodeOrIRI activityId = statement.getSubject();
                 final RDFTerm startTimeTerm = statement.getObject();
-                if (startTimeTerm instanceof Literal && activityId instanceof IRI) try {
-                    final String lexicalForm = startTimeTerm.toString();
-                    final String s = StringUtils.replace(lexicalForm, "\"^^<http://www.w3.org/2001/XMLSchema#dateTime>", "");
-                    final DateTime startTime = DateUtil.parse(StringUtils.substring(s, 1));
+                try {
+                    final DateTime startTime = DateUtil.parse(RDFUtil.getValueFor(startTimeTerm));
                     lastActivityStartTime.set(Pair.of(startTime, (IRI) activityId));
                 } catch (IllegalArgumentException ex) {
                     //

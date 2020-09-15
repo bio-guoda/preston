@@ -4,9 +4,9 @@ import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.process.StatementsListenerAdapter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -25,15 +25,18 @@ import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsNull.nullValue;
 
 public class JekyllUtilTest {
@@ -85,6 +88,12 @@ public class JekyllUtilTest {
         };
         JekyllUtil.writePages(is, pageFactory, recordType);
         return osMap;
+    }
+
+    @Test
+    public void compile() throws IOException {
+        final List<String> absoluteList = JekyllUtil.staticFileTemplates().collect(Collectors.toList());
+        assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/index.md"));
     }
 
     @Test
