@@ -3,7 +3,9 @@ layout: default
 ---
 {%- assign endpoint= "/data.json" | prepend: site.baseurl | prepend: site.url -%}
 
-A biodiversity dataset graph: {{ site.baseurl | prepend: site.url }} . <span id="year"/>. {{ site.data.history | last | map: "hash" }}
+A biodiversity dataset graph: {{ site.baseurl | prepend: site.url }} . {{ site.data.version.created_at | date: "%Y" }}. {{ site.data.version.archive }}  
+
+Created using [Preston](https://preston.guoda.bio) v{{ site.data.version.preston }} on {{ site.data.version.created_at }}.
 
 ## Welcome! 
 
