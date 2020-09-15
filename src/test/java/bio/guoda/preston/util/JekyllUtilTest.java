@@ -1,11 +1,17 @@
 package bio.guoda.preston.util;
 
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementListener;
+import bio.guoda.preston.process.StatementsListener;
+import bio.guoda.preston.process.StatementsListenerAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Quad;
 import org.apache.tika.io.IOUtils;
+import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
+import org.joda.time.DateTime;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -19,11 +25,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNull.nullValue;
 
 public class JekyllUtilTest {
 
@@ -127,6 +136,55 @@ public class JekyllUtilTest {
         assertThat(urlContentVersion.isFile(), Is.is(true));
 
     }
+
+    @Test
+    public void lastKnownCrawlDate() {
+        final Quad activity = toStatement(toIRI("d2c8a96a-89c8-4dd6-ba37-06809d4ff9ae"), RefNodeConstants.WAS_STARTED_BY, toIRI("https://preston.guoda.bio"));
+        final Quad startTime = toStatement(toIRI("d2c8a96a-89c8-4dd6-ba37-06809d4ff9ae"), RefNodeConstants.STARTED_AT_TIME, toLiteral("2020-09-12T05:54:48.034Z", toIRI("http://www.w3.org/2001/XMLSchema#dateTime")));
+
+        AtomicReference<DateTime> lastPrestonActivityStartTime = new AtomicReference<>();
+        final StatementsListener statementsListenerAdapter
+                = JekyllUtil.createPrestonStartTimeListener(lastPrestonActivityStartTime::set);
+
+        statementsListenerAdapter.on(activity);
+        assertThat(lastPrestonActivityStartTime.get(), Is.is(nullValue()));
+        statementsListenerAdapter.on(startTime);
+        assertThat(lastPrestonActivityStartTime.get(), Is.is(Matchers.not(nullValue())));
+        assertThat(lastPrestonActivityStartTime.get().toString(), Is.is("2020-09-12T05:54:48.034Z"));
+    }
+
+    @Test
+    public void lastKnownCrawlDateEventFirst() {
+        final Quad activity = toStatement(toIRI("d2c8a96a-89c8-4dd6-ba37-06809d4ff9ae"), RefNodeConstants.WAS_STARTED_BY, toIRI("https://preston.guoda.bio"));
+        final Quad startTime = toStatement(toIRI("d2c8a96a-89c8-4dd6-ba37-06809d4ff9ae"), RefNodeConstants.STARTED_AT_TIME, toLiteral("2020-09-12T05:54:48.034Z", toIRI("http://www.w3.org/2001/XMLSchema#dateTime")));
+
+        AtomicReference<DateTime> lastPrestonActivityStartTime = new AtomicReference<>();
+        final StatementsListener statementsListenerAdapter
+                = JekyllUtil.createPrestonStartTimeListener(lastPrestonActivityStartTime::set);
+
+        statementsListenerAdapter.on(startTime);
+        assertThat(lastPrestonActivityStartTime.get(), Is.is(nullValue()));
+        statementsListenerAdapter.on(activity);
+        assertThat(lastPrestonActivityStartTime.get(), Is.is(Matchers.not(nullValue())));
+        assertThat(lastPrestonActivityStartTime.get().toString(), Is.is("2020-09-12T05:54:48.034Z"));
+    }
+
+    @Test
+    public void noLastKnownCrawlDateEventFirst() {
+        final Quad startTime = toStatement(toIRI("d2c8a96a-89c8-4dd6-ba37-06809d4ff9ae"), RefNodeConstants.STARTED_AT_TIME, toLiteral("2020-09-12T05:54:48.034Z", toIRI("http://www.w3.org/2001/XMLSchema#dateTime")));
+
+        AtomicReference<DateTime> lastPrestonActivityStartTime = new AtomicReference<>();
+        final StatementsListener statementsListenerAdapter
+                = JekyllUtil.createPrestonStartTimeListener(lastPrestonActivityStartTime::set);
+
+        statementsListenerAdapter.on(startTime);
+        statementsListenerAdapter.on(startTime);
+        statementsListenerAdapter.on(startTime);
+        statementsListenerAdapter.on(startTime);
+        assertThat(lastPrestonActivityStartTime.get(), Is.is(nullValue()));
+    }
+
+
 
     private void checkPageUUID(File jekyllDir, String child) {
         final File subDir = new File(new File(jekyllDir, "pages"), child.substring(0, 2));

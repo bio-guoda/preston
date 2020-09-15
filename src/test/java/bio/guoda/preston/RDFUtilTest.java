@@ -1,5 +1,6 @@
 package bio.guoda.preston;
 
+import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
@@ -25,6 +26,14 @@ public class RDFUtilTest {
         assertThat(quad.getSubject().toString(), is("<subj>"));
         assertThat(quad.getGraphName().isPresent(), is(true));
         assertThat(quad.getGraphName().get().toString(), is("<graph>"));
+    }
+
+    @Test
+    public void valueForDate() {
+        final String valueFor = RDFUtil.getValueFor(RefNodeFactory
+                .toLiteral("2020-09-12T05:54:48.034Z", RefNodeFactory.toIRI("http://www.w3.org/2001/XMLSchema#dateTime")));
+
+        assertThat(valueFor, is("2020-09-12T05:54:48.034Z"));
     }
 
 }

@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.Preston;
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.RegistryReaderALA;
@@ -190,7 +191,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                 toStatement(crawlActivity, crawlActivity, IS_A, ACTIVITY),
                 toStatement(crawlActivity, crawlActivity, DESCRIPTION, toEnglishLiteral(activity.getDescription())),
                 toStatement(crawlActivity, crawlActivity, toIRI("http://www.w3.org/ns/prov#startedAtTime"), RefNodeFactory.nowDateTimeLiteral()),
-                toStatement(crawlActivity, crawlActivity, toIRI("http://www.w3.org/ns/prov#wasStartedBy"), PRESTON),
+                toStatement(crawlActivity, crawlActivity, RefNodeConstants.WAS_STARTED_BY, PRESTON),
 
 
                 toStatement(crawlActivity, PRESTON_DOI_IRI, USED_BY, crawlActivity),

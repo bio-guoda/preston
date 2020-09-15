@@ -1,5 +1,7 @@
 package bio.guoda.preston.util;
 
+import bio.guoda.preston.DateUtil;
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.RegistryReaderIDigBio;
@@ -15,10 +17,13 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
+import org.joda.time.DateTime;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,6 +36,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -66,8 +72,6 @@ public class JekyllUtil {
         final PrintStream printWriter = new PrintStream(new FileOutputStream(contentVersions));
         printWriter.println("url\tverb\thash\tgraphname");
         final StatementListener versionLogger = new StatementLoggerTSV(printWriter);
-
-
         return createPageGenerators(store, posts, versionLogger);
     }
 
@@ -185,5 +189,47 @@ public class JekyllUtil {
 
     public interface JekyllPageFactory {
         OutputStream outputStreamFor(UUID uuid);
+    }
+
+    public static StatementsListener createPrestonStartTimeListener(ValueListener<DateTime> listener) {
+        return new PrestonStartTimeListener(listener);
+    }
+
+    private static class PrestonStartTimeListener extends StatementsListenerAdapter {
+
+        private final ValueListener<DateTime> listener;
+        private AtomicReference<Pair<DateTime, IRI>> lastActivityStartTime;
+        private AtomicReference<IRI> lastPrestonActivityId;
+
+        PrestonStartTimeListener(ValueListener<DateTime> listener) {
+            this.listener = listener;
+            lastActivityStartTime = new AtomicReference<>();
+            lastPrestonActivityId = new AtomicReference<>();
+        }
+
+        @Override
+        public void on(Quad statement) {
+            if (RefNodeConstants.STARTED_AT_TIME.equals(statement.getPredicate())) {
+                final BlankNodeOrIRI activityId = statement.getSubject();
+                final RDFTerm startTimeTerm = statement.getObject();
+                if (startTimeTerm instanceof Literal && activityId instanceof IRI) try {
+                    final String lexicalForm = startTimeTerm.toString();
+                    final String s = StringUtils.replace(lexicalForm, "\"^^<http://www.w3.org/2001/XMLSchema#dateTime>", "");
+                    final DateTime startTime = DateUtil.parse(StringUtils.substring(s, 1));
+                    lastActivityStartTime.set(Pair.of(startTime, (IRI) activityId));
+                } catch (IllegalArgumentException ex) {
+                    //
+                }
+            } else if (RefNodeConstants.WAS_STARTED_BY.equals(statement.getPredicate())
+                    && RefNodeConstants.PRESTON.equals(statement.getObject())
+                    && statement.getSubject() instanceof IRI) {
+                lastPrestonActivityId.set((IRI) statement.getSubject());
+            }
+
+            final Pair<DateTime, IRI> dateTimeIRIPair = lastActivityStartTime.get();
+            if (dateTimeIRIPair != null && dateTimeIRIPair.getValue().equals(lastPrestonActivityId.get())) {
+                listener.on(dateTimeIRIPair.getKey());
+            }
+        }
     }
 }

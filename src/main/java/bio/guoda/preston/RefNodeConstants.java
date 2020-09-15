@@ -51,4 +51,5 @@ public class RefNodeConstants {
     public static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
     public static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
     public static final IRI USED = toIRI("http://www.w3.org/ns/prov#used");
+    public static final IRI WAS_STARTED_BY = toIRI("http://www.w3.org/ns/prov#wasStartedBy");
 }
