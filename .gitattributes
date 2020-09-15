@@ -1,2 +1,3 @@
-# These files are text and should be normalized (Convert crlf => lf)
-*.md text 
+# disable text file normalization
+# equivalent to setting core.autocrlf = false.
+* -text
