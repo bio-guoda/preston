@@ -1,0 +1,6 @@
+{%- assign thumbnail_url_offline = site.data.content | where: "url", include.url | first -%}
+{%- assign hash = thumbnail_url_offline.hash | remove: "hash://sha256/" -%}
+{%- assign hash_first2 = hash | slice: 0,2 -%}
+{%- assign hash_second2 = hash | slice: 2,2 -%}
+{%- assign thumbnail_local = hash | prepend: "/" | prepend: hash_second2 | prepend: "/" | prepend: hash_first2 | prepend: "data/" %}
+{{ thumbnail_local }}

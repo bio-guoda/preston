@@ -1,0 +1,17 @@
+<div style="display: flex; flex-direction: row; border: solid;">
+  <div style="display: flex; flex-direction: column; border: solid;">
+    <div>Specimen Record</div>
+    <div><a href="{{ include.record.idigbio.uuid }}">{%- include uuid.html url=site.url uuid=include.record.idigbio.uuid -%}</a></div>
+    <div>
+      <a href="{{ include.record.idigbio.uuid | prepend: "https://www.idigbio.org/portal/records/" }}">{%- include uuid.html url="idigbio.org" uuid=include.record.idigbio.uuid -%}</a>
+    </div>
+    <div id="{{ include.record.idigbio.data | jsonify | uri_escape }}" class="meta"></div>
+  </div>
+  <div>
+  {%-   for uuid in include.record.idigbio.indexTerms.mediarecords -%}
+  {%-     assign mediarecord = site.pages | where: "id", uuid | first -%}
+  {%      include media.html mediarecord=mediarecord.idigbio %}
+  {%-   endfor -%}
+  </div>
+</div>
+
