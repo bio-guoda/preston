@@ -1,10 +1,14 @@
 ---
 ---
-{%- assign records = site.pages | where: "layout", "record" -%}
+{%- assign records = site.pages -%}
 {%- for page in records -%}
+{% assign layout = page.layout %}
+{%- case layout -%}
+  {%- when "record" -%}
 {{ page.idigbio | jsonify | strip_newlines }}
-{%- endfor -%}
-{%- assign records = site.pages | where: "layout", "mediarecord" -%}
-{%- for page in records -%}
+{{ "" }}
+  {%- when "mediarecord" -%}
 {{ page.idigbio | jsonify | strip_newlines }}
+{{ "" }}
+{%- endcase -%}
 {%- endfor -%}
