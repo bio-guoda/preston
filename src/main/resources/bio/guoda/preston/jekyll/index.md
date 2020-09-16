@@ -3,7 +3,7 @@ layout: default
 ---
 {%- assign endpoint= "/data.json" | prepend: site.baseurl | prepend: site.url -%}
 
-A biodiversity dataset graph: {{ site.baseurl | prepend: site.url }} . {{ site.data.version.created_at | date: "%Y" }}. {{ site.data.version.archive }}  
+A biodiversity dataset graph: [{{ site.baseurl | prepend: site.url }}]({{ site.baseurl | prepend: site.url }}). {{ site.data.version.created_at | date: "%Y" }}. [{{ site.data.version.archive }}]({%- include local_url_for_hash.html hash=site.data.version.archive -%})  
 
 Created using [Preston](https://preston.guoda.bio) v{{ site.data.version.preston }} on {{ site.data.version.created_at }}.
 
@@ -21,7 +21,7 @@ Would you like to help preserve some (or all) of iDigBio's images and their asso
 
 This automatically generated website contains a versioned archive of a custom selection of specimen records and associated media. The selection is made using the [iDigBio Search API](https://www.idigbio.org/wiki/index.php/IDigBio_API), a powerful search engine powered by Elastic Search that contains over 130M vouchered specimen records. The data is archived using [Preston](https://github.com/bio-guoda/preston), a biodiversity data tracker that can version entire biodiversity dataset networks. Finally, the website is generated from the archived content using [Jekyll](https://jekyllrb.com/), the static site generator that powers GitHub pages. 
 
-<a href="assets/preston.dot.png"><img src="assets/preston.dot.png" style="height: 30em;"/></a>
+<a href="assets/preston.dot.svg"><img src="assets/preston.dot.svg" style="height: 30em;"/></a>
 
 ### Archive iDigBio-indexed content
 
@@ -56,7 +56,7 @@ preston clone "{{ "/data" | prepend: site.baseurl | prepend: site.url }}"
 Also, you can query the idigbio records available through this site via the api at <a href="{{ endpoint }}">{{ endpoint }}</a>. With this, you can programmatically access the data and select the records you are interested in. For instance, you can show the first record by executing: 
 
 ```
-$ curl "{{ endpoint }}" | jq -c 'select(.type == "records")' 
+$ curl "{{ endpoint }}" | jq -c 'select(.type == "records")' | head -n1 
 {{ site.pages | where: "layout", "record" | first | map: "idigbio" | jsonify | strip_newlines }} 
 
 ```
