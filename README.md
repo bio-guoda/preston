@@ -471,7 +471,7 @@ Preston needs Java 8+.
 ### Standalone
 Preston is a stand-alone java application, packaged in a jarfile. You can build you own (see [building](#building)) or download a prebuilt jar at [releases](https://github.com/bio-guoda/preston/releases).
 
-On linux (and Mac) you can install Preston by running:
+On linux (and Mac) you can install Preston by running (note: this installs preston using sudo privileges and makes preston.jar executable; please inspect the script before running it):
 
 ```console
 sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.2.0/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
