@@ -22,7 +22,7 @@ cd [some_dir]
 preston clone "https://jhpoelen.nl/bees/data"
 preston cat hash://sha256/edde5b2b45961e356f27b81a3aa51584de4761ad9fa678c4b9fa3230808ea356 > bee.jpg
 ```
-and open ```bee.jpg``` to view your local copy of the following headshot of [Nomadopsis puellae specimen MCZ:Ent:17219](https://mczbase.mcz.harvard.edu/guid/MCZ:Ent:17219) from the [Museum of Comparative Zoology, Harvard University](https://mcz.harvard.edu/) [![CC-BY-NC-SA](https://licensebuttons.net/l/by-nc-sa/3.0/88x31.png)](http://creativecommons.org/licences/by-nc-sa/3.0/legalcode):
+and open ```bee.jpg``` to view your local copy of the following headshot of [Nomadopsis puellae specimen MCZ:Ent:17219](https://mczbase.mcz.harvard.edu/guid/MCZ:Ent:17219) from the [Museum of Comparative Zoology, Harvard University](https://mcz.harvard.edu/) [CC-BY-NC-SA](http://creativecommons.org/licences/by-nc-sa/3.0/legalcode):
 
 [![Nomadopsis puellae MCZ:Ent:17219 head](http://mczbase.mcz.harvard.edu/specimen_images/entomology/large/MCZ-ENT00017219_Spinoliella_puellae_hef.jpg)](http://mczbase.mcz.harvard.edu/media/1493651)
 
