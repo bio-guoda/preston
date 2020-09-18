@@ -24,7 +24,7 @@ preston cat hash://sha256/edde5b2b45961e356f27b81a3aa51584de4761ad9fa678c4b9fa32
 ```
 and open bee.jpg to see your local copy of the following headshot of [Nomadopsis puellae specimen MCZ:Ent:17219](https://mczbase.mcz.harvard.edu/guid/MCZ:Ent:17219) from the [Museum of Comparative Zoology, Harvard University](https://mcz.harvard.edu/):
 
-[![Nomadopsis puellae MCZ:Ent:17219 head](https://jhpoelen.nl/data/ed/de/edde5b2b45961e356f27b81a3aa51584de4761ad9fa678c4b9fa3230808ea356)](http://mczbase.mcz.harvard.edu/media/1493651)
+[![Nomadopsis puellae MCZ:Ent:17219 head](https://jhpoelen.nl/bees/data/ed/de/edde5b2b45961e356f27b81a3aa51584de4761ad9fa678c4b9fa3230808ea356)](http://mczbase.mcz.harvard.edu/media/1493651)
 
 ## Introduction
 
