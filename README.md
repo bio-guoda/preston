@@ -4,7 +4,7 @@
 
  *Named after [Frank W. Preston (1896-1989)](https://en.wikipedia.org/wiki/Frank_W._Preston) and the Prestonian shortfall, one of the "[Seven Shortfalls that Beset Large-Scale Knowledge of Biodiversity](https://doi.org/10.1146/annurev-ecolsys-112414-054400)" as described by [Hortal et al. 2015](https://doi.org/10.1146/annurev-ecolsys-112414-054400). 
 
-[`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](./architecture.md) / [`funding`](#funding)
+[`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding)
 
 Preston is an open-source software system that keeps track of biodiversity datasets. Scientists can use Preston to keep a local, uniquely identifiable, versioned copy of all or parts of [GBIF](https://gbif.org)-indexed datasets. Institutions can use Preston to check that their collections are indexed and available through [iDigBio](https://idigbio.org). Biodiversity informatics researchers can use Preston to perform metadata analysis. And finally, archivists can distribute archives across the world. 
  
@@ -28,7 +28,7 @@ The figure above shows how Preston starts (1) a crawl activity. This crawl activ
 
 <img src="https://raw.githubusercontent.com/bio-guoda/preston/main/docs/history.png">
 
-If you haven't yet tried Preston, please see the [Installation](#install) section. Please also see [a template repository](https://github.com/bio-guoda/preston-amazon) and [use cases](#use-cases) for examples. If you are interested in learning how Preston works, please visit the [architecture](./docs/architecture.md) page.
+If you haven't yet tried Preston, please see the [Installation](#install) section. Please also see [a template repository](https://github.com/bio-guoda/preston-amazon) and [use cases](#use-cases) for examples. If you are interested in learning how Preston works, please visit the [architecture](docs/architecture.md) page.
 
 ## Table of Contents
  
