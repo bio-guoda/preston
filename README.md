@@ -4,7 +4,29 @@
 
  *Named after [Frank W. Preston (1896-1989)](https://en.wikipedia.org/wiki/Frank_W._Preston) and the Prestonian shortfall, one of the "[Seven Shortfalls that Beset Large-Scale Knowledge of Biodiversity](https://doi.org/10.1146/annurev-ecolsys-112414-054400)" as described by [Hortal et al. 2015](https://doi.org/10.1146/annurev-ecolsys-112414-054400). 
 
-[`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding)
+[`toc`](#table-of-contents] / [`quickstart`](#quickstart) / [`introduction`](#introduction) / [`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding)
+
+## Quickstart
+To install preston on your linux/mac (note: this installs preston using sudo privileges and makes preston.jar executable, please inspect the script before running it):
+
+```console
+sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.2.0/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
+```
+
+Then, visit [https://jhpoelen.nl/bees](jhpoelen.nl/bees) or [https://github.com/bio-guoda/preston-amazon](github.com/bio-guoda/preston-amazon) for worked out examples. 
+
+Alternatively, run:
+
+```
+cd [some_dir]
+preston clone "https://jhpoelen.nl/bees/data"
+preston cat hash://sha256/edde5b2b45961e356f27b81a3aa51584de4761ad9fa678c4b9fa3230808ea356 > bee.jpg
+```
+and open bee.jpg to see a local copy of the following headshot of [Nomadopsis puellae specimen MCZ:Ent:17219](https://mczbase.mcz.harvard.edu/guid/MCZ:Ent:17219) from the [Museum of Comparative Zoology, Harvard University](https://mcz.harvard.edu/) .
+
+<a href="http://mczbase.mcz.harvard.edu/media/1493651"><img src="https://archive.softwareheritage.org/api/1/content/sha256:edde5b2b45961e356f27b81a3aa51584de4761ad9fa678c4b9fa3230808ea356/raw/" height="200"/></a>
+
+## Introduction
 
 Preston is an open-source software system that keeps track of biodiversity datasets. Scientists can use Preston to keep a local, uniquely identifiable, versioned copy of all or parts of [GBIF](https://gbif.org)-indexed datasets. Institutions can use Preston to check that their collections are indexed and available through [iDigBio](https://idigbio.org). Biodiversity informatics researchers can use Preston to perform metadata analysis. And finally, archivists can distribute archives across the world. 
  
