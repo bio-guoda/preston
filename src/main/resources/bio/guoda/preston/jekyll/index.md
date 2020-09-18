@@ -1,5 +1,6 @@
 ---
 layout: default
+id: A biodiversity dataset graph
 ---
 {%- assign endpoint= "/data.json" | prepend: site.baseurl | prepend: site.url -%}
 
@@ -28,7 +29,7 @@ This automatically generated website contains a versioned archive of a custom se
 This biodiversity data archive website was created with the following steps:
 
 ```
-# first, create a new blank jekyll site
+# first, create a new blank jekyll site (tested on Jekyll v4.0.1)
 jekyll new [site_dir] --blank 
 
 cd [site_dir]
