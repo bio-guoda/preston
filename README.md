@@ -6,7 +6,7 @@
 
 [`toc`](#table-of-contents) / [`quickstart`](#quickstart) / [`introduction`](#introduction) / [`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding)
 
-# # Quickstart
+## Quickstart
 To install [a preston release](../../releases) on your linux/mac (note: this installs preston using sudo privileges and makes preston.jar executable; please inspect the script before running it; also see [install](#install)):
 
 ```console
