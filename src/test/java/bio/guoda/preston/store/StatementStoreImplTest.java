@@ -45,6 +45,13 @@ public class StatementStoreImplTest {
     }
 
     @Test
+    public void calculateRootURN_UUID_ArchiveQueryKey() {
+        IRI iri = StatementStoreImpl.calculateKeyFor(Pair.of(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH_URN_UUID, RefNodeConstants.HAS_VERSION));
+        assertThat(iri.getIRIString(),
+                is("hash://sha256/7fd737aed8f0d9acefb35db505cd77e81157dbf23c51203db53b00dea68af467"));
+    }
+
+    @Test
     public void putKey() throws IOException {
         StatementStore statementStore = new StatementStoreImpl(new KeyValueStore() {
 
