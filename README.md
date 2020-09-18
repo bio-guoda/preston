@@ -22,13 +22,13 @@ Periodically, the crawl process (see diagram below) is run for each institution 
 
 The process diagram below shows how Preston starts crawls to download copies of biodiversity registries and their datasets. A detailed log of the crawl activities are recorded to describe what data was discovered and how. This activity log is referred to as the history of a biodiversity dataset graph. The numbers indicate the sequence of events. Click on the image to enlarge. 
 
-<img src="https://raw.githubusercontent.com/bio-guoda/preston/master/process.png" width="50%">
+<img src="https://raw.githubusercontent.com/bio-guoda/preston/main/docs/process.png" width="50%">
 
 The figure above shows how Preston starts (1) a crawl activity. This crawl activity then accesses (2) a registry to save (3,4) a snapshot (or version) of it. Now, datasets referenced in this registry version are accessed, downloaded and saved (6,7,8). After all this, the crawl activity saves the log that contains its activities (1-8) as a version of a biodiversity dataset and linked to previous versions (see figure below). This log can be used to retrace the steps of the crawl activity to reconstruct the relationships between the registries, datasets as well as their respective content signatures or content hashes. Actual instances of crawl activities contains multiple registries (e.g., GBIF, iDigBio) and potentially thousands of datasets.   
 
-<img src="https://raw.githubusercontent.com/bio-guoda/preston/master/history.png">
+<img src="https://raw.githubusercontent.com/bio-guoda/preston/main/docs/history.png">
 
-If you haven't yet tried Preston, please see the [Installation](#install) section. Please also see [a template repository](https://github.com/bio-guoda/preston-amazon) and [use cases](#use-cases) for examples. If you are interested in learning how Preston works, please visit the [architecture](./architecture.md) page.
+If you haven't yet tried Preston, please see the [Installation](#install) section. Please also see [a template repository](https://github.com/bio-guoda/preston-amazon) and [use cases](#use-cases) for examples. If you are interested in learning how Preston works, please visit the [architecture](./docs/architecture.md) page.
 
 ## Table of Contents
  
@@ -475,7 +475,7 @@ If you'd like to run Preston inside a docker container so that you don't have to
 ### running periodically
 If you'd like to run Preston as a service to periodically update, you can use a systemd service combined with a systemd timer, or perhaps using a [Jenkins](https://jenkins.io) job. Both have advantages. The following example focuses on systemd. 
 
-Assuming that you have some standalone installation of preston running, you might be inspired by the following examples [preston.service](https://raw.githubusercontent.com/bio-guoda/preston/master/src/main/deb/lib/systemd/system/preston.service) and [preston.timer](https://raw.githubusercontent.com/bio-guoda/preston/master/src/main/deb/lib/systemd/system/preston.timer). The .service file defined how to run the update, while the .timer file defines how to run that update.
+Assuming that you have some standalone installation of preston running, you might be inspired by the following examples [preston.service](https://raw.githubusercontent.com/bio-guoda/preston/main/src/main/deb/lib/systemd/system/preston.service) and [preston.timer](https://raw.githubusercontent.com/bio-guoda/preston/main/src/main/deb/lib/systemd/system/preston.timer). The .service file defined how to run the update, while the .timer file defines how to run that update.
 
 To use, copy [preston.service](./src/main/deb/lib/systemd/system/preston.service) and [preston.timer](./src/main/deb/lib/systemd/system/preston.timer) into ```/etc/systemd/system/``` on your debian/ubuntu server. 
 
