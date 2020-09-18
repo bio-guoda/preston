@@ -4,7 +4,7 @@
 
  *Named after [Frank W. Preston (1896-1989)](https://en.wikipedia.org/wiki/Frank_W._Preston) and the Prestonian shortfall, one of the "[Seven Shortfalls that Beset Large-Scale Knowledge of Biodiversity](https://doi.org/10.1146/annurev-ecolsys-112414-054400)" as described by [Hortal et al. 2015](https://doi.org/10.1146/annurev-ecolsys-112414-054400). 
 
-[`toc`](#table-of-contents] / [`quickstart`](#quickstart) / [`introduction`](#introduction) / [`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding)
+[`toc`](#table-of-contents) / [`quickstart`](#quickstart) / [`introduction`](#introduction) / [`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding)
 
 ## Quickstart
 To install preston on your linux/mac (note: this installs preston using sudo privileges and makes preston.jar executable, please inspect the script before running it):
@@ -22,9 +22,9 @@ cd [some_dir]
 preston clone "https://jhpoelen.nl/bees/data"
 preston cat hash://sha256/edde5b2b45961e356f27b81a3aa51584de4761ad9fa678c4b9fa3230808ea356 > bee.jpg
 ```
-and open bee.jpg to see a local copy of the following headshot of [Nomadopsis puellae specimen MCZ:Ent:17219](https://mczbase.mcz.harvard.edu/guid/MCZ:Ent:17219) from the [Museum of Comparative Zoology, Harvard University](https://mcz.harvard.edu/) .
+and open bee.jpg to see your local copy of the following headshot of [Nomadopsis puellae specimen MCZ:Ent:17219](https://mczbase.mcz.harvard.edu/guid/MCZ:Ent:17219) from the [Museum of Comparative Zoology, Harvard University](https://mcz.harvard.edu/):
 
-<a href="http://mczbase.mcz.harvard.edu/media/1493651"><img src="https://archive.softwareheritage.org/api/1/content/sha256:edde5b2b45961e356f27b81a3aa51584de4761ad9fa678c4b9fa3230808ea356/raw/" height="200"/></a>
+<a href="http://mczbase.mcz.harvard.edu/media/1493651"><img src="https://jhpoelen.nl/data/ed/de/edde5b2b45961e356f27b81a3aa51584de4761ad9fa678c4b9fa3230808ea356" height="200"/></a>
 
 ## Introduction
 
