@@ -6,8 +6,8 @@
 
 [`toc`](#table-of-contents) / [`quickstart`](#quickstart) / [`introduction`](#introduction) / [`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding)
 
-## Quickstart
-To install preston on your linux/mac (note: this installs preston using sudo privileges and makes preston.jar executable, please inspect the script before running it):
+# # Quickstart
+To install [a preston release](./releases) on your linux/mac (note: this installs preston using sudo privileges and makes preston.jar executable; please inspect the script before running it; also see [install](#install)):
 
 ```console
 sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.2.0/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
