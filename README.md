@@ -7,11 +7,12 @@
 [`toc`](#table-of-contents) / [`quickstart`](#quickstart) / [`introduction`](#introduction) / [`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding)
 
 ## Quickstart
-To install [a preston release](../../releases) on your linux/mac (:warning: notethat this installs preston using sudo privileges and makes preston.jar executable; please inspect the script before running it; also see [install](#install)):
+To install [a preston release](../../releases) on your linux/mac: 
 
 ```console
 sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.2.0/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
 ```
+:warning: Note that this installs preston using sudo privileges and makes preston.jar executable. Please inspect the script before running it. Also see [install](#install).
 
 Then, visit [https://jhpoelen.nl/bees](jhpoelen.nl/bees) or [https://github.com/bio-guoda/preston-amazon](github.com/bio-guoda/preston-amazon) for worked out examples. 
 
@@ -471,11 +472,13 @@ Preston needs Java 8+.
 ### Standalone
 Preston is a stand-alone java application, packaged in a jarfile. You can build you own (see [building](#building)) or download a prebuilt jar at [releases](https://github.com/bio-guoda/preston/releases).
 
-On linux (and Mac) you can install Preston by running (:warning: note that this installs preston using sudo privileges and makes preston.jar executable; please inspect the script before running it):
+On linux (and Mac) you can install Preston by running:
+
 
 ```console
 sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.2.0/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
 ```
+:warning: Note that this installs preston using sudo privileges and makes preston.jar executable. Please inspect the script before running it.
 
 On successful installation, execute ```preston version``` on the commandline should print the version of preston. 
 .
