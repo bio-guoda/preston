@@ -14,7 +14,7 @@ sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/pr
 ```
 :warning: Note that this installs preston using sudo privileges and makes preston.jar executable. Please inspect the script before running it. Also see [install](#install).
 
-Then, visit [https://jhpoelen.nl/bees](jhpoelen.nl/bees) or [https://github.com/bio-guoda/preston-amazon](github.com/bio-guoda/preston-amazon) for worked out examples. 
+Then, visit [jhpoelen.nl/bees](https://jhpoelen.nl/bees) or [github.com/bio-guoda/preston-amazon](https://github.com/bio-guoda/preston-amazon) for worked out examples. 
 
 Alternatively, run:
 
