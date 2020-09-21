@@ -66,4 +66,29 @@ public class URLFinderTest {
         String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
         assertThat(lastUrlStatement, startsWith("<cut:hash://sha256/blub!/b1679-1722> <http://www.w3.org/ns/prov#value> <https://www.biodiversitylibrary.org/item/947>"));
     }
+
+    @Test
+    public void onNestedZip() {
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                return getClass().getResourceAsStream("/bio/guoda/preston/process/nested.zip");
+            }
+        };
+
+        ArrayList<Quad> nodes = new ArrayList<>();
+        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
+
+        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
+
+        urlFinder.on(statement);
+
+        assertThat(nodes.size(), is(3));
+
+        String level1UrlStatement = nodes.get(1).toString();
+        assertThat(level1UrlStatement, startsWith("<cut:zip:zip:hash://sha256/blub!/level2.zip!/level2.txt!/b1-19> <http://www.w3.org/ns/prov#value> <https://example.org>"));
+
+        String level2UrlStatement = nodes.get(2).toString();
+        assertThat(level2UrlStatement, startsWith("<cut:zip:hash://sha256/blub!/level1.txt!/b1-19> <http://www.w3.org/ns/prov#value> <https://example.org>"));
+    }
 }
