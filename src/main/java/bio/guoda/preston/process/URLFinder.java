@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.RefNodeConstants;
 import com.drew.lang.Charsets;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -18,6 +19,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.model.RefNodeFactory.getVersion;
 import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
@@ -118,7 +120,7 @@ public class URLFinder extends ProcessorReadOnly {
                 int bytePosMatchEndsAt = bytePosMatchStartsAt + matchSizeInBytes;
 
                 String matchString = matcher.group();
-                emitter.emit(toStatement(toIRI(matchString), toIRI("locatedAt"), getCutIri(version, bytePosMatchStartsAt, bytePosMatchEndsAt)));
+                emitter.emit(toStatement(getCutIri(version, bytePosMatchStartsAt, bytePosMatchEndsAt), HAS_VALUE, toIRI(matchString)));
 
                 nextBytePosition = bytePosMatchEndsAt;
             }

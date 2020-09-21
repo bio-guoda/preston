@@ -36,10 +36,10 @@ public class URLFinderTest {
         assertThat(nodes.size(), is(151));
 
         String firstUrlStatement = nodes.get(1).toString();
-        assertThat(firstUrlStatement, startsWith("<http://rs.tdwg.org/dwc/text/> <locatedAt> <cut:zip:hash://sha256/blub!/meta.xml!/b56-83>"));
+        assertThat(firstUrlStatement, startsWith("<cut:zip:hash://sha256/blub!/meta.xml!/b56-83> <http://www.w3.org/ns/prov#value> <http://rs.tdwg.org/dwc/text/>"));
 
         String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
-        assertThat(lastUrlStatement, startsWith("<http://treatment.plazi.org/id/D51D87C0FFC3C7624B9C5739FC6EDCBF> <locatedAt> <cut:zip:hash://sha256/blub!/media.txt!/b15496-15557>"));
+        assertThat(lastUrlStatement, startsWith("<cut:zip:hash://sha256/blub!/media.txt!/b15496-15557> <http://www.w3.org/ns/prov#value> <http://treatment.plazi.org/id/D51D87C0FFC3C7624B9C5739FC6EDCBF>"));
     }
 
     @Test
@@ -61,9 +61,9 @@ public class URLFinderTest {
         assertThat(nodes.size(), is(10));
 
         String firstUrlStatement = nodes.get(1).toString();
-        assertThat(firstUrlStatement, startsWith("<https://www.biodiversitylibrary.org/item/24> <locatedAt> <cut:hash://sha256/blub!/b192-234>"));
+        assertThat(firstUrlStatement, startsWith("<cut:hash://sha256/blub!/b192-234> <http://www.w3.org/ns/prov#value> <https://www.biodiversitylibrary.org/item/24>"));
 
         String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
-        assertThat(lastUrlStatement, startsWith("<https://www.biodiversitylibrary.org/item/947> <locatedAt> <cut:hash://sha256/blub!/b1679-1722>"));
+        assertThat(lastUrlStatement, startsWith("<cut:hash://sha256/blub!/b1679-1722> <http://www.w3.org/ns/prov#value> <https://www.biodiversitylibrary.org/item/947>"));
     }
 }
