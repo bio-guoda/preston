@@ -61,10 +61,10 @@ public class URLFinderTest {
         assertThat(nodes.size(), is(10));
 
         String firstUrlStatement = nodes.get(1).toString();
-        assertThat(firstUrlStatement, startsWith("<cut:hash://sha256/blub!/b192-234> <http://www.w3.org/ns/prov#value> <https://www.biodiversitylibrary.org/item/24>"));
+        assertThat(firstUrlStatement, startsWith("<cut:hash://sha256/blub!/b191-233> <http://www.w3.org/ns/prov#value> <https://www.biodiversitylibrary.org/item/24>"));
 
         String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
-        assertThat(lastUrlStatement, startsWith("<cut:hash://sha256/blub!/b1679-1722> <http://www.w3.org/ns/prov#value> <https://www.biodiversitylibrary.org/item/947>"));
+        assertThat(lastUrlStatement, startsWith("<cut:hash://sha256/blub!/b1670-1713> <http://www.w3.org/ns/prov#value> <https://www.biodiversitylibrary.org/item/947>"));
     }
 
     @Test
