@@ -36,10 +36,10 @@ public class URLFinderTest {
         assertThat(nodes.size(), is(151));
 
         String firstUrlStatement = nodes.get(1).toString();
-        assertThat(firstUrlStatement, startsWith("<cut:zip:hash://sha256/blub!/meta.xml!/b56-83> <http://www.w3.org/ns/prov#value> <http://rs.tdwg.org/dwc/text/>"));
+        assertThat(firstUrlStatement, startsWith("<cut:zip:hash://sha256/blub!/meta.xml!/b56-83> <http://www.w3.org/ns/prov#value> \"http://rs.tdwg.org/dwc/text/\""));
 
         String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
-        assertThat(lastUrlStatement, startsWith("<cut:zip:hash://sha256/blub!/media.txt!/b15496-15557> <http://www.w3.org/ns/prov#value> <http://treatment.plazi.org/id/D51D87C0FFC3C7624B9C5739FC6EDCBF>"));
+        assertThat(lastUrlStatement, startsWith("<cut:zip:hash://sha256/blub!/media.txt!/b15496-15557> <http://www.w3.org/ns/prov#value> \"http://treatment.plazi.org/id/D51D87C0FFC3C7624B9C5739FC6EDCBF\""));
     }
 
     @Test
@@ -61,10 +61,10 @@ public class URLFinderTest {
         assertThat(nodes.size(), is(10));
 
         String firstUrlStatement = nodes.get(1).toString();
-        assertThat(firstUrlStatement, startsWith("<cut:hash://sha256/blub!/b191-233> <http://www.w3.org/ns/prov#value> <https://www.biodiversitylibrary.org/item/24>"));
+        assertThat(firstUrlStatement, startsWith("<cut:hash://sha256/blub!/b191-233> <http://www.w3.org/ns/prov#value> \"https://www.biodiversitylibrary.org/item/24\""));
 
         String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
-        assertThat(lastUrlStatement, startsWith("<cut:hash://sha256/blub!/b1670-1713> <http://www.w3.org/ns/prov#value> <https://www.biodiversitylibrary.org/item/947>"));
+        assertThat(lastUrlStatement, startsWith("<cut:hash://sha256/blub!/b1670-1713> <http://www.w3.org/ns/prov#value> \"https://www.biodiversitylibrary.org/item/947\""));
     }
 
     @Test
@@ -86,9 +86,9 @@ public class URLFinderTest {
         assertThat(nodes.size(), is(3));
 
         String level1UrlStatement = nodes.get(1).toString();
-        assertThat(level1UrlStatement, startsWith("<cut:zip:zip:hash://sha256/blub!/level2.zip!/level2.txt!/b1-19> <http://www.w3.org/ns/prov#value> <https://example.org>"));
+        assertThat(level1UrlStatement, startsWith("<cut:zip:zip:hash://sha256/blub!/level2.zip!/level2.txt!/b1-19> <http://www.w3.org/ns/prov#value> \"https://example.org\""));
 
         String level2UrlStatement = nodes.get(2).toString();
-        assertThat(level2UrlStatement, startsWith("<cut:zip:hash://sha256/blub!/level1.txt!/b1-19> <http://www.w3.org/ns/prov#value> <https://example.org>"));
+        assertThat(level2UrlStatement, startsWith("<cut:zip:hash://sha256/blub!/level1.txt!/b1-19> <http://www.w3.org/ns/prov#value> \"https://example.org\""));
     }
 }

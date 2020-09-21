@@ -23,6 +23,7 @@ import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.model.RefNodeFactory.getVersion;
 import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 
@@ -120,7 +121,7 @@ public class URLFinder extends ProcessorReadOnly {
                 int bytePosMatchEndsAt = bytePosMatchStartsAt + matchSizeInBytes;
 
                 String matchString = matcher.group();
-                emitter.emit(toStatement(getCutIri(version, bytePosMatchStartsAt, bytePosMatchEndsAt), HAS_VALUE, toIRI(matchString)));
+                emitter.emit(toStatement(getCutIri(version, bytePosMatchStartsAt, bytePosMatchEndsAt), HAS_VALUE, toLiteral(matchString)));
 
                 nextBytePosition = bytePosMatchEndsAt;
             }
