@@ -27,22 +27,43 @@ public class URLFinderTest {
         };
 
         ArrayList<Quad> nodes = new ArrayList<>();
-        URLFinder zipReader = new URLFinder(blobStore, TestUtil.testListener(nodes));
+        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
 
         Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
 
-        zipReader.on(statement);
+        urlFinder.on(statement);
 
         assertThat(nodes.size(), is(151));
 
         String firstUrlStatement = nodes.get(1).toString();
-        assertThat(firstUrlStatement, startsWith("<http://rs.tdwg.org/dwc/text/> <locatedAt> <zip:hash://sha256/blub!/meta.xml#L2>"));
+        assertThat(firstUrlStatement, startsWith("<http://rs.tdwg.org/dwc/text/> <locatedAt> <cut:zip:hash://sha256/blub!/meta.xml!/b56-83>"));
 
         String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
-        assertThat(lastUrlStatement, startsWith("<http://treatment.plazi.org/id/D51D87C0FFC3C7624B9C5739FC6EDCBF> <locatedAt> <zip:hash://sha256/blub!/media.txt#L3>"));
+        assertThat(lastUrlStatement, startsWith("<http://treatment.plazi.org/id/D51D87C0FFC3C7624B9C5739FC6EDCBF> <locatedAt> <cut:zip:hash://sha256/blub!/media.txt!/b15496-15557>"));
     }
 
     @Test
     public void onText() {
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                return getClass().getResourceAsStream("/bio/guoda/preston/process/bhl_item.txt");
+            }
+        };
+
+        ArrayList<Quad> nodes = new ArrayList<>();
+        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
+
+        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
+
+        urlFinder.on(statement);
+
+        assertThat(nodes.size(), is(10));
+
+        String firstUrlStatement = nodes.get(1).toString();
+        assertThat(firstUrlStatement, startsWith("<https://www.biodiversitylibrary.org/item/24> <locatedAt> <cut:hash://sha256/blub!/b192-234>"));
+
+        String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
+        assertThat(lastUrlStatement, startsWith("<https://www.biodiversitylibrary.org/item/947> <locatedAt> <cut:hash://sha256/blub!/b1679-1722>"));
     }
 }
