@@ -97,17 +97,17 @@ public class URLFinder extends ProcessorReadOnly {
         byte[] byteBuffer = new byte[BUFFER_SIZE];
 
         int offset = 0;
-        int overlapSize = 0;
+        int numBytesToReuse = 0;
         while (true) {
             // Copy text from the end of the buffer to the beginning in case matches occur across buffer boundaries
-            System.arraycopy(byteBuffer, byteBuffer.length - overlapSize, byteBuffer, 0, overlapSize);
+            System.arraycopy(byteBuffer, byteBuffer.length - numBytesToReuse, byteBuffer, 0, numBytesToReuse);
 
-            int numBytesRead = in.read(byteBuffer, overlapSize, byteBuffer.length - overlapSize);
+            int numBytesRead = in.read(byteBuffer, numBytesToReuse, byteBuffer.length - numBytesToReuse);
             if (numBytesRead == -1) {
                 break;
             }
 
-            int numBytesToScan = overlapSize + numBytesRead;
+            int numBytesToScan = numBytesToReuse + numBytesRead;
             CharBuffer charBuffer = Charsets.UTF_8.decode(ByteBuffer.wrap(byteBuffer, 0, numBytesToScan));
             Matcher matcher = URL_PATTERN.matcher(charBuffer);
             int nextBytePosition = 0;
@@ -126,8 +126,8 @@ public class URLFinder extends ProcessorReadOnly {
                 nextBytePosition = bytePosMatchEndsAt;
             }
 
-            overlapSize = Integer.min(MAX_MATCH_SIZE_IN_BYTES, byteBuffer.length - (nextBytePosition - offset));
-            offset += byteBuffer.length - overlapSize;
+            numBytesToReuse = Integer.min(MAX_MATCH_SIZE_IN_BYTES, byteBuffer.length - (nextBytePosition - offset));
+            offset += byteBuffer.length - numBytesToReuse;
         }
     }
 
