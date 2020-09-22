@@ -4,6 +4,7 @@ import bio.guoda.preston.RefNodeConstants;
 import com.drew.lang.Charsets;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.jena.atlas.lib.Bytes;
 import org.apache.tika.detect.TextDetector;
 import org.apache.tika.mime.MediaType;
 
@@ -116,8 +117,8 @@ public class URLFinder extends ProcessorReadOnly {
                 int charPosMatchEndsAt = matcher.end();
 
                 // Because UTF-8 characters have variable width, report byte positions instead of character positions
-                int bytePosMatchStartsAt = offset + charBuffer.subSequence(0, charPosMatchStartsAt).toString().getBytes().length;
-                int matchSizeInBytes = charBuffer.subSequence(charPosMatchStartsAt, charPosMatchEndsAt).toString().getBytes().length;
+                int bytePosMatchStartsAt = offset + getNumBytesInCharBuffer(charBuffer, 0, charPosMatchStartsAt);
+                int matchSizeInBytes = getNumBytesInCharBuffer(charBuffer, charPosMatchStartsAt, charPosMatchEndsAt);
                 int bytePosMatchEndsAt = bytePosMatchStartsAt + matchSizeInBytes;
 
                 String matchString = matcher.group();
@@ -129,6 +130,10 @@ public class URLFinder extends ProcessorReadOnly {
             numBytesToReuse = Integer.min(MAX_MATCH_SIZE_IN_BYTES, byteBuffer.length - (nextBytePosition - offset));
             offset += byteBuffer.length - numBytesToReuse;
         }
+    }
+
+    private int getNumBytesInCharBuffer(CharBuffer charBuffer, int startAt, int endAt) {
+        return Charsets.UTF_8.encode(charBuffer.subSequence(startAt, endAt)).limit();
     }
 
     private boolean isStreamPlainText(InputStream stream) throws IOException {
