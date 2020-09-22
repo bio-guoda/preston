@@ -6,6 +6,7 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
+import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.tika.metadata.Metadata;
@@ -19,10 +20,12 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
+import static bio.guoda.preston.RefNodeConstants.USED;
 import static bio.guoda.preston.model.RefNodeFactory.getVersion;
 import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
@@ -46,18 +49,25 @@ public class URLFinder extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (hasVersionAvailable(statement)) {
             IRI version = (IRI) getVersion(statement);
+
+            BlankNodeOrIRI newActivity = toIRI(UUID.randomUUID());
             List<Quad> nodes = new ArrayList<>();
+            nodes.add(toStatement(newActivity, USED, version));
+
             try (InputStream in = get(version)) {
-                attemptToParse(version, in, new StatementsEmitterAdapter() {
-                    @Override
-                    public void emit(Quad statement) {
-                        nodes.add(statement);
-                    }
-                });
+                if (in != null) {
+                    attemptToParse(version, in, new StatementsEmitterAdapter() {
+                        @Override
+                        public void emit(Quad statement) {
+                            nodes.add(statement);
+                        }
+                    });
+                }
             } catch (IOException e) {
                 // ignore; this is opportunistic
             }
-            emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+
+            emitAsNewActivity(nodes.stream(), this, statement.getGraphName(), newActivity);
         }
     }
 

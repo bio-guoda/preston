@@ -1,21 +1,76 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.store.TestUtil;
+import com.mchange.v1.io.InputStreamUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class URLFinderTest {
+
+    @Test
+    public void onUnresolvable() {
+        BlobStoreReadOnly blobStore = TestUtil.getTestBlobStore();
+
+        ArrayList<Quad> nodes = new ArrayList<>();
+        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
+
+        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
+
+        urlFinder.on(statement);
+
+        assertThat(nodes.size(), is(2));
+
+        String firstUrlStatement = nodes.get(1).toString();
+        assertThat(firstUrlStatement, containsString("<http://www.w3.org/ns/prov#used> <hash://sha256/blub>"));
+    }
+
+    @Test
+    public void onNonparseable() {
+        BlobStoreReadOnly blobStore = key -> InputStreamUtils.getEmptyInputStream();
+
+        ArrayList<Quad> nodes = new ArrayList<>();
+        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
+
+        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
+
+        urlFinder.on(statement);
+
+        assertThat(nodes.size(), is(2));
+
+        String firstUrlStatement = nodes.get(1).toString();
+        assertThat(firstUrlStatement, containsString("<http://www.w3.org/ns/prov#used> <hash://sha256/blub>"));
+    }
+
+    @Test
+    public void onTextWithNoUrls() {
+        BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("haha no URLs to see here", Charset.defaultCharset());
+
+        ArrayList<Quad> nodes = new ArrayList<>();
+        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
+
+        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
+
+        urlFinder.on(statement);
+
+        assertThat(nodes.size(), is(2));
+
+        String firstUrlStatement = nodes.get(1).toString();
+        assertThat(firstUrlStatement, containsString("<http://www.w3.org/ns/prov#used> <hash://sha256/blub>"));
+    }
 
     @Test
     public void onZip() {
@@ -33,9 +88,9 @@ public class URLFinderTest {
 
         urlFinder.on(statement);
 
-        assertThat(nodes.size(), is(151));
+        assertThat(nodes.size(), is(152));
 
-        String firstUrlStatement = nodes.get(1).toString();
+        String firstUrlStatement = nodes.get(2).toString();
         assertThat(firstUrlStatement, startsWith("<cut:zip:hash://sha256/blub!/meta.xml!/b56-83> <http://www.w3.org/ns/prov#value> \"http://rs.tdwg.org/dwc/text/\""));
 
         String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
@@ -58,9 +113,9 @@ public class URLFinderTest {
 
         urlFinder.on(statement);
 
-        assertThat(nodes.size(), is(10));
+        assertThat(nodes.size(), is(11));
 
-        String firstUrlStatement = nodes.get(1).toString();
+        String firstUrlStatement = nodes.get(2).toString();
         assertThat(firstUrlStatement, startsWith("<cut:hash://sha256/blub!/b191-233> <http://www.w3.org/ns/prov#value> \"https://www.biodiversitylibrary.org/item/24\""));
 
         String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
@@ -83,12 +138,12 @@ public class URLFinderTest {
 
         urlFinder.on(statement);
 
-        assertThat(nodes.size(), is(3));
+        assertThat(nodes.size(), is(4));
 
-        String level1UrlStatement = nodes.get(1).toString();
+        String level1UrlStatement = nodes.get(2).toString();
         assertThat(level1UrlStatement, startsWith("<cut:zip:zip:hash://sha256/blub!/level2.zip!/level2.txt!/b1-19> <http://www.w3.org/ns/prov#value> \"https://example.org\""));
 
-        String level2UrlStatement = nodes.get(2).toString();
+        String level2UrlStatement = nodes.get(3).toString();
         assertThat(level2UrlStatement, startsWith("<cut:zip:hash://sha256/blub!/level1.txt!/b1-19> <http://www.w3.org/ns/prov#value> \"https://example.org\""));
     }
 }
