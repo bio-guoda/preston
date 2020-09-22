@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class URLFinderTest {
+public class TextMatcherTest {
 
     @Test
     public void onUnresolvable() {
@@ -97,11 +97,11 @@ public class URLFinderTest {
 
     private ArrayList<Quad> runUrlFinder(BlobStoreReadOnly blobStore) {
         ArrayList<Quad> nodes = new ArrayList<>();
-        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
+        TextMatcher textMatcher = new TextMatcher(blobStore, TestUtil.testListener(nodes));
 
         Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
 
-        urlFinder.on(statement);
+        textMatcher.on(statement);
         return nodes;
     }
 }

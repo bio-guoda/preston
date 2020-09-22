@@ -33,16 +33,27 @@ import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 
-public class URLFinder extends ProcessorReadOnly {
+public class TextMatcher extends ProcessorReadOnly {
 
-    private static final int BUFFER_SIZE = 40096;
+    private static final int BUFFER_SIZE = 4096;
     private static final int MAX_MATCH_SIZE_IN_BYTES = 512;
 
     // From https://urlregex.com/
     private static final Pattern URL_PATTERN = Pattern.compile("(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
-    public URLFinder(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
+    private final Pattern pattern;
+
+    public TextMatcher(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
+        this(URL_PATTERN, blobStoreReadOnly, listeners);
+    }
+
+    public TextMatcher(String regex, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
+        this(Pattern.compile(regex), blobStoreReadOnly, listeners);
+    }
+
+    public TextMatcher(Pattern pattern, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
+        this.pattern = pattern;
     }
 
     @Override
@@ -157,7 +168,7 @@ public class URLFinder extends ProcessorReadOnly {
 
             int numBytesToScan = numBytesToReuse + numBytesRead;
             CharBuffer charBuffer = charset.decode(ByteBuffer.wrap(byteBuffer, 0, numBytesToScan));
-            Matcher matcher = URL_PATTERN.matcher(charBuffer);
+            Matcher matcher = pattern.matcher(charBuffer);
             int nextBytePosition = 0;
             while (matcher.find()) {
                 int charPosMatchStartsAt = matcher.start();
