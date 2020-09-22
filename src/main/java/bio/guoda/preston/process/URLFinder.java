@@ -1,5 +1,11 @@
 package bio.guoda.preston.process;
 
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.compressors.CompressorException;
+import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.tika.metadata.Metadata;
@@ -15,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.model.RefNodeFactory.getVersion;
@@ -28,7 +32,7 @@ import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 
 public class URLFinder extends ProcessorReadOnly {
 
-    private static final int BUFFER_SIZE = 4096;
+    private static final int BUFFER_SIZE = 40096;
     private static final int MAX_MATCH_SIZE_IN_BYTES = 512;
 
     // From https://urlregex.com/
@@ -58,16 +62,47 @@ public class URLFinder extends ProcessorReadOnly {
     }
 
     private boolean attemptToParse(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
-        return (attemptToParseAsZip(version, in, emitter) ||
+        return (attemptToParseAsArchive(version, in, emitter) ||
+                attemptToParseAsCompressed(version, in, emitter) ||
                 attemptToParseAsText(version, in, emitter));
     }
 
-    private boolean attemptToParseAsZip(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
-        if (isStreamZipped(in)) {
-            parseAsZip(version, in, emitter);
+    private boolean attemptToParseAsArchive(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
+        ArchiveInputStream archiveStream = getArchiveStream(in);
+        if (archiveStream != null) {
+            parseAsArchive(version, archiveStream, emitter);
             return true;
         }
         return false;
+    }
+
+    private ArchiveInputStream getArchiveStream(InputStream in) {
+        try {
+            ArchiveInputStream archiveStream = new ArchiveStreamFactory()
+                    .createArchiveInputStream(in);
+            return archiveStream;
+        } catch (ArchiveException e) {
+            return null;
+        }
+    }
+
+    private boolean attemptToParseAsCompressed(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
+        InputStream compressedStream = getCompressedStream(in);
+        if (compressedStream != null) {
+            parseAsCompressed(version, compressedStream, emitter);
+            return true;
+        }
+        return false;
+    }
+
+    private InputStream getCompressedStream(InputStream in) {
+        try {
+            InputStream decompressedStream = new CompressorStreamFactory()
+                    .createCompressorInputStream(in);
+            return decompressedStream;
+        } catch (CompressorException e) {
+            return null;
+        }
     }
 
     private boolean attemptToParseAsText(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
@@ -79,18 +114,22 @@ public class URLFinder extends ProcessorReadOnly {
         return false;
     }
 
-    private void parseAsZip(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
-        ZipInputStream zIn = new ZipInputStream(in);
-
-        ZipEntry entry;
-        while ((entry = zIn.getNextEntry()) != null) {
-            InputStream entryStream = new BufferedInputStream(zIn);
-            try {
-                attemptToParse(getEntryIri(version, entry.getName()), entryStream, emitter);
-            } catch (IOException e) {
-                // ignore; this is opportunistic
+    private void parseAsArchive(IRI version, ArchiveInputStream in, StatementEmitter emitter) throws IOException {
+        ArchiveEntry entry;
+        while ((entry = in.getNextEntry()) != null) {
+            if (in.canReadEntryData(entry)) {
+                InputStream entryStream = new BufferedInputStream(in);
+                try {
+                    attemptToParse(getEntryIri(version, entry.getName()), entryStream, emitter);
+                } catch (IOException e) {
+                    // ignore; this is opportunistic
+                }
             }
         }
+    }
+
+    private void parseAsCompressed(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
+        attemptToParse(version, in, emitter);
     }
 
     private void parseAsText(IRI version, InputStream in, StatementEmitter emitter, Charset charset) throws IOException {
@@ -98,9 +137,10 @@ public class URLFinder extends ProcessorReadOnly {
 
         int offset = 0;
         int numBytesToReuse = 0;
+        int numBytesScannedInLastIteration = 0;
         while (true) {
             // Copy text from the end of the buffer to the beginning in case matches occur across buffer boundaries
-            System.arraycopy(byteBuffer, byteBuffer.length - numBytesToReuse, byteBuffer, 0, numBytesToReuse);
+            System.arraycopy(byteBuffer, numBytesScannedInLastIteration - numBytesToReuse, byteBuffer, 0, numBytesToReuse);
 
             int numBytesRead = in.read(byteBuffer, numBytesToReuse, byteBuffer.length - numBytesToReuse);
             if (numBytesRead == -1) {
@@ -126,20 +166,14 @@ public class URLFinder extends ProcessorReadOnly {
                 nextBytePosition = bytePosMatchEndsAt;
             }
 
-            numBytesToReuse = Integer.min(MAX_MATCH_SIZE_IN_BYTES, byteBuffer.length - (nextBytePosition - offset));
-            offset += byteBuffer.length - numBytesToReuse;
+            numBytesScannedInLastIteration = numBytesToScan;
+            numBytesToReuse = Integer.min(MAX_MATCH_SIZE_IN_BYTES, numBytesScannedInLastIteration - (nextBytePosition - offset));
+            offset += numBytesScannedInLastIteration - numBytesToReuse;
         }
     }
 
     private int getNumBytesInCharBuffer(Charset charset, CharBuffer charBuffer, int startAt, int endAt) {
         return charset.encode(charBuffer.subSequence(startAt, endAt)).limit();
-    }
-
-    private boolean isStreamZipped(InputStream stream) throws IOException {
-        stream.mark(128);
-        boolean isZip = (new ZipInputStream(stream).getNextEntry() != null);
-        stream.reset();
-        return isZip;
     }
 
     private static IRI getEntryIri(IRI version, String name) {
