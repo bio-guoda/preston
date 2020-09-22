@@ -1,18 +1,16 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.RefNodeConstants;
-import com.drew.lang.Charsets;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.jena.atlas.lib.Bytes;
-import org.apache.tika.detect.TextDetector;
-import org.apache.tika.mime.MediaType;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.txt.UniversalEncodingDetector;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -73,8 +71,9 @@ public class URLFinder extends ProcessorReadOnly {
     }
 
     private boolean attemptToParseAsText(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
-        if (isStreamPlainText(in)) {
-            parseAsText(version, in, emitter);
+        Charset charset = new UniversalEncodingDetector().detect(in, new Metadata());
+        if (charset != null) {
+            parseAsText(version, in, emitter, charset);
             return true;
         }
         return false;
@@ -94,7 +93,7 @@ public class URLFinder extends ProcessorReadOnly {
         }
     }
 
-    private void parseAsText(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
+    private void parseAsText(IRI version, InputStream in, StatementEmitter emitter, Charset charset) throws IOException {
         byte[] byteBuffer = new byte[BUFFER_SIZE];
 
         int offset = 0;
@@ -109,7 +108,7 @@ public class URLFinder extends ProcessorReadOnly {
             }
 
             int numBytesToScan = numBytesToReuse + numBytesRead;
-            CharBuffer charBuffer = Charsets.UTF_8.decode(ByteBuffer.wrap(byteBuffer, 0, numBytesToScan));
+            CharBuffer charBuffer = charset.decode(ByteBuffer.wrap(byteBuffer, 0, numBytesToScan));
             Matcher matcher = URL_PATTERN.matcher(charBuffer);
             int nextBytePosition = 0;
             while (matcher.find()) {
@@ -117,8 +116,8 @@ public class URLFinder extends ProcessorReadOnly {
                 int charPosMatchEndsAt = matcher.end();
 
                 // Because UTF-8 characters have variable width, report byte positions instead of character positions
-                int bytePosMatchStartsAt = offset + getNumBytesInCharBuffer(charBuffer, 0, charPosMatchStartsAt);
-                int matchSizeInBytes = getNumBytesInCharBuffer(charBuffer, charPosMatchStartsAt, charPosMatchEndsAt);
+                int bytePosMatchStartsAt = offset + getNumBytesInCharBuffer(charset, charBuffer, 0, charPosMatchStartsAt);
+                int matchSizeInBytes = getNumBytesInCharBuffer(charset, charBuffer, charPosMatchStartsAt, charPosMatchEndsAt);
                 int bytePosMatchEndsAt = bytePosMatchStartsAt + matchSizeInBytes;
 
                 String matchString = matcher.group();
@@ -132,12 +131,8 @@ public class URLFinder extends ProcessorReadOnly {
         }
     }
 
-    private int getNumBytesInCharBuffer(CharBuffer charBuffer, int startAt, int endAt) {
-        return Charsets.UTF_8.encode(charBuffer.subSequence(startAt, endAt)).limit();
-    }
-
-    private boolean isStreamPlainText(InputStream stream) throws IOException {
-        return (new TextDetector().detect(stream, null) == MediaType.TEXT_PLAIN);
+    private int getNumBytesInCharBuffer(Charset charset, CharBuffer charBuffer, int startAt, int endAt) {
+        return charset.encode(charBuffer.subSequence(startAt, endAt)).limit();
     }
 
     private boolean isStreamZipped(InputStream stream) throws IOException {
