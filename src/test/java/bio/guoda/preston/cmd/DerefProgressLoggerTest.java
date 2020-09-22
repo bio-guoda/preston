@@ -3,7 +3,6 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.DerefState;
 import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -57,10 +56,8 @@ public class DerefProgressLoggerTest {
 
         String[] lines = StringUtils.split(out.toString(StandardCharsets.UTF_8.name()), '\r');
 
-        assertThat(lines[0], Is.is(
-                "[https://example.org/very...ooooooooooooooooooooong] 1.0% of 1 kB at ? MB/s ETA: < 1 minute"));
-
-
+        assertThat(lines[0], startsWith("[https://example.org/very...ooooooooooooooooooooong] 1.0% of 1 kB at "));
+        assertThat(lines[0], endsWith("ETA: < 1 minute"));
     }
 
     @Test
