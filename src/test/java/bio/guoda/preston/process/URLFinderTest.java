@@ -3,17 +3,16 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.store.TestUtil;
 import com.mchange.v1.io.InputStreamUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
-import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.store.TestUtil.getTestBlobStoreForResource;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
@@ -25,13 +24,7 @@ public class URLFinderTest {
     public void onUnresolvable() {
         BlobStoreReadOnly blobStore = TestUtil.getTestBlobStore();
 
-        ArrayList<Quad> nodes = new ArrayList<>();
-        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
-
-        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
-
-        urlFinder.on(statement);
-
+        ArrayList<Quad> nodes = runUrlFinder(blobStore);
         assertThat(nodes.size(), is(2));
 
         String firstUrlStatement = nodes.get(1).toString();
@@ -42,13 +35,7 @@ public class URLFinderTest {
     public void onNonparseable() {
         BlobStoreReadOnly blobStore = key -> InputStreamUtils.getEmptyInputStream();
 
-        ArrayList<Quad> nodes = new ArrayList<>();
-        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
-
-        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
-
-        urlFinder.on(statement);
-
+        ArrayList<Quad> nodes = runUrlFinder(blobStore);
         assertThat(nodes.size(), is(2));
 
         String firstUrlStatement = nodes.get(1).toString();
@@ -59,13 +46,7 @@ public class URLFinderTest {
     public void onTextWithNoUrls() {
         BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("haha no URLs to see here", Charset.defaultCharset());
 
-        ArrayList<Quad> nodes = new ArrayList<>();
-        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
-
-        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
-
-        urlFinder.on(statement);
-
+        ArrayList<Quad> nodes = runUrlFinder(blobStore);
         assertThat(nodes.size(), is(2));
 
         String firstUrlStatement = nodes.get(1).toString();
@@ -74,20 +55,9 @@ public class URLFinderTest {
 
     @Test
     public void onZip() {
-        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
-            @Override
-            public InputStream get(IRI key) {
-                return getClass().getResourceAsStream("/bio/guoda/preston/plazidwca.zip");
-            }
-        };
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/plazidwca.zip");
 
-        ArrayList<Quad> nodes = new ArrayList<>();
-        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
-
-        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
-
-        urlFinder.on(statement);
-
+        ArrayList<Quad> nodes = runUrlFinder(blobStore);
         assertThat(nodes.size(), is(152));
 
         String firstUrlStatement = nodes.get(2).toString();
@@ -99,20 +69,9 @@ public class URLFinderTest {
 
     @Test
     public void onText() {
-        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
-            @Override
-            public InputStream get(IRI key) {
-                return getClass().getResourceAsStream("/bio/guoda/preston/process/bhl_item.txt");
-            }
-        };
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
 
-        ArrayList<Quad> nodes = new ArrayList<>();
-        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
-
-        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
-
-        urlFinder.on(statement);
-
+        ArrayList<Quad> nodes = runUrlFinder(blobStore);
         assertThat(nodes.size(), is(11));
 
         String firstUrlStatement = nodes.get(2).toString();
@@ -124,20 +83,9 @@ public class URLFinderTest {
 
     @Test
     public void onNestedZip() {
-        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
-            @Override
-            public InputStream get(IRI key) {
-                return getClass().getResourceAsStream("/bio/guoda/preston/process/nested.zip");
-            }
-        };
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.zip");
 
-        ArrayList<Quad> nodes = new ArrayList<>();
-        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
-
-        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
-
-        urlFinder.on(statement);
-
+        ArrayList<Quad> nodes = runUrlFinder(blobStore);
         assertThat(nodes.size(), is(4));
 
         String level1UrlStatement = nodes.get(2).toString();
@@ -145,5 +93,15 @@ public class URLFinderTest {
 
         String level2UrlStatement = nodes.get(3).toString();
         assertThat(level2UrlStatement, startsWith("<cut:zip:hash://sha256/blub!/level1.txt!/b1-19> <http://www.w3.org/ns/prov#value> \"https://example.org\""));
+    }
+
+    private ArrayList<Quad> runUrlFinder(BlobStoreReadOnly blobStore) {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        URLFinder urlFinder = new URLFinder(blobStore, TestUtil.testListener(nodes));
+
+        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
+
+        urlFinder.on(statement);
+        return nodes;
     }
 }

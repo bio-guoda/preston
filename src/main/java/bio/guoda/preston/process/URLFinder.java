@@ -88,9 +88,8 @@ public class URLFinder extends ProcessorReadOnly {
 
     private ArchiveInputStream getArchiveStream(InputStream in) {
         try {
-            ArchiveInputStream archiveStream = new ArchiveStreamFactory()
+            return new ArchiveStreamFactory()
                     .createArchiveInputStream(in);
-            return archiveStream;
         } catch (ArchiveException e) {
             return null;
         }
@@ -107,9 +106,8 @@ public class URLFinder extends ProcessorReadOnly {
 
     private InputStream getCompressedStream(InputStream in) {
         try {
-            InputStream decompressedStream = new CompressorStreamFactory()
+            return new CompressorStreamFactory()
                     .createCompressorInputStream(in);
-            return decompressedStream;
         } catch (CompressorException e) {
             return null;
         }

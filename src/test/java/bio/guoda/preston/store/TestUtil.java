@@ -31,6 +31,15 @@ public class TestUtil {
         return new BlobStoreAppendOnly(getTestPersistence());
     }
 
+    public static BlobStoreReadOnly getTestBlobStoreForResource(String pathToResource) {
+        return new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                return getClass().getResourceAsStream(pathToResource);
+            }
+        };
+    }
+
     public static ActivityContext getTestCrawlContext() {
         return new ActivityContext() {
             @Override
