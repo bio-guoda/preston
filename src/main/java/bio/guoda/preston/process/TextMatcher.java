@@ -67,7 +67,8 @@ public class TextMatcher extends ProcessorReadOnly {
 
             try (InputStream in = get(version)) {
                 if (in != null) {
-                    attemptToParse(version, in, new StatementsEmitterAdapter() {
+                    InputStream markableInputStream = (in.markSupported()) ? in : new BufferedInputStream(in);
+                    attemptToParse(version, markableInputStream, new StatementsEmitterAdapter() {
                         @Override
                         public void emit(Quad statement) {
                             nodes.add(statement);
