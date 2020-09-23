@@ -39,7 +39,7 @@ public class TextMatcher extends ProcessorReadOnly {
     private static final int MAX_MATCH_SIZE_IN_BYTES = 512;
 
     // From https://urlregex.com/
-    private static final Pattern URL_PATTERN = Pattern.compile("(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+    public static final Pattern URL_PATTERN = Pattern.compile("(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
     private final Pattern pattern;
 

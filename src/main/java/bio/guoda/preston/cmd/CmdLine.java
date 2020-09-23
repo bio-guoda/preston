@@ -65,6 +65,7 @@ public class CmdLine {
                 .addCommand("test", new CmdVerify(), "verify", "check", "validate")
                 .addCommand("seeds", new CmdSeeds())
                 .addCommand("text", new CmdText(), "extract-text")
+                .addCommand("match", new CmdMatch(), "findURLs")
                 .build();
     }
 
