@@ -24,6 +24,6 @@ public class CmdMatch extends CmdProcess {
 
     @Override
     String getActivityDescription() {
-        return "An event that finds the locations of text matching the regular expression " + regex + " inside any encountered content (e.g., hash://sha256/... identifiers).";
+        return "An event that finds the locations of text matching the regular expression '" + regex + "' inside any encountered content (e.g., hash://sha256/... identifiers).";
     }
 }
