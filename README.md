@@ -63,7 +63,7 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
       * [`ls`](#ls) - list/print biodiversity dataset graph
       * [`get`](#get) - print biodiversity dataset graph node (e.g., dwca)
       * [`history`](#history) - show history of biodiversity dataset graph node
-      * [`copyTo`](#copyTo) - copies local ersioned dataset graphs to another location
+      * [`copyTo`](#copyTo) - copies local versioned dataset graphs to another location
       * [`check`](#check) / [`verify`](#verify) - verify/check the integrity of the locally versioned dataset graphs and their datasets.
    * [Use Cases](#use-cases)
       * [`mining citations`](#mining-citations)
@@ -458,7 +458,16 @@ preston update https://data.gbif.no/ipt/rss.do
 
 By running this periodically, you can keep track of dataset changes and retain historic datasets in your Preston archive.  
 
+#### Finding Text In Tracked Contents
 
+The `match` command searches nodes in the biodiversity dataset graph for text that matches a specified pattern. For each match it finds, it outputs the text that was matched and its location, including the node it was found in and where to find the text inside the node. If the `match` command encounters compressed files (e.g., .gz files), it will first decompress them. Files inside file archives (e.g., zip files) will also be searched. If no search pattern is specified, the `match`/`findURLs` command searches for URLs.   
+```console
+$ preston ls | preston match
+...
+<cut:hash://sha256/6d86c332b045e74fe4410f79655a1f47596808c057f30779b9584dba38fa25d5!/b2581-2590> <http://www.w3.org/ns/prov#value> "zootaxa.44" <cf90eac1-6181-44a6-b800-119233f98467> .
+<cut:hash://sha256/6d86c332b045e74fe4410f79655a1f47596808c057f30779b9584dba38fa25d5!/b4959-4968> <http://www.w3.org/ns/prov#value> "zootaxa.42" <cf90eac1-6181-44a6-b800-119233f98467> .
+...
+```
 
 
 
