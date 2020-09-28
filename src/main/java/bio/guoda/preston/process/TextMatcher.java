@@ -170,7 +170,7 @@ public class TextMatcher extends ProcessorReadOnly {
             int numBytesToScan = numBytesToReuse + numBytesRead;
             CharBuffer charBuffer = charset.decode(ByteBuffer.wrap(byteBuffer, 0, numBytesToScan));
             Matcher matcher = pattern.matcher(charBuffer);
-            int nextBytePosition = 0;
+            int nextBytePosition = offset;
             while (matcher.find()) {
                 int charPosMatchStartsAt = matcher.start();
                 int charPosMatchEndsAt = matcher.end();
