@@ -74,6 +74,9 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
       * [`generating citations`](#generating-citations)
       * [`finding copies with hash-archive.org`](#finding-copies-with-hash-archiveorg)
       * [`tracking an GBIF IPT`](#tracking-an-gbif-ipt)
+      * [`tracking an GBIF IPT`](#tracking-an-gbif-ipt)
+      * [`finding text in tracked contents`](#finding-text-in-tracked-contents)
+      * [`generating publication using Jekyll`](#jekyll-publication)
  * [Prerequisites](#prerequisites)
  * [Install](#install)
    * [`standalone`](#standalone)
@@ -469,7 +472,9 @@ $ preston ls | preston match
 ...
 ```
 
+#### Jekyll Publication
 
+See https://github.com/bio-guoda/preston/issues/75 and https://jhpoelen.nl/bees for examples on how to generate a static website from a Preston biodiversity dataset graph.
 
 
 ## Prerequisites
