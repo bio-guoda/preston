@@ -16,6 +16,7 @@ import sun.nio.cs.ThreadLocalCoders;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -66,7 +67,7 @@ public class TextMatcher extends ProcessorReadOnly {
             BlankNodeOrIRI newActivity = toIRI(UUID.randomUUID());
             List<Quad> nodes = new ArrayList<>();
             nodes.add(toStatement(newActivity, USED, version));
-
+Buffer buff;
             try (InputStream in = get(version)) {
                 if (in != null) {
                     InputStream markableInputStream = (in.markSupported()) ? in : new BufferedInputStream(in);
@@ -185,37 +186,37 @@ public class TextMatcher extends ProcessorReadOnly {
                 int charPosMatchEndsAt = matcher.end();
 
                 // Because UTF-8 characters have variable width, report byte positions instead of character positions
-                scanningByteBuffer.position(0);
+                SetBufferPosition(scanningByteBuffer, 0);
 
                 advanceToCorrespondingByte(
                         scanningByteBuffer,
                         charset.encode(charBuffer.subSequence(0, charPosMatchStartsAt)));
-                int bytePosMatchStartsAt = scanningByteBuffer.position();
+                int bytePosMatchStartsAt = GetBufferPosition(scanningByteBuffer);
 
                 advanceToCorrespondingByte(
                         scanningByteBuffer,
                         charset.encode(charBuffer.subSequence(charPosMatchStartsAt, charPosMatchEndsAt)));
-                int bytePosMatchEndsAt = scanningByteBuffer.position();
+                int bytePosMatchEndsAt = GetBufferPosition(scanningByteBuffer);
 
                 String matchString = matcher.group();
                 emitter.emit(toStatement(getCutIri(version, offset + bytePosMatchStartsAt, offset + bytePosMatchEndsAt), HAS_VALUE, toLiteral(matchString)));
             }
 
             numBytesScannedInLastIteration = numBytesToScan;
-            numBytesToReuse = Integer.min(MAX_MATCH_SIZE_IN_BYTES, numBytesScannedInLastIteration - scanningByteBuffer.position());
+            numBytesToReuse = Integer.min(MAX_MATCH_SIZE_IN_BYTES, numBytesScannedInLastIteration - GetBufferPosition(scanningByteBuffer));
             offset += numBytesScannedInLastIteration - numBytesToReuse;
         }
     }
 
     private void advanceToCorrespondingByte(ByteBuffer byteBuffer, ByteBuffer filteredByteBuffer) {
-        int i = byteBuffer.position();
-        for (int j = filteredByteBuffer.position(); i < byteBuffer.limit() && j < filteredByteBuffer.limit(); ++i) {
+        int i = GetBufferPosition(byteBuffer);
+        for (int j = GetBufferPosition(filteredByteBuffer); i < byteBuffer.limit() && j < filteredByteBuffer.limit(); ++i) {
             if (byteBuffer.get(i) == filteredByteBuffer.get(j)) {
                 ++j;
             }
         }
 
-        byteBuffer.position(i);
+        SetBufferPosition(byteBuffer, i);
     }
 
     private static IRI getEntryIri(IRI version, String name) {
@@ -228,6 +229,14 @@ public class TextMatcher extends ProcessorReadOnly {
 
     private static IRI getCutIri(IRI fileIri, int startAt, int endAt) {
         return toIRI(String.format("cut:%s!/b%d-%d", fileIri.getIRIString(), startAt + 1, endAt));
+    }
+
+    private int GetBufferPosition(Buffer buffer) {
+        return buffer.position();
+    }
+
+    private void SetBufferPosition(Buffer buffer, int newPosition) {
+        buffer.position(newPosition);
     }
 
 }
