@@ -11,6 +11,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
+import sun.nio.cs.ThreadLocalCoders;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.CodingErrorAction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -168,32 +170,52 @@ public class TextMatcher extends ProcessorReadOnly {
             }
 
             int numBytesToScan = numBytesToReuse + numBytesRead;
-            CharBuffer charBuffer = charset.decode(ByteBuffer.wrap(byteBuffer, 0, numBytesToScan));
+            ByteBuffer scanningByteBuffer = ByteBuffer.wrap(byteBuffer, 0, numBytesToScan);
+
+            // Default CharBuffer::decode behavior is to replace uninterpretable bytes with an "unknown" character that
+            // is not always the same length in bytes. Instead, ignore those bytes and reinsert them after encoding.
+            CharBuffer charBuffer = ThreadLocalCoders.decoderFor(charset)
+                    .onMalformedInput(CodingErrorAction.IGNORE)
+                    .onUnmappableCharacter(CodingErrorAction.IGNORE)
+                    .decode(scanningByteBuffer);
+
             Matcher matcher = pattern.matcher(charBuffer);
-            int nextBytePosition = offset;
             while (matcher.find()) {
                 int charPosMatchStartsAt = matcher.start();
                 int charPosMatchEndsAt = matcher.end();
 
                 // Because UTF-8 characters have variable width, report byte positions instead of character positions
-                int bytePosMatchStartsAt = offset + getNumBytesInCharBuffer(charset, charBuffer, 0, charPosMatchStartsAt);
-                int matchSizeInBytes = getNumBytesInCharBuffer(charset, charBuffer, charPosMatchStartsAt, charPosMatchEndsAt);
-                int bytePosMatchEndsAt = bytePosMatchStartsAt + matchSizeInBytes;
+                scanningByteBuffer.position(0);
+
+                advanceToCorrespondingByte(
+                        scanningByteBuffer,
+                        charset.encode(charBuffer.subSequence(0, charPosMatchStartsAt)));
+                int bytePosMatchStartsAt = scanningByteBuffer.position();
+
+                advanceToCorrespondingByte(
+                        scanningByteBuffer,
+                        charset.encode(charBuffer.subSequence(charPosMatchStartsAt, charPosMatchEndsAt)));
+                int bytePosMatchEndsAt = scanningByteBuffer.position();
 
                 String matchString = matcher.group();
-                emitter.emit(toStatement(getCutIri(version, bytePosMatchStartsAt, bytePosMatchEndsAt), HAS_VALUE, toLiteral(matchString)));
-
-                nextBytePosition = bytePosMatchEndsAt;
+                emitter.emit(toStatement(getCutIri(version, offset + bytePosMatchStartsAt, offset + bytePosMatchEndsAt), HAS_VALUE, toLiteral(matchString)));
             }
 
             numBytesScannedInLastIteration = numBytesToScan;
-            numBytesToReuse = Integer.min(MAX_MATCH_SIZE_IN_BYTES, numBytesScannedInLastIteration - (nextBytePosition - offset));
+            numBytesToReuse = Integer.min(MAX_MATCH_SIZE_IN_BYTES, numBytesScannedInLastIteration - scanningByteBuffer.position());
             offset += numBytesScannedInLastIteration - numBytesToReuse;
         }
     }
 
-    private int getNumBytesInCharBuffer(Charset charset, CharBuffer charBuffer, int startAt, int endAt) {
-        return charset.encode(charBuffer.subSequence(startAt, endAt)).limit();
+    private void advanceToCorrespondingByte(ByteBuffer byteBuffer, ByteBuffer filteredByteBuffer) {
+        int i = byteBuffer.position();
+        for (int j = filteredByteBuffer.position(); i < byteBuffer.limit() && j < filteredByteBuffer.limit(); ++i) {
+            if (byteBuffer.get(i) == filteredByteBuffer.get(j)) {
+                ++j;
+            }
+        }
+
+        byteBuffer.position(i);
     }
 
     private static IRI getEntryIri(IRI version, String name) {

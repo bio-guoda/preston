@@ -1,37 +1,21 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.cmd.Persisting;
-import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystemTest;
 import bio.guoda.preston.store.TestUtil;
 import com.mchange.v1.io.InputStreamUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.Quad;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static bio.guoda.preston.store.TestUtil.getTestBlobStoreForResource;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class TextMatcherTest {
@@ -112,8 +96,14 @@ public class TextMatcherTest {
     }
 
     @Test
-    public void noArrayIndexOutOfBoundsException() {
+    public void parseFileWithNoEarlyMatches() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/data/97/cb/97cbeae429fbc95d1859f7afa28b33f08ac64125ba72511c49c4b77ca66d2d66");
+        runUrlFinder(blobStore);
+    }
+
+    @Test
+    public void parseFileWithMalformedCharacters() {
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/data/42/56/4256fd83db9270d2236776bc4bd45e22b15235e0798ba59952f8ddd1f7fbe7b2");
         runUrlFinder(blobStore);
     }
 
