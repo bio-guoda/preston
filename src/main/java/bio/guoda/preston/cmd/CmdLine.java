@@ -29,7 +29,6 @@ public class CmdLine {
             throw ex;
         } catch (Throwable ex) {
             LOG.error("unexpected exception", ex);
-            printUsage(jc);
             throw ex;
         }
     }
