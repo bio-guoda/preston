@@ -14,12 +14,7 @@ public class CmdList extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        run(new LogErrorHandler() {
-            @Override
-            public void handleError() {
-                System.exit(0);
-            }
-        });
+        run(() -> System.exit(0));
     }
 
     public void run(LogErrorHandler handler) {

@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
@@ -26,7 +27,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
+import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.RefNodeConstants.USED;
 import static bio.guoda.preston.model.RefNodeFactory.getVersion;
@@ -45,6 +48,7 @@ public class TextMatcher extends ProcessorReadOnly {
     public static final Pattern URL_PATTERN = Pattern.compile("(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
     private final Pattern pattern;
+    private int batchSize = 256;
 
     public TextMatcher(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         this(URL_PATTERN, blobStoreReadOnly, listeners);
@@ -63,26 +67,20 @@ public class TextMatcher extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (hasVersionAvailable(statement)) {
             IRI version = (IRI) getVersion(statement);
+            final List<Quad> nodes = new ArrayList<>();
 
-            BlankNodeOrIRI newActivity = toIRI(UUID.randomUUID());
-            List<Quad> nodes = new ArrayList<>();
-            nodes.add(toStatement(newActivity, USED, version));
-Buffer buff;
+            BatchingEmitter batchingStatementEmitter = new BatchingEmitter(nodes, version, statement);
             try (InputStream in = get(version)) {
                 if (in != null) {
                     InputStream markableInputStream = (in.markSupported()) ? in : new BufferedInputStream(in);
-                    attemptToParse(version, markableInputStream, new StatementsEmitterAdapter() {
-                        @Override
-                        public void emit(Quad statement) {
-                            nodes.add(statement);
-                        }
-                    });
+                    attemptToParse(version, markableInputStream, batchingStatementEmitter);
                 }
             } catch (IOException e) {
                 // ignore; this is opportunistic
             }
 
-            emitAsNewActivity(nodes.stream(), this, statement.getGraphName(), newActivity);
+            // emit remaining
+            batchingStatementEmitter.emitBatch();
         }
     }
 
@@ -237,6 +235,55 @@ Buffer buff;
 
     private void SetBufferPosition(Buffer buffer, int newPosition) {
         buffer.position(newPosition);
+    }
+
+    public void setBatchSize(int batchSize) {
+        this.batchSize = batchSize;
+    }
+
+    public int getBatchSize() {
+        return batchSize;
+    }
+
+    private class BatchingEmitter extends StatementsEmitterAdapter {
+
+        private final List<Quad> nodes;
+        private final IRI version;
+        private final Quad statement;
+
+        public BatchingEmitter(List<Quad> nodes, IRI version, Quad statement) {
+            this.nodes = nodes;
+            this.version = version;
+            this.statement = statement;
+        }
+
+        private void emitBatch() {
+            BlankNodeOrIRI newActivity = toIRI(UUID.randomUUID());
+            emitAsNewActivity(
+                    Stream.concat(
+                            Stream.of(
+                                    toStatement(newActivity, USED, version),
+                                    toStatement(newActivity, DESCRIPTION, RefNodeFactory.toEnglishLiteral(TextMatcher.this.getActivityDescription()))
+                            ),
+                                    nodes.stream()
+                    ),
+                    TextMatcher.this,
+                    statement.getGraphName(),
+                    newActivity);
+            nodes.clear();
+        }
+
+        @Override
+        public void emit(Quad statement) {
+            nodes.add(statement);
+            if (nodes.size() > getBatchSize()) {
+                emitBatch();
+            }
+        }
+    }
+
+    private String getActivityDescription() {
+        return "An activity that finds the locations of text matching the regular expression '" + pattern.pattern() + "' inside any encountered content (e.g., hash://sha256/... identifiers).";
     }
 
 }

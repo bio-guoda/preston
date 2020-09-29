@@ -31,14 +31,12 @@ public class CmdMatchTest {
             }
         };
 
-        StatementStoreNull statementStoreNull = new StatementStoreNull();
-
         CmdMatch cmdMatch = new CmdMatch();
 
         Quad quad = toStatement(toIRI("something"), HAS_VERSION, aContentHash);
         cmdMatch.setInputStream(new ByteArrayInputStream(quad.toString().getBytes()));
 
-        cmdMatch.run(blobStoreNull, statementStoreNull);
+        cmdMatch.run(blobStoreNull);
 
         assertThat(blobStoreNull.getAttemptCount.get(), is(1));
     }
