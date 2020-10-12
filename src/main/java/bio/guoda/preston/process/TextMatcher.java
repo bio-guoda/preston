@@ -196,7 +196,7 @@ public class TextMatcher extends ProcessorReadOnly {
                         charset.encode(charBuffer.subSequence(charPosMatchStartsAt, charPosMatchEndsAt)));
                 int bytePosMatchEndsAt = GetBufferPosition(scanningByteBuffer);
 
-                if (bytePosMatchEndsAt == BUFFER_SIZE) {
+                if (charPosMatchStartsAt >= BUFFER_SIZE - MAX_MATCH_SIZE_IN_BYTES) {
                     SetBufferPosition(scanningByteBuffer, bytePosMatchStartsAt);
                     break;
                 }

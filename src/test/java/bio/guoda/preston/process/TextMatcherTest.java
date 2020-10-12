@@ -135,7 +135,7 @@ public class TextMatcherTest {
         assertThat(nodes.size(), is(4));
 
         String matchAcrossBufferBoundary = nodes.get(nodes.size() - 1).toString();
-        assertThat(matchAcrossBufferBoundary, startsWith("<cut:hash://sha256/blub!/b4081-4114> <http://www.w3.org/ns/prov#value> \"http://thereisa4KBboundaryhere.com\""));
+        assertThat(matchAcrossBufferBoundary, startsWith("<cut:hash://sha256/blub!/b4081-4115> <http://www.w3.org/ns/prov#value> \"http://thereisa.4KBboundaryhere.com\""));
     }
 
     private ArrayList<Quad> runUrlFinder(BlobStoreReadOnly blobStore) {
