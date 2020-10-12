@@ -197,7 +197,7 @@ public class TextMatcher extends ProcessorReadOnly {
                 int bytePosMatchEndsAt = GetBufferPosition(scanningByteBuffer);
 
                 if (bytePosMatchEndsAt == BUFFER_SIZE) {
-                    scanningByteBuffer.position(bytePosMatchStartsAt);
+                    SetBufferPosition(scanningByteBuffer, bytePosMatchStartsAt);
                     break;
                 }
                 else {
