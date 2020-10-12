@@ -132,10 +132,10 @@ public class TextMatcherTest {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/textmatcher-4KB-boundary-test.tsv");
 
         ArrayList<Quad> nodes = runUrlFinder(blobStore);
-        assertThat(nodes.size(), is(20));
+        assertThat(nodes.size(), is(4));
 
         String matchAcrossBufferBoundary = nodes.get(nodes.size() - 1).toString();
-        assertThat(matchAcrossBufferBoundary, startsWith("<cut:hash://sha256/blub!/b3708-3757> <http://www.w3.org/ns/prov#value> \"http://arctos.database.museum/guid/DMNS:Mamm:13998\""));
+        assertThat(matchAcrossBufferBoundary, startsWith("<cut:hash://sha256/blub!/b4081-4114> <http://www.w3.org/ns/prov#value> \"http://thereisa4KBboundaryhere.com\""));
     }
 
     private ArrayList<Quad> runUrlFinder(BlobStoreReadOnly blobStore) {
