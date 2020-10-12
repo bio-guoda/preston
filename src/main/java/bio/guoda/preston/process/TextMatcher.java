@@ -160,15 +160,19 @@ public class TextMatcher extends ProcessorReadOnly {
         int numBytesToReuse = 0;
         int numBytesScannedInLastIteration = 0;
         while (true) {
+            int numBytesToScan = numBytesToReuse;
+
             // Copy text from the end of the buffer to the beginning in case matches occur across buffer boundaries
             System.arraycopy(byteBuffer, numBytesScannedInLastIteration - numBytesToReuse, byteBuffer, 0, numBytesToReuse);
 
             int numBytesRead = in.read(byteBuffer, numBytesToReuse, byteBuffer.length - numBytesToReuse);
-            if (numBytesRead == -1) {
-                break;
+            if (numBytesRead > 0) {
+                numBytesToScan += numBytesRead;
             }
 
-            int numBytesToScan = numBytesToReuse + numBytesRead;
+            if (numBytesToScan <= 0) {
+                break;
+            }
             ByteBuffer scanningByteBuffer = ByteBuffer.wrap(byteBuffer, 0, numBytesToScan);
 
             // Default CharBuffer::decode behavior is to replace uninterpretable bytes with an "unknown" character that
@@ -196,7 +200,7 @@ public class TextMatcher extends ProcessorReadOnly {
                         charset.encode(charBuffer.subSequence(charPosMatchStartsAt, charPosMatchEndsAt)));
                 int bytePosMatchEndsAt = GetBufferPosition(scanningByteBuffer);
 
-                if (charPosMatchStartsAt >= BUFFER_SIZE - MAX_MATCH_SIZE_IN_BYTES) {
+                if (bytePosMatchStartsAt >= BUFFER_SIZE - MAX_MATCH_SIZE_IN_BYTES) {
                     SetBufferPosition(scanningByteBuffer, bytePosMatchStartsAt);
                     break;
                 }
