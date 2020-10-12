@@ -196,8 +196,14 @@ public class TextMatcher extends ProcessorReadOnly {
                         charset.encode(charBuffer.subSequence(charPosMatchStartsAt, charPosMatchEndsAt)));
                 int bytePosMatchEndsAt = GetBufferPosition(scanningByteBuffer);
 
-                String matchString = matcher.group();
-                emitter.emit(toStatement(getCutIri(version, offset + bytePosMatchStartsAt, offset + bytePosMatchEndsAt), HAS_VALUE, toLiteral(matchString)));
+                if (bytePosMatchEndsAt == BUFFER_SIZE) {
+                    scanningByteBuffer.position(bytePosMatchStartsAt);
+                    break;
+                }
+                else {
+                    String matchString = matcher.group();
+                    emitter.emit(toStatement(getCutIri(version, offset + bytePosMatchStartsAt, offset + bytePosMatchEndsAt), HAS_VALUE, toLiteral(matchString)));
+                }
             }
 
             numBytesScannedInLastIteration = numBytesToScan;

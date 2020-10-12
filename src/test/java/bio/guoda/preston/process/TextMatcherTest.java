@@ -127,6 +127,17 @@ public class TextMatcherTest {
         runUrlFinder(blobStore);
     }
 
+    @Test
+    public void detectMatchesAcrossBufferBoundaries() {
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/textmatcher-4KB-boundary-test.tsv");
+
+        ArrayList<Quad> nodes = runUrlFinder(blobStore);
+        assertThat(nodes.size(), is(20));
+
+        String matchAcrossBufferBoundary = nodes.get(nodes.size() - 1).toString();
+        assertThat(matchAcrossBufferBoundary, startsWith("<cut:hash://sha256/blub!/b3708-3757> <http://www.w3.org/ns/prov#value> \"http://arctos.database.museum/guid/DMNS:Mamm:13998\""));
+    }
+
     private ArrayList<Quad> runUrlFinder(BlobStoreReadOnly blobStore) {
         return runUrlFinder(blobStore, 256);
     }
