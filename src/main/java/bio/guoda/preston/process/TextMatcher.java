@@ -165,8 +165,9 @@ public class TextMatcher extends ProcessorReadOnly {
             // Copy text from the end of the buffer to the beginning in case matches occur across buffer boundaries
             System.arraycopy(byteBuffer, numBytesScannedInLastIteration - numBytesToReuse, byteBuffer, 0, numBytesToReuse);
 
-            int numBytesRead = in.read(byteBuffer, numBytesToReuse, byteBuffer.length - numBytesToReuse);
-            if (numBytesRead > 0) {
+            int numBytesRead;
+            while ((numBytesRead = in.read(byteBuffer, numBytesToScan, byteBuffer.length - numBytesToScan)) > 0)
+            {
                 numBytesToScan += numBytesRead;
             }
 
