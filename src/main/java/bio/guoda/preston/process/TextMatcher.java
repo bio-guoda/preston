@@ -23,13 +23,17 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CodingErrorAction;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
+import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.RefNodeConstants.USED;
 import static bio.guoda.preston.model.RefNodeFactory.getVersion;
@@ -45,7 +49,7 @@ public class TextMatcher extends ProcessorReadOnly {
     private static final int MAX_MATCH_SIZE_IN_BYTES = 512;
 
     // From https://urlregex.com/
-    public static final Pattern URL_PATTERN = Pattern.compile("(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+    public static final Pattern URL_PATTERN = Pattern.compile("(?>https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
     private final Pattern pattern;
     private int batchSize = 256;
@@ -183,49 +187,68 @@ public class TextMatcher extends ProcessorReadOnly {
                     .onUnmappableCharacter(CodingErrorAction.IGNORE)
                     .decode(scanningByteBuffer);
 
+            SetBufferPosition(scanningByteBuffer, 0);
+
             Matcher matcher = pattern.matcher(charBuffer);
+            CharBufferByteReader charBufferByteReader = new CharBufferByteReader(scanningByteBuffer, charBuffer, charset);
+
             while (matcher.find()) {
                 int charPosMatchStartsAt = matcher.start();
-                int charPosMatchEndsAt = matcher.end();
-
-                // Because UTF-8 characters have variable width, report byte positions instead of character positions
-                SetBufferPosition(scanningByteBuffer, 0);
-
-                advanceToCorrespondingByte(
-                        scanningByteBuffer,
-                        charset.encode(charBuffer.subSequence(0, charPosMatchStartsAt)));
-                int bytePosMatchStartsAt = GetBufferPosition(scanningByteBuffer);
-
-                advanceToCorrespondingByte(
-                        scanningByteBuffer,
-                        charset.encode(charBuffer.subSequence(charPosMatchStartsAt, charPosMatchEndsAt)));
-                int bytePosMatchEndsAt = GetBufferPosition(scanningByteBuffer);
+                int bytePosMatchStartsAt = charBufferByteReader.advance(charPosMatchStartsAt);
 
                 if (bytePosMatchStartsAt >= BUFFER_SIZE - MAX_MATCH_SIZE_IN_BYTES) {
                     SetBufferPosition(scanningByteBuffer, bytePosMatchStartsAt);
                     break;
                 }
-                else {
-                    String matchString = matcher.group();
-                    emitter.emit(toStatement(getCutIri(version, offset + bytePosMatchStartsAt, offset + bytePosMatchEndsAt), HAS_VALUE, toLiteral(matchString)));
+
+                List<Integer> orderedCharPositions = new LinkedList<>();
+                for (int i = 0; i <= matcher.groupCount(); ++i) {
+                    if (matcher.group(i) != null) {
+                        orderedCharPositions.add(matcher.start(i));
+                        orderedCharPositions.add(matcher.end(i));
+                    }
                 }
+
+                orderedCharPositions.sort(null);
+
+                // Because characters can have variable width, report byte positions instead of character positions
+                Map<Integer, Integer> charToBytePositions = orderedCharPositions.stream().distinct().collect(Collectors.toMap(
+                        charPosition -> charPosition,
+                        charBufferByteReader::advance
+                ));
+
+                int charPosMatchEndsAt = matcher.end();
+                int bytePosMatchEndsAt = charToBytePositions.get(charPosMatchEndsAt);
+                IRI matchIri = getCutIri(version, offset + bytePosMatchStartsAt, offset + bytePosMatchEndsAt);
+
+                for (int i = 0; i <= matcher.groupCount(); ++i) {
+                    if (matcher.group(i) != null) {
+                        int charPosGroupStartsAt = matcher.start(i);
+                        int charPosGroupEndsAt = matcher.end(i);
+
+                        int bytePosGroupStartsAt = charToBytePositions.get(charPosGroupStartsAt);
+                        int bytePosGroupEndsAt = charToBytePositions.get(charPosGroupEndsAt);
+
+                        String groupString = matcher.group(i);
+                        IRI groupIri = getCutIri(version, offset + bytePosGroupStartsAt, offset + bytePosGroupEndsAt);
+                        emitter.emit(toStatement(groupIri, HAS_VALUE, toLiteral(groupString)));
+
+                        if (i > 0) {
+                            emitter.emit(toStatement(matchIri, HAD_MEMBER, groupIri));
+                        }
+                    }
+                }
+            }
+
+            // If no matches were found, we need to advance the buffer's position manually
+            if (GetBufferPosition(scanningByteBuffer) == 0) {
+                SetBufferPosition(scanningByteBuffer, scanningByteBuffer.limit());
             }
 
             numBytesScannedInLastIteration = numBytesToScan;
             numBytesToReuse = Integer.min(MAX_MATCH_SIZE_IN_BYTES, numBytesScannedInLastIteration - GetBufferPosition(scanningByteBuffer));
             offset += numBytesScannedInLastIteration - numBytesToReuse;
         }
-    }
-
-    private void advanceToCorrespondingByte(ByteBuffer byteBuffer, ByteBuffer filteredByteBuffer) {
-        int i = GetBufferPosition(byteBuffer);
-        for (int j = GetBufferPosition(filteredByteBuffer); i < byteBuffer.limit() && j < filteredByteBuffer.limit(); ++i) {
-            if (byteBuffer.get(i) == filteredByteBuffer.get(j)) {
-                ++j;
-            }
-        }
-
-        SetBufferPosition(byteBuffer, i);
     }
 
     private static IRI getEntryIri(IRI version, String name) {
@@ -297,4 +320,45 @@ public class TextMatcher extends ProcessorReadOnly {
         return "An activity that finds the locations of text matching the regular expression '" + pattern.pattern() + "' inside any encountered content (e.g., hash://sha256/... identifiers).";
     }
 
+    private int advanceToCorrespondingByte(ByteBuffer byteBuffer, ByteBuffer filteredByteBuffer) {
+        int i = GetBufferPosition(byteBuffer);
+        for (int j = GetBufferPosition(filteredByteBuffer); i < byteBuffer.limit() && j < filteredByteBuffer.limit(); ++i) {
+            if (byteBuffer.get(i) == filteredByteBuffer.get(j)) {
+                ++j;
+            }
+        }
+
+        SetBufferPosition(byteBuffer, i);
+        return i;
+    }
+
+    private class CharBufferByteReader {
+        private ByteBuffer byteBuffer;
+        private CharBuffer charBuffer;
+        private Charset charset;
+
+        private int charPosition = 0;
+
+        public CharBufferByteReader(ByteBuffer scanningByteBuffer, CharBuffer charBuffer, Charset charset) {
+            this.byteBuffer = scanningByteBuffer;
+            this.charBuffer = charBuffer;
+            this.charset = charset;
+        }
+
+        int advance(int newCharPosition) {
+            ByteBuffer filteredByteBuffer = charset.encode(charBuffer.subSequence(this.charPosition, newCharPosition));
+
+            int i = GetBufferPosition(byteBuffer);
+            for (int j = 0; i < byteBuffer.limit() && j < filteredByteBuffer.limit(); ++i) {
+                if (byteBuffer.get(i) == filteredByteBuffer.get(j)) {
+                    ++j;
+                }
+            }
+
+            SetBufferPosition(byteBuffer, i);
+            this.charPosition = newCharPosition;
+
+            return i;
+        }
+    }
 }

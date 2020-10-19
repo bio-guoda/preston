@@ -10,6 +10,9 @@ import org.junit.Test;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
@@ -19,6 +22,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class TextMatcherTest {
 
@@ -26,7 +30,7 @@ public class TextMatcherTest {
     public void onUnresolvable() {
         BlobStoreReadOnly blobStore = TestUtil.getTestBlobStore();
 
-        ArrayList<Quad> nodes = runUrlFinder(blobStore);
+        ArrayList<Quad> nodes = runTextFinder(blobStore);
         assertThat(nodes.size(), is(3));
 
         String firstUrlStatement = nodes.get(1).toString();
@@ -40,7 +44,7 @@ public class TextMatcherTest {
     public void onNonparseable() {
         BlobStoreReadOnly blobStore = key -> InputStreamUtils.getEmptyInputStream();
 
-        ArrayList<Quad> nodes = runUrlFinder(blobStore);
+        ArrayList<Quad> nodes = runTextFinder(blobStore);
         assertThat(nodes.size(), is(3));
 
         String firstUrlStatement = nodes.get(1).toString();
@@ -51,7 +55,7 @@ public class TextMatcherTest {
     public void onTextWithNoUrls() {
         BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("haha no URLs to see here", Charset.defaultCharset());
 
-        ArrayList<Quad> nodes = runUrlFinder(blobStore);
+        ArrayList<Quad> nodes = runTextFinder(blobStore);
         assertThat(nodes.size(), is(3));
 
         String firstUrlStatement = nodes.get(1).toString();
@@ -62,7 +66,7 @@ public class TextMatcherTest {
     public void onZip() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/plazidwca.zip");
 
-        ArrayList<Quad> nodes = runUrlFinder(blobStore);
+        ArrayList<Quad> nodes = runTextFinder(blobStore);
         assertThat(nodes.size(), is(153));
 
         String firstUrlStatement = nodes.get(3).toString();
@@ -76,7 +80,7 @@ public class TextMatcherTest {
     public void onZipBatchSize100() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/plazidwca.zip");
 
-        ArrayList<Quad> nodes = runUrlFinder(blobStore, 100);
+        ArrayList<Quad> nodes = runTextFinder(blobStore, 100);
         assertThat(nodes.size(), is(156));
 
         long numberOfActivities = nodes.stream()
@@ -91,7 +95,7 @@ public class TextMatcherTest {
     public void onText() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
 
-        ArrayList<Quad> nodes = runUrlFinder(blobStore);
+        ArrayList<Quad> nodes = runTextFinder(blobStore);
         assertThat(nodes.size(), is(12));
 
         String firstUrlStatement = nodes.get(3).toString();
@@ -105,7 +109,7 @@ public class TextMatcherTest {
     public void onNestedZip() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.zip");
 
-        ArrayList<Quad> nodes = runUrlFinder(blobStore);
+        ArrayList<Quad> nodes = runTextFinder(blobStore);
         assertThat(nodes.size(), is(5));
 
         String level1UrlStatement = nodes.get(3).toString();
@@ -118,33 +122,51 @@ public class TextMatcherTest {
     @Test
     public void parseFileWithNoEarlyMatches() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/data/97/cb/97cbeae429fbc95d1859f7afa28b33f08ac64125ba72511c49c4b77ca66d2d66");
-        runUrlFinder(blobStore);
+        runTextFinder(blobStore);
     }
 
     @Test
     public void parseFileWithMalformedCharacters() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/data/42/56/4256fd83db9270d2236776bc4bd45e22b15235e0798ba59952f8ddd1f7fbe7b2");
-        runUrlFinder(blobStore);
+        runTextFinder(blobStore);
     }
 
     @Test
     public void detectMatchesAcrossBufferBoundaries() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/textmatcher-4KB-boundary-test.tsv");
 
-        ArrayList<Quad> nodes = runUrlFinder(blobStore);
+        ArrayList<Quad> nodes = runTextFinder(blobStore);
         assertThat(nodes.size(), is(4));
 
         String matchAcrossBufferBoundary = nodes.get(nodes.size() - 1).toString();
         assertThat(matchAcrossBufferBoundary, startsWith("<cut:hash://sha256/blub!/b4081-4115> <http://www.w3.org/ns/prov#value> \"http://thereisa.4KBboundaryhere.com\""));
     }
 
-    private ArrayList<Quad> runUrlFinder(BlobStoreReadOnly blobStore) {
-        return runUrlFinder(blobStore, 256);
+    @Test
+    public void usingRegexGroups() {
+        BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("the duck is in the pond", Charset.defaultCharset());
+
+        ArrayList<Quad> nodes = runTextFinder(blobStore, Pattern.compile("the (?<what>\\S+) is in the (?<where>\\S+)"));
+        assertThat(nodes.size(), is(8));
+
+        List<String> triples = nodes.stream().map((quad) -> quad.asTriple().toString()).collect(Collectors.toList());
+
+        assertTrue(triples.contains("<cut:hash://sha256/blub!/b1-23> <http://www.w3.org/ns/prov#value> \"the duck is in the pond\" ."));
+        assertTrue(triples.contains("<cut:hash://sha256/blub!/b5-8> <http://www.w3.org/ns/prov#value> \"duck\" ."));
+        assertTrue(triples.contains("<cut:hash://sha256/blub!/b1-23> <http://www.w3.org/ns/prov#hadMember> <cut:hash://sha256/blub!/b5-8> ."));
+        assertTrue(triples.contains("<cut:hash://sha256/blub!/b20-23> <http://www.w3.org/ns/prov#value> \"pond\" ."));
+        assertTrue(triples.contains("<cut:hash://sha256/blub!/b1-23> <http://www.w3.org/ns/prov#hadMember> <cut:hash://sha256/blub!/b20-23> ."));
     }
 
-    private ArrayList<Quad> runUrlFinder(BlobStoreReadOnly blobStore, int batchSize) {
+    private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore) { return runTextFinder(blobStore, TextMatcher.URL_PATTERN, 256); }
+
+    private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore, int batchSize) { return runTextFinder(blobStore, TextMatcher.URL_PATTERN, batchSize); }
+
+    private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore, Pattern pattern) { return runTextFinder(blobStore, pattern, 256); }
+
+    private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore, Pattern pattern, int batchSize) {
         ArrayList<Quad> nodes = new ArrayList<>();
-        TextMatcher textMatcher = new TextMatcher(blobStore, TestUtil.testListener(nodes));
+        TextMatcher textMatcher = new TextMatcher(pattern, blobStore, TestUtil.testListener(nodes));
         textMatcher.setBatchSize(batchSize);
 
         Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
