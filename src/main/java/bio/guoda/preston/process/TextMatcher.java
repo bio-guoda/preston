@@ -10,7 +10,6 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.cxf.common.util.URIParserUtil;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
 import sun.nio.cs.ThreadLocalCoders;
@@ -18,6 +17,8 @@ import sun.nio.cs.ThreadLocalCoders;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -147,7 +148,7 @@ public class TextMatcher extends ProcessorReadOnly {
                 InputStream entryStream = new BufferedInputStream(in);
                 try {
                     attemptToParse(getEntryIri(version, entry.getName()), entryStream, emitter);
-                } catch (IOException e) {
+                } catch (IOException | URISyntaxException e) {
                     // ignore; this is opportunistic
                 }
             }
@@ -252,8 +253,9 @@ public class TextMatcher extends ProcessorReadOnly {
         }
     }
 
-    private static IRI getEntryIri(IRI version, String name) {
-        return toIRI(URIParserUtil.escapeChars((String.format("zip:%s!/%s", version.getIRIString(), name))));
+    private static IRI getEntryIri(IRI version, String name) throws URISyntaxException {
+        URI uri = new URI("zip", String.format("%s!/%s", version.getIRIString(), name), null);
+        return toIRI(uri);
     }
 
     private static IRI getLineIri(IRI fileIri, int line) {
