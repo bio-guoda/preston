@@ -258,10 +258,6 @@ public class TextMatcher extends ProcessorReadOnly {
         return toIRI(uri);
     }
 
-    private static IRI getLineIri(IRI fileIri, int line) {
-        return toIRI(String.format("line:%s!/%d", fileIri.getIRIString(), line));
-    }
-
     private static IRI getCutIri(IRI fileIri, int startAt, int endAt) {
         return toIRI(String.format("cut:%s!/b%d-%d", fileIri.getIRIString(), startAt + 1, endAt));
     }
@@ -321,18 +317,6 @@ public class TextMatcher extends ProcessorReadOnly {
 
     private String getActivityDescription() {
         return "An activity that finds the locations of text matching the regular expression '" + pattern.pattern() + "' inside any encountered content (e.g., hash://sha256/... identifiers).";
-    }
-
-    private int advanceToCorrespondingByte(ByteBuffer byteBuffer, ByteBuffer filteredByteBuffer) {
-        int i = GetBufferPosition(byteBuffer);
-        for (int j = GetBufferPosition(filteredByteBuffer); i < byteBuffer.limit() && j < filteredByteBuffer.limit(); ++i) {
-            if (byteBuffer.get(i) == filteredByteBuffer.get(j)) {
-                ++j;
-            }
-        }
-
-        SetBufferPosition(byteBuffer, i);
-        return i;
     }
 
     private class CharBufferByteReader {
