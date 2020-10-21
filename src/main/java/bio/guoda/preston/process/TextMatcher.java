@@ -10,6 +10,7 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.cxf.common.util.URIParserUtil;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
 import sun.nio.cs.ThreadLocalCoders;
@@ -252,7 +253,7 @@ public class TextMatcher extends ProcessorReadOnly {
     }
 
     private static IRI getEntryIri(IRI version, String name) {
-        return toIRI(String.format("zip:%s!/%s", version.getIRIString(), name));
+        return toIRI(URIParserUtil.escapeChars((String.format("zip:%s!/%s", version.getIRIString(), name))));
     }
 
     private static IRI getLineIri(IRI fileIri, int line) {

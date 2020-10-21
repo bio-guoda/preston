@@ -120,6 +120,17 @@ public class TextMatcherTest {
     }
 
     @Test
+    public void onArchiveWithWhitespaceInFileNames() {
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/archive-with-whitespace-file-names.zip");
+
+        ArrayList<Quad> nodes = runTextFinder(blobStore);
+        assertThat(nodes.size(), is(4));
+
+        String level1UrlStatement = nodes.get(3).toString();
+        assertThat(level1UrlStatement, startsWith("<cut:zip:hash://sha256/blub!/name%20with%20spaces.txt!/b1-19> <http://www.w3.org/ns/prov#value> \"https://example.org\""));
+    }
+
+    @Test
     public void parseFileWithNoEarlyMatches() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/data/97/cb/97cbeae429fbc95d1859f7afa28b33f08ac64125ba72511c49c4b77ca66d2d66");
         runTextFinder(blobStore);
