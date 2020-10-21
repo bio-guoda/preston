@@ -157,14 +157,15 @@ public class TextMatcherTest {
     public void usingRegexGroups() {
         BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("the duck is in the pond", Charset.defaultCharset());
 
-        ArrayList<Quad> nodes = runTextFinder(blobStore, Pattern.compile("the (?<what>\\S+) is in the (?<where>\\S+)"));
-        assertThat(nodes.size(), is(8));
+        ArrayList<Quad> nodes = runTextFinder(blobStore, Pattern.compile("(?:the) (?<what>\\S+) (?>is) in the (\\S+)"));
+        assertThat(nodes.size(), is(9));
 
         List<String> triples = nodes.stream().map((quad) -> quad.asTriple().toString()).collect(Collectors.toList());
 
         assertTrue(triples.contains("<cut:hash://sha256/blub!/b1-23> <http://www.w3.org/ns/prov#value> \"the duck is in the pond\" ."));
         assertTrue(triples.contains("<cut:hash://sha256/blub!/b5-8> <http://www.w3.org/ns/prov#value> \"duck\" ."));
         assertTrue(triples.contains("<cut:hash://sha256/blub!/b1-23> <http://www.w3.org/ns/prov#hadMember> <cut:hash://sha256/blub!/b5-8> ."));
+        assertTrue(triples.contains("<cut:hash://sha256/blub!/b1-23> <http://purl.org/dc/terms/description> \"what\" ."));
         assertTrue(triples.contains("<cut:hash://sha256/blub!/b20-23> <http://www.w3.org/ns/prov#value> \"pond\" ."));
         assertTrue(triples.contains("<cut:hash://sha256/blub!/b1-23> <http://www.w3.org/ns/prov#hadMember> <cut:hash://sha256/blub!/b20-23> ."));
     }

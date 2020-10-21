@@ -56,6 +56,8 @@ public class TextMatcher extends ProcessorReadOnly {
     private final Pattern pattern;
     private int batchSize = 256;
 
+    private List<String> patternGroupNames;
+
     public TextMatcher(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         this(URL_PATTERN, blobStoreReadOnly, listeners);
     }
@@ -67,6 +69,23 @@ public class TextMatcher extends ProcessorReadOnly {
     public TextMatcher(Pattern pattern, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
         this.pattern = pattern;
+        this.patternGroupNames = ExtractPatternGroupNames(pattern);
+    }
+
+    private List<String> ExtractPatternGroupNames(Pattern pattern) {
+        final Pattern matchRegexEscapes = Pattern.compile("\\\\.");
+        String sterilizedPattern = matchRegexEscapes.matcher(pattern.pattern()).replaceAll(".");
+
+        final Pattern matchRegexGroupNames = Pattern.compile("\\((?:\\?<([a-zA-Z][a-zA-Z0-9]*)>[^\\)]+|[^\\?\\)][^\\)]*)\\)");
+        Matcher matcher = matchRegexGroupNames.matcher(sterilizedPattern);
+
+        Stream.Builder<String> builder = Stream.builder();
+        builder.accept(null); // Group 0 always represents the full match and is unnamed
+        while (matcher.find()) {
+            builder.accept(matcher.group(1));
+        }
+
+        return builder.build().collect(Collectors.toList());
     }
 
     @Override
@@ -237,6 +256,11 @@ public class TextMatcher extends ProcessorReadOnly {
 
                         if (i > 0) {
                             emitter.emit(toStatement(matchIri, HAD_MEMBER, groupIri));
+
+                            String groupName = patternGroupNames.get(i);
+                            if (groupName != null) {
+                                emitter.emit(toStatement(matchIri, DESCRIPTION, toLiteral(groupName)));
+                            }
                         }
                     }
                 }
