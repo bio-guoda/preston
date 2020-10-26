@@ -16,35 +16,36 @@ import java.nio.charset.StandardCharsets;
 
 public class StatementStoreImpl implements StatementStore {
 
+    private final QueryKeyCalculator queryKeyCalculator;
     private final KeyValueStore keyValueStore;
 
     public StatementStoreImpl(KeyValueStore keyValueStore) {
+        this(keyValueStore, new QueryKeyCalculatorImpl());
+    }
+
+    public StatementStoreImpl(KeyValueStore keyValueStore, QueryKeyCalculator queryKeyCalculator) {
         this.keyValueStore = keyValueStore;
+        this.queryKeyCalculator = queryKeyCalculator;
     }
 
     @Override
     public void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException {
         // write-once, read-many
-        IRI key = calculateKeyFor(queryKey);
+        IRI key = queryKeyCalculator.calculateKeyFor(queryKey);
         String strValue = value instanceof IRI ? ((IRI) value).getIRIString() : value.toString();
         if (StringUtils.isNotBlank(strValue)) {
             keyValueStore.put(key, IOUtils.toInputStream(strValue, StandardCharsets.UTF_8));
         }
     }
 
-    protected static IRI calculateKeyFor(Pair<RDFTerm, RDFTerm> unhashedKeyPair) {
-        IRI left = calculateHashFor(unhashedKeyPair.getLeft());
-        IRI right = calculateHashFor(unhashedKeyPair.getRight());
-        return Hasher.calcSHA256(left.getIRIString() + right.getIRIString());
-    }
 
-    protected static IRI calculateHashFor(RDFTerm left1) {
-        return Hasher.calcSHA256(RDFUtil.getValueFor(left1));
+    protected static IRI calculateHashFor(RDFTerm term) {
+        return Hasher.calcSHA256(RDFUtil.getValueFor(term));
     }
 
     @Override
     public IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException {
-        try(InputStream inputStream = keyValueStore.get(calculateKeyFor(queryKey))) {
+        try(InputStream inputStream = keyValueStore.get(queryKeyCalculator.calculateKeyFor(queryKey))) {
             return inputStream == null
                     ? null
                     : RefNodeFactory.toIRI(URI.create(IOUtils.toString(inputStream, StandardCharsets.UTF_8)));

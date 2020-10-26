@@ -49,7 +49,6 @@ import static bio.guoda.preston.RefNodeConstants.AGENT;
 import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
 import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
-import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.PRESTON;
 import static bio.guoda.preston.RefNodeConstants.SOFTWARE_AGENT;
@@ -269,7 +268,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
                     IRI previousVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), statementStore);
                     if (previousVersion == null) {
-                        statementStore.put(Pair.of(BIODIVERSITY_DATASET_GRAPH, HAS_VERSION), newVersion);
+                        statementStore.put(RefNodeConstants.PROVENANCE_ROOT_QUERY, newVersion);
                     } else {
                         statementStore.put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
                     }

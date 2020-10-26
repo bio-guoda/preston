@@ -1,7 +1,9 @@
 package bio.guoda.preston;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import bio.guoda.preston.model.RefNodeFactory;
+import org.apache.commons.rdf.api.RDFTerm;
 
 import java.net.URI;
 import java.util.UUID;
@@ -36,7 +38,16 @@ public class RefNodeConstants {
     public static final String BIODIVERSITY_DATASET_GRAPH_UUID_STRING = "0659a54f-b713-4f86-a917-5be166a14110";
     public static final UUID BIODIVERSITY_DATASET_GRAPH_UUID = UUID.fromString(BIODIVERSITY_DATASET_GRAPH_UUID_STRING);
     public static final IRI BIODIVERSITY_DATASET_GRAPH = toIRI(BIODIVERSITY_DATASET_GRAPH_UUID.toString());
+
+
+
     public static final IRI BIODIVERSITY_DATASET_GRAPH_URN_UUID = toIRI("urn:uuid:" + BIODIVERSITY_DATASET_GRAPH_UUID_STRING);
+
+    // Provenance Root Query is the starting point of any biodiversity dataset graph
+    // for backwards compatibility, this root query is calculated from the *bare*, none URN uuid,
+    // of the Biodiversity Dataset Graph Concept UUID.
+    public static final Pair<RDFTerm, RDFTerm> PROVENANCE_ROOT_QUERY = Pair.of(BIODIVERSITY_DATASET_GRAPH, HAS_VERSION);
+    public static final String PROVENANCE_ROOT_QUERY_HASH = "hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a";
 
     public static final IRI STARTED_AT_TIME = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#startedAtTime"));
     public static final IRI ENDED_AT_TIME = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#endedAtTime"));
@@ -55,4 +66,5 @@ public class RefNodeConstants {
     public static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
     public static final IRI USED = toIRI("http://www.w3.org/ns/prov#used");
     public static final IRI WAS_STARTED_BY = toIRI("http://www.w3.org/ns/prov#wasStartedBy");
+
 }
