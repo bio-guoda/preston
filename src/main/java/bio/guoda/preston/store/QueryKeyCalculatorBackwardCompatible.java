@@ -1,6 +1,5 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeConstants;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;

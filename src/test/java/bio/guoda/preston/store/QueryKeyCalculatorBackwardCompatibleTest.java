@@ -41,7 +41,10 @@ public class QueryKeyCalculatorBackwardCompatibleTest {
     }
 
     @Test
-    public void calculateRootURN_UUID_ArchiveQueryKey() {
+    public void replaceBiodiversityDatasetGraphURN_UUIDWithOldUUID() {
+        // important to keep this test running because
+        // older provenance logs use the hash hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a
+        // as the starting point to traverse the provenance logs.
         IRI iri = new QueryKeyCalculatorBackwardCompatible()
                 .calculateKeyFor(Pair.of(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH_URN_UUID, RefNodeConstants.HAS_VERSION));
 

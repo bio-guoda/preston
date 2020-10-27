@@ -20,14 +20,10 @@ public class StatementStoreImpl implements StatementStore {
     private final KeyValueStore keyValueStore;
 
     public StatementStoreImpl(KeyValueStore keyValueStore) {
-        this(keyValueStore, new QueryKeyCalculatorImpl());
-    }
-
-    public StatementStoreImpl(KeyValueStore keyValueStore, QueryKeyCalculator queryKeyCalculator) {
         this.keyValueStore = keyValueStore;
-        this.queryKeyCalculator = queryKeyCalculator;
+        this.queryKeyCalculator = new QueryKeyCalculatorBackwardCompatible();
     }
-
+    
     @Override
     public void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException {
         // write-once, read-many
