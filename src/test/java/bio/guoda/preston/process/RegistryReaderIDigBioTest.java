@@ -18,7 +18,10 @@ import java.util.UUID;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
-import static bio.guoda.preston.model.RefNodeFactory.*;
+import static bio.guoda.preston.model.RefNodeFactory.toBlank;
+import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
+import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -297,7 +300,7 @@ public class RegistryReaderIDigBioTest {
         assertThat(nodes.size(), is(312));
 
         Quad node = nodes.get(0);
-        assertThat(node.toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <51290816-f682-4e38-a06c-03bf5df2442d> ."));
+        assertThat(node.toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <urn:uuid:51290816-f682-4e38-a06c-03bf5df2442d> ."));
 
         node = nodes.get(1);
         assertThat(node.toString(), is("<urn:uuid:51290816-f682-4e38-a06c-03bf5df2442d> <http://www.w3.org/ns/prov#hadMember> <https://www.morphosource.org/rss/ms.rss> ."));
@@ -309,7 +312,7 @@ public class RegistryReaderIDigBioTest {
         assertThat(node.toString(), startsWith("<https://www.morphosource.org/rss/ms.rss> <http://purl.org/pav/hasVersion> "));
 
         node = nodes.get(4);
-        assertThat(node.toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <a9684883-ce9b-4be1-9841-b063fc69e163> ."));
+        assertThat(node.toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <urn:uuid:a9684883-ce9b-4be1-9841-b063fc69e163> ."));
 
         node = nodes.get(5);
         assertThat(node.toString(), is("<urn:uuid:a9684883-ce9b-4be1-9841-b063fc69e163> <http://www.w3.org/ns/prov#hadMember> <http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml> ."));

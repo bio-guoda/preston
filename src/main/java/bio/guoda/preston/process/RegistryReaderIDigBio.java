@@ -181,7 +181,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
             for (JsonNode item : r.get("items")) {
                 itemCounter.incrementAndGet();
                 String publisherUUID = item.get("uuid").asText();
-                IRI refNodePublisher = toIRI(publisherUUID);
+                IRI refNodePublisher = toIRI(UUID.fromString(publisherUUID));
                 emitter.emit(toStatement(parent, HAD_MEMBER, refNodePublisher));
                 JsonNode data = item.get("data");
                 if (item.has("data")) {
