@@ -239,23 +239,23 @@ public class RegistryReaderIDigBioTest {
 
         assertThat(nodes.size(), is(19));
 
-        assertThat(nodes.get(0).toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <e6c5dffc-4ad1-4d9d-800f-5796baec1f65> ."));
-        assertThat(nodes.get(2).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
+        assertThat(nodes.get(0).toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <urn:uuid:e6c5dffc-4ad1-4d9d-800f-5796baec1f65> ."));
+        assertThat(nodes.get(2).toString(), is("<urn:uuid:e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <urn:uuid:45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
 
         assertThat(nodes.get(3).toString(), startsWith("<https://search.something/view/mediarecords/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://purl.org/pav/hasVersion> _:"));
         assertThat(nodes.get(4).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=thumbnail> <http://purl.org/pav/hasVersion> _:"));
         assertThat(nodes.get(5).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=webview> <http://purl.org/pav/hasVersion> _:"));
         assertThat(nodes.get(6).toString(), startsWith("<https://api.something/media/45e8135c-5cd9-4424-ae6e-a5910d3f2bb4?size=fullsize> <http://purl.org/pav/hasVersion> _:"));
 
-        assertThat(nodes.get(7).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <66caac8d-d00c-4d68-9a5c-450e2608d0b5> ."));
+        assertThat(nodes.get(7).toString(), is("<urn:uuid:e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <urn:uuid:66caac8d-d00c-4d68-9a5c-450e2608d0b5> ."));
 
         assertThat(nodes.get(8).toString(), startsWith("<https://search.something/view/mediarecords/66caac8d-d00c-4d68-9a5c-450e2608d0b5> <http://purl.org/pav/hasVersion> _:"));
 
-        assertThat(nodes.get(12).toString(), is("<e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <00ba0ad7-a11a-4b9f-90b4-299b7949a232> ."));
+        assertThat(nodes.get(12).toString(), is("<urn:uuid:e6c5dffc-4ad1-4d9d-800f-5796baec1f65> <http://www.w3.org/ns/prov#hadMember> <urn:uuid:00ba0ad7-a11a-4b9f-90b4-299b7949a232> ."));
 
         assertThat(nodes.get(13).toString(), startsWith("<https://search.something/view/mediarecords/00ba0ad7-a11a-4b9f-90b4-299b7949a232> <http://purl.org/pav/hasVersion> _:"));
 
-        assertThat(nodes.get(17).toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <db16bf3a-550b-4204-92e4-bbc71c96c772> ."));
+        assertThat(nodes.get(17).toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <urn:uuid:db16bf3a-550b-4204-92e4-bbc71c96c772> ."));
 
     }
 
@@ -272,13 +272,13 @@ public class RegistryReaderIDigBioTest {
 
         assertThat(nodes.size(), is(4));
 
-        assertThat(nodes.get(0).toString(), is("<someContentIRI> <http://www.w3.org/ns/prov#hadMember> <45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
+        assertThat(nodes.get(0).toString(), is("<someContentIRI> <http://www.w3.org/ns/prov#hadMember> <urn:uuid:45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> ."));
 
         assertThat(nodes.get(1).toString(), startsWith("<http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> <http://purl.org/pav/hasVersion> _:"));
 
-        assertThat(nodes.get(2).toString(), is("<45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://rs.tdwg.org/ac/terms/accessURI> <http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> ."));
+        assertThat(nodes.get(2).toString(), is("<urn:uuid:45e8135c-5cd9-4424-ae6e-a5910d3f2bb4> <http://rs.tdwg.org/ac/terms/accessURI> <http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> ."));
 
-        assertThat(nodes.get(3).toString(), is("<http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> <http://xmlns.com/foaf/0.1/depicts> <e6c5dffc-4ad1-4d9d-800f-5796baec1f65> ."));
+        assertThat(nodes.get(3).toString(), is("<http://www.burkemuseum.org/research-and-collections/invertebrate-paleontology-and-micropaleontology/collections/database/images/jpeg.php?Image=UWBM_IP_66034_2.jpg> <http://xmlns.com/foaf/0.1/depicts> <urn:uuid:e6c5dffc-4ad1-4d9d-800f-5796baec1f65> ."));
 
 
     }
@@ -300,7 +300,7 @@ public class RegistryReaderIDigBioTest {
         assertThat(node.toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <51290816-f682-4e38-a06c-03bf5df2442d> ."));
 
         node = nodes.get(1);
-        assertThat(node.toString(), is("<51290816-f682-4e38-a06c-03bf5df2442d> <http://www.w3.org/ns/prov#hadMember> <https://www.morphosource.org/rss/ms.rss> ."));
+        assertThat(node.toString(), is("<urn:uuid:51290816-f682-4e38-a06c-03bf5df2442d> <http://www.w3.org/ns/prov#hadMember> <https://www.morphosource.org/rss/ms.rss> ."));
 
         node = nodes.get(2);
         assertThat(node.toString(), is("<https://www.morphosource.org/rss/ms.rss> <http://purl.org/dc/elements/1.1/format> \"application/rss+xml\" ."));
@@ -312,7 +312,7 @@ public class RegistryReaderIDigBioTest {
         assertThat(node.toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <a9684883-ce9b-4be1-9841-b063fc69e163> ."));
 
         node = nodes.get(5);
-        assertThat(node.toString(), is("<a9684883-ce9b-4be1-9841-b063fc69e163> <http://www.w3.org/ns/prov#hadMember> <http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml> ."));
+        assertThat(node.toString(), is("<urn:uuid:a9684883-ce9b-4be1-9841-b063fc69e163> <http://www.w3.org/ns/prov#hadMember> <http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml> ."));
 
         node = nodes.get(6);
         assertThat(node.toString(), is("<http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml> <http://purl.org/dc/elements/1.1/format> \"application/rss+xml\" ."));
@@ -321,7 +321,7 @@ public class RegistryReaderIDigBioTest {
         assertThat(node.toString(), startsWith("<http://portal.torcherbaria.org/portal/webservices/dwc/rss.xml> <http://purl.org/pav/hasVersion> "));
 
         node = nodes.get(8);
-        assertThat(node.toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <089a51fa-5f81-48e7-a1b7-9bc539555f29> ."));
+        assertThat(node.toString(), is("<someRegistryUUID> <http://www.w3.org/ns/prov#hadMember> <urn:uuid:089a51fa-5f81-48e7-a1b7-9bc539555f29> ."));
 
     }
 

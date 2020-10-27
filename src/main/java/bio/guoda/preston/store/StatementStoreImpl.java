@@ -23,7 +23,7 @@ public class StatementStoreImpl implements StatementStore {
         this.keyValueStore = keyValueStore;
         this.queryKeyCalculator = new QueryKeyCalculatorBackwardCompatible();
     }
-    
+
     @Override
     public void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException {
         // write-once, read-many

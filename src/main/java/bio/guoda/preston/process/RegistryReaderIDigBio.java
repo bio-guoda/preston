@@ -319,7 +319,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                 for (JsonNode record : records) {
                     String specimenRecordUUID = record.isValueNode() ? record.asText() : null;
                     if (StringUtils.isNotBlank(specimenRecordUUID)) {
-                        emitter.emit(toStatement(toIRI(accessURI), toIRI("http://xmlns.com/foaf/0.1/depicts"), toIRI(specimenRecordUUID)));
+                        emitter.emit(toStatement(toIRI(accessURI), toIRI("http://xmlns.com/foaf/0.1/depicts"), toIRI(UUID.fromString(specimenRecordUUID))));
                     }
                 }
             }

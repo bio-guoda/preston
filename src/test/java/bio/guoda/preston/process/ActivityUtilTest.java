@@ -55,6 +55,6 @@ public class ActivityUtilTest {
 
     private boolean isUUID(BlankNodeOrIRI uuid) {
         String uuidString = uuid.toString();
-        return uuidString.matches("^<[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}>$");
+        return uuidString.matches("^<urn:uuid:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}>$");
     }
 }

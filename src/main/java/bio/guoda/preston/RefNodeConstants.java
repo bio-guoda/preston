@@ -12,13 +12,14 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 
 public class RefNodeConstants {
 
+    public static final String URN_UUID_PREFIX = "urn:uuid:";
+
     public static final IRI HAD_MEMBER = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#hadMember"));
     public static final IRI SEE_ALSO = RefNodeFactory.toIRI(URI.create("http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso"));
 
     public static final String PRESTON_URI = "https://preston.guoda.bio";
 
     public static final IRI PRESTON = RefNodeFactory.toIRI(URI.create(PRESTON_URI));
-
 
     public static final IRI HAS_FORMAT = RefNodeFactory.toIRI(URI.create("http://purl.org/dc/elements/1.1/format"));
 
@@ -37,11 +38,10 @@ public class RefNodeConstants {
 
     public static final String BIODIVERSITY_DATASET_GRAPH_UUID_STRING = "0659a54f-b713-4f86-a917-5be166a14110";
     public static final UUID BIODIVERSITY_DATASET_GRAPH_UUID = UUID.fromString(BIODIVERSITY_DATASET_GRAPH_UUID_STRING);
-    public static final IRI BIODIVERSITY_DATASET_GRAPH = toIRI(BIODIVERSITY_DATASET_GRAPH_UUID.toString());
+    public static final IRI BIODIVERSITY_DATASET_GRAPH = toIRI(BIODIVERSITY_DATASET_GRAPH_UUID);
 
 
-
-    public static final IRI BIODIVERSITY_DATASET_GRAPH_URN_UUID = toIRI("urn:uuid:" + BIODIVERSITY_DATASET_GRAPH_UUID_STRING);
+    public static final IRI BIODIVERSITY_DATASET_GRAPH_URN_UUID = toIRI(URN_UUID_PREFIX + BIODIVERSITY_DATASET_GRAPH_UUID_STRING);
 
     // Provenance Root Query is the starting point of any biodiversity dataset graph
     // for backwards compatibility, this root query is calculated from the *bare*, none URN uuid,

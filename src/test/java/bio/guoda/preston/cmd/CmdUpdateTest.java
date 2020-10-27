@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RDFUtil;
+import bio.guoda.preston.RefNodeConstants;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -56,6 +57,7 @@ public class CmdUpdateTest {
         assertThat(graphNamesIgnoreDefault.size(), is(quads.size()));
 
         long numActivities = graphNamesIgnoreDefault.stream()
+                .map(x -> StringUtils.replacePattern(x, "^" + RefNodeConstants.URN_UUID_PREFIX, ""))
                 .map(UUID::fromString)
                 .distinct()
                 .count();

@@ -27,7 +27,7 @@ public class RefNodeFactory {
     }
 
     public static IRI toIRI(UUID uuid) {
-        return rdf.createIRI(uuid.toString());
+        return rdf.createIRI("urn:uuid:" + uuid.toString());
     }
 
     public static IRI toIRI(URI uri) {

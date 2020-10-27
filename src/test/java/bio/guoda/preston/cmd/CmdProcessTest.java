@@ -133,6 +133,7 @@ public class CmdProcessTest {
                 .collect(Collectors.toList());
 
         long numActivities = activityUUIDs.stream()
+                .map(x -> StringUtils.replacePattern(x, "^" + RefNodeConstants.URN_UUID_PREFIX, ""))
                 .map(UUID::fromString)
                 .distinct()
                 .count();
