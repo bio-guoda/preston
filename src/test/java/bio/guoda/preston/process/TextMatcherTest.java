@@ -5,9 +5,12 @@ import bio.guoda.preston.store.TestUtil;
 import com.mchange.v1.io.InputStreamUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -154,6 +157,19 @@ public class TextMatcherTest {
     public void parseFileWithMalformedCharacters() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/data/42/56/4256fd83db9270d2236776bc4bd45e22b15235e0798ba59952f8ddd1f7fbe7b2");
         runTextFinder(blobStore);
+    }
+
+    @Test
+    public void findMultiLineMatches() {
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return IOUtils.toInputStream("one\ntwo\nthree", Charset.defaultCharset());
+            }
+        };
+
+        ArrayList<Quad> nodes = runTextFinder(blobStore, Pattern.compile("one\ntwo"));
+        assertThat(nodes.size(), is(4));
     }
 
     @Test
