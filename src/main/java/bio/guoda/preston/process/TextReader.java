@@ -41,6 +41,7 @@ abstract public class TextReader {
     private Pair<ArchiveInputStream, String> getArchiveStreamAndFormat(InputStream in) {
         try {
             String archiveFormat = ArchiveStreamFactory.detect(in);
+            // do not close this stream; it would also close the "in" stream
             ArchiveInputStream archiveInputStream = new ArchiveStreamFactory().createArchiveInputStream(in);
             return Pair.of(archiveInputStream, archiveFormat);
         } catch (ArchiveException e) {
@@ -60,6 +61,7 @@ abstract public class TextReader {
     private Pair<CompressorInputStream, String> getCompressedStreamAndFormat(InputStream in) {
         try {
             String compressionFormat = CompressorStreamFactory.detect(in);
+            // do not close this stream; it would also close the "in" stream
             CompressorInputStream compressedInputStream = new CompressorStreamFactory()
                     .createCompressorInputStream(in);
             return Pair.of(compressedInputStream, compressionFormat);
@@ -83,9 +85,10 @@ abstract public class TextReader {
         ArchiveEntry entry;
         while ((entry = in.getNextEntry()) != null) {
             if (in.canReadEntryData(entry)) {
-                InputStream entryStream = new BufferedInputStream(in);
+                // do not close this stream; it would also close the "in" stream
+                InputStream markableEntryStream = new BufferedInputStream(in);
                 try {
-                    attemptToParse(getWrappedIri(archiveFormat, version, entry.getName()), entryStream);
+                    attemptToParse(getWrappedIri(archiveFormat, version, entry.getName()), markableEntryStream);
                 } catch (IOException | URISyntaxException e) {
                     // ignore; this is opportunistic
                 }
@@ -94,7 +97,9 @@ abstract public class TextReader {
     }
 
     protected void parseAsCompressed(IRI version, InputStream in, String compressionFormat) throws IOException, URISyntaxException {
-        attemptToParse(getWrappedIri(compressionFormat, version), new BufferedInputStream(in));
+        // do not close this stream; it would also close the "in" stream
+        InputStream markableStream = new BufferedInputStream(in);
+        attemptToParse(getWrappedIri(compressionFormat, version), markableStream);
     }
 
     public static IRI getWrappedIri(String prefix, IRI version, String suffix) throws URISyntaxException {
