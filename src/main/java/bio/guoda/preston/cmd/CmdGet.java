@@ -24,21 +24,24 @@ public class CmdGet extends Persisting implements Runnable {
 
     @Parameter(description = "data content-hash uri (e.g., [hash://sha256/8ed311...])",
             validateWith = URIValidator.class)
-    private List<String> hashes = new ArrayList<>();
+    private List<String> contentUris = new ArrayList<>();
 
     @Override
     public void run() {
         BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
+        run(blobStore);
+    }
 
+    public void run(BlobStoreReadOnly blobStore) {
         try {
-            if (hashes.isEmpty()) {
+            if (contentUris.isEmpty()) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 String line;
                 while ((line = reader.readLine()) != null) {
                     handleHash(blobStore, StringUtils.trim(line));
                 }
             } else {
-                for (String s : hashes) {
+                for (String s : contentUris) {
                     handleHash(blobStore, s);
                 }
             }
@@ -46,8 +49,6 @@ public class CmdGet extends Persisting implements Runnable {
             th.printStackTrace(System.err);
             exit(1);
         }
-
-        exit(0);
     }
 
     protected void handleHash(BlobStoreReadOnly blobStore, String hash) throws IOException {
@@ -70,6 +71,10 @@ public class CmdGet extends Persisting implements Runnable {
         while (this.shouldKeepProcessing() && !out.checkError() && EOF != (n = proxyIs.read(buffer))) {
             System.out.write(buffer, 0, n);
         }
+    }
+
+    public void setContentUris(List<String> contentUris) {
+        this.contentUris = contentUris;
     }
 
 }
