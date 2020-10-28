@@ -52,8 +52,6 @@ public class TextMatcher extends ProcessorReadOnly {
 
     private List<String> patternGroupNames;
 
-    private final MyTextReader textReader = new MyTextReader();
-
     public TextMatcher(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         this(URL_PATTERN, blobStoreReadOnly, listeners);
     }
@@ -91,10 +89,11 @@ public class TextMatcher extends ProcessorReadOnly {
             final List<Quad> nodes = new ArrayList<>();
 
             BatchingEmitter batchingStatementEmitter = new BatchingEmitter(nodes, version, statement);
+            MyTextReader textReader = new MyTextReader(batchingStatementEmitter);
             try (InputStream in = get(version)) {
                 if (in != null) {
                     InputStream markableInputStream = (in.markSupported()) ? in : new BufferedInputStream(in);
-                    textReader.attemptToParse(version, markableInputStream, batchingStatementEmitter);
+                    textReader.attemptToParse(version, markableInputStream);
                 }
             } catch (IOException e) {
                 // ignore; this is opportunistic
@@ -124,13 +123,19 @@ public class TextMatcher extends ProcessorReadOnly {
 
     private class MyTextReader extends TextReader {
 
-        protected void parseAsArchive(IRI version, ArchiveInputStream in, StatementEmitter emitter) throws IOException {
+        private final StatementEmitter emitter;
+
+        public MyTextReader(StatementEmitter emitter) {
+            this.emitter = emitter;
+        }
+
+        protected void parseAsArchive(IRI version, ArchiveInputStream in) throws IOException {
             ArchiveEntry entry;
             while ((entry = in.getNextEntry()) != null) {
                 if (in.canReadEntryData(entry)) {
                     InputStream entryStream = new BufferedInputStream(in);
                     try {
-                        attemptToParse(getEntryIri(version, entry.getName()), entryStream, emitter);
+                        attemptToParse(getEntryIri(version, entry.getName()), entryStream);
                     } catch (IOException | URISyntaxException e) {
                         // ignore; this is opportunistic
                     }
@@ -138,7 +143,7 @@ public class TextMatcher extends ProcessorReadOnly {
             }
         }
 
-        protected void parseAsText(IRI version, InputStream in, StatementEmitter emitter, Charset charset) throws IOException {
+        protected void parseAsText(IRI version, InputStream in, Charset charset) throws IOException {
             byte[] byteBuffer = new byte[BUFFER_SIZE];
 
             int offset = 0;

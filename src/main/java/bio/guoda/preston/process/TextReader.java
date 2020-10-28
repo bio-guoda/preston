@@ -15,16 +15,16 @@ import java.nio.charset.Charset;
 
 abstract public class TextReader {
 
-    public void attemptToParse(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
-        if (!attemptToParseAsArchive(version, in, emitter) && !attemptToParseAsCompressed(version, in, emitter)) {
-            attemptToParseAsText(version, in, emitter);
+    public void attemptToParse(IRI version, InputStream in) throws IOException {
+        if (!attemptToParseAsArchive(version, in) && !attemptToParseAsCompressed(version, in)) {
+            attemptToParseAsText(version, in);
         }
     }
 
-    private boolean attemptToParseAsArchive(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
+    private boolean attemptToParseAsArchive(IRI version, InputStream in) throws IOException {
         ArchiveInputStream archiveStream = getArchiveStream(in);
         if (archiveStream != null) {
-            parseAsArchive(version, archiveStream, emitter);
+            parseAsArchive(version, archiveStream);
             return true;
         }
         return false;
@@ -39,10 +39,10 @@ abstract public class TextReader {
         }
     }
 
-    private boolean attemptToParseAsCompressed(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
+    private boolean attemptToParseAsCompressed(IRI version, InputStream in) throws IOException {
         InputStream compressedStream = getCompressedStream(in);
         if (compressedStream != null) {
-            parseAsCompressed(version, compressedStream, emitter);
+            parseAsCompressed(version, compressedStream);
             return true;
         }
         return false;
@@ -57,20 +57,20 @@ abstract public class TextReader {
         }
     }
 
-    private boolean attemptToParseAsText(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
+    private boolean attemptToParseAsText(IRI version, InputStream in) throws IOException {
         Charset charset = new UniversalEncodingDetector().detect(in, new Metadata());
         if (charset != null) {
-            parseAsText(version, in, emitter, charset);
+            parseAsText(version, in, charset);
             return true;
         }
         return false;
     }
 
-    protected abstract void parseAsText(IRI version, InputStream in, StatementEmitter emitter, Charset charset) throws IOException;
+    protected abstract void parseAsText(IRI version, InputStream in, Charset charset) throws IOException;
 
-    protected abstract void parseAsArchive(IRI version, ArchiveInputStream in, StatementEmitter emitter) throws IOException;
+    protected abstract void parseAsArchive(IRI version, ArchiveInputStream in) throws IOException;
 
-    protected void parseAsCompressed(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
-        attemptToParse(version, in, emitter);
+    protected void parseAsCompressed(IRI version, InputStream in) throws IOException {
+        attemptToParse(version, in);
     }
 }
