@@ -2,16 +2,10 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
-import org.apache.commons.compress.archivers.ArchiveStreamFactory;
-import org.apache.commons.compress.compressors.CompressorException;
-import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.parser.txt.UniversalEncodingDetector;
 import sun.nio.cs.ThreadLocalCoders;
 
 import java.io.BufferedInputStream;
@@ -58,6 +52,8 @@ public class TextMatcher extends ProcessorReadOnly {
 
     private List<String> patternGroupNames;
 
+    private final MyTextReader textReader = new MyTextReader();
+
     public TextMatcher(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         this(URL_PATTERN, blobStoreReadOnly, listeners);
     }
@@ -76,7 +72,7 @@ public class TextMatcher extends ProcessorReadOnly {
         final Pattern matchRegexEscapes = Pattern.compile("\\\\.");
         String sterilizedPattern = matchRegexEscapes.matcher(pattern.pattern()).replaceAll(".");
 
-        final Pattern matchRegexGroupNames = Pattern.compile("\\((?:\\?<([a-zA-Z][a-zA-Z0-9]*)>[^\\)]+|[^\\?\\)][^\\)]*)\\)");
+        final Pattern matchRegexGroupNames = Pattern.compile("\\((?:\\?<([a-zA-Z][a-zA-Z0-9]*)>[^)]+|[^?)][^)]*)\\)");
         Matcher matcher = matchRegexGroupNames.matcher(sterilizedPattern);
 
         Stream.Builder<String> builder = Stream.builder();
@@ -98,7 +94,7 @@ public class TextMatcher extends ProcessorReadOnly {
             try (InputStream in = get(version)) {
                 if (in != null) {
                     InputStream markableInputStream = (in.markSupported()) ? in : new BufferedInputStream(in);
-                    attemptToParse(version, markableInputStream, batchingStatementEmitter);
+                    textReader.attemptToParse(version, markableInputStream, batchingStatementEmitter);
                 }
             } catch (IOException e) {
                 // ignore; this is opportunistic
@@ -106,174 +102,6 @@ public class TextMatcher extends ProcessorReadOnly {
 
             // emit remaining
             batchingStatementEmitter.emitBatch();
-        }
-    }
-
-    private boolean attemptToParse(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
-        return (attemptToParseAsArchive(version, in, emitter) ||
-                attemptToParseAsCompressed(version, in, emitter) ||
-                attemptToParseAsText(version, in, emitter));
-    }
-
-    private boolean attemptToParseAsArchive(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
-        ArchiveInputStream archiveStream = getArchiveStream(in);
-        if (archiveStream != null) {
-            parseAsArchive(version, archiveStream, emitter);
-            return true;
-        }
-        return false;
-    }
-
-    private ArchiveInputStream getArchiveStream(InputStream in) {
-        try {
-            return new ArchiveStreamFactory()
-                    .createArchiveInputStream(in);
-        } catch (ArchiveException e) {
-            return null;
-        }
-    }
-
-    private boolean attemptToParseAsCompressed(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
-        InputStream compressedStream = getCompressedStream(in);
-        if (compressedStream != null) {
-            parseAsCompressed(version, compressedStream, emitter);
-            return true;
-        }
-        return false;
-    }
-
-    private InputStream getCompressedStream(InputStream in) {
-        try {
-            return new CompressorStreamFactory()
-                    .createCompressorInputStream(in);
-        } catch (CompressorException e) {
-            return null;
-        }
-    }
-
-    private boolean attemptToParseAsText(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
-        Charset charset = new UniversalEncodingDetector().detect(in, new Metadata());
-        if (charset != null) {
-            parseAsText(version, in, emitter, charset);
-            return true;
-        }
-        return false;
-    }
-
-    private void parseAsArchive(IRI version, ArchiveInputStream in, StatementEmitter emitter) throws IOException {
-        ArchiveEntry entry;
-        while ((entry = in.getNextEntry()) != null) {
-            if (in.canReadEntryData(entry)) {
-                InputStream entryStream = new BufferedInputStream(in);
-                try {
-                    attemptToParse(getEntryIri(version, entry.getName()), entryStream, emitter);
-                } catch (IOException | URISyntaxException e) {
-                    // ignore; this is opportunistic
-                }
-            }
-        }
-    }
-
-    private void parseAsCompressed(IRI version, InputStream in, StatementEmitter emitter) throws IOException {
-        attemptToParse(version, in, emitter);
-    }
-
-    private void parseAsText(IRI version, InputStream in, StatementEmitter emitter, Charset charset) throws IOException {
-        byte[] byteBuffer = new byte[BUFFER_SIZE];
-
-        int offset = 0;
-        int numBytesToReuse = 0;
-        int numBytesScannedInLastIteration = 0;
-        while (true) {
-            int numBytesToScan = numBytesToReuse;
-
-            // Copy text from the end of the buffer to the beginning in case matches occur across buffer boundaries
-            System.arraycopy(byteBuffer, numBytesScannedInLastIteration - numBytesToReuse, byteBuffer, 0, numBytesToReuse);
-
-            int numBytesRead;
-            while ((numBytesRead = in.read(byteBuffer, numBytesToScan, byteBuffer.length - numBytesToScan)) > 0)
-            {
-                numBytesToScan += numBytesRead;
-            }
-
-            if (numBytesToScan <= 0) {
-                break;
-            }
-            ByteBuffer scanningByteBuffer = ByteBuffer.wrap(byteBuffer, 0, numBytesToScan);
-
-            // Default CharBuffer::decode behavior is to replace uninterpretable bytes with an "unknown" character that
-            // is not always the same length in bytes. Instead, ignore those bytes and reinsert them after encoding.
-            CharBuffer charBuffer = ThreadLocalCoders.decoderFor(charset)
-                    .onMalformedInput(CodingErrorAction.IGNORE)
-                    .onUnmappableCharacter(CodingErrorAction.IGNORE)
-                    .decode(scanningByteBuffer);
-
-            SetBufferPosition(scanningByteBuffer, 0);
-
-            Matcher matcher = pattern.matcher(charBuffer);
-            CharBufferByteReader charBufferByteReader = new CharBufferByteReader(scanningByteBuffer, charBuffer, charset);
-
-            while (matcher.find()) {
-                int charPosMatchStartsAt = matcher.start();
-                int bytePosMatchStartsAt = charBufferByteReader.advance(charPosMatchStartsAt);
-
-                if (bytePosMatchStartsAt >= BUFFER_SIZE - MAX_MATCH_SIZE_IN_BYTES) {
-                    SetBufferPosition(scanningByteBuffer, bytePosMatchStartsAt);
-                    break;
-                }
-
-                List<Integer> orderedCharPositions = new LinkedList<>();
-                for (int i = 0; i <= matcher.groupCount(); ++i) {
-                    if (matcher.group(i) != null) {
-                        orderedCharPositions.add(matcher.start(i));
-                        orderedCharPositions.add(matcher.end(i));
-                    }
-                }
-
-                orderedCharPositions.sort(null);
-
-                // Because characters can have variable width, report byte positions instead of character positions
-                Map<Integer, Integer> charToBytePositions = orderedCharPositions.stream().distinct().collect(Collectors.toMap(
-                        charPosition -> charPosition,
-                        charBufferByteReader::advance
-                ));
-
-                int charPosMatchEndsAt = matcher.end();
-                int bytePosMatchEndsAt = charToBytePositions.get(charPosMatchEndsAt);
-                IRI matchIri = getCutIri(version, offset + bytePosMatchStartsAt, offset + bytePosMatchEndsAt);
-
-                for (int i = 0; i <= matcher.groupCount(); ++i) {
-                    if (matcher.group(i) != null) {
-                        int charPosGroupStartsAt = matcher.start(i);
-                        int charPosGroupEndsAt = matcher.end(i);
-
-                        int bytePosGroupStartsAt = charToBytePositions.get(charPosGroupStartsAt);
-                        int bytePosGroupEndsAt = charToBytePositions.get(charPosGroupEndsAt);
-
-                        String groupString = matcher.group(i);
-                        IRI groupIri = getCutIri(version, offset + bytePosGroupStartsAt, offset + bytePosGroupEndsAt);
-                        emitter.emit(toStatement(groupIri, HAS_VALUE, toLiteral(groupString)));
-
-                        if (i > 0) {
-                            emitter.emit(toStatement(matchIri, HAD_MEMBER, groupIri));
-
-                            String groupName = patternGroupNames.get(i);
-                            if (groupName != null) {
-                                emitter.emit(toStatement(matchIri, DESCRIPTION, toLiteral(groupName)));
-                            }
-                        }
-                    }
-                }
-            }
-
-            // If no matches were found, we need to advance the buffer's position manually
-            if (GetBufferPosition(scanningByteBuffer) == 0) {
-                SetBufferPosition(scanningByteBuffer, scanningByteBuffer.limit());
-            }
-
-            numBytesScannedInLastIteration = numBytesToScan;
-            numBytesToReuse = Integer.min(MAX_MATCH_SIZE_IN_BYTES, numBytesScannedInLastIteration - GetBufferPosition(scanningByteBuffer));
-            offset += numBytesScannedInLastIteration - numBytesToReuse;
         }
     }
 
@@ -292,6 +120,122 @@ public class TextMatcher extends ProcessorReadOnly {
 
     private void SetBufferPosition(Buffer buffer, int newPosition) {
         buffer.position(newPosition);
+    }
+
+    private class MyTextReader extends TextReader {
+
+        protected void parseAsArchive(IRI version, ArchiveInputStream in, StatementEmitter emitter) throws IOException {
+            ArchiveEntry entry;
+            while ((entry = in.getNextEntry()) != null) {
+                if (in.canReadEntryData(entry)) {
+                    InputStream entryStream = new BufferedInputStream(in);
+                    try {
+                        attemptToParse(getEntryIri(version, entry.getName()), entryStream, emitter);
+                    } catch (IOException | URISyntaxException e) {
+                        // ignore; this is opportunistic
+                    }
+                }
+            }
+        }
+
+        protected void parseAsText(IRI version, InputStream in, StatementEmitter emitter, Charset charset) throws IOException {
+            byte[] byteBuffer = new byte[BUFFER_SIZE];
+
+            int offset = 0;
+            int numBytesToReuse = 0;
+            int numBytesScannedInLastIteration = 0;
+            while (true) {
+                int numBytesToScan = numBytesToReuse;
+
+                // Copy text from the end of the buffer to the beginning in case matches occur across buffer boundaries
+                System.arraycopy(byteBuffer, numBytesScannedInLastIteration - numBytesToReuse, byteBuffer, 0, numBytesToReuse);
+
+                int numBytesRead;
+                while ((numBytesRead = in.read(byteBuffer, numBytesToScan, byteBuffer.length - numBytesToScan)) > 0)
+                {
+                    numBytesToScan += numBytesRead;
+                }
+
+                if (numBytesToScan <= 0) {
+                    break;
+                }
+                ByteBuffer scanningByteBuffer = ByteBuffer.wrap(byteBuffer, 0, numBytesToScan);
+
+                // Default CharBuffer::decode behavior is to replace uninterpretable bytes with an "unknown" character that
+                // is not always the same length in bytes. Instead, ignore those bytes and reinsert them after encoding.
+                CharBuffer charBuffer = ThreadLocalCoders.decoderFor(charset)
+                        .onMalformedInput(CodingErrorAction.IGNORE)
+                        .onUnmappableCharacter(CodingErrorAction.IGNORE)
+                        .decode(scanningByteBuffer);
+
+                SetBufferPosition(scanningByteBuffer, 0);
+
+                Matcher matcher = pattern.matcher(charBuffer);
+                CharBufferByteReader charBufferByteReader = new CharBufferByteReader(scanningByteBuffer, charBuffer, charset);
+
+                while (matcher.find()) {
+                    int charPosMatchStartsAt = matcher.start();
+                    int bytePosMatchStartsAt = charBufferByteReader.advance(charPosMatchStartsAt);
+
+                    if (bytePosMatchStartsAt >= BUFFER_SIZE - MAX_MATCH_SIZE_IN_BYTES) {
+                        SetBufferPosition(scanningByteBuffer, bytePosMatchStartsAt);
+                        break;
+                    }
+
+                    List<Integer> orderedCharPositions = new LinkedList<>();
+                    for (int i = 0; i <= matcher.groupCount(); ++i) {
+                        if (matcher.group(i) != null) {
+                            orderedCharPositions.add(matcher.start(i));
+                            orderedCharPositions.add(matcher.end(i));
+                        }
+                    }
+
+                    orderedCharPositions.sort(null);
+
+                    // Because characters can have variable width, report byte positions instead of character positions
+                    Map<Integer, Integer> charToBytePositions = orderedCharPositions.stream().distinct().collect(Collectors.toMap(
+                            charPosition -> charPosition,
+                            charBufferByteReader::advance
+                    ));
+
+                    int charPosMatchEndsAt = matcher.end();
+                    int bytePosMatchEndsAt = charToBytePositions.get(charPosMatchEndsAt);
+                    IRI matchIri = getCutIri(version, offset + bytePosMatchStartsAt, offset + bytePosMatchEndsAt);
+
+                    for (int i = 0; i <= matcher.groupCount(); ++i) {
+                        if (matcher.group(i) != null) {
+                            int charPosGroupStartsAt = matcher.start(i);
+                            int charPosGroupEndsAt = matcher.end(i);
+
+                            int bytePosGroupStartsAt = charToBytePositions.get(charPosGroupStartsAt);
+                            int bytePosGroupEndsAt = charToBytePositions.get(charPosGroupEndsAt);
+
+                            String groupString = matcher.group(i);
+                            IRI groupIri = getCutIri(version, offset + bytePosGroupStartsAt, offset + bytePosGroupEndsAt);
+                            emitter.emit(toStatement(groupIri, HAS_VALUE, toLiteral(groupString)));
+
+                            if (i > 0) {
+                                emitter.emit(toStatement(matchIri, HAD_MEMBER, groupIri));
+
+                                String groupName = patternGroupNames.get(i);
+                                if (groupName != null) {
+                                    emitter.emit(toStatement(matchIri, DESCRIPTION, toLiteral(groupName)));
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // If no matches were found, we need to advance the buffer's position manually
+                if (GetBufferPosition(scanningByteBuffer) == 0) {
+                    SetBufferPosition(scanningByteBuffer, scanningByteBuffer.limit());
+                }
+
+                numBytesScannedInLastIteration = numBytesToScan;
+                numBytesToReuse = Integer.min(MAX_MATCH_SIZE_IN_BYTES, numBytesScannedInLastIteration - GetBufferPosition(scanningByteBuffer));
+                offset += numBytesScannedInLastIteration - numBytesToReuse;
+            }
+        }
     }
 
     public void setBatchSize(int batchSize) {
