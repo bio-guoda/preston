@@ -120,6 +120,20 @@ public class TextMatcherTest {
     }
 
     @Test
+    public void onNestedTarGz() {
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
+
+        ArrayList<Quad> nodes = runTextFinder(blobStore);
+        assertThat(nodes.size(), is(5));
+
+        String level1UrlStatement = nodes.get(3).toString();
+        assertThat(level1UrlStatement, startsWith("<cut:tar:gz:hash://sha256/blub!/level1.txt!/b1-19> <http://www.w3.org/ns/prov#value> \"https://example.org\""));
+
+        String level2UrlStatement = nodes.get(4).toString();
+        assertThat(level2UrlStatement, startsWith("<cut:zip:tar:gz:hash://sha256/blub!/level2.zip!/level2.txt!/b1-19> <http://www.w3.org/ns/prov#value> \"https://example.org\""));
+    }
+
+    @Test
     public void onArchiveWithWhitespaceInFileNames() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/archive-with-whitespace-file-names.zip");
 

@@ -41,7 +41,7 @@ abstract public class TextReader {
     private Pair<ArchiveInputStream, String> getArchiveStreamAndFormat(InputStream in) {
         try {
             String archiveFormat = ArchiveStreamFactory.detect(in);
-            ArchiveInputStream archiveInputStream = new ArchiveStreamFactory().createArchiveInputStream(archiveFormat, in);
+            ArchiveInputStream archiveInputStream = new ArchiveStreamFactory().createArchiveInputStream(in);
             return Pair.of(archiveInputStream, archiveFormat);
         } catch (ArchiveException e) {
             return null;
@@ -85,7 +85,7 @@ abstract public class TextReader {
             if (in.canReadEntryData(entry)) {
                 InputStream entryStream = new BufferedInputStream(in);
                 try {
-                    attemptToParse(getWrappedIri(version, archiveFormat, entry.getName()), entryStream);
+                    attemptToParse(getWrappedIri(archiveFormat, version, entry.getName()), entryStream);
                 } catch (IOException | URISyntaxException e) {
                     // ignore; this is opportunistic
                 }
@@ -94,11 +94,15 @@ abstract public class TextReader {
     }
 
     protected void parseAsCompressed(IRI version, InputStream in, String compressionFormat) throws IOException, URISyntaxException {
-        attemptToParse(version, in);
+        attemptToParse(getWrappedIri(compressionFormat, version), new BufferedInputStream(in));
     }
 
-    public static IRI getWrappedIri(IRI version, String prefix, String suffix) throws URISyntaxException {
-        URI uri = new URI(prefix, String.format("%s!/%s", version.getIRIString(), suffix), null);
+    public static IRI getWrappedIri(String prefix, IRI version, String suffix) throws URISyntaxException {
+        URI uri = new URI(prefix, version.getIRIString() + (suffix != null ? "!/" + suffix : ""), null);
         return toIRI(uri);
+    }
+
+    public static IRI getWrappedIri(String prefix, IRI version) throws URISyntaxException {
+        return getWrappedIri(prefix, version, null);
     }
 }
