@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
@@ -11,6 +12,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -77,7 +79,19 @@ abstract public class TextReader {
 
     protected abstract void parseAsText(IRI version, InputStream in, Charset charset) throws IOException;
 
-    protected abstract void parseAsArchive(IRI version, ArchiveInputStream in, String archiveFormat) throws IOException;
+    protected void parseAsArchive(IRI version, ArchiveInputStream in, String archiveFormat) throws IOException {
+        ArchiveEntry entry;
+        while ((entry = in.getNextEntry()) != null) {
+            if (in.canReadEntryData(entry)) {
+                InputStream entryStream = new BufferedInputStream(in);
+                try {
+                    attemptToParse(getWrappedIri(version, archiveFormat, entry.getName()), entryStream);
+                } catch (IOException | URISyntaxException e) {
+                    // ignore; this is opportunistic
+                }
+            }
+        }
+    }
 
     protected void parseAsCompressed(IRI version, InputStream in, String compressionFormat) throws IOException, URISyntaxException {
         attemptToParse(version, in);

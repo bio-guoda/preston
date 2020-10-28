@@ -123,20 +123,6 @@ public class TextMatcher extends ProcessorReadOnly {
             this.emitter = emitter;
         }
 
-        protected void parseAsArchive(IRI version, ArchiveInputStream in, String archiveFormat) throws IOException {
-            ArchiveEntry entry;
-            while ((entry = in.getNextEntry()) != null) {
-                if (in.canReadEntryData(entry)) {
-                    InputStream entryStream = new BufferedInputStream(in);
-                    try {
-                        attemptToParse(getWrappedIri(version, archiveFormat, entry.getName()), entryStream);
-                    } catch (IOException | URISyntaxException e) {
-                        // ignore; this is opportunistic
-                    }
-                }
-            }
-        }
-
         protected void parseAsText(IRI version, InputStream in, Charset charset) throws IOException {
             byte[] byteBuffer = new byte[BUFFER_SIZE];
 
