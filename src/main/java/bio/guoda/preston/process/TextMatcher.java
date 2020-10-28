@@ -11,7 +11,6 @@ import sun.nio.cs.ThreadLocalCoders;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -95,18 +94,13 @@ public class TextMatcher extends ProcessorReadOnly {
                     InputStream markableInputStream = (in.markSupported()) ? in : new BufferedInputStream(in);
                     textReader.attemptToParse(version, markableInputStream);
                 }
-            } catch (IOException e) {
+            } catch (IOException | URISyntaxException e) {
                 // ignore; this is opportunistic
             }
 
             // emit remaining
             batchingStatementEmitter.emitBatch();
         }
-    }
-
-    private static IRI getEntryIri(IRI version, String archiveFormat, String name) throws URISyntaxException {
-        URI uri = new URI(archiveFormat, String.format("%s!/%s", version.getIRIString(), name), null);
-        return toIRI(uri);
     }
 
     private static IRI getCutIri(IRI fileIri, int startAt, int endAt) {
@@ -135,7 +129,7 @@ public class TextMatcher extends ProcessorReadOnly {
                 if (in.canReadEntryData(entry)) {
                     InputStream entryStream = new BufferedInputStream(in);
                     try {
-                        attemptToParse(getEntryIri(version, archiveFormat, entry.getName()), entryStream);
+                        attemptToParse(getWrappedIri(version, archiveFormat, entry.getName()), entryStream);
                     } catch (IOException | URISyntaxException e) {
                         // ignore; this is opportunistic
                     }

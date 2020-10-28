@@ -4,6 +4,7 @@ import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.compressors.CompressorException;
+import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -12,11 +13,15 @@ import org.apache.tika.parser.txt.UniversalEncodingDetector;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+
+import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 
 abstract public class TextReader {
 
-    public void attemptToParse(IRI version, InputStream in) throws IOException {
+    public void attemptToParse(IRI version, InputStream in) throws IOException, URISyntaxException {
         if (!attemptToParseAsArchive(version, in) && !attemptToParseAsCompressed(version, in)) {
             attemptToParseAsText(version, in);
         }
@@ -41,19 +46,21 @@ abstract public class TextReader {
         }
     }
 
-    private boolean attemptToParseAsCompressed(IRI version, InputStream in) throws IOException {
-        InputStream compressedStream = getCompressedStream(in);
-        if (compressedStream != null) {
-            parseAsCompressed(version, compressedStream);
+    private boolean attemptToParseAsCompressed(IRI version, InputStream in) throws IOException, URISyntaxException {
+        Pair<CompressorInputStream, String> compressedStreamAndFormat = getCompressedStreamAndFormat(in);
+        if (compressedStreamAndFormat != null) {
+            parseAsCompressed(version, compressedStreamAndFormat.getLeft(), compressedStreamAndFormat.getRight());
             return true;
         }
         return false;
     }
 
-    private InputStream getCompressedStream(InputStream in) {
+    private Pair<CompressorInputStream, String> getCompressedStreamAndFormat(InputStream in) {
         try {
-            return new CompressorStreamFactory()
+            String compressionFormat = CompressorStreamFactory.detect(in);
+            CompressorInputStream compressedInputStream = new CompressorStreamFactory()
                     .createCompressorInputStream(in);
+            return Pair.of(compressedInputStream, compressionFormat);
         } catch (CompressorException e) {
             return null;
         }
@@ -72,7 +79,12 @@ abstract public class TextReader {
 
     protected abstract void parseAsArchive(IRI version, ArchiveInputStream in, String archiveFormat) throws IOException;
 
-    protected void parseAsCompressed(IRI version, InputStream in) throws IOException {
+    protected void parseAsCompressed(IRI version, InputStream in, String compressionFormat) throws IOException, URISyntaxException {
         attemptToParse(version, in);
+    }
+
+    public static IRI getWrappedIri(IRI version, String prefix, String suffix) throws URISyntaxException {
+        URI uri = new URI(prefix, String.format("%s!/%s", version.getIRIString(), suffix), null);
+        return toIRI(uri);
     }
 }
