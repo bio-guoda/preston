@@ -104,8 +104,8 @@ public class TextMatcher extends ProcessorReadOnly {
         }
     }
 
-    private static IRI getEntryIri(IRI version, String name) throws URISyntaxException {
-        URI uri = new URI("zip", String.format("%s!/%s", version.getIRIString(), name), null);
+    private static IRI getEntryIri(IRI version, String archiveFormat, String name) throws URISyntaxException {
+        URI uri = new URI(archiveFormat, String.format("%s!/%s", version.getIRIString(), name), null);
         return toIRI(uri);
     }
 
@@ -129,13 +129,13 @@ public class TextMatcher extends ProcessorReadOnly {
             this.emitter = emitter;
         }
 
-        protected void parseAsArchive(IRI version, ArchiveInputStream in) throws IOException {
+        protected void parseAsArchive(IRI version, ArchiveInputStream in, String archiveFormat) throws IOException {
             ArchiveEntry entry;
             while ((entry = in.getNextEntry()) != null) {
                 if (in.canReadEntryData(entry)) {
                     InputStream entryStream = new BufferedInputStream(in);
                     try {
-                        attemptToParse(getEntryIri(version, entry.getName()), entryStream);
+                        attemptToParse(getEntryIri(version, archiveFormat, entry.getName()), entryStream);
                     } catch (IOException | URISyntaxException e) {
                         // ignore; this is opportunistic
                     }
