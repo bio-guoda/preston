@@ -161,12 +161,7 @@ public class TextMatcherTest {
 
     @Test
     public void findMultiLineMatches() {
-        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
-            @Override
-            public InputStream get(IRI key) throws IOException {
-                return IOUtils.toInputStream("one\ntwo\nthree", Charset.defaultCharset());
-            }
-        };
+        BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("one\ntwo\nthree", Charset.defaultCharset());
 
         ArrayList<Quad> nodes = runTextFinder(blobStore, Pattern.compile("one\ntwo"));
         assertThat(nodes.size(), is(4));
