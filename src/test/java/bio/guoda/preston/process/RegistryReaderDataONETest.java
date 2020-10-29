@@ -5,7 +5,6 @@ import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -38,7 +37,7 @@ public class RegistryReaderDataONETest {
         ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
         reader.on(toStatement(Seeds.DATA_ONE, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        Assert.assertThat(nodes.size(), is(7));
+        assertThat(nodes.size(), is(7));
         assertThat(getVersionSource(nodes.get(6)).getIRIString(), is(FIRST_PAGE));
     }
 
@@ -78,7 +77,7 @@ public class RegistryReaderDataONETest {
 
         reader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(44));
+        assertThat(nodes.size(), is(44));
         Quad secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=1000&rows=1000>"));
     }
@@ -100,7 +99,7 @@ public class RegistryReaderDataONETest {
 
         reader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(44));
+        assertThat(nodes.size(), is(44));
         Quad secondPage = nodes.get(nodes.size() - 1);
         assertThat(secondPage.toString(), startsWith("<http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=1000&rows=1000> <http://purl.org/pav/hasVersion> _:"));
     }
@@ -121,7 +120,7 @@ public class RegistryReaderDataONETest {
 
         reader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(44));
+        assertThat(nodes.size(), is(44));
         Quad secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<http://cn.dataone.org/cn/v2/query/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=1000&rows=1000>"));
     }
@@ -141,7 +140,7 @@ public class RegistryReaderDataONETest {
 
         reader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(21));
+        assertThat(nodes.size(), is(21));
         Quad identifierMemberStatement = nodes.get(2);
         assertThat(identifierMemberStatement, hasTriple(toStatement(toIRI("aekos.org.au/collection/nsw.gov.au/nsw_atlas/vis_flora_module/NOMBIN.20150515"), HAD_MEMBER, toIRI("https://dataone.tern.org.au/mn/v2/object/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FNOMBIN.20150515"))));
         Quad locationType = nodes.get(3);

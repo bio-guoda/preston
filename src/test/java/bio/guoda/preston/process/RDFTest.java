@@ -13,7 +13,7 @@ import org.apache.commons.rdf.simple.Types;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RDFTest {
 

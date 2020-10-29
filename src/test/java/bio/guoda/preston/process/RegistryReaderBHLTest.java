@@ -29,7 +29,7 @@ public class RegistryReaderBHLTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderBHL registryReader = new RegistryReaderBHL(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
         registryReader.on(toStatement(Seeds.BHL, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        Assert.assertThat(nodes.size(), is(6));
+        assertThat(nodes.size(), is(6));
         assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://www.biodiversitylibrary.org/data/item.txt"));
     }
 
@@ -69,7 +69,7 @@ public class RegistryReaderBHLTest {
 
         registryReader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(37));
+        assertThat(nodes.size(), is(37));
         Quad mimeType = nodes.get(nodes.size() - 2);
         assertThat(mimeType.getSubject().toString(), is("<https://archive.org/download/mobot31753002306964/mobot31753002306964_djvu.txt>"));
         assertThat(mimeType.getPredicate().toString(), is("<http://purl.org/dc/elements/1.1/format>"));

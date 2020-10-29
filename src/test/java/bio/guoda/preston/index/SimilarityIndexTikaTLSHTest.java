@@ -12,7 +12,7 @@ import java.io.IOException;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SimilarityIndexTikaTLSHTest {
 

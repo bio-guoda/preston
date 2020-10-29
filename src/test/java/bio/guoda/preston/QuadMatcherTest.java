@@ -8,7 +8,7 @@ import org.junit.Test;
 import static bio.guoda.preston.QuadMatcher.hasQuad;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class QuadMatcherTest {
 

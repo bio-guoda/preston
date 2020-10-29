@@ -7,7 +7,6 @@ import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -46,7 +45,7 @@ public class RegistryReaderBioCASETest {
     public void onSeed() {
         RDFTerm bla = toLiteral("bla");
         registryReader.on(toStatement(Seeds.BIOCASE, WAS_ASSOCIATED_WITH, bla));
-        Assert.assertThat(nodes.size(), is(5));
+        assertThat(nodes.size(), is(5));
         assertThat(((IRI) getVersionSource(nodes.get(4))).getIRIString(), is(RegistryReaderBioCASE.BIOCASE_REGISTRY_ENDPOINT));
     }
 

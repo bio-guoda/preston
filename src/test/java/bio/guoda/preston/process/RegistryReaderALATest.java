@@ -33,7 +33,7 @@ public class RegistryReaderALATest {
         ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
         registryReader.on(toStatement(Seeds.ALA, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        Assert.assertThat(nodes.size(), is(7));
+        assertThat(nodes.size(), is(7));
         assertThat(getVersionSource(nodes.get(6)).getIRIString(), is("https://collections.ala.org.au/ws/dataResource?status=dataAvailable"));
     }
 
@@ -73,7 +73,7 @@ public class RegistryReaderALATest {
 
         registryReader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(3982));
+        assertThat(nodes.size(), is(3982));
         Quad secondPage = nodes.get(nodes.size() - 3);
         assertThat(secondPage, hasTriple(toStatement(toIRI("https://collections.ala.org.au/ws/dataResource/dr8052"), toIRI("http://purl.org/pav/createdBy"), toIRI("https://ala.org.au"))));
         secondPage = nodes.get(nodes.size() - 2);
@@ -98,7 +98,7 @@ public class RegistryReaderALATest {
 
         registryReader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(3));
+        assertThat(nodes.size(), is(3));
         Quad first = nodes.get(1);
         assertThat(getVersionSource(first).toString(), is("<http://biocache.ala.org.au/archives/dr6504/dr6504_ror_dwca.zip>"));
         Quad second = nodes.get(2);
@@ -121,7 +121,7 @@ public class RegistryReaderALATest {
 
         registryReader.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(3));
+        assertThat(nodes.size(), is(3));
         Quad first = nodes.get(1);
         assertThat(first.toString(), startsWith("<https://biocache.ala.org.au/archives/gbif/dr382/dr382.zip> <http://purl.org/dc/elements/1.1/format> \"application/dwca\" "));
         Quad second = nodes.get(2);

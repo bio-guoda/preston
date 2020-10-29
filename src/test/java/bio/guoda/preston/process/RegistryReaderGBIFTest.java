@@ -1,10 +1,10 @@
 package bio.guoda.preston.process;
 
-import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.RDFTerm;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.TestUtil;
+import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.rdf.api.RDFTerm;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,9 +16,15 @@ import java.util.HashSet;
 import java.util.List;
 
 import static bio.guoda.preston.MimeTypes.MIME_TYPE_JSON;
-import static bio.guoda.preston.RefNodeConstants.*;
+import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
+import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
+import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
 import static bio.guoda.preston.TripleMatcher.hasTriple;
-import static bio.guoda.preston.model.RefNodeFactory.*;
+import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
+import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
+import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -35,7 +41,7 @@ public class RegistryReaderGBIFTest {
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
         registryReaderGBIF.on(toStatement(Seeds.GBIF, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         assertThat(new HashSet<>(nodes).size(), is(6));
-        Assert.assertThat(nodes.size(), is(6));
+        assertThat(nodes.size(), is(6));
         assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://api.gbif.org/v1/dataset"));
     }
 
@@ -75,7 +81,7 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(60974));
+        assertThat(nodes.size(), is(60974));
         assertThat(nodes.get(18 - 1), hasTriple(toStatement(toIRI("https://api.gbif.org/v1/dataset?offset=2&limit=2"), CREATED_BY, toIRI("https://gbif.org"))));
         assertThat(nodes.get(19 - 1), hasTriple(toStatement(toIRI("https://api.gbif.org/v1/dataset?offset=2&limit=2"), HAS_FORMAT, toLiteral(MIME_TYPE_JSON))));
         Quad secondPage = nodes.get(20 - 1);
@@ -100,7 +106,7 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(5));
+        assertThat(nodes.size(), is(5));
         Quad lastItem = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(lastItem).toString(), is("<https://api.gbif.org/v1/dataset/b7010c1b-8013-4a3c-a43b-4309a91f9629>"));
     }
@@ -121,7 +127,7 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(41));
+        assertThat(nodes.size(), is(41));
         Quad lastItem = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(lastItem).toString(), is("<https://api.gbif.org/v1/dataset/663199f1-3528-4289-8069-d27552f62f10>"));
     }
@@ -142,7 +148,7 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(60974));
+        assertThat(nodes.size(), is(60974));
         Quad secondPage = nodes.get(20 - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<https://api.gbif.org/v1/dataset/search?q=plant&amp;publishingCountry=AR&offset=2&limit=2>"));
         Quad lastPage = nodes.get(nodes.size() - 1);
@@ -173,7 +179,7 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(doiLink);
 
-        Assert.assertThat(nodes.size(), is(5));
+        assertThat(nodes.size(), is(5));
         Quad secondStatement = nodes.get(1);
         assertThat(secondStatement.toString(), startsWith("<hash://json> <http://www.w3.org/ns/prov#hadMember> <http://api.gbif.org/v1/occurrence/download/request/0062961-200221144449610.zip> "));
     }
@@ -197,7 +203,7 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(doiLink);
 
-        Assert.assertThat(nodes.size(), is(0));
+        assertThat(nodes.size(), is(0));
     }
 
     @Test
@@ -216,7 +222,7 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(firstPage);
 
-        Assert.assertThat(nodes.size(), is(6));
+        assertThat(nodes.size(), is(6));
         Quad secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<http://plazi.cs.umb.edu/GgServer/dwca/2924FFB8FFC7C76B4B0B503BFFD8D973.zip>"));
     }

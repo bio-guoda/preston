@@ -24,7 +24,7 @@ import static bio.guoda.preston.store.TestUtil.getTestBlobStoreForResource;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class TextMatcherTest {

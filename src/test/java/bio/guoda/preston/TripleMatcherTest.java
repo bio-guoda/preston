@@ -1,6 +1,5 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.TripleLike;
 import org.apache.commons.rdf.simple.SimpleRDF;
@@ -9,7 +8,7 @@ import org.junit.Test;
 import static bio.guoda.preston.TripleMatcher.hasTriple;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TripleMatcherTest {
 

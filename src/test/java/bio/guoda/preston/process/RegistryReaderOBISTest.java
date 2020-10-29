@@ -3,9 +3,8 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.api.Quad;
-import org.junit.Assert;
+import org.apache.commons.rdf.api.RDFTerm;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -34,7 +33,7 @@ public class RegistryReaderOBISTest {
         StatementsListener adapt = TestUtil.testListener(nodes);
         RegistryReaderOBIS registryReader = new RegistryReaderOBIS(TestUtil.getTestBlobStore(), adapt);
         registryReader.on(toStatement(Seeds.OBIS, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        Assert.assertThat(nodes.size(), is(6));
+        assertThat(nodes.size(), is(6));
         assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://api.obis.org/v3/dataset"));
     }
 

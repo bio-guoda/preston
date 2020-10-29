@@ -1,21 +1,17 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.RefNodeConstants;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
-import bio.guoda.preston.RefNodeConstants;
-import org.apache.commons.rdf.api.Literal;
-import org.apache.commons.rdf.api.Triple;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static bio.guoda.preston.model.RefNodeFactory.toBlank;
-import static bio.guoda.preston.model.RefNodeFactory.toDateTime;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class VersionUtilTest {
 
