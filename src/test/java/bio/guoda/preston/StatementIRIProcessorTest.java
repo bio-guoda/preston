@@ -14,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class StatementIRIProcessorTest {
 
     @Test
-    public void relativeIRIsNon2005CompliantRDF() {
+    public void fixNonCompliantURIs() {
         final List<Quad> quads = new ArrayList<>();
 
         new StatementIRIProcessor(new StatementsListenerAdapter() {

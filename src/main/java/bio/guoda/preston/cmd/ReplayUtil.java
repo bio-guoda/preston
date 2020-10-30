@@ -38,12 +38,7 @@ public final class ReplayUtil {
                               final StatementStoreReadOnly provenanceLogIndex,
                               final IRI provRoot,
                               StatementsListener... listeners) {
-        attemptReplay(provenanceLogStore, provenanceLogIndex, new CmdContext(new ProcessorState() {
-            @Override
-            public boolean shouldKeepProcessing() {
-                return true;
-            }
-        }, provRoot, listeners));
+        attemptReplay(provenanceLogStore, provenanceLogIndex, new CmdContext(() -> true, provRoot, listeners));
     }
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
