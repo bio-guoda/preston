@@ -91,8 +91,7 @@ public class TextMatcher extends ProcessorReadOnly {
             MyTextReader textReader = new MyTextReader(batchingStatementEmitter);
             try (InputStream in = get(version)) {
                 if (in != null) {
-                    InputStream markableInputStream = (in.markSupported()) ? in : new BufferedInputStream(in);
-                    textReader.attemptToParse(version, markableInputStream);
+                    textReader.attemptToParse(version, in);
                 }
             } catch (IOException | URISyntaxException e) {
                 // ignore; this is opportunistic

@@ -24,8 +24,9 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 abstract public class TextReader {
 
     public void attemptToParse(IRI version, InputStream in) throws IOException, URISyntaxException {
-        if (!attemptToParseAsArchive(version, in) && !attemptToParseAsCompressed(version, in)) {
-            attemptToParseAsText(version, in);
+        InputStream markableInputStream = (in.markSupported()) ? in : new BufferedInputStream(in);
+        if (!attemptToParseAsArchive(version, markableInputStream) && !attemptToParseAsCompressed(version, markableInputStream)) {
+            attemptToParseAsText(version, markableInputStream);
         }
     }
 
