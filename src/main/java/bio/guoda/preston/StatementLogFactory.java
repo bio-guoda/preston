@@ -17,11 +17,8 @@ public class StatementLogFactory {
     }
 
     public static StatementsListener createPrintingLogger(Logger logMode, final PrintStream out) {
-        return createPrintingLogger(logMode, out, new LogErrorHandler() {
-            @Override
-            public void handleError() {
-                // ignore
-            }
+        return createPrintingLogger(logMode, out, () -> {
+            // ignore
         });
     }
 

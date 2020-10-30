@@ -18,13 +18,7 @@ public class EmittingStreamRDF {
     private final ProcessorState context;
 
     public EmittingStreamRDF(StatementsEmitter emitter) {
-        this(emitter, new ProcessorState() {
-
-            @Override
-            public boolean shouldKeepProcessing() {
-                return true;
-            }
-        });
+        this(emitter, () -> true);
     }
 
     public EmittingStreamRDF(StatementsEmitter emitter, ProcessorState processorState) {
