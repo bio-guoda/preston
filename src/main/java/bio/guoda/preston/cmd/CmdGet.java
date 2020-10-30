@@ -1,12 +1,13 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.BlobStoreReadOnly;
+import bio.guoda.preston.process.TextReader;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.BufferedReader;
@@ -14,12 +15,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static java.lang.System.exit;
@@ -69,20 +70,19 @@ public class CmdGet extends Persisting implements Runnable {
             }
             processQuery(query, input);
 
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new IOException("problem retrieving [" + contentHash.getIRIString() + "]", e);
         }
     }
 
-    private void processQuery(ContentQuery query, InputStream is) throws IOException {
-        InputStream copyStream = query.dereference(is);
-        copyIfNoError(copyStream, System.out);
+    private void processQuery(ContentQuery query, InputStream is) throws IOException, URISyntaxException {
+        query.dereference(is, System.out);
     }
 
-    protected void copyIfNoError(InputStream proxyIs, PrintStream out) throws IOException {
+    protected void copyIfNoError(InputStream proxyIs) throws IOException {
         byte[] buffer = new byte[4096];
         int n;
-        while (this.shouldKeepProcessing() && !out.checkError() && EOF != (n = proxyIs.read(buffer))) {
+        while (this.shouldKeepProcessing() && !System.out.checkError() && EOF != (n = proxyIs.read(buffer))) {
             System.out.write(buffer, 0, n);
         }
     }
@@ -91,34 +91,54 @@ public class CmdGet extends Persisting implements Runnable {
         this.contentUris = contentUris;
     }
 
-    private class ContentQuery {
-        final Pattern matchOuterQuery = Pattern.compile("^(?<operator>[a-zA-Z0-9]+):(?<inner>\\S+)!\\\\/(?<qualifiers>\\S*)$");
-        LinkedList<Pair<String, String>> queryParts = new LinkedList<>();
-        private final IRI contentIri;
+    private class ContentQuery extends TextReader {
 
-        public ContentQuery(String query) {
-            Matcher matcher = matchOuterQuery.matcher(query);
+        String targetIriString;
+        long byteStart;
+        long byteEnd;
+        private IRI contentIri;
+        private PrintStream printStream;
 
-            while (matcher.find()) {
-                queryParts.addFirst(Pair.of(matcher.group("operator"), matcher.group("qualifiers")));
+        public ContentQuery(String targetIriString) {
+            this.targetIriString = targetIriString;
+
+            final Pattern contentHashPattern = Pattern.compile("hash://sha256/[a-fA-F0-9]{64}");
+            Matcher matchHash = contentHashPattern.matcher(targetIriString);
+            if (matchHash.find()) {
+                contentIri = toIRI(matchHash.group());
             }
+        }
 
-            if (queryParts.size() > 0) {
-                contentIri = toIRI(matcher.group("inner"));
+        public IRI getContentIri() {
+            return contentIri;
+        }
+
+        public void dereference(InputStream is, PrintStream out) throws IOException, URISyntaxException {
+            printStream = out;
+            attemptToParse(contentIri, is);
+        }
+
+        @Override
+        protected boolean shouldReadArchiveEntry(IRI entryIri) {
+            return (targetIriString.contains(entryIri.getIRIString()));
+        }
+
+        @Override
+        protected void parseAsText(IRI version, InputStream in, Charset charset) throws IOException {
+            // do not support open-ended cuts, e.g. "b5-" or "b-5"
+            Matcher matchByteLocation = Pattern.compile(String.format("^cut:%s!/b(?<first>[0-9]+)-(?<last>[0-9]+)", version.getIRIString())).matcher(targetIriString);
+            if (matchByteLocation.find()) {
+                long firstByteIndex = Long.parseLong(matchByteLocation.group("first")) - 1;
+                long lastByteIndex = Long.parseLong(matchByteLocation.group("last"));
+
+                IOUtils.copyLarge(in, printStream, firstByteIndex, (lastByteIndex - firstByteIndex));
+            }
+            else if (targetIriString.equals(version.getIRIString())) {
+                IOUtils.copy(in, printStream);
             }
             else {
-                contentIri = toIRI(query);
+                throw new IOException();
             }
-        }
-
-        public IRI getContentIri() { return contentIri; }
-
-        public Stream<Pair<String, String>> getQueryStream() {
-            return queryParts.stream();
-        }
-
-        public InputStream dereference(InputStream is) {
-            return is;
         }
     }
 

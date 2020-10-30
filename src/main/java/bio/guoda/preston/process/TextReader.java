@@ -29,7 +29,7 @@ abstract public class TextReader {
         }
     }
 
-    private boolean attemptToParseAsArchive(IRI version, InputStream in) throws IOException {
+    private boolean attemptToParseAsArchive(IRI version, InputStream in) throws IOException, URISyntaxException {
         Pair<ArchiveInputStream, String> archiveStreamAndFormat = getArchiveStreamAndFormat(in);
         if (archiveStreamAndFormat != null) {
             parseAsArchive(version, archiveStreamAndFormat.getLeft(), archiveStreamAndFormat.getRight());
@@ -81,20 +81,25 @@ abstract public class TextReader {
 
     protected abstract void parseAsText(IRI version, InputStream in, Charset charset) throws IOException;
 
-    protected void parseAsArchive(IRI version, ArchiveInputStream in, String archiveFormat) throws IOException {
+    protected void parseAsArchive(IRI version, ArchiveInputStream in, String archiveFormat) throws URISyntaxException, IOException {
         ArchiveEntry entry;
         while ((entry = in.getNextEntry()) != null) {
             if (in.canReadEntryData(entry)) {
-                // do not close this stream; it would also close the "in" stream
-                InputStream markableEntryStream = new BufferedInputStream(in);
-                try {
-                    attemptToParse(getWrappedIri(archiveFormat, version, entry.getName()), markableEntryStream);
-                } catch (IOException | URISyntaxException e) {
-                    // ignore; this is opportunistic
+                IRI entryIri = getWrappedIri(archiveFormat, version, entry.getName());
+                if (shouldReadArchiveEntry(entryIri)) {
+                    // do not close this stream; it would also close the "in" stream
+                    InputStream markableEntryStream = new BufferedInputStream(in);
+                    try {
+                        attemptToParse(entryIri, markableEntryStream);
+                    } catch (IOException | URISyntaxException e) {
+                        // ignore; this is opportunistic
+                    }
                 }
             }
         }
     }
+
+    protected boolean shouldReadArchiveEntry(IRI entryIri) { return true; }
 
     protected void parseAsCompressed(IRI version, InputStream in, String compressionFormat) throws IOException, URISyntaxException {
         // do not close this stream; it would also close the "in" stream
