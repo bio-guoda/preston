@@ -10,7 +10,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +24,6 @@ import java.util.regex.Pattern;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static java.lang.System.exit;
-import static org.apache.commons.io.IOUtils.EOF;
 
 @Parameters(separators = "= ", commandDescription = "get biodiversity data")
 public class CmdGet extends Persisting implements Runnable {
@@ -80,14 +78,6 @@ public class CmdGet extends Persisting implements Runnable {
         query.dereference(is, System.out);
     }
 
-    protected void copyIfNoError(InputStream proxyIs) throws IOException {
-        byte[] buffer = new byte[4096];
-        int n;
-        while (this.shouldKeepProcessing() && !System.out.checkError() && EOF != (n = proxyIs.read(buffer))) {
-            System.out.write(buffer, 0, n);
-        }
-    }
-
     public void setContentUris(List<String> contentUris) {
         this.contentUris = contentUris;
     }
@@ -95,10 +85,9 @@ public class CmdGet extends Persisting implements Runnable {
     private class ContentQuery extends TextReader {
 
         String targetIriString;
-        long byteStart;
-        long byteEnd;
         private IRI contentIri;
         private PrintStream printStream;
+        private boolean foundSomething = false;
 
         public ContentQuery(String targetIriString) {
             this.targetIriString = targetIriString;
@@ -117,11 +106,15 @@ public class CmdGet extends Persisting implements Runnable {
         public void dereference(InputStream is, PrintStream out) throws IOException, URISyntaxException {
             printStream = out;
             attemptToParse(contentIri, is);
+
+            if (!foundSomething) {
+                throw new IOException("failed to resolve to content");
+            }
         }
 
         @Override
         protected boolean shouldReadArchiveEntry(IRI entryIri) {
-            return (targetIriString.contains(entryIri.getIRIString()));
+            return isPartOfTargetIri(entryIri);
         }
 
         @Override
@@ -133,13 +126,19 @@ public class CmdGet extends Persisting implements Runnable {
                 long lastByteIndex = Long.parseLong(matchByteLocation.group("last"));
 
                 IOUtils.copyLarge(in, printStream, firstByteIndex, (lastByteIndex - firstByteIndex));
+                foundSomething = true;
             }
-            else if (targetIriString.equals(version.getIRIString())) {
+            else if (isPartOfTargetIri(version)) {
                 IOUtils.copy(in, printStream);
+                foundSomething = true;
             }
             else {
                 throw new IOException();
             }
+        }
+
+        private boolean isPartOfTargetIri(IRI version) {
+            return targetIriString.equals(version.getIRIString());
         }
     }
 

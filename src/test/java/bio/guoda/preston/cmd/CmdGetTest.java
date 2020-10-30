@@ -59,6 +59,20 @@ public class CmdGetTest {
     }
 
     @Test
+    public void getFileInArchive() {
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        CmdGet cmdGet = new CmdGet();
+        cmdGet.setContentUris(Collections.singletonList("tar:gz:" + aContentHash + "!/level1.txt"));
+        cmdGet.run(blobStore);
+
+        assertThat(out.toString(), is("https://example.org"));
+    }
+
+    @Test
     public void getBytesFromFileInArchive() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
 
@@ -66,9 +80,9 @@ public class CmdGetTest {
         System.setOut(new PrintStream(out));
 
         CmdGet cmdGet = new CmdGet();
-        cmdGet.setContentUris(Collections.singletonList("cut:tar:gz:" + aContentHash + "!/level1.txt!/b1-19"));
+        cmdGet.setContentUris(Collections.singletonList("cut:tar:gz:" + aContentHash + "!/level1.txt!/b9-15"));
         cmdGet.run(blobStore);
 
-        assertThat(out.toString(), is("https://example.org"));
+        assertThat(out.toString(), is("example"));
     }
 }
