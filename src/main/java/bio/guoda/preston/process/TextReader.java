@@ -88,13 +88,7 @@ abstract public class TextReader {
             if (in.canReadEntryData(entry)) {
                 IRI entryIri = getWrappedIri(archiveFormat, version, entry.getName());
                 if (shouldReadArchiveEntry(entryIri)) {
-                    // do not close this stream; it would also close the "in" stream
-                    InputStream markableEntryStream = new BufferedInputStream(in);
-                    try {
-                        attemptToParse(entryIri, markableEntryStream);
-                    } catch (IOException | URISyntaxException e) {
-                        // ignore; this is opportunistic
-                    }
+                    attemptToParse(entryIri, in);
                 }
             }
         }
@@ -103,9 +97,7 @@ abstract public class TextReader {
     protected boolean shouldReadArchiveEntry(IRI entryIri) { return true; }
 
     protected void parseAsCompressed(IRI version, InputStream in, String compressionFormat) throws IOException, URISyntaxException {
-        // do not close this stream; it would also close the "in" stream
-        InputStream markableStream = new BufferedInputStream(in);
-        attemptToParse(getWrappedIri(compressionFormat, version), markableStream);
+        attemptToParse(getWrappedIri(compressionFormat, version), in);
     }
 
     public static IRI getWrappedIri(String prefix, IRI version, String suffix) throws URISyntaxException {
