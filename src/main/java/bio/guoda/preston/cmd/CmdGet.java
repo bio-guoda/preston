@@ -138,7 +138,7 @@ public class CmdGet extends Persisting implements Runnable {
         }
 
         private boolean isPartOfTargetIri(IRI version) {
-            return targetIriString.equals(version.getIRIString());
+            return targetIriString.contains(version.getIRIString());
         }
     }
 
