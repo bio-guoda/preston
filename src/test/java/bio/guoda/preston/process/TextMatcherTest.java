@@ -176,6 +176,16 @@ public class TextMatcherTest {
     }
 
     @Test
+    public void detectSymbiotaOccurrenceReferences() {
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/textmatcher-symbiota-test.tsv");
+
+        ArrayList<Quad> nodes = runTextFinder(blobStore, Pattern.compile("http[s]{0,1}://[a-zA-Z0-9.]+/portal/collections/individual/index.php[?]{1}occid=[0-9]+"), 256);
+
+        String matchAcrossBufferBoundary = nodes.get(nodes.size() - 1).toString();
+        assertThat(matchAcrossBufferBoundary, startsWith("<cut:hash://sha256/blub!/b47-123> <http://www.w3.org/ns/prov#value> \"http://openherbarium.org/portal/collections/individual/index.php?occid=157755\""));
+    }
+
+    @Test
     public void usingRegexGroups() {
         BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("the duck is in the pond", Charset.defaultCharset());
 

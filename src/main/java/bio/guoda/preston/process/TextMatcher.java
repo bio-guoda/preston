@@ -195,7 +195,7 @@ public class TextMatcher extends ProcessorReadOnly {
                             IRI groupIri = getCutIri(version, offset + bytePosGroupStartsAt, offset + bytePosGroupEndsAt);
                             emitter.emit(toStatement(groupIri, HAS_VALUE, toLiteral(groupString)));
 
-                            if (i > 0) {
+                            if (i > 0 && i < patternGroupNames.size()) {
                                 emitter.emit(toStatement(matchIri, HAD_MEMBER, groupIri));
 
                                 String groupName = patternGroupNames.get(i);
