@@ -17,60 +17,17 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 public class ContentDereferencer extends TextReader implements Dereferencer<InputStream> {
 
     private final BlobStoreReadOnly blobStore;
-
     private String targetIriString;
+
     private IRI contentHash;
-    private InputStream contentStream;
 
     public ContentDereferencer(BlobStoreReadOnly blobStore) {
         this.blobStore = blobStore;
     }
 
-    @Override
-    public void attemptToParse(IRI version, InputStream in) throws IOException, URISyntaxException {
-        Matcher nextOperatorMatcher = Pattern.compile(String.format("([^:]+):%s", version.getIRIString())).matcher(targetIriString);
-
-        if (version.getIRIString().equals(targetIriString)) {
-            contentStream = in;
-            stopReading();
-        }
-        else if (nextOperatorMatcher.find() && nextOperatorMatcher.group(1).equals("cut")) {
-            cutAndParseBytes(version, in);
-        }
-        else {
-            super.attemptToParse(version, in);
-        }
-    }
-
-    private void cutAndParseBytes(IRI version, InputStream in) throws IOException, URISyntaxException {
-        // do not support open-ended cuts, e.g. "b5-" or "b-5"
-        Matcher byteRangeMatcher = Pattern.compile(String.format("^cut:%s!/b(?<first>[0-9]+)-(?<last>[0-9]+)$", version.getIRIString())).matcher(targetIriString);
-        if (byteRangeMatcher.find()) {
-            long firstByteIndex = Long.parseLong(byteRangeMatcher.group("first")) - 1;
-            long lastByteIndex = Long.parseLong(byteRangeMatcher.group("last"));
-
-            attemptToParse(
-                    toIRI(byteRangeMatcher.group()),
-                    cutBytes(in, firstByteIndex, lastByteIndex)
-            );
-        }
-        else {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private InputStream cutBytes(InputStream in, long firstByteIndex, long lastByteIndex) throws IOException {
+    private static InputStream cutBytes(InputStream in, long firstByteIndex, long lastByteIndex) throws IOException {
         IOUtils.skipFully(in, firstByteIndex);
         return new BoundedInputStream(in, (lastByteIndex - firstByteIndex));
-    }
-
-    @Override
-    protected boolean shouldReadArchiveEntry(IRI entryIri) {
-        return isPartOfTargetIri(entryIri);
-    }
-
-    private boolean isPartOfTargetIri(IRI version) {
-        return targetIriString.contains(version.getIRIString());
     }
 
     @Override
@@ -83,21 +40,66 @@ public class ContentDereferencer extends TextReader implements Dereferencer<Inpu
             contentHash = toIRI(matchHash.group());
         }
 
-        contentStream = null;
+        try (InputStream is = blobStore.get(contentHash)) {
+            return new ContentExtractor().getContentStream(contentHash, is);
+        } catch (IOException | URISyntaxException e) {
+            throw new IOException("failed to resolve [\" + contentHash.getIRIString() + \"]", e);
+        }
+    }
 
-        InputStream is = blobStore.get(contentHash);
-        if (is != null) {
-            try {
-                attemptToParse(contentHash, is);
-            } catch (URISyntaxException ignored) {
+    private class ContentExtractor extends TextReader {
+        private InputStream contentStream;
+
+        public InputStream getContentStream(IRI version, InputStream in) throws IOException, URISyntaxException {
+            contentStream = null;
+            attemptToParse(version, in);
+
+            if (contentStream == null)
+                throw new IOException();
+            else
+                return contentStream;
+        }
+
+        @Override
+        public void attemptToParse(IRI version, InputStream in) throws IOException, URISyntaxException {
+            Matcher nextOperatorMatcher = Pattern.compile(String.format("([^:]+):%s", version.getIRIString())).matcher(targetIriString);
+
+            if (version.getIRIString().equals(targetIriString)) {
+                contentStream = in;
+                stopReading();
+            }
+            else if (nextOperatorMatcher.find() && nextOperatorMatcher.group(1).equals("cut")) {
+                cutAndParseBytes(version, in);
+            }
+            else {
+                super.attemptToParse(version, in);
             }
         }
 
-        if (contentStream == null) {
-            throw new IOException("failed to resolve [\" + contentHash.getIRIString() + \"]");
+        private void cutAndParseBytes(IRI version, InputStream in) throws IOException, URISyntaxException {
+            // do not support open-ended cuts, e.g. "b5-" or "b-5"
+            Matcher byteRangeMatcher = Pattern.compile(String.format("^cut:%s!/b(?<first>[0-9]+)-(?<last>[0-9]+)$", version.getIRIString())).matcher(targetIriString);
+            if (byteRangeMatcher.find()) {
+                long firstByteIndex = Long.parseLong(byteRangeMatcher.group("first")) - 1;
+                long lastByteIndex = Long.parseLong(byteRangeMatcher.group("last"));
+
+                attemptToParse(
+                        toIRI(byteRangeMatcher.group()),
+                        cutBytes(in, firstByteIndex, lastByteIndex)
+                );
+            }
+            else {
+                throw new IllegalArgumentException();
+            }
         }
-        else {
-            return contentStream;
+
+        @Override
+        protected boolean shouldReadArchiveEntry(IRI entryIri) {
+            return isPartOfTargetIri(entryIri);
+        }
+
+        private boolean isPartOfTargetIri(IRI version) {
+            return targetIriString.contains(version.getIRIString());
         }
     }
 }
