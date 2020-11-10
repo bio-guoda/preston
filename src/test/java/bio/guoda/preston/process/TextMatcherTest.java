@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -217,5 +218,36 @@ public class TextMatcherTest {
 
         textMatcher.on(statement);
         return nodes;
+    }
+
+    @Test
+    public void extractPatternGroupNames() {
+        Pattern pattern = Pattern.compile("(no)(?>no)(?<group1>yes[^(]no[)]_[(no)[(no)]]_[(no[)]]_(?:no(?<group2>yes)))");
+        Map<Integer, String> groupNames = TextMatcher.extractPatternGroupNames(pattern);
+
+        assertThat(groupNames.size(), is(2));
+        assertThat(groupNames.get(2), is("group1"));
+        assertThat(groupNames.get(3), is("group2"));
+    }
+
+    @Test
+    public void sterilizeEscapes() {
+        Pattern pattern = Pattern.compile("\\(blah\\)");
+        Pattern sterilizedPattern = TextMatcher.sterilizePatternForGroupDetection(pattern);
+        assertThat(sterilizedPattern.pattern(), is(".blah."));
+    }
+
+    @Test
+    public void sterilizeClasses() {
+        Pattern pattern = Pattern.compile("[blah]");
+        Pattern sterilizedPattern = TextMatcher.sterilizePatternForGroupDetection(pattern);
+        assertThat(sterilizedPattern.pattern(), is("."));
+    }
+
+    @Test
+    public void sterilizeSomethingMessy() {
+        Pattern pattern = Pattern.compile("(w)(?>w)(?<g1>w[^(]w[)]_[(w)[(w)]]_[(w[)]]_(?:w(?<g2>w)))");
+        Pattern sterilizedPattern = TextMatcher.sterilizePatternForGroupDetection(pattern);
+        assertThat(sterilizedPattern.pattern(), is("(w)(?>w)(?<g1>w.w._._._(?:w(?<g2>w)))"));
     }
 }

@@ -15,10 +15,12 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CodingErrorAction;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -46,7 +48,7 @@ public class TextMatcher extends ProcessorReadOnly {
     private final Pattern pattern;
     private int batchSize = 256;
 
-    private List<String> patternGroupNames;
+    private Map<Integer, String> patternGroupNames;
 
     public TextMatcher(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         this(URL_PATTERN, blobStoreReadOnly, listeners);
@@ -59,23 +61,52 @@ public class TextMatcher extends ProcessorReadOnly {
     public TextMatcher(Pattern pattern, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
         this.pattern = pattern;
-        this.patternGroupNames = ExtractPatternGroupNames(pattern);
+        this.patternGroupNames = extractPatternGroupNames(pattern);
     }
 
-    private List<String> ExtractPatternGroupNames(Pattern pattern) {
-        final Pattern matchRegexEscapes = Pattern.compile("\\\\.");
-        String sterilizedPattern = matchRegexEscapes.matcher(pattern.pattern()).replaceAll(".");
+    protected static Map<Integer, String> extractPatternGroupNames(Pattern pattern) {
 
-        final Pattern matchRegexGroupNames = Pattern.compile("\\((?:\\?<([a-zA-Z][a-zA-Z0-9]*)>[^)]+|[^?)][^)]*)\\)");
-        Matcher matcher = matchRegexGroupNames.matcher(sterilizedPattern);
+        Pattern sterilizedPattern = sterilizePatternForGroupDetection(pattern);
 
-        Stream.Builder<String> builder = Stream.builder();
-        builder.accept(null); // Group 0 always represents the full match and is unnamed
-        while (matcher.find()) {
-            builder.accept(matcher.group(1));
+        final Pattern matchRegexGroupNames = Pattern.compile("\\((?:\\?<([a-zA-Z][a-zA-Z0-9]*)>|[^?)])");
+        Matcher matcher = matchRegexGroupNames.matcher(sterilizedPattern.pattern());
+
+        Map<Integer, String> patternGroupNames = new HashMap<>();
+        for (int i = 1; matcher.find(); ++i) {
+            String groupName = matcher.group(1);
+            if (groupName != null) {
+                patternGroupNames.put(i, groupName);
+            }
         }
 
-        return builder.build().collect(Collectors.toList());
+        return patternGroupNames;
+    }
+
+    protected static Pattern sterilizePatternForGroupDetection(Pattern pattern) {
+        final Pattern matchRegexEscapes = Pattern.compile("\\\\.");
+        final Pattern matchRegexClasses = Pattern.compile("\\[[^\\[\\]]+]");
+
+        AtomicReference<String> sterilizedPattern = new AtomicReference<>(pattern.pattern());
+        Stream.of(
+                matchRegexEscapes,
+                matchRegexClasses
+        ).forEach(
+                sterilizerPattern -> sterilizedPattern.set(
+                        deepReplaceAll(sterilizedPattern.get(), sterilizerPattern, ".")
+                )
+        );
+
+        return Pattern.compile(sterilizedPattern.get());
+    }
+
+    private static String deepReplaceAll(String string, Pattern pattern, String replacement) {
+        String newString = pattern.matcher(string).replaceAll(replacement);
+        if (newString.equals(string)) {
+            return string;
+        }
+        else {
+            return deepReplaceAll(newString, pattern, replacement);
+        }
     }
 
     @Override
@@ -195,12 +226,17 @@ public class TextMatcher extends ProcessorReadOnly {
                             IRI groupIri = getCutIri(version, offset + bytePosGroupStartsAt, offset + bytePosGroupEndsAt);
                             emitter.emit(toStatement(groupIri, HAS_VALUE, toLiteral(groupString)));
 
-                            if (i > 0 && i < patternGroupNames.size()) {
+                            if (i > 0) {
                                 emitter.emit(toStatement(matchIri, HAD_MEMBER, groupIri));
 
-                                String groupName = patternGroupNames.get(i);
-                                if (groupName != null) {
-                                    emitter.emit(toStatement(matchIri, DESCRIPTION, toLiteral(groupName)));
+                                if (patternGroupNames.containsKey(i)) {
+                                    String groupName = patternGroupNames.get(i);
+                                    if (groupString.equals(matcher.group(groupName))) {
+                                        emitter.emit(toStatement(matchIri, DESCRIPTION, toLiteral(groupName)));
+                                    }
+                                    else {
+                                        throw new RuntimeException("pattern group [" + groupName + "] was assigned the wrong index");
+                                    }
                                 }
                             }
                         }
