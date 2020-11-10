@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class ValidatingKeyValueStreamSHA256IRI implements ValidatingKeyValueStream {
 
-    public final static Pattern SHA_256_PATTERN = Pattern.compile("hash://sha256/([a-z0-9]){64}");
+    public final static Pattern SHA_256_PATTERN = Pattern.compile("hash://sha256/([a-fA-F0-9]){64}");
 
     private final ByteArrayOutputStream baos;
     private final InputStream value;
