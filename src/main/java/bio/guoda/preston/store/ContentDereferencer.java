@@ -2,8 +2,6 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.ContentReader;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
@@ -18,38 +16,47 @@ import static bio.guoda.preston.util.ByteStreamUtil.cutBytes;
 public class ContentDereferencer extends ContentReader implements Dereferencer<InputStream> {
 
     private final BlobStoreReadOnly blobStore;
-    private String targetIriString;
-
-    private IRI contentHash;
 
     public ContentDereferencer(BlobStoreReadOnly blobStore) {
         this.blobStore = blobStore;
     }
 
     @Override
-    public InputStream dereference(IRI uri) throws IOException {
-        targetIriString = uri.getIRIString();
-
-        final Pattern contentHashPattern = Pattern.compile("hash://sha256/[a-fA-F0-9]{64}");
-        Matcher matchHash = contentHashPattern.matcher(targetIriString);
-        if (matchHash.find()) {
-            contentHash = toIRI(matchHash.group());
-        }
-
+    public InputStream dereference(IRI iri) throws IOException {
         try {
-            InputStream is = blobStore.get(contentHash);
-            return new ContentExtractor().getContentStream(contentHash, is);
-        } catch (IOException | URISyntaxException e) {
-            throw new IOException("failed to resolve [\" + contentHash.getIRIString() + \"]", e);
+            IRI contentHash = extractContentHash(iri);
+            InputStream in = blobStore.get(contentHash);
+            return new ContentExtractor(iri).getContentStream(in);
+        } catch (IOException | URISyntaxException | IllegalArgumentException e) {
+            throw new IOException("failed to dereference [" + iri.getIRIString() + "]", e);
         }
     }
 
-    private class ContentExtractor extends ContentReader {
+    protected static IRI extractContentHash(IRI iri) throws IllegalArgumentException {
+        final Pattern contentHashPattern = ValidatingKeyValueStreamSHA256IRI.SHA_256_PATTERN;
+        Matcher contentHashMatcher = contentHashPattern.matcher(iri.getIRIString());
+
+        IRI contentHash = (contentHashMatcher.find()) ? toIRI(contentHashMatcher.group()) : null;
+        if (contentHash == null) {
+            throw new IllegalArgumentException("[" + iri.getIRIString() + "] is not a content-based URI (e.g. \"...hash://abc123...\"");
+        }
+        else {
+            return contentHash;
+        }
+    }
+
+    private static class ContentExtractor extends ContentReader {
+        private final IRI targetIri;
         private InputStream contentStream;
 
-        public InputStream getContentStream(IRI version, InputStream in) throws IOException, URISyntaxException {
+        public ContentExtractor(IRI iri) {
+            this.targetIri = iri;
+        }
+
+        public InputStream getContentStream(InputStream in) throws IOException, URISyntaxException, IllegalArgumentException {
+            IRI contentReference = extractContentHash(targetIri);
             contentStream = null;
-            attemptToParse(version, in);
+            attemptToParse(contentReference, in);
 
             if (contentStream == null)
                 throw new IOException();
@@ -58,24 +65,29 @@ public class ContentDereferencer extends ContentReader implements Dereferencer<I
         }
 
         @Override
-        public void attemptToParse(IRI version, InputStream in) throws IOException, URISyntaxException {
-            Matcher nextOperatorMatcher = Pattern.compile(String.format("([^:]+):%s", version.getIRIString())).matcher(targetIriString);
+        public void attemptToParse(IRI iri, InputStream in) throws IOException, URISyntaxException {
+            Matcher nextOperatorMatcher = Pattern
+                    .compile(String.format("([^:]+):%s", iri.getIRIString()))
+                    .matcher(targetIri.getIRIString());
 
-            if (version.getIRIString().equals(targetIriString)) {
+            if (iri.getIRIString().equals(targetIri.getIRIString())) {
                 contentStream = in;
                 stopReading();
             }
             else if (nextOperatorMatcher.find() && nextOperatorMatcher.group(1).equals("cut")) {
-                cutAndParseBytes(version, in);
+                cutAndParseBytes(iri, in);
             }
             else {
-                super.attemptToParse(version, in);
+                super.attemptToParse(iri, in);
             }
         }
 
-        private void cutAndParseBytes(IRI version, InputStream in) throws IOException, URISyntaxException {
+        private void cutAndParseBytes(IRI iri, InputStream in) throws IOException, URISyntaxException {
             // do not support open-ended cuts, e.g. "b5-" or "b-5"
-            Matcher byteRangeMatcher = Pattern.compile(String.format("^cut:%s!/b(?<first>[0-9]+)-(?<last>[0-9]+)$", version.getIRIString())).matcher(targetIriString);
+            Matcher byteRangeMatcher = Pattern
+                    .compile(String.format("^cut:%s!/b(?<first>[0-9]+)-(?<last>[0-9]+)$", iri.getIRIString()))
+                    .matcher(targetIri.getIRIString());
+
             if (byteRangeMatcher.find()) {
                 long firstByteIndex = Long.parseLong(byteRangeMatcher.group("first")) - 1;
                 long lastByteIndex = Long.parseLong(byteRangeMatcher.group("last"));
@@ -86,7 +98,7 @@ public class ContentDereferencer extends ContentReader implements Dereferencer<I
                 );
             }
             else {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("[" + iri + "] is not a valid cut URI");
             }
         }
 
@@ -95,8 +107,18 @@ public class ContentDereferencer extends ContentReader implements Dereferencer<I
             return isPartOfTargetIri(entryIri);
         }
 
-        private boolean isPartOfTargetIri(IRI version) {
-            return targetIriString.contains(version.getIRIString());
+        private boolean isPartOfTargetIri(IRI iri) {
+            return targetIri.getIRIString().contains(iri.getIRIString());
+        }
+    }
+
+    private static class ContentUriException extends Exception {
+        public ContentUriException(String message) {
+            super(message);
+        }
+
+        public ContentUriException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 }
