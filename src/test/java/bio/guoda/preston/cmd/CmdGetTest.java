@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.store.TestUtil.getTestBlobStoreForResource;
@@ -56,6 +57,26 @@ public class CmdGetTest {
         cmdGet.run(blobStore);
 
         assertThat(out.toString(), is("bits"));
+    }
+
+    @Test
+    public void getArchive() {
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
+
+        final AtomicInteger bytesWritten = new AtomicInteger(0);
+        PrintStream out = new PrintStream(new ByteArrayOutputStream()) {
+            @Override
+            public void write(byte[] buf, int off, int len) {
+                bytesWritten.addAndGet(len);
+            }
+        };
+        System.setOut(new PrintStream(out));
+
+        CmdGet cmdGet = new CmdGet();
+        cmdGet.setContentUris(Collections.singletonList(aContentHash));
+        cmdGet.run(blobStore);
+
+        assertThat(bytesWritten.get(), is(303));
     }
 
     @Test

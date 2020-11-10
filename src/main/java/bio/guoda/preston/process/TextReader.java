@@ -25,8 +25,8 @@ abstract public class TextReader {
 
     public void attemptToParse(IRI version, InputStream in) throws IOException, URISyntaxException {
         InputStream markableInputStream = (in.markSupported()) ? in : new BufferedInputStream(in);
-        if (!attemptToParseAsArchive(version, markableInputStream) && !attemptToParseAsCompressed(version, markableInputStream)) {
-            attemptToParseAsText(version, markableInputStream);
+        if (!attemptToParseAsArchive(version, markableInputStream) && !attemptToParseAsCompressed(version, markableInputStream) && !attemptToParseAsText(version, markableInputStream)) {
+            // fail silently
         }
     }
 
@@ -80,7 +80,8 @@ abstract public class TextReader {
         return false;
     }
 
-    protected abstract void parseAsText(IRI version, InputStream in, Charset charset) throws IOException;
+    protected void parseAsText(IRI version, InputStream in, Charset charset) throws IOException {
+    }
 
     protected void parseAsArchive(IRI version, ArchiveInputStream in, String archiveFormat) throws URISyntaxException, IOException {
         ArchiveEntry entry;

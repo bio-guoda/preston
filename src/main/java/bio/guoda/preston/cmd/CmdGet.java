@@ -7,6 +7,7 @@ import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
@@ -16,7 +17,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -118,23 +118,41 @@ public class CmdGet extends Persisting implements Runnable {
         }
 
         @Override
-        protected void parseAsText(IRI version, InputStream in, Charset charset) throws IOException {
-            // do not support open-ended cuts, e.g. "b5-" or "b-5"
-            Matcher matchByteLocation = Pattern.compile(String.format("^cut:%s!/b(?<first>[0-9]+)-(?<last>[0-9]+)", version.getIRIString())).matcher(targetIriString);
-            if (matchByteLocation.find()) {
-                long firstByteIndex = Long.parseLong(matchByteLocation.group("first")) - 1;
-                long lastByteIndex = Long.parseLong(matchByteLocation.group("last"));
+        public void attemptToParse(IRI version, InputStream in) throws IOException, URISyntaxException {
+            Matcher nextOperatorMatcher = Pattern.compile(String.format("([^:]+):%s", version.getIRIString())).matcher(targetIriString);
 
-                IOUtils.copyLarge(in, printStream, firstByteIndex, (lastByteIndex - firstByteIndex));
+            if (version.getIRIString().equals(targetIriString)) {
+                IOUtils.copyLarge(in, printStream);
                 foundSomething = true;
             }
-            else if (isPartOfTargetIri(version)) {
-                IOUtils.copy(in, printStream);
-                foundSomething = true;
+            else if (nextOperatorMatcher.find() && nextOperatorMatcher.group(1).equals("cut")) {
+                cutAndParseBytes(version, in);
             }
             else {
-                throw new IOException();
+                super.attemptToParse(version, in);
             }
+        }
+
+        private void cutAndParseBytes(IRI version, InputStream in) throws IOException, URISyntaxException {
+            Matcher byteRangeMatcher = Pattern.compile(String.format("^cut:%s!/b(?<first>[0-9]+)-(?<last>[0-9]+)$", version.getIRIString())).matcher(targetIriString);
+            if (byteRangeMatcher.find()) {
+                // do not support open-ended cuts, e.g. "b5-" or "b-5"
+                long firstByteIndex = Long.parseLong(byteRangeMatcher.group("first")) - 1;
+                long lastByteIndex = Long.parseLong(byteRangeMatcher.group("last"));
+
+                attemptToParse(
+                        toIRI(byteRangeMatcher.group()),
+                        cutBytes(in, firstByteIndex, lastByteIndex)
+                );
+            }
+            else {
+                throw new IllegalArgumentException();
+            }
+        }
+
+        private InputStream cutBytes(InputStream in, long firstByteIndex, long lastByteIndex) throws IOException {
+            IOUtils.skipFully(in, firstByteIndex);
+            return new BoundedInputStream(in, (lastByteIndex - firstByteIndex));
         }
 
         private boolean isPartOfTargetIri(IRI version) {
