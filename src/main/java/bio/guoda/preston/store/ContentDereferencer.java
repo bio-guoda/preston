@@ -40,7 +40,8 @@ public class ContentDereferencer extends ContentReader implements Dereferencer<I
             contentHash = toIRI(matchHash.group());
         }
 
-        try (InputStream is = blobStore.get(contentHash)) {
+        try {
+            InputStream is = blobStore.get(contentHash);
             return new ContentExtractor().getContentStream(contentHash, is);
         } catch (IOException | URISyntaxException e) {
             throw new IOException("failed to resolve [\" + contentHash.getIRIString() + \"]", e);
