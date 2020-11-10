@@ -3,6 +3,7 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.TextReader;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -15,7 +16,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +58,12 @@ public class CmdGet extends Persisting implements Runnable {
     }
 
     protected void handleContentQuery(BlobStoreReadOnly blobStore, String queryString) throws IOException {
-        ContentQuery query = new ContentQuery(queryString);
+        ContentDereferencer query = new ContentDereferencer(blobStore);
 
         try {
-            query.dereference(blobStore, System.out);
-        } catch (IOException | URISyntaxException e) {
+            InputStream contentStream = query.dereference(toIRI(queryString));
+            IOUtils.copyLarge(contentStream, System.out);
+        } catch (IOException e) {
             throw new IOException("problem retrieving [" + queryString + "]", e);
         }
     }
@@ -71,37 +72,16 @@ public class CmdGet extends Persisting implements Runnable {
         this.contentUris = contentUris;
     }
 
-    private class ContentQuery extends TextReader {
+    private class ContentDereferencer extends TextReader implements Dereferencer<InputStream> {
 
-        String targetIriString;
+        private final BlobStoreReadOnly blobStore;
+
+        private String targetIriString;
         private IRI contentHash;
-        private PrintStream printStream;
-        private boolean foundSomething;
+        private InputStream contentStream;
 
-        public ContentQuery(String targetIriString) {
-            this.targetIriString = targetIriString;
-
-            final Pattern contentHashPattern = Pattern.compile("hash://sha256/[a-fA-F0-9]{64}");
-            Matcher matchHash = contentHashPattern.matcher(targetIriString);
-            if (matchHash.find()) {
-                contentHash = toIRI(matchHash.group());
-            }
-        }
-
-        public void dereference(BlobStoreReadOnly blobStore, PrintStream out) throws IOException, URISyntaxException {
-            InputStream is = blobStore.get(contentHash);
-            if (is == null) {
-                System.err.print("not found: [" + contentHash.getIRIString() + "]\n");
-                exit(1);
-            }
-
-            foundSomething = false;
-            printStream = out;
-            attemptToParse(contentHash, is);
-
-            if (!foundSomething) {
-                throw new IOException("failed to resolve to content");
-            }
+        public ContentDereferencer(BlobStoreReadOnly blobStore) {
+            this.blobStore = blobStore;
         }
 
         @Override
@@ -109,8 +89,8 @@ public class CmdGet extends Persisting implements Runnable {
             Matcher nextOperatorMatcher = Pattern.compile(String.format("([^:]+):%s", version.getIRIString())).matcher(targetIriString);
 
             if (version.getIRIString().equals(targetIriString)) {
-                IOUtils.copyLarge(in, printStream);
-                foundSomething = true;
+                contentStream = in;
+                stopReading();
             }
             else if (nextOperatorMatcher.find() && nextOperatorMatcher.group(1).equals("cut")) {
                 cutAndParseBytes(version, in);
@@ -149,6 +129,35 @@ public class CmdGet extends Persisting implements Runnable {
 
         private boolean isPartOfTargetIri(IRI version) {
             return targetIriString.contains(version.getIRIString());
+        }
+
+        @Override
+        public InputStream dereference(IRI uri) throws IOException {
+            targetIriString = uri.getIRIString();
+
+            final Pattern contentHashPattern = Pattern.compile("hash://sha256/[a-fA-F0-9]{64}");
+            Matcher matchHash = contentHashPattern.matcher(targetIriString);
+            if (matchHash.find()) {
+                contentHash = toIRI(matchHash.group());
+            }
+
+            contentStream = null;
+
+            InputStream is = blobStore.get(contentHash);
+            if (is != null) {
+                try {
+                    attemptToParse(contentHash, is);
+                } catch (URISyntaxException ignored) {
+                    int x = 0;
+                }
+            }
+
+            if (contentStream == null) {
+                throw new IOException("failed to resolve [\" + contentHash.getIRIString() + \"]");
+            }
+            else {
+                return contentStream;
+            }
         }
     }
 

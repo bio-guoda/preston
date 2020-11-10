@@ -23,6 +23,8 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 
 abstract public class TextReader {
 
+    private boolean keepReading = true;
+
     public void attemptToParse(IRI version, InputStream in) throws IOException, URISyntaxException {
         InputStream markableInputStream = (in.markSupported()) ? in : new BufferedInputStream(in);
         if (!attemptToParseAsArchive(version, markableInputStream) && !attemptToParseAsCompressed(version, markableInputStream) && !attemptToParseAsText(version, markableInputStream)) {
@@ -85,7 +87,7 @@ abstract public class TextReader {
 
     protected void parseAsArchive(IRI version, ArchiveInputStream in, String archiveFormat) throws URISyntaxException, IOException {
         ArchiveEntry entry;
-        while ((entry = in.getNextEntry()) != null) {
+        while (keepReading && (entry = in.getNextEntry()) != null) {
             if (in.canReadEntryData(entry)) {
                 IRI entryIri = getWrappedIri(archiveFormat, version, entry.getName());
                 if (shouldReadArchiveEntry(entryIri)) {
@@ -108,5 +110,9 @@ abstract public class TextReader {
 
     public static IRI getWrappedIri(String prefix, IRI version) throws URISyntaxException {
         return getWrappedIri(prefix, version, null);
+    }
+
+    protected void stopReading() {
+        keepReading = false;
     }
 }
