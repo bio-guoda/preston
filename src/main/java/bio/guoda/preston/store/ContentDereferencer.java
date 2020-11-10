@@ -59,7 +59,7 @@ public class ContentDereferencer extends ContentReader implements Dereferencer<I
             attemptToParse(contentReference, in);
 
             if (contentStream == null)
-                throw new IOException();
+                throw new IOException("failed to find content identified by [" + targetIri + "]");
             else
                 return contentStream;
         }
@@ -109,16 +109,6 @@ public class ContentDereferencer extends ContentReader implements Dereferencer<I
 
         private boolean isPartOfTargetIri(IRI iri) {
             return targetIri.getIRIString().contains(iri.getIRIString());
-        }
-    }
-
-    private static class ContentUriException extends Exception {
-        public ContentUriException(String message) {
-            super(message);
-        }
-
-        public ContentUriException(String message, Throwable cause) {
-            super(message, cause);
         }
     }
 }
