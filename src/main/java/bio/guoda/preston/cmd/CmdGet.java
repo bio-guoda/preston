@@ -148,7 +148,6 @@ public class CmdGet extends Persisting implements Runnable {
                 try {
                     attemptToParse(contentHash, is);
                 } catch (URISyntaxException ignored) {
-                    int x = 0;
                 }
             }
 
