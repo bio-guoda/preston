@@ -44,11 +44,11 @@ public class CmdGet extends Persisting implements Runnable {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    handleContentIri(blobStore, StringUtils.trim(line));
+                    handleContentQuery(blobStore, StringUtils.trim(line));
                 }
             } else {
                 for (String s : contentUris) {
-                    handleContentIri(blobStore, s);
+                    handleContentQuery(blobStore, s);
                 }
             }
         } catch (Throwable th) {
@@ -57,25 +57,14 @@ public class CmdGet extends Persisting implements Runnable {
         }
     }
 
-    protected void handleContentIri(BlobStoreReadOnly blobStore, String queryString) throws IOException {
+    protected void handleContentQuery(BlobStoreReadOnly blobStore, String queryString) throws IOException {
         ContentQuery query = new ContentQuery(queryString);
-        IRI contentHash = query.getContentIri();
 
         try {
-            InputStream input = blobStore.get(contentHash);
-            if (input == null) {
-                System.err.print("not found: [" + contentHash.getIRIString() + "]\n");
-                exit(1);
-            }
-            processQuery(query, input);
-
+            query.dereference(blobStore, System.out);
         } catch (IOException | URISyntaxException e) {
-            throw new IOException("problem retrieving [" + contentHash.getIRIString() + "]", e);
+            throw new IOException("problem retrieving [" + queryString + "]", e);
         }
-    }
-
-    private void processQuery(ContentQuery query, InputStream is) throws IOException, URISyntaxException {
-        query.dereference(is, System.out);
     }
 
     public void setContentUris(List<String> contentUris) {
@@ -85,9 +74,9 @@ public class CmdGet extends Persisting implements Runnable {
     private class ContentQuery extends TextReader {
 
         String targetIriString;
-        private IRI contentIri;
+        private IRI contentHash;
         private PrintStream printStream;
-        private boolean foundSomething = false;
+        private boolean foundSomething;
 
         public ContentQuery(String targetIriString) {
             this.targetIriString = targetIriString;
@@ -95,26 +84,24 @@ public class CmdGet extends Persisting implements Runnable {
             final Pattern contentHashPattern = Pattern.compile("hash://sha256/[a-fA-F0-9]{64}");
             Matcher matchHash = contentHashPattern.matcher(targetIriString);
             if (matchHash.find()) {
-                contentIri = toIRI(matchHash.group());
+                contentHash = toIRI(matchHash.group());
             }
         }
 
-        public IRI getContentIri() {
-            return contentIri;
-        }
+        public void dereference(BlobStoreReadOnly blobStore, PrintStream out) throws IOException, URISyntaxException {
+            InputStream is = blobStore.get(contentHash);
+            if (is == null) {
+                System.err.print("not found: [" + contentHash.getIRIString() + "]\n");
+                exit(1);
+            }
 
-        public void dereference(InputStream is, PrintStream out) throws IOException, URISyntaxException {
+            foundSomething = false;
             printStream = out;
-            attemptToParse(contentIri, is);
+            attemptToParse(contentHash, is);
 
             if (!foundSomething) {
                 throw new IOException("failed to resolve to content");
             }
-        }
-
-        @Override
-        protected boolean shouldReadArchiveEntry(IRI entryIri) {
-            return isPartOfTargetIri(entryIri);
         }
 
         @Override
@@ -134,9 +121,9 @@ public class CmdGet extends Persisting implements Runnable {
         }
 
         private void cutAndParseBytes(IRI version, InputStream in) throws IOException, URISyntaxException {
+            // do not support open-ended cuts, e.g. "b5-" or "b-5"
             Matcher byteRangeMatcher = Pattern.compile(String.format("^cut:%s!/b(?<first>[0-9]+)-(?<last>[0-9]+)$", version.getIRIString())).matcher(targetIriString);
             if (byteRangeMatcher.find()) {
-                // do not support open-ended cuts, e.g. "b5-" or "b-5"
                 long firstByteIndex = Long.parseLong(byteRangeMatcher.group("first")) - 1;
                 long lastByteIndex = Long.parseLong(byteRangeMatcher.group("last"));
 
@@ -153,6 +140,11 @@ public class CmdGet extends Persisting implements Runnable {
         private InputStream cutBytes(InputStream in, long firstByteIndex, long lastByteIndex) throws IOException {
             IOUtils.skipFully(in, firstByteIndex);
             return new BoundedInputStream(in, (lastByteIndex - firstByteIndex));
+        }
+
+        @Override
+        protected boolean shouldReadArchiveEntry(IRI entryIri) {
+            return isPartOfTargetIri(entryIri);
         }
 
         private boolean isPartOfTargetIri(IRI version) {
