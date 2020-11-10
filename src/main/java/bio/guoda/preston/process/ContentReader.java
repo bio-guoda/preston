@@ -21,7 +21,7 @@ import java.nio.charset.Charset;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 
-abstract public class TextReader {
+abstract public class ContentReader {
 
     private boolean keepReading = true;
 

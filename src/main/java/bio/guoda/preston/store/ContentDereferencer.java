@@ -1,7 +1,7 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.process.BlobStoreReadOnly;
-import bio.guoda.preston.process.TextReader;
+import bio.guoda.preston.process.ContentReader;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.rdf.api.IRI;
@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 
-public class ContentDereferencer extends TextReader implements Dereferencer<InputStream> {
+public class ContentDereferencer extends ContentReader implements Dereferencer<InputStream> {
 
     private final BlobStoreReadOnly blobStore;
     private String targetIriString;
@@ -47,7 +47,7 @@ public class ContentDereferencer extends TextReader implements Dereferencer<Inpu
         }
     }
 
-    private class ContentExtractor extends TextReader {
+    private class ContentExtractor extends ContentReader {
         private InputStream contentStream;
 
         public InputStream getContentStream(IRI version, InputStream in) throws IOException, URISyntaxException {

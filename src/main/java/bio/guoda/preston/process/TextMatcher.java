@@ -85,7 +85,7 @@ public class TextMatcher extends ProcessorReadOnly {
             final List<Quad> nodes = new ArrayList<>();
 
             BatchingEmitter batchingStatementEmitter = new BatchingEmitter(nodes, version, statement);
-            MyTextReader textReader = new MyTextReader(batchingStatementEmitter);
+            MyContentReader textReader = new MyContentReader(batchingStatementEmitter);
             try (InputStream in = get(version)) {
                 if (in != null) {
                     textReader.attemptToParse(version, in);
@@ -111,11 +111,11 @@ public class TextMatcher extends ProcessorReadOnly {
         buffer.position(newPosition);
     }
 
-    private class MyTextReader extends TextReader {
+    private class MyContentReader extends ContentReader {
 
         private final StatementEmitter emitter;
 
-        public MyTextReader(StatementEmitter emitter) {
+        public MyContentReader(StatementEmitter emitter) {
             this.emitter = emitter;
         }
 
