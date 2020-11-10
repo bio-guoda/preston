@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.util.ByteStreamUtil.cutBytes;
 
 public class ContentDereferencer extends ContentReader implements Dereferencer<InputStream> {
 
@@ -23,11 +24,6 @@ public class ContentDereferencer extends ContentReader implements Dereferencer<I
 
     public ContentDereferencer(BlobStoreReadOnly blobStore) {
         this.blobStore = blobStore;
-    }
-
-    private static InputStream cutBytes(InputStream in, long firstByteIndex, long lastByteIndex) throws IOException {
-        IOUtils.skipFully(in, firstByteIndex);
-        return new BoundedInputStream(in, (lastByteIndex - firstByteIndex));
     }
 
     @Override
