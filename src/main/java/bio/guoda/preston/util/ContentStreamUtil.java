@@ -6,7 +6,7 @@ import org.apache.commons.io.input.BoundedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ByteStreamUtil {
+public class ContentStreamUtil {
 
     /**
      * @param in a stream of bytes.

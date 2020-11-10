@@ -10,12 +10,12 @@ import java.io.InputStream;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ByteStreamUtilTest {
+public class ContentStreamUtilTest {
 
     @Test
     public void cutBytes() throws IOException {
         InputStream inBytes = IOUtils.toInputStream("0123456789", Charsets.DEFAULT_CHARSET);
-        InputStream outBytes = ByteStreamUtil.cutBytes(inBytes, 4, 7);
+        InputStream outBytes = ContentStreamUtil.cutBytes(inBytes, 4, 7);
 
         assertThat(IOUtils.toString(outBytes, Charsets.DEFAULT_CHARSET), is("456"));
     }
@@ -23,6 +23,6 @@ public class ByteStreamUtilTest {
     @Test( expected = IOException.class)
     public void cutBadRange() throws IOException {
         InputStream inBytes = IOUtils.toInputStream("0123456789", Charsets.DEFAULT_CHARSET);
-        ByteStreamUtil.cutBytes(inBytes, 14, 17);
+        ContentStreamUtil.cutBytes(inBytes, 14, 17);
     }
 }

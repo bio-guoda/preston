@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.util.ByteStreamUtil.cutBytes;
+import static bio.guoda.preston.util.ContentStreamUtil.cutBytes;
 
 public class ContentDereferencer extends ContentReader implements Dereferencer<InputStream> {
 
