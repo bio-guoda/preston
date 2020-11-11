@@ -22,13 +22,13 @@ public class ContentDereferencer extends ContentReader implements Dereferencer<I
     }
 
     @Override
-    public InputStream dereference(IRI iri) throws IOException {
+    public InputStream dereference(IRI iri) throws DereferenceException {
         try {
             IRI contentHash = extractContentHash(iri);
             InputStream in = blobStore.get(contentHash);
             return new ContentExtractor(iri).getContentStream(in);
         } catch (IOException | URISyntaxException | IllegalArgumentException e) {
-            throw new IOException("failed to dereference [" + iri.getIRIString() + "]", e);
+            throw new DereferenceException(iri, e);
         }
     }
 
