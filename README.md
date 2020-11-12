@@ -653,6 +653,7 @@ Poelen, J. H. (2019) To connect is to preserve: on frugal data integration and p
 Poelen, J. H. (2020). Global Biotic Interactions: Benefits of Pragmatic Reuse of Species Interaction Datasets. https://doi.org/10.17605/OSF.IO/9JT24
 
 Elliott, M. J. (2020). Reliable Biodiversity Dataset References. iDigBio Communications Luncheon, 10 February 2020. https://doi.org/10.17605/OSF.IO/FTZ9B
+
 Poelen, J. H., Boettiger, C. (2020). Reliable Data Use In R. 4th Annual Digital Data in Biodiversity Research, 1-3 June 2020. https://doi.org/10.17605/OSF.IO/VKJ9Q
 
 Elliott, M. J., Poelen, J. H., Fortes, J. A. B. (2020). Reliable Dataset Identifiers Are Essential Building Blocks For Reproducible Research. 4th Annual Digital Data in Biodiversity Research, 1-3 June 2020. http://doi.org/10.17605/OSF.IO/AT4XE
