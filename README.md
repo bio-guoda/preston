@@ -646,7 +646,7 @@ MJ Elliott, JH Poelen, JAB Fortes (2020). Toward Reliable Biodiversity Dataset R
 
 ### Other Conference Presentations / Papers
 
-Poelen, Jorrit H.; Schulz, Kayja; Trei, Kelli J.; Rees, Jonathan A. (2019). Finding Identification of Keys in the Biodiversity Heritage Library. Biodiversity Heritage Library (BHL) and Global Names (GN) Workshop. Champaign, Illinois. Status = PUBLISHED; Acknowledgement of Federal Support = Yes
+Poelen, Jorrit H.; Schulz, Kayja; Trei, Kelli J.; Rees, Jonathan A. (2019). Finding Identification of Keys in the Biodiversity Heritage Library. Biodiversity Heritage Library (BHL) and Global Names (GN) Workshop. Champaign, Illinois. Zenodo. http://doi.org/10.5281/zenodo.3311815 . Status = PUBLISHED; Acknowledgement of Federal Support = Yes
 
 Poelen, J. H. (2019) To connect is to preserve: on frugal data integration and preservation solutions. Society for Preservation of Natural History Collections (SPNHC) Annual Meeting. Chicago. https://doi.org/10.17605/OSF.IO/A2V8G. Status = PUBLISHED; Acknowledgement of Federal Support = Yes
 
