@@ -4,7 +4,7 @@
 
  *Named after [Frank W. Preston (1896-1989)](https://en.wikipedia.org/wiki/Frank_W._Preston) and the Prestonian shortfall, one of the "[Seven Shortfalls that Beset Large-Scale Knowledge of Biodiversity](https://doi.org/10.1146/annurev-ecolsys-112414-054400)" as described by [Hortal et al. 2015](https://doi.org/10.1146/annurev-ecolsys-112414-054400). 
 
-[`toc`](#table-of-contents) / [`quickstart`](#quickstart) / [`introduction`](#introduction) / [`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding)
+[`toc`](#table-of-contents) / [`quickstart`](#quickstart) / [`introduction`](#introduction) / [`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding) / [`(data) publications`](#publications)
 
 ## Quickstart
 To install [a preston release](../../releases) on your linux/mac: 
@@ -635,3 +635,52 @@ Feel free to join in. All welcome. Open an [issue](https://github.com/bio-guoda/
 
 ## Funding
 This work is funded in part by grant [NSF OAC 1839201](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1839201&HistoricalAwards=false) from the National Science Foundation.
+
+## Publications
+A list of publications using Preston or exploring the idea of using content-based identifiers as a building block for reliably reference data and their provenance.
+
+### Journals
+
+MJ Elliott, JH Poelen, JAB Fortes (2020). Toward Reliable Biodiversity Dataset References. Ecological Informatics. https://doi.org/10.1016/j.ecoinf.2020.101132
+
+
+### Other Conference Presentations / Papers
+
+Poelen, Jorrit H.; Schulz, Kayja; Trei, Kelli J.; Rees, Jonathan A. (2019). Finding Identification of Keys in the Biodiversity Heritage Library. Biodiversity Heritage Library (BHL) and Global Names (GN) Workshop. Champaign, Illinois. Status = PUBLISHED; Acknowledgement of Federal Support = Yes
+
+Poelen, J. H. (2019) To connect is to preserve: on frugal data integration and preservation solutions. Society for Preservation of Natural History Collections (SPNHC) Annual Meeting. Chicago. https://doi.org/10.17605/OSF.IO/A2V8G. Status = PUBLISHED; Acknowledgement of Federal Support = Yes
+
+Poelen, J. H. (2020). Global Biotic Interactions: Benefits of Pragmatic Reuse of Species Interaction Datasets. https://doi.org/10.17605/OSF.IO/9JT24
+
+Elliott, M. J. (2020). Reliable Biodiversity Dataset References. iDigBio Communications Luncheon, 10 February 2020. https://doi.org/10.17605/OSF.IO/FTZ9B
+Poelen, J. H., Boettiger, C. (2020). Reliable Data Use In R. 4th Annual Digital Data in Biodiversity Research, 1-3 June 2020. https://doi.org/10.17605/OSF.IO/VKJ9Q
+
+Elliott, M. J., Poelen, J. H., Fortes, J. A. B. (2020). Reliable Dataset Identifiers Are Essential Building Blocks For Reproducible Research. 4th Annual Digital Data in Biodiversity Research, 1-3 June 2020. http://doi.org/10.17605/OSF.IO/AT4XE
+
+Boettiger, C (2020). Content-based Identifiers for Iterative Forecasts: A Proposal. Data One Webinars. Accessible at https://www.dataone.org/webinars/iterative-forecasts/ .
+
+### Data publications
+
+J.H. Poelen. A biodiversity dataset graph: Biodiversity Heritage Library (BHL) hash://sha256/34ccd7cf7f4a1ea35ac6ae26a458bb603b2f6ee8ad36e1a58aa0261105d630b1, https://archive.org/details/preston-bhl (2019)
+
+J.H. Poelen Biodiversity Dataset Archive. hash://sha256/8aacce08462b87a345d271081783bdd999663ef90099212c8831db399fc0831b, https://archive.org/details/biodiversity-dataset-archives (2019)
+
+J.H. Poelen. A biodiversity dataset graph: DataONE. hash://sha256/2b5c445f0b7b918c14a50de36e29a32854ed55f00d8639e09f58f049b85e50e3, https://archive.org/details/preston-dataone (2019)
+
+J.H. Poelen. A biodiversity dataset graph: BHL. hash://sha256/34ccd7cf7f4a1ea35ac6ae26a458bb603b2f6ee8ad36e1a58aa0261105d630b1, https://doi.org/10.5281/zenodo.3849560 (2020)
+
+J.H. Poelen. A biodiversity dataset graph: DataONE. hash://sha256/2b5c445f0b7b918c14a50de36e29a32854ed55f00d8639e09f58f049b85e50e3, https://doi.org/10.5281/zenodo.3849494 (2020)
+
+J.H. Poelen. A biodiversity dataset graph: GBIF, iDigBio, BioCASe. hash://sha256/8aacce08462b87a345d271081783bdd999663ef90099212c8831db399fc0831b, https://doi.org/10.5281/zenodo.3852671 (2020)
+
+### Technologies or Techniques
+All software and scripts written for the purposes of this project are publicly available and released under open source licenses on GitHub within the following online repositories:
+
+https://github.com/bio-linker
+
+https://github.com/bio-guoda/preston
+
+https://github.com/bio-guoda/preston-scripts
+
+https://github.com/cboettig/contentid
+
