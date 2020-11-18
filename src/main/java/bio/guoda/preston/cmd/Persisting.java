@@ -19,6 +19,7 @@ import bio.guoda.preston.store.KeyValueStoreStickyFailover;
 import bio.guoda.preston.store.KeyValueStoreWithDereferencing;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.KeyValueStreamFactory;
+import bio.guoda.preston.util.ContentStreamUtil;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.URIConverter;
 import org.apache.commons.io.IOUtils;
@@ -28,6 +29,7 @@ import org.apache.commons.rdf.api.IRI;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
@@ -43,6 +45,9 @@ public class Persisting extends PersistingLocal {
 
     @Parameter(names = {"--no-cache", "--disable-cache"}, description = "disable local content cache")
     private Boolean disableCache = false;
+
+    @Parameter(names = {"--no-progress"}, description = "disable progress monitor")
+    private Boolean disableProgress = false;
 
     private boolean supportTarGzDiscovery = true;
 
@@ -117,7 +122,13 @@ public class Persisting extends PersistingLocal {
     }
 
     private KeyValueStoreReadOnly withStoreAt(URI baseURI, KeyToPath keyToPath) {
-        return withStoreAt(keyToPath, getDerefStream(baseURI));
+        return withStoreAt(keyToPath, getDerefStream(baseURI, getProgressListener()));
+    }
+
+    private DerefProgressListener getProgressListener() {
+        return disableProgress
+                ? ContentStreamUtil.getNullDerefProgressListener()
+                : new DerefProgressLogger();
     }
 
     private KeyValueStoreReadOnly withStoreAt(KeyToPath keyToPath, Dereferencer<InputStream> dereferencer) {
@@ -129,17 +140,28 @@ public class Persisting extends PersistingLocal {
     }
 
 
-    public static Dereferencer<InputStream> getDerefStream(URI baseURI) {
+    public static Dereferencer<InputStream> getDerefStream(URI baseURI, DerefProgressListener listener) {
         Dereferencer<InputStream> dereferencer;
         if (StringUtils.equalsAnyIgnoreCase(baseURI.getScheme(), "file")) {
-            dereferencer = uri -> {
-                File file = new File(URI.create(uri.getIRIString()));
-                return file.exists() ? IOUtils.buffer(new FileInputStream(file)) : null;
-            };
+            dereferencer = getInputStreamDereferencerFile(listener);
         } else {
-            dereferencer = getDerefStreamHTTP(new DerefProgressLogger());
+            dereferencer = getDerefStreamHTTP(listener);
         }
         return dereferencer;
+    }
+
+    public static Dereferencer<InputStream> getInputStreamDereferencerFile(DerefProgressListener listener) {
+        return uri -> {
+            URI uri1 = URI.create(uri.getIRIString());
+            File file = new File(uri1);
+            return file.exists()
+                    ? getInputStreamForFile(uri, file, listener)
+                    : null;
+        };
+    }
+
+    public static InputStream getInputStreamForFile(IRI uri, File file, DerefProgressListener listener) throws FileNotFoundException {
+        return ContentStreamUtil.getInputStreamWithProgressLogger(uri, listener, file.length(), IOUtils.buffer(new FileInputStream(file)));
     }
 
     public static Dereferencer<InputStream> getDerefStreamHTTP(final DerefProgressListener listener) {
@@ -148,11 +170,11 @@ public class Persisting extends PersistingLocal {
 
     private KeyValueStoreReadOnly remoteWithTarGz(URI baseURI) {
         return withStoreAt(new KeyTo3LevelTarGzPath(baseURI),
-                new DereferencerContentAddressedTarGZ(getDerefStream(baseURI)));
+                new DereferencerContentAddressedTarGZ(getDerefStream(baseURI, getProgressListener())));
     }
 
     private KeyValueStoreReadOnly remoteWithTarGzCacheAll(URI baseURI, KeyValueStore keyValueStore) {
-        DereferencerContentAddressedTarGZ dereferencer = new DereferencerContentAddressedTarGZ(getDerefStream(baseURI), new BlobStoreAppendOnly(keyValueStore, false));
+        DereferencerContentAddressedTarGZ dereferencer = new DereferencerContentAddressedTarGZ(getDerefStream(baseURI, getProgressListener()), new BlobStoreAppendOnly(keyValueStore, false));
         return withStoreAt(new KeyTo3LevelTarGzPath(baseURI), dereferencer);
     }
 

@@ -1,6 +1,6 @@
 package bio.guoda.preston;
 
-import org.apache.commons.io.input.CountingInputStream;
+import bio.guoda.preston.util.ContentStreamUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
@@ -31,7 +31,6 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ResourcesHTTP {
     private static final List<Integer> REDIRECT_CODES = Arrays.asList(301, 302, 303);
@@ -52,24 +51,12 @@ public class ResourcesHTTP {
         return asInputStream(dataURI, Arrays.asList(400,404), derefProgressListener);
     }
 
-    public static InputStream asInputStreamIgnore404(IRI dataURI) throws IOException {
-        return asInputStreamIgnore404(dataURI, getNullDerefProgressListener());
-    }
-
-    public static DerefProgressListener getNullDerefProgressListener() {
-        return new DerefProgressListener() {
-            @Override
-            public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
-            }
-        };
-    }
-
     public static InputStream asInputStream(IRI dataURI, DerefProgressListener nullDerefProgressListener) throws IOException {
         return asInputStream(dataURI, Collections.emptyList(), nullDerefProgressListener);
     }
 
     public static InputStream asInputStream(IRI dataURI) throws IOException {
-        return asInputStream(dataURI, getNullDerefProgressListener());
+        return asInputStream(dataURI, ContentStreamUtil.getNullDerefProgressListener());
     }
 
 
@@ -103,33 +90,7 @@ public class ResourcesHTTP {
 
                 InputStream contentStream = entity.getContent();
 
-                listener.onProgress(dataURI, DerefState.START, 0, contentLength);
-
-                return new CountingInputStream(contentStream) {
-                    AtomicBoolean isDone = new AtomicBoolean(false);
-
-                    @Override
-                    public synchronized long skip(long length) throws IOException {
-                        long skip = super.skip(length);
-                        listener.onProgress(dataURI, DerefState.BUSY, getByteCount(), contentLength);
-                        return skip;
-                    }
-
-                    @Override
-                    protected synchronized void afterRead(int n) {
-                        super.afterRead(n);
-                        listener.onProgress(dataURI, DerefState.BUSY, getByteCount(), contentLength);
-                    }
-
-                    @Override
-                    public void close() throws IOException {
-                        super.close();
-                        if (!isDone.get()) {
-                            listener.onProgress(dataURI, DerefState.DONE, getByteCount(), contentLength);
-                            isDone.set(true);
-                        }
-                    }
-                };
+                return ContentStreamUtil.getInputStreamWithProgressLogger(dataURI, listener, contentLength, contentStream);
             }
         }
         return is;

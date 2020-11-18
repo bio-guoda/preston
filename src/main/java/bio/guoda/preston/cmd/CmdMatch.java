@@ -27,6 +27,7 @@ public class CmdMatch extends LoggingPersisting implements Runnable {
     @Parameter(description = "regular expression",
             validateWith = RegexValidator.class)
     private String regex = TextMatcher.URL_PATTERN.pattern();
+
     private InputStream inputStream = System.in;
 
 

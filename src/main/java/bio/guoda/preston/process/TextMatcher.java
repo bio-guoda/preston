@@ -50,10 +50,6 @@ public class TextMatcher extends ProcessorReadOnly {
 
     private Map<Integer, String> patternGroupNames;
 
-    public TextMatcher(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
-        this(URL_PATTERN, blobStoreReadOnly, listeners);
-    }
-
     public TextMatcher(String regex, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         this(Pattern.compile(regex), blobStoreReadOnly, listeners);
     }
