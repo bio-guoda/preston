@@ -1,6 +1,7 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.process.BlobStoreReadOnly;
+import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.james.mime4j.Charsets;
@@ -62,7 +63,7 @@ public class ContentDereferencerTest {
 
     @Test
     public void extractContentHash() {
-        IRI contentHash = ContentDereferencer.extractContentHash(toIRI("blub:hash://sha256/babababababababababababababababababababababababababababababababa!/blah"));
+        IRI contentHash = ContentStreamUtil.extractContentHash(toIRI("blub:hash://sha256/babababababababababababababababababababababababababababababababa!/blah"));
         assertThat(contentHash.getIRIString(), is("hash://sha256/babababababababababababababababababababababababababababababababa"));
     }
 }

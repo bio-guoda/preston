@@ -1,7 +1,8 @@
-package bio.guoda.preston.util;
+package bio.guoda.preston.stream;
 
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.DerefState;
+import bio.guoda.preston.store.ValidatingKeyValueStreamSHA256IRI;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.io.input.CountingInputStream;
@@ -10,6 +11,10 @@ import org.apache.commons.rdf.api.IRI;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 
 public class ContentStreamUtil {
 
@@ -57,5 +62,19 @@ public class ContentStreamUtil {
 
     public static DerefProgressListener getNullDerefProgressListener() {
         return (dataURI, derefState, read, total) -> {};
+    }
+
+    public static IRI extractContentHash(IRI iri) throws IllegalArgumentException {
+        final Pattern contentHashPattern = ValidatingKeyValueStreamSHA256IRI.SHA_256_PATTERN;
+        Matcher contentHashMatcher = contentHashPattern.matcher(iri.getIRIString());
+
+        IRI contentHash = (contentHashMatcher.find())
+                ? toIRI(contentHashMatcher.group())
+                : null;
+        if (contentHash == null) {
+            throw new IllegalArgumentException("[" + iri.getIRIString() + "] is not a content-based URI (e.g. \"...hash://abc123...\"");
+        } else {
+            return contentHash;
+        }
     }
 }

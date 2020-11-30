@@ -19,7 +19,7 @@ import bio.guoda.preston.store.KeyValueStoreStickyFailover;
 import bio.guoda.preston.store.KeyValueStoreWithDereferencing;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.KeyValueStreamFactory;
-import bio.guoda.preston.util.ContentStreamUtil;
+import bio.guoda.preston.stream.ContentStreamUtil;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.URIConverter;
 import org.apache.commons.io.IOUtils;

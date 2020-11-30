@@ -1,5 +1,6 @@
 package bio.guoda.preston.util;
 
+import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.james.mime4j.Charsets;
 import org.junit.Test;

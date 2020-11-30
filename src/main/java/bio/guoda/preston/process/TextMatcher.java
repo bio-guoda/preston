@@ -1,6 +1,8 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.stream.ContentStreamException;
+import bio.guoda.preston.stream.ContentStreamHandlerImpl;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -8,7 +10,6 @@ import sun.nio.cs.ThreadLocalCoders;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -112,12 +113,12 @@ public class TextMatcher extends ProcessorReadOnly {
             final List<Quad> nodes = new ArrayList<>();
 
             BatchingEmitter batchingStatementEmitter = new BatchingEmitter(nodes, version, statement);
-            MyContentReader textReader = new MyContentReader(batchingStatementEmitter);
+            MyContentStreamHandlerImpl textReader = new MyContentStreamHandlerImpl(batchingStatementEmitter);
             try (InputStream in = get(version)) {
                 if (in != null) {
-                    textReader.attemptToParse(version, in);
+                    textReader.handle(version, in);
                 }
-            } catch (IOException | URISyntaxException e) {
+            } catch (ContentStreamException | IOException e) {
                 // ignore; this is opportunistic
             }
 
@@ -138,11 +139,11 @@ public class TextMatcher extends ProcessorReadOnly {
         buffer.position(newPosition);
     }
 
-    private class MyContentReader extends ContentReader {
+    private class MyContentStreamHandlerImpl extends ContentStreamHandlerImpl {
 
         private final StatementEmitter emitter;
 
-        public MyContentReader(StatementEmitter emitter) {
+        public MyContentStreamHandlerImpl(StatementEmitter emitter) {
             this.emitter = emitter;
         }
 

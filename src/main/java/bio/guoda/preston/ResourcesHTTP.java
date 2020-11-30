@@ -1,6 +1,6 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.util.ContentStreamUtil;
+import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
