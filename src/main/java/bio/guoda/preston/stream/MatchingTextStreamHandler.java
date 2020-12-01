@@ -59,7 +59,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         }
         if (charset != null) {
             try {
-                parseAsText(version, is, charset);
+                findAndEmitTextMatches(version, is, charset);
             } catch (IOException e) {
                 throw new ContentStreamException("failed to parse text", e);
             }
@@ -73,7 +73,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         return true;
     }
 
-    protected void parseAsText(IRI version, InputStream is, Charset charset) throws IOException {
+    protected void findAndEmitTextMatches(IRI version, InputStream is, Charset charset) throws IOException {
         byte[] byteBuffer = new byte[BUFFER_SIZE];
 
         int offset = 0;
