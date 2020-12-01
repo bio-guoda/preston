@@ -13,11 +13,13 @@ import static bio.guoda.preston.stream.ContentStreamUtil.cutBytes;
 public class ContentStreamFactory implements InputStreamFactory, ContentStreamHandler {
     private final IRI targetIri;
     private final ContentStreamHandler handler;
+    private final IRI contentReference;
     private InputStream contentStream;
     private boolean keepReading = true;
 
     public ContentStreamFactory(IRI iri) {
         this.targetIri = iri;
+        this.contentReference = ContentStreamUtil.extractContentHash(targetIri);
         this.handler = new ContentStreamHandlerImpl(
                 new ArchiveEntryStreamHandler(this, targetIri),
                 new CompressedStreamHandler(this));
@@ -25,7 +27,6 @@ public class ContentStreamFactory implements InputStreamFactory, ContentStreamHa
 
     @Override
     public InputStream create(InputStream is) throws IOException {
-        IRI contentReference = ContentStreamUtil.extractContentHash(targetIri);
         contentStream = null;
         try {
             handle(contentReference, is);
