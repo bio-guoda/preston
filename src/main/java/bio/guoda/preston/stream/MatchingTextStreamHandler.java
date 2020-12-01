@@ -73,7 +73,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         return true;
     }
 
-    protected void findAndEmitTextMatches(IRI version, InputStream is, Charset charset) throws IOException {
+    private void findAndEmitTextMatches(IRI version, InputStream is, Charset charset) throws IOException {
         byte[] byteBuffer = new byte[BUFFER_SIZE];
 
         int offset = 0;
@@ -82,7 +82,8 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         while (true) {
             int numBytesToScan = numBytesToReuse;
 
-            // Copy text from the end of the buffer to the beginning in case matches occur across buffer boundaries
+            // Copy text from the end of the buffer to the beginning in case
+            // matches occur across buffer boundaries
             System.arraycopy(byteBuffer, numBytesScannedInLastIteration - numBytesToReuse, byteBuffer, 0, numBytesToReuse);
 
             int numBytesRead;
@@ -105,64 +106,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
             setBufferPosition(scanningByteBuffer, 0);
 
             Matcher matcher = pattern.matcher(charBuffer);
-            CharBufferByteReader charBufferByteReader = new CharBufferByteReader(scanningByteBuffer, charBuffer, charset);
-
-            while (matcher.find()) {
-                int charPosMatchStartsAt = matcher.start();
-                int bytePosMatchStartsAt = charBufferByteReader.advance(charPosMatchStartsAt);
-
-                if (bytePosMatchStartsAt >= BUFFER_SIZE - MAX_MATCH_SIZE_IN_BYTES) {
-                    setBufferPosition(scanningByteBuffer, bytePosMatchStartsAt);
-                    break;
-                }
-
-                List<Integer> orderedCharPositions = new LinkedList<>();
-                for (int i = 0; i <= matcher.groupCount(); ++i) {
-                    if (matcher.group(i) != null) {
-                        orderedCharPositions.add(matcher.start(i));
-                        orderedCharPositions.add(matcher.end(i));
-                    }
-                }
-
-                orderedCharPositions.sort(null);
-
-                // Because characters can have variable width, report byte positions instead of character positions
-                Map<Integer, Integer> charToBytePositions = orderedCharPositions.stream().distinct().collect(Collectors.toMap(
-                        charPosition -> charPosition,
-                        charBufferByteReader::advance
-                ));
-
-                int charPosMatchEndsAt = matcher.end();
-                int bytePosMatchEndsAt = charToBytePositions.get(charPosMatchEndsAt);
-                IRI matchIri = getCutIri(version, offset + bytePosMatchStartsAt, offset + bytePosMatchEndsAt);
-
-                for (int i = 0; i <= matcher.groupCount(); ++i) {
-                    if (matcher.group(i) != null) {
-                        int charPosGroupStartsAt = matcher.start(i);
-                        int charPosGroupEndsAt = matcher.end(i);
-
-                        int bytePosGroupStartsAt = charToBytePositions.get(charPosGroupStartsAt);
-                        int bytePosGroupEndsAt = charToBytePositions.get(charPosGroupEndsAt);
-
-                        String groupString = matcher.group(i);
-                        IRI groupIri = getCutIri(version, offset + bytePosGroupStartsAt, offset + bytePosGroupEndsAt);
-                        emitter.emit(toStatement(groupIri, HAS_VALUE, toLiteral(groupString)));
-
-                        if (i > 0) {
-                            emitter.emit(toStatement(matchIri, HAD_MEMBER, groupIri));
-
-                            if (patternGroupNames.containsKey(i)) {
-                                String groupName = patternGroupNames.get(i);
-                                if (groupString.equals(matcher.group(groupName))) {
-                                    emitter.emit(toStatement(matchIri, DESCRIPTION, toLiteral(groupName)));
-                                } else {
-                                    throw new RuntimeException("pattern group [" + groupName + "] was assigned the wrong index");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            findAndEmitMatches(version, charset, offset, scanningByteBuffer, charBuffer, matcher);
 
             // If no matches were found, we need to advance the buffer's position manually
             if (getBufferPosition(scanningByteBuffer) == 0) {
@@ -172,6 +116,75 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
             numBytesScannedInLastIteration = numBytesToScan;
             numBytesToReuse = Integer.min(MAX_MATCH_SIZE_IN_BYTES, numBytesScannedInLastIteration - getBufferPosition(scanningByteBuffer));
             offset += numBytesScannedInLastIteration - numBytesToReuse;
+        }
+    }
+
+    private void findAndEmitMatches(IRI version, Charset charset, int offset, ByteBuffer scanningByteBuffer, CharBuffer charBuffer, Matcher matcher) {
+        CharBufferByteReader charBufferByteReader = new CharBufferByteReader(scanningByteBuffer, charBuffer, charset);
+
+        while (matcher.find()) {
+            int charPosMatchStartsAt = matcher.start();
+            int bytePosMatchStartsAt = charBufferByteReader.advance(charPosMatchStartsAt);
+
+            if (bytePosMatchStartsAt >= BUFFER_SIZE - MAX_MATCH_SIZE_IN_BYTES) {
+                setBufferPosition(scanningByteBuffer, bytePosMatchStartsAt);
+                break;
+            }
+
+            List<Integer> orderedCharPositions = new LinkedList<>();
+            for (int i = 0; i <= matcher.groupCount(); ++i) {
+                if (matcher.group(i) != null) {
+                    orderedCharPositions.add(matcher.start(i));
+                    orderedCharPositions.add(matcher.end(i));
+                }
+            }
+
+            orderedCharPositions.sort(null);
+
+            // Because characters can have variable width,
+            // report byte positions instead of character positions
+            Map<Integer, Integer> charToBytePositions = orderedCharPositions
+                    .stream()
+                    .distinct()
+                    .collect(Collectors.toMap(
+                            charPosition -> charPosition,
+                            charBufferByteReader::advance
+                    ));
+
+            int charPosMatchEndsAt = matcher.end();
+            int bytePosMatchEndsAt = charToBytePositions.get(charPosMatchEndsAt);
+            IRI matchIri = getCutIri(version, offset + bytePosMatchStartsAt, offset + bytePosMatchEndsAt);
+
+            emitMatches(version, offset, matcher, charToBytePositions, matchIri);
+        }
+    }
+
+    private void emitMatches(IRI version, int offset, Matcher matcher, Map<Integer, Integer> charToBytePositions, IRI matchIri) {
+        for (int i = 0; i <= matcher.groupCount(); ++i) {
+            if (matcher.group(i) != null) {
+                int charPosGroupStartsAt = matcher.start(i);
+                int charPosGroupEndsAt = matcher.end(i);
+
+                int bytePosGroupStartsAt = charToBytePositions.get(charPosGroupStartsAt);
+                int bytePosGroupEndsAt = charToBytePositions.get(charPosGroupEndsAt);
+
+                String groupString = matcher.group(i);
+                IRI groupIri = getCutIri(version, offset + bytePosGroupStartsAt, offset + bytePosGroupEndsAt);
+                emitter.emit(toStatement(groupIri, HAS_VALUE, toLiteral(groupString)));
+
+                if (i > 0) {
+                    emitter.emit(toStatement(matchIri, HAD_MEMBER, groupIri));
+
+                    if (patternGroupNames.containsKey(i)) {
+                        String groupName = patternGroupNames.get(i);
+                        if (groupString.equals(matcher.group(groupName))) {
+                            emitter.emit(toStatement(matchIri, DESCRIPTION, toLiteral(groupName)));
+                        } else {
+                            throw new RuntimeException("pattern group [" + groupName + "] was assigned the wrong index");
+                        }
+                    }
+                }
+            }
         }
     }
 
