@@ -4,19 +4,23 @@ import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.stream.ContentStreamUtil.cutBytes;
 
-public class ContentStreamFactory extends ContentStreamHandlerImpl implements InputStreamFactory {
+public class ContentStreamFactory implements InputStreamFactory, ContentStreamHandler {
     private final IRI targetIri;
+    private final ContentStreamHandler handler;
     private InputStream contentStream;
+    private boolean keepReading = true;
 
     public ContentStreamFactory(IRI iri) {
         this.targetIri = iri;
+        this.handler = new ContentStreamHandlerImpl(
+                new ArchiveEntryStreamHandler(this, targetIri),
+                new CompressedStreamHandler(this));
     }
 
     @Override
@@ -51,8 +55,17 @@ public class ContentStreamFactory extends ContentStreamHandlerImpl implements In
             cutAndParseBytes(iri, in);
             return true;
         } else {
-            return super.handle(iri, in);
+            return handler.handle(iri, in);
         }
+    }
+
+    private void stopReading() {
+        keepReading = false;
+    }
+
+    @Override
+    public boolean shouldKeepReading() {
+        return keepReading;
     }
 
     private void cutAndParseBytes(IRI iri, InputStream in) throws ContentStreamException {
@@ -80,12 +93,4 @@ public class ContentStreamFactory extends ContentStreamHandlerImpl implements In
         }
     }
 
-    @Override
-    protected boolean shouldReadArchiveEntry(IRI entryIri) {
-        return isPartOfTargetIri(entryIri);
-    }
-
-    private boolean isPartOfTargetIri(IRI iri) {
-        return targetIri.getIRIString().contains(iri.getIRIString());
-    }
 }

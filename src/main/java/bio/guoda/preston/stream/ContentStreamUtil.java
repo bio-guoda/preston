@@ -8,6 +8,7 @@ import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.io.input.CountingInputStream;
 import org.apache.commons.rdf.api.IRI;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -76,5 +77,9 @@ public class ContentStreamUtil {
         } else {
             return contentHash;
         }
+    }
+
+    public static InputStream getMarkSupportedInputStream(InputStream in) {
+        return (in.markSupported()) ? in : new BufferedInputStream(in);
     }
 }

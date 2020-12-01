@@ -2,6 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.stream.MatchingTextStreamHandler;
 import com.mchange.v1.io.InputStreamUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -223,7 +224,7 @@ public class TextMatcherTest {
     @Test
     public void extractPatternGroupNames() {
         Pattern pattern = Pattern.compile("(no)(?>no)(?<group1>yes[^(]no[)]_[(no)[(no)]]_[(no[)]]_(?:no(?<group2>yes)))");
-        Map<Integer, String> groupNames = TextMatcher.extractPatternGroupNames(pattern);
+        Map<Integer, String> groupNames = MatchingTextStreamHandler.extractPatternGroupNames(pattern);
 
         assertThat(groupNames.size(), is(2));
         assertThat(groupNames.get(2), is("group1"));
@@ -233,21 +234,21 @@ public class TextMatcherTest {
     @Test
     public void sterilizeEscapes() {
         Pattern pattern = Pattern.compile("\\(blah\\)");
-        Pattern sterilizedPattern = TextMatcher.sterilizePatternForGroupDetection(pattern);
+        Pattern sterilizedPattern = MatchingTextStreamHandler.sterilizePatternForGroupDetection(pattern);
         assertThat(sterilizedPattern.pattern(), is(".blah."));
     }
 
     @Test
     public void sterilizeClasses() {
         Pattern pattern = Pattern.compile("[blah]");
-        Pattern sterilizedPattern = TextMatcher.sterilizePatternForGroupDetection(pattern);
+        Pattern sterilizedPattern = MatchingTextStreamHandler.sterilizePatternForGroupDetection(pattern);
         assertThat(sterilizedPattern.pattern(), is("."));
     }
 
     @Test
     public void sterilizeSomethingMessy() {
         Pattern pattern = Pattern.compile("(w)(?>w)(?<g1>w[^(]w[)]_[(w)[(w)]]_[(w[)]]_(?:w(?<g2>w)))");
-        Pattern sterilizedPattern = TextMatcher.sterilizePatternForGroupDetection(pattern);
+        Pattern sterilizedPattern = MatchingTextStreamHandler.sterilizePatternForGroupDetection(pattern);
         assertThat(sterilizedPattern.pattern(), is("(w)(?>w)(?<g1>w.w._._._(?:w(?<g2>w)))"));
     }
 }

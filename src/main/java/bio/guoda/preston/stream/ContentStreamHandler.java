@@ -8,4 +8,6 @@ import java.net.URISyntaxException;
 
 public interface ContentStreamHandler {
     boolean handle(IRI version, InputStream in) throws ContentStreamException;
+
+    boolean shouldKeepReading();
 }
