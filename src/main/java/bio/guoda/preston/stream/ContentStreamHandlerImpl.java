@@ -12,8 +12,6 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 
 public class ContentStreamHandlerImpl implements ContentStreamHandler {
 
-    private boolean keepReading = true;
-
     private final List<ContentStreamHandler> handlers;
 
     public ContentStreamHandlerImpl() {
@@ -55,7 +53,7 @@ public class ContentStreamHandlerImpl implements ContentStreamHandler {
 
     @Override
     public boolean shouldKeepReading() {
-        return keepReading;
+        return true;
     }
 
 }
