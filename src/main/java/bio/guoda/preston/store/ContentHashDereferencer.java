@@ -3,19 +3,16 @@ package bio.guoda.preston.store;
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.stream.ContentStreamFactory;
 import bio.guoda.preston.stream.ContentStreamUtil;
-import bio.guoda.preston.stream.ContentStreamHandlerImpl;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-
-public class ContentDereferencer extends ContentStreamHandlerImpl implements Dereferencer<InputStream> {
+public class ContentHashDereferencer implements Dereferencer<InputStream> {
 
     private final BlobStoreReadOnly blobStore;
 
-    public ContentDereferencer(BlobStoreReadOnly blobStore) {
+    public ContentHashDereferencer(BlobStoreReadOnly blobStore) {
         this.blobStore = blobStore;
     }
 

@@ -2,7 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
-import bio.guoda.preston.store.ContentDereferencer;
+import bio.guoda.preston.store.ContentHashDereferencer;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -52,7 +52,7 @@ public class CmdGet extends Persisting implements Runnable {
     }
 
     protected void handleContentQuery(BlobStoreReadOnly blobStore, String queryString) throws IOException {
-        ContentDereferencer query = new ContentDereferencer(blobStore);
+        ContentHashDereferencer query = new ContentHashDereferencer(blobStore);
 
         try {
             InputStream contentStream = query.dereference(toIRI(queryString));
