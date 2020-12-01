@@ -105,8 +105,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
 
             setBufferPosition(scanningByteBuffer, 0);
 
-            Matcher matcher = pattern.matcher(charBuffer);
-            findAndEmitMatches(version, charset, offset, scanningByteBuffer, charBuffer, matcher);
+            findAndEmitMatches(version, charset, offset, scanningByteBuffer, charBuffer);
 
             // If no matches were found, we need to advance the buffer's position manually
             if (getBufferPosition(scanningByteBuffer) == 0) {
@@ -119,7 +118,8 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         }
     }
 
-    private void findAndEmitMatches(IRI version, Charset charset, int offset, ByteBuffer scanningByteBuffer, CharBuffer charBuffer, Matcher matcher) {
+    private void findAndEmitMatches(IRI version, Charset charset, int offset, ByteBuffer scanningByteBuffer, CharBuffer charBuffer) {
+        Matcher matcher = pattern.matcher(charBuffer);
         CharBufferByteReader charBufferByteReader = new CharBufferByteReader(scanningByteBuffer, charBuffer, charset);
 
         while (matcher.find()) {
