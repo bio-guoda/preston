@@ -5,8 +5,8 @@ import org.apache.commons.rdf.api.IRI;
 public class ArchiveEntryStreamHandler extends ArchiveStreamHandler {
     private final IRI targetIri;
 
-    public ArchiveEntryStreamHandler(ContentStreamFactory contentStreamFactory, IRI targetIri) {
-        super(contentStreamFactory);
+    public ArchiveEntryStreamHandler(ContentStreamHandler contentStreamHandler, IRI targetIri) {
+        super(contentStreamHandler);
         this.targetIri = targetIri;
     }
 
