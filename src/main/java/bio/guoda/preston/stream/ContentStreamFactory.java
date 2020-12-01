@@ -21,29 +21,31 @@ public class ContentStreamFactory implements InputStreamFactory {
 
     @Override
     public InputStream create(InputStream is) throws IOException {
-        ContentStreamRequestHandler streamRequest = new ContentStreamRequestHandler();
+        InputStream contentStream = requestContentStream(is);
+        if (contentStream == null) {
+            throw new IOException("failed to find content identified by [" + targetIri + "]");
+        }
+        return contentStream;
+    }
+
+    private InputStream requestContentStream(InputStream is) throws IOException {
+        ContentStreamRequest streamRequest = new ContentStreamRequest();
         try {
             streamRequest.handle(contentReference, is);
         } catch (ContentStreamException e) {
             throw new IOException("failed create inputstream", e);
         }
-
-        InputStream contentStream = streamRequest.getContentStream();
-        if (contentStream == null) {
-            throw new IOException("failed to find content identified by [" + targetIri + "]");
-        } else {
-            return contentStream;
-        }
+        return streamRequest.getContentStream();
     }
 
 
-    private class ContentStreamRequestHandler implements ContentStreamHandler {
+    private class ContentStreamRequest implements ContentStreamHandler {
 
-        private final ContentStreamHandlerImpl handler;
+        private final ContentStreamHandler handler;
         private InputStream contentStream;
         private boolean keepReading = true;
 
-        public ContentStreamRequestHandler() {
+        ContentStreamRequest() {
             this.handler = new ContentStreamHandlerImpl(
                     new ArchiveEntryStreamHandler(this, targetIri),
                     new CompressedStreamHandler(this));
@@ -52,6 +54,10 @@ public class ContentStreamFactory implements InputStreamFactory {
 
         @Override
         public boolean handle(IRI iri, InputStream in) throws ContentStreamException {
+            if (!shouldKeepReading()) {
+                throw new ContentStreamException("request handler cannot be re-used");
+            }
+
             Matcher nextOperatorMatcher = Pattern
                     .compile(String.format("([^:]+):%s", iri.getIRIString()))
                     .matcher(targetIri.getIRIString());
