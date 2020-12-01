@@ -35,55 +35,9 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
     private static final int BUFFER_SIZE = 4096;
     private static final int MAX_MATCH_SIZE_IN_BYTES = 512;
 
-
     private final StatementEmitter emitter;
     private final Pattern pattern;
-    private Map<Integer, String> patternGroupNames;
-
-    public static Map<Integer, String> extractPatternGroupNames(Pattern pattern) {
-
-        Pattern sterilizedPattern = sterilizePatternForGroupDetection(pattern);
-
-        final Pattern matchRegexGroupNames = Pattern.compile("\\((?:\\?<([a-zA-Z][a-zA-Z0-9]*)>|[^?)])");
-        Matcher matcher = matchRegexGroupNames.matcher(sterilizedPattern.pattern());
-
-        Map<Integer, String> patternGroupNames = new HashMap<>();
-        for (int i = 1; matcher.find(); ++i) {
-            String groupName = matcher.group(1);
-            if (groupName != null) {
-                patternGroupNames.put(i, groupName);
-            }
-        }
-
-        return patternGroupNames;
-    }
-
-    public static Pattern sterilizePatternForGroupDetection(Pattern pattern) {
-        final Pattern matchRegexEscapes = Pattern.compile("\\\\.");
-        final Pattern matchRegexClasses = Pattern.compile("\\[[^\\[\\]]+]");
-
-        AtomicReference<String> sterilizedPattern = new AtomicReference<>(pattern.pattern());
-        Stream.of(
-                matchRegexEscapes,
-                matchRegexClasses
-        ).forEach(
-                sterilizerPattern -> sterilizedPattern.set(
-                        deepReplaceAll(sterilizedPattern.get(), sterilizerPattern, ".")
-                )
-        );
-
-        return Pattern.compile(sterilizedPattern.get());
-    }
-
-    private static String deepReplaceAll(String string, Pattern pattern, String replacement) {
-        String newString = pattern.matcher(string).replaceAll(replacement);
-        if (newString.equals(string)) {
-            return string;
-        } else {
-            return deepReplaceAll(newString, pattern, replacement);
-        }
-    }
-
+    private final Map<Integer, String> patternGroupNames;
 
     public MatchingTextStreamHandler(StatementEmitter emitter, Pattern pattern) {
         this.emitter = emitter;
@@ -220,5 +174,50 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
             offset += numBytesScannedInLastIteration - numBytesToReuse;
         }
     }
+
+    public static Map<Integer, String> extractPatternGroupNames(Pattern pattern) {
+
+        Pattern sterilizedPattern = sterilizePatternForGroupDetection(pattern);
+
+        final Pattern matchRegexGroupNames = Pattern.compile("\\((?:\\?<([a-zA-Z][a-zA-Z0-9]*)>|[^?)])");
+        Matcher matcher = matchRegexGroupNames.matcher(sterilizedPattern.pattern());
+
+        Map<Integer, String> patternGroupNames = new HashMap<>();
+        for (int i = 1; matcher.find(); ++i) {
+            String groupName = matcher.group(1);
+            if (groupName != null) {
+                patternGroupNames.put(i, groupName);
+            }
+        }
+
+        return patternGroupNames;
+    }
+
+    public static Pattern sterilizePatternForGroupDetection(Pattern pattern) {
+        final Pattern matchRegexEscapes = Pattern.compile("\\\\.");
+        final Pattern matchRegexClasses = Pattern.compile("\\[[^\\[\\]]+]");
+
+        AtomicReference<String> sterilizedPattern = new AtomicReference<>(pattern.pattern());
+        Stream.of(
+                matchRegexEscapes,
+                matchRegexClasses
+        ).forEach(
+                sterilizerPattern -> sterilizedPattern.set(
+                        deepReplaceAll(sterilizedPattern.get(), sterilizerPattern, ".")
+                )
+        );
+
+        return Pattern.compile(sterilizedPattern.get());
+    }
+
+    private static String deepReplaceAll(String string, Pattern pattern, String replacement) {
+        String newString = pattern.matcher(string).replaceAll(replacement);
+        if (newString.equals(string)) {
+            return string;
+        } else {
+            return deepReplaceAll(newString, pattern, replacement);
+        }
+    }
+
 
 }
