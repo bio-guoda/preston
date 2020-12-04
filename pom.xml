@@ -152,9 +152,9 @@
     <build>
         <extensions>
             <extension>
-                <groupId>net.adamcin.org.kuali.maven.wagons</groupId>
+                <groupId>com.github.seahen</groupId>
                 <artifactId>maven-s3-wagon</artifactId>
-                <version>1.2.2</version>
+                <version>1.3.1</version>
             </extension>
         </extensions>
         <plugins>
