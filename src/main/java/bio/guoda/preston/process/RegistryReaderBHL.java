@@ -3,8 +3,8 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.Seeds;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
@@ -40,7 +40,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 public class RegistryReaderBHL extends ProcessorReadOnly {
     public static final String BHL_API_URL_PART = "//www.biodiversitylibrary.org/data/item.txt";
     public static final String BHL_DATASET_REGISTRY_STRING = "https:" + BHL_API_URL_PART;
-    private final Log LOG = LogFactory.getLog(RegistryReaderBHL.class);
+    private final Logger LOG = LoggerFactory.getLogger(RegistryReaderBHL.class);
     public static final IRI BHL_REGISTRY = toIRI(BHL_DATASET_REGISTRY_STRING);
 
     public RegistryReaderBHL(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {

@@ -7,8 +7,8 @@ import bio.guoda.preston.store.StatementStore;
 import bio.guoda.preston.store.StatementStoreImpl;
 import bio.guoda.preston.store.VersionUtil;
 import com.beust.jcommander.Parameters;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Parameters(separators = "= ", commandDescription = "show history of biodiversity dataset graph")
 public class CmdHistory extends LoggingPersisting implements Runnable {
 
-    private static final Log LOG = LogFactory.getLog(CmdHistory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CmdHistory.class);
 
     @Override
     public void run() {

@@ -6,8 +6,8 @@ import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.process.VersionedRDFChainEmitter;
 import bio.guoda.preston.store.ArchiverReadOnly;
 import bio.guoda.preston.store.StatementStoreReadOnly;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
@@ -25,7 +25,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public final class ReplayUtil {
 
-    private static final Log LOG = LogFactory.getLog(ReplayUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ReplayUtil.class);
 
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,

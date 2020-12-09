@@ -2,8 +2,8 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.cmd.ProcessorState;
 import bio.guoda.preston.store.VersionUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
@@ -14,7 +14,7 @@ import java.io.InputStream;
 
 public class VersionedRDFChainEmitter extends ProcessorReadOnly {
 
-    private static final Log LOG = LogFactory.getLog(VersionedRDFChainEmitter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(VersionedRDFChainEmitter.class);
 
     public VersionedRDFChainEmitter(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);

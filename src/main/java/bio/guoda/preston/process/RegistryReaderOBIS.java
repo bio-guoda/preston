@@ -4,8 +4,8 @@ import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.Seeds;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
@@ -35,7 +35,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 public class RegistryReaderOBIS extends ProcessorReadOnly {
     private static final String OBIS_API_URL_PART = "//api.obis.org/v3/dataset";
     private static final String OBIS_DATASET_REGISTRY_STRING = "https:" + OBIS_API_URL_PART;
-    private final Log LOG = LogFactory.getLog(RegistryReaderOBIS.class);
+    private final Logger LOG = LoggerFactory.getLogger(RegistryReaderOBIS.class);
     private static final IRI OBIS_REGISTRY = toIRI(OBIS_DATASET_REGISTRY_STRING);
 
     public RegistryReaderOBIS(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {

@@ -5,8 +5,8 @@ import bio.guoda.preston.Seeds;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -42,7 +42,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class RegistryReaderBioCASE extends ProcessorReadOnly {
-    private static final Log LOG = LogFactory.getLog(RegistryReaderBioCASE.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RegistryReaderBioCASE.class);
 
     static final String BIOCASE_REGISTRY_ENDPOINT = "https://bms.gfbio.org/services/data-sources/";
     public static final IRI BIO_CASE_REGISTRY = toIRI(BIOCASE_REGISTRY_ENDPOINT);

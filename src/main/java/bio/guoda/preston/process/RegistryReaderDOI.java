@@ -6,8 +6,8 @@ import bio.guoda.preston.model.RefNodeFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.cxf.helpers.IOUtils;
@@ -43,7 +43,7 @@ public class RegistryReaderDOI extends ProcessorReadOnly {
 
 
     public static final String GBIF_DOI_PART = "10.15468/";
-    private final Log LOG = LogFactory.getLog(RegistryReaderDOI.class);
+    private final Logger LOG = LoggerFactory.getLogger(RegistryReaderDOI.class);
 
     public RegistryReaderDOI(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);

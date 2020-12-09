@@ -8,8 +8,8 @@ import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.StatementStoreImpl;
 import bio.guoda.preston.store.StatementStoreReadOnly;
 import bio.guoda.preston.store.VersionUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
@@ -19,7 +19,7 @@ import java.io.InputStream;
 import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 
 public class CloneUtil {
-    private static final Log LOG = LogFactory.getLog(CloneUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CloneUtil.class);
 
     public static void clone(KeyValueStore blobKeyValueStore, KeyValueStore provenanceLogKeyValueStore, KeyValueStore provenanceIndexKeyValueStore) {
         final BlobStoreReadOnly blobStore

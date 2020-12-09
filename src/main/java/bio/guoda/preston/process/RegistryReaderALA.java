@@ -5,8 +5,8 @@ import bio.guoda.preston.Seeds;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Quad;
@@ -39,7 +39,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 public class RegistryReaderALA extends ProcessorReadOnly {
     private static final String ALA_API_URL_PART = "//collections.ala.org.au/ws/dataResource?status=dataAvailable";
     private static final String ALA_DATASET_REGISTRY_STRING = "https:" + ALA_API_URL_PART;
-    private final Log LOG = LogFactory.getLog(RegistryReaderALA.class);
+    private final Logger LOG = LoggerFactory.getLogger(RegistryReaderALA.class);
     private static final IRI ALA_REGISTRY = toIRI(ALA_DATASET_REGISTRY_STRING);
 
     public RegistryReaderALA(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {

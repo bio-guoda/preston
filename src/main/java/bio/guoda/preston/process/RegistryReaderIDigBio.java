@@ -8,8 +8,8 @@ import bio.guoda.preston.util.ResultPagerUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
@@ -45,7 +45,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class RegistryReaderIDigBio extends ProcessorReadOnly {
 
-    private final static Log LOG = LogFactory.getLog(RegistryReaderIDigBio.class);
+    private final static Logger LOG = LoggerFactory.getLogger(RegistryReaderIDigBio.class);
 
     public static final String PUBLISHERS_URI = "https://search.idigbio.org/v2/search/publishers";
     public static final IRI IDIGBIO_PUBLISHER_REGISTRY = toIRI(URI.create(PUBLISHERS_URI + "?limit=10000"));

@@ -5,8 +5,8 @@ import bio.guoda.preston.Seeds;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.w3c.dom.Node;
@@ -48,7 +48,7 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
     public static final String DATA_ONE_URL_QUERY_PREFIX = DATA_ONE_URL_BASE + "/query";
     public static final String DATA_ONE_URL_QUERY_PART = DATA_ONE_URL_QUERY_PREFIX + "/solr/?q=formatId:eml*+AND+-obsoletedBy:*&fl=identifier,dataUrl&wt=json&start=0&rows=100";
     public static final String DATA_ONE_REGISTRY_STRING = "http:" + DATA_ONE_URL_QUERY_PART;
-    private final Log LOG = LogFactory.getLog(RegistryReaderDataONE.class);
+    private final Logger LOG = LoggerFactory.getLogger(RegistryReaderDataONE.class);
     public static final IRI DATA_ONE_REGISTRY = toIRI(DATA_ONE_REGISTRY_STRING);
 
     public RegistryReaderDataONE(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {

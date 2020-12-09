@@ -3,8 +3,8 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.VersionUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class VersionRetriever extends StatementsListenerAdapter {
-    private static final Log LOG = LogFactory.getLog(VersionRetriever.class);
+    private static final Logger LOG = LoggerFactory.getLogger(VersionRetriever.class);
 
     private final BlobStoreReadOnly blobStore;
 

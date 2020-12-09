@@ -5,8 +5,8 @@ import bio.guoda.preston.cmd.ActivityContext;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsListener;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
@@ -28,7 +28,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 
 public class Archiver extends VersionProcessor {
-    private static Log LOG = LogFactory.getLog(Archiver.class);
+    private static Logger LOG = LoggerFactory.getLogger(Archiver.class);
 
     private final ActivityContext activityCtx;
 

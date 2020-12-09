@@ -26,8 +26,8 @@ import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
@@ -58,7 +58,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public abstract class CmdActivity extends LoggingPersisting implements Runnable {
-    private static final Log LOG = LogFactory.getLog(CmdActivity.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CmdActivity.class);
 
     private static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
     private static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
