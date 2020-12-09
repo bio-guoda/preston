@@ -15,6 +15,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jackson.version>2.11.2</jackson.version>
         <slf4j.version>1.7.25</slf4j.version>
+        <commons-rdf.version>0.5.0</commons-rdf.version>
+        <lucene.version>8.5.2</lucene.version>
     </properties>
 
     <dependencies>
@@ -62,17 +64,17 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-rdf-api</artifactId>
-            <version>0.5.0</version>
+            <version>${commons-rdf.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-rdf-simple</artifactId>
-            <version>0.5.0</version>
+            <version>${commons-rdf.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-rdf-jena</artifactId>
-            <version>0.5.0</version>
+            <version>${commons-rdf.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -150,12 +152,12 @@
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
-            <version>8.5.2</version>
+            <version>${lucene.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-analyzers-common</artifactId>
-            <version>8.5.2</version>
+            <version>${lucene.version}</version>
         </dependency>
     </dependencies>
     <build>
