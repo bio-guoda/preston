@@ -4,9 +4,6 @@ jdk:
 install: mvn --version
 before_script: ".travis/version_if_tag.sh"
 after_success: ".travis/deploy_if_tag.sh"
-cache:
-  directories:
-  - "$HOME/.m2"
 env:
   global:
   - secure: RReoTE5Y7ngxk+mM+iy/fpDPvv5SZ/y4xOkrFI4DDnKPCQrSxLMdFdpTwy8slgIxH1y0hA8jLwcpdP0WJfkGX3iH+YblTvEtKrgQxyk2aAcBvrw1YLcc9cFjmrqrq8j4san1h+c52P8JAicPjupxtI5gGmOmrIJbIWi2hmJPVnMq8o88vciwPvZ018W0mEQsEvQyA3bFF4CJuIam6LpXOtSKNsgOgas9taCtn6DBUbbLdrFqt3MDJZkB+zHKpiyfyVUbqwHWc/Nj3KfogHHSzuoG6MAfWFVoU28xb01tn0VWKHxKul6Pub932bPh+4Xaccn0DYUx4DDG10En6QhWDMGZuz0Ovw2zD1fUCXt2XtK5OLZ4QGJDqIAr8w/uzEW7J/82GWkPWSoIHMwqH7LkyX390juQOBix67tZOxgWyvMozn3cdPeP/1fIe66SFm8CB+3PKT5K63yo7WjbselEz9sUg9Hg800U2AbTMbBN6cNdtVeJtEOBYVzhQq3KYZc+UPgQyUZgjtHNMhSZanzyroca2S3eznvJk+OqcZzZ6TQvMVhKJIGvmMGgn8XOKtC7oZAtTlCj4GI34dNUYOKmQNUlUQkR9Mc7nElIM5jFt/RTB5EHJbrZGaReJJzZ3xEtYR5+aWXBA88jzqQJiFULmsllMwFgde6+0IOljkGHENo=
