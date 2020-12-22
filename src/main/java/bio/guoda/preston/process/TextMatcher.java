@@ -83,7 +83,6 @@ public class TextMatcher extends ProcessorReadOnly {
 
         @Override
         public boolean handle(IRI version, InputStream in) throws ContentStreamException {
-
             return handler.handle(version, in);
         }
 
