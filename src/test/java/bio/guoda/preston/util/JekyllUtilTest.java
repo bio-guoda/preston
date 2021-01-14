@@ -94,6 +94,9 @@ public class JekyllUtilTest {
     public void compile() throws IOException {
         final List<String> absoluteList = JekyllUtil.staticFileTemplates().collect(Collectors.toList());
         assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/index.md"));
+        assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot.png"));
+        assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot.svg"));
+        assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot"));
     }
 
     @Test
