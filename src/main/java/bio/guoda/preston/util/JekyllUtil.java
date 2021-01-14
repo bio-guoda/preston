@@ -183,7 +183,7 @@ public class JekyllUtil {
     static Stream<String> staticFileTemplates() {
         Reflections reflections = new Reflections("bio.guoda.preston.jekyll", new ResourcesScanner());
         Set<String> resourceList = reflections.getResources(
-                Pattern.compile(".*\\.((md)|(json)|(html)|(png)|(dot)|(svg)|(gitignore))"));
+                Pattern.compile(".*"));
         return resourceList.stream().map(x -> "/" + x);
     }
 

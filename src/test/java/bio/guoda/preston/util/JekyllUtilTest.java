@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +99,18 @@ public class JekyllUtilTest {
         assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot.svg"));
         assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot"));
         assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/.gitignore"));
+    }
+
+    @Test
+    public void writeStatic() throws IOException {
+        File jekyllDir = folder.newFolder();
+        JekyllUtil.copyStatic(jekyllDir);
+
+        List<String> strings = Arrays.asList(jekyllDir.list());
+
+        assertThat(strings, hasItem("index.md"));
+        assertThat(strings, hasItem("data.json"));
+        assertThat(strings, hasItem(".gitignore"));
     }
 
     @Test
