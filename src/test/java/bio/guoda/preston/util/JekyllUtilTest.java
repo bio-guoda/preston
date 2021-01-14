@@ -98,7 +98,6 @@ public class JekyllUtilTest {
         assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot.png"));
         assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot.svg"));
         assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot"));
-        assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/.gitignore"));
     }
 
     @Test

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
@@ -86,6 +87,12 @@ public class JekyllUtil {
         for (Pair<String, File> stringFilePair : collect) {
             FileUtils.copyToFile(JekyllUtil.class.getResourceAsStream(stringFilePair.getKey()), stringFilePair.getValue());
         }
+
+        FileUtils.copyToFile(IOUtils.toInputStream(
+                "_config.yml\n" +
+                        "_site\n" +
+                        "tmp/\n" +
+                        ".jekyll-cache", StandardCharsets.UTF_8), new File(jekyllDir, ".gitignore"));
     }
 
     public static StatementsListener createPageGenerators(BlobStoreReadOnly store, File posts, StatementListener contentVersionLogger) {
