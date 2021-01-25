@@ -1,8 +1,8 @@
 # Preston Architecture
 
-Preston consist of the following components: a [`crawler`](#crawler), [`content handlers`](#content-handlers), an [`archiver`](#archiver), a content addressed [`blob store`](#blob-store), and a [`simplified hexastore`](#simplified-hexastore). In the following sections, each component is discussed, ending with a [`summary`](#summary). 
+Preston consists of the following components: a [`crawler`](#crawler), [`content handlers`](#content-handlers), an [`archiver`](#archiver), a content addressed [`blob store`](#blob-store), and a [`simplified hexastore`](#simplified-hexastore). In the following sections, each component is discussed, ending with a [summary](#summary). 
 
-Please [open an issue](https://github.com/bio-guoda/preston) if you have any questions, comments and suggestions.
+Please [open an issue](https://github.com/bio-guoda/preston) if you have any questions, comments or suggestions.
 
 ## ```crawler```
 
@@ -14,7 +14,7 @@ The crawler creates statements that describe the crawling activity. An example o
 ```
 
 
-The first line defined the crawl event or activity, and the second line states that this particular crawl event was started at some time on 2018-09-07.
+The first line defines the crawl event or "activity" identified as `e8a41d42-3688-43a7-b287-b78b8d485a2c`, and the second line states that this particular crawl event was started at some time on 2018-09-07.
 
 The crawler also issues statements that describe registries of biodiversity datasets, or more specifically:
 
@@ -26,22 +26,22 @@ The crawler also issues statements that describe registries of biodiversity data
 <https://search.idigbio.org/v2/search/publishers> <http://purl.org/dc/elements/1.1/format> "application/json" .
 ```
 
-The statement above describe idigbio as an organization that created a resource, https://search.idigbio.org/v2/search/publishers, which has a format "application/json". 
+The statement above describes iDigBio as an organization that created a resource, https://search.idigbio.org/v2/search/publishers, which has a format "application/json". 
 
-On finishing a crawl, the complete record of the crawl is stored into the ```blobstore```. Also, the [`simplified hexastore`](#simplified-hexastore) is used to descibe the stored record as a version of the biodiversity dataset graph. Note also, that at the start of a successive crawl, a relation with the previous crawl is created. This relation helps to retain the provenance and versions of the various versions of the biodiversity dataset graph.  
+On finishing a crawl, the complete record of the crawl is stored into the [`blob store`](#blob-store). Also, the [`simplified hexastore`](#simplified-hexastore) is used to descibe the stored record as a version of the biodiversity dataset graph. Note also, that at the start of a successive crawl, a relation with the previous crawl is created. This relation helps to retain the provenance and versions of the various versions of the biodiversity dataset graph.  
 
 So, in short, the crawler produces, stores and versions the information that describes a crawl, including registries like the list of publishers created by iDigBio and retrieved archives. The versions of the crawl can be interpreted as versions of a biodiversity dataset graph.
 
 ## `content handlers`
 
-Content handlers listen to statements created by the crawler by other content handlers. In addition, content handlers can create (or _emit_) statement of their own. 
+Content handlers listen to statements created by the crawler by other content handlers. In addition, content handlers can create (or _emit_) statements of their own. 
 
-For instance, the iDigBio registry content handler responds to statement that include the iDigBio publisher registry. On receiving such as statement, the handler requests a version of the registry creating (or _emitting_) a question, or statement with a _blank_. Such a question looks something like:
+For instance, the iDigBio registry content handler responds to statement that mention the iDigBio publisher registry. On receiving such as statement, the handler requests a version of the registry by creating (or _emitting_) a question in the form of a statement with a _blank_. Such a question looks something like:
 
 ```
 <https://search.idigbio.org/v2/search/publishers> <http://purl.org/pav/hasVersion> _:5bd91b46-dffb-36f2-9547-7acc61f50117 . 
 ``` 
-This statements says that the iDigBio publisher registry has version _blank_ . This is the way for a content handler to ask the [`archiver`](#archiver) to fill in the _blank_ by attempting to dereference (e.g., download, "click on", or lookup) the content associated with https://search.idigbio.org/v2/search/publishers . 
+This statements says that the iDigBio publisher registry has version _blank_, represented here as `_:5bd91b46-dffb-36f2-9547-7acc61f50117`. This is how the content handler asks the [`archiver`](#archiver) to fill in the _blank_ by attempting to dereference (e.g., download, "click on", or lookup) the content associated with https://search.idigbio.org/v2/search/publishers.
 
 If the content handler received a statement with a non-blank resource version, like:
 
@@ -49,7 +49,7 @@ If the content handler received a statement with a non-blank resource version, l
 <https://search.idigbio.org/v2/search/publishers> <http://purl.org/pav/hasVersion> <hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362> .
 ```
 
-then the content handler will attempt to parse the content. In parsing the content, more statements can be created, including requests for, let's say downloading of darwin core archives or rss feeds using a ```<resource> <hasVersion> <blank> . ``` as we saw earlier.
+then the content handler will attempt to parse the content. In parsing the content, more statements can be created, including requests for, let's say downloading darwin core archives or rss feeds using a ```<resource> <hasVersion> <blank> . ``` as we saw earlier.
 
 ## `archiver`
 
@@ -57,7 +57,7 @@ An archiver listens to statements containing  a _blank_ . On receiving such a st
 
 ## `blob store`
 
-On succesfully saving the content into the blob store, a unique identifier is returned in the form of a SHA256 hash. The unique content identifier is now used to store a relation between the resource and it's unique content identifier. This identifier is now used to point to the content. Also, the content is saved in an hierarchical file structure derived from the content hash. For example, if the url https://search.idigbio.org/v2/search/publishers resolved to content with a hash of hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 (see [the "official" spec of hash uri notation](https://github.com/hash-uri/hash-uri/blob/master/README.md) with examples at [hash-archive.org](https://hash-archive.org)), then a file is stored in the following structure:
+On successfully saving the content into the blob store, a unique identifier is returned in the form of a SHA256 hash. The unique content identifier is now used to store a relation between the resource and its unique content identifier. This identifier is now used to point to the content. Also, the content is saved in an hierarchical file structure derived from the content hash. For example, if the url https://search.idigbio.org/v2/search/publishers resolved to content with a hash of hash://sha256/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 (see [the "official" spec of hash uri notation](https://github.com/hash-uri/hash-uri/blob/master/README.md) with examples at [hash-archive.org](https://hash-archive.org)), then the content is stored as a file in the following structure:
 
 ```
 3e/
@@ -65,13 +65,13 @@ On succesfully saving the content into the blob store, a unique identifier is re
         3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362
 ```
 
-With the file path being derived from the hash of the data itself, you can now easily locate the content by its hash. For instance, on the server at https://deeplinker.bio , the nginx webserver is configured such that you can retrieve the said datafile by requesting https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 . Note that this content hash is "real" and you can download the copy (or version) of the content that was served by https://search.idigbio.org/v2/search/publishers at some point in the past. So, using the blob store, we know have a way to easily access content as long as we know the content hash.
+With the file path being derived from the hash of the data itself, you can now easily locate the content by its hash. For instance, on the server at https://deeplinker.bio , the nginx webserver is configured such that you can retrieve the said datafile by requesting https://deeplinker.bio/3eff98d4b66368fd8d1f8fa1af6a057774d8a407a4771490beeb9e7add76f362 . Note that this content hash is "real" and you can download the copy (or version) of the content that was served by https://search.idigbio.org/v2/search/publishers at some point in the past. So, using the blob store, we now have a way to easily access content as long as we know the content hash.
 
 ## `simplified hexastore`
 
-The simplified hexastore ([Weiss et al. 2008](#weiss2008)) keeps an index of the immutable versions of the biodiversity dataset graph provenance over time. This index allows to traverse from the first version of the provenance to the next. The index is created by hashing a query (what is the next version?) and associating this query hash to the content hash uri of the related provenance log version. 
+The simplified hexastore ([Weiss et al. 2008](#weiss2008)) keeps an index of the immutable versions of the biodiversity dataset graph provenance over time. This index allows traversal from the first version of the provenance to the next. The index is created by hashing a query ("what is the next version?") and associating this query hash to the content hash uri of the related provenance log version. 
 
-The query hash is calculated by combining the hashed resource uri with a hashed version relationship (e.g., ```hasVersion``` or ```previousVersion```). These two hash uri are appended and the result is hashed again to create a unique query hash uri. For example, the query for the first version of a biodiversity dataset graph is always:
+The query hash is calculated by combining the hashed resource uri with a hashed version relationship (e.g., ```hasVersion``` or ```previousVersion```). These two hash uris are appended and the result is hashed again to create a unique query hash uri. For example, the query for the first version of a biodiversity dataset graph is always:
 
 ```
 sha256(
@@ -110,7 +110,7 @@ $ echo -n "hash://sha256/1a9158fc90d1b38fe7fa71118daa88861c0d40761e4c1452c64e069
 2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a  -
 ```
 
-On saving a Preston provenance log for the first time, Preston puts the content hash uri of that provenance log (e.g., ```hash://sha256/c253...```) in a file named by the query hash ```hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55``` into the statement (or relation,version) store. With this, on requesting content associated with ```hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a```, the content hash uri of the first provenance log (i.e., ```hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55```) is returned. The content of the first version can now be retrieved via the content store. Because the first query is static, the content hash uri of the first provenance log version of any Preston observatory can be retrieved by resolving ```hash://sha256/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e``` . In order words, if a hash ```a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e``` is found anywhere in a data archive, the chances are pretty high that the archive is a contains Preston provenance logs.
+On saving a Preston provenance log for the first time, Preston puts the content hash uri of that provenance log (e.g., ```hash://sha256/c253...```) in a file named by the query hash ```hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55``` into the statement (or relation,version) store. With this, on requesting content associated with ```hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a```, the content hash uri of the first provenance log (i.e., ```hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55```) is returned. The content of the first version can now be retrieved via the content store. Because the first query is static, the content hash uri of the first provenance log version of any Preston observatory can be retrieved by resolving ```hash://sha256/a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e```. In other words, if a hash ```a21d81acb039ca8daa013b4eebe52d5eda4f23d29c95d0f04888583ca5c8af4e``` is found anywhere in a data archive, the chances are pretty high that the archive is a contains Preston provenance logs.
 
 The next version in the provenance history can be retrieved using:
 
@@ -129,7 +129,7 @@ sha256(
 hash://sha256/7ebb008412baaac3afcc8af68b796bf4ca98f367cfd61a815eee82cdffeab196 
 ```
 
-Continuing this pattern, all available provenance log versions can be traversed until a query result is empty or generates a 404 not found error. This simplified hexastore enables the ```history``` command:
+Continuing this pattern, all available provenance log versions can be traversed until a query result is empty or generates a "404 not found" error. This simplified hexastore enables the ```history``` command:
 
 ```
 $ preston history --remote https://deeplinker.bio | head -n2
@@ -145,7 +145,7 @@ The simplified hexastore uses the same folder structure as the blob store to sto
         2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a
 ```
 
-As you might have seen, deeplinker.bio, resolves ```https://deeplinker.bio/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a``` to a response with content ```hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55``` . The latter hash can now be used to resolves to the first version of the provenance log version history . Using curl, head, the first the lines of the first provenance log content can be shown: 
+As you might have seen, deeplinker.bio, resolves ```https://deeplinker.bio/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a``` to a response with content ```hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55```. The latter hash can now be used to resolves to the first version of the provenance log version history. Using `curl` and `head`, the first the lines of the first provenance log content can be shown: 
 
 ```console
 $ curl --silent https://deeplinker.bio/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 \
@@ -166,24 +166,23 @@ $ curl --silent https://deeplinker.bio/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51f
 c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55  -
 ```
 
-The simplified hexastore is intended as a pragmatic way to discover a history of provenance logs. The integrity of this history can be verified because every successive provenance log version references the preceeding one using a statement like:
+The simplified hexastore is intended as a pragmatic way to discover a history of provenance logs. The integrity of this history can be verified because every successive provenance log version references the preceding one using a statement like:
 
 ```
 <hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55> <http://www.w3.org/ns/prov#usedBy> <4e540f45-d7a1-40d6-a2b8-f623f1c1d566> .
 ```
 
-where ```4e540f45-d7a1-40d6-a2b8-f623f1c1d566``` uniquely identifies a specific crawl activity. This statement can be found on line 11 in provenance log identified by [hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d](https://deeplinker.bio/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d) .
+where ```4e540f45-d7a1-40d6-a2b8-f623f1c1d566``` uniquely identifies a specific crawl activity. This statement can be found on line 11 in provenance log identified by [hash://sha256/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d](https://deeplinker.bio/b83cf099449dae3f633af618b19d05013953e7a1d7d97bc5ac01afd7bd9abe5d).
 
-For more information about hexastores, please see reference [Weiss et al. 2008](#weiss2008) . Also see a related issue [```trying to understand the simplified hexastore #52```](https://github.com/bio-guoda/preston/issues/52) for an exchange on this simplified hexastore. 
+For more information about hexastores, please see reference [Weiss et al. 2008](#weiss2008). Also see a related issue [```trying to understand the simplified hexastore #52```](https://github.com/bio-guoda/preston/issues/52) for an exchange on this simplified hexastore.
 
 ## summary 
 
-[Preston](https://github.com/bio-guoda/preston) combines a [`crawler`](#crawler), [`content handlers`](#content-handlers), and an [`archiver`](#archiver) with a [`blob store`](#blob-store) and [`simplified hexastore`](#simplified-hexastore) to implement a scheme to establish an immutable, versioned, provenance of a biodiversity dataset graph over time. By using a hashes to uniquely identify both dereferenced (or downloaded) content and simply queries (what content was downloaded from a specific url?) a simple file structure can be used to serve content and answer queries. Because the hashing schemes are applied consistently, each and every preston based blob and hexastore can be used to reliably retrieve content as well as query provenance of that content.
-
+[Preston](https://github.com/bio-guoda/preston) combines a [`crawler`](#crawler), [`content handlers`](#content-handlers), and an [`archiver`](#archiver) with a [`blob store`](#blob-store) and [`simplified hexastore`](#simplified-hexastore) to implement a scheme to establish an immutable, versioned, provenance of a biodiversity dataset graph over time. By using a hashes to uniquely identify both dereferenced (or downloaded) content and simple queries ("what content was downloaded from a specific url?"), a simple file structure can be used to serve content and answer queries. Because the hashing schemes are applied consistently, each and every Preston-based blob and hexastore can be used to reliably retrieve content as well as query provenance of that content.
 
 ## examples
 
-The example below show some example of how to query for versions of things in a Preston file structure or web accessible store.
+The examples below show some ways to query for versions of things in a Preston file structure or web-accessible store.
 
 ### eBird
 eBird is the biggest collection of occurrence data that I know of. ~10GB.

@@ -31,25 +31,25 @@ You can find more (exact) copies of this image via [hash-archive.org](https://ha
 
 ## Introduction
 
-Preston is an open-source software system that keeps track of biodiversity datasets. Scientists can use Preston to keep a local, uniquely identifiable, versioned copy of all or parts of [GBIF](https://gbif.org)-indexed datasets. Institutions can use Preston to check that their collections are indexed and available through [iDigBio](https://idigbio.org). Biodiversity informatics researchers can use Preston to perform metadata analysis. And finally, archivists can distribute archives across the world. 
- 
+Preston is an open-source software system that captures and catalogs biodiversity datasets. It enables **reproducible research:** scientists can use Preston to work with a uniquely identifiable, versioned copy of all or parts of [GBIF](https://gbif.org)-indexed datasets; **dataset registry lookups:** institutions can use Preston to check if and when their collections have been indexed and made available through [iDigBio](https://idigbio.org); **cross-network analysis:** biodiversity informatics researchers can use Preston to evaluate dataset overlap between [GBIF](https://gbif.org) and [iDigBio](https://idigbio.org); and finally, **decentralized dataset archival:** archivists can distribute Preston-generated biodiversity dataset archives across the world. 
+
 Preston uses the [PROV](https://www.w3.org/TR/prov-o/) and [PAV](https://pav-ontology.github.io/pav/) ontologies to model the actors, activities and entities involved in discovery, access and change control of digital biodiversity datasets. In addition, Preston uses [content-addressed storage](https://bentrask.com/?q=hash://sha256/98493caa8b37eaa26343bbf73f232597a3ccda20498563327a4c3713821df892) and [SHA256 hashes](https://en.wikipedia.org/wiki/SHA-2) to uniquely identify and store content. A [hexastore](https://people.csail.mit.edu/tdanford/6830papers/weiss-hexastore.pdf)-like index is used to navigate a local graph of biodiversity datasets. Preston is designed to work offline and can be cloned, copied and moved across storage media with existing tools and infrastructures like rsync, dropbox, the internet archive or thumbdrives. In addition to versioned copies of uniquely identifiable original [ABCD](http://tdwg.github.io/abcd/ABCD_v206.html)-A, [DWC](http://rs.tdwg.org/dwc/)-A and [EML](https://www.researchgate.net/profile/Oliver_Guenther/publication/228958840_EML-the_Environmental_Markup_Language/links/0046351ee4c535bf56000000.pdf?inViewer=true&disableCoverPage=true&origin=publication_detail) files, Preston also keeps track of the [GBIF](https://gbif.org), [iDigBio](https://idigbio.org) and [BioCASe](http://biocasemonitor.biodiv.naturkundemuseum-berlin.de/index.php/Main_Page) registries to help retain the relationships between the institutions to keep a detailed record of provenance. 
 
-Periodically, the crawl process (see diagram below) is run for each institution which stores biodiversity datasets:
+To capture and catalog biodiversity datasets, Preston performs a crawl process (see diagram below) for each institution which stores biodiversity datasets:
 1. A crawl activity is started (1)
-2. The registry (set of datasets) of institution i is requested and downloaded (2)
+2. The registry (set of datasets) of an institution is requested and downloaded (2)
 3. The sha-256 hash is computed for the downloaded registry (3) (4)
-4. The list of registry's datasets is created and each dataset is related to the registry (5)
+4. A list of the registry's datasets is created and each dataset is related to the registry (5)
 5. For each dataset in the registry:
    1. The information about the dataset is downloaded (6)
    2. For the downloaded dataset, it is computed the sha-256 hash (7) (8)
 6. The crawl activity finishes: log is completed.
 
-The process diagram below shows how Preston starts crawls to download copies of biodiversity registries and their datasets. A detailed log of the crawl activities are recorded to describe what data was discovered and how. This activity log is referred to as the history of a biodiversity dataset graph. The numbers indicate the sequence of events. Click on the image to enlarge. 
+The process diagram below shows how Preston starts crawls to download copies of biodiversity registries and their datasets. A detailed log of the crawl activities is recorded to describe what data was discovered and how. This activity log is referred to as the history of a biodiversity dataset graph. The numbers indicate the sequence of events. Click on the image to enlarge. 
 
 <img src="https://raw.githubusercontent.com/bio-guoda/preston/main/docs/process.png" width="50%">
 
-The figure above shows how Preston starts (1) a crawl activity. This crawl activity then accesses (2) a registry to save (3,4) a snapshot (or version) of it. Now, datasets referenced in this registry version are accessed, downloaded and saved (6,7,8). After all this, the crawl activity saves the log that contains its activities (1-8) as a version of a biodiversity dataset and linked to previous versions (see figure below). This log can be used to retrace the steps of the crawl activity to reconstruct the relationships between the registries, datasets as well as their respective content signatures or content hashes. Actual instances of crawl activities contains multiple registries (e.g., GBIF, iDigBio) and potentially thousands of datasets.   
+The figure above shows how Preston starts (1) a crawl activity. This crawl activity then accesses (2) a registry to save (3,4) a snapshot (or version) of it. Now, datasets referenced in this registry version are accessed, downloaded and saved (6,7,8). After all this, the crawl activity saves the log that contains its activities (1-8) as a version of a biodiversity dataset and linked to previous versions (see figure below). This log can be used to retrace the steps of the crawl activity to reconstruct the relationships between the registries, datasets as well as their respective content signatures or content hashes. Actual instances of crawl activities contain multiple registries (e.g., GBIF, iDigBio) and potentially thousands of datasets.   
 
 <img src="https://raw.githubusercontent.com/bio-guoda/preston/main/docs/history.png">
 
@@ -73,8 +73,8 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
       * [`compare versions`](#compare-versions)
       * [`generating citations`](#generating-citations)
       * [`finding copies with hash-archive.org`](#finding-copies-with-hash-archiveorg)
-      * [`tracking an GBIF IPT`](#tracking-an-gbif-ipt)
-      * [`tracking an GBIF IPT`](#tracking-an-gbif-ipt)
+      * [`tracking a GBIF IPT`](#tracking-a-gbif-ipt)
+      * [`tracking a GBIF IPT`](#tracking-a-gbif-ipt)
       * [`finding text in tracked contents`](#finding-text-in-tracked-contents)
       * [`generating publication using Jekyll`](#jekyll-publication)
  * [Prerequisites](#prerequisites)
@@ -92,13 +92,13 @@ Preston was designed with the [unix philosophy](https://en.wikipedia.org/wiki/Un
 
 ### Command Line Tool
 
-The command line tool provides four commands: ```update```, ```ls```, ```get``` and ```history```. In short, the commands are used to track and access DwC-A, EMLs and various registries. The output of the tools is [nquads](https://www.w3.org/TR/n-quads/) or [tsv](https://www.iana.org/assignments/media-types/text/tab-separated-values). Both output formats are structured in "columns" to form a three term sentence per line. In a way, this output is telling you the story of your local biodiversity data graph in terms of simple sentences. This line-by-line format helps to re-use existing text processing tools like awk, sed, cut, etc. Also, tab-separated-values output plays well with spreadsheet applications and [R](https://r-project.org).
+The command line tool provides four commands: ```update```, ```ls```, ```get``` and ```history```. In short, the commands are used to track and access DwC-A, EMLs and various registries. The output of the tools is [nquads](https://www.w3.org/TR/n-quads/) or [tsv](https://www.iana.org/assignments/media-types/text/tab-separated-values). Both output formats are structured in "columns" to form a three-term sentence per line. In a way, this output is telling you the story of your local biodiversity data graph in terms of simple sentences. This line-by-line format helps to re-use existing text processing tools like awk, sed, cut, etc. Also, tab-separated-values output plays well with spreadsheet applications and [R](https://r-project.org).
 
 The examples below assume that you've created a shortcut ```preston``` to ```java -jar preston.jar ``` (see [installation](#install)).
 
 #### `update`
 
-The ```update``` command updates your local biodiversity dataset graph using remote resources. By default, Preston uses GBIF, iDigBio and BioCASe to retrieve associated registries and data archives. The output is statements, expressed in nquads (or nquad-like tsv). An in depth discussion of rdf, nquads and related topics are beyond the current scope. However, with a little patience, you can probably figure out what Preston is trying to communicate.
+The ```update``` command updates your local biodiversity dataset graph using remote resources. By default, Preston uses GBIF, iDigBio and BioCASe to retrieve associated registries and data archives. The output is statements, expressed in nquads (or nquad-like tsv). An in-depth discussion of rdf, nquads and related topics are beyond the current scope. However, with a little patience, you can probably figure out what Preston is trying to communicate.
 
 For instance:
 
@@ -177,7 +177,7 @@ The implication of using content addressed storage is that if the hash is the sa
 
 #### `history`
 
-History helps to list your local content versions associated with a web address. Because the internet today might not be the internet of yesterday, and because publishers update their content for various reasons, Preston helps you keep track of the different versions retrieved from a particular location. Just like the [Internet Archive](https://archive.org)'s Way Back Machine keeps track of web page content, Preston help you keep track of the datasets that you are interested in. 
+History helps to list your local content versions associated with a web address. Because the internet today might not be the internet of yesterday, and because publishers update their content for various reasons, Preston helps you keep track of the different versions retrieved from a particular location. Just like the [Internet Archive](https://archive.org)'s Way Back Machine keeps track of web page content, Preston helps you keep track of the datasets that you are interested in. 
 
 To inspect the history you can type:
 
@@ -199,7 +199,7 @@ $ preston ls | grep 0659a54f-b713-4f86-a917-5be166a14110
 <0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/dc/terms/description> "A biodiversity dataset graph archive."@en .
 ```
 
-So, the UUID ending on 4110 is describe as "A biodiversity dataset graph archive". This UUID is the same across all Preston updates, so in a way we are help to create different versions of the same "a biodiversity dataset graph". Good to know right? 
+So, the UUID ending with 4110 is described as "A biodiversity dataset graph archive". This UUID is the same across all Preston updates, so in a way we are helping to create different versions of the same "a biodiversity dataset graph". Good to know right? 
 
 #### `copyTo`
 
@@ -431,7 +431,7 @@ On successful completion of the request, hash-archive.org returns something like
 }
 ```
 
-This response indicates that the hash archive has independently downloaded the EML url, and calculated various content hashes. Now, you should be able to do to https://hash-archive.org/history/http://zoobank.org:8080/ipt/eml.do?r=zoobank , and see the history of content that this particular url has produced. 
+This response indicates that the hash archive has independently downloaded the EML url and calculated various content hashes. Now, you should be able to do to https://hash-archive.org/history/http://zoobank.org:8080/ipt/eml.do?r=zoobank , and see the history of content that this particular url has produced. 
 
 In short, hash-archive provides a way to check whether content produced by a url has changed. Also, it provides a way to lookup which urls are associated with a unique content hash. 
 
@@ -449,9 +449,9 @@ The example (also see related [gist](https://gist.github.com/jhpoelen/0f531a8489
 preston ls -l tsv | grep Version | cut -f1,3 | tr '\t' '\n' | grep -v "deeplinker\.bio/\.well-known/genid" | sort | uniq | sed -e 's/hash:\/\/sha256/https:\/\/deeplinker.bio/g' | sed -e 's/^/https:\/\/hash-archive.org\/api\/enqueue\//g' | xargs -L1 curl 
 ```
 
-If all web-accessible Preston instances would periodically register their content like this, https://hash-archive.org could serve as a way to lookup backup for the an archive that you got from some no longer active archive url.
+If all web-accessible Preston instances would periodically register their content like this, https://hash-archive.org could serve as a way to lookup a backup for an archive that you got from an archive url that is no longer active.
 
-#### Tracking an GBIF IPT 
+#### Tracking a GBIF IPT 
 
 [GBIF](https://gbif.org)'s [Integrated Publishing Toolkit (IPT)](https://www.gbif.org/ipt) helps to publish and register biodiversity datasets with GBIF. IPT provide a RSS feeds that lists publicly available collections/datasets. Using this RSS feed, Preston can track datasets of individual IPTs, such as GBIF Norway's IPT at https://data.gbif.no/ipt . You can find the RSS link at the bottom of the home page of the ipt. GBIF Norway's RSS feed is ```https://data.gbif.no/ipt/rss.do``` . Now, you can update/track the IPT using Preston by running:
 
@@ -461,7 +461,7 @@ preston update https://data.gbif.no/ipt/rss.do
 
 By running this periodically, you can keep track of dataset changes and retain historic datasets in your Preston archive.  
 
-#### Finding Text In Tracked Contents
+#### Finding Text in Tracked Contents
 
 The `match` command searches nodes in the biodiversity dataset graph for text that matches a specified pattern. For each match it finds, it outputs the text that was matched and its location, including the node it was found in and where to find the text inside the node. If the `match` command encounters compressed files (e.g., .gz files), it will first decompress them. Files inside file archives (e.g., zip files) will also be searched. If no search pattern is specified, the `match`/`findURLs` command searches for URLs.   
 ```console
