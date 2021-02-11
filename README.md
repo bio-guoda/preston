@@ -478,7 +478,7 @@ For more information, see Poelen, Jorrit H. (2019). A biodiversity dataset graph
 
 ```console
 # find all mentions of text mentioning Aves (birds) in Biodiversity Heritage Library
-$ preston ls --remote https://zenodo.org/record/3484555/files,https://denker.bio | preston match --no-cache --remote https://deeplinker.bio,https://zenodo.org/record/3484555/files "[ A-Za-z]+Aves[ A-Za-z]+" | head
+$ preston ls --remote https://zenodo.org/record/3484555/files,https://deeplinker.bio | preston match --no-cache --remote https://deeplinker.bio,https://zenodo.org/record/3484555/files "[ A-Za-z]+Aves[ A-Za-z]+" | head
 <urn:uuid:17087386-391d-4192-b6fc-9a79daf846c6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> <urn:uuid:17087386-391d-4192-b6fc-9a79daf846c6> .
 <urn:uuid:17087386-391d-4192-b6fc-9a79daf846c6> <http://www.w3.org/ns/prov#used> <hash://sha256/e0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e57b84f51f22ca> <urn:uuid:17087386-391d-4192-b6fc-9a79daf846c6> .
 <urn:uuid:17087386-391d-4192-b6fc-9a79daf846c6> <http://purl.org/dc/terms/description> "An activity that finds the locations of text matching the regular expression '[ A-Za-z]+Aves[ A-Za-z]+' inside any encountered content (e.g., hash://sha256/... identifiers)."@en <urn:uuid:17087386-391d-4192-b6fc-9a79daf846c6> .
