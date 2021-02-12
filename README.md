@@ -485,7 +485,7 @@ $ preston ls --remote https://zenodo.org/record/3484555/files,https://deeplinker
 ...
 ```
 
-In the example above, two matches are ``` Subclass Aves Carinate``` in content ```hash://sha256/e0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e57b84f51f22ca```, content retrieve from ```<https://www.biodiversitylibrary.org/data/item.txt>``` at byte ranges ```b217065-217087``` and ```b217166-217188``` . 
+In the example above, two matches are ``` Subclass Aves Carinate``` in content ```hash://sha256/e0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e57b84f51f22ca```, content retrieved from ```<https://www.biodiversitylibrary.org/data/item.txt>``` at byte ranges ```b217065-217087``` and ```b217166-217188``` .
 
 Selecting the byte ranges using the unix tool ```cut``` can be done with:
 ```
