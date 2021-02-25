@@ -2,10 +2,11 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.TestUtil;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ import static org.hamcrest.core.StringStartsWith.startsWith;
 public class RegistryReaderGBIFTest {
 
     public static final String GBIFDATASETS_JSON = "gbifdatasets.json";
+    public static final String GBIF_OCCURRENCES_JSON = "gbif-occurrences.json";
 
     @Test
     public void onSeed() {
@@ -172,7 +174,6 @@ public class RegistryReaderGBIFTest {
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtil.testListener(nodes));
 
 
-
         Quad doiLink = toStatement(toIRI("https://api.gbif.org/v1/occurrence/download/0062961-200221144449610"),
                 HAS_VERSION,
                 toIRI("hash://json"));
@@ -194,7 +195,6 @@ public class RegistryReaderGBIFTest {
             }
         };
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtil.testListener(nodes));
-
 
 
         Quad doiLink = toStatement(toIRI("https://api.gbif.org/v1/occurrence/download/request/0062961-200221144449610.zip"),
@@ -242,7 +242,7 @@ public class RegistryReaderGBIFTest {
 
         IRI testNode = createTestNode();
 
-        RegistryReaderGBIF.parse(testNode, TestUtil.testEmitter(refNodes), getClass().getResourceAsStream(GBIFDATASETS_JSON), toIRI("http://example.org/"));
+        RegistryReaderGBIF.parseDatasetResultPage(testNode, TestUtil.testEmitter(refNodes), getClass().getResourceAsStream(GBIFDATASETS_JSON), toIRI("http://example.org/"));
 
         assertThat(refNodes.size(), is(60973));
 
@@ -282,6 +282,77 @@ public class RegistryReaderGBIFTest {
     }
 
     @Test
+    public void parseOccurrences() throws IOException {
+
+        final List<Quad> refNodes = new ArrayList<>();
+
+        RegistryReaderGBIF.parseOccurrenceResultPage(
+                toIRI("http://example.org/occurrence/123"),
+                TestUtil.testEmitter(refNodes), getClass().getResourceAsStream(GBIF_OCCURRENCES_JSON),
+                toIRI("http://example.org/"));
+
+        assertThat(refNodes.size(), is(375));
+
+        Quad refNode = refNodes.get(0);
+        assertThat(refNode.toString(), is("<http://example.org/occurrence/123> <http://www.w3.org/ns/prov#hadMember> <https://api.gbif.org/v1/occurrence/1142366485> ."));
+
+
+        Quad lastRefNode = refNodes.get(refNodes.size() - 5);
+        assertThat(lastRefNode.toString(), is("<http://example.org/?offset=80&limit=20> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
+
+        lastRefNode = refNodes.get(refNodes.size() - 4);
+        assertThat(lastRefNode.toString(), startsWith("<http://example.org/?offset=80&limit=20> <http://purl.org/pav/hasVersion> "));
+
+        lastRefNode = refNodes.get(refNodes.size() - 3);
+        assertThat(lastRefNode.toString(), startsWith("<http://example.org/?offset=100&limit=20> <http://purl.org/pav/createdBy> <https://gbif.org> ."));
+
+        lastRefNode = refNodes.get(refNodes.size() - 2);
+        assertThat(lastRefNode.toString(), is("<http://example.org/?offset=100&limit=20> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
+
+        lastRefNode = refNodes.get(refNodes.size() - 1);
+        assertThat(lastRefNode.toString(), startsWith("<http://example.org/?offset=100&limit=20> <http://purl.org/pav/hasVersion> "));
+
+    }
+
+    @Test
+    public void parseIndividualOccurrence() throws IOException {
+
+        final List<Quad> refNodes = new ArrayList<>();
+
+        JsonNode occurrence = new ObjectMapper().readTree(getClass().getResourceAsStream("gbif-individual-occurrence.json"));
+
+        RegistryReaderGBIF.parseIndividualOccurrence(
+                toIRI("http://example.org/"),
+                TestUtil.testEmitter(refNodes),
+                occurrence
+        );
+
+        assertThat(refNodes.size(), is(22));
+
+        Quad refNode = refNodes.get(0);
+        assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <https://api.gbif.org/v1/occurrence/1142366485> ."));
+
+        refNode = refNodes.get(1);
+        assertThat(refNode.toString(), is("<https://api.gbif.org/v1/occurrence/1142366485> <http://www.w3.org/ns/prov#hadMember> <http://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg> ."));
+
+        refNode = refNodes.get(2);
+        assertThat(refNode.toString(), is("<http://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg> <http://xmlns.com/foaf/0.1/depicts> <https://api.gbif.org/v1/occurrence/1142366485> ."));
+
+        refNode = refNodes.get(3);
+        assertThat(refNode.toString(), is("<http://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg> <http://purl.org/dc/elements/1.1/format> \"image/jpeg\" ."));
+
+        refNode = refNodes.get(4);
+        assertThat(refNode.toString(), startsWith("<http://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg> <http://purl.org/pav/hasVersion> _:"));
+
+        refNode = refNodes.get(5);
+        assertThat(refNode.toString(), is("<https://api.gbif.org/v1/occurrence/1142366485> <http://www.w3.org/ns/prov#hadMember> <https://fm-digital-assets.fieldmuseum.org/672/421/28936_Menacanthus_campephili_PT_d_IN.jpg> ."));
+
+        Quad lastRefNode = refNodes.get(refNodes.size() - 1);
+        assertThat(lastRefNode.toString(), startsWith("<https://api.gbif.org/v1/occurrence/1142366485> <http://purl.org/pav/hasVersion>"));
+
+    }
+
+    @Test
     public void parseOccurrenceDownload() throws IOException {
         final List<Quad> refNodes = new ArrayList<>();
         IRI testNode = createTestNode();
@@ -312,6 +383,22 @@ public class RegistryReaderGBIFTest {
     private IRI createTestNode() {
         try {
             return toIRI(getClass().getResource("gbifdatasets.json").toURI());
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    private IRI createOccurrencesTestNode() {
+        try {
+            return toIRI(getClass().getResource(GBIF_OCCURRENCES_JSON).toURI());
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    private IRI createIndividualOccurrenceTestNode() {
+        try {
+            return toIRI(getClass().getResource("gbif-individual-occurrence.json").toURI());
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
         }
