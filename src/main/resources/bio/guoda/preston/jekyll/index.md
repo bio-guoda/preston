@@ -5,7 +5,7 @@ id: A biodiversity dataset graph
 {%- assign endpoint= "/data.json" | prepend: site.baseurl | prepend: site.url -%}
 {% capture provenance %}{%- include local_url_for_hash.html hash=site.data.version.archive -%}{% endcapture %}
 
-A biodiversity dataset graph: [{{ site.baseurl | prepend: site.url }}]({{ site.baseurl | prepend: site.url }}). {{ site.data.version.created_at | date: "%Y" }}. [{{ site.data.version.archive }}]({{ provenance }})  
+A biodiversity dataset graph: [{{ site.baseurl | prepend: site.url }}]({{ site.baseurl | prepend: site.url }}). {{ site.data.version.created_at | date: "%Y" }}. [{{ site.data.version.archive }}]({{ provenance }})
 
 Created using [Preston](https://preston.guoda.bio) v{{ site.data.version.preston }} on {{ site.data.version.created_at }}.
 
@@ -19,7 +19,7 @@ Do you want to include latest research data while keeping your original data aro
 
 ### Introducing Content-based Biodiversity Data Archives.
 
-This automatically generated website contains a versioned archive of a custom selection of specimen records and associated media. The selection is made using the [iDigBio Search API](https://www.idigbio.org/wiki/index.php/IDigBio_API), a powerful search engine powered by Elastic Search that contains over 130M vouchered specimen records, or the [GBIF occurrence search API](https://www.gbif.org/developer/occurrence) covering over a billion indexed biodiversity data records. The indexed data is archived using [Preston](https://github.com/bio-guoda/preston), a biodiversity data tracker that can version entire biodiversity dataset networks. Finally, the website is generated from the archived content using [Jekyll](https://jekyllrb.com/), the static site generator that powers GitHub pages. 
+This automatically generated website contains a versioned archive of a custom selection of occurrence/specimen records and associated media. The selection is made using currently available biodiversity search indexes like the [iDigBio Search API](https://www.idigbio.org/wiki/index.php/IDigBio_API) or the [GBIF Occurrence Search API](https://www.gbif.org/developer/occurrence). The indexed data is archived using [Preston](https://github.com/bio-guoda/preston), a biodiversity data tracker that can version entire biodiversity dataset networks. Finally, the website is generated from the archived content using [Jekyll](https://jekyllrb.com/), the static site generator that powers GitHub pages. 
 
 <a href="assets/preston.dot.svg"><img src="assets/preston.dot.svg" style="height: 30em;"/></a>
 
