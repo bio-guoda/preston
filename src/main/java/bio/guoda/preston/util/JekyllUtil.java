@@ -6,6 +6,7 @@ import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.BlobStoreReadOnly;
+import bio.guoda.preston.process.RegistryReaderGBIF;
 import bio.guoda.preston.process.RegistryReaderIDigBio;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerTSV;
@@ -41,6 +42,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -105,7 +107,11 @@ public class JekyllUtil {
                 }
 
                 final RecordType recordType = guessRecordType(statement);
+
+
                 if (!RecordType.unknown.equals(recordType)) {
+                    JekyllPageWriter pageWriter = writerForRecordType(recordType);
+
                     final RDFTerm resource = statement.getObject();
                     if (resource instanceof IRI) {
                         try {
@@ -113,10 +119,13 @@ public class JekyllUtil {
                             if (is == null) {
                                 throw new IOException("resource [" + ((IRI) resource).getIRIString() + "] needed for page generation, but not found");
                             }
-                            writePages(is, uuid -> {
+                            pageWriter.writePages(is, iri -> {
                                 try {
-                                    final File subdir = new File(posts, uuid.toString().substring(0, 2));
-                                    final File destination = new File(subdir, uuid.toString() + ".md");
+                                    String uuid = iri.getIRIString()
+                                            .replaceFirst("urn:uuid:", "")
+                                            .replaceFirst(".*/occurrence/", "");
+                                    final File subdir = new File(posts, uuid.substring(0, 2));
+                                    final File destination = new File(subdir, uuid + ".md");
                                     FileUtils.forceMkdirParent(destination);
                                     return new FileOutputStream(destination);
                                 } catch (IOException e) {
@@ -130,6 +139,14 @@ public class JekyllUtil {
                     }
                 }
 
+            }
+
+            private JekyllPageWriter writerForRecordType(RecordType recordType) {
+                JekyllPageWriter pageWriter = new JekyllPageWriterIDigBio();
+                if (RecordType.occurrence.equals(recordType)) {
+                    pageWriter = new JekyllPageWriterGBIF();
+                }
+                return pageWriter;
             }
 
         };
@@ -147,42 +164,19 @@ public class JekyllUtil {
                 type = RecordType.mediarecord;
             } else if (RegistryReaderIDigBio.isRecordsEndpoint(version)) {
                 type = RecordType.record;
+            } else if (RegistryReaderGBIF.isOccurrenceEndpoint(version)) {
+                type = RecordType.occurrence;
             }
         }
         return type;
-    }
-
-    public static void writePages(InputStream is, JekyllPageFactory factory, RecordType pageType) throws IOException {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        final JsonNode jsonNode = objectMapper.readTree(is);
-        writePage(factory, pageType, objectMapper, jsonNode);
-        if (jsonNode.has("items")) {
-            for (JsonNode item : jsonNode.get("items")) {
-                writePage(factory, pageType, objectMapper, item);
-            }
-        }
-    }
-
-    public static void writePage(JekyllPageFactory factory, RecordType pageType, ObjectMapper objectMapper, JsonNode item) throws IOException {
-        if (item.has("uuid")) {
-            final String uuid = item.get("uuid").asText();
-            try (final OutputStream os = factory.outputStreamFor(UUID.fromString(uuid))) {
-                final ObjectNode frontMatter = objectMapper.createObjectNode();
-                frontMatter.put("layout", pageType.name());
-                frontMatter.put("id", uuid);
-                frontMatter.put("permalink", "/" + uuid);
-                frontMatter.set("idigbio", item);
-
-                writeFrontMatter(os, frontMatter);
-            }
-        }
     }
 
     static void writeFrontMatter(OutputStream os, ObjectNode jekyllFrontMatterNode) throws IOException {
         YAMLFactory jsonFactory = new YAMLFactory();
         jsonFactory.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
         final ObjectWriter writer = new YAMLMapper(jsonFactory)
-                .writer(new DefaultPrettyPrinter().withObjectIndenter(new DefaultIndenter().withLinefeed("\n")));
+                .writer(new DefaultPrettyPrinter()
+                        .withObjectIndenter(new DefaultIndenter().withLinefeed("\n")));
         writer.writeValue(os, jekyllFrontMatterNode);
         org.apache.commons.io.IOUtils.write("---\n", os, StandardCharsets.UTF_8);
     }
@@ -219,11 +213,12 @@ public class JekyllUtil {
         recordset,
         mediarecord,
         record,
+        occurrence,
         unknown
     }
 
     public interface JekyllPageFactory {
-        OutputStream outputStreamFor(UUID uuid);
+        OutputStream outputStreamFor(IRI iri);
     }
 
     public static StatementsListener createPrestonStartTimeListener(ValueListener<DateTime> listener) {

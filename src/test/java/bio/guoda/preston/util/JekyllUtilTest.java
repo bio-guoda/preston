@@ -1,6 +1,7 @@
 package bio.guoda.preston.util;
 
 import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsListener;
@@ -46,12 +47,22 @@ public class JekyllUtilTest {
     public TemporaryFolder folder = new TemporaryFolder();
 
     @Test
+    public void generateOccurrencePage() throws IOException {
+        final String resource = "/bio/guoda/preston/process/gbif-individual-occurrence.json";
+        Map<IRI, ByteArrayOutputStream> osMap = writePagesGBIF(resource, JekyllUtil.RecordType.occurrence);
+        assertThat(osMap.size(), Is.is(1));
+
+        final String actual = osMap.get(RefNodeFactory.toIRI("https://api.gbif.org/v1/occurrence/1142366485")).toString("UTF-8");
+        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("/bio/guoda/preston/process/jekyll/occurrence.md"), StandardCharsets.UTF_8.name())));
+    }
+
+    @Test
     public void generateRecordSetPage() throws IOException {
         final String resource = "/bio/guoda/preston/process/idigbio-recordsets-complete.json";
-        Map<UUID, ByteArrayOutputStream> osMap = writePages(resource, JekyllUtil.RecordType.recordset);
+        Map<IRI, ByteArrayOutputStream> osMap = writePagesIDigBio(resource, JekyllUtil.RecordType.recordset);
         assertThat(osMap.size(), Is.is(100));
 
-        final String actual = osMap.get(UUID.fromString("d2e46893-099f-45eb-9a76-d2a66f43bec8")).toString("UTF-8");
+        final String actual = osMap.get(RefNodeFactory.toIRI(UUID.fromString("d2e46893-099f-45eb-9a76-d2a66f43bec8"))).toString("UTF-8");
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("/bio/guoda/preston/process/jekyll/recordset.md"), StandardCharsets.UTF_8.name())));
     }
 
@@ -59,11 +70,11 @@ public class JekyllUtilTest {
     public void generateMediaPages() throws IOException {
         final String resource = "/bio/guoda/preston/process/idigbio-mediarecord.json";
 
-        Map<UUID, ByteArrayOutputStream> osMap = writePages(resource, JekyllUtil.RecordType.mediarecord);
+        Map<IRI, ByteArrayOutputStream> osMap = writePagesIDigBio(resource, JekyllUtil.RecordType.mediarecord);
 
         assertThat(osMap.size(), Is.is(1));
 
-        final String actual = StringUtils.toEncodedString(osMap.get(UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4")).toByteArray(), StandardCharsets.UTF_8);
+        final String actual = StringUtils.toEncodedString(osMap.get(RefNodeFactory.toIRI(UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"))).toByteArray(), StandardCharsets.UTF_8);
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("/bio/guoda/preston/process/jekyll/mediarecord.md"), StandardCharsets.UTF_8.name())));
     }
 
@@ -71,23 +82,33 @@ public class JekyllUtilTest {
     public void generateRecordPage() throws IOException {
         final String resource = "/bio/guoda/preston/process/idigbio-records-complete.json";
 
-        Map<UUID, ByteArrayOutputStream> osMap = writePages(resource, JekyllUtil.RecordType.record);
+        Map<IRI, ByteArrayOutputStream> osMap = writePagesIDigBio(resource, JekyllUtil.RecordType.record);
 
         assertThat(osMap.size(), Is.is(2));
 
-        final String actual = osMap.get(UUID.fromString("e6c5dffc-4ad1-4d9d-800f-5796baec1f65")).toString("UTF-8");
+        final String actual = osMap.get(RefNodeFactory.toIRI(UUID.fromString("e6c5dffc-4ad1-4d9d-800f-5796baec1f65"))).toString("UTF-8");
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("/bio/guoda/preston/process/jekyll/record.md"), StandardCharsets.UTF_8.name())));
     }
 
-    public Map<UUID, ByteArrayOutputStream> writePages(String resource, JekyllUtil.RecordType recordType) throws IOException {
+    private Map<IRI, ByteArrayOutputStream> writePagesIDigBio(String resource, JekyllUtil.RecordType recordType) throws IOException {
+        JekyllPageWriter jekyllPageWriter = new JekyllPageWriterIDigBio();
+        return writePagesGeneric(resource, recordType, jekyllPageWriter);
+    }
+
+    private Map<IRI, ByteArrayOutputStream> writePagesGBIF(String resource, JekyllUtil.RecordType recordType) throws IOException {
+        JekyllPageWriter jekyllPageWriter = new JekyllPageWriterGBIF();
+        return writePagesGeneric(resource, recordType, jekyllPageWriter);
+    }
+
+    private Map<IRI, ByteArrayOutputStream> writePagesGeneric(String resource, JekyllUtil.RecordType recordType, JekyllPageWriter jekyllPageWriter) throws IOException {
         final InputStream is = getClass().getResourceAsStream(resource);
-        Map<UUID, ByteArrayOutputStream> osMap = new HashMap<>();
-        final JekyllUtil.JekyllPageFactory pageFactory = uuid -> {
+        Map<IRI, ByteArrayOutputStream> osMap = new HashMap<>();
+        final JekyllUtil.JekyllPageFactory pageFactory = iri -> {
             final ByteArrayOutputStream os = new ByteArrayOutputStream();
-            osMap.put(uuid, os);
+            osMap.put(iri, os);
             return os;
         };
-        JekyllUtil.writePages(is, pageFactory, recordType);
+        jekyllPageWriter.writePages(is, pageFactory, recordType);
         return osMap;
     }
 

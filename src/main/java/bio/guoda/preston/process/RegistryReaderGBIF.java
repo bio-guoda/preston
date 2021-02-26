@@ -5,6 +5,7 @@ import bio.guoda.preston.Seeds;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
@@ -45,7 +46,8 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
 
     public static final String GBIF_API_DATASET_PART = "//api.gbif.org/v1/dataset";
     public static final String GBIF_API_OCCURRENCE_DOWNLOAD_PART = "//api.gbif.org/v1/occurrence/download";
-    public static final String GBIF_OCCURRENCE_PART = "//api.gbif.org/v1/occurrence";
+    public static final String GBIF_OCCURRENCE_PART_PATH = "api.gbif.org/v1/occurrence";
+    public static final String GBIF_OCCURRENCE_PART = "//" + GBIF_OCCURRENCE_PART_PATH;
     public static final String GBIF_OCCURRENCE_SEARCH = "https:" + GBIF_OCCURRENCE_PART + "/search";
     public static final String GBIF_DATASET_REGISTRY_STRING = "https:" + GBIF_API_DATASET_PART;
     public static final String GBIF_OCCURRENCE_STRING = "https:" + GBIF_OCCURRENCE_PART;
@@ -54,6 +56,10 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
 
     public RegistryReaderGBIF(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
+    }
+
+    public static boolean isOccurrenceEndpoint(BlankNodeOrIRI subject) {
+        return StringUtils.contains(subject.ntriplesString(), GBIF_OCCURRENCE_PART_PATH);
     }
 
     @Override

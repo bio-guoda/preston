@@ -89,11 +89,19 @@ This archived dataset includes {{ site.pages | where: "layout", "record" | size 
 The first 10 records and their associated media included in this data archive are:
 
 <div style="display: flex; flex-direction: column; row-gap: 2em;">
-  
   {%- assign records = site.pages | where: "layout", "record" -%}
   {%- for record in records -%}
   <div style="display: flex; flex-align: column; border: solid;">
     {%- include record.html record=record -%}
+  </div>
+  {%- endfor -%}
+</div>
+
+<div style="display: flex; flex-direction: column; row-gap: 2em;">
+  {%- assign occurrences = site.pages | where: "layout", "occurrence" -%}
+  {%- for occurrence in occurrences limit:10 -%}
+  <div style="display: flex; flex-align: column; border: solid;">
+    {%- include occurrence.html occurrence=occurrence -%}
   </div>
   {%- endfor -%}
 

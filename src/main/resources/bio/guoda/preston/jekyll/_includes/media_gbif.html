@@ -1,0 +1,10 @@
+<div style="display: flex; flex-direction: column; border: solid; border-style: top;">
+  Media
+    <div style="display: flex; justify-content: space-evenly;">
+        <div>
+            {% assign original_online = include.media_gbif.identifier %}
+            {% include media_frag.html origin=original_online %}
+        </div>
+    </div>
+  <div id="{{ include.media_gbif | jsonify | uri_escape }}" class="meta"></div>
+</div>
