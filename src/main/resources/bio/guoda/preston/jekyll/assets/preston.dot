@@ -1,6 +1,6 @@
 digraph idigbio {
     
-    "Preston"->"iDigBio API"[label="query"]
+    "Preston"->"GBIF/iDigBio\nSearch API"[label="query"]
     "Preston"->"Collections"[label="access"]
     "Preston"->"Biodiversity Data Archive"[label="update"]
     "Biodiversity Data Archive"->"Preston"[label="clone"]
@@ -17,5 +17,5 @@ digraph idigbio {
     "Webserver"->"R"[label="programmatic access"]
     "Webserver"->"Jypiter notebook"[label="programmatic access"]
 
-    label="Content-based iDigBio"
+    label="Independent Content-based Biodiversity Archives"
 }

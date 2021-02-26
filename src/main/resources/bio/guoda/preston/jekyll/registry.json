@@ -1,0 +1,7 @@
+---
+---
+{%- assign versions = site.data.content -%}
+{%- for version in versions -%}
+  {{ version.url }}
+  {{ version | jsonify | strip_newlines }}
+{%- endfor -%}
