@@ -95,7 +95,7 @@ $ curl -s "{{ registry }}" | head -n1
 
 #### More Access Methods
 
-The backbone of this biodiversity data archive is their provenance log, or knowledge graph. This knowledge graph is stored in in [rdf]([rdf](https://en.wikipedia.org/wiki/Resource_Description_Framework) nquad format and can loaded into triple store and queried using [SPARQL](https://en.wikipedia.org/wiki/SPARQL). 
+The backbone of this biodiversity data archive is their provenance log, or knowledge graph. This knowledge graph is stored in in [rdf](https://en.wikipedia.org/wiki/Resource_Description_Framework)/ nquad format and can loaded into triple store and queried using [SPARQL](https://en.wikipedia.org/wiki/SPARQL). 
 
 Because the log is stored in a text file you can easily read it. For instance, the first 10 lines of the provenance graph (or knowledge graph) can be seen when running:
 
