@@ -33,7 +33,7 @@ jekyll new [site_dir] --blank
 
 cd [site_dir]
 
-# archive 10 iDigBio indexed Andrenidae records and related images
+# use GBIF/iDigBio API to track specimen, occurrences and their related images.
 preston track "{{ site.data.content | first | map: "url" }}" 
 
 # generate Jekyll site for archived content
@@ -72,7 +72,7 @@ $ curl "{{ endpoint }}" | jq -c 'select(.media[].type == "StillImage")' | head -
 {{ site.pages | where: "layout", "occurrence" | first | map: "gbif" | jsonify | strip_newlines }} 
 ```
 
-Or, select archived iDigBio index records with scientific name matching _Liphanthus sabulosus_:
+Or, select archived iDigBio indexed records with scientific name matching _Liphanthus sabulosus_:
 
 ```
 curl -s "{{ endpoint }}" | jq -c 'select(.data["dwc:scientificName"] == "Liphanthus sabulosus")' 
