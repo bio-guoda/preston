@@ -54,7 +54,7 @@ preston clone "{{ "/data" | prepend: site.baseurl | prepend: site.url }}"
 ### Programmatic access
 
 #### Access to Indexed Records
-Also, you can query the indexed data available through this site via the api at <a href="{{ endpoint }}">{{ endpoint }}</a>. 
+Also, you can query the indexed data available through this site via the api at <a href="{{ endpoint }}">{{ endpoint }}</a> (one json object per line, [https://jsonlines.org/](https://jsonlines.org)) . 
 
 With this, you can programmatically access the data and select the records you are interested in. 
 
@@ -84,7 +84,7 @@ This biodiversity archive contains local copies of remote content.
 
 {%- assign registry= "/registry.json" | prepend: site.baseurl | prepend: site.url -%}
 
-You can access a list of all archived location via the content registry at [{{ registry }}]({{ registry }}). Here's a way to get the first one:
+You can access a list of all archived location via the content registry at [{{ registry }}]({{ registry }}) ((one json object per line, [https://jsonlines.org/](https://jsonlines.org))). Here's a way to get the first one:
 
 ```
 $ curl -s "{{ registry }}" | head -n1
