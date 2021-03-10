@@ -42,6 +42,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
         put("DWC_ARCHIVE", MimeTypes.MIME_TYPE_DWCA);
         put("BIOCASE_XML_ARCHIVE", MimeTypes.MIME_TYPE_ABCDA);
+        put("BIOCASE", MimeTypes.MIME_TYPE_BIOCASE_META);
         put("EML", MimeTypes.MIME_TYPE_EML);
     }};
 

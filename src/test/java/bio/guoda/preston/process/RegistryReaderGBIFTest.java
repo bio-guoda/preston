@@ -243,8 +243,10 @@ public class RegistryReaderGBIFTest {
 
         registryReaderGBIF.on(firstPage);
 
-        assertThat(nodes.size(), is(6));
-        Quad secondPage = nodes.get(nodes.size() - 1);
+        assertThat(nodes.size(), is(9));
+        Quad secondPage = nodes.get(5);
+        assertThat(getVersionSource(secondPage).toString(), is("<http://131.130.131.9/biocase/pywrapper.cgi?dsa=gbif_je>"));
+        secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<http://131.130.131.9/biocase/downloads/gbif_je/University%20of%20Jena%2C%20Herbarium%20Haussknecht%20-%20Herbarium%20JE.ABCD_2.06.zip>"));
     }
 
