@@ -28,7 +28,7 @@ This automatically generated website contains a versioned archive of a custom se
 This biodiversity data archive website was created with the following steps:
 
 ```
-# first, create a new blank jekyll site (tested on Jekyll v4.0.1)
+# first, create a new blank jekyll site (needs Jekyll v4+, tested on Jekyll v4.0.1)
 jekyll new [site_dir] --blank 
 
 cd [site_dir]
@@ -48,8 +48,21 @@ jekyll s
 You can clone an exact copy of the entire biodiversity data archive using:
 
 ```
+# first, create a new blank jekyll site (needs Jekyll v4+, tested on Jekyll v4.0.1)
+jekyll new [site_dir] --blank 
+
+cd [site_dir]
+
+# clone this existing biodiversity dataset graph 
 preston clone "{{ "/data" | prepend: site.baseurl | prepend: site.url }}"
-```
+
+# generate Jekyll site for archived content
+preston copyTo --type jekyll . 
+
+# launch website and visit http://localhost:4000 in your browser
+jekyll s 
+``` 
+
 
 ### Programmatic access
 
