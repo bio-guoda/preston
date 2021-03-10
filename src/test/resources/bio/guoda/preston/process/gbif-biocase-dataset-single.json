@@ -1,0 +1,133 @@
+{
+  "key": "ee0e7875-8fbc-4cd8-a6a8-65f4a871e2ea",
+  "installationKey": "602f7766-f762-11e1-a439-00145eb45e9a",
+  "publishingOrganizationKey": "58520c30-bafb-11d9-8e53-b8a03c50a862",
+  "doi": "10.15468/8arhjc",
+  "external": false,
+  "numConstituents": 0,
+  "type": "OCCURRENCE",
+  "title": "University of Jena, Herbarium Haussknecht - Herbarium JE",
+  "description": "The Herbarium Haussknecht (JE) houses about 3.5 Mio specimens from all parts of the world, especially vascular plants from central and southeast Europe, southwest Asia, and Cuba, and Bryophytes from tropical and subtropical regions . The most important collections include the original collections of C. Haussknecht, C. Gaillardot,  T. Herzog (only bryophtyes), and T. Strauss, the original herbaria of C. Dufft, A. Georges, W. Gerhard,  R. Grolle, E. Sagorski, and K. Schliephacke, as well as major collections of e.g., B. Balansa, C. I. Blanche, E. Boissier, J. Bornmüller, W. Rothmaler, P. Sintenis, F. K. Meyer, A. Schäfer-Verwimp, R. Düll, and the Flora de Cuba series.",
+  "language": "eng",
+  "homepage": "http://www.spezbot.uni-jena.de/herbarium/",
+  "logoUrl": "http://www.uni-jena.de/unijenamedia/SPZ_LPF_Logo_FSU-width-70-height-70.png",
+  "citation": {
+    "text": "University of Vienna - Herbarium WU. University of Jena, Herbarium Haussknecht - Herbarium JE. Occurrence dataset https://doi.org/10.15468/8arhjc accessed via GBIF.org on 2021-03-10."
+  },
+  "lockedForAutoUpdate": false,
+  "createdBy": "crawler.gbif.org",
+  "modifiedBy": "crawler.gbif.org",
+  "created": "2021-02-03T14:31:19.441+00:00",
+  "modified": "2021-02-03T14:31:19.441+00:00",
+  "contacts": [
+    {
+      "key": 2305057,
+      "type": "TECHNICAL_POINT_OF_CONTACT",
+      "primary": false,
+      "userId": [],
+      "firstName": "Heimo Rainer",
+      "position": [],
+      "email": [
+        "heimo.rainer@nhm-wien.ac.at"
+      ],
+      "phone": [],
+      "homepage": [],
+      "address": [],
+      "createdBy": "crawler.gbif.org",
+      "modifiedBy": "crawler.gbif.org",
+      "created": "2021-02-03T14:31:19.695+00:00",
+      "modified": "2021-02-03T14:31:19.695+00:00"
+    },
+    {
+      "key": 2305058,
+      "type": "ADMINISTRATIVE_POINT_OF_CONTACT",
+      "primary": false,
+      "userId": [],
+      "firstName": "Jörn Hentschel",
+      "position": [],
+      "email": [
+        "j.hentschel@uni-jena.de"
+      ],
+      "phone": [],
+      "homepage": [],
+      "address": [
+        "Fürstengraben 1, 07737 Jena, Germany"
+      ],
+      "createdBy": "crawler.gbif.org",
+      "modifiedBy": "crawler.gbif.org",
+      "created": "2021-02-03T14:31:19.785+00:00",
+      "modified": "2021-02-03T14:31:19.785+00:00"
+    }
+  ],
+  "endpoints": [
+    {
+      "key": 563887,
+      "type": "BIOCASE",
+      "url": "http://131.130.131.9/biocase/pywrapper.cgi?dsa=gbif_je",
+      "createdBy": "crawler.gbif.org",
+      "modifiedBy": "crawler.gbif.org",
+      "created": "2021-02-03T14:31:20.057+00:00",
+      "modified": "2021-02-03T14:31:20.057+00:00",
+      "machineTags": [
+        {
+          "key": 7714917,
+          "namespace": "metasync.gbif.org",
+          "name": "conceptualSchema",
+          "value": "http://www.tdwg.org/schemas/abcd/2.06",
+          "createdBy": "crawler.gbif.org",
+          "created": "2021-02-03T14:31:20.057+00:00"
+        }
+      ]
+    },
+    {
+      "key": 563886,
+      "type": "BIOCASE_XML_ARCHIVE",
+      "url": "http://131.130.131.9/biocase/downloads/gbif_je/University%20of%20Jena%2C%20Herbarium%20Haussknecht%20-%20Herbarium%20JE.ABCD_2.06.zip",
+      "createdBy": "crawler.gbif.org",
+      "modifiedBy": "crawler.gbif.org",
+      "created": "2021-02-03T14:31:19.945+00:00",
+      "modified": "2021-02-03T14:31:19.945+00:00",
+      "machineTags": [
+        {
+          "key": 7714916,
+          "namespace": "metasync.gbif.org",
+          "name": "archiveOrigin",
+          "value": "BIOCASE_INSTALLATION",
+          "createdBy": "crawler.gbif.org",
+          "created": "2021-02-03T14:31:19.945+00:00"
+        }
+      ]
+    }
+  ],
+  "machineTags": [
+    {
+      "key": 7939302,
+      "namespace": "crawler.gbif.org",
+      "name": "crawl_attempt",
+      "value": "5",
+      "createdBy": "crawler.gbif.org",
+      "created": "2021-03-03T15:07:17.267+00:00"
+    },
+    {
+      "key": 7939301,
+      "namespace": "metasync.gbif.org",
+      "name": "declaredCount",
+      "value": "37292",
+      "createdBy": "crawler.gbif.org",
+      "created": "2021-03-03T15:07:17.139+00:00"
+    }
+  ],
+  "tags": [],
+  "identifiers": [],
+  "comments": [],
+  "bibliographicCitations": [],
+  "curatorialUnits": [],
+  "taxonomicCoverages": [],
+  "geographicCoverages": [],
+  "temporalCoverages": [],
+  "keywordCollections": [],
+  "countryCoverage": [],
+  "collections": [],
+  "dataDescriptions": [],
+  "license": "http://creativecommons.org/publicdomain/zero/1.0/legalcode"
+}

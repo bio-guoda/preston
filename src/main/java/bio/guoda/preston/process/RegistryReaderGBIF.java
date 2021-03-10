@@ -41,6 +41,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 public class RegistryReaderGBIF extends ProcessorReadOnly {
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
         put("DWC_ARCHIVE", MimeTypes.MIME_TYPE_DWCA);
+        put("BIOCASE_XML_ARCHIVE", MimeTypes.MIME_TYPE_ABCDA);
         put("EML", MimeTypes.MIME_TYPE_EML);
     }};
 

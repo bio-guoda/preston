@@ -1,0 +1,37 @@
+{
+  "offset": 0,
+  "limit": 20,
+  "endOfRecords": true,
+  "count": 2,
+  "results": [
+    {
+      "key": "0afba960-be3b-4202-a7de-736ae05aec9e",
+      "title": "University of Vienna, Institute for Botany - Herbarium WU",
+      "doi": "10.15468/tnj8wm",
+      "description": "The Herbarium of the University of Vienna (Index Herbariorum Acronym WU) represents one of the largest collections of its kind being purely university bound and holds about 1.5 million objects. After the botanical collections of the Austrian empire in Vienna were transferred to the Natural History Museum of Vienna a university herbarium was initiated de novo by Prof. A. Kerner von Marilaun director of the botanical institute in 1879. Collections cover all groups of organisms curated traditionally at botanical institutes from plants, algae, lichens to fungi worldwide.",
+      "type": "OCCURRENCE",
+      "hostingOrganizationKey": "58520c30-bafb-11d9-8e53-b8a03c50a862",
+      "hostingOrganizationTitle": "University of Vienna - Herbarium WU",
+      "publishingCountry": "AT",
+      "publishingOrganizationKey": "58520c30-bafb-11d9-8e53-b8a03c50a862",
+      "publishingOrganizationTitle": "University of Vienna - Herbarium WU",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "recordCount": 121940
+    },
+    {
+      "key": "ee0e7875-8fbc-4cd8-a6a8-65f4a871e2ea",
+      "title": "University of Jena, Herbarium Haussknecht - Herbarium JE",
+      "doi": "10.15468/8arhjc",
+      "description": "The Herbarium Haussknecht (JE) houses about 3.5 Mio specimens from all parts of the world, especially vascular plants from central and southeast Europe, southwest Asia, and Cuba, and Bryophytes from tropical and subtropical regions . The most important collections include the original collections of C. Haussknecht, C. Gaillardot,  T. Herzog (only bryophtyes), and T. Strauss, the original herbaria of C. Dufft, A. Georges, W. Gerhard,  R. Grolle, E. Sagorski, and K. Schliephacke, as well as major collections of e.g., B. Balansa, C. I. Blanche, E. Boissier, J. Bornmüller, W. Rothmaler, P. Sintenis, F. K. Meyer, A. Schäfer-Verwimp, R. Düll, and the Flora de Cuba series.",
+      "type": "OCCURRENCE",
+      "hostingOrganizationKey": "58520c30-bafb-11d9-8e53-b8a03c50a862",
+      "hostingOrganizationTitle": "University of Vienna - Herbarium WU",
+      "publishingCountry": "AT",
+      "publishingOrganizationKey": "58520c30-bafb-11d9-8e53-b8a03c50a862",
+      "publishingOrganizationTitle": "University of Vienna - Herbarium WU",
+      "license": "http://creativecommons.org/publicdomain/zero/1.0/legalcode",
+      "recordCount": 0
+    }
+  ],
+  "facets": []
+}

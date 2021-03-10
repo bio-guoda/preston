@@ -228,6 +228,27 @@ public class RegistryReaderGBIFTest {
     }
 
     @Test
+    public void onSingleBioCASe() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return getClass().getResourceAsStream("gbif-biocase-dataset-single.json");
+            }
+        };
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtil.testListener(nodes));
+
+
+        Quad firstPage = toStatement(toIRI("https://api.gbif.org/v1/dataset"), HAS_VERSION, createTestNode());
+
+        registryReaderGBIF.on(firstPage);
+
+        assertThat(nodes.size(), is(6));
+        Quad secondPage = nodes.get(nodes.size() - 1);
+        assertThat(getVersionSource(secondPage).toString(), is("<http://131.130.131.9/biocase/downloads/gbif_je/University%20of%20Jena%2C%20Herbarium%20Haussknecht%20-%20Herbarium%20JE.ABCD_2.06.zip>"));
+    }
+
+    @Test
     public void nextPage() {
         List<Quad> nodes = new ArrayList<>();
         RegistryReaderGBIF.emitNextPage(0, 10, TestUtil.testEmitter(nodes), "https://bla/?limit=2&offset=8");
