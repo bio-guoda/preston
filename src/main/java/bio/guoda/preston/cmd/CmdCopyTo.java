@@ -82,7 +82,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
                 statementStore,
                 ctx);
 
-        JekyllUtil.writeVersionFile(target, lastCrawlTime, statementStore, getProvenanceRoot());
+        JekyllUtil.writePrestonConfigFile(target, lastCrawlTime, statementStore, getProvenanceRoot());
     }
 
     private void copyAll(File target, File tmp) {

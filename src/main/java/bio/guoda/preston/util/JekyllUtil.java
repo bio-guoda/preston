@@ -188,8 +188,8 @@ public class JekyllUtil {
         return resourceList.stream().map(x -> "/" + x);
     }
 
-    public static void writeVersionFile(File target, AtomicReference<DateTime> lastCrawlTime, StatementStore statementStore, IRI provenanceRoot) {
-        final File data = new File(new File(target, "_data"), "version.yml");
+    public static void writePrestonConfigFile(File target, AtomicReference<DateTime> lastCrawlTime, StatementStore statementStore, IRI provenanceRoot) {
+        final File data = new File(new File(target, "_data"), "preston.yml");
         try {
             FileUtils.forceMkdirParent(data);
             try (final FileOutputStream out = new FileOutputStream(data)) {
@@ -197,6 +197,7 @@ public class JekyllUtil {
                 final YAMLMapper yamlMapper = new YAMLMapper();
                 final ObjectNode objectNode = yamlMapper.createObjectNode();
                 objectNode.put("archive", mostRecentVersion.getIRIString());
+                objectNode.put("data_location", "data/");
                 objectNode.put("preston", Preston.getVersion());
                 final DateTime dateTime = lastCrawlTime.get();
                 if (dateTime != null) {
