@@ -314,10 +314,13 @@ public class RegistryReaderGBIFTest {
                 TestUtil.testEmitter(refNodes), getClass().getResourceAsStream(GBIF_OCCURRENCES_JSON),
                 toIRI("http://example.org/"));
 
-        assertThat(refNodes.size(), is(375));
+        assertThat(refNodes.size(), is(55));
 
         Quad refNode = refNodes.get(0);
         assertThat(refNode.toString(), is("<http://example.org/occurrence/123> <http://www.w3.org/ns/prov#hadMember> <https://api.gbif.org/v1/occurrence/1142366485> ."));
+
+        refNode = refNodes.get(1);
+        assertThat(refNode.toString(), startsWith("<https://api.gbif.org/v1/occurrence/1142366485> <http://purl.org/pav/hasVersion>"));
 
 
         Quad lastRefNode = refNodes.get(refNodes.size() - 5);
@@ -345,33 +348,29 @@ public class RegistryReaderGBIFTest {
         JsonNode occurrence = new ObjectMapper().readTree(getClass().getResourceAsStream("gbif-individual-occurrence.json"));
 
         RegistryReaderGBIF.parseIndividualOccurrence(
-                toIRI("http://example.org/"),
                 TestUtil.testEmitter(refNodes),
                 occurrence
         );
 
-        assertThat(refNodes.size(), is(22));
+        assertThat(refNodes.size(), is(20));
 
         Quad refNode = refNodes.get(0);
-        assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <https://api.gbif.org/v1/occurrence/1142366485> ."));
-
-        refNode = refNodes.get(1);
         assertThat(refNode.toString(), is("<https://api.gbif.org/v1/occurrence/1142366485> <http://www.w3.org/ns/prov#hadMember> <http://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg> ."));
 
-        refNode = refNodes.get(2);
+        refNode = refNodes.get(1);
         assertThat(refNode.toString(), is("<http://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg> <http://xmlns.com/foaf/0.1/depicts> <https://api.gbif.org/v1/occurrence/1142366485> ."));
 
-        refNode = refNodes.get(3);
+        refNode = refNodes.get(2);
         assertThat(refNode.toString(), is("<http://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg> <http://purl.org/dc/elements/1.1/format> \"image/jpeg\" ."));
 
-        refNode = refNodes.get(4);
+        refNode = refNodes.get(3);
         assertThat(refNode.toString(), startsWith("<http://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg> <http://purl.org/pav/hasVersion> _:"));
 
-        refNode = refNodes.get(5);
+        refNode = refNodes.get(4);
         assertThat(refNode.toString(), is("<https://api.gbif.org/v1/occurrence/1142366485> <http://www.w3.org/ns/prov#hadMember> <https://fm-digital-assets.fieldmuseum.org/672/421/28936_Menacanthus_campephili_PT_d_IN.jpg> ."));
 
         Quad lastRefNode = refNodes.get(refNodes.size() - 1);
-        assertThat(lastRefNode.toString(), startsWith("<https://api.gbif.org/v1/occurrence/1142366485> <http://purl.org/pav/hasVersion>"));
+        assertThat(lastRefNode.toString(), startsWith("<https://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg> <http://purl.org/pav/hasVersion>"));
 
     }
 

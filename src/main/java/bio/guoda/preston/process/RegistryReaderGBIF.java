@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
@@ -56,12 +57,14 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     private final Logger LOG = LoggerFactory.getLogger(RegistryReaderGBIF.class);
     public static final IRI GBIF_REGISTRY = toIRI(GBIF_DATASET_REGISTRY_STRING);
 
+    public static final Pattern OCCURRENCE_RECORD_URL_PATTERN = Pattern.compile("<http[s]{0,1}://" + GBIF_OCCURRENCE_PART_PATH + "/([0-9]+)|(search.*)>");
+
     public RegistryReaderGBIF(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
     }
 
-    public static boolean isOccurrenceEndpoint(BlankNodeOrIRI subject) {
-        return StringUtils.contains(subject.ntriplesString(), GBIF_OCCURRENCE_PART_PATH);
+    public static boolean isOccurrenceRecordEndpoint(BlankNodeOrIRI subject) {
+        return OCCURRENCE_RECORD_URL_PATTERN.matcher(subject.ntriplesString()).matches();
     }
 
     @Override
@@ -87,13 +90,21 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 && getVersionSource(statement).toString().contains(GBIF_API_DATASET_PART)) {
             handleDataset(statement);
         } else if (hasVersionAvailable(statement)
-                && getVersionSource(statement).toString().contains(GBIF_API_OCCURRENCE_DOWNLOAD_PART)
-                && !getVersionSource(statement).toString().contains("/download/request/")) {
+                && isOccurrenceDownload(statement)) {
             handleOccurrenceDownload(statement);
         } else if (hasVersionAvailable(statement)
-                && getVersionSource(statement).toString().contains(GBIF_OCCURRENCE_SEARCH)) {
-            handleOccurrenceSearch(statement);
+                && isOccurrenceRecordEndpoint(statement)) {
+            handleOccurrenceRecords(statement);
         }
+    }
+
+    private boolean isOccurrenceRecordEndpoint(Quad statement) {
+        return isOccurrenceRecordEndpoint(getVersionSource(statement));
+    }
+
+    private boolean isOccurrenceDownload(Quad statement) {
+        return getVersionSource(statement).toString().contains(GBIF_API_OCCURRENCE_DOWNLOAD_PART)
+                && !getVersionSource(statement).toString().contains("/download/request/");
     }
 
     public void handleOccurrenceDownload(Quad statement) {
@@ -115,7 +126,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
     }
 
-    public void handleOccurrenceSearch(Quad statement) {
+    private void handleOccurrenceRecords(Quad statement) {
         List<Quad> nodes = new ArrayList<>();
         try {
             IRI currentPage = (IRI) getVersion(statement);
@@ -178,13 +189,13 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         if (jsonNode != null) {
             if (jsonNode.has("results")) {
                 for (JsonNode result : jsonNode.get("results")) {
-                    parseIndividualOccurrence(currentPage, emitter, result);
+                    requestIndividualOccurrence(currentPage, emitter, result);
                 }
             } else if (jsonNode.has("key")) {
-                parseIndividualOccurrence(currentPage, emitter, jsonNode);
+                parseIndividualOccurrence(emitter, jsonNode);
             } else if (jsonNode.isArray()) {
                 for (JsonNode node : jsonNode) {
-                    parseIndividualOccurrence(currentPage, emitter, node);
+                    requestIndividualOccurrence(currentPage, emitter, node);
                 }
             }
         }
@@ -255,16 +266,23 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     }
 
 
-    public static void parseIndividualOccurrence(IRI currentPage, StatementsEmitter emitter, JsonNode result) {
+    public static void requestIndividualOccurrence(IRI currentPage, StatementsEmitter emitter, JsonNode result) {
         if (result.has("key")) {
             String key = result.get("key").asText();
             IRI occurrenceKey = toIRI(GBIF_OCCURRENCE_STRING + "/" + key);
             emitter.emit(toStatement(currentPage, HAD_MEMBER, occurrenceKey));
+            emitter.emit(toStatement(toIRI(GBIF_OCCURRENCE_STRING + "/" + key), HAS_VERSION, toBlank()));
+        }
+    }
+
+    public static void parseIndividualOccurrence(StatementsEmitter emitter, JsonNode result) {
+        if (result.has("key")) {
+            String key = result.get("key").asText();
+            IRI occurrenceKey = toIRI(GBIF_OCCURRENCE_STRING + "/" + key);
 
             if (result.has("media")) {
                 handleMedia(emitter, result, occurrenceKey);
             }
-            emitter.emit(toStatement(toIRI(GBIF_OCCURRENCE_STRING + "/" + key), HAS_VERSION, toBlank()));
         }
     }
 

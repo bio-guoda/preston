@@ -17,8 +17,6 @@ import bio.guoda.preston.store.VersionUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -42,10 +40,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -164,7 +160,7 @@ public class JekyllUtil {
                 type = RecordType.mediarecord;
             } else if (RegistryReaderIDigBio.isRecordsEndpoint(version)) {
                 type = RecordType.record;
-            } else if (RegistryReaderGBIF.isOccurrenceEndpoint(version)) {
+            } else if (RegistryReaderGBIF.isOccurrenceRecordEndpoint(version)) {
                 type = RecordType.occurrence;
             }
         }
