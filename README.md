@@ -499,7 +499,7 @@ See https://github.com/bio-guoda/preston/issues/75 and https://jhpoelen.nl/bees 
 
 #### Parallel Content Tracking 
 
-A single biodiversity data archive/graph can be constructed with parallel processes.
+A single biodiversity data archive/graph can be constructed, or updated, using parallel processes.
 
 For instance, if you'd like to track two separate web locations in parallel, you can using GNU's parallel to do:
 
