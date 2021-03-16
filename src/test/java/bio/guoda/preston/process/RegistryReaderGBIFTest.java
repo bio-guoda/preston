@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.Seeds;
+import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.TestUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,11 +32,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.hamcrest.core.StringStartsWith.startsWith;
+import static org.junit.Assert.assertTrue;
 
 public class RegistryReaderGBIFTest {
 
     public static final String GBIFDATASETS_JSON = "gbifdatasets.json";
     public static final String GBIF_OCCURRENCES_JSON = "gbif-occurrences.json";
+    public static final String GBIF_INDIVIDUAL_OCCURRENCE_JSON = "gbif-individual-occurrence.json";
 
     @Test
     public void onSeed() {
@@ -207,7 +210,7 @@ public class RegistryReaderGBIFTest {
     }
 
     @Test
-    public void onSingle() {
+    public void onSingleDataset() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
@@ -225,6 +228,41 @@ public class RegistryReaderGBIFTest {
         assertThat(nodes.size(), is(6));
         Quad secondPage = nodes.get(nodes.size() - 1);
         assertThat(getVersionSource(secondPage).toString(), is("<http://plazi.cs.umb.edu/GgServer/dwca/2924FFB8FFC7C76B4B0B503BFFD8D973.zip>"));
+    }
+
+    @Test
+    public void onSingleOccurrence() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return getClass().getResourceAsStream(GBIF_INDIVIDUAL_OCCURRENCE_JSON);
+            }
+        };
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtil.testListener(nodes));
+
+
+        Quad firstPage = toStatement(toIRI("https://api.gbif.org/v1/occurrence/1234"), HAS_VERSION, createTestNode());
+
+        registryReaderGBIF.on(firstPage);
+
+        assertThat(nodes.size(), is(21));
+        assertThat(nodes.get(1).toString(),
+                startsWith("<https://api.gbif.org/v1/occurrence/1142366485> <http://www.w3.org/ns/prov#hadMember> <http://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg> <urn:uuid:"));
+        assertThat(getVersionSource(nodes.get(4)).toString(),
+                is("<http://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg>"));
+    }
+
+    @Test
+    public void isOccurrenceRecordEndpoint() {
+        assertTrue(RegistryReaderGBIF.isOccurrenceRecordEndpoint(
+                RefNodeFactory.toIRI("https://api.gbif.org/v1/occurrence/1234")));
+    }
+
+    @Test
+    public void isOccurrenceRecordEndpoint2() {
+        assertTrue(RegistryReaderGBIF.isOccurrenceRecordEndpoint(
+                RefNodeFactory.toIRI("https://api.gbif.org/v1/occurrence/search?blabla")));
     }
 
     @Test
@@ -265,7 +303,10 @@ public class RegistryReaderGBIFTest {
 
         IRI testNode = createTestNode();
 
-        RegistryReaderGBIF.parseDatasetResultPage(testNode, TestUtil.testEmitter(refNodes), getClass().getResourceAsStream(GBIFDATASETS_JSON), toIRI("http://example.org/"));
+        RegistryReaderGBIF.parseDatasetResultPage(testNode,
+                TestUtil.testEmitter(refNodes),
+                getClass().getResourceAsStream(GBIFDATASETS_JSON),
+                toIRI("http://example.org/"));
 
         assertThat(refNodes.size(), is(60973));
 
@@ -309,7 +350,7 @@ public class RegistryReaderGBIFTest {
 
         final List<Quad> refNodes = new ArrayList<>();
 
-        RegistryReaderGBIF.parseOccurrenceResultPage(
+        RegistryReaderGBIF.parseOccurrenceRecords(
                 toIRI("http://example.org/occurrence/123"),
                 TestUtil.testEmitter(refNodes), getClass().getResourceAsStream(GBIF_OCCURRENCES_JSON),
                 toIRI("http://example.org/"));
@@ -345,9 +386,10 @@ public class RegistryReaderGBIFTest {
 
         final List<Quad> refNodes = new ArrayList<>();
 
-        JsonNode occurrence = new ObjectMapper().readTree(getClass().getResourceAsStream("gbif-individual-occurrence.json"));
+        JsonNode occurrence = new ObjectMapper().readTree(
+                getClass().getResourceAsStream(GBIF_INDIVIDUAL_OCCURRENCE_JSON));
 
-        RegistryReaderGBIF.parseIndividualOccurrence(
+        RegistryReaderGBIF.parseOccurrenceRecord(
                 TestUtil.testEmitter(refNodes),
                 occurrence
         );

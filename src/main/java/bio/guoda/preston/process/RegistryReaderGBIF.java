@@ -57,7 +57,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     private final Logger LOG = LoggerFactory.getLogger(RegistryReaderGBIF.class);
     public static final IRI GBIF_REGISTRY = toIRI(GBIF_DATASET_REGISTRY_STRING);
 
-    public static final Pattern OCCURRENCE_RECORD_URL_PATTERN = Pattern.compile("<http[s]{0,1}://" + GBIF_OCCURRENCE_PART_PATH + "/([0-9]+)|(search.*)>");
+    public static final Pattern OCCURRENCE_RECORD_URL_PATTERN = Pattern.compile("<http[s]{0,1}://" + GBIF_OCCURRENCE_PART_PATH + "/(([0-9]+)|(search.*))>");
 
     public RegistryReaderGBIF(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
@@ -132,7 +132,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
             IRI currentPage = (IRI) getVersion(statement);
             InputStream is = get(currentPage);
             if (is != null) {
-                parseOccurrenceResultPage(currentPage, new StatementsEmitterAdapter() {
+                parseOccurrenceRecords(currentPage, new StatementsEmitterAdapter() {
                     @Override
                     public void emit(Quad statement) {
                         nodes.add(statement);
@@ -184,7 +184,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 .forEach(emitter::emit);
     }
 
-    static void parseOccurrenceResultPage(IRI currentPage, StatementsEmitter emitter, InputStream in, IRI versionSource) throws IOException {
+    static void parseOccurrenceRecords(IRI currentPage, StatementsEmitter emitter, InputStream in, IRI versionSource) throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(in);
         if (jsonNode != null) {
             if (jsonNode.has("results")) {
@@ -192,7 +192,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                     requestIndividualOccurrence(currentPage, emitter, result);
                 }
             } else if (jsonNode.has("key")) {
-                parseIndividualOccurrence(emitter, jsonNode);
+                parseOccurrenceRecord(emitter, jsonNode);
             } else if (jsonNode.isArray()) {
                 for (JsonNode node : jsonNode) {
                     requestIndividualOccurrence(currentPage, emitter, node);
@@ -275,7 +275,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         }
     }
 
-    public static void parseIndividualOccurrence(StatementsEmitter emitter, JsonNode result) {
+    public static void parseOccurrenceRecord(StatementsEmitter emitter, JsonNode result) {
         if (result.has("key")) {
             String key = result.get("key").asText();
             IRI occurrenceKey = toIRI(GBIF_OCCURRENCE_STRING + "/" + key);
