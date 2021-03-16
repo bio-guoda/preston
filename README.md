@@ -513,7 +513,7 @@ $ echo -e "https://example.org/bigdata1\nhttps://example.org/bigdata2" | paralle
 
 where ```echo -e "https://example.org/bigdata1\nhttps://example.org/bigdata2"``` contains two lines with each one url, and ```parallel -j2 --line-buffer preston track``` launches two preston processes, one for each url.
 
-On completion, each track processes adds it's provenance log to the end of the preston archive version history. So, after each track process has completed, you'll find two extra versions added to the biodiversity graph using ```preston history```.
+On completion, each Preston process adds it's provenance log to the end of the preston archive version history. So, after each track process has completed, you'll find two extra versions added to the biodiversity graph using ```preston history```.
 
 
 ## Prerequisites
