@@ -74,9 +74,9 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
       * [`generating citations`](#generating-citations)
       * [`finding copies with hash-archive.org`](#finding-copies-with-hash-archiveorg)
       * [`tracking a GBIF IPT`](#tracking-a-gbif-ipt)
-      * [`tracking a GBIF IPT`](#tracking-a-gbif-ipt)
       * [`finding text in tracked contents`](#finding-text-in-tracked-contents)
       * [`generating publication using Jekyll`](#jekyll-publication)
+      * [`parallel content tracking`](#parallel-content-tracking)
  * [Prerequisites](#prerequisites)
  * [Install](#install)
    * [`standalone`](#standalone)
@@ -496,6 +496,24 @@ $ preston cat hash://sha256/e0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e5
 #### Jekyll Publication
 
 See https://github.com/bio-guoda/preston/issues/75 and https://jhpoelen.nl/bees for examples on how to generate a static website from a Preston biodiversity dataset graph.
+
+#### Parallel Content Tracking 
+
+A single biodiversity data archive/graph can be constructed with parallel processes.
+
+For instance, if you'd like to track two separate web locations in parallel, you can using GNU's parallel to do:
+
+```shell 
+$ echo -e "https://example.org/bigdata1\nhttps://example.org/bigdata2" | parallel -j2 --line-buffer preston track  
+<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> <19974b7b-d88b-4ffb-aa17-e12153956b86> .
+<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> <19974b7b-d88b-4ffb-aa17-e12153956b86> .
+<https://preston.guoda.bio> <http://purl.org/dc/terms/description> "Preston is a software program that finds, archives and provides access to biodiversity datasets."@en <19974b7b-d88b-4ffb-aa17-e12153956b86> .
+...
+```
+
+where ```echo -e "https://example.org/bigdata1\nhttps://example.org/bigdata2"``` contains two lines with each one url, and ```parallel -j2 --line-buffer preston track``` launches two preston processes, one for each url.
+
+On completion, each track processes adds it's provenance log to the end of the preston archive version history. So, after each track process has completed, you'll find two extra versions added to the biodiversity graph using ```preston history```.
 
 
 ## Prerequisites
