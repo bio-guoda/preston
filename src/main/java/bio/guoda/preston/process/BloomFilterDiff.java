@@ -23,6 +23,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
+import static bio.guoda.preston.RefNodeConstants.BLOOM_HASH_PREFIX;
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.RefNodeConstants.OVERLAPS;
 import static bio.guoda.preston.RefNodeConstants.QUALIFIED_GENERATION;
@@ -50,8 +51,8 @@ public class BloomFilterDiff extends ProcessorReadOnly implements Closeable {
     @Override
     public void on(Quad statement) {
         if (WAS_DERIVED_FROM.equals(statement.getPredicate())
-                && isOfHashType(statement.getSubject(), HashType.bloom_gz)
-                && isOfHashType(statement.getObject(), HashType.sha256)) {
+                && isOfHashType(statement.getSubject(), BLOOM_HASH_PREFIX)
+                && isOfHashType(statement.getObject(), HashType.sha256.getPrefix())) {
 
             IRI bloomGzHash = (IRI) statement.getSubject();
             IRI shaHash = (IRI) statement.getObject();
@@ -100,14 +101,14 @@ public class BloomFilterDiff extends ProcessorReadOnly implements Closeable {
         return (sizeReference + sizeTarget) - sizeCombined;
     }
 
-    private boolean isOfHashType(RDFTerm object, HashType hashType) {
+    private boolean isOfHashType(RDFTerm object, String prefix) {
         return object instanceof IRI
-                && ((IRI) object).getIRIString().startsWith(hashType.getPrefix());
+                && ((IRI) object).getIRIString().startsWith(prefix);
     }
 
     private BloomFilter<CharSequence> getBloomFilter(IRI contentHash) throws IOException {
         BloomFilter<CharSequence> bloomFilter = null;
-        String bloomFilterContentId = StringUtils.removeStart(contentHash.getIRIString(), HashType.bloom_gz.getPrefix());
+        String bloomFilterContentId = StringUtils.removeStart(contentHash.getIRIString(), BLOOM_HASH_PREFIX);
         if (StringUtils.isNotBlank(bloomFilterContentId)) {
             try (InputStream inputStream = get(toIRI(bloomFilterContentId))) {
                 if (inputStream == null) {

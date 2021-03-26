@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 import java.util.zip.GZIPOutputStream;
 
+import static bio.guoda.preston.RefNodeConstants.BLOOM_HASH_PREFIX;
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
@@ -95,7 +96,7 @@ public class BloomFilterCreate extends StatementProcessor implements Closeable {
             }
             IRI bloomFilterContentId = blobStore.put(new ByteArrayInputStream(out.toByteArray()));
             emitBloomFilter(
-                    RefNodeFactory.toIRI(HashType.bloom_gz.getPrefix() + bloomFilterContentId.getIRIString()),
+                    RefNodeFactory.toIRI(BLOOM_HASH_PREFIX + bloomFilterContentId.getIRIString()),
                     contentId,
                     statement.getGraphName());
         } catch (IOException e) {

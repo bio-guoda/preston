@@ -70,4 +70,7 @@ public class RefNodeConstants {
     public static final IRI WAS_STARTED_BY = toIRI("http://www.w3.org/ns/prov#wasStartedBy");
 
     public static final IRI DEPICTS = toIRI("http://xmlns.com/foaf/0.1/depicts");
+
+    public static final String BLOOM_HASH_PREFIX = "bloom:gz:";
+
 }
