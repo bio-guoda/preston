@@ -73,7 +73,7 @@ public class ContentStreamUtil {
                 ? toIRI(contentHashMatcher.group())
                 : null;
         if (contentHash == null) {
-            throw new IllegalArgumentException("[" + iri.getIRIString() + "] is not a content-based URI (e.g. \"...hash://abc123...\"");
+            throw new IllegalArgumentException("[" + iri.getIRIString() + "] is not a content-based URI (e.g. \"...hash://sha256/abc123...\"");
         } else {
             return contentHash;
         }
