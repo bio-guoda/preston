@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashType;
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.model.RefNodeFactory;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
@@ -23,6 +24,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
+import static bio.guoda.preston.RefNodeConstants.*;
 import static bio.guoda.preston.RefNodeConstants.BLOOM_HASH_PREFIX;
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.RefNodeConstants.OVERLAPS;
@@ -65,7 +67,7 @@ public class BloomFilterDiff extends ProcessorReadOnly implements Closeable {
                 if (bloomFilterCurrent != null) {
                     long sizeReference = bloomFilterCurrent.approximateElementCount();
 
-                    Map<String, Long> checkedTargets = new TreeMap<>();
+                    Map<String, Pair<Long, Double>> checkedTargets = new TreeMap<>();
                     for (String contentKey : encounteredBloomFilters.keySet()) {
                         if (!StringUtils.equals(iriString, contentKey)) {
                             IRI bloomGzHashTarget = toIRI(encounteredBloomFilters.get(contentKey));
@@ -91,14 +93,14 @@ public class BloomFilterDiff extends ProcessorReadOnly implements Closeable {
         }
     }
 
-    private long calculateApproximateIntersection(BloomFilter<CharSequence> bloomFilterCurrent, long sizeReference, IRI bloomGzHashTarget) throws IOException {
+    private Pair<Long,Double> calculateApproximateIntersection(BloomFilter<CharSequence> bloomFilterCurrent, long sizeReference, IRI bloomGzHashTarget) throws IOException {
         BloomFilter<CharSequence> bloomFilterExisting = getBloomFilter(bloomGzHashTarget);
         long sizeTarget = bloomFilterExisting.approximateElementCount();
         bloomFilterExisting.putAll(bloomFilterCurrent);
 
         long sizeCombined = bloomFilterExisting.approximateElementCount();
 
-        return (sizeReference + sizeTarget) - sizeCombined;
+        return Pair.of((sizeReference + sizeTarget) - sizeCombined, bloomFilterExisting.expectedFpp());
     }
 
     private boolean isOfHashType(RDFTerm object, String prefix) {
@@ -123,13 +125,14 @@ public class BloomFilterDiff extends ProcessorReadOnly implements Closeable {
     }
 
     private void emitOverlap(Pair<IRI, IRI> leftBloomAndContent,
-                             long approximateIntersection,
+                             Pair<Long,Double> approximateIntersection,
                              Pair<IRI, IRI> rightBloomAndContent,
                              Optional<BlankNodeOrIRI> parentActivity) {
         IRI similarityId = toIRI(UUID.randomUUID());
         IRI generationId = toIRI(UUID.randomUUID());
         Stream<Quad> intersectionStatements = Stream.of(
-                toStatement(similarityId, HAS_VALUE, toLiteral(Long.toString(approximateIntersection), Types.XSD_LONG)),
+                toStatement(similarityId, HAS_VALUE, toLiteral(Long.toString(approximateIntersection.getLeft()), Types.XSD_LONG)),
+                toStatement(similarityId, STATISTICAL_ERROR, toLiteral(String.format("%.2f", approximateIntersection.getRight()), Types.XSD_DOUBLE)),
                 toStatement(similarityId, QUALIFIED_GENERATION, generationId),
                 toStatement(generationId, USED, leftBloomAndContent.getRight()),
                 toStatement(generationId, USED, leftBloomAndContent.getLeft()),
@@ -137,7 +140,7 @@ public class BloomFilterDiff extends ProcessorReadOnly implements Closeable {
                 toStatement(generationId, USED, rightBloomAndContent.getLeft()));
 
 
-        Stream<Quad> statements = approximateIntersection > 0
+        Stream<Quad> statements = approximateIntersection.getLeft() > 0
                 ? Stream.concat(Stream.of(toStatement(leftBloomAndContent.getValue(), OVERLAPS, rightBloomAndContent.getValue())), intersectionStatements)
                 : intersectionStatements;
 

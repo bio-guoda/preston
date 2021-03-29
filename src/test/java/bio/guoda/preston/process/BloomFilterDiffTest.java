@@ -24,6 +24,7 @@ import java.util.zip.GZIPOutputStream;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.RefNodeConstants.QUALIFIED_GENERATION;
+import static bio.guoda.preston.RefNodeConstants.STATISTICAL_ERROR;
 import static bio.guoda.preston.RefNodeConstants.USED;
 import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
 import static bio.guoda.preston.TripleMatcher.hasTriple;
@@ -124,20 +125,23 @@ public class BloomFilterDiffTest {
                 toStatement(bloomHash2, WAS_DERIVED_FROM, content2)
         ).collect(Collectors.toList()));
 
-        assertThat(nodes.size(), is(8));
+        assertThat(nodes.size(), is(9));
 
         assertThat(nodes.get(1).toString(), startsWith("<hash://sha256/bbb> <http://purl.obolibrary.org/obo/RO_0002131> <hash://sha256/aaa>"));
 
         assertThat(nodes.get(2).getPredicate(), is(HAS_VALUE));
         assertThat(nodes.get(2).getObject(), is(toLiteral(Long.toString(5L), Types.XSD_LONG)));
 
-        assertThat(nodes.get(3).getPredicate(), is(QUALIFIED_GENERATION));
-        IRI generationId = (IRI) nodes.get(3).getObject();
+        assertThat(nodes.get(3).getPredicate(), is(STATISTICAL_ERROR));
+        assertThat(nodes.get(3).getObject(), is(toLiteral("0.00", Types.XSD_DOUBLE)));
 
-        assertThat(nodes.get(4), hasTriple(toStatement(generationId, USED, content2)));
-        assertThat(nodes.get(5), hasTriple(toStatement(generationId, USED, bloomHash2)));
-        assertThat(nodes.get(6), hasTriple(toStatement(generationId, USED, content1)));
-        assertThat(nodes.get(7), hasTriple(toStatement(generationId, USED, bloomHash1)));
+        assertThat(nodes.get(4).getPredicate(), is(QUALIFIED_GENERATION));
+        IRI generationId = (IRI) nodes.get(4).getObject();
+
+        assertThat(nodes.get(5), hasTriple(toStatement(generationId, USED, content2)));
+        assertThat(nodes.get(6), hasTriple(toStatement(generationId, USED, bloomHash2)));
+        assertThat(nodes.get(7), hasTriple(toStatement(generationId, USED, content1)));
+        assertThat(nodes.get(8), hasTriple(toStatement(generationId, USED, bloomHash1)));
     }
 
     public static ByteArrayOutputStream writeFilter(BloomFilter<CharSequence> filter2) throws IOException {

@@ -73,4 +73,5 @@ public class RefNodeConstants {
 
     public static final String BLOOM_HASH_PREFIX = "bloom:gz:";
 
+    public static final IRI STATISTICAL_ERROR = RefNodeFactory.toIRI("http://purl.obolibrary.org/obo/STATO_0000242");
 }
