@@ -1,7 +1,6 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashType;
-import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.model.RefNodeFactory;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
@@ -9,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.simple.Types;
@@ -132,7 +132,7 @@ public class BloomFilterDiff extends ProcessorReadOnly implements Closeable {
         IRI generationId = toIRI(UUID.randomUUID());
         Stream<Quad> intersectionStatements = Stream.of(
                 toStatement(similarityId, HAS_VALUE, toLiteral(Long.toString(approximateIntersection.getLeft()), Types.XSD_LONG)),
-                toStatement(similarityId, STATISTICAL_ERROR, toLiteral(String.format("%.2f", approximateIntersection.getRight()), Types.XSD_DOUBLE)),
+                toStatement(similarityId, STATISTICAL_ERROR, errorApproximationValue(approximateIntersection.getRight())),
                 toStatement(similarityId, QUALIFIED_GENERATION, generationId),
                 toStatement(generationId, USED, leftBloomAndContent.getRight()),
                 toStatement(generationId, USED, leftBloomAndContent.getLeft()),
@@ -149,6 +149,10 @@ public class BloomFilterDiff extends ProcessorReadOnly implements Closeable {
                 this,
                 parentActivity
         );
+    }
+
+    public static Literal errorApproximationValue(Double right) {
+        return toLiteral(String.format("%.2f", right), Types.XSD_DOUBLE);
     }
 
     @Override

@@ -199,7 +199,10 @@ public class BloomFilterDiffTest {
         assertThat(filter.approximateElementCount(), allOf(greaterThan(1900L * 10000), lessThan(2100L * 10000)));
         assertThat(filter.expectedFpp(), is(greaterThan(0.23)));
 
+        assertThat(BloomFilterDiff.errorApproximationValue(filter.expectedFpp()).getLexicalForm(), is("0.23"));
     }
+
+
 
     @Test
     public void createBloomFilterManySaturatedCompression() throws IOException {
