@@ -197,6 +197,7 @@ public class BloomFilterDiffTest {
         filter.putAll(filter2);
 
         assertThat(filter.approximateElementCount(), allOf(greaterThan(1900L * 10000), lessThan(2100L * 10000)));
+        assertThat(filter.expectedFpp(), is(greaterThan(0.23)));
 
     }
 
