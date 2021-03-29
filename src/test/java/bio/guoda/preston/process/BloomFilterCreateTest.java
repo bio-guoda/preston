@@ -60,7 +60,7 @@ public class BloomFilterCreateTest {
             ).collect(Collectors.toList()));
         }
 
-        assertThat(nodes.size(), is(2));
+        assertThat(nodes.size(), is(4));
 
         assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
@@ -78,7 +78,7 @@ public class BloomFilterCreateTest {
                     toStatement(toIRI("cut:hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c!/b1-3"), HAS_VALUE, toIRI("foo"))
             ).collect(Collectors.toList()));
         }
-        assertThat(nodes.size(), is(2));
+        assertThat(nodes.size(), is(4));
 
         assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
@@ -100,7 +100,7 @@ public class BloomFilterCreateTest {
 
         assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
-        assertThat(nodes.size(), is(2));
+        assertThat(nodes.size(), is(4));
 
     }
 
@@ -120,7 +120,7 @@ public class BloomFilterCreateTest {
 
         assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
-        assertThat(nodes.size(), is(2));
+        assertThat(nodes.size(), is(4));
 
     }
 
@@ -137,10 +137,10 @@ public class BloomFilterCreateTest {
                     toStatement(toIRI("hash://sha256/fffc2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c"), HAS_VALUE, toIRI("bar"))
             ).collect(Collectors.toList()));
         }
-        assertThat(nodes.size(), is(4));
+        assertThat(nodes.size(), is(8));
 
         assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
-        assertThat(nodes.get(3).toString(), startsWith("<bloom:gz:put:1> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/fffc2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(5).toString(), startsWith("<bloom:gz:put:1> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/fffc2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
     }
 
 

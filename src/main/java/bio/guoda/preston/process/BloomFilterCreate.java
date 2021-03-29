@@ -1,6 +1,5 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.BlobStore;
@@ -12,6 +11,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.rdf.simple.Types;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,7 +26,9 @@ import java.util.zip.GZIPOutputStream;
 
 import static bio.guoda.preston.RefNodeConstants.BLOOM_HASH_PREFIX;
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
+import static bio.guoda.preston.RefNodeConstants.STATISTICAL_ERROR;
 import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
+import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 /**
@@ -96,6 +98,7 @@ public class BloomFilterCreate extends StatementProcessor implements Closeable {
             }
             IRI bloomFilterContentId = blobStore.put(new ByteArrayInputStream(out.toByteArray()));
             emitBloomFilter(
+                    filter,
                     RefNodeFactory.toIRI(BLOOM_HASH_PREFIX + bloomFilterContentId.getIRIString()),
                     contentId,
                     statement.getGraphName());
@@ -104,12 +107,15 @@ public class BloomFilterCreate extends StatementProcessor implements Closeable {
         }
     }
 
-    private void emitBloomFilter(IRI bloomHash,
+    private void emitBloomFilter(BloomFilter<CharSequence> filter,
+                                 IRI bloomHash,
                                  IRI contentId,
                                  Optional<BlankNodeOrIRI> parentActivity) {
 
         ActivityUtil.emitAsNewActivity(
-                Stream.of(toStatement(bloomHash, WAS_DERIVED_FROM, contentId)),
+                Stream.of(toStatement(bloomHash, WAS_DERIVED_FROM, contentId),
+                        toStatement(bloomHash, HAS_VALUE, toLiteral(Long.toString(filter.approximateElementCount()), Types.XSD_LONG)),
+                        toStatement(bloomHash, STATISTICAL_ERROR, toLiteral(String.format("%.2f", filter.expectedFpp()), Types.XSD_DOUBLE))),
                 this,
                 parentActivity
         );
