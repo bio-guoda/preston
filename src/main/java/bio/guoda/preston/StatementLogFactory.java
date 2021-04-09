@@ -1,7 +1,7 @@
 package bio.guoda.preston;
 
 import bio.guoda.preston.cmd.LogErrorHandler;
-import bio.guoda.preston.cmd.Logger;
+import bio.guoda.preston.cmd.LogTypes;
 import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.process.StatementLoggerTSV;
 import bio.guoda.preston.process.StatementsListener;
@@ -12,21 +12,21 @@ import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class StatementLogFactory {
-    public static StatementsListener createPrintingLogger(Logger logMode) {
+    public static StatementsListener createPrintingLogger(LogTypes logMode) {
         return createPrintingLogger(logMode, System.out);
     }
 
-    public static StatementsListener createPrintingLogger(Logger logMode, final PrintStream out) {
+    public static StatementsListener createPrintingLogger(LogTypes logMode, final PrintStream out) {
         return createPrintingLogger(logMode, out, () -> {
             // ignore
         });
     }
 
-    public static StatementsListener createPrintingLogger(Logger logMode, final PrintStream out, LogErrorHandler handler) {
+    public static StatementsListener createPrintingLogger(LogTypes logMode, final PrintStream out, LogErrorHandler handler) {
         StatementsListener logger;
-        if (Logger.tsv == logMode) {
+        if (LogTypes.tsv == logMode) {
             logger = new StatementLoggerTSV(out);
-        } else if (Logger.nquads == logMode) {
+        } else if (LogTypes.nquads == logMode) {
             logger = new StatementLoggerNQuads(out);
         } else {
             logger = new StatementsListenerAdapter() {

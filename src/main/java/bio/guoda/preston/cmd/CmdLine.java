@@ -65,8 +65,8 @@ public class CmdLine {
                 .addCommand("seeds", new CmdSeeds())
                 .addCommand("text", new CmdText(), "extract-text")
                 .addCommand("match", new CmdMatch(), "grep", "findURLs")
-                .addCommand("bloom", new CmdBloomFilterCreate())
-                .addCommand("diff", new CmdBloomFilterDiff())
+                .addCommand("sketch", new CmdCreateSketch())
+                .addCommand("diff", new CmdSketchDiff())
                 .build();
     }
 

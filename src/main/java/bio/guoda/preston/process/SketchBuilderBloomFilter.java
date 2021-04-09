@@ -3,7 +3,6 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.BlobStore;
-import bio.guoda.preston.stream.ContentStreamUtil;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +14,6 @@ import org.apache.commons.rdf.simple.Types;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -35,28 +33,21 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
  * Creates bloom filter from encountered content values.
  */
 
-public class BloomFilterCreate extends StatementProcessor implements Closeable {
-
+public class SketchBuilderBloomFilter extends SketchBuilder {
 
     private final AtomicReference<Triple<String, BloomFilter<CharSequence>, Quad>> activeFilterContext = new AtomicReference<>();
 
     private final BlobStore blobStore;
 
-    public BloomFilterCreate(BlobStore blobStore, StatementsListener listener) {
+    public SketchBuilderBloomFilter(BlobStore blobStore, StatementsListener listener) {
         super(listener);
         this.blobStore = blobStore;
     }
 
     @Override
-    public void on(Quad statement) {
-        if (HAS_VALUE.equals(statement.getPredicate())
-                && statement.getSubject() instanceof IRI) {
-
-            IRI contentId = ContentStreamUtil.extractContentHash((IRI) statement.getSubject());
-
-            getActiveFilter(statement, contentId)
-                    .put(RDFUtil.getValueFor(statement.getObject()));
-        }
+    protected void updateSketch(Quad statement, IRI contentId) {
+        getActiveFilter(statement, contentId)
+                .put(RDFUtil.getValueFor(statement.getObject()));
     }
 
     private BloomFilter<CharSequence> getActiveFilter(Quad statement, IRI contentId) {
@@ -93,7 +84,7 @@ public class BloomFilterCreate extends StatementProcessor implements Closeable {
     private void dereferenceFilter(Quad statement, IRI contentId, BloomFilter<CharSequence> filter) {
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            try (OutputStream os = BloomFilterDiff.enableCompression ? new GZIPOutputStream(out) : out) {
+            try (OutputStream os = SketchIntersectBloomFilter.enableCompression ? new GZIPOutputStream(out) : out) {
                 filter.writeTo(os);
             }
             IRI bloomFilterContentId = blobStore.put(new ByteArrayInputStream(out.toByteArray()));

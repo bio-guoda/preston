@@ -1,12 +1,12 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.process.BlobStoreReadOnly;
-import bio.guoda.preston.process.BloomFilterCreate;
+import bio.guoda.preston.process.SketchBuilder;
+import bio.guoda.preston.process.SketchBuilderBloomFilter;
 import bio.guoda.preston.process.EmittingStreamRDF;
+import bio.guoda.preston.process.SketchBuilderTheta;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.process.TextMatcher;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
@@ -17,10 +17,13 @@ import org.apache.commons.rdf.api.Quad;
 import java.io.IOException;
 import java.io.InputStream;
 
-@Parameters(separators = "= ", commandDescription = "creates bloom filters for matched content")
-public class CmdBloomFilterCreate extends LoggingPersisting implements Runnable {
+@Parameters(separators = "= ", commandDescription = "creates sketches (e.g., bloom filters or theta sketches) from matched content for estimating content overlap")
+public class CmdCreateSketch extends LoggingPersisting implements Runnable {
 
     private InputStream inputStream = System.in;
+
+    @Parameter(names = {"-s", "--sketch-type",}, description = "sketch type", converter = SketchTypeConverter.class)
+    private SketchType sketch = SketchType.theta;
 
 
     @Override
@@ -35,13 +38,12 @@ public class CmdBloomFilterCreate extends LoggingPersisting implements Runnable 
                 getLogMode(),
                 System.out, () -> System.exit(0));
 
-        try (BloomFilterCreate bloomFilterCreate = new BloomFilterCreate(blobStore, listener)) {
-
+        try (SketchBuilder sketchCreator = getSketchCreator(blobStore, listener)) {
             StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {
 
                 @Override
                 public void emit(Quad statement) {
-                    bloomFilterCreate.on(statement);
+                    sketchCreator.on(statement);
                 }
             };
 
@@ -51,6 +53,12 @@ public class CmdBloomFilterCreate extends LoggingPersisting implements Runnable 
             throw new RuntimeException("failed to generate bloom filter", e);
         }
 
+    }
+
+    private SketchBuilder getSketchCreator(BlobStore blobStore, StatementsListener listener) {
+        return sketch.equals(SketchType.theta)
+                ? new SketchBuilderTheta(blobStore, listener)
+                : new SketchBuilderBloomFilter(blobStore, listener);
     }
 
     public void setInputStream(InputStream inputStream) {

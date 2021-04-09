@@ -18,21 +18,25 @@ import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
 
-public class ThetaSketchCreateTest {
+public class SketchBuilderBloomFilterTest {
 
     @Rule
     public TemporaryFolder tmpDir = new TemporaryFolder();
 
     @Test
-    public void singleValue() throws IOException {
+    public void createBloomFilterSingleValue() throws IOException {
 
         ArrayList<Quad> nodes = new ArrayList<>();
-        try (ThetaSketchCreate processor = new ThetaSketchCreate(
+        try (SketchBuilderBloomFilter processor = new SketchBuilderBloomFilter(
                 new TestBlobStore(),
                 TestUtil.testListener(nodes)
         )) {
@@ -43,15 +47,15 @@ public class ThetaSketchCreateTest {
 
         assertThat(nodes.size(), is(4));
 
-        assertThat(nodes.get(1).toString(), startsWith("<theta:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
     }
 
     @Test
-    public void singleValueCutIRI() throws IOException {
+    public void createBloomFilterSingleValueCutIRI() throws IOException {
 
         ArrayList<Quad> nodes = new ArrayList<>();
-        try (ThetaSketchCreate processor = new ThetaSketchCreate(
+        try (SketchBuilderBloomFilter processor = new SketchBuilderBloomFilter(
                 new TestBlobStore(),
                 TestUtil.testListener(nodes)
         )) {
@@ -61,14 +65,14 @@ public class ThetaSketchCreateTest {
         }
         assertThat(nodes.size(), is(4));
 
-        assertThat(nodes.get(1).toString(), startsWith("<theta:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
     }
 
     @Test
-    public void twoValues() throws IOException {
+    public void createBloomFilterTwoValues() throws IOException {
         ArrayList<Quad> nodes = new ArrayList<>();
-        try (ThetaSketchCreate processor = new ThetaSketchCreate(
+        try (SketchBuilderBloomFilter processor = new SketchBuilderBloomFilter(
                 new TestBlobStore(),
                 TestUtil.testListener(nodes)
         )) {
@@ -79,17 +83,17 @@ public class ThetaSketchCreateTest {
             ).collect(Collectors.toList()));
         }
 
-        assertThat(nodes.get(1).toString(), startsWith("<theta:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
         assertThat(nodes.size(), is(4));
 
     }
 
     @Test
-    public void twoCutValues() throws IOException {
+    public void createBloomFilterTwoCutValues() throws IOException {
         ArrayList<Quad> nodes = new ArrayList<>();
 
-        try (ThetaSketchCreate processor = new ThetaSketchCreate(
+        try (SketchBuilderBloomFilter processor = new SketchBuilderBloomFilter(
                 new TestBlobStore(),
                 TestUtil.testListener(nodes)
         )) {
@@ -99,16 +103,16 @@ public class ThetaSketchCreateTest {
             ).collect(Collectors.toList()));
         }
 
-        assertThat(nodes.get(1).toString(), startsWith("<theta:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
         assertThat(nodes.size(), is(4));
 
     }
 
     @Test
-    public void createTwoSketchesTwoValues() throws IOException {
+    public void createTwoBloomFilterTwoValues() throws IOException {
         ArrayList<Quad> nodes = new ArrayList<>();
-        try (ThetaSketchCreate processor = new ThetaSketchCreate(
+        try (SketchBuilderBloomFilter processor = new SketchBuilderBloomFilter(
                 new TestBlobStore(),
                 TestUtil.testListener(nodes)
         )) {
@@ -120,8 +124,8 @@ public class ThetaSketchCreateTest {
         }
         assertThat(nodes.size(), is(8));
 
-        assertThat(nodes.get(1).toString(), startsWith("<theta:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
-        assertThat(nodes.get(5).toString(), startsWith("<theta:put:1> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/fffc2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(5).toString(), startsWith("<bloom:gz:put:1> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/fffc2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
     }
 
 

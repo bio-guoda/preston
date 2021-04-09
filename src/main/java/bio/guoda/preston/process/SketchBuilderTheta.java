@@ -3,7 +3,6 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.BlobStore;
-import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
@@ -13,7 +12,6 @@ import org.apache.commons.rdf.simple.Types;
 import org.apache.datasketches.theta.UpdateSketch;
 
 import java.io.ByteArrayInputStream;
-import java.io.Closeable;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -30,28 +28,22 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
  * Creates ThetaSketch filter from encountered content values.
  */
 
-public class ThetaSketchCreate extends StatementProcessor implements Closeable {
+public class SketchBuilderTheta extends SketchBuilder {
 
 
     private final AtomicReference<Triple<String, UpdateSketch, Quad>> activeFilterContext = new AtomicReference<>();
 
     private final BlobStore blobStore;
 
-    public ThetaSketchCreate(BlobStore blobStore, StatementsListener listener) {
+    public SketchBuilderTheta(BlobStore blobStore, StatementsListener listener) {
         super(listener);
         this.blobStore = blobStore;
     }
 
     @Override
-    public void on(Quad statement) {
-        if (HAS_VALUE.equals(statement.getPredicate())
-                && statement.getSubject() instanceof IRI) {
-
-            IRI contentId = ContentStreamUtil.extractContentHash((IRI) statement.getSubject());
-
-            getActiveFilter(statement, contentId)
-                    .update(RDFUtil.getValueFor(statement.getObject()));
-        }
+    protected void updateSketch(Quad statement, IRI contentId) {
+        getActiveFilter(statement, contentId)
+                .update(RDFUtil.getValueFor(statement.getObject()));
     }
 
     private UpdateSketch getActiveFilter(Quad statement, IRI contentId) {

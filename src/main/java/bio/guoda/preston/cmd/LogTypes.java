@@ -1,6 +1,6 @@
 package bio.guoda.preston.cmd;
 
-public enum Logger {
+public enum LogTypes {
     tsv,
     nquads,
     dots

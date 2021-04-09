@@ -5,9 +5,9 @@ import com.beust.jcommander.Parameter;
 public class LoggingPersisting extends Persisting {
 
     @Parameter(names = {"-l", "--log",}, description = "log format", converter = LoggerConverter.class)
-    private Logger logMode = Logger.nquads;
+    private LogTypes logMode = LogTypes.nquads;
 
-    protected Logger getLogMode() {
+    protected LogTypes getLogMode() {
         return logMode;
     }
 

@@ -1,51 +1,48 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.store.TestUtil;
-import org.apache.commons.io.IOUtils;
+import com.google.common.hash.BloomFilter;
+import com.google.common.hash.Funnels;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.simple.Types;
-import org.apache.datasketches.memory.Memory;
-import org.apache.datasketches.theta.CompactSketch;
-import org.apache.datasketches.theta.Intersection;
-import org.apache.datasketches.theta.SetOperation;
-import org.apache.datasketches.theta.Sketch;
-import org.apache.datasketches.theta.Sketches;
-import org.apache.datasketches.theta.Union;
-import org.apache.datasketches.theta.UpdateSketch;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.Stopwatch;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.GZIPOutputStream;
 
-import static bio.guoda.preston.RefNodeConstants.CONFIDENCE_INTERVAL_95;
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.RefNodeConstants.QUALIFIED_GENERATION;
+import static bio.guoda.preston.RefNodeConstants.STATISTICAL_ERROR;
 import static bio.guoda.preston.RefNodeConstants.USED;
 import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
 import static bio.guoda.preston.TripleMatcher.hasTriple;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static junit.framework.TestCase.assertTrue;
+import static org.apache.commons.lang3.Range.between;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
 
-public class ThetaSketchDiffTest {
+public class SketchIntersectBloomFilterTest {
 
     @Rule
     public TemporaryFolder tmpDir = new TemporaryFolder();
@@ -53,13 +50,13 @@ public class ThetaSketchDiffTest {
     @Test(expected = RuntimeException.class)
     public void oneContentMissingBloomFilter() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        StatementProcessor processor = new ThetaSketchDiff(
+        StatementProcessor processor = new SketchIntersectBloomFilter(
                 TestUtil.getTestBlobStore(),
                 TestUtil.testListener(nodes)
         );
 
         processor.on(Stream.of(
-                toStatement(toIRI("theta:hash://123abc"), WAS_DERIVED_FROM, toIRI("hash://sha256/aaa"))
+                toStatement(toIRI("bloom:gz:hash://123abc"), WAS_DERIVED_FROM, toIRI("hash://sha256/aaa"))
         ).collect(Collectors.toList()));
     }
 
@@ -67,21 +64,21 @@ public class ThetaSketchDiffTest {
     public void oneContentBloomFilter() {
         BlobStoreReadOnly blobStoreReadOnly = key -> {
             if (key.getIRIString().endsWith("hash://123abc")) {
-                return new ByteArrayInputStream(writeFilter(generateSketch(1)).toByteArray());
+                return new ByteArrayInputStream(writeFilter(generateRandomBloomFilter(1)).toByteArray());
             } else {
                 throw new IOException("kaboom!");
             }
         };
 
         ArrayList<Quad> nodes = new ArrayList<>();
-        StatementProcessor processor = new ThetaSketchDiff(
+        StatementProcessor processor = new SketchIntersectBloomFilter(
                 blobStoreReadOnly,
                 TestUtil.testListener(nodes)
         );
 
         processor.on(Stream.of(
                 toStatement(
-                        toIRI("theta:hash://123abc"),
+                        toIRI("bloom:gz:hash://123abc"),
                         WAS_DERIVED_FROM,
                         toIRI("hash://sha256/aaa"))
         ).collect(Collectors.toList()));
@@ -92,13 +89,12 @@ public class ThetaSketchDiffTest {
 
     @Test
     public void sharedLinks() throws IOException {
-        Sketch filter1 = generateSketch(10);
-        Sketch filter2 = generateSketch(5);
+        BloomFilter<CharSequence> filter1 = generateRandomBloomFilter(10);
+        BloomFilter<CharSequence> filter2 = generateRandomBloomFilter(5);
 
-        Union union = SetOperation.builder().buildUnion();
-        Sketch unionResult = union.union(filter1, filter2);
+        filter1.putAll(filter2);
 
-        ByteArrayOutputStream out1 = writeFilter(unionResult);
+        ByteArrayOutputStream out1 = writeFilter(filter1);
         ByteArrayOutputStream out2 = writeFilter(filter2);
 
 
@@ -114,15 +110,15 @@ public class ThetaSketchDiffTest {
 
 
         ArrayList<Quad> nodes = new ArrayList<>();
-        StatementProcessor processor = new ThetaSketchDiff(
+        StatementProcessor processor = new SketchIntersectBloomFilter(
                 blobStoreReadOnly,
                 TestUtil.testListener(nodes));
 
         IRI content1 = toIRI("hash://sha256/aaa");
-        IRI bloomHash1 = toIRI("theta:hash://sha256/123");
+        IRI bloomHash1 = toIRI("bloom:gz:hash://sha256/123");
 
         IRI content2 = toIRI("hash://sha256/bbb");
-        IRI bloomHash2 = toIRI("theta:hash://sha256/456");
+        IRI bloomHash2 = toIRI("bloom:gz:hash://sha256/456");
 
         processor.on(Stream.of(
                 toStatement(bloomHash1, WAS_DERIVED_FROM, content1),
@@ -134,10 +130,10 @@ public class ThetaSketchDiffTest {
         assertThat(nodes.get(1).toString(), startsWith("<hash://sha256/bbb> <http://purl.obolibrary.org/obo/RO_0002131> <hash://sha256/aaa>"));
 
         assertThat(nodes.get(2).getPredicate(), is(HAS_VALUE));
-        assertThat(nodes.get(2).getObject(), is(toLiteral("5.00", Types.XSD_DOUBLE)));
+        assertThat(nodes.get(2).getObject(), is(toLiteral(Long.toString(5L), Types.XSD_LONG)));
 
-        assertThat(nodes.get(3).getPredicate(), is(CONFIDENCE_INTERVAL_95));
-        assertThat(nodes.get(3).getObject(), is(toLiteral("5.00", Types.XSD_DOUBLE)));
+        assertThat(nodes.get(3).getPredicate(), is(STATISTICAL_ERROR));
+        assertThat(nodes.get(3).getObject(), is(toLiteral("0.00", Types.XSD_DOUBLE)));
 
         assertThat(nodes.get(4).getPredicate(), is(QUALIFIED_GENERATION));
         IRI generationId = (IRI) nodes.get(4).getObject();
@@ -148,133 +144,116 @@ public class ThetaSketchDiffTest {
         assertThat(nodes.get(8), hasTriple(toStatement(generationId, USED, bloomHash1)));
     }
 
-    public static ByteArrayOutputStream writeFilter(Sketch filter2) throws IOException {
+    public static ByteArrayOutputStream writeFilter(BloomFilter<CharSequence> filter2) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtils.write(filter2.compact().toByteArray(), out);
+        GZIPOutputStream out1 = new GZIPOutputStream(out);
+        filter2.writeTo(out1);
+        out1.flush();
+        out1.close();
         return out;
     }
 
 
     @Test
-    public void createSketch() throws IOException {
-        UpdateSketch filter0 = UpdateSketch.builder().build();
+    public void createBloomFilter() throws IOException {
+        BloomFilter<CharSequence> filter = BloomFilter
+                .create(Funnels.stringFunnel(StandardCharsets.UTF_8),
+                        10 * 1000000);
 
-        UpdateSketch filter1 = UpdateSketch.builder().build();
-        filter1.update("bla");
+        assertFalse(filter.mightContain("bla"));
 
-        Intersection intersection = SetOperation.builder().buildIntersection();
-        CompactSketch intersect = intersection.intersect(filter0, filter1);
+        filter.put("bla");
 
-        assertThat(intersect.getEstimate(), is(0.0d));
+        assertTrue(filter.mightContain("bla"));
 
-        filter0.update("bla");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        filter.writeTo(out);
+        assertThat(out.size(), is(9123062));
 
-        CompactSketch intersect1 = intersection.intersect(filter0, filter1);
-        assertThat(intersect1.getEstimate(), is(1.0d));
+        BloomFilter<CharSequence> restoredFilter = BloomFilter.readFrom(new ByteArrayInputStream(out.toByteArray()), Funnels.stringFunnel(StandardCharsets.UTF_8));
 
-
-        byte[] bytes = intersect1.toByteArray();
-        assertThat(bytes.length, is(16));
-
-        Sketch restoredSketch = Sketches.wrapSketch(Memory.wrap(bytes));
-
-        assertThat(intersection.intersect(restoredSketch, filter1).getEstimate(), is(1.0d));
+        assertTrue(restoredFilter.mightContain("bla"));
     }
 
     @Test
     public void createBloomFilterMany() throws IOException {
-        Sketch filter = generateSketch(1000);
-        Sketch filter2 = generateSketch(1000);
+        BloomFilter<CharSequence> filter = generateRandomBloomFilter(1000);
+        BloomFilter<CharSequence> filter2 = generateRandomBloomFilter(1000);
 
-        assertThat(filter.getEstimate(), is(1000.0d));
+        assertThat(filter.approximateElementCount(), is(1000L));
 
-        Union union = SetOperation.builder().buildUnion();
-        Sketch unionResult = union.union(filter, filter2);
+        filter.putAll(filter2);
 
-        assertThat(unionResult.getEstimate(), is(2000.0d));
+        assertThat(filter.approximateElementCount(), is(2000L));
 
     }
 
     @Test
-    public void createSketchesManySaturated() throws IOException {
-
+    public void createBloomFilterManySaturated() throws IOException {
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
-        for (int i = 0; i < 2 * 10 * 1000 * 1000; i++) {
-            UUID.randomUUID().toString();
-        }
-        stopWatch.stop();
-        long uuidOverheadEstimate = stopWatch.getTime();
-
-        stopWatch.reset();
-        stopWatch.start();
-
-        Sketch filter = generateSketch(10 * 1000 * 1000);
-        Sketch filter2 = generateSketch(10 * 1000 * 1000);
+        BloomFilter<CharSequence> filter = generateRandomBloomFilter(1000 * 10000);
+        BloomFilter<CharSequence> filter2 = generateRandomBloomFilter(1000 * 10000);
 
         stopWatch.stop();
 
-        System.out.println("generating 2 theta sketches with 20*10^6 elements each took [" + (stopWatch.getTime() - uuidOverheadEstimate) / 1000.0 + "]s");
+        System.out.println("generating 2 bloom filter with 10 million entries each took [" + stopWatch.getTime() / 1000.0 + "]s");
 
+        filter.putAll(filter2);
 
-        stopWatch.reset();
-        stopWatch.start();
-        Union union = SetOperation.builder().buildUnion();
-        Sketch unionResult = union.union(filter, filter2);
+        assertThat(filter.approximateElementCount(), allOf(greaterThan(1900L * 10000), lessThan(2100L * 10000)));
+        assertThat(filter.expectedFpp(), is(greaterThan(0.23)));
 
-        stopWatch.stop();
-        System.out.println("calculating union of 2 theta sketches with 20*10^6 elements each took [" + stopWatch.getTime() / 1000.0 + "]s");
-        assertThat(unionResult.getEstimate(), allOf(greaterThan(1900 * 10000.0d), lessThan(2100 * 10000d)));
-
-        assertThat((unionResult.getUpperBound(2) - unionResult.getLowerBound(2)) / unionResult.getEstimate(),
-                lessThan(0.07d));
-
+        assertThat(SketchIntersectBloomFilter.errorApproximationValue(filter.expectedFpp()).getLexicalForm(), is("0.23"));
     }
+
 
 
     @Test
     public void createBloomFilterManySaturatedCompression() throws IOException {
-        UpdateSketch filter0 = generateSketch(0);
-        Sketch filter1 = generateSketch(10 * 10000);
-        Sketch filter2 = generateSketch(10 * 10000);
+        BloomFilter<CharSequence> filter0 = generateRandomBloomFilter(0);
+        BloomFilter<CharSequence> filter1 = generateRandomBloomFilter(10 * 10000);
+        BloomFilter<CharSequence> filter2 = generateRandomBloomFilter(10 * 10000);
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try (OutputStream out = new GZIPOutputStream(bytes)) {
-            IOUtils.write(filter0.compact().toByteArray(), out);
+            filter0.writeTo(out);
         }
 
         assertThat(bytes.size(), is(lessThan(9000)));
-        assertThat(filter0.getEstimate(), is(0.0d));
+        assertThat(filter0.approximateElementCount(), is(0L));
 
-        Union union = SetOperation.builder().buildUnion();
-        union.union(filter0);
-        union.union(filter1);
+        filter0.putAll(filter1);
 
         bytes = new ByteArrayOutputStream();
         try (OutputStream out = new GZIPOutputStream(bytes)) {
-            IOUtils.write(union.getResult().compact().toByteArray(), out);
+            filter0.writeTo(out);
         }
 
         assertThat(bytes.size(), lessThan(1024 * 1024));
 
-        union.union(filter2);
+        filter0.putAll(filter2);
 
         bytes = new ByteArrayOutputStream();
-        IOUtils.write(union.getResult().compact().toByteArray(), bytes);
+        try (OutputStream out = new GZIPOutputStream(bytes)) {
+            filter0.writeTo(out);
+        }
 
-        assertThat(bytes.size(), greaterThan(31373));
+        assertThat(bytes.size(), greaterThan(1024 * 1024));
 
     }
 
-    private UpdateSketch generateSketch(int numberOfElements) {
-        UpdateSketch sketch1 = UpdateSketch.builder().build();
+    private BloomFilter<CharSequence> generateRandomBloomFilter(int numberOfElements) {
+        BloomFilter<CharSequence> filter = BloomFilter
+                .create(Funnels.stringFunnel(StandardCharsets.UTF_8),
+                        10 * 1000000);
 
         for (int i = 0; i < numberOfElements; i++) {
-            sketch1.update(UUID.randomUUID().toString());
+            filter.put(UUID.randomUUID().toString());
         }
-        return sketch1;
+        return filter;
     }
 
 }
