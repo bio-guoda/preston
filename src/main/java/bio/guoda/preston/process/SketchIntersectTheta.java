@@ -100,7 +100,7 @@ public class SketchIntersectTheta extends ProcessorReadOnly implements Closeable
 
         double sizeIntersect = intersect.getEstimate();
 
-        return Pair.of(sizeIntersect, intersect.getLowerBound(2));
+        return Pair.of(sizeIntersect, intersect.getUpperBound(2));
     }
 
     private boolean isOfHashType(RDFTerm object, String prefix) {

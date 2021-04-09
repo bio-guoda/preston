@@ -6,6 +6,8 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.simple.Types;
+import org.apache.datasketches.Family;
+import org.apache.datasketches.ResizeFactor;
 import org.apache.datasketches.memory.Memory;
 import org.apache.datasketches.theta.CompactSketch;
 import org.apache.datasketches.theta.Intersection;
@@ -21,12 +23,10 @@ import org.junit.rules.TemporaryFolder;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.zip.GZIPOutputStream;
 
 import static bio.guoda.preston.RefNodeConstants.CONFIDENCE_INTERVAL_95;
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
@@ -37,6 +37,7 @@ import static bio.guoda.preston.TripleMatcher.hasTriple;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
 import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
@@ -240,9 +241,7 @@ public class SketchIntersectThetaTest {
         Sketch filter2 = generateSketch(10 * 10000);
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        try (OutputStream out = new GZIPOutputStream(bytes)) {
-            IOUtils.write(filter0.compact().toByteArray(), out);
-        }
+        IOUtils.write(filter0.compact().toByteArray(), bytes);
 
         assertThat(bytes.size(), is(lessThan(9000)));
         assertThat(filter0.getEstimate(), is(0.0d));
@@ -252,9 +251,7 @@ public class SketchIntersectThetaTest {
         union.union(filter1);
 
         bytes = new ByteArrayOutputStream();
-        try (OutputStream out = new GZIPOutputStream(bytes)) {
-            IOUtils.write(union.getResult().compact().toByteArray(), out);
-        }
+        IOUtils.write(union.getResult().compact().toByteArray(), bytes);
 
         assertThat(bytes.size(), lessThan(1024 * 1024));
 
@@ -264,6 +261,64 @@ public class SketchIntersectThetaTest {
         IOUtils.write(union.getResult().compact().toByteArray(), bytes);
 
         assertThat(bytes.size(), greaterThan(31373));
+
+    }
+
+    @Test
+    public void createIntersectionSmallAndBigSet() throws IOException {
+        UpdateSketch sketchA = UpdateSketch
+                .builder()
+                .build();
+
+        for (int i = 0; i < 192717; i++) {
+            sketchA.update(UUID.randomUUID().toString());
+        }
+
+        assertEquals(185429, sketchA.getLowerBound(2), 10000);
+        assertEquals(192885, sketchA.getEstimate(), 10000);
+        assertEquals(0.02, sketchA.getTheta(), 0.01d);
+
+        UpdateSketch sketchB = UpdateSketch
+                .builder()
+                .setResizeFactor(ResizeFactor.X1)
+                .build();
+
+        for (int i = 0; i < 3; i++) {
+            sketchB.update(UUID.randomUUID().toString());
+        }
+
+        assertEquals(3, sketchB.getLowerBound(2), 0);
+        assertEquals(3, sketchB.getEstimate(), 0);
+        assertEquals(1, sketchB.getTheta(), 0.01d);
+    }
+
+    @Test
+    public void compareRealLifeSketchesFalseNegative() throws IOException {
+        //see https://github.com/bio-guoda/preston/issues/113#issuecomment-816790438
+
+        Sketch sketchA = Sketches.wrapSketch(Memory.wrap(IOUtils.toByteArray(getClass().getResourceAsStream("/bio/guoda/preston/process/sketch/30869702aa9fd66e555b94dd9eefaa653de1bbbc040feff6f40b9b6470769993.theta.bin"))));
+        Sketch sketchB = Sketches.wrapSketch(Memory.wrap(IOUtils.toByteArray(getClass().getResourceAsStream("/bio/guoda/preston/process/sketch/544e12d30f8bd789c4b675e31cee8dcf9120b2d5d244fe7da16cac33ee1ec552.theta.bin"))));
+
+        assertEquals(192717d, sketchA.getEstimate(), 1d);
+        assertEquals(187063d, sketchA.getLowerBound(2), 1d);
+        assertEquals(0.02, sketchA.getTheta(), 0.01d);
+
+        assertEquals(3d, sketchB.getEstimate(), 0.01d);
+        assertEquals(3d, sketchB.getLowerBound(2), 0.01d);
+        assertEquals(1.0, sketchB.getTheta(), 0.01d);
+
+        CompactSketch intersect = SetOperation
+                .builder()
+                .buildIntersection()
+                .intersect(sketchA, sketchB);
+
+        assertEquals(0.02, intersect.getTheta(), 0.01d);
+        assertEquals(0.0, intersect.getEstimate(), 0.01d);
+        assertEquals(0.0, intersect.getLowerBound(2), 0.01d);
+        assertEquals(163.0, intersect.getUpperBound(2), 0.01d);
+
+        assertThat(intersect.getEstimate(),
+                is(0.0d));
 
     }
 
