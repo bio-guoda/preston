@@ -67,6 +67,7 @@ public class CmdLine {
                 .addCommand("match", new CmdMatch(), "grep", "findURLs")
                 .addCommand("sketch", new CmdCreateSketch(), "bloom")
                 .addCommand("diff", new CmdSketchDiff())
+                .addCommand("union", new CmdSketchUnion())
                 .build();
     }
 

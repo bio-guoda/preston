@@ -322,7 +322,7 @@ public class SketchIntersectThetaTest {
 
     }
 
-    private UpdateSketch generateSketch(int numberOfElements) {
+    public static UpdateSketch generateSketch(int numberOfElements) {
         UpdateSketch sketch1 = UpdateSketch.builder().build();
 
         for (int i = 0; i < numberOfElements; i++) {

@@ -17,7 +17,7 @@ import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 
 public class ActivityUtil {
 
-    private static Stream<Quad> beginInformedActivity(BlankNodeOrIRI newActivity, Optional<BlankNodeOrIRI> sourceActivity) {
+    public static Stream<Quad> beginInformedActivity(BlankNodeOrIRI newActivity, Optional<BlankNodeOrIRI> sourceActivity) {
         Stream<Quad> quadStream = Stream.of(toStatement(newActivity, newActivity, IS_A, ACTIVITY));
 
         return sourceActivity
@@ -25,7 +25,7 @@ public class ActivityUtil {
                 .orElse(quadStream);
     }
 
-    private static void emitWithActivityName(Stream<Quad> quadStream, StatementsEmitter emitter, BlankNodeOrIRI activity) {
+    public static void emitWithActivityName(Stream<Quad> quadStream, StatementsEmitter emitter, BlankNodeOrIRI activity) {
         List<Quad> statements = quadStream
                 .map(quad -> toStatement(activity, quad))
                 .collect(Collectors.toList());

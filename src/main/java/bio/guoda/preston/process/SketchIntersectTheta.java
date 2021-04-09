@@ -2,6 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
@@ -65,7 +66,7 @@ public class SketchIntersectTheta extends ProcessorReadOnly implements Closeable
             encounteredThetaSketches.put(iriString, sketchHash.getIRIString());
 
             try {
-                Sketch bloomFilterCurrent = readSketch(sketchHash);
+                Sketch bloomFilterCurrent = readSketch(sketchHash, this);
                 if (bloomFilterCurrent != null) {
                     Map<String, Pair<Double, Double>> checkedTargets = new TreeMap<>();
                     for (String contentKey : encounteredThetaSketches.keySet()) {
@@ -94,7 +95,7 @@ public class SketchIntersectTheta extends ProcessorReadOnly implements Closeable
     }
 
     private Pair<Double,Double> calculateApproximateIntersection(Sketch bloomFilterCurrent, IRI bloomGzHashTarget) throws IOException {
-        Sketch bloomFilterExisting = readSketch(bloomGzHashTarget);
+        Sketch bloomFilterExisting = readSketch(bloomGzHashTarget, this);
         Intersection intersection = SetOperation.builder().buildIntersection();
         CompactSketch intersect = intersection.intersect(bloomFilterCurrent, bloomFilterExisting);
 
@@ -108,11 +109,11 @@ public class SketchIntersectTheta extends ProcessorReadOnly implements Closeable
                 && ((IRI) object).getIRIString().startsWith(prefix);
     }
 
-    private Sketch readSketch(IRI contentHash) throws IOException {
+    public static Sketch readSketch(IRI contentHash, KeyValueStoreReadOnly store) throws IOException {
         Sketch sketch = null;
         String sketchContentId = StringUtils.removeStart(contentHash.getIRIString(), THETA_SKETCH_PREFIX);
         if (StringUtils.isNotBlank(sketchContentId)) {
-            try (InputStream inputStream = get(toIRI(sketchContentId))) {
+            try (InputStream inputStream = store.get(toIRI(sketchContentId))) {
                 if (inputStream == null) {
                     throw new IOException("failed to retrieve theta sketch [" + contentHash.getIRIString() + "]");
                 }
