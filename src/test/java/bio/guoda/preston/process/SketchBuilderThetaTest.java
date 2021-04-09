@@ -61,7 +61,7 @@ public class SketchBuilderThetaTest {
         }
         assertThat(nodes.size(), is(4));
 
-        assertThat(nodes.get(1).toString(), startsWith("<theta:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(1).toString(), startsWith("<theta:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
     }
 
