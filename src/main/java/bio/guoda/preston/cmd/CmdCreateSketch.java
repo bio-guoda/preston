@@ -23,7 +23,7 @@ public class CmdCreateSketch extends LoggingPersisting implements Runnable {
     private InputStream inputStream = System.in;
 
     @Parameter(names = {"-s", "--sketch-type",}, description = "sketch type", converter = SketchTypeConverter.class)
-    private SketchType sketch = SketchType.theta;
+    private SketchType sketch = SketchType.bloom;
 
 
     @Override
