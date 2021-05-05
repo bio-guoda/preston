@@ -98,7 +98,7 @@ public class SketchBuilderTheta extends SketchBuilder {
         ActivityUtil.emitAsNewActivity(
                 Stream.of(toStatement(sketchHash, WAS_DERIVED_FROM, contentId),
                         toStatement(sketchHash, HAS_VALUE, toLiteral(String.format("%.2f", filter.getEstimate()), Types.XSD_DOUBLE)),
-                        toStatement(sketchHash, CONFIDENCE_INTERVAL_95, toLiteral(String.format("%.2f", filter.getLowerBound(2)), Types.XSD_DOUBLE))),
+                        toStatement(sketchHash, CONFIDENCE_INTERVAL_95, toLiteral(String.format("%.2f", filter.getUpperBound(2)), Types.XSD_DOUBLE))),
                 this,
                 parentActivity
         );
