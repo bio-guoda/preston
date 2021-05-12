@@ -1,19 +1,21 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RDFUtil;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.cmd.LogErrorHandler;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.PrintStream;
 import java.util.Optional;
 
-public class StatementLoggerTSV extends StatementsListenerAdapter {
-
-    private final PrintStream out;
+public class StatementLoggerTSV extends StatementLogger {
 
     public StatementLoggerTSV(PrintStream printWriter) {
-        this.out = printWriter;
+        super(printWriter);
+    }
+
+    public StatementLoggerTSV(PrintStream printWriter, LogErrorHandler handler) {
+        super(printWriter, handler);
     }
 
     @Override
@@ -27,7 +29,7 @@ public class StatementLoggerTSV extends StatementsListenerAdapter {
                 ? RDFUtil.getValueFor(blankNodeOrIRI.get())
                 : "";
 
-        out.print(subject + "\t" + predicate + "\t" + object + "\t" + graphName + "\n");
+        print(subject + "\t" + predicate + "\t" + object + "\t" + graphName + "\n");
     }
 
 }

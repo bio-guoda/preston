@@ -1,20 +1,23 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.cmd.LogErrorHandler;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.PrintStream;
 
-public class StatementLoggerNQuads extends StatementsListenerAdapter {
-
-    private final PrintStream out;
+public class StatementLoggerNQuads extends StatementLogger {
 
     public StatementLoggerNQuads(PrintStream printWriter) {
-        this.out = printWriter;
+        super(printWriter);
+    }
+
+    public StatementLoggerNQuads(PrintStream printWriter, LogErrorHandler handler) {
+        super(printWriter, handler);
     }
 
     @Override
     public void on(Quad statement) {
-        out.print(statement.toString() + "\n");
+        print(statement.toString() + "\n");
     }
 
 }

@@ -18,6 +18,10 @@ public class Cmd implements ProcessorState {
 //
 //    }
 
+    public static void stopProcessing() {
+        shouldKeepProcessing.set(false);
+    }
+
     @Override
     public boolean shouldKeepProcessing() {
         return shouldKeepProcessing.get();
