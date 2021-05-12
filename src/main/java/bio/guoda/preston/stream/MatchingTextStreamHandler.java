@@ -4,13 +4,13 @@ import bio.guoda.preston.process.StatementEmitter;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
-import sun.nio.cs.ThreadLocalCoders;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -75,6 +75,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
 
     private void findAndEmitTextMatches(IRI version, InputStream is, Charset charset) throws IOException {
         byte[] byteBuffer = new byte[BUFFER_SIZE];
+        CharsetDecoder decoder = charset.newDecoder();
 
         int offset = 0;
         int numBytesToReuse = 0;
@@ -98,7 +99,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
 
             // Default CharBuffer::decode behavior is to replace uninterpretable bytes with an "unknown" character that
             // is not always the same length in bytes. Instead, ignore those bytes and reinsert them after encoding.
-            CharBuffer charBuffer = ThreadLocalCoders.decoderFor(charset)
+            CharBuffer charBuffer = decoder
                     .onMalformedInput(CodingErrorAction.IGNORE)
                     .onUnmappableCharacter(CodingErrorAction.IGNORE)
                     .decode(scanningByteBuffer);
