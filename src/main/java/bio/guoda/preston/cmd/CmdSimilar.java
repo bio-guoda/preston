@@ -17,7 +17,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @Parameters(separators = "= ", commandDescription = "Describes similarity between contents identified by hash://sha256 IRIs according to their hash://tika-tlsh IRIs")
-public class CmdSimilar extends CmdProcess {
+public class CmdSimilar extends CmdAppend {
 
     @Parameter(names = {"--hits", "--max-hits", "--matches", "--max-matches"}, description = "maximum number of similar contents to record for each content", converter = IntegerConverter.class)
     private int maxHits = 100;

@@ -50,24 +50,32 @@ public class CmdLine {
     private JCommander buildCommander() {
         return JCommander.newBuilder()
                 .addObject(new CommandMain())
+                // core operations
                 .addCommand("ls", new CmdList(), "log", "logs")
-                .addCommand("hash", new CmdHash())
                 .addCommand("get", new CmdGet(), "cat")
                 .addCommand("cp", new CmdCopyTo(), "copyTo", "export")
                 .addCommand("clone", new CmdClone(), "pull")
                 .addCommand("update", new CmdUpdate(), "track")
-                .addCommand("process", new CmdProcess(), "handle")
-                .addCommand("tika", new CmdTika(), "tika-tlsh")
-                .addCommand("similar", new CmdSimilar(), "similarity")
+                .addCommand("append", new CmdAppend(), "handle", "process", "add")
                 .addCommand("history", new CmdHistory())
-                .addCommand("version", new CmdVersion())
+
+                // sketch generation (e.g, bloom, theta, tika-tlsh)
+                .addCommand("tika", new CmdTika(), "tika-tlsh")
+                .addCommand("sketch", new CmdCreateSketch(), "bloom")
+
+                // sketch operations
+                .addCommand("similar", new CmdSimilar(), "similarity")
+                .addCommand("diff", new CmdSketchDiff(), "intersect")
+                .addCommand("union", new CmdSketchUnion())
+
+                // utilities
+                .addCommand("match", new CmdMatch(), "grep", "findURLs")
                 .addCommand("test", new CmdVerify(), "verify", "check", "validate")
+                .addCommand("version", new CmdVersion())
                 .addCommand("seeds", new CmdSeeds())
                 .addCommand("text", new CmdText(), "extract-text")
-                .addCommand("match", new CmdMatch(), "grep", "findURLs")
-                .addCommand("sketch", new CmdCreateSketch(), "bloom")
-                .addCommand("diff", new CmdSketchDiff())
-                .addCommand("union", new CmdSketchUnion())
+                .addCommand("hash", new CmdHash())
+
                 .build();
     }
 

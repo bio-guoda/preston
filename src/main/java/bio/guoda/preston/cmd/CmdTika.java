@@ -8,7 +8,7 @@ import com.beust.jcommander.Parameters;
 import java.util.stream.Stream;
 
 @Parameters(separators = "= ", commandDescription = "Generates Tika TLSH associated with any encountered hash://sha256 IRIs")
-public class CmdTika extends CmdProcess {
+public class CmdTika extends CmdAppend {
 
     @Override
     protected Stream<StatementsListener> createProcessors(BlobStore blobStore, StatementsListener queueAsListener) {
