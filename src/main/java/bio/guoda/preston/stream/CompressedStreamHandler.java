@@ -31,7 +31,7 @@ public class CompressedStreamHandler implements ContentStreamHandler {
 
     @Override
     public boolean shouldKeepReading() {
-        return true;
+        return contentStreamHandler.shouldKeepReading();
     }
 
     private Pair<CompressorInputStream, String> getCompressedStreamAndFormat(InputStream in) {

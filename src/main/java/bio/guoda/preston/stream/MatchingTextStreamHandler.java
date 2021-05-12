@@ -128,7 +128,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         Matcher matcher = pattern.matcher(charBuffer);
         CharBufferByteReader charBufferByteReader = new CharBufferByteReader(scanningByteBuffer, charBuffer, charset);
 
-        while (matcher.find()) {
+        while (contentStreamHandler.shouldKeepReading() && matcher.find()) {
             int charPosMatchStartsAt = matcher.start();
             int bytePosMatchStartsAt = charBufferByteReader.advance(charPosMatchStartsAt);
 
