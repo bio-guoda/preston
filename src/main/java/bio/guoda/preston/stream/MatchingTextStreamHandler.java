@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,14 +36,18 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
     private static final int BUFFER_SIZE = 4096;
     private static final int MAX_MATCH_SIZE_IN_BYTES = 512;
 
+    private final ContentStreamHandler contentStreamHandler;
     private final StatementEmitter emitter;
     private final Pattern pattern;
     private final Map<Integer, String> patternGroupNames;
+    private final AtomicInteger matchCounter;
 
-    public MatchingTextStreamHandler(StatementEmitter emitter, Pattern pattern) {
+    public MatchingTextStreamHandler(ContentStreamHandler contentStreamHandler, StatementEmitter emitter, Pattern pattern, AtomicInteger matchCounter) {
+        this.contentStreamHandler = contentStreamHandler;
         this.emitter = emitter;
         this.pattern = pattern;
         this.patternGroupNames = extractPatternGroupNames(pattern);
+        this.matchCounter = matchCounter;
     }
 
     private static IRI getCutIri(IRI fileIri, int startAt, int endAt) {
@@ -70,7 +75,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
 
     @Override
     public boolean shouldKeepReading() {
-        return true;
+        return contentStreamHandler.shouldKeepReading();
     }
 
     private void findAndEmitTextMatches(IRI version, InputStream is, Charset charset) throws IOException {
@@ -80,7 +85,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         int offset = 0;
         int numBytesToReuse = 0;
         int numBytesScannedInLastIteration = 0;
-        while (true) {
+        while (contentStreamHandler.shouldKeepReading()) {
             int numBytesToScan = numBytesToReuse;
 
             // Copy text from the end of the buffer to the beginning in case
@@ -157,6 +162,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
             IRI matchIri = getCutIri(version, offset + bytePosMatchStartsAt, offset + bytePosMatchEndsAt);
 
             emitMatches(version, offset, matcher, charToBytePositions, matchIri);
+            matchCounter.getAndIncrement();
         }
     }
 

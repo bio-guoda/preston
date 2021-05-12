@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.cmd.ProcessorState;
 import bio.guoda.preston.store.TestUtil;
 import bio.guoda.preston.stream.MatchingTextStreamHandler;
 import com.mchange.v1.io.InputStreamUtils;
@@ -181,7 +182,7 @@ public class TextMatcherTest {
     public void detectSymbiotaOccurrenceReferences() {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/textmatcher-symbiota-test.tsv");
 
-        ArrayList<Quad> nodes = runTextFinder(blobStore, Pattern.compile("http[s]{0,1}://[a-zA-Z0-9.]+/portal/collections/individual/index.php[?]{1}occid=[0-9]+"), 256);
+        ArrayList<Quad> nodes = runTextFinder(blobStore, Pattern.compile("http[s]{0,1}://[a-zA-Z0-9.]+/portal/collections/individual/index.php[?]{1}occid=[0-9]+"));
 
         String matchAcrossBufferBoundary = nodes.get(nodes.size() - 1).toString();
         assertThat(matchAcrossBufferBoundary, startsWith("<cut:hash://sha256/blub!/b47-123> <http://www.w3.org/ns/prov#value> \"http://openherbarium.org/portal/collections/individual/index.php?occid=157755\""));
@@ -204,15 +205,27 @@ public class TextMatcherTest {
         assertTrue(triples.contains("<cut:hash://sha256/blub!/b1-23> <http://www.w3.org/ns/prov#hadMember> <cut:hash://sha256/blub!/b20-23> ."));
     }
 
-    private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore) { return runTextFinder(blobStore, TextMatcher.URL_PATTERN, 256); }
+    @Test
+    public void withMaxNumMatches() {
+        final int numActivityLines = 3;
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.zip");
 
-    private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore, int batchSize) { return runTextFinder(blobStore, TextMatcher.URL_PATTERN, batchSize); }
+        ArrayList<Quad> nodes = runTextFinder(blobStore);
+        assertThat(nodes.size(), is(numActivityLines + 2));
 
-    private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore, Pattern pattern) { return runTextFinder(blobStore, pattern, 256); }
+        nodes = runTextFinder(blobStore, TextMatcher.URL_PATTERN, 256, 1);
+        assertThat(nodes.size(), is(numActivityLines + 1));
+    }
 
-    private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore, Pattern pattern, int batchSize) {
+    private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore) { return runTextFinder(blobStore, TextMatcher.URL_PATTERN, 256, 0); }
+
+    private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore, int batchSize) { return runTextFinder(blobStore, TextMatcher.URL_PATTERN, batchSize, 0); }
+
+    private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore, Pattern pattern) { return runTextFinder(blobStore, pattern, 256, 0); }
+
+    private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore, Pattern pattern, int batchSize, int maxNumMatches) {
         ArrayList<Quad> nodes = new ArrayList<>();
-        TextMatcher textMatcher = new TextMatcher(pattern, blobStore, TestUtil.testListener(nodes));
+        TextMatcher textMatcher = new TextMatcher(pattern, maxNumMatches, () -> true, blobStore, TestUtil.testListener(nodes));
         textMatcher.setBatchSize(batchSize);
 
         Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));

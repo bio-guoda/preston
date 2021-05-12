@@ -3,23 +3,17 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.process.EmittingStreamRDF;
-import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.TextMatcher;
-import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.StatementStoreImpl;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.Quad;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.stream.Stream;
-
-import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
+import java.util.regex.Pattern;
 
 @Parameters(separators = "= ", commandDescription = "Searches identified contents for text that matches the provided regular expression")
 public class CmdMatch extends LoggingPersisting implements Runnable {
@@ -43,7 +37,7 @@ public class CmdMatch extends LoggingPersisting implements Runnable {
                 getLogMode(),
                 System.out, () -> System.exit(0));
 
-        TextMatcher textMatcher = new TextMatcher(regex, blobStoreReadOnly, listener);
+        TextMatcher textMatcher = new TextMatcher(Pattern.compile(regex), 0, this, blobStoreReadOnly, listener);
 
         StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {
 

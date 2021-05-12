@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.cmd.ProcessorState;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.stream.ArchiveStreamHandler;
 import bio.guoda.preston.stream.CompressedStreamHandler;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -24,7 +26,6 @@ import static bio.guoda.preston.RefNodeConstants.USED;
 import static bio.guoda.preston.model.RefNodeFactory.getVersion;
 import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
 import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 
@@ -35,18 +36,16 @@ public class TextMatcher extends ProcessorReadOnly {
     public static final Pattern URL_PATTERN = Pattern.compile("(?:https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
     private final Pattern pattern;
+    private final ProcessorState processorState;
     private int batchSize = 256;
+    private final int maxNumMatches;
 
-    public TextMatcher(String regex, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
-        this(Pattern.compile(regex), blobStoreReadOnly, listeners);
-    }
-
-    TextMatcher(Pattern pattern, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
+    public TextMatcher(Pattern pattern, int maxNumMatches, ProcessorState processorState, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
         this.pattern = pattern;
+        this.processorState = processorState;
+        this.maxNumMatches = maxNumMatches;
     }
-
-
 
     @Override
     public void on(Quad statement) {
@@ -73,12 +72,14 @@ public class TextMatcher extends ProcessorReadOnly {
     private class MyContentStreamHandlerImpl extends ContentStreamHandlerImpl {
 
         private final ContentStreamHandler handler;
+        private final AtomicInteger matchCounter;
 
         public MyContentStreamHandlerImpl(StatementEmitter emitter) {
+            matchCounter = new AtomicInteger(0);
             this.handler = new ContentStreamHandlerImpl(
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
-                    new MatchingTextStreamHandler(emitter, pattern));
+                    new MatchingTextStreamHandler(this, emitter, pattern, matchCounter));
         }
 
         @Override
@@ -86,7 +87,10 @@ public class TextMatcher extends ProcessorReadOnly {
             return handler.handle(version, in);
         }
 
-
+        @Override
+        public boolean shouldKeepReading() {
+            return processorState.shouldKeepProcessing() && (maxNumMatches == 0 || matchCounter.get() < maxNumMatches);
+        }
     }
 
     public void setBatchSize(int batchSize) {
