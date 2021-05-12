@@ -25,16 +25,16 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class CmdProcessTest {
+public class CmdAppendTest {
 
     @Test
     public void doProcessNothing() throws IOException {
         BlobStoreNull blobStoreNull = new BlobStoreNull();
         StatementStoreNull statementStoreNull = new StatementStoreNull();
 
-        CmdProcess cmdProcess = new CmdProcess();
-        cmdProcess.setInputStream(new ByteArrayInputStream("".getBytes()));
-        cmdProcess.run(blobStoreNull, statementStoreNull);
+        CmdAppend cmdAppend = new CmdAppend();
+        cmdAppend.setInputStream(new ByteArrayInputStream("".getBytes()));
+        cmdAppend.run(blobStoreNull, statementStoreNull);
 
         assertThat(blobStoreNull.putAttemptCount.get() > 0, Is.is(true));
         assertThat(statementStoreNull.putLogVersionAttemptCount.get() > 0, Is.is(true));
@@ -55,7 +55,7 @@ public class CmdProcessTest {
         BlobStoreNull blobStoreNull = new BlobStoreNull();
         StatementStoreNull statementStoreNull = new StatementStoreNull();
 
-        CmdProcess cmdProcess = new CmdProcess();
+        CmdAppend cmdAppend = new CmdAppend();
 
         Quad quad = RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI(UUID.fromString("0b4201b7-8ca4-4367-a7be-e9e0c7b8bc8c")),
@@ -63,9 +63,9 @@ public class CmdProcessTest {
                 RefNodeConstants.HAS_VERSION,
                 RefNodeFactory.toBlank());
 
-        cmdProcess.setInputStream(new ByteArrayInputStream(quad.toString().getBytes()));
+        cmdAppend.setInputStream(new ByteArrayInputStream(quad.toString().getBytes()));
 
-        cmdProcess.run(
+        cmdAppend.run(
                 blobStoreNull,
                 statementStoreNull
         );
@@ -86,7 +86,7 @@ public class CmdProcessTest {
         BlobStoreNull blobStoreNull = new BlobStoreNull();
         StatementStoreNull statementStoreNull = new StatementStoreNull();
 
-        CmdProcess cmdProcess = new CmdProcess();
+        CmdAppend cmdAppend = new CmdAppend();
 
         Quad quad = RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI(UUID.fromString("1dd4573c-a332-478e-bd66-93de617857bc")),
@@ -94,9 +94,9 @@ public class CmdProcessTest {
                 RefNodeConstants.HAS_VERSION,
                 RefNodeFactory.toIRI(URI.create("https://example.org")));
 
-        cmdProcess.setInputStream(new ByteArrayInputStream(quad.toString().getBytes()));
+        cmdAppend.setInputStream(new ByteArrayInputStream(quad.toString().getBytes()));
 
-        cmdProcess.run(
+        cmdAppend.run(
                 blobStoreNull,
                 statementStoreNull
         );

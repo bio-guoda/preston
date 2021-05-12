@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  */
 
 @Parameters(separators = "= ", commandDescription = "offline (re-)processing of tracked biodiversity dataset graph using stdin")
-public class CmdProcess extends CmdActivity {
+public class CmdAppend extends CmdActivity {
 
     private InputStream is = System.in;
 
