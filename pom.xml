@@ -4,7 +4,7 @@
 
     <groupId>bio.guoda</groupId>
     <artifactId>preston</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.2.6</version>
     <name>Preston commandline tool</name>
     <description>a biodiversity dataset tracker</description>
 
