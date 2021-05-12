@@ -10,6 +10,7 @@ import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import com.beust.jcommander.converters.IntegerConverter;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.InputStream;
@@ -21,6 +22,9 @@ public class CmdMatch extends LoggingPersisting implements Runnable {
     @Parameter(description = "regular expression",
             validateWith = RegexValidator.class)
     private String regex = TextMatcher.URL_PATTERN.pattern();
+
+    @Parameter(names = {"--max", "--max-per-content"}, description = "maximum number of matched texts to record for each content; set to 0 for no limit", converter = IntegerConverter.class)
+    private int maxHitsPerContent = 0;
 
     private InputStream inputStream = System.in;
 
@@ -37,7 +41,7 @@ public class CmdMatch extends LoggingPersisting implements Runnable {
                 getLogMode(),
                 System.out, () -> System.exit(0));
 
-        TextMatcher textMatcher = new TextMatcher(Pattern.compile(regex), 0, this, blobStoreReadOnly, listener);
+        TextMatcher textMatcher = new TextMatcher(Pattern.compile(regex), maxHitsPerContent, this, blobStoreReadOnly, listener);
 
         StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {
 

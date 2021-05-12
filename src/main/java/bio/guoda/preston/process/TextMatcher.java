@@ -38,13 +38,13 @@ public class TextMatcher extends ProcessorReadOnly {
     private final Pattern pattern;
     private final ProcessorState processorState;
     private int batchSize = 256;
-    private final int maxNumMatches;
+    private final int maxNumMatchesPerContent;
 
-    public TextMatcher(Pattern pattern, int maxNumMatches, ProcessorState processorState, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
+    public TextMatcher(Pattern pattern, int maxNumMatchesPerContent, ProcessorState processorState, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
         this.pattern = pattern;
         this.processorState = processorState;
-        this.maxNumMatches = maxNumMatches;
+        this.maxNumMatchesPerContent = maxNumMatchesPerContent;
     }
 
     @Override
@@ -89,7 +89,7 @@ public class TextMatcher extends ProcessorReadOnly {
 
         @Override
         public boolean shouldKeepReading() {
-            return processorState.shouldKeepProcessing() && (maxNumMatches == 0 || matchCounter.get() < maxNumMatches);
+            return processorState.shouldKeepProcessing() && (maxNumMatchesPerContent == 0 || matchCounter.get() < maxNumMatchesPerContent);
         }
     }
 
