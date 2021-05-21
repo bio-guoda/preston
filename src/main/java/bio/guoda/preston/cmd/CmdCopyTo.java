@@ -33,7 +33,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
     @Parameter(names = {"-t", "--type",}, description = "archive type", converter = ArchiveTypeConverter.class)
     private ArchiveType archiveType = ArchiveType.data_prov_provindex;
 
-    @Parameter(names = {"-p", "--hash-path-pattern",}, description = "hash path file pattern", converter = HashPathPatternConverter.class)
+    @Parameter(names = {"-p", "--target-hash-path-pattern",}, description = "hash path pattern of content to be copied", converter = HashPathPatternConverter.class)
     private HashPathPattern pathPattern = HashPathPattern.directoryDepth2;
 
     protected ArchiveType getArchiveType() {
