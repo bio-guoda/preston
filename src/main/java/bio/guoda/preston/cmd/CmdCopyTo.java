@@ -5,6 +5,7 @@ import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyGeneratingStream;
 import bio.guoda.preston.store.KeyTo1LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
+import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
@@ -31,6 +32,9 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     @Parameter(names = {"-t", "--type",}, description = "archive type", converter = ArchiveTypeConverter.class)
     private ArchiveType archiveType = ArchiveType.data_prov_provindex;
+
+    @Parameter(names = {"-p", "--hash-path-pattern",}, description = "hash path file pattern", converter = HashPathPatternConverter.class)
+    private HashPathPattern pathPattern = HashPathPattern.directoryDepth2;
 
     protected ArchiveType getArchiveType() {
         return archiveType;
@@ -88,21 +92,29 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
     private void copyAll(File target, File tmp) {
         KeyValueStore copyingKeyValueStore = new KeyValueStoreCopying(
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()),
-                new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI()),
+                new KeyValueStoreLocalFileSystem(tmp, getKeyToPath(target),
                         new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
 
         KeyValueStore copyingKeyValueStoreIndex = new KeyValueStoreCopying(
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()),
-                new KeyValueStoreLocalFileSystem(tmp, new KeyTo3LevelPath(target.toURI()),
+                new KeyValueStoreLocalFileSystem(tmp, getKeyToPath(target),
                         new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
 
         CloneUtil.clone(copyingKeyValueStore, copyingKeyValueStore, copyingKeyValueStoreIndex);
     }
 
+    private KeyToPath getKeyToPath(File target) {
+        if (HashPathPattern.directoryDepth0.equals(pathPattern)) {
+            return new KeyTo1LevelPath(target.toURI());
+        } else {
+            return new KeyTo3LevelPath(target.toURI());
+        }
+    }
+
     private void copyProvIndexOnly(File target, File tmp) {
         KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()),
-                new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI()),
+                new KeyValueStoreLocalFileSystem(tmp, getKeyToPath(target),
                         new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
 
         CloneUtil.clone(
@@ -115,7 +127,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
     private void copyProvLogsOnly(File target, File tmp) {
         KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()),
-                new KeyValueStoreLocalFileSystem(tmp, new KeyTo1LevelPath(target.toURI()), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
+                new KeyValueStoreLocalFileSystem(tmp, getKeyToPath(target), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
 
         CloneUtil.clone(
                 new NullKeyValueStore(),
@@ -128,7 +140,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         KeyValueStore copyingKeyValueStoreBlob = new KeyValueStoreCopying(
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()),
                 new KeyValueStoreLocalFileSystem(tmp,
-                        new KeyTo3LevelPath(target.toURI()),
+                        getKeyToPath(target),
                         new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
 
         CloneUtil.clone(
