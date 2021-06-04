@@ -23,19 +23,21 @@ public class LineStreamHandler implements ContentStreamHandler {
 
     @Override
     public boolean handle(IRI version, InputStream in) throws ContentStreamException {
-        Charset charset;
-        try {
-            charset = new UniversalEncodingDetector().detect(in, new Metadata());
-        } catch (IOException e) {
-            throw new ContentStreamException("failed to detect charset", e);
-        }
-        if (charset != null) {
+        if (!version.getIRIString().startsWith("line:")) {
+            Charset charset;
             try {
-                extractlines(version, in, charset);
+                charset = new UniversalEncodingDetector().detect(in, new Metadata());
             } catch (IOException e) {
-                throw new ContentStreamException("failed to parse text", e);
+                throw new ContentStreamException("failed to detect charset", e);
             }
-            return true;
+            if (charset != null) {
+                try {
+                    extractlines(version, in, charset);
+                } catch (IOException e) {
+                    throw new ContentStreamException("failed to parse text", e);
+                }
+                return true;
+            }
         }
         return false;
     }
