@@ -42,7 +42,7 @@ public class LineStreamHandlerTest {
         };
 
         IRI contentIri = RefNodeFactory.toIRI("blah");
-        BlobStoreReadOnly store = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
+        BlobStoreReadOnly store = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item_no_BOM.txt");
 
         LineStreamHandler lineHandler = new LineStreamHandler(testHandler);
         lineHandler.handle(contentIri, store.get(contentIri));
@@ -59,7 +59,7 @@ public class LineStreamHandlerTest {
         ContentStreamHandler handler = getLineTextMatcher(nodes, true);
 
         IRI contentIri = RefNodeFactory.toIRI("blah");
-        BlobStoreReadOnly store = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
+        BlobStoreReadOnly store = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item_no_BOM.txt");
 
         handler.handle(contentIri, store.get(contentIri));
 

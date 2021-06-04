@@ -1,4 +1,4 @@
-﻿ItemID	TitleID	ThumbnailPageID	BarCode	MARCItemID	CallNumber	VolumeInfo	ItemURL	LocalID	Year	InstitutionName	ZQuery	CreationDate
+ItemID	TitleID	ThumbnailPageID	BarCode	MARCItemID	CallNumber	VolumeInfo	ItemURL	LocalID	Year	InstitutionName	ZQuery	CreationDate
 24	11	268274	mobot31753000022803	i11499722	QK98 .R6 1789		https://www.biodiversitylibrary.org/item/24 		1789	Missouri Botanical Garden, Peter H. Raven Library		2006-05-04 00:00
 49	23	6027003	mobot31753000028362	i11506039	QK495.F67 T7 1916		https://www.biodiversitylibrary.org/item/49 		1916	Missouri Botanical Garden, Peter H. Raven Library		2006-05-04 00:00
 150	47	6208526	mobot31753000049772	i11534485	QK400.5 .B65 1837		https://www.biodiversitylibrary.org/item/150 		1837	Missouri Botanical Garden, Peter H. Raven Library		2006-05-04 00:00
