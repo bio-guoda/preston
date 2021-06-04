@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,7 +28,7 @@ public class LineStreamHandlerTest {
             @Override
             public boolean handle(IRI version, InputStream in) {
                 try {
-                    lines.add(IOUtils.toString(new InputStreamReader(in)));
+                    lines.add(IOUtils.toString(in, StandardCharsets.UTF_8.name()));
                 } catch (IOException e) {
                     // Oh no!
                 }
@@ -48,7 +48,7 @@ public class LineStreamHandlerTest {
         lineHandler.handle(contentIri, store.get(contentIri));
 
         assertThat(lines.size(), is(11));
-        assertThat(lines.get(0), is("\uFEFFItemID\tTitleID\tThumbnailPageID\tBarCode\tMARCItemID\tCallNumber\tVolumeInfo\tItemURL\tLocalID\tYear\tInstitutionName\tZQuery\tCreationDate"));
+        assertThat(lines.get(0), is("ItemID\tTitleID\tThumbnailPageID\tBarCode\tMARCItemID\tCallNumber\tVolumeInfo\tItemURL\tLocalID\tYear\tInstitutionName\tZQuery\tCreationDate"));
         assertThat(lines.get(lines.size() - 3), is("935\t64\t36774\tmobot31753002306857\ti11595206\tQK1 .F418\tv.23:no.2 (1840)\thttps://www.biodiversitylibrary.org/item/935 \t\t1840\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00"));
         assertThat(lines.get(lines.size() - 1), is(""));
     }

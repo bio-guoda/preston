@@ -32,7 +32,7 @@ public class LineStreamHandler implements ContentStreamHandler {
             }
             if (charset != null) {
                 try {
-                    extractlines(version, in, charset);
+                    extractLines(version, in, charset);
                 } catch (IOException e) {
                     throw new ContentStreamException("failed to parse text", e);
                 }
@@ -42,7 +42,7 @@ public class LineStreamHandler implements ContentStreamHandler {
         return false;
     }
 
-    private void extractlines(IRI version, InputStream in, Charset charset) throws ContentStreamException, IOException {
+    private void extractLines(IRI version, InputStream in, Charset charset) throws ContentStreamException, IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in, charset));
 
         for (int lineNumber = 1; contentStreamHandler.shouldKeepReading(); ++lineNumber) {
