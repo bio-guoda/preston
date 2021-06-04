@@ -54,12 +54,40 @@ public class LineStreamHandlerTest {
     }
 
     @Test
-    public void passLinesToTextMatcher() throws IOException, ContentStreamException {
+    public void findMatchesInLines() throws IOException, ContentStreamException {
         List<Quad> nodes = new LinkedList<>();
-        ContentStreamHandler handler = new ContentStreamHandler() {
+        ContentStreamHandler handler = getLineTextMatcher(nodes, true);
+
+        IRI contentIri = RefNodeFactory.toIRI("blah");
+        BlobStoreReadOnly store = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
+
+        handler.handle(contentIri, store.get(contentIri));
+
+        assertThat(nodes.size(), is(9));
+        assertThat(nodes.get(0).toString(), is("<cut:line:blah!/L2!/b59-101> <http://www.w3.org/ns/prov#value> \"https://www.biodiversitylibrary.org/item/24\" ."));
+        assertThat(nodes.get(nodes.size() - 1).toString(), is("<cut:line:blah!/L10!/b66-109> <http://www.w3.org/ns/prov#value> \"https://www.biodiversitylibrary.org/item/947\" ."));
+    }
+
+    @Test
+    public void findMatchingLines() throws IOException, ContentStreamException {
+        List<Quad> nodes = new LinkedList<>();
+        ContentStreamHandler handler = getLineTextMatcher(nodes, false);
+
+        IRI contentIri = RefNodeFactory.toIRI("blah");
+        BlobStoreReadOnly store = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
+
+        handler.handle(contentIri, store.get(contentIri));
+
+        assertThat(nodes.size(), is(9));
+        assertThat(nodes.get(0).toString(), is("<line:blah!/L2> <http://www.w3.org/ns/prov#value> \"24\t11\t268274\tmobot31753000022803\ti11499722\tQK98 .R6 1789\t\thttps://www.biodiversitylibrary.org/item/24 \t\t1789\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\" ."));
+        assertThat(nodes.get(nodes.size() - 1).toString(), is("<line:blah!/L10> <http://www.w3.org/ns/prov#value> \"947\t64\t44519\tmobot31753002306964\ti11595310\tQK1 .F418\tv.33 (1850)\thttps://www.biodiversitylibrary.org/item/947 \t\t1850\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\" ."));
+    }
+
+    private ContentStreamHandler getLineTextMatcher(List<Quad> nodes, boolean reportOnlyMatchingText) {
+        return new ContentStreamHandler() {
             final ContentStreamHandler handler = new ContentStreamHandlerImpl(
                     new LineStreamHandler(this),
-                    new MatchingTextStreamHandler(this, nodes::add, TextMatcher.URL_PATTERN, new AtomicInteger())
+                    new MatchingTextStreamHandler(this, nodes::add, TextMatcher.URL_PATTERN, new AtomicInteger(), reportOnlyMatchingText)
             );
 
             @Override
@@ -72,15 +100,6 @@ public class LineStreamHandlerTest {
                 return true;
             }
         };
-
-        IRI contentIri = RefNodeFactory.toIRI("blah");
-        BlobStoreReadOnly store = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
-
-        handler.handle(contentIri, store.get(contentIri));
-
-        assertThat(nodes.size(), is(9));
-        assertThat(nodes.get(0).toString(), is("<cut:line:blah!/L2!/b59-101> <http://www.w3.org/ns/prov#value> \"https://www.biodiversitylibrary.org/item/24\" ."));
-        assertThat(nodes.get(nodes.size() - 1).toString(), is("<cut:line:blah!/L10!/b66-109> <http://www.w3.org/ns/prov#value> \"https://www.biodiversitylibrary.org/item/947\" ."));
     }
 
 }

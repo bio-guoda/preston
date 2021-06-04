@@ -2,6 +2,7 @@ package bio.guoda.preston.stream;
 
 import bio.guoda.preston.process.StatementEmitter;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.tika.io.IOUtils;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
 
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
@@ -23,12 +25,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
-import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
-import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeConstants.*;
+import static bio.guoda.preston.model.RefNodeFactory.*;
 import static bio.guoda.preston.stream.CharBufferByteReader.getBufferPosition;
 import static bio.guoda.preston.stream.CharBufferByteReader.setBufferPosition;
 
@@ -41,13 +39,19 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
     private final Pattern pattern;
     private final Map<Integer, String> patternGroupNames;
     private final AtomicInteger matchCounter;
+    private final boolean reportOnlyMatchingText;
 
-    public MatchingTextStreamHandler(ContentStreamHandler contentStreamHandler, StatementEmitter emitter, Pattern pattern, AtomicInteger matchCounter) {
+    public MatchingTextStreamHandler(ContentStreamHandler contentStreamHandler, StatementEmitter emitter, Pattern pattern, AtomicInteger matchCounter, boolean reportOnlyMatchingText) {
         this.contentStreamHandler = contentStreamHandler;
         this.emitter = emitter;
         this.pattern = pattern;
         this.patternGroupNames = extractPatternGroupNames(pattern);
         this.matchCounter = matchCounter;
+        this.reportOnlyMatchingText = reportOnlyMatchingText;
+    }
+
+    public MatchingTextStreamHandler(ContentStreamHandler contentStreamHandler, StatementEmitter emitter, Pattern pattern, AtomicInteger matchCounter) {
+        this(contentStreamHandler, emitter, pattern, matchCounter, true);
     }
 
     private static IRI getCutIri(IRI fileIri, int startAt, int endAt) {
@@ -79,8 +83,24 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
     }
 
     private void findAndEmitTextMatches(IRI version, InputStream is, Charset charset) throws IOException {
+        if (reportOnlyMatchingText) {
+            emitAllTextMatches(version, is, charset);
+        } else {
+            emitAnyTextMatch(version, is, charset);
+        }
+    }
+
+    private void emitAnyTextMatch(IRI contentIri, InputStream is, Charset charset) throws IOException {
+        ByteBuffer fullText = ByteBuffer.wrap(IOUtils.toByteArray(is));
+        CharBuffer charBuffer = charset.decode(fullText);
+        Matcher matcher = pattern.matcher(charBuffer);
+        if (matcher.find()) {
+            emitter.emit(toStatement(contentIri, HAS_VALUE, toLiteral(charBuffer.toString())));
+        }
+    }
+
+    private void emitAllTextMatches(IRI version, InputStream is, Charset charset) throws IOException {
         byte[] byteBuffer = new byte[BUFFER_SIZE];
-        CharsetDecoder decoder = charset.newDecoder();
 
         int offset = 0;
         int numBytesToReuse = 0;
@@ -100,18 +120,9 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
             if (numBytesToScan <= 0) {
                 break;
             }
+
             ByteBuffer scanningByteBuffer = ByteBuffer.wrap(byteBuffer, 0, numBytesToScan);
-
-            // Default CharBuffer::decode behavior is to replace uninterpretable bytes with an "unknown" character that
-            // is not always the same length in bytes. Instead, ignore those bytes and reinsert them after encoding.
-            CharBuffer charBuffer = decoder
-                    .onMalformedInput(CodingErrorAction.IGNORE)
-                    .onUnmappableCharacter(CodingErrorAction.IGNORE)
-                    .decode(scanningByteBuffer);
-
-            setBufferPosition(scanningByteBuffer, 0);
-
-            findAndEmitMatches(version, charset, offset, scanningByteBuffer, charBuffer);
+            emitAllTextMatches(version, charset, offset, scanningByteBuffer);
 
             // If no matches were found, we need to advance the buffer's position manually
             if (getBufferPosition(scanningByteBuffer) == 0) {
@@ -124,16 +135,26 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         }
     }
 
-    private void findAndEmitMatches(IRI version, Charset charset, int offset, ByteBuffer scanningByteBuffer, CharBuffer charBuffer) {
+    private void emitAllTextMatches(IRI version, Charset charset, int offset, ByteBuffer byteBuffer) throws CharacterCodingException {
+        // Default CharBuffer::decode behavior is to replace uninterpretable bytes with an "unknown" character that
+        // is not always the same length in bytes. Instead, ignore those bytes and reinsert them after encoding.
+        CharsetDecoder decoder = charset.newDecoder();
+        CharBuffer charBuffer = decoder
+                .onMalformedInput(CodingErrorAction.IGNORE)
+                .onUnmappableCharacter(CodingErrorAction.IGNORE)
+                .decode(byteBuffer);
+
+        setBufferPosition(byteBuffer, 0);
+
         Matcher matcher = pattern.matcher(charBuffer);
-        CharBufferByteReader charBufferByteReader = new CharBufferByteReader(scanningByteBuffer, charBuffer, charset);
+        CharBufferByteReader charBufferByteReader = new CharBufferByteReader(byteBuffer, charBuffer, charset);
 
         while (contentStreamHandler.shouldKeepReading() && matcher.find()) {
             int charPosMatchStartsAt = matcher.start();
             int bytePosMatchStartsAt = charBufferByteReader.advance(charPosMatchStartsAt);
 
             if (bytePosMatchStartsAt >= BUFFER_SIZE - MAX_MATCH_SIZE_IN_BYTES) {
-                setBufferPosition(scanningByteBuffer, bytePosMatchStartsAt);
+                setBufferPosition(byteBuffer, bytePosMatchStartsAt);
                 break;
             }
 
