@@ -1,7 +1,6 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.cmd.ProcessorState;
 import bio.guoda.preston.store.TestUtil;
 import bio.guoda.preston.stream.MatchingTextStreamHandler;
 import com.mchange.v1.io.InputStreamUtils;
@@ -106,6 +105,34 @@ public class TextMatcherTest {
 
         String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
         assertThat(lastUrlStatement, startsWith("<cut:hash://sha256/blub!/b1670-1713> <http://www.w3.org/ns/prov#value> \"https://www.biodiversitylibrary.org/item/947\""));
+    }
+
+    @Test
+    public void findMatchesInLines() {
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
+
+        ArrayList<Quad> nodes = new TextFinder(blobStore).separateLines(true).findMatches();
+        assertThat(nodes.size(), is(12));
+
+        String firstUrlStatement = nodes.get(3).toString();
+        assertThat(firstUrlStatement, startsWith("<cut:line:hash://sha256/blub!/L2!/b59-101> <http://www.w3.org/ns/prov#value> \"https://www.biodiversitylibrary.org/item/24\""));
+
+        String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
+        assertThat(lastUrlStatement, startsWith("<cut:line:hash://sha256/blub!/L10!/b66-109> <http://www.w3.org/ns/prov#value> \"https://www.biodiversitylibrary.org/item/947\""));
+    }
+
+    @Test
+    public void findMatchingLines() {
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
+
+        ArrayList<Quad> nodes = new TextFinder(blobStore).reportOnlyMatchingText(false).separateLines(true).findMatches();
+        assertThat(nodes.size(), is(12));
+
+        String firstUrlStatement = nodes.get(3).toString();
+        assertThat(firstUrlStatement, startsWith("<line:hash://sha256/blub!/L2> <http://www.w3.org/ns/prov#value> \"24\t11\t268274\tmobot31753000022803\ti11499722\tQK98 .R6 1789\t\thttps://www.biodiversitylibrary.org/item/24 \t\t1789\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\""));
+
+        String lastUrlStatement = nodes.get(nodes.size() - 1).toString();
+        assertThat(lastUrlStatement, startsWith("<line:hash://sha256/blub!/L10> <http://www.w3.org/ns/prov#value> \"947\t64\t44519\tmobot31753002306964\ti11595310\tQK1 .F418\tv.33 (1850)\thttps://www.biodiversitylibrary.org/item/947 \t\t1850\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\""));
     }
 
     @Test
@@ -217,6 +244,59 @@ public class TextMatcherTest {
         assertThat(nodes.size(), is(numActivityLines + 1));
     }
 
+    private class TextFinder {
+        private final BlobStoreReadOnly blobStore;
+        private Pattern pattern;
+        private int batchSize;
+        private int maxNumMatches;
+        private boolean reportOnlyMatchingText;
+        private boolean separateLines;
+
+        public TextFinder(BlobStoreReadOnly blobStore) {
+            this.blobStore = blobStore;
+            this.pattern = TextMatcher.URL_PATTERN;
+            this.batchSize = 256;
+            this.maxNumMatches = 0;
+            this.reportOnlyMatchingText = true;
+            this.separateLines = false;
+        }
+
+        public TextFinder pattern(Pattern pattern) {
+            this.pattern = pattern;
+            return this;
+        }
+
+        public TextFinder batchSize(int batchSize) {
+            this.batchSize = batchSize;
+            return this;
+        }
+
+        public TextFinder maxNumMatches(int maxNumMatches) {
+            this.maxNumMatches = maxNumMatches;
+            return this;
+        }
+
+        public TextFinder reportOnlyMatchingText(boolean reportOnlyMatchingText) {
+            this.reportOnlyMatchingText = reportOnlyMatchingText;
+            return this;
+        }
+
+        public TextFinder separateLines(boolean separateLines) {
+            this.separateLines = separateLines;
+            return this;
+        }
+
+        public ArrayList<Quad> findMatches() {
+            ArrayList<Quad> nodes = new ArrayList<>();
+            TextMatcher textMatcher = new TextMatcher(pattern, maxNumMatches, reportOnlyMatchingText, separateLines, () -> true, blobStore, TestUtil.testListener(nodes));
+            textMatcher.setBatchSize(batchSize);
+
+            Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
+
+            textMatcher.on(statement);
+            return nodes;
+        }
+    }
     private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore) { return runTextFinder(blobStore, TextMatcher.URL_PATTERN, 256, 0); }
 
     private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore, int batchSize) { return runTextFinder(blobStore, TextMatcher.URL_PATTERN, batchSize, 0); }
@@ -224,14 +304,11 @@ public class TextMatcherTest {
     private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore, Pattern pattern) { return runTextFinder(blobStore, pattern, 256, 0); }
 
     private ArrayList<Quad> runTextFinder(BlobStoreReadOnly blobStore, Pattern pattern, int batchSize, int maxNumMatches) {
-        ArrayList<Quad> nodes = new ArrayList<>();
-        TextMatcher textMatcher = new TextMatcher(pattern, maxNumMatches, () -> true, blobStore, TestUtil.testListener(nodes));
-        textMatcher.setBatchSize(batchSize);
-
-        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));
-
-        textMatcher.on(statement);
-        return nodes;
+        return new TextFinder(blobStore)
+                .pattern(pattern)
+                .batchSize(batchSize)
+                .maxNumMatches(maxNumMatches)
+                .findMatches();
     }
 
     @Test

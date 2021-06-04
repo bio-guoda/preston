@@ -26,6 +26,12 @@ public class CmdMatch extends LoggingPersisting implements Runnable {
     @Parameter(names = {"--max", "--max-per-content"}, description = "maximum number of matched texts to record for each content; set to 0 for no limit", converter = IntegerConverter.class)
     private int maxHitsPerContent = 0;
 
+    @Parameter(names = {"-o", "--only-matching"}, description = "report only the text that was matched")
+    private boolean reportOnlyMatchingText = false;
+
+    @Parameter(names = {"--no-line", "--no-lines"}, description = "don't report line numbers for matches")
+    private boolean dontSeparateLines = false;
+
     private InputStream inputStream = System.in;
 
 
@@ -41,7 +47,14 @@ public class CmdMatch extends LoggingPersisting implements Runnable {
                 getLogMode(),
                 System.out, () -> System.exit(0));
 
-        TextMatcher textMatcher = new TextMatcher(Pattern.compile(regex), maxHitsPerContent, this, blobStoreReadOnly, listener);
+        TextMatcher textMatcher = new TextMatcher(
+                Pattern.compile(regex),
+                maxHitsPerContent,
+                reportOnlyMatchingText,
+                !dontSeparateLines,
+                this,
+                blobStoreReadOnly,
+                listener);
 
         StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {
 

@@ -7,6 +7,7 @@ import bio.guoda.preston.stream.CompressedStreamHandler;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import bio.guoda.preston.stream.ContentStreamHandlerImpl;
+import bio.guoda.preston.stream.LineStreamHandler;
 import bio.guoda.preston.stream.MatchingTextStreamHandler;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
@@ -36,13 +37,17 @@ public class TextMatcher extends ProcessorReadOnly {
     public static final Pattern URL_PATTERN = Pattern.compile("(?:https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
     private final Pattern pattern;
+    private boolean reportOnlyMatchingText;
+    private boolean separateLines;
     private final ProcessorState processorState;
     private int batchSize = 256;
     private final int maxNumMatchesPerContent;
 
-    public TextMatcher(Pattern pattern, int maxNumMatchesPerContent, ProcessorState processorState, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
+    public TextMatcher(Pattern pattern, int maxNumMatchesPerContent, boolean reportOnlyMatchingText, boolean separateLines, ProcessorState processorState, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
         this.pattern = pattern;
+        this.reportOnlyMatchingText = reportOnlyMatchingText;
+        this.separateLines = separateLines;
         this.processorState = processorState;
         this.maxNumMatchesPerContent = maxNumMatchesPerContent;
     }
@@ -76,10 +81,19 @@ public class TextMatcher extends ProcessorReadOnly {
 
         public MyContentStreamHandlerImpl(StatementEmitter emitter) {
             matchCounter = new AtomicInteger(0);
-            this.handler = new ContentStreamHandlerImpl(
-                    new ArchiveStreamHandler(this),
-                    new CompressedStreamHandler(this),
-                    new MatchingTextStreamHandler(this, emitter, pattern, matchCounter));
+
+            if (separateLines) {
+                this.handler = new ContentStreamHandlerImpl(
+                        new ArchiveStreamHandler(this),
+                        new CompressedStreamHandler(this),
+                        new LineStreamHandler(this),
+                        new MatchingTextStreamHandler(this, emitter, pattern, matchCounter, reportOnlyMatchingText));
+            } else {
+                this.handler = new ContentStreamHandlerImpl(
+                        new ArchiveStreamHandler(this),
+                        new CompressedStreamHandler(this),
+                        new MatchingTextStreamHandler(this, emitter, pattern, matchCounter, reportOnlyMatchingText));
+            }
         }
 
         @Override
