@@ -37,8 +37,8 @@ public class TextMatcher extends ProcessorReadOnly {
     public static final Pattern URL_PATTERN = Pattern.compile("(?:https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
     private final Pattern pattern;
-    private boolean reportOnlyMatchingText;
-    private boolean separateLines;
+    private final boolean reportOnlyMatchingText;
+    private final boolean separateLines;
     private final ProcessorState processorState;
     private int batchSize = 256;
     private final int maxNumMatchesPerContent;
