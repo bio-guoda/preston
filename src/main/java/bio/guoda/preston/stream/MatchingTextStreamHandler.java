@@ -1,7 +1,8 @@
 package bio.guoda.preston.stream;
 
-import bio.guoda.preston.process.StatementEmitter;
+import bio.guoda.preston.process.StatementsEmitter;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Quad;
 import org.apache.tika.io.IOUtils;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
@@ -14,19 +15,23 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.RefNodeConstants.*;
-import static bio.guoda.preston.model.RefNodeFactory.*;
+import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
+import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
+import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
+import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
+import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static bio.guoda.preston.stream.CharBufferByteReader.getBufferPosition;
 import static bio.guoda.preston.stream.CharBufferByteReader.setBufferPosition;
 
@@ -35,23 +40,21 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
     private static final int MAX_MATCH_SIZE_IN_BYTES = 512;
 
     private final ContentStreamHandler contentStreamHandler;
-    private final StatementEmitter emitter;
+    private final StatementsEmitter emitter;
     private final Pattern pattern;
     private final Map<Integer, String> patternGroupNames;
-    private final AtomicInteger matchCounter;
     private final boolean reportOnlyMatchingText;
 
-    public MatchingTextStreamHandler(ContentStreamHandler contentStreamHandler, StatementEmitter emitter, Pattern pattern, AtomicInteger matchCounter, boolean reportOnlyMatchingText) {
+    public MatchingTextStreamHandler(ContentStreamHandler contentStreamHandler, StatementsEmitter emitter, Pattern pattern, boolean reportOnlyMatchingText) {
         this.contentStreamHandler = contentStreamHandler;
         this.emitter = emitter;
         this.pattern = pattern;
         this.patternGroupNames = extractPatternGroupNames(pattern);
-        this.matchCounter = matchCounter;
         this.reportOnlyMatchingText = reportOnlyMatchingText;
     }
 
-    public MatchingTextStreamHandler(ContentStreamHandler contentStreamHandler, StatementEmitter emitter, Pattern pattern, AtomicInteger matchCounter) {
-        this(contentStreamHandler, emitter, pattern, matchCounter, true);
+    public MatchingTextStreamHandler(ContentStreamHandler contentStreamHandler, StatementsEmitter emitter, Pattern pattern) {
+        this(contentStreamHandler, emitter, pattern, true);
     }
 
     private static IRI getCutIri(IRI fileIri, int startAt, int endAt) {
@@ -93,10 +96,10 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
     private void emitAnyTextMatch(IRI contentIri, InputStream is, Charset charset) throws IOException {
         ByteBuffer fullText = ByteBuffer.wrap(IOUtils.toByteArray(is));
         CharBuffer charBuffer = charset.decode(fullText);
+
         Matcher matcher = pattern.matcher(charBuffer);
         if (matcher.find()) {
-            emitter.emit(toStatement(contentIri, HAS_VALUE, toLiteral(charBuffer.toString())));
-            matchCounter.getAndIncrement();
+            emitter.emit(Collections.singletonList(toStatement(contentIri, HAS_VALUE, toLiteral(charBuffer.toString()))));
         }
     }
 
@@ -151,44 +154,24 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         CharBufferByteReader charBufferByteReader = new CharBufferByteReader(byteBuffer, charBuffer, charset);
 
         while (contentStreamHandler.shouldKeepReading() && matcher.find()) {
-            int charPosMatchStartsAt = matcher.start();
-            int bytePosMatchStartsAt = charBufferByteReader.advance(charPosMatchStartsAt);
-
+            int bytePosMatchStartsAt = charBufferByteReader.advance(matcher.start());
             if (bytePosMatchStartsAt >= BUFFER_SIZE - MAX_MATCH_SIZE_IN_BYTES) {
                 setBufferPosition(byteBuffer, bytePosMatchStartsAt);
                 break;
             }
 
-            List<Integer> orderedCharPositions = new LinkedList<>();
-            for (int i = 0; i <= matcher.groupCount(); ++i) {
-                if (matcher.group(i) != null) {
-                    orderedCharPositions.add(matcher.start(i));
-                    orderedCharPositions.add(matcher.end(i));
-                }
-            }
-
-            orderedCharPositions.sort(null);
-
-            // Because characters can have variable width,
-            // report byte positions instead of character positions
-            Map<Integer, Integer> charToBytePositions = orderedCharPositions
-                    .stream()
-                    .distinct()
-                    .collect(Collectors.toMap(
-                            charPosition -> charPosition,
-                            charBufferByteReader::advance
-                    ));
-
-            int charPosMatchEndsAt = matcher.end();
-            int bytePosMatchEndsAt = charToBytePositions.get(charPosMatchEndsAt);
-            IRI matchIri = getCutIri(version, offset + bytePosMatchStartsAt, offset + bytePosMatchEndsAt);
-
-            emitMatches(version, offset, matcher, charToBytePositions, matchIri);
-            matchCounter.getAndIncrement();
+            emitMatches(version, offset, matcher, getCharToBytePositionsMap(matcher, charBufferByteReader));
         }
     }
 
-    private void emitMatches(IRI version, int offset, Matcher matcher, Map<Integer, Integer> charToBytePositions, IRI matchIri) {
+    private void emitMatches(IRI version, int offset, Matcher matcher, Map<Integer, Integer> charToBytePositions) {
+        // Because characters can have variable width, report byte positions instead of character positions
+        int bytePosMatchStartsAt = offset + charToBytePositions.get(matcher.start());
+        int bytePosMatchEndsAt = offset + charToBytePositions.get(matcher.end());
+
+        IRI matchIri = getCutIri(version, bytePosMatchStartsAt, bytePosMatchEndsAt);
+
+        List<Quad> statements = new LinkedList<>();
         for (int i = 0; i <= matcher.groupCount(); ++i) {
             if (matcher.group(i) != null) {
                 int charPosGroupStartsAt = matcher.start(i);
@@ -198,16 +181,18 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
                 int bytePosGroupEndsAt = charToBytePositions.get(charPosGroupEndsAt);
 
                 String groupString = matcher.group(i);
-                IRI groupIri = getCutIri(version, offset + bytePosGroupStartsAt, offset + bytePosGroupEndsAt);
-                emitter.emit(toStatement(groupIri, HAS_VALUE, toLiteral(groupString)));
 
-                if (i > 0) {
-                    emitter.emit(toStatement(matchIri, HAD_MEMBER, groupIri));
+                if (i == 0) {
+                    statements.add(toStatement(matchIri, HAS_VALUE, toLiteral(groupString)));
+                } else {
+                    IRI groupIri = getCutIri(version, offset + bytePosGroupStartsAt, offset + bytePosGroupEndsAt);
+                    statements.add(toStatement(groupIri, HAS_VALUE, toLiteral(groupString)));
+                    statements.add(toStatement(matchIri, HAD_MEMBER, groupIri));
 
                     if (patternGroupNames.containsKey(i)) {
                         String groupName = patternGroupNames.get(i);
                         if (groupString.equals(matcher.group(groupName))) {
-                            emitter.emit(toStatement(matchIri, DESCRIPTION, toLiteral(groupName)));
+                            statements.add(toStatement(matchIri, DESCRIPTION, toLiteral(groupName)));
                         } else {
                             throw new RuntimeException("pattern group [" + groupName + "] was assigned the wrong index");
                         }
@@ -215,6 +200,26 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
                 }
             }
         }
+        emitter.emit(statements);
+    }
+
+    private Map<Integer, Integer> getCharToBytePositionsMap(Matcher matcher, CharBufferByteReader charBufferByteReader) {
+        List<Integer> orderedCharPositions = new LinkedList<>();
+        for (int i = 0; i <= matcher.groupCount(); ++i) {
+            if (matcher.group(i) != null) {
+                orderedCharPositions.add(matcher.start(i));
+                orderedCharPositions.add(matcher.end(i));
+            }
+        }
+        orderedCharPositions.sort(null);
+
+        return orderedCharPositions
+                .stream()
+                .distinct()
+                .collect(Collectors.toMap(
+                        charPosition -> charPosition,
+                        charBufferByteReader::advance
+                ));
     }
 
     public static Map<Integer, String> extractPatternGroupNames(Pattern pattern) {

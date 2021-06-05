@@ -2,6 +2,8 @@ package bio.guoda.preston.stream;
 
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.BlobStoreReadOnly;
+import bio.guoda.preston.process.StatementsEmitter;
+import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.TextMatcher;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -103,9 +105,16 @@ public class LineStreamHandlerTest {
 
     private ContentStreamHandler getLineTextMatcher(List<Quad> nodes, boolean reportOnlyMatchingText) {
         return new ContentStreamHandler() {
+            final StatementsEmitter emitter = new StatementsEmitterAdapter() {
+                @Override
+                public void emit(Quad statement) {
+                    nodes.add(statement);
+                }
+            };
+
             final ContentStreamHandler handler = new ContentStreamHandlerImpl(
                     new LineStreamHandler(this),
-                    new MatchingTextStreamHandler(this, nodes::add, TextMatcher.URL_PATTERN, new AtomicInteger(), reportOnlyMatchingText)
+                    new MatchingTextStreamHandler(this, emitter, TextMatcher.URL_PATTERN, reportOnlyMatchingText)
             );
 
             @Override

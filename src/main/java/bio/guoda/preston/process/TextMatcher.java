@@ -18,7 +18,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -74,25 +73,26 @@ public class TextMatcher extends ProcessorReadOnly {
     }
 
 
-    private class MyContentStreamHandlerImpl extends ContentStreamHandlerImpl {
+    private class MyContentStreamHandlerImpl extends ContentStreamHandlerImpl implements StatementsEmitter {
 
         private final ContentStreamHandler handler;
-        private final AtomicInteger matchCounter;
+        private final StatementEmitter emitter;
+        private int numMatches = 0;
 
         public MyContentStreamHandlerImpl(StatementEmitter emitter) {
-            matchCounter = new AtomicInteger(0);
+            this.emitter = emitter;
 
             if (separateLines) {
                 this.handler = new ContentStreamHandlerImpl(
                         new ArchiveStreamHandler(this),
                         new CompressedStreamHandler(this),
                         new LineStreamHandler(this),
-                        new MatchingTextStreamHandler(this, emitter, pattern, matchCounter, reportOnlyMatchingText));
+                        new MatchingTextStreamHandler(this, this, pattern, reportOnlyMatchingText));
             } else {
                 this.handler = new ContentStreamHandlerImpl(
                         new ArchiveStreamHandler(this),
                         new CompressedStreamHandler(this),
-                        new MatchingTextStreamHandler(this, emitter, pattern, matchCounter, reportOnlyMatchingText));
+                        new MatchingTextStreamHandler(this, this, pattern, reportOnlyMatchingText));
             }
         }
 
@@ -103,7 +103,20 @@ public class TextMatcher extends ProcessorReadOnly {
 
         @Override
         public boolean shouldKeepReading() {
-            return processorState.shouldKeepProcessing() && (maxNumMatchesPerContent == 0 || matchCounter.get() < maxNumMatchesPerContent);
+            return processorState.shouldKeepProcessing() && (maxNumMatchesPerContent == 0 || numMatches < maxNumMatchesPerContent);
+        }
+
+        @Override
+        public void emit(List<Quad> statements) {
+            ++numMatches;
+            for (Quad statement : statements) {
+                this.emitter.emit(statement);
+            }
+        }
+
+        @Override
+        public void emit(Quad statement) {
+            // don't do this; statements need to be grouped to allow matches to be counted
         }
     }
 
