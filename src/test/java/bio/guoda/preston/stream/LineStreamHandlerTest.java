@@ -87,7 +87,7 @@ public class LineStreamHandlerTest {
     }
 
     @Test
-    public void findMatchingLines() throws IOException, ContentStreamException {
+    public void findLinesWithMatches() throws IOException, ContentStreamException {
         List<Quad> nodes = new LinkedList<>();
         ContentStreamHandler handler = getLineTextMatcher(nodes, false);
 

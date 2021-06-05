@@ -58,5 +58,18 @@ public class ContentStreamFactoryTest {
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()), Is.is("https://example.org"));
     }
 
+    @Test
+    public void contentStreamForLine() throws IOException {
+        ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("line:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/L3"));
+        InputStream inputStream = factory.create(getClass().getResourceAsStream("/bio/guoda/preston/process/bhl_item.txt"));
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()), Is.is("49\t23\t6027003\tmobot31753000028362\ti11506039\tQK495.F67 T7 1916\t\thttps://www.biodiversitylibrary.org/item/49 \t\t1916\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00"));
+    }
+
+    @Test
+    public void contentStreamForCutOfLine() throws IOException {
+        ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("cut:line:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/L3!/b115-122"));
+        InputStream inputStream = factory.create(getClass().getResourceAsStream("/bio/guoda/preston/process/bhl_item.txt"));
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()), Is.is("Missouri"));
+    }
 
 }

@@ -48,8 +48,8 @@ public class ContentStreamFactory implements InputStreamFactory {
         ContentStreamRequest() {
             this.handler = new ContentStreamHandlerImpl(
                     new ArchiveEntryStreamHandler(this, targetIri),
-                    new CompressedStreamHandler(this));
-
+                    new CompressedStreamHandler(this),
+                    new LineStreamHandler(this));
         }
 
         @Override
