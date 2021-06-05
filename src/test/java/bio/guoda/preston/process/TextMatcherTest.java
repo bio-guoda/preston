@@ -244,6 +244,20 @@ public class TextMatcherTest {
         assertThat(nodes.size(), is(numActivityLines + 1));
     }
 
+    @Test
+    public void withMaxNumMatchesAndReportingMoreThanMatch() {
+        final int numActivityLines = 3;
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.zip");
+
+        ArrayList<Quad> nodes = new TextFinder(blobStore)
+                .maxNumMatches(1)
+                .reportOnlyMatchingText(false)
+                .separateLines(true)
+                .findMatches();
+
+        assertThat(nodes.size(), is(numActivityLines + 1));
+    }
+
     private class TextFinder {
         private final BlobStoreReadOnly blobStore;
         private Pattern pattern;
