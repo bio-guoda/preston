@@ -96,6 +96,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         Matcher matcher = pattern.matcher(charBuffer);
         if (matcher.find()) {
             emitter.emit(toStatement(contentIri, HAS_VALUE, toLiteral(charBuffer.toString())));
+            matchCounter.getAndIncrement();
         }
     }
 
