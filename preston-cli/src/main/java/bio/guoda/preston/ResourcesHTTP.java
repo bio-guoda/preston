@@ -10,12 +10,12 @@ import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
-import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
@@ -26,8 +26,6 @@ import java.net.URI;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +46,7 @@ public class ResourcesHTTP {
     }
 
     public static InputStream asInputStreamIgnore404(IRI dataURI, DerefProgressListener derefProgressListener) throws IOException {
-        return asInputStream(dataURI, Arrays.asList(400,404), derefProgressListener);
+        return asInputStream(dataURI, Arrays.asList(400, 404), derefProgressListener);
     }
 
     public static InputStream asInputStream(IRI dataURI, DerefProgressListener nullDerefProgressListener) throws IOException {
@@ -124,15 +122,14 @@ public class ResourcesHTTP {
                 .build();
 
         try {
-            SSLContext build = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
-                public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
-                    return true;
-                }
-            }).build();
+            SSLContext build = new SSLContextBuilder()
+                    .loadTrustMaterial(null, (TrustStrategy) (arg0, arg1) -> true)
+                    .build();
+
             return HttpClientBuilder
                     .create()
-                    .setHostnameVerifier(new AllowAllHostnameVerifier()) // see https://github.com/bio-guoda/preston/issues/25
-                    .setSslcontext(build)
+                    .setSSLHostnameVerifier(new NoopHostnameVerifier()) // see https://github.com/bio-guoda/preston/issues/25
+                    .setSSLContext(build)
                     .setRetryHandler(new DefaultHttpRequestRetryHandler(3, true))
                     .setUserAgent("globalbioticinteractions/" + Preston.getVersion() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)")
                     .setDefaultRequestConfig(config)
