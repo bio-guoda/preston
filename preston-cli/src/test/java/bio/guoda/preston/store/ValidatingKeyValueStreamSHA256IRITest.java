@@ -22,7 +22,7 @@ public class ValidatingKeyValueStreamSHA256IRITest {
         InputStream is = IOUtils.toInputStream(iri.getIRIString(), StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
         ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(is);
-        IOUtils.copy(someiri.getValueStream(), new NullOutputStream());
+        IOUtils.copy(someiri.getValueStream(), NullOutputStream.NULL_OUTPUT_STREAM);
 
         assertThat(someiri.acceptValueStreamForKey(somekey), Is.is(true));
     }
@@ -32,7 +32,7 @@ public class ValidatingKeyValueStreamSHA256IRITest {
         InputStream is = IOUtils.toInputStream("short", StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
         ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(is);
-        IOUtils.copy(someiri.getValueStream(), new NullOutputStream());
+        IOUtils.copy(someiri.getValueStream(), NullOutputStream.NULL_OUTPUT_STREAM);
 
         assertThat(someiri.acceptValueStreamForKey(somekey), Is.is(false));
     }
@@ -43,7 +43,7 @@ public class ValidatingKeyValueStreamSHA256IRITest {
         InputStream is = IOUtils.toInputStream(iri.getIRIString() + "toolong", StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
         ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(is);
-        IOUtils.copy(someiri.getValueStream(), new NullOutputStream());
+        IOUtils.copy(someiri.getValueStream(), NullOutputStream.NULL_OUTPUT_STREAM);
 
         assertThat(someiri.acceptValueStreamForKey(somekey), Is.is(false));
     }

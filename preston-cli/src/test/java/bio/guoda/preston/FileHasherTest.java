@@ -27,7 +27,7 @@ public class FileHasherTest {
 
     @Test
     public void sha256Binary() throws IOException {
-        IRI shaIRI = Hasher.calcSHA256(dwcaInputStream(), new NullOutputStream());
+        IRI shaIRI = Hasher.calcSHA256(dwcaInputStream(), NullOutputStream.NULL_OUTPUT_STREAM);
         assertThat(shaIRI.getIRIString(), is("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
     }
 
@@ -80,11 +80,11 @@ public class FileHasherTest {
         ZipEntry entry;
         while ((entry = is.getNextEntry()) != null) {
             if (filter.accept(entry)) {
-                String iriString = Hasher.calcSHA256(is, new NullOutputStream()
+                String iriString = Hasher.calcSHA256(is, NullOutputStream.NULL_OUTPUT_STREAM
                         , false).getIRIString();
                 hashList.add(iriString);
             } else {
-                IOUtils.copy(is, new NullOutputStream());
+                IOUtils.copy(is, NullOutputStream.NULL_OUTPUT_STREAM);
             }
             is.closeEntry();
         }

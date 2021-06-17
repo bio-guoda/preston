@@ -69,7 +69,7 @@ public class KeyValueStoreCopyingTest {
 
         InputStream barStream = store.get(RefNodeFactory.toIRI("foo"));
 
-        IOUtils.copy(barStream, new NullOutputStream());
+        IOUtils.copy(barStream, NullOutputStream.NULL_OUTPUT_STREAM);
         assertThat(cache.get("foo"), Is.is("<foo>-value"));
 
 

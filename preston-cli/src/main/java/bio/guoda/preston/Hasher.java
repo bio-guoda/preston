@@ -19,14 +19,14 @@ public final class Hasher {
 
     public static IRI calcSHA256(String content) {
         try {
-            return calcSHA256(IOUtils.toInputStream(content, StandardCharsets.UTF_8), new NullOutputStream());
+            return calcSHA256(IOUtils.toInputStream(content, StandardCharsets.UTF_8), NullOutputStream.NULL_OUTPUT_STREAM);
         } catch (IOException e) {
             throw new IllegalStateException("unexpected failure of hash calculation", e);
         }
     }
 
     public static IRI calcSHA256(InputStream is) throws IOException {
-        return calcSHA256(is, new NullOutputStream(), true);
+        return calcSHA256(is, NullOutputStream.NULL_OUTPUT_STREAM, true);
     }
 
     public static HashGenerator<String> createSHA256HashGenerator() {
@@ -34,7 +34,7 @@ public final class Hasher {
 
             @Override
             public String hash(InputStream is) throws IOException {
-                return hash(is, new NullOutputStream());
+                return hash(is, NullOutputStream.NULL_OUTPUT_STREAM);
             }
 
             @Override

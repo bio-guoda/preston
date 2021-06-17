@@ -72,7 +72,7 @@ public class TikaUtilTest {
         assertThat(detect, Is.is("image/jpeg"));
         assertThat(countingIs.getCount(), Is.is(66562));
 
-        CountingOutputStream output = new CountingOutputStream(new NullOutputStream());
+        CountingOutputStream output = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM);
         IOUtils.copy(getClass().getResourceAsStream("MCZ_Ent_17219.jpg"), output);
 
 

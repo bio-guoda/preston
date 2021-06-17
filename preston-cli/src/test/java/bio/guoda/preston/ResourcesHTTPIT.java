@@ -23,7 +23,7 @@ public class ResourcesHTTPIT {
     @Test
     public void irelandServerPickyAboutContentHeaderWithJSON() throws IOException {
         try (InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("http://gbif.biodiversityireland.ie/HareSurveyOfIreland0607.zip")))) {
-            IOUtils.copy(is, new NullOutputStream());
+            IOUtils.copy(is, NullOutputStream.NULL_OUTPUT_STREAM);
         }
     }
 
@@ -41,7 +41,7 @@ public class ResourcesHTTPIT {
                 }
             }
         })) {
-            IOUtils.copy(is, new NullOutputStream());
+            IOUtils.copy(is, NullOutputStream.NULL_OUTPUT_STREAM);
         }
         assertThat(gotDoneMessage.get(), Is.is(true));
         assertThat(gotBusyMessage.get(), Is.is(true));
@@ -58,7 +58,7 @@ public class ResourcesHTTPIT {
             }
         };
         try (InputStream is = ResourcesHTTP.asInputStreamIgnore404(dataURI, listener)) {
-            IOUtils.copy(is, new NullOutputStream());
+            IOUtils.copy(is, NullOutputStream.NULL_OUTPUT_STREAM);
         }
         assertThat(gotDoneMessage.get(), Is.is(true));
     }
