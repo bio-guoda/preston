@@ -53,10 +53,6 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         this.reportOnlyMatchingText = reportOnlyMatchingText;
     }
 
-    public MatchingTextStreamHandler(ContentStreamHandler contentStreamHandler, StatementsEmitter emitter, Pattern pattern) {
-        this(contentStreamHandler, emitter, pattern, true);
-    }
-
     private static IRI getCutIri(IRI fileIri, int startAt, int endAt) {
         return toIRI(String.format("cut:%s!/b%d-%d", fileIri.getIRIString(), startAt + 1, endAt));
     }
