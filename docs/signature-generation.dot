@@ -1,0 +1,38 @@
+digraph citation_signature {
+
+  rankdir=LR;
+
+  { rank = same; Preston; location1; }
+  
+  Preston-> metadataset1 [label="generates"];
+  Preston-> location1 [label="track"];
+
+  location1 [shape = "box", label="https://example.org/data.zip"];
+  Preston [label="Preston\ncontent tracker"];
+
+
+  subgraph {
+
+    signature2-> dataset1 [label="derived from"];
+    signature2 [shape="box", label="hash://sha256/a1b..."];
+    dataset1 [shape="box", label="Dataset"]; 
+    dataset1-> location1 [label="accessed at"];
+
+    { rank = max; dataset1; signature2; }
+
+  }
+  
+  subgraph {
+    metadataset1 [shape="box", label="Metadata\n(or provenance)"];
+    { rank = same; metadataset1; }
+  }
+
+  metadataset1 -> signature2 [label="describes"];
+
+  metadataset1 -> location1 [label="describes"];
+
+  metadataset1 -> Preston [label="describes"];
+
+
+}
+
