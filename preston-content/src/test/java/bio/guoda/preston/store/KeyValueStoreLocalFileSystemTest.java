@@ -68,7 +68,7 @@ public class KeyValueStoreLocalFileSystemTest {
 
     }
 
-    public static KeyValueStreamFactory getAlwaysAccepting() {
+    private static KeyValueStreamFactory getAlwaysAccepting() {
         return (key, is) -> new ValidatingKeyValueStream() {
             @Override
             public InputStream getValueStream() {
