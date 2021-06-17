@@ -3,6 +3,7 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
@@ -35,7 +36,7 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
         RDFTerm bla = toLiteral("bla");
         reader.on(toStatement(Seeds.IDIGBIO, WAS_ASSOCIATED_WITH, bla));
         assertThat(nodes.size(), is(10));
@@ -44,7 +45,7 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void onNotSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
         RDFTerm bla = toLiteral("bla");
         reader.on(toStatement(Seeds.IDIGBIO, toIRI("https://example.org/bla"), bla));
         assertThat(nodes.size(), is(0));
@@ -55,7 +56,7 @@ public class RegistryReaderIDigBioTest {
     public void onRegistry() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blob = key -> publishersInputStream();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtilForProcessor.testListener(nodes));
 
         reader.on(toStatement(
                 toIRI("https://search.idigbio.org/v2/search/publishers"),
@@ -69,7 +70,7 @@ public class RegistryReaderIDigBioTest {
     public void onIncompleteRecordSets() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blob = key -> incompleteRecordsetInputStream();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtilForProcessor.testListener(nodes));
 
         reader.on(toStatement(
                 toIRI("https://search.idigbio.org/v2/search/recordsets?limit=10000"),
@@ -83,7 +84,7 @@ public class RegistryReaderIDigBioTest {
     public void onCompleteListOfRecordSets() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blob = key -> completeRecordsetInputStream();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtilForProcessor.testListener(nodes));
 
         reader.on(toStatement(
                 toIRI("https://search.idigbio.org/v2/search/recordsets?limit=10000"),
@@ -106,7 +107,7 @@ public class RegistryReaderIDigBioTest {
     public void onRecordSetView() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("idigbio-recordset.json");
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtilForProcessor.testListener(nodes));
 
         reader.on(toStatement(
                 toIRI("https://search.idigbio.org/v2/view/recordsets/ba77d411-4179-4dbd-b6c1-39b8a71ae795"),
@@ -129,7 +130,7 @@ public class RegistryReaderIDigBioTest {
     public void onCompleteListOfRecords() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blob = key -> completeRecordsInputStream();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtilForProcessor.testListener(nodes));
 
         reader.on(toStatement(
                 toIRI("https://search.idigbio.org/v2/search/records?limit=10000"),
@@ -144,7 +145,7 @@ public class RegistryReaderIDigBioTest {
     public void onIncompleteListOfRecordsCustomLimit() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("idigbio-records-incomplete.json");
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtilForProcessor.testListener(nodes));
 
         reader.on(toStatement(
                 toIRI("https://search.idigbio.org/v2/search/records?limit=10"),
@@ -159,7 +160,7 @@ public class RegistryReaderIDigBioTest {
     public void doNotPageOnIncompleteListOfRecordsWithExplicitOffset() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("idigbio-records-incomplete.json");
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtilForProcessor.testListener(nodes));
 
         reader.on(toStatement(
                 toIRI("https://search.idigbio.org/v2/search/records?limit=10&offset=2"),
@@ -216,7 +217,7 @@ public class RegistryReaderIDigBioTest {
     public void onIncompleteListOfRecordsMultiplePages() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("idigbio-records-incomplete.json");
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtil.testListener(nodes));
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(blob, TestUtilForProcessor.testListener(nodes));
 
         reader.on(toStatement(
                 toIRI("https://search.idigbio.org/v2/search/records?limit=1"),
@@ -238,7 +239,7 @@ public class RegistryReaderIDigBioTest {
         InputStream is = completeRecordsInputStream();
         IRI providedPageIRI = toIRI("https://search.something/search/record?foo=bar");
 
-        RegistryReaderIDigBio.parseRecords(providedParent, TestUtil.testEmitter(nodes), is, providedPageIRI);
+        RegistryReaderIDigBio.parseRecords(providedParent, TestUtilForProcessor.testEmitter(nodes), is, providedPageIRI);
 
         assertThat(nodes.size(), is(19));
 
@@ -271,7 +272,7 @@ public class RegistryReaderIDigBioTest {
         InputStream is = mediaRecordInputStream();
         IRI providedPageIRI = toIRI("https://something/search/record?foo=bar");
 
-        RegistryReaderIDigBio.parseMediaRecord(providedParent, TestUtil.testEmitter(nodes), is, providedPageIRI);
+        RegistryReaderIDigBio.parseMediaRecord(providedParent, TestUtilForProcessor.testEmitter(nodes), is, providedPageIRI);
 
         assertThat(nodes.size(), is(4));
 
@@ -295,7 +296,7 @@ public class RegistryReaderIDigBioTest {
 
         InputStream is = publishersInputStream();
 
-        RegistryReaderIDigBio.parsePublishers(providedParent, TestUtil.testEmitter(nodes), is);
+        RegistryReaderIDigBio.parsePublishers(providedParent, TestUtilForProcessor.testEmitter(nodes), is);
 
         assertThat(nodes.size(), is(312));
 

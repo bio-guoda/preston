@@ -2,6 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
@@ -35,7 +36,7 @@ public class RegistryReaderDataONETest {
     @Test
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
+        RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
         reader.on(toStatement(Seeds.DATA_ONE, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         assertThat(nodes.size(), is(7));
         assertThat(getVersionSource(nodes.get(6)).getIRIString(), is(FIRST_PAGE));
@@ -44,7 +45,7 @@ public class RegistryReaderDataONETest {
     @Test
     public void onEmptyPage() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
+        RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
 
         reader.on(toStatement(toIRI(FIRST_PAGE),
                 HAS_VERSION,
@@ -55,7 +56,7 @@ public class RegistryReaderDataONETest {
     @Test
     public void onNotSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
+        RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
         RDFTerm bla = toLiteral("bla");
         reader.on(toStatement(Seeds.DATA_ONE, toIRI("http://example.org"), bla));
         assertThat(nodes.size(), is(0));
@@ -70,7 +71,7 @@ public class RegistryReaderDataONETest {
                 return getClass().getResourceAsStream(DATAONE_FIRST_JSON);
             }
         };
-        RegistryReaderDataONE reader = new RegistryReaderDataONE(blobStore, TestUtil.testListener(nodes));
+        RegistryReaderDataONE reader = new RegistryReaderDataONE(blobStore, TestUtilForProcessor.testListener(nodes));
 
 
         Quad firstPage = toStatement(toIRI(FIRST_PAGE), HAS_VERSION, createTestNode());
@@ -92,7 +93,7 @@ public class RegistryReaderDataONETest {
                 return getClass().getResourceAsStream(DATAONE_FIRST_JSON);
             }
         };
-        RegistryReaderDataONE reader = new RegistryReaderDataONE(blobStore, TestUtil.testListener(nodes));
+        RegistryReaderDataONE reader = new RegistryReaderDataONE(blobStore, TestUtilForProcessor.testListener(nodes));
 
 
         Quad firstPage = toStatement(toIRI(FIRST_PAGE), HAS_VERSION, createTestNode());
@@ -113,7 +114,7 @@ public class RegistryReaderDataONETest {
                 return getClass().getResourceAsStream(DATAONE_FIRST_JSON);
             }
         };
-        RegistryReaderDataONE reader = new RegistryReaderDataONE(blobStore, TestUtil.testListener(nodes));
+        RegistryReaderDataONE reader = new RegistryReaderDataONE(blobStore, TestUtilForProcessor.testListener(nodes));
 
 
         Quad firstPage = toStatement(toIRI(FIRST_PAGE), HAS_VERSION, createTestNode());
@@ -134,7 +135,7 @@ public class RegistryReaderDataONETest {
                 return getClass().getResourceAsStream("dataone-object-location-list.xml");
             }
         };
-        RegistryReaderDataONE reader = new RegistryReaderDataONE(blobStore, TestUtil.testListener(nodes));
+        RegistryReaderDataONE reader = new RegistryReaderDataONE(blobStore, TestUtilForProcessor.testListener(nodes));
 
         Quad firstPage = toStatement(toIRI("https://cn.dataone.org/cn/v2/resolve/aekos.org.au%2Fcollection%2Fnsw.gov.au%2Fnsw_atlas%2Fvis_flora_module%2FKM_CUDM.20160202"), HAS_VERSION, createTestNode());
 
@@ -156,7 +157,7 @@ public class RegistryReaderDataONETest {
     @Test
     public void nextPage() {
         List<Quad> nodes = new ArrayList<>();
-        RegistryReaderDataONE.emitNextPage(0, 10, TestUtil.testEmitter(nodes), "https://bla/?rows=2&start=8");
+        RegistryReaderDataONE.emitNextPage(0, 10, TestUtilForProcessor.testEmitter(nodes), "https://bla/?rows=2&start=8");
         assertThat(nodes.size(), is(3));
         assertThat(nodes.get(1).getSubject().toString(), is("<https://bla/?rows=10&start=0>"));
     }
@@ -168,7 +169,7 @@ public class RegistryReaderDataONETest {
 
         IRI testNode = createTestNode();
 
-        RegistryReaderDataONE.parse(testNode, TestUtil.testEmitter(refNodes), getClass().getResourceAsStream(DATAONE_FIRST_JSON), toIRI("http://example.org/"));
+        RegistryReaderDataONE.parse(testNode, TestUtilForProcessor.testEmitter(refNodes), getClass().getResourceAsStream(DATAONE_FIRST_JSON), toIRI("http://example.org/"));
 
         assertThat(refNodes.size(), is(43));
 

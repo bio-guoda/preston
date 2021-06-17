@@ -1,6 +1,6 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -34,7 +34,7 @@ public class RegistryReaderDOITest {
             }
         };
 
-        RegistryReaderDOI registryReader = new RegistryReaderDOI(blobStore, TestUtil.testListener(nodes));
+        RegistryReaderDOI registryReader = new RegistryReaderDOI(blobStore, TestUtilForProcessor.testListener(nodes));
         registryReader.on(toStatement(toIRI("https://doi.org/10.15468/dl.4n9w6m"), HAS_VERSION, toIRI("some://hash")));
 
         assertThat(new HashSet<>(nodes).size(), is(2));
@@ -49,7 +49,7 @@ public class RegistryReaderDOITest {
             throw new IOException("kaboom!");
         };
 
-        RegistryReaderDOI registryReader = new RegistryReaderDOI(blobStore, TestUtil.testListener(nodes));
+        RegistryReaderDOI registryReader = new RegistryReaderDOI(blobStore, TestUtilForProcessor.testListener(nodes));
         registryReader.on(toStatement(toIRI("https://doi.org/10.1234/dl.4n9w6m"), HAS_VERSION, toIRI("some://hash")));
 
         assertThat(new HashSet<>(nodes).size(), is(0));
@@ -63,7 +63,7 @@ public class RegistryReaderDOITest {
             throw new IOException("kaboom!");
         };
 
-        RegistryReaderDOI registryReader = new RegistryReaderDOI(blobStore, TestUtil.testListener(nodes));
+        RegistryReaderDOI registryReader = new RegistryReaderDOI(blobStore, TestUtilForProcessor.testListener(nodes));
         registryReader.on(toStatement(toIRI("https://doi.org/10.15468/dl.4n9w6m"), HAS_VERSION, toIRI("some://hash")));
 
         assertThat(new HashSet<>(nodes).size(), is(0));
@@ -73,7 +73,7 @@ public class RegistryReaderDOITest {
     @Test
     public void parseGBIFDownloadPage() throws IOException {
         ArrayList<Quad> nodes = new ArrayList<>();
-       StatementsEmitter emitter = TestUtil.testEmitter(nodes);
+       StatementsEmitter emitter = TestUtilForProcessor.testEmitter(nodes);
 
         Quad versionStatement = toStatement(toIRI(
                 "https://doi.org/10.15468/dl.4n9w6m"),

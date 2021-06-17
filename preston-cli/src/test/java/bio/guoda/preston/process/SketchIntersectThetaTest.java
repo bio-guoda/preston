@@ -1,12 +1,12 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.simple.Types;
-import org.apache.datasketches.Family;
 import org.apache.datasketches.ResizeFactor;
 import org.apache.datasketches.memory.Memory;
 import org.apache.datasketches.theta.CompactSketch;
@@ -55,7 +55,7 @@ public class SketchIntersectThetaTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         StatementProcessor processor = new SketchIntersectTheta(
                 TestUtil.getTestBlobStore(),
-                TestUtil.testListener(nodes)
+                TestUtilForProcessor.testListener(nodes)
         );
 
         processor.on(Stream.of(
@@ -76,7 +76,7 @@ public class SketchIntersectThetaTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         StatementProcessor processor = new SketchIntersectTheta(
                 blobStoreReadOnly,
-                TestUtil.testListener(nodes)
+                TestUtilForProcessor.testListener(nodes)
         );
 
         processor.on(Stream.of(
@@ -116,7 +116,7 @@ public class SketchIntersectThetaTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         StatementProcessor processor = new SketchIntersectTheta(
                 blobStoreReadOnly,
-                TestUtil.testListener(nodes));
+                TestUtilForProcessor.testListener(nodes));
 
         IRI content1 = toIRI("hash://sha256/aaa");
         IRI bloomHash1 = toIRI("theta:hash://sha256/123");

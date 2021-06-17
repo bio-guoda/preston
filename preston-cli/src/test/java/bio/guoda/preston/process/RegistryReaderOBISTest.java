@@ -2,6 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
@@ -30,7 +31,7 @@ public class RegistryReaderOBISTest {
     @Test
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        StatementsListener adapt = TestUtil.testListener(nodes);
+        StatementsListener adapt = TestUtilForProcessor.testListener(nodes);
         RegistryReaderOBIS registryReader = new RegistryReaderOBIS(TestUtil.getTestBlobStore(), adapt);
         registryReader.on(toStatement(Seeds.OBIS, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         assertThat(nodes.size(), is(6));
@@ -40,7 +41,7 @@ public class RegistryReaderOBISTest {
     @Test
     public void onEmptyPage() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderOBIS registryReader = new RegistryReaderOBIS(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
+        RegistryReaderOBIS registryReader = new RegistryReaderOBIS(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
 
         registryReader.on(toStatement(toIRI("https://api.gbif.org/v1/dataset"),
                 HAS_VERSION,
@@ -51,7 +52,7 @@ public class RegistryReaderOBISTest {
     @Test
     public void onNotSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderOBIS registryReader = new RegistryReaderOBIS(TestUtil.getTestBlobStore(), TestUtil.testListener(nodes));
+        RegistryReaderOBIS registryReader = new RegistryReaderOBIS(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
         RDFTerm bla = toLiteral("bla");
         registryReader.on(toStatement(Seeds.GBIF, toIRI("http://example.org"), bla));
         assertThat(nodes.size(), is(0));
@@ -64,7 +65,7 @@ public class RegistryReaderOBISTest {
 
         IRI testNode = createTestNode();
 
-        RegistryReaderOBIS.parse(testNode, TestUtil.testEmitter(refNodes), getClass().getResourceAsStream(OBIS_DATASETS_JSON));
+        RegistryReaderOBIS.parse(testNode, TestUtilForProcessor.testEmitter(refNodes), getClass().getResourceAsStream(OBIS_DATASETS_JSON));
 
         assertThat(refNodes.size(), is(12));
 

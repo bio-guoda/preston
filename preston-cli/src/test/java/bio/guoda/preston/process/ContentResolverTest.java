@@ -9,7 +9,7 @@ import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.DereferencerContentAddressed;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
@@ -52,7 +52,7 @@ public class ContentResolverTest {
     }
 
     private Archiver createStatementStore(StatementsListener... listeners) {
-        return new Archiver(new DereferencerContentAddressed(ResourcesHTTP::asInputStream, blobStore), TestUtil.getTestCrawlContext(), listeners);
+        return new Archiver(new DereferencerContentAddressed(ResourcesHTTP::asInputStream, blobStore), TestUtilForProcessor.getTestCrawlContext(), listeners);
     }
 
     @After
@@ -75,7 +75,7 @@ public class ContentResolverTest {
 
         URI testURI = getClass().getResource("test.txt").toURI();
         IRI providedNode = toIRI(testURI);
-        Quad relation = RefNodeFactory.toStatement(TestUtil.getTestCrawlContext().getActivity(), providedNode, RefNodeConstants.HAS_VERSION, RefNodeFactory.toBlank());
+        Quad relation = RefNodeFactory.toStatement(TestUtilForProcessor.getTestCrawlContext().getActivity(), providedNode, RefNodeConstants.HAS_VERSION, RefNodeFactory.toBlank());
 
         listener.on(relation);
 

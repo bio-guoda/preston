@@ -2,6 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.store.TestUtilForProcessor;
 import bio.guoda.preston.stream.MatchingTextStreamHandler;
 import com.mchange.v1.io.InputStreamUtils;
 import org.apache.commons.io.IOUtils;
@@ -302,7 +303,7 @@ public class TextMatcherTest {
 
         public ArrayList<Quad> findMatches() {
             ArrayList<Quad> nodes = new ArrayList<>();
-            TextMatcher textMatcher = new TextMatcher(pattern, maxNumMatches, reportOnlyMatchingText, separateLines, () -> true, blobStore, TestUtil.testListener(nodes));
+            TextMatcher textMatcher = new TextMatcher(pattern, maxNumMatches, reportOnlyMatchingText, separateLines, () -> true, blobStore, TestUtilForProcessor.testListener(nodes));
             textMatcher.setBatchSize(batchSize);
 
             Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));

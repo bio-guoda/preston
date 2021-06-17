@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -30,7 +31,6 @@ import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.model.RefNodeFactory.toStatement;
 import static bio.guoda.preston.process.SketchIntersectThetaTest.generateSketch;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
 
 public class SketchUnionThetaTest {
@@ -43,7 +43,7 @@ public class SketchUnionThetaTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         StatementProcessor processor = new SketchUnionTheta(
                 TestUtil.getTestBlobStore(),
-                TestUtil.testListener(nodes)
+                TestUtilForProcessor.testListener(nodes)
         );
 
         processor.on(Stream.of(
@@ -65,7 +65,7 @@ public class SketchUnionThetaTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         try (SketchUnionTheta processor = new SketchUnionTheta(
                 blobStoreReadOnly,
-                TestUtil.testListener(nodes)
+                TestUtilForProcessor.testListener(nodes)
         )) {
 
             processor.on(Stream.of(
@@ -122,7 +122,7 @@ public class SketchUnionThetaTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         try (SketchUnionTheta processor = new SketchUnionTheta(
                 blobStoreReadOnly,
-                TestUtil.testListener(nodes))) {
+                TestUtilForProcessor.testListener(nodes))) {
 
 
             processor.on(Stream.of(

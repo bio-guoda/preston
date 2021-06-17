@@ -2,7 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashGeneratorTLSHTruncatedTest;
 import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -40,7 +40,7 @@ public class TikaHashingActivityTest {
                 return IOUtils.toInputStream("bla", StandardCharsets.UTF_8);
 
             }
-        }, TestUtil.testListener(nodes));
+        }, TestUtilForProcessor.testListener(nodes));
 
         tikaHashing.on(toStatement(
                 RefNodeFactory.toIRI("foo:bar"),
@@ -66,7 +66,7 @@ public class TikaHashingActivityTest {
                 return getClass().getResourceAsStream(HashGeneratorTLSHTruncatedTest.DWCA);
 
             }
-        }, TestUtil.testListener(nodes));
+        }, TestUtilForProcessor.testListener(nodes));
 
         tikaHashing.on(toStatement(
                 RefNodeFactory.toIRI("graph:name"),
@@ -92,7 +92,7 @@ public class TikaHashingActivityTest {
                 return getClass().getResourceAsStream(HashGeneratorTLSHTruncatedTest.DWCA);
 
             }
-        }, TestUtil.testListener(nodes));
+        }, TestUtilForProcessor.testListener(nodes));
 
         tikaHashing.on(toStatement(
                 RefNodeFactory.toIRI("graph:name"),
@@ -119,7 +119,7 @@ public class TikaHashingActivityTest {
                 return getClass().getResourceAsStream(HashGeneratorTLSHTruncatedTest.DWCA);
 
             }
-        }, TestUtil.testListener(nodes));
+        }, TestUtilForProcessor.testListener(nodes));
 
         tikaHashing.on(toStatement(
                 RefNodeFactory.toIRI("graph:name"),

@@ -2,7 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.store.BlobStore;
-import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Rule;
@@ -34,7 +34,7 @@ public class SketchBuilderThetaTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         try (SketchBuilderTheta processor = new SketchBuilderTheta(
                 new TestBlobStore(),
-                TestUtil.testListener(nodes)
+                TestUtilForProcessor.testListener(nodes)
         )) {
             processor.on(Stream.of(
                     toStatement(toIRI("hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c"), HAS_VALUE, toIRI("foo"))
@@ -53,7 +53,7 @@ public class SketchBuilderThetaTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         try (SketchBuilderTheta processor = new SketchBuilderTheta(
                 new TestBlobStore(),
-                TestUtil.testListener(nodes)
+                TestUtilForProcessor.testListener(nodes)
         )) {
             processor.on(Stream.of(
                     toStatement(toIRI("cut:hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c!/b1-3"), HAS_VALUE, toIRI("foo"))
@@ -70,7 +70,7 @@ public class SketchBuilderThetaTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         try (SketchBuilderTheta processor = new SketchBuilderTheta(
                 new TestBlobStore(),
-                TestUtil.testListener(nodes)
+                TestUtilForProcessor.testListener(nodes)
         )) {
 
             processor.on(Stream.of(
@@ -91,7 +91,7 @@ public class SketchBuilderThetaTest {
 
         try (SketchBuilderTheta processor = new SketchBuilderTheta(
                 new TestBlobStore(),
-                TestUtil.testListener(nodes)
+                TestUtilForProcessor.testListener(nodes)
         )) {
             processor.on(Stream.of(
                     toStatement(toIRI("hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c"), HAS_VALUE, toIRI("foo")),
@@ -110,7 +110,7 @@ public class SketchBuilderThetaTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         try (SketchBuilderTheta processor = new SketchBuilderTheta(
                 new TestBlobStore(),
-                TestUtil.testListener(nodes)
+                TestUtilForProcessor.testListener(nodes)
         )) {
 
             processor.on(Stream.of(

@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.store.TestUtilForProcessor;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import org.apache.commons.lang3.time.StopWatch;
@@ -52,7 +53,7 @@ public class SketchIntersectBloomFilterTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         StatementProcessor processor = new SketchIntersectBloomFilter(
                 TestUtil.getTestBlobStore(),
-                TestUtil.testListener(nodes)
+                TestUtilForProcessor.testListener(nodes)
         );
 
         processor.on(Stream.of(
@@ -73,7 +74,7 @@ public class SketchIntersectBloomFilterTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         StatementProcessor processor = new SketchIntersectBloomFilter(
                 blobStoreReadOnly,
-                TestUtil.testListener(nodes)
+                TestUtilForProcessor.testListener(nodes)
         );
 
         processor.on(Stream.of(
@@ -112,7 +113,7 @@ public class SketchIntersectBloomFilterTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         StatementProcessor processor = new SketchIntersectBloomFilter(
                 blobStoreReadOnly,
-                TestUtil.testListener(nodes));
+                TestUtilForProcessor.testListener(nodes));
 
         IRI content1 = toIRI("hash://sha256/aaa");
         IRI bloomHash1 = toIRI("bloom:gz:hash://sha256/123");

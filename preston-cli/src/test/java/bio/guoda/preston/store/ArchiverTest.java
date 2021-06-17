@@ -54,7 +54,7 @@ public class ArchiverTest {
 
         Archiver relationStore = new Archiver(
                 dereferencer,
-                TestUtil.getTestCrawlContext(),
+                TestUtilForProcessor.getTestCrawlContext(),
                 versionLogger);
 
         relationStore.on(statement);
@@ -104,8 +104,8 @@ public class ArchiverTest {
 
         Archiver relationStore = new Archiver(
                 dereferencer,
-                TestUtil.getTestCrawlContext(),
-                TestUtil.testListener(nodes),
+                TestUtilForProcessor.getTestCrawlContext(),
+                TestUtilForProcessor.testListener(nodes),
                 createVersionLogger(versionStore));
 
         relationStore.on(statement);
@@ -123,7 +123,7 @@ public class ArchiverTest {
 
     @Test
     public void includeGenerationActivity() throws IOException {
-        ActivityContext testCrawlContext = TestUtil.getTestCrawlContext();
+        ActivityContext testCrawlContext = TestUtilForProcessor.getTestCrawlContext();
         Quad statement = toStatement(testCrawlContext.getActivity(),
                 toIRI(URI.create("http://some")),
                 HAS_VERSION,
@@ -145,7 +145,7 @@ public class ArchiverTest {
         Archiver relationStore = new Archiver(
                 dereferencer,
                 testCrawlContext,
-                TestUtil.testListener(nodes),
+                TestUtilForProcessor.testListener(nodes),
                 createVersionLogger(versionStore));
 
         relationStore.on(statement);
@@ -193,7 +193,7 @@ public class ArchiverTest {
     }
 
     private Archiver getAppendOnlyRelationStore(Dereferencer<IRI> dereferencer1, StatementStore statementStore) {
-        return new Archiver(dereferencer1, TestUtil.getTestCrawlContext(), createVersionLogger(statementStore));
+        return new Archiver(dereferencer1, TestUtilForProcessor.getTestCrawlContext(), createVersionLogger(statementStore));
     }
 
     @Test

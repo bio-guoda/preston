@@ -2,7 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -26,7 +26,7 @@ public class VersionedRDFChainEmitterTest {
     public void replayArchive() {
         List<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = createBlobStore();
-        VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, TestUtil.testListener(nodes));
+        VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, TestUtilForProcessor.testListener(nodes));
         reader.on(RefNodeFactory
                 .toStatement(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, RefNodeConstants.HAS_VERSION, SOME));
 
@@ -55,7 +55,7 @@ public class VersionedRDFChainEmitterTest {
     public void replayArchiveMultipleVersions() {
         List<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = createBlobStore();
-        VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, TestUtil.testListener(nodes));
+        VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, TestUtilForProcessor.testListener(nodes));
         reader.on(RefNodeFactory
                 .toStatement(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, RefNodeConstants.HAS_VERSION, RefNodeFactory.toIRI("http://some")));
         reader.on(RefNodeFactory
