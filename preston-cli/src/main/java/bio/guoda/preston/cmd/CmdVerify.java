@@ -79,14 +79,14 @@ public class CmdVerify extends PersistingLocal implements Runnable {
                                 URI uri = getKeyToPathLocal().toPath(iri);
                                 fileSize = new File(uri).length();
                                 if (fileSize == 0) {
-                                    try (CountingOutputStream counting = new CountingOutputStream(new NullOutputStream())) {
+                                    try (CountingOutputStream counting = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM)) {
                                         IOUtils.copy(is, counting);
                                         fileSize = counting.getByteCount();
                                     }
                                 }
                                 state = State.CONTENT_PRESENT_HASH_NOT_VERIFIED;
                             } else {
-                                try (CountingOutputStream counting = new CountingOutputStream(new NullOutputStream())) {
+                                try (CountingOutputStream counting = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM)) {
                                     calculatedHashIRI = hashGenerator.hash(is, counting);
                                     state = calculatedHashIRI.equals(iri) ? State.CONTENT_PRESENT_VALID_HASH : State.CONTENT_PRESENT_INVALID_HASH;
                                     fileSize = counting.getByteCount();
