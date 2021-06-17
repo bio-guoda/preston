@@ -1,0 +1,13 @@
+digraph citation_signature {
+
+  rankdir=RL;
+
+  metadataset1 [shape="record", label="Metadata v1 | <s1> hash://sha256/a1b..."];
+  metadataset2 [shape="record", label="Metadata v2 | <s2> hash://sha256/b2c..."]; 
+  metadataset3 [style=dotted, shape="record", label="Metadata v3 | <s3> hash://sha256/d3f..."]; 
+  
+  metadataset2 -> metadataset1;
+  metadataset3 -> metadataset2 [style=dotted];
+
+}
+
