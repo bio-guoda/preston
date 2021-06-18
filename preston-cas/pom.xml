@@ -4,7 +4,7 @@
 
     <groupId>bio.guoda</groupId>
     <artifactId>preston-cas</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.3.0</version>
     <name>Preston Content-Addressed Store</name>
     <description>Preston Content-Addressed Store contains libraries to read/write to content-addressed stores</description>
 

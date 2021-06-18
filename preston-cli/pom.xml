@@ -4,7 +4,7 @@
 
     <groupId>bio.guoda</groupId>
     <artifactId>preston</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.3.0</version>
     <name>Preston Command Line Interface (CLI)</name>
     <description>a biodiversity dataset tracker</description>
 
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>bio.guoda</groupId>
             <artifactId>preston-cas</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.3.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
