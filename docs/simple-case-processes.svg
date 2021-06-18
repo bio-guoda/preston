@@ -63,7 +63,10 @@
 <!-- content -->
 <g id="node7" class="node">
 <title>content</title>
-<polygon fill="#ffffff" stroke="#ffffff" points="489.5621,-214 428.8955,-214 428.8955,-178 489.5621,-178 489.5621,-214"/>
+<polygon fill="#ffffff" stroke="#c0c0c0" points="489.5621,-214 432.8955,-214 428.8955,-210 428.8955,-178 485.5621,-178 489.5621,-182 489.5621,-214"/>
+<polyline fill="none" stroke="#c0c0c0" points="485.5621,-210 428.8955,-210 "/>
+<polyline fill="none" stroke="#c0c0c0" points="485.5621,-210 485.5621,-178 "/>
+<polyline fill="none" stroke="#c0c0c0" points="485.5621,-210 489.5621,-214 "/>
 <text text-anchor="middle" x="459.2288" y="-191.8" font-family="Times,serif" font-size="14.00" fill="#000000">Content</text>
 </g>
 <!-- dereference&#45;&gt;content -->
@@ -75,7 +78,10 @@
 <!-- newProv -->
 <g id="node9" class="node">
 <title>newProv</title>
-<polygon fill="#ffffff" stroke="#ffffff" points="500.0309,-106 418.4266,-106 418.4266,-70 500.0309,-70 500.0309,-106"/>
+<polygon fill="#ffffff" stroke="#c0c0c0" points="500.0309,-106 422.4266,-106 418.4266,-102 418.4266,-70 496.0309,-70 500.0309,-74 500.0309,-106"/>
+<polyline fill="none" stroke="#c0c0c0" points="496.0309,-102 418.4266,-102 "/>
+<polyline fill="none" stroke="#c0c0c0" points="496.0309,-102 496.0309,-70 "/>
+<polyline fill="none" stroke="#c0c0c0" points="496.0309,-102 500.0309,-106 "/>
 <text text-anchor="middle" x="459.2288" y="-83.8" font-family="Times,serif" font-size="14.00" fill="#000000">Provenance</text>
 </g>
 <!-- generateProvenance&#45;&gt;newProv -->

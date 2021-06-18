@@ -21,11 +21,11 @@ digraph G {
     subgraph cluster_2 {
         style=filled
         color=lightgrey
-        node [style=filled, color=white, shape=Mrectangle]
+        node [style=filled, color=white, shape=Mrectangle, fillcolor=white]
         label = "Outputs"
-        content [label="Content"]
+        content [label="Content", shape=box3d, color=gray]
         contentHash [label="Content hash"]
-        newProv [label="Provenance"]
+        newProv [label="Provenance", shape=box3d, color=gray]
         newProvHash [label="Provenance hash"]
     }
     
