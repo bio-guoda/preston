@@ -7,7 +7,7 @@ digraph G {
         node [style=filled, color=white, shape=Mrectangle]
         label = "Inputs"
         url [label="URL"]
-        previousProv [label="Known provenance"]
+        previousProvHash [label="Provenance hash"]
     }
     
     subgraph cluster_1 {
@@ -31,6 +31,6 @@ digraph G {
     
     url -> dereference -> content
     content -> computeContentHash -> contentHash
-    url, previousProv, contentHash -> generateProvenance -> newProv
+    url, previousProvHash, contentHash -> generateProvenance -> newProv
     newProv -> computeProvHash -> newProvHash
 }
