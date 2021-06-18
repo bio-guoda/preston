@@ -10,6 +10,8 @@
 </g>
 <g id="clust2" class="cluster">
 <title>cluster_1</title>
+<polygon fill="none" stroke="#000000" points="169.2322,-8 169.2322,-247 390.7698,-247 390.7698,-8 169.2322,-8"/>
+<text text-anchor="middle" x="280.001" y="-230.4" font-family="Times,serif" font-size="14.00" fill="#000000">Preston</text>
 </g>
 <g id="clust3" class="cluster">
 <title>cluster_2</title>

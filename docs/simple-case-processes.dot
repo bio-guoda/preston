@@ -11,7 +11,7 @@ digraph G {
     }
     
     subgraph cluster_1 {
-        style=invis
+        label = "Preston"
         dereference [label="Dereference"]
         generateProvenance [label="Describe processes"]
         computeContentHash [label="Compute SHA256 hash"]
