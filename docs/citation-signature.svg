@@ -18,15 +18,15 @@
 <!-- metadataset1 -->
 <g id="node2" class="node">
 <title>metadataset1</title>
-<polygon fill="none" stroke="#000000" points="308.5,-38 205.5,-38 205.5,0 308.5,0 308.5,-38"/>
-<text text-anchor="middle" x="257" y="-22.8" font-family="Times,serif" font-size="14.00" fill="#000000">Metadata</text>
-<text text-anchor="middle" x="257" y="-7.8" font-family="Times,serif" font-size="14.00" fill="#000000">(or provenance)</text>
+<polygon fill="none" stroke="#000000" points="311.5,-38 208.5,-38 208.5,0 311.5,0 311.5,-38"/>
+<text text-anchor="middle" x="260" y="-22.8" font-family="Times,serif" font-size="14.00" fill="#000000">Metadata</text>
+<text text-anchor="middle" x="260" y="-7.8" font-family="Times,serif" font-size="14.00" fill="#000000">(or provenance)</text>
 </g>
 <!-- signature1&#45;&gt;metadataset1 -->
 <g id="edge1" class="edge">
 <title>signature1&#45;&gt;metadataset1</title>
-<path fill="none" stroke="#000000" d="M251.9703,-88.571C252.0535,-78.8704 252.3128,-66.7823 253,-56 253.1618,-53.4611 253.3685,-50.8279 253.6024,-48.1895"/>
-<polygon fill="#000000" stroke="#000000" points="257.0912,-48.4743 254.6021,-38.1761 250.1259,-47.7789 257.0912,-48.4743"/>
+<path fill="none" stroke="#000000" d="M251.6195,-88.5416C251.6067,-78.833 251.886,-66.7466 253,-56 253.2654,-53.4396 253.6148,-50.7914 254.016,-48.1432"/>
+<polygon fill="#000000" stroke="#000000" points="257.4951,-48.5644 255.7525,-38.1139 250.5977,-47.3702 257.4951,-48.5644"/>
 <text text-anchor="middle" x="285.5" y="-59.8" font-family="Times,serif" font-size="14.00" fill="#000000">signature of</text>
 </g>
 <!-- signature2 -->
@@ -38,29 +38,29 @@
 <!-- metadataset1&#45;&gt;signature2 -->
 <g id="edge6" class="edge">
 <title>metadataset1&#45;&gt;signature2</title>
-<path fill="none" stroke="#000000" d="M289.1227,-38.1569C298.4809,-43.826 308.6902,-50.0967 318,-56 331.643,-64.651 346.4737,-74.3919 359.444,-83.0248"/>
-<polygon fill="#000000" stroke="#000000" points="357.8289,-86.1549 368.0889,-88.7975 361.7162,-80.3335 357.8289,-86.1549"/>
-<text text-anchor="middle" x="360.5" y="-59.8" font-family="Times,serif" font-size="14.00" fill="#000000">has part</text>
+<path fill="none" stroke="#000000" d="M290.1661,-38.1059C299.1432,-43.8288 308.9874,-50.1412 318,-56 331.5443,-64.8047 346.354,-74.5783 359.3351,-83.1944"/>
+<polygon fill="#000000" stroke="#000000" points="357.7264,-86.3277 367.992,-88.9484 361.6012,-80.498 357.7264,-86.3277"/>
+<text text-anchor="middle" x="362" y="-59.8" font-family="Times,serif" font-size="14.00" fill="#000000">includes</text>
 </g>
 <!-- dataset1 -->
 <g id="node4" class="node">
 <title>dataset1</title>
-<polygon fill="none" stroke="#000000" points="434.5,-37 377.5,-37 377.5,-1 434.5,-1 434.5,-37"/>
-<text text-anchor="middle" x="406" y="-15.3" font-family="Times,serif" font-size="14.00" fill="#000000">Dataset</text>
+<polygon fill="none" stroke="#000000" points="437.5,-37 380.5,-37 380.5,-1 437.5,-1 437.5,-37"/>
+<text text-anchor="middle" x="409" y="-15.3" font-family="Times,serif" font-size="14.00" fill="#000000">Dataset</text>
 </g>
 <!-- metadataset1&#45;&gt;dataset1 -->
 <g id="edge5" class="edge">
 <title>metadataset1&#45;&gt;dataset1</title>
-<path fill="none" stroke="#000000" d="M308.6948,-19C327.9467,-19 349.4472,-19 367.3316,-19"/>
-<polygon fill="#000000" stroke="#000000" points="367.3995,-22.5001 377.3994,-19 367.3994,-15.5001 367.3995,-22.5001"/>
-<text text-anchor="middle" x="343" y="-25.8" font-family="Times,serif" font-size="14.00" fill="#000000">describes</text>
+<path fill="none" stroke="#000000" d="M311.6948,-19C330.9467,-19 352.4472,-19 370.3316,-19"/>
+<polygon fill="#000000" stroke="#000000" points="370.3995,-22.5001 380.3994,-19 370.3994,-15.5001 370.3995,-22.5001"/>
+<text text-anchor="middle" x="346" y="-25.8" font-family="Times,serif" font-size="14.00" fill="#000000">describes</text>
 </g>
 <!-- signature2&#45;&gt;dataset1 -->
 <g id="edge2" class="edge">
 <title>signature2&#45;&gt;dataset1</title>
-<path fill="none" stroke="#000000" d="M397.2792,-88.7663C398.7689,-76.8492 400.7452,-61.0384 402.4398,-47.4817"/>
-<polygon fill="#000000" stroke="#000000" points="405.9563,-47.5672 403.7237,-37.2103 399.0103,-46.6989 405.9563,-47.5672"/>
-<text text-anchor="middle" x="433.5" y="-59.8" font-family="Times,serif" font-size="14.00" fill="#000000">signature of</text>
+<path fill="none" stroke="#000000" d="M397.9008,-88.7663C399.7967,-76.8492 402.3121,-61.0384 404.4688,-47.4817"/>
+<polygon fill="#000000" stroke="#000000" points="407.9882,-47.636 406.1029,-37.2103 401.0751,-46.5362 407.9882,-47.636"/>
+<text text-anchor="middle" x="434.5" y="-59.8" font-family="Times,serif" font-size="14.00" fill="#000000">signature of</text>
 </g>
 <!-- citation -->
 <g id="node5" class="node">
@@ -73,14 +73,14 @@
 <title>citation&#45;&gt;signature1</title>
 <path fill="none" stroke="#000000" d="M308.2888,-175.9735C298.1026,-163.4919 284.3906,-146.6899 273.0506,-132.7944"/>
 <polygon fill="#000000" stroke="#000000" points="275.7267,-130.5379 266.6924,-125.0034 270.3035,-134.9638 275.7267,-130.5379"/>
-<text text-anchor="middle" x="313.5" y="-146.8" font-family="Times,serif" font-size="14.00" fill="#000000">has part</text>
+<text text-anchor="middle" x="315" y="-146.8" font-family="Times,serif" font-size="14.00" fill="#000000">includes</text>
 </g>
 <!-- citation&#45;&gt;signature2 -->
 <g id="edge4" class="edge">
 <title>citation&#45;&gt;signature2</title>
 <path fill="none" stroke="#000000" d="M337.9184,-175.9735C348.2481,-163.4919 362.1532,-146.6899 373.6529,-132.7944"/>
 <polygon fill="#000000" stroke="#000000" points="376.4213,-134.9388 380.1007,-125.0034 371.0286,-130.4758 376.4213,-134.9388"/>
-<text text-anchor="middle" x="384.5" y="-146.8" font-family="Times,serif" font-size="14.00" fill="#000000">has part</text>
+<text text-anchor="middle" x="386" y="-146.8" font-family="Times,serif" font-size="14.00" fill="#000000">includes</text>
 </g>
 </g>
 </svg>

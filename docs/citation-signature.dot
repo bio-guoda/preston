@@ -9,14 +9,14 @@ digraph citation_signature {
       signature2 [shape="box", label="hash://sha256/a1b..."];
 
 
-      citation-> signature1 [label="has part"];
-      citation-> signature2 [label="has part"];
+      citation-> signature1 [label="includes"];
+      citation-> signature2 [label="includes"];
       
       citation [shape="box", label="Doe, Jane. 2021. The Sky is Blue. Scientific Journal. hash://sha256/a1b... via hash://sha256/d5e... doi:10.123/456 ."]; 
 
 
       metadataset1-> dataset1 [label="describes"];
-      metadataset1-> signature2 [label="has part"];
+      metadataset1-> signature2 [label="includes"];
 
       dataset1 [shape="box", label="Dataset"]; 
    
