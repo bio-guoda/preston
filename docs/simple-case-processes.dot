@@ -1,0 +1,36 @@
+digraph G {
+    rankdir="LR"
+    
+    subgraph cluster_0 {
+        style=filled
+        color=lightgrey
+        node [style=filled, color=white, shape=Mrectangle]
+        label = "Inputs"
+        url [label="URL"]
+        previousProv [label="Known provenance"]
+    }
+    
+    subgraph cluster_1 {
+        style=invis
+        dereference [label="Dereference"]
+        generateProvenance [label="Describe processes"]
+        computeContentHash [label="Compute SHA256 hash"]
+        computeProvHash [label="Compute SHA256 hash"]
+    }
+    
+    subgraph cluster_2 {
+        style=filled
+        color=lightgrey
+        node [style=filled, color=white, shape=Mrectangle]
+        label = "Outputs"
+        content [label="Content"]
+        contentHash [label="Content hash"]
+        newProv [label="Provenance"]
+        newProvHash [label="Provenance hash"]
+    }
+    
+    url -> dereference -> content
+    content -> computeContentHash -> contentHash
+    url, previousProv, contentHash -> generateProvenance -> newProv
+    newProv -> computeProvHash -> newProvHash
+}
