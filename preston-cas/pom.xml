@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>bio.guoda</groupId>
-    <artifactId>preston-content</artifactId>
+    <artifactId>preston-cas</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Preston Content Library</name>
-    <description>Preston Content Addressing Library</description>
+    <name>Preston Content-Addressed Store</name>
+    <description>Preston Content-Addressed Store contains libraries to read/write to content-addressed stores</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

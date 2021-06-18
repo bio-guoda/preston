@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>bio.guoda</groupId>
-            <artifactId>preston-content</artifactId>
+            <artifactId>preston-cas</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
