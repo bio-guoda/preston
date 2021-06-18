@@ -21,8 +21,8 @@
 <!-- url -->
 <g id="node1" class="node">
 <title>url</title>
-<polygon fill="#ffffff" stroke="#ffffff" points="98.2304,-160 44.2304,-160 44.2304,-124 98.2304,-124 98.2304,-160"/>
-<text text-anchor="middle" x="71.2304" y="-137.8" font-family="Times,serif" font-size="14.00" fill="#000000">URL</text>
+<polygon fill="#ffffff" stroke="#ffffff" points="116.2037,-160 26.2571,-160 26.2571,-124 116.2037,-124 116.2037,-160"/>
+<text text-anchor="middle" x="71.2304" y="-137.8" font-family="Times,serif" font-size="14.00" fill="#000000">Dataset URL</text>
 </g>
 <!-- dereference -->
 <g id="node3" class="node">
@@ -33,7 +33,7 @@
 <!-- url&#45;&gt;dereference -->
 <g id="edge1" class="edge">
 <title>url-&gt;dereference</title>
-<path fill="none" stroke="#000000" d="M98.4385,-151.3936C114.6214,-156.8384 135.6081,-163.6525 154.4608,-169 171.8118,-173.9216 190.844,-178.7602 208.1626,-182.9514"/>
+<path fill="none" stroke="#000000" d="M116.3991,-157.3304C128.6897,-161.3161 142.0385,-165.4764 154.4608,-169 171.8118,-173.9216 190.844,-178.7602 208.1626,-182.9514"/>
 <polygon fill="#000000" stroke="#000000" points="207.5957,-186.4145 218.1359,-185.34 209.2261,-179.607 207.5957,-186.4145"/>
 </g>
 <!-- generateProvenance -->
@@ -45,7 +45,7 @@
 <!-- url&#45;&gt;generateProvenance -->
 <g id="edge5" class="edge">
 <title>url-&gt;generateProvenance</title>
-<path fill="none" stroke="#000000" d="M98.4385,-132.6064C114.6214,-127.1616 135.6081,-120.3475 154.4608,-115 168.3856,-111.0502 183.3933,-107.1539 197.729,-103.6028"/>
+<path fill="none" stroke="#000000" d="M116.3991,-126.6696C128.6897,-122.6839 142.0385,-118.5236 154.4608,-115 168.3856,-111.0502 183.3933,-107.1539 197.729,-103.6028"/>
 <polygon fill="#000000" stroke="#000000" points="198.6448,-106.982 207.5248,-101.2031 196.9792,-100.1831 198.6448,-106.982"/>
 </g>
 <!-- previousProvHash -->
@@ -60,20 +60,20 @@
 <path fill="none" stroke="#000000" d="M126.5632,-88C140.1214,-88 155.0206,-88 169.8686,-88"/>
 <polygon fill="#000000" stroke="#000000" points="170.1228,-91.5001 180.1227,-88 170.1227,-84.5001 170.1228,-91.5001"/>
 </g>
-<!-- content -->
+<!-- dataset -->
 <g id="node7" class="node">
-<title>content</title>
-<polygon fill="#ffffff" stroke="#c0c0c0" points="489.5621,-214 432.8955,-214 428.8955,-210 428.8955,-178 485.5621,-178 489.5621,-182 489.5621,-214"/>
-<polyline fill="none" stroke="#c0c0c0" points="485.5621,-210 428.8955,-210 "/>
-<polyline fill="none" stroke="#c0c0c0" points="485.5621,-210 485.5621,-178 "/>
-<polyline fill="none" stroke="#c0c0c0" points="485.5621,-210 489.5621,-214 "/>
-<text text-anchor="middle" x="459.2288" y="-191.8" font-family="Times,serif" font-size="14.00" fill="#000000">Content</text>
+<title>dataset</title>
+<polygon fill="#ffffff" stroke="#c0c0c0" points="488.205,-214 434.2526,-214 430.2526,-210 430.2526,-178 484.205,-178 488.205,-182 488.205,-214"/>
+<polyline fill="none" stroke="#c0c0c0" points="484.205,-210 430.2526,-210 "/>
+<polyline fill="none" stroke="#c0c0c0" points="484.205,-210 484.205,-178 "/>
+<polyline fill="none" stroke="#c0c0c0" points="484.205,-210 488.205,-214 "/>
+<text text-anchor="middle" x="459.2288" y="-191.8" font-family="Times,serif" font-size="14.00" fill="#000000">Dataset</text>
 </g>
-<!-- dereference&#45;&gt;content -->
+<!-- dereference&#45;&gt;dataset -->
 <g id="edge2" class="edge">
-<title>dereference-&gt;content</title>
-<path fill="none" stroke="#000000" d="M323.4357,-196C354.214,-196 391.2312,-196 418.8377,-196"/>
-<polygon fill="#000000" stroke="#000000" points="418.9248,-199.5001 428.9247,-196 418.9247,-192.5001 418.9248,-199.5001"/>
+<title>dereference-&gt;dataset</title>
+<path fill="none" stroke="#000000" d="M323.4357,-196C354.6099,-196 392.1844,-196 419.8982,-196"/>
+<polygon fill="#000000" stroke="#000000" points="420.0031,-199.5001 430.003,-196 420.003,-192.5001 420.0031,-199.5001"/>
 </g>
 <!-- newProv -->
 <g id="node9" class="node">
@@ -90,23 +90,23 @@
 <path fill="none" stroke="#000000" d="M350.0382,-88C369.8968,-88 390.4481,-88 408.2911,-88"/>
 <polygon fill="#000000" stroke="#000000" points="408.4582,-91.5001 418.4581,-88 408.4581,-84.5001 408.4582,-91.5001"/>
 </g>
-<!-- computeContentHash -->
+<!-- computeDatasetHash -->
 <g id="node5" class="node">
-<title>computeContentHash</title>
+<title>computeDatasetHash</title>
 <ellipse fill="none" stroke="#000000" cx="265.2296" cy="-142" rx="102.5381" ry="18"/>
 <text text-anchor="middle" x="265.2296" y="-137.8" font-family="Times,serif" font-size="14.00" fill="#000000">Compute SHA256 hash</text>
 </g>
-<!-- contentHash -->
+<!-- datasetHash -->
 <g id="node8" class="node">
-<title>contentHash</title>
-<polygon fill="#ffffff" stroke="#ffffff" points="504.2217,-160 414.2358,-160 414.2358,-124 504.2217,-124 504.2217,-160"/>
-<text text-anchor="middle" x="459.2288" y="-137.8" font-family="Times,serif" font-size="14.00" fill="#000000">Content hash</text>
+<title>datasetHash</title>
+<polygon fill="#ffffff" stroke="#ffffff" points="502.8643,-160 415.5933,-160 415.5933,-124 502.8643,-124 502.8643,-160"/>
+<text text-anchor="middle" x="459.2288" y="-137.8" font-family="Times,serif" font-size="14.00" fill="#000000">Dataset hash</text>
 </g>
-<!-- computeContentHash&#45;&gt;contentHash -->
+<!-- computeDatasetHash&#45;&gt;datasetHash -->
 <g id="edge4" class="edge">
-<title>computeContentHash-&gt;contentHash</title>
-<path fill="none" stroke="#000000" d="M368.1936,-142C380.5527,-142 392.7821,-142 404.0754,-142"/>
-<polygon fill="#000000" stroke="#000000" points="404.1604,-145.5001 414.1604,-142 404.1603,-138.5001 404.1604,-145.5001"/>
+<title>computeDatasetHash-&gt;datasetHash</title>
+<path fill="none" stroke="#000000" d="M368.1936,-142C380.9693,-142 393.6065,-142 405.2142,-142"/>
+<polygon fill="#000000" stroke="#000000" points="405.5594,-145.5001 415.5593,-142 405.5593,-138.5001 405.5594,-145.5001"/>
 </g>
 <!-- computeProvHash -->
 <g id="node6" class="node">
@@ -126,16 +126,16 @@
 <path fill="none" stroke="#000000" d="M368.1936,-34C376.7381,-34 385.2207,-34 393.3747,-34"/>
 <polygon fill="#000000" stroke="#000000" points="393.5075,-37.5001 403.5075,-34 393.5074,-30.5001 393.5075,-37.5001"/>
 </g>
-<!-- content&#45;&gt;computeContentHash -->
+<!-- dataset&#45;&gt;computeDatasetHash -->
 <g id="edge3" class="edge">
-<title>content-&gt;computeContentHash</title>
-<path fill="none" stroke="#000000" d="M428.9561,-185.5783C413.243,-180.3221 393.6819,-174.0159 375.9984,-169 363.5553,-165.4705 350.2476,-161.9837 337.3273,-158.7478"/>
+<title>dataset-&gt;computeDatasetHash</title>
+<path fill="none" stroke="#000000" d="M430.1177,-185.9673C414.2141,-180.6356 394.1203,-174.1403 375.9984,-169 363.5553,-165.4705 350.2476,-161.9837 337.3273,-158.7478"/>
 <polygon fill="#000000" stroke="#000000" points="338.0914,-155.3314 327.5433,-156.3256 336.4092,-162.1262 338.0914,-155.3314"/>
 </g>
-<!-- contentHash&#45;&gt;generateProvenance -->
+<!-- datasetHash&#45;&gt;generateProvenance -->
 <g id="edge7" class="edge">
-<title>contentHash-&gt;generateProvenance</title>
-<path fill="none" stroke="#000000" d="M414.0601,-126.6696C401.7695,-122.6839 388.4207,-118.5236 375.9984,-115 362.0735,-111.0502 347.0659,-107.1539 332.7302,-103.6028"/>
+<title>datasetHash-&gt;generateProvenance</title>
+<path fill="none" stroke="#000000" d="M415.3574,-127.091C402.7129,-122.9783 388.8591,-118.6479 375.9984,-115 362.0735,-111.0502 347.0659,-107.1539 332.7302,-103.6028"/>
 <polygon fill="#000000" stroke="#000000" points="333.48,-100.1831 322.9343,-101.2031 331.8143,-106.982 333.48,-100.1831"/>
 </g>
 <!-- newProv&#45;&gt;computeProvHash -->

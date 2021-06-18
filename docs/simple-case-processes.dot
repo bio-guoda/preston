@@ -6,7 +6,7 @@ digraph G {
         color=lightgrey
         node [style=filled, color=white, shape=Mrectangle]
         label = "Inputs"
-        url [label="URL"]
+        url [label="Dataset URL"]
         previousProvHash [label="Provenance hash"]
     }
     
@@ -14,7 +14,7 @@ digraph G {
         label = "Preston"
         dereference [label="Dereference"]
         generateProvenance [label="Describe processes"]
-        computeContentHash [label="Compute SHA256 hash"]
+        computeDatasetHash [label="Compute SHA256 hash"]
         computeProvHash [label="Compute SHA256 hash"]
     }
     
@@ -23,14 +23,14 @@ digraph G {
         color=lightgrey
         node [style=filled, color=white, shape=Mrectangle, fillcolor=white]
         label = "Outputs"
-        content [label="Content", shape=box3d, color=gray]
-        contentHash [label="Content hash"]
+        dataset [label="Dataset", shape=box3d, color=gray]
+        datasetHash [label="Dataset hash"]
         newProv [label="Provenance", shape=box3d, color=gray]
         newProvHash [label="Provenance hash"]
     }
     
-    url -> dereference -> content
-    content -> computeContentHash -> contentHash
-    url, previousProvHash, contentHash -> generateProvenance -> newProv
+    url -> dereference -> dataset
+    dataset -> computeDatasetHash -> datasetHash
+    url, previousProvHash, datasetHash -> generateProvenance -> newProv
     newProv -> computeProvHash -> newProvHash
 }
