@@ -3,7 +3,8 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.Seeds;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.util.ResultPagerUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,13 +36,13 @@ import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.ORGANIZATION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
-import static bio.guoda.preston.model.RefNodeFactory.getVersion;
-import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
-import static bio.guoda.preston.model.RefNodeFactory.toBlank;
-import static bio.guoda.preston.model.RefNodeFactory.toContentType;
-import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.getVersion;
+import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
+import static bio.guoda.preston.RefNodeFactory.toBlank;
+import static bio.guoda.preston.RefNodeFactory.toContentType;
+import static bio.guoda.preston.RefNodeFactory.toEnglishLiteral;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class RegistryReaderIDigBio extends ProcessorReadOnly {
 

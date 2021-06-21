@@ -1,12 +1,10 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.Hasher;
-import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 
 
 public class BlobStoreAppendOnly implements BlobStore {

@@ -1,20 +1,17 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.commons.rdf.api.RDFTerm;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toLiteral;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;

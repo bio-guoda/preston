@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -19,12 +20,12 @@ import java.util.List;
 import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
-import static bio.guoda.preston.model.RefNodeFactory.getVersion;
-import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
-import static bio.guoda.preston.model.RefNodeFactory.toBlank;
-import static bio.guoda.preston.model.RefNodeFactory.toContentType;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.getVersion;
+import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
+import static bio.guoda.preston.RefNodeFactory.toBlank;
+import static bio.guoda.preston.RefNodeFactory.toContentType;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class RegistryReaderRSS extends ProcessorReadOnly {
     public RegistryReaderRSS(BlobStoreReadOnly blobStore, StatementsListener listener) {

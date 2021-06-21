@@ -1,7 +1,8 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashGeneratorTLSHTruncatedTest;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -14,8 +15,8 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;

@@ -1,6 +1,6 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
 import com.beust.jcommander.IStringConverter;
 import org.apache.commons.rdf.api.IRI;
 

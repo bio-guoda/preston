@@ -1,6 +1,5 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;

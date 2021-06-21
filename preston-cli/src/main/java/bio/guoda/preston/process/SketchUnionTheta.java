@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashType;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -25,9 +26,9 @@ import static bio.guoda.preston.RefNodeConstants.QUALIFIED_GENERATION;
 import static bio.guoda.preston.RefNodeConstants.THETA_SKETCH_PREFIX;
 import static bio.guoda.preston.RefNodeConstants.USED;
 import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toLiteral;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 /**
  * Reports on the approximate union of dataset elements via encountered Theta Sketches.

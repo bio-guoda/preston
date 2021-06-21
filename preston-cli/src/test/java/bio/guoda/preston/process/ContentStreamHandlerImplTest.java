@@ -1,6 +1,6 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.stream.ContentStreamHandlerImpl;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.Is;

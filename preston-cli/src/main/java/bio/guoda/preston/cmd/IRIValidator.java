@@ -2,7 +2,7 @@ package bio.guoda.preston.cmd;
 
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
 
 
 public class IRIValidator implements IParameterValidator {

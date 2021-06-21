@@ -10,7 +10,7 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 
-import static bio.guoda.preston.model.RefNodeFactory.getVersion;
+import static bio.guoda.preston.RefNodeFactory.getVersion;
 
 
 public abstract class VersionProcessor extends StatementProcessor {

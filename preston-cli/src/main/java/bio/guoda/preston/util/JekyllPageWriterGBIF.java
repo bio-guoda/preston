@@ -1,7 +1,6 @@
 package bio.guoda.preston.util;
 
-import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.process.RegistryReaderGBIF;
+import bio.guoda.preston.RefNodeFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -9,7 +8,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.UUID;
 
 public class JekyllPageWriterGBIF implements JekyllPageWriter {
 

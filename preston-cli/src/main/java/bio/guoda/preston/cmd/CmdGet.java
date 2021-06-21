@@ -1,6 +1,6 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.process.BlobStoreReadOnly;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.ContentHashDereferencer;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static java.lang.System.exit;
 
 @Parameters(separators = "= ", commandDescription = "get biodiversity data")

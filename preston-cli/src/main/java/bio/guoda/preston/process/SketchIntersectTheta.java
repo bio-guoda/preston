@@ -1,7 +1,8 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashType;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -35,9 +36,9 @@ import static bio.guoda.preston.RefNodeConstants.QUALIFIED_GENERATION;
 import static bio.guoda.preston.RefNodeConstants.THETA_SKETCH_PREFIX;
 import static bio.guoda.preston.RefNodeConstants.USED;
 import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toLiteral;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 /**
  * Reports on the approximate overlap of dataset elements via encountered Theta Sketches.

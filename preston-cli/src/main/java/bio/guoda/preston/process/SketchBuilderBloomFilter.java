@@ -1,7 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RDFUtil;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStore;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
@@ -26,8 +26,8 @@ import static bio.guoda.preston.RefNodeConstants.BLOOM_HASH_PREFIX;
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.RefNodeConstants.STATISTICAL_ERROR;
 import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
-import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.toLiteral;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 /**
  * Creates bloom filter from encountered content values.

@@ -3,7 +3,7 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.ResourcesHTTP;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.DereferencerContentAddressed;
@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

@@ -1,7 +1,7 @@
 package bio.guoda.preston.stream;
 
-import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.process.BlobStoreReadOnly;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.TextMatcher;

@@ -1,6 +1,5 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.rdf.api.IRI;
 
 public class IRIFixingProcessor implements IRIProcessor {

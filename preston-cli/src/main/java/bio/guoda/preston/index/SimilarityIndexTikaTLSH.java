@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
 
 public class SimilarityIndexTikaTLSH implements Closeable {
 

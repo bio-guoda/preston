@@ -1,7 +1,7 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.cmd.ActivityContext;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import org.apache.commons.lang3.tuple.Pair;
@@ -20,11 +20,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.TripleMatcher.hasTriple;
-import static bio.guoda.preston.model.RefNodeFactory.isBlankOrSkolemizedBlank;
-import static bio.guoda.preston.model.RefNodeFactory.toBlank;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toSkolemizedBlank;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.isBlankOrSkolemizedBlank;
+import static bio.guoda.preston.RefNodeFactory.toBlank;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toSkolemizedBlank;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.containsString;

@@ -2,13 +2,12 @@ package bio.guoda.preston;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
-import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.rdf.api.RDFTerm;
 
 import java.net.URI;
 import java.util.UUID;
 
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
 
 public class RefNodeConstants {
 

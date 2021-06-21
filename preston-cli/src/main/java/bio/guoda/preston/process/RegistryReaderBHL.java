@@ -2,11 +2,11 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.Seeds;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.BufferedReader;
@@ -15,8 +15,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
@@ -28,14 +26,14 @@ import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.ORGANIZATION;
 import static bio.guoda.preston.RefNodeConstants.SEE_ALSO;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
-import static bio.guoda.preston.model.RefNodeFactory.getVersion;
-import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
-import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
-import static bio.guoda.preston.model.RefNodeFactory.toBlank;
-import static bio.guoda.preston.model.RefNodeFactory.toContentType;
-import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.getVersion;
+import static bio.guoda.preston.RefNodeFactory.getVersionSource;
+import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
+import static bio.guoda.preston.RefNodeFactory.toBlank;
+import static bio.guoda.preston.RefNodeFactory.toContentType;
+import static bio.guoda.preston.RefNodeFactory.toEnglishLiteral;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class RegistryReaderBHL extends ProcessorReadOnly {
     public static final String BHL_API_URL_PART = "//www.biodiversitylibrary.org/data/item.txt";

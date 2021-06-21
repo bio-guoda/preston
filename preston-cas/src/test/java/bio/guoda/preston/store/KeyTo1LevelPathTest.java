@@ -1,6 +1,6 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
 import org.junit.Test;
 
 import java.net.URI;

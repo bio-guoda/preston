@@ -1,6 +1,5 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.model.RefNodeFactory;
 import org.junit.Test;
 
 import java.io.File;

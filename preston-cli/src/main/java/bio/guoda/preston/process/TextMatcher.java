@@ -1,7 +1,8 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.cmd.ProcessorState;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.stream.ArchiveStreamHandler;
 import bio.guoda.preston.stream.CompressedStreamHandler;
 import bio.guoda.preston.stream.ContentStreamException;
@@ -23,10 +24,10 @@ import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
 import static bio.guoda.preston.RefNodeConstants.USED;
-import static bio.guoda.preston.model.RefNodeFactory.getVersion;
-import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.getVersion;
+import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 
 public class TextMatcher extends ProcessorReadOnly {

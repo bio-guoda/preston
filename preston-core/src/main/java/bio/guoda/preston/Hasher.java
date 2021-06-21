@@ -3,7 +3,6 @@ package bio.guoda.preston;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
-import bio.guoda.preston.model.RefNodeFactory;
 
 import java.io.IOException;
 import java.io.InputStream;

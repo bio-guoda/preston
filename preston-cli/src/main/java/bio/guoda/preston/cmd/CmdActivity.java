@@ -3,7 +3,7 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.Preston;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.RegistryReaderALA;
 import bio.guoda.preston.process.RegistryReaderBHL;
 import bio.guoda.preston.process.RegistryReaderBioCASE;
@@ -53,9 +53,9 @@ import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.PRESTON;
 import static bio.guoda.preston.RefNodeConstants.SOFTWARE_AGENT;
 import static bio.guoda.preston.RefNodeConstants.USED_BY;
-import static bio.guoda.preston.model.RefNodeFactory.toEnglishLiteral;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.toEnglishLiteral;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public abstract class CmdActivity extends LoggingPersisting implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(CmdActivity.class);

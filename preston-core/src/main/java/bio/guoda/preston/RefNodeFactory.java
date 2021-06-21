@@ -1,6 +1,5 @@
-package bio.guoda.preston.model;
+package bio.guoda.preston;
 
-import bio.guoda.preston.DateUtil;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;

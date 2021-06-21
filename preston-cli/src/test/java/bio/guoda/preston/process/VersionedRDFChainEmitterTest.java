@@ -1,7 +1,8 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;

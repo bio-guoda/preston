@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
 
 public class LineStreamHandler implements ContentStreamHandler {
 

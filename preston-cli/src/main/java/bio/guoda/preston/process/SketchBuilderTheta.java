@@ -1,7 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RDFUtil;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStore;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
@@ -21,8 +21,8 @@ import static bio.guoda.preston.RefNodeConstants.CONFIDENCE_INTERVAL_95;
 import static bio.guoda.preston.RefNodeConstants.HAS_VALUE;
 import static bio.guoda.preston.RefNodeConstants.THETA_SKETCH_PREFIX;
 import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
-import static bio.guoda.preston.model.RefNodeFactory.toLiteral;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.toLiteral;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 /**
  * Creates ThetaSketch filter from encountered content values.

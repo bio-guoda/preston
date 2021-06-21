@@ -1,7 +1,7 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.process.BlobStoreReadOnly;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.Is;

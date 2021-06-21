@@ -2,7 +2,6 @@ package bio.guoda.preston;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
-import bio.guoda.preston.model.RefNodeFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.Is;

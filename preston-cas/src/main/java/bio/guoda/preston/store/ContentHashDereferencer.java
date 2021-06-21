@@ -1,6 +1,5 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.process.BlobStoreReadOnly;
 import bio.guoda.preston.stream.ContentStreamFactory;
 import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.rdf.api.IRI;

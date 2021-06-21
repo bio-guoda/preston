@@ -2,6 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashGeneratorTikaTLSH;
 import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
@@ -13,9 +14,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.model.RefNodeFactory.toBlank;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.toBlank;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class TikaHashingActivity extends ProcessorReadOnly {
 

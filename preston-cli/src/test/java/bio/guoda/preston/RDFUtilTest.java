@@ -1,26 +1,14 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.model.RefNodeFactory;
 import bio.guoda.preston.process.EmittingStreamRDF;
-import bio.guoda.preston.process.StatementProcessor;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
-import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.process.StatementsListenerAdapter;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.rdf.api.BlankNodeOrIRI;
-import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.jena.riot.RiotException;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

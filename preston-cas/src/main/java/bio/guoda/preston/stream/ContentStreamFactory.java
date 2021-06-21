@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.stream.ContentStreamUtil.cutBytes;
 
 public class ContentStreamFactory implements InputStreamFactory {

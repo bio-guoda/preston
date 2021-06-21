@@ -1,7 +1,7 @@
 package bio.guoda.preston.stream;
 
-import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.process.BlobStoreReadOnly;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.tika.io.IOUtils;
 import org.junit.Ignore;

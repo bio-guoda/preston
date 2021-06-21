@@ -1,11 +1,8 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.process.BlobStoreReadOnly;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.process.EmittingStreamRDF;
-import bio.guoda.preston.process.ProcessorReadOnly;
-import bio.guoda.preston.process.SketchIntersectBloomFilter;
-import bio.guoda.preston.process.SketchIntersectTheta;
 import bio.guoda.preston.process.SketchUnionTheta;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
@@ -16,9 +13,6 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @Parameters(separators = "= ", commandDescription = "uses pre-calculated sketches (only theta sketches for now) to calculates union of distinct elements found in datasets")
 public class CmdSketchUnion extends LoggingPersisting implements Runnable {

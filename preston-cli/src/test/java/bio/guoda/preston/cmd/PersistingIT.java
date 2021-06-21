@@ -2,7 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.DerefState;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 

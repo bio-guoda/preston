@@ -12,8 +12,8 @@ import java.util.stream.Stream;
 import static bio.guoda.preston.RefNodeConstants.ACTIVITY;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.WAS_INFORMED_BY;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class ActivityUtil {
 

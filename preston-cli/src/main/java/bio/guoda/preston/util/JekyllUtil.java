@@ -4,8 +4,8 @@ import bio.guoda.preston.DateUtil;
 import bio.guoda.preston.Preston;
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.model.RefNodeFactory;
-import bio.guoda.preston.process.BlobStoreReadOnly;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.process.RegistryReaderGBIF;
 import bio.guoda.preston.process.RegistryReaderIDigBio;
 import bio.guoda.preston.process.StatementListener;
@@ -47,7 +47,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.model.RefNodeFactory.hasVersionAvailable;
+import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
 
 public class JekyllUtil {
     public static StatementsListener createJekyllSiteGenerator(BlobStoreReadOnly store, File jekyllDir) throws IOException {

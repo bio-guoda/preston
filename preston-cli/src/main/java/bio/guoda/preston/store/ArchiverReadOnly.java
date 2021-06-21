@@ -7,7 +7,7 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 
-import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
+import static bio.guoda.preston.RefNodeFactory.getVersionSource;
 
 public class ArchiverReadOnly extends VersionProcessor {
 

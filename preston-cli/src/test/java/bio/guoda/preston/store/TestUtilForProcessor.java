@@ -10,7 +10,7 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.util.List;
 
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
 
 public class TestUtilForProcessor {
     public static ActivityContext getTestCrawlContext() {

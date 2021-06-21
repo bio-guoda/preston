@@ -1,7 +1,6 @@
 package bio.guoda.preston;
 
 import org.apache.commons.rdf.api.IRI;
-import bio.guoda.preston.model.RefNodeFactory;
 
 import java.util.Arrays;
 import java.util.List;

@@ -6,7 +6,7 @@ import org.apache.commons.rdf.simple.SimpleRDF;
 import org.junit.Test;
 
 import static bio.guoda.preston.QuadMatcher.hasQuad;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 

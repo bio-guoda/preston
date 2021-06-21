@@ -2,7 +2,7 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.cmd.ActivityContext;
-import bio.guoda.preston.model.RefNodeFactory;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsListener;
 import org.slf4j.Logger;
@@ -21,10 +21,10 @@ import static bio.guoda.preston.RefNodeConstants.GENERATED_AT_TIME;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.WAS_GENERATED_BY;
-import static bio.guoda.preston.model.RefNodeFactory.getVersionSource;
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
-import static bio.guoda.preston.model.RefNodeFactory.toSkolemizedBlank;
-import static bio.guoda.preston.model.RefNodeFactory.toStatement;
+import static bio.guoda.preston.RefNodeFactory.getVersionSource;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toSkolemizedBlank;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 
 public class Archiver extends VersionProcessor {

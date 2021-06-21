@@ -11,7 +11,7 @@ import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.util.Collections;
 
-import static bio.guoda.preston.model.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 

@@ -1,11 +1,11 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.cmd.ProcessorState;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Triple;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.jena.shared.JenaException;
 
