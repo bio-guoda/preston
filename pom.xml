@@ -11,6 +11,7 @@
     <modules>
         <module>preston-parent</module>
         <module>preston-cas</module>
+        <module>preston-hexa</module>
         <module>preston-cli</module>
     </modules>
 
