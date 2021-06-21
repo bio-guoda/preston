@@ -49,7 +49,7 @@ public class ArchiverTest {
             throw new IOException("fails to dereference");
         };
 
-        final StatementStoreImpl versionStore = new StatementStoreImpl(TestUtil.getTestPersistence());
+        final HexaStoreImpl versionStore = new HexaStoreImpl(TestUtil.getTestPersistence());
         StatementsListener versionLogger = createVersionLogger(versionStore);
 
         Archiver relationStore = new Archiver(
@@ -66,7 +66,7 @@ public class ArchiverTest {
         assertTrue(isBlankOrSkolemizedBlank(contentHash));
     }
 
-    private StatementsListener createVersionLogger(final StatementStore versionStore) {
+    private StatementsListener createVersionLogger(final HexaStore versionStore) {
         return new StatementsListenerAdapter() {
             @Override
             public void on(Quad statement) {
@@ -100,7 +100,7 @@ public class ArchiverTest {
 
         List<Quad> nodes = new ArrayList<>();
 
-        StatementStoreImpl versionStore = new StatementStoreImpl(testKeyValueStore);
+        HexaStoreImpl versionStore = new HexaStoreImpl(testKeyValueStore);
 
         Archiver relationStore = new Archiver(
                 dereferencer,
@@ -140,7 +140,7 @@ public class ArchiverTest {
 
         List<Quad> nodes = new ArrayList<>();
 
-        StatementStoreImpl versionStore = new StatementStoreImpl(testKeyValueStore);
+        HexaStoreImpl versionStore = new HexaStoreImpl(testKeyValueStore);
 
         Archiver relationStore = new Archiver(
                 dereferencer,
@@ -179,7 +179,7 @@ public class ArchiverTest {
         Dereferencer<IRI> dereferencer = new DereferenceTest("#derefData");
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
-        StatementStoreImpl versionStore = new StatementStoreImpl(testKeyValueStore);
+        HexaStoreImpl versionStore = new HexaStoreImpl(testKeyValueStore);
         Archiver relationStore = getAppendOnlyRelationStore(dereferencer, versionStore);
 
         relationStore.on(statement);
@@ -192,8 +192,8 @@ public class ArchiverTest {
         assertThat(contentHash, Is.is(RefNodeFactory.toIRI("http://some#derefData")));
     }
 
-    private Archiver getAppendOnlyRelationStore(Dereferencer<IRI> dereferencer1, StatementStore statementStore) {
-        return new Archiver(dereferencer1, TestUtilForProcessor.getTestCrawlContext(), createVersionLogger(statementStore));
+    private Archiver getAppendOnlyRelationStore(Dereferencer<IRI> dereferencer1, HexaStore hexastore) {
+        return new Archiver(dereferencer1, TestUtilForProcessor.getTestCrawlContext(), createVersionLogger(hexastore));
     }
 
     @Test
@@ -201,7 +201,7 @@ public class ArchiverTest {
         Quad statement = toStatement(SOME_IRI, HAS_VERSION, toBlank());
 
         KeyValueStore keyValueStore = TestUtil.getTestPersistence();
-        StatementStore versionStore = new StatementStoreImpl(keyValueStore);
+        HexaStore versionStore = new HexaStoreImpl(keyValueStore);
 
         final DereferenceTest dereferencer = new DereferenceTest("#derefData");
         Archiver relationstore = getAppendOnlyRelationStore(dereferencer, versionStore);
@@ -225,7 +225,7 @@ public class ArchiverTest {
         Quad statement = toStatement(SOME_IRI, HAS_VERSION, toBlank());
 
         KeyValueStore keyValueStore = TestUtil.getTestPersistence();
-        StatementStore versionStore = new StatementStoreImpl(keyValueStore);
+        HexaStore versionStore = new HexaStoreImpl(keyValueStore);
 
         Archiver relationstore = getAppendOnlyRelationStore(
                 new DereferenceTest("#derefData"), versionStore);

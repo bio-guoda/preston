@@ -31,7 +31,7 @@ public class CmdTikaTest {
             }
         };
 
-        StatementStoreNull statementStoreNull = new StatementStoreNull();
+        HexaStoreNull statementStoreNull = new HexaStoreNull();
 
         CmdTika cmdTika = new CmdTika();
 

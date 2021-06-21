@@ -5,7 +5,7 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.process.VersionedRDFChainEmitter;
 import bio.guoda.preston.store.ArchiverReadOnly;
-import bio.guoda.preston.store.StatementStoreReadOnly;
+import bio.guoda.preston.store.HexaStoreReadOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
@@ -29,20 +29,20 @@ public final class ReplayUtil {
 
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
-                              final StatementStoreReadOnly provenanceLogIndex,
+                              final HexaStoreReadOnly provenanceLogIndex,
                               StatementsListener... listeners) {
         attemptReplay(provenanceLogStore, provenanceLogIndex, BIODIVERSITY_DATASET_GRAPH, listeners);
     }
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
-                              final StatementStoreReadOnly provenanceLogIndex,
+                              final HexaStoreReadOnly provenanceLogIndex,
                               final IRI provRoot,
                               StatementsListener... listeners) {
         attemptReplay(provenanceLogStore, provenanceLogIndex, new CmdContext(() -> true, provRoot, listeners));
     }
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
-                              final StatementStoreReadOnly provenanceLogIndex,
+                              final HexaStoreReadOnly provenanceLogIndex,
                               final CmdContext ctx) {
 
         final Queue<Quad> statementQueue =

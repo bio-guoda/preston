@@ -3,7 +3,7 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.process.SimilarContentFinder;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStore;
-import bio.guoda.preston.store.StatementStore;
+import bio.guoda.preston.store.HexaStore;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.converters.FloatConverter;
@@ -29,7 +29,7 @@ public class CmdSimilar extends CmdAppend {
     private SimilarContentFinder similarContentFinder;
 
     @Override
-    protected void run(BlobStore blobStore, StatementStore logRelations) {
+    protected void run(BlobStore blobStore, HexaStore logRelations) {
         super.run(blobStore, logRelations);
 
         try {

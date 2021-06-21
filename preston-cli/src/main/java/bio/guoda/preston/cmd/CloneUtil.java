@@ -5,8 +5,8 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.StatementStoreImpl;
-import bio.guoda.preston.store.StatementStoreReadOnly;
+import bio.guoda.preston.store.HexaStoreImpl;
+import bio.guoda.preston.store.HexaStoreReadOnly;
 import bio.guoda.preston.store.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +28,8 @@ public class CloneUtil {
         final BlobStoreReadOnly provenanceLogStore
                 = new BlobStoreAppendOnly(provenanceLogKeyValueStore);
 
-        final StatementStoreReadOnly provenanceIndex
-                = new StatementStoreImpl(provenanceIndexKeyValueStore);
+        final HexaStoreReadOnly provenanceIndex
+                = new HexaStoreImpl(provenanceIndexKeyValueStore);
 
         StatementsListener statementListener = blobToucher(blobStore);
         attemptReplay(provenanceLogStore,

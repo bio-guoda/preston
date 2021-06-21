@@ -9,8 +9,8 @@ import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.StatementStore;
-import bio.guoda.preston.store.StatementStoreImpl;
+import bio.guoda.preston.store.HexaStore;
+import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.util.JekyllUtil;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -80,13 +80,13 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         final AtomicReference<DateTime> lastCrawlTime = new AtomicReference<>();
         final CmdContext ctx = new CmdContext(this, listener, JekyllUtil.createPrestonStartTimeListener(lastCrawlTime::set));
 
-        final StatementStore statementStore = new StatementStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
+        final HexaStore hexastore = new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
         attemptReplay(
                 provenanceLogStore,
-                statementStore,
+                hexastore,
                 ctx);
 
-        JekyllUtil.writePrestonConfigFile(target, lastCrawlTime, statementStore, getProvenanceRoot());
+        JekyllUtil.writePrestonConfigFile(target, lastCrawlTime, hexastore, getProvenanceRoot());
     }
 
     private void copyAll(File target, File tmp) {

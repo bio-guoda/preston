@@ -18,11 +18,11 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class StatementStoreImplTest {
+public class HexaStoreImplTest {
 
     @Test
     public void putKey() throws IOException {
-        StatementStore statementStore = new StatementStoreImpl(new KeyValueStore() {
+        HexaStore hexastore = new HexaStoreImpl(new KeyValueStore() {
 
             Map<String, String> keyMap = new HashMap<String, String>();
 
@@ -48,15 +48,15 @@ public class StatementStoreImplTest {
         });
 
         Pair<RDFTerm, RDFTerm> queryKey = Pair.of(RefNodeFactory.toIRI("bla"), RefNodeFactory.toIRI("boo"));
-        statementStore.put(queryKey, RefNodeFactory.toIRI(""));
+        hexastore.put(queryKey, RefNodeFactory.toIRI(""));
 
-        IRI iri1 = statementStore.get(queryKey);
+        IRI iri1 = hexastore.get(queryKey);
 
         assertThat(iri1, is(nullValue()));
 
-        statementStore.put(queryKey, RefNodeFactory.toIRI("foo"));
+        hexastore.put(queryKey, RefNodeFactory.toIRI("foo"));
 
-        iri1 = statementStore.get(queryKey);
+        iri1 = hexastore.get(queryKey);
 
         assertThat(iri1.getIRIString(), is("foo"));
 

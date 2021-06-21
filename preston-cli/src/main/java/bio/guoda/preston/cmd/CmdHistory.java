@@ -3,8 +3,8 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.StatementStore;
-import bio.guoda.preston.store.StatementStoreImpl;
+import bio.guoda.preston.store.HexaStore;
+import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.VersionUtil;
 import com.beust.jcommander.Parameters;
 import org.slf4j.Logger;
@@ -25,12 +25,12 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
 
         StatementsListener logger = StatementLogFactory.createPrintingLogger(getLogMode());
 
-        StatementStore statementStore = new StatementStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
+        HexaStore hexastore = new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
         AtomicBoolean foundHistory = new AtomicBoolean(false);
         try {
             VersionUtil.findMostRecentVersion(
                     getProvenanceRoot()
-                    , statementStore
+                    , hexastore
                     , statement -> {
                         foundHistory.set(true);
                         logger.on(statement);

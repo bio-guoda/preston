@@ -30,7 +30,7 @@ public class CmdAppendTest {
     @Test
     public void doProcessNothing() throws IOException {
         BlobStoreNull blobStoreNull = new BlobStoreNull();
-        StatementStoreNull statementStoreNull = new StatementStoreNull();
+        HexaStoreNull statementStoreNull = new HexaStoreNull();
 
         CmdAppend cmdAppend = new CmdAppend();
         cmdAppend.setInputStream(new ByteArrayInputStream("".getBytes()));
@@ -53,7 +53,7 @@ public class CmdAppendTest {
     @Test
     public void doProcessABlankVersionWithGraphName() throws IOException {
         BlobStoreNull blobStoreNull = new BlobStoreNull();
-        StatementStoreNull statementStoreNull = new StatementStoreNull();
+        HexaStoreNull statementStoreNull = new HexaStoreNull();
 
         CmdAppend cmdAppend = new CmdAppend();
 
@@ -84,7 +84,7 @@ public class CmdAppendTest {
     @Test
     public void doProcessAStatementWithoutABlankStatement() throws IOException {
         BlobStoreNull blobStoreNull = new BlobStoreNull();
-        StatementStoreNull statementStoreNull = new StatementStoreNull();
+        HexaStoreNull statementStoreNull = new HexaStoreNull();
 
         CmdAppend cmdAppend = new CmdAppend();
 

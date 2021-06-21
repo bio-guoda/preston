@@ -1,6 +1,6 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.store.StatementStore;
+import bio.guoda.preston.store.HexaStore;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
@@ -8,7 +8,7 @@ import org.apache.commons.rdf.api.RDFTerm;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class StatementStoreNull implements StatementStore {
+public class HexaStoreNull implements HexaStore {
     final AtomicInteger putLogVersionAttemptCount = new AtomicInteger(0);
 
     @Override

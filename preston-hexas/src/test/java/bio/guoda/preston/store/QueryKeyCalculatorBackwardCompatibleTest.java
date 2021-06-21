@@ -16,10 +16,10 @@ public class QueryKeyCalculatorBackwardCompatibleTest {
         IRI publisher = RefNodeFactory.toIRI("https://search.idigbio.org/v2/search/publishers");
         IRI version = RefNodeFactory.toIRI("http://purl.org/pav/hasVersion");
 
-        assertThat(StatementStoreImpl.calculateHashFor(publisher).getIRIString(),
+        assertThat(HexaStoreImpl.calculateHashFor(publisher).getIRIString(),
                 is("hash://sha256/3edfe376ce9a6602fec3a6d3fa30d1d97bbf7a768fb855c8c75eeab389e1e3ef"));
 
-        assertThat(StatementStoreImpl.calculateHashFor(version).getIRIString(),
+        assertThat(HexaStoreImpl.calculateHashFor(version).getIRIString(),
                 is("hash://sha256/0b658d6c9e2f6275fee7c564a229798c56031c020ded04c1040e30d2527f1806"));
 
         IRI iri = new QueryKeyCalculatorBackwardCompatible().calculateKeyFor(Pair.of(publisher, version));

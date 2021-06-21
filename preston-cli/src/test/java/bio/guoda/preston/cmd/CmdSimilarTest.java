@@ -25,7 +25,7 @@ public class CmdSimilarTest {
     @Test
     public void cleanTmpFiles() {
         BlobStoreNull blobStoreNull = new BlobStoreNull();
-        StatementStoreNull statementStoreNull = new StatementStoreNull();
+        HexaStoreNull statementStoreNull = new HexaStoreNull();
 
         CmdSimilar cmdSimilar = new CmdSimilar();
 
@@ -44,7 +44,7 @@ public class CmdSimilarTest {
         IRI similarityHash2 = toIRI("hash://tika-tlsh/22c9a6d80630687c345faa7e08a4bff27d26b6370ce21781c493d474bf765a7548d");
 
         BlobStoreNull blobStoreNull = new BlobStoreNull();
-        StatementStoreNull statementStoreNull = new StatementStoreNull();
+        HexaStoreNull statementStoreNull = new HexaStoreNull();
 
         CmdSimilar cmdSimilar = new CmdSimilar();
 

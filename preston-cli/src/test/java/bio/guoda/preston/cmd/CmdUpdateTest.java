@@ -29,7 +29,7 @@ public class CmdUpdateTest {
     @Test
     public void doUpdate() throws IOException {
         BlobStoreNull blobStore = new BlobStoreNull();
-        StatementStoreNull logRelations = new StatementStoreNull();
+        HexaStoreNull logRelations = new HexaStoreNull();
         assertThat(blobStore.putAttemptCount.get(), Is.is(0));
         assertThat(logRelations.putLogVersionAttemptCount.get(), Is.is(0));
 

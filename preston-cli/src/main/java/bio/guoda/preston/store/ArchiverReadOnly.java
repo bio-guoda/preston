@@ -11,9 +11,9 @@ import static bio.guoda.preston.RefNodeFactory.getVersionSource;
 
 public class ArchiverReadOnly extends VersionProcessor {
 
-    private final StatementStoreReadOnly provenanceLogIndex;
+    private final HexaStoreReadOnly provenanceLogIndex;
 
-    public ArchiverReadOnly(StatementStoreReadOnly provenanceLogIndex, StatementsListener... listeners) {
+    public ArchiverReadOnly(HexaStoreReadOnly provenanceLogIndex, StatementsListener... listeners) {
         super(listeners);
         this.provenanceLogIndex = provenanceLogIndex;
     }
@@ -24,7 +24,7 @@ public class ArchiverReadOnly extends VersionProcessor {
         VersionUtil.findMostRecentVersion(versionSource, getProvenanceLogIndex(), this::emit);
     }
 
-    private StatementStoreReadOnly getProvenanceLogIndex() {
+    private HexaStoreReadOnly getProvenanceLogIndex() {
         return provenanceLogIndex;
     }
 

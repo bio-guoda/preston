@@ -20,8 +20,8 @@ import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.StatementStore;
-import bio.guoda.preston.store.StatementStoreImpl;
+import bio.guoda.preston.store.HexaStore;
+import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -74,11 +74,11 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
         KeyValueStore logRelationsStore = getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values());
 
-        run(blobStore, new StatementStoreImpl(logRelationsStore));
+        run(blobStore, new HexaStoreImpl(logRelationsStore));
     }
 
 
-    protected void run(BlobStore blobStore, StatementStore logRelations) {
+    protected void run(BlobStore blobStore, HexaStore logRelations) {
         ActivityContext ctx = createNewActivityContext(getActivityDescription());
 
         final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, logRelations, ctx);
@@ -227,15 +227,15 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
     private class ArchivingLogger extends StatementsListenerAdapter {
         private final BlobStore blobStore;
-        private final StatementStore statementStore;
+        private final HexaStore hexastore;
         private final ActivityContext ctx;
         File tmpArchive;
         PrintStream printStream;
         StatementsListener listener;
 
-        public ArchivingLogger(BlobStore blobStore, StatementStore statementStore, ActivityContext ctx) {
+        public ArchivingLogger(BlobStore blobStore, HexaStore hexastore, ActivityContext ctx) {
             this.blobStore = blobStore;
-            this.statementStore = statementStore;
+            this.hexastore = hexastore;
             this.ctx = ctx;
             tmpArchive = null;
             printStream = null;
@@ -266,11 +266,11 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                     IRI newVersion = blobStore.put(is);
                     RefNodeFactory.nowDateTimeLiteral();
 
-                    IRI previousVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), statementStore);
+                    IRI previousVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), hexastore);
                     if (previousVersion == null) {
-                        statementStore.put(RefNodeConstants.PROVENANCE_ROOT_QUERY, newVersion);
+                        hexastore.put(RefNodeConstants.PROVENANCE_ROOT_QUERY, newVersion);
                     } else {
-                        statementStore.put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
+                        hexastore.put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
                     }
                 }
             }

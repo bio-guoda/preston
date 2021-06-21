@@ -16,11 +16,11 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class VersionUtil {
 
-    public static IRI findMostRecentVersion(IRI versionSource, StatementStore statementStore) throws IOException {
-        return findMostRecentVersion(versionSource, statementStore, null);
+    public static IRI findMostRecentVersion(IRI versionSource, HexaStore hexastore) throws IOException {
+        return findMostRecentVersion(versionSource, hexastore, null);
     }
 
-    public static IRI findMostRecentVersion(IRI versionSource, StatementStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
+    public static IRI findMostRecentVersion(IRI versionSource, HexaStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
         IRI mostRecentVersion = findVersion(versionSource, statementStore, versionListener);
 
         List<IRI> versions = new ArrayList<>();
@@ -45,7 +45,7 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    public static IRI findPreviousVersion(IRI versionSource, StatementStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
+    public static IRI findPreviousVersion(IRI versionSource, HexaStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
         IRI mostRecentVersion = statementStore.get(Pair.of(HAS_PREVIOUS_VERSION, versionSource));
 
         if (versionListener != null && mostRecentVersion != null) {
@@ -54,7 +54,7 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    public static IRI findVersion(IRI versionSource, StatementStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
+    public static IRI findVersion(IRI versionSource, HexaStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
         IRI mostRecentVersion = statementStore.get(Pair.of(versionSource, HAS_VERSION));
 
         if (versionListener != null && mostRecentVersion != null) {

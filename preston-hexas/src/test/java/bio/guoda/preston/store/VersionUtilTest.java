@@ -20,11 +20,11 @@ public class VersionUtilTest {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
-        statementStore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
+        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore);
+        hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
 
 
-        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some"), statementStore);
+        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some"), hexastore);
 
         assertThat(mostRecentVersion.toString(), is("<http://some/version>"));
     }
@@ -33,12 +33,12 @@ public class VersionUtilTest {
     public void getTwoVersions() throws IOException {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
-        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
-        statementStore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
-        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/later/version"));
+        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore);
+        hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
+        hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/later/version"));
 
 
-        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some"), statementStore);
+        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some"), hexastore);
 
         assertThat(mostRecentVersion.toString(), is("<http://some/later/version>"));
     }
@@ -48,12 +48,12 @@ public class VersionUtilTest {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
-        statementStore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
-        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/version"));
+        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore);
+        hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
+        hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/version"));
 
 
-        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some"), statementStore);
+        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some"), hexastore);
 
         assertThat(mostRecentVersion.toString(), is("<http://some/version>"));
     }
@@ -63,14 +63,14 @@ public class VersionUtilTest {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
-        statementStore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
-        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
-        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/other/version")), toIRI("http://some/version"));
-        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
+        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore);
+        hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
+        hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
+        hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/other/version")), toIRI("http://some/version"));
+        hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
 
 
-        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some"), statementStore);
+        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some"), hexastore);
 
         assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));
     }
@@ -81,14 +81,14 @@ public class VersionUtilTest {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
-        statementStore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
-        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
-        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/other/version")), toIRI("http://some/version"));
-        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
+        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore);
+        hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
+        hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
+        hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/other/version")), toIRI("http://some/version"));
+        hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
 
 
-        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some/version"), statementStore);
+        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some/version"), hexastore);
 
         assertNotNull(mostRecentVersion);
         assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));
@@ -100,12 +100,12 @@ public class VersionUtilTest {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        StatementStore statementStore = new StatementStoreImpl(testKeyValueStore);
-        statementStore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
-        statementStore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
+        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore);
+        hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
+        hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
 
 
-        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some/version"), statementStore);
+        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some/version"), hexastore);
 
         assertNotNull(mostRecentVersion);
         assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));

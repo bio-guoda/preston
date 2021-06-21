@@ -5,7 +5,7 @@ import org.apache.commons.rdf.api.RDFTerm;
 
 import java.io.IOException;
 
-public interface StatementStore extends StatementStoreReadOnly {
+public interface HexaStore extends HexaStoreReadOnly {
 
     void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException;
 

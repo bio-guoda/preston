@@ -14,12 +14,12 @@ import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
-public class StatementStoreImpl implements StatementStore {
+public class HexaStoreImpl implements HexaStore {
 
     private final QueryKeyCalculator queryKeyCalculator;
     private final KeyValueStore keyValueStore;
 
-    public StatementStoreImpl(KeyValueStore keyValueStore) {
+    public HexaStoreImpl(KeyValueStore keyValueStore) {
         this.keyValueStore = keyValueStore;
         this.queryKeyCalculator = new QueryKeyCalculatorBackwardCompatible();
     }

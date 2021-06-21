@@ -8,8 +8,8 @@ import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.StatementStore;
-import bio.guoda.preston.store.StatementStoreImpl;
+import bio.guoda.preston.store.HexaStore;
+import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.VersionUtil;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -60,7 +60,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
         final HashGenerator<IRI> hashGenerator = new HashGeneratorFactory().create(hashType);
 
         final BlobStore blobStore = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
-        final StatementStore statementPersistence = new StatementStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
+        final HexaStore statementPersistence = new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
 
         Map<String, State> verifiedMap = new TreeMap<>();
 

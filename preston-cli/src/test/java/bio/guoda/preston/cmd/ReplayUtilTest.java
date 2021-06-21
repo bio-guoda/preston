@@ -4,7 +4,7 @@ import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.store.BlobStore;
-import bio.guoda.preston.store.StatementStore;
+import bio.guoda.preston.store.HexaStore;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -73,8 +73,8 @@ public class ReplayUtilTest {
     }
 
 
-    public StatementStore getStatementStore() {
-        return new StatementStore() {
+    public HexaStore getStatementStore() {
+        return new HexaStore() {
             @Override
             public void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException {
                 throw new IllegalArgumentException();

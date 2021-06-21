@@ -6,7 +6,7 @@ import org.apache.commons.rdf.api.RDFTerm;
 
 import java.io.IOException;
 
-public interface StatementStoreReadOnly {
+public interface HexaStoreReadOnly {
 
     IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException;
 

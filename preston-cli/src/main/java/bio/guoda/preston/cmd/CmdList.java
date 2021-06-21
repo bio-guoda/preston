@@ -6,7 +6,7 @@ import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.StatementStoreImpl;
+import bio.guoda.preston.store.HexaStoreImpl;
 import com.beust.jcommander.Parameters;
 
 import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
@@ -27,7 +27,7 @@ public class CmdList extends LoggingPersisting implements Runnable {
 
         attemptReplay(
                 new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory())),
-                new StatementStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values())),
+                new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values())),
                 new CmdContext(this, processor));
     }
 
