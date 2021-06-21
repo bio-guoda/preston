@@ -13,7 +13,7 @@
         <module>preston-core</module>
         <module>preston-test</module>
         <module>preston-cas</module>
-        <module>preston-hexa</module>
+        <module>preston-hexas</module>
         <module>preston-cli</module>
     </modules>
 

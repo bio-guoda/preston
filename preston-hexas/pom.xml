@@ -9,14 +9,14 @@
         <relativePath>../preston-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>preston-hexa</artifactId>
+    <artifactId>preston-hexas</artifactId>
     <name>Preston Simplified Hexastore</name>
     <description>Preston Simplified Hexastore helps to index a forward pointing version history of Preston provenance logs</description>
 
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>preston-cas</artifactId>
+            <artifactId>preston-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
