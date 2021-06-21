@@ -7,3 +7,4 @@ datasets/*
 .classpath
 .project
 .settings/*
+pom.xml.versionsBackup
