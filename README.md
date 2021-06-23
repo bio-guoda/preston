@@ -724,3 +724,16 @@ https://github.com/bio-guoda/preston-scripts
 
 https://github.com/cboettig/contentid
 
+### Related Forum Posts / Tweets
+
+https://discourse.gbif.org/t/gbif-exports-as-public-datasets-in-cloud-environments/1835/5
+
+https://discourse.gbif.org/t/version-control-of-a-dataset/2633/4
+
+https://discourse.gbif.org/t/when-to-assign-a-new-doi-to-an-existing-dataset/2319/3
+
+https://discourse.gbif.org/t/toward-reliable-biodiversity-dataset-references/1637
+
+https://twitter.com/GlobalBiotic/status/1306710330148519936
+
+https://discourse.gbif.org/t/10-transactional-mechanisms-and-provenance/2667/13
