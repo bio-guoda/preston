@@ -737,3 +737,5 @@ https://discourse.gbif.org/t/toward-reliable-biodiversity-dataset-references/163
 https://twitter.com/GlobalBiotic/status/1306710330148519936
 
 https://discourse.gbif.org/t/10-transactional-mechanisms-and-provenance/2667/13
+
+Response to NSF 20-015, Dear Colleague Letter:Request for Information on Data-Focused Cyberinfrastructure Needed to Support Future Data-Intensive Science and Engineering Research - https://www.nsf.gov/cise/oac/datacirfi/pdf/11202805209_Poelen.pdf
