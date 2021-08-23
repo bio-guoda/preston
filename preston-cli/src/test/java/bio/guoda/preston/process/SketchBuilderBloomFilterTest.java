@@ -47,7 +47,7 @@ public class SketchBuilderBloomFilterTest {
 
         assertThat(nodes.size(), is(4));
 
-        assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(1).toString(), startsWith("<gz:bloom:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
     }
 
@@ -65,7 +65,7 @@ public class SketchBuilderBloomFilterTest {
         }
         assertThat(nodes.size(), is(4));
 
-        assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(1).toString(), startsWith("<gz:bloom:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
     }
 
@@ -83,7 +83,7 @@ public class SketchBuilderBloomFilterTest {
             ).collect(Collectors.toList()));
         }
 
-        assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(1).toString(), startsWith("<gz:bloom:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
         assertThat(nodes.size(), is(4));
 
@@ -103,7 +103,7 @@ public class SketchBuilderBloomFilterTest {
             ).collect(Collectors.toList()));
         }
 
-        assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(1).toString(), startsWith("<gz:bloom:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
 
         assertThat(nodes.size(), is(4));
 
@@ -124,8 +124,8 @@ public class SketchBuilderBloomFilterTest {
         }
         assertThat(nodes.size(), is(8));
 
-        assertThat(nodes.get(1).toString(), startsWith("<bloom:gz:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
-        assertThat(nodes.get(5).toString(), startsWith("<bloom:gz:put:1> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/fffc2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(1).toString(), startsWith("<gz:bloom:put:0> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/c61c2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
+        assertThat(nodes.get(5).toString(), startsWith("<gz:bloom:put:1> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/fffc2622391ae5b8fabe7003c32289342a874d306724f7111e49b2a90d8be56c>"));
     }
 
 

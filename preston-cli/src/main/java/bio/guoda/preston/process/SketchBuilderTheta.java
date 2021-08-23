@@ -86,7 +86,7 @@ public class SketchBuilderTheta extends SketchBuilder {
                     contentId,
                     statement.getGraphName());
         } catch (IOException e) {
-            throw new RuntimeException("failed to serialize bloom filter [bloom:gz:" + contentId.getIRIString() + "]", e);
+            throw new RuntimeException("failed to serialize bloom filter [gz:bloom:" + contentId.getIRIString() + "]", e);
         }
     }
 

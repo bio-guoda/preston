@@ -70,7 +70,7 @@ public class RefNodeConstants {
 
     public static final IRI DEPICTS = toIRI("http://xmlns.com/foaf/0.1/depicts");
 
-    public static final String BLOOM_HASH_PREFIX = "bloom:gz:";
+    public static final String BLOOM_HASH_PREFIX = "gz:bloom:";
     public static final String THETA_SKETCH_PREFIX = "theta:";
 
     public static final IRI STATISTICAL_ERROR = RefNodeFactory.toIRI("http://purl.obolibrary.org/obo/STATO_0000242");

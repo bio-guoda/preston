@@ -58,7 +58,7 @@ public class SketchIntersectBloomFilterTest {
         );
 
         processor.on(Stream.of(
-                toStatement(toIRI("bloom:gz:hash://123abc"), WAS_DERIVED_FROM, toIRI("hash://sha256/aaa"))
+                toStatement(toIRI("gz:bloom:hash://123abc"), WAS_DERIVED_FROM, toIRI("hash://sha256/aaa"))
         ).collect(Collectors.toList()));
     }
 
@@ -80,7 +80,7 @@ public class SketchIntersectBloomFilterTest {
 
         processor.on(Stream.of(
                 toStatement(
-                        toIRI("bloom:gz:hash://123abc"),
+                        toIRI("gz:bloom:hash://123abc"),
                         WAS_DERIVED_FROM,
                         toIRI("hash://sha256/aaa"))
         ).collect(Collectors.toList()));
@@ -117,10 +117,10 @@ public class SketchIntersectBloomFilterTest {
                 TestUtilForProcessor.testListener(nodes));
 
         IRI content1 = toIRI("hash://sha256/aaa");
-        IRI bloomHash1 = toIRI("bloom:gz:hash://sha256/123");
+        IRI bloomHash1 = toIRI("gz:bloom:hash://sha256/123");
 
         IRI content2 = toIRI("hash://sha256/bbb");
-        IRI bloomHash2 = toIRI("bloom:gz:hash://sha256/456");
+        IRI bloomHash2 = toIRI("gz:bloom:hash://sha256/456");
 
         processor.on(Stream.of(
                 toStatement(bloomHash1, WAS_DERIVED_FROM, content1),
