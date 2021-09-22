@@ -5,9 +5,9 @@ id: A biodiversity dataset graph
 {%- assign endpoint= "/data.json" | prepend: site.baseurl | prepend: site.url -%}
 {% capture provenance %}{%- include local_url_for_hash.html hash=site.data.preston.archive location=site.data.preston.provenance_location -%}{% endcapture %}
 
-A biodiversity dataset graph: [{{ site.baseurl | prepend: site.url }}]({{ site.baseurl | prepend: site.url }}). {{ site.data.preston.created_at | date: "%Y" }}. [{{ site.data.version.archive }}]({{ provenance }})
+A biodiversity dataset graph: [{{ site.baseurl | prepend: site.url }}]({{ site.baseurl | prepend: site.url }}). {{ site.data.preston.created_at | date: "%Y" }}. [{{ site.data.preston.archive }}]({{ provenance }})
 
-Biodiversity knowledge graph created using [Preston](https://preston.guoda.bio) v{{ site.data.preston.version }} and [Jekyll](https://jekyllrb.com) v{{ jekyll.version }} on {{ site.data.version.created_at }}
+Biodiversity knowledge graph created using [Preston](https://preston.guoda.bio) v{{ site.data.preston.version }} and [Jekyll](https://jekyllrb.com) v{{ jekyll.version }} on {{ site.data.preston.created_at }}
 
 ## Welcome! 
 

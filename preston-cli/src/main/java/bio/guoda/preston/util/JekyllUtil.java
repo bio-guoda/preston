@@ -196,7 +196,7 @@ public class JekyllUtil {
                 objectNode.put("data_location_comment", "replace [data_location/provenance_location] if content is hosted separately, e.g., [https://example.org/data/] would link content to locations like [https://example.org/data/aa/bb/aabb...] where [aabb...] is a sha256 content/provenance hash");
                 objectNode.put("data_location", "data/");
                 objectNode.put("provenance_location", "data/");
-                objectNode.put("preston", Preston.getVersion());
+                objectNode.put("version", Preston.getVersion());
                 final DateTime dateTime = lastCrawlTime.get();
                 if (dateTime != null) {
                     objectNode.put("created_at", dateTime.toString());
