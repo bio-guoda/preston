@@ -713,6 +713,14 @@ J.H. Poelen. A biodiversity dataset graph: DataONE. hash://sha256/2b5c445f0b7b91
 
 J.H. Poelen. A biodiversity dataset graph: GBIF, iDigBio, BioCASe. hash://sha256/8aacce08462b87a345d271081783bdd999663ef90099212c8831db399fc0831b, https://doi.org/10.5281/zenodo.3852671 (2020)
 
+A biodiversity dataset graph: [https://jhpoelen.nl/bats](https://jhpoelen.nl/bats). 2021. [hash://sha256/5150f699411c4433b0a6c111f8e6ec7fbae2c336ab237f3638bbdc9d0b2dda0d](https://jhpoelen.nl/bats/data/51/50/5150f699411c4433b0a6c111f8e6ec7fbae2c336ab237f3638bbdc9d0b2dda0d)
+
+A biodiversity dataset graph: [https://jhpoelen.nl/rats](https://jhpoelen.nl/rats). 2021. [hash://sha256/812da92d28f6abbd8b26be507168877ede7dfd78f7cc5b79b417316cf64ff78c](https://jhpoelen.nl/rats/data/81/2d/812da92d28f6abbd8b26be507168877ede7dfd78f7cc5b79b417316cf64ff78c)
+
+A biodiversity dataset graph: [https://jhpoelen.nl/bees](https://jhpoelen.nl/bees). 2020. [hash://sha256/85138e506a29fb73099fb050372d8a379794ab57fe4bfdf141743db0de2b985c](https://jhpoelen.nl/bees/data/85/13/85138e506a29fb73099fb050372d8a379794ab57fe4bfdf141743db0de2b985c)
+
+
+
 ### Technologies or Techniques
 All software and scripts written for the purposes of this project are publicly available and released under open source licenses on GitHub within the following online repositories:
 
