@@ -746,4 +746,8 @@ https://twitter.com/GlobalBiotic/status/1306710330148519936
 
 https://discourse.gbif.org/t/10-transactional-mechanisms-and-provenance/2667/13
 
+https://twitter.com/GlobalBiotic/status/1433517595475382278 (re: Data Dryad linkrot / content drift example) 
+
+
+
 Response to NSF 20-015, Dear Colleague Letter:Request for Information on Data-Focused Cyberinfrastructure Needed to Support Future Data-Intensive Science and Engineering Research - https://www.nsf.gov/cise/oac/datacirfi/pdf/11202805209_Poelen.pdf
