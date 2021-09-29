@@ -17,8 +17,10 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
@@ -34,7 +36,7 @@ public class PersistingTest {
         URL resource = getClass().getResource("/preston-a1.tar.gz");
         assertThat(resource, is(not(nullValue())));
         URI baseURI = new File(resource.toURI()).getParentFile().toURI();
-        persisting.setRepositoryURIs(Collections.singletonList(baseURI));
+        persisting.setRemotes(Collections.singletonList(baseURI));
 
         KeyValueStore keyValueStore = persisting.getKeyValueStore(getAlwaysAccepting());
         InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/a12dd6335e7803027da3007e26926c5c946fea9803a5eb07908d978998d933da"));
@@ -43,12 +45,19 @@ public class PersistingTest {
     }
 
     @Test
+    public void defaultRemotes() {
+        Persisting persisting = new Persisting();
+        List<URI> remotes = persisting.getRemotes();
+        assertThat(remotes.size(), is(greaterThan(0)));
+    }
+
+    @Test
     public void localFilePathInFolders() throws URISyntaxException, IOException {
         Persisting persisting = new Persisting();
         URL resource = getClass().getResource("/bio/guoda/preston/data/a1/2d/a12dd6335e7803027da3007e26926c5c946fea9803a5eb07908d978998d933da");
         assertThat(resource, is(not(nullValue())));
         URI baseURI = new File(resource.toURI()).getParentFile().getParentFile().getParentFile().toURI();
-        persisting.setRepositoryURIs(Collections.singletonList(baseURI));
+        persisting.setRemotes(Collections.singletonList(baseURI));
 
         KeyValueStore keyValueStore = persisting.getKeyValueStore(getAlwaysAccepting());
         InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/a12dd6335e7803027da3007e26926c5c946fea9803a5eb07908d978998d933da"));
@@ -62,7 +71,7 @@ public class PersistingTest {
         URL resource = getClass().getResource("/bio/guoda/preston/data/a1/2d/a12dd6335e7803027da3007e26926c5c946fea9803a5eb07908d978998d933da");
         assertThat(resource, is(not(nullValue())));
         URI baseURI = new File(resource.toURI()).getParentFile().getParentFile().getParentFile().toURI();
-        persisting.setRepositoryURIs(Collections.singletonList(baseURI));
+        persisting.setRemotes(Collections.singletonList(baseURI));
 
         KeyValueStore keyValueStore = persisting.getKeyValueStore(getAlwaysAccepting());
         InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/a12226335e7803027da3007e26926c5c946fea9803a5eb07908d978998d933da"));
@@ -73,7 +82,7 @@ public class PersistingTest {
     public void githubPlainFolder() throws IOException {
         Persisting persisting = new Persisting();
         persisting.setDisableCache(true);
-        persisting.setRepositoryURIs(Collections.singletonList(URI.create("https://raw.githubusercontent.com/bio-guoda/preston-amazon/master/data/")));
+        persisting.setRemotes(Collections.singletonList(URI.create("https://raw.githubusercontent.com/bio-guoda/preston-amazon/master/data/")));
 
         KeyValueStore keyValueStore = persisting.getKeyValueStore(getAlwaysAccepting());
         InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/052c70c60e7c17123a1bdf18d2ce607cee1b0d96157b6174aae08a2f2f8d53d8"));
@@ -87,7 +96,7 @@ public class PersistingTest {
     public void gitHubTarGz() throws IOException {
 
         Persisting persisting = new Persisting();
-        persisting.setRepositoryURIs(Collections.singletonList(URI.create("https://raw.githubusercontent.com/bio-guoda/preston/346c2f16bdeff39b385ed86717015bf69f0301d4/src/test/resources/")));
+        persisting.setRemotes(Collections.singletonList(URI.create("https://raw.githubusercontent.com/bio-guoda/preston/346c2f16bdeff39b385ed86717015bf69f0301d4/src/test/resources/")));
         persisting.setDisableCache(true);
 
         KeyValueStore keyValueStore = persisting.getKeyValueStore(getAlwaysAccepting());
@@ -103,7 +112,7 @@ public class PersistingTest {
     public void softwareHeritageDetect() throws IOException {
 
         Persisting persisting = new Persisting();
-        persisting.setRepositoryURIs(Collections.singletonList(URI.create("https://softwareheritage.org")));
+        persisting.setRemotes(Collections.singletonList(URI.create("https://softwareheritage.org")));
         persisting.setDisableCache(true);
 
         KeyValueStore keyValueStore = persisting.getKeyValueStore(getAlwaysAccepting());
@@ -119,7 +128,7 @@ public class PersistingTest {
     public void softwareHeritageExact() throws IOException {
 
         Persisting persisting = new Persisting();
-        persisting.setRepositoryURIs(Collections.singletonList(URI.create("https://archive.softwareheritage.org/api/1/content/sha256:")));
+        persisting.setRemotes(Collections.singletonList(URI.create("https://archive.softwareheritage.org/api/1/content/sha256:")));
         persisting.setDisableCache(true);
 
         KeyValueStore keyValueStore = persisting.getKeyValueStore(getAlwaysAccepting());
