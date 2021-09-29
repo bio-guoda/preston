@@ -748,6 +748,6 @@ https://discourse.gbif.org/t/10-transactional-mechanisms-and-provenance/2667/13
 
 https://twitter.com/GlobalBiotic/status/1433517595475382278 (re: Data Dryad linkrot / content drift example) 
 
-https://github.com/ArctosDB/arctos/issues/3950 (re: no-fly list - internet addresses blacklisted from image retrieval) 
+https://github.com/ArctosDB/arctos/issues/3950 (re: internet no-fly list - internet addresses blacklisted from image retrieval) 
 
 Response to NSF 20-015, Dear Colleague Letter:Request for Information on Data-Focused Cyberinfrastructure Needed to Support Future Data-Intensive Science and Engineering Research - https://www.nsf.gov/cise/oac/datacirfi/pdf/11202805209_Poelen.pdf
