@@ -35,7 +35,7 @@ public class CmdGetTest {
         System.setOut(new PrintStream(out));
 
         CmdGet cmdGet = new CmdGet();
-        cmdGet.setContentUris(Collections.singletonList(aContentHash));
+        cmdGet.setContentIdsOrAliases(Collections.singletonList(aContentHash));
         cmdGet.run(blobStoreNull);
 
         assertThat(blobStoreNull.getAttemptCount.get(), is(1));

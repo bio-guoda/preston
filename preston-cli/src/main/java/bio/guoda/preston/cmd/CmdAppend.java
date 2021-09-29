@@ -63,7 +63,7 @@ public class CmdAppend extends CmdActivity {
         return "An event that (re-) processes existing biodiversity datasets graphs and their provenance.";
     }
 
-    private void handleQueuedMessages(Queue<List<Quad>> statementQueue1, StatementsListener[] listeners) {
+    protected void handleQueuedMessages(Queue<List<Quad>> statementQueue1, StatementsListener[] listeners) {
         while (!statementQueue1.isEmpty()) {
             List<Quad> polled = statementQueue1.poll();
             handleNonBlankMessages(polled, listeners);

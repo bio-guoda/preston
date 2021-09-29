@@ -1,8 +1,11 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.IRIFixingProcessor;
+import bio.guoda.preston.store.AliasDereferencer;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ContentHashDereferencer;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -22,9 +25,9 @@ import static java.lang.System.exit;
 @Parameters(separators = "= ", commandDescription = "get biodiversity data")
 public class CmdGet extends Persisting implements Runnable {
 
-    @Parameter(description = "data content-hash uri (e.g., [hash://sha256/8ed311...])",
+    @Parameter(description = "content ids or known aliases (e.g., [hash://sha256/8ed311...])",
             validateWith = URIValidator.class)
-    private List<String> contentUris = new ArrayList<>();
+    private List<String> contentIdsOrAliases = new ArrayList<>();
 
     @Override
     public void run() {
@@ -34,15 +37,15 @@ public class CmdGet extends Persisting implements Runnable {
 
     public void run(BlobStoreReadOnly blobStore) {
         try {
-            if (contentUris.isEmpty()) {
+            if (contentIdsOrAliases.isEmpty()) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    handleContentQuery(blobStore, StringUtils.trim(line));
+                    handleContentQuery(blobStore, StringUtils.trim(line), this);
                 }
             } else {
-                for (String s : contentUris) {
-                    handleContentQuery(blobStore, s);
+                for (String s : contentIdsOrAliases) {
+                    handleContentQuery(blobStore, s, this);
                 }
             }
         } catch (Throwable th) {
@@ -51,19 +54,25 @@ public class CmdGet extends Persisting implements Runnable {
         }
     }
 
-    protected void handleContentQuery(BlobStoreReadOnly blobStore, String queryString) throws IOException {
-        ContentHashDereferencer query = new ContentHashDereferencer(blobStore);
+    protected void handleContentQuery(BlobStoreReadOnly blobStore, String queryString, Persisting persisting) throws IOException {
+        Dereferencer<InputStream> query = new AliasDereferencer(
+                new ContentHashDereferencer(blobStore),
+                persisting
+        );
 
         try {
-            InputStream contentStream = query.dereference(toIRI(queryString));
+            InputStream contentStream = query.dereference(
+                    new IRIFixingProcessor()
+                            .process(toIRI(queryString))
+            );
             IOUtils.copyLarge(contentStream, System.out);
         } catch (IOException e) {
             throw new IOException("problem retrieving [" + queryString + "]", e);
         }
     }
 
-    public void setContentUris(List<String> contentUris) {
-        this.contentUris = contentUris;
+    public void setContentIdsOrAliases(List<String> contentIdsOrAliases) {
+        this.contentIdsOrAliases = contentIdsOrAliases;
     }
 
 }

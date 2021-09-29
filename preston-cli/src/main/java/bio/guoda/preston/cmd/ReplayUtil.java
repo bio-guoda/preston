@@ -1,15 +1,20 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.IRIFixingProcessor;
+import bio.guoda.preston.StatementIRIProcessor;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.process.VersionedRDFChainEmitter;
 import bio.guoda.preston.store.ArchiverReadOnly;
+import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.HexaStoreReadOnly;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,4 +84,17 @@ public final class ReplayUtil {
         }
     }
 
+    public static void replay(StatementsListener listener, Persisting persisting) {
+        StatementIRIProcessor processor = new StatementIRIProcessor(listener);
+        processor.setIriProcessor(new IRIFixingProcessor());
+
+        attemptReplay(
+                new BlobStoreAppendOnly(
+                        persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory())
+                ),
+                new HexaStoreImpl(
+                        persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values())
+                ),
+                new CmdContext(persisting, processor));
+    }
 }
