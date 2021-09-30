@@ -104,22 +104,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
             initQueue(statementQueue, ctx);
 
-            StatementsListener printingLogger = StatementLogFactory.createPrintingLogger(getLogMode(), System.out);
-
-            StatementsListener[] listeners = Stream.concat(
-                    createProcessors(blobStore, new StatementsListener() {
-                        @Override
-                        public void on(Quad statement) {
-                            on(Collections.singletonList(statement));
-                        }
-
-                        @Override
-                        public void on(List<Quad> statements) {
-                            statementQueue.add(statements);
-                        }
-                    }),
-                    createLoggers(archivingLogger, printingLogger)
-            ).toArray(StatementsListener[]::new);
+            StatementsListener[] listeners = initListeners(blobStore, archivingLogger, statementQueue);
 
             processQueue(statementQueue, blobStore, ctx, listeners);
 
@@ -131,6 +116,25 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         }
     }
 
+    protected StatementsListener[] initListeners(BlobStore blobStore, StatementsListener archivingLogger, Queue<List<Quad>> statementQueue) {
+        StatementsListener printingLogger = StatementLogFactory.createPrintingLogger(getLogMode(), System.out);
+
+        return Stream.concat(
+                createProcessors(blobStore, new StatementsListener() {
+                    @Override
+                    public void on(Quad statement) {
+                        on(Collections.singletonList(statement));
+                    }
+
+                    @Override
+                    public void on(List<Quad> statements) {
+                        statementQueue.add(statements);
+                    }
+                }),
+                createLoggers(archivingLogger, printingLogger)
+        ).toArray(StatementsListener[]::new);
+    }
+
     abstract void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx);
 
     abstract void processQueue(Queue<List<Quad>> statementQueue,
@@ -139,7 +143,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                                StatementsListener[] listeners);
 
 
-    private Stream<StatementsListener> createLoggers(ArchivingLogger archivingLogger, StatementsListener printingLogger) {
+    private Stream<StatementsListener> createLoggers(StatementsListener archivingLogger, StatementsListener printingLogger) {
         return Stream.of(
                 printingLogger,
                 archivingLogger);

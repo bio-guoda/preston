@@ -63,9 +63,9 @@ public class CmdAppend extends CmdActivity {
         return "An event that (re-) processes existing biodiversity datasets graphs and their provenance.";
     }
 
-    protected void handleQueuedMessages(Queue<List<Quad>> statementQueue1, StatementsListener[] listeners) {
-        while (!statementQueue1.isEmpty()) {
-            List<Quad> polled = statementQueue1.poll();
+    protected void handleQueuedMessages(Queue<List<Quad>> queue, StatementsListener[] listeners) {
+        while (!queue.isEmpty()) {
+            List<Quad> polled = queue.poll();
             handleNonBlankMessages(polled, listeners);
         }
     }
@@ -79,7 +79,8 @@ public class CmdAppend extends CmdActivity {
 
     private List<Quad> nonBlankStatements(List<Quad> polled) {
         Stream<Quad> quadStream = polled.stream().filter(statement ->
-                (!(statement.getSubject() instanceof BlankNode) && !(statement.getObject() instanceof BlankNode)));
+                (!(statement.getSubject() instanceof BlankNode)
+                        && !(statement.getObject() instanceof BlankNode)));
 
         return quadStream.collect(Collectors.toList());
     }

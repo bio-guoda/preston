@@ -84,7 +84,8 @@ public class CmdAlias extends CmdAppend implements Runnable {
         statementQueue.add(Collections
                 .singletonList(RefNodeFactory.toStatement(
                         ctx.getActivity(),
-                        params.get(0),
+                        new IRIFixingProcessor()
+                                .process(params.get(0)),
                         RefNodeConstants.HAS_VERSION,
                         params.get(1)))
         );
@@ -96,6 +97,14 @@ public class CmdAlias extends CmdAppend implements Runnable {
                       ActivityContext ctx,
                       StatementsListener[] listeners) {
         handleQueuedMessages(statementQueue, listeners);
+    }
+
+    @Override
+    protected StatementsListener[] initListeners(BlobStore blobStore, StatementsListener archivingLogger, Queue<List<Quad>> statementQueue) {
+        return new StatementsListener[]{
+                archivingLogger,
+                StatementLogFactory.createPrintingLogger(getLogMode(), System.out)
+        };
     }
 
 
