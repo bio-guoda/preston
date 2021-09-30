@@ -59,10 +59,11 @@ public class CmdAlias extends CmdAppend implements Runnable {
         Predicate<Quad> selector = quad -> RefNodeConstants.HAS_VERSION.equals(quad.getPredicate());
 
         if (params.size() > 0) {
+            final IRI origIRI = this.params.get(0);
             final IRI fixedIRI = new IRIFixingProcessor()
-                    .process(this.params.get(0));
+                    .process(origIRI);
             selector = selector
-                    .and(quad -> fixedIRI.equals(quad.getSubject()));
+                    .and(quad -> origIRI.equals(quad.getSubject()) || fixedIRI.equals(quad.getSubject()));
         }
         return selector;
     }
