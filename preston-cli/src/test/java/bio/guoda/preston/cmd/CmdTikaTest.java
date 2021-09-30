@@ -19,7 +19,7 @@ public class CmdTikaTest {
 
     @Test
     public void processOneVersion() throws IOException {
-        IRI aContentHash = toIRI("hash://sha256/blabla");
+        IRI aContentHash = toIRI("hash://sha256/f2cdbb41783ddee78964b6dbd517364810ed67ba0d6a04c98cea821958bb45dc");
 
         BlobStoreNull blobStoreNull = new BlobStoreNull(){
             @Override
