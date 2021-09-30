@@ -463,7 +463,7 @@ By running this periodically, you can keep track of dataset changes and retain h
 
 #### Finding Text in Tracked Contents
 
-The `match` command searches nodes in the biodiversity dataset graph for text that matches a specified pattern. For each match it finds, it outputs the text that was matched and its location, including the node it was found in and where to find the text inside the node. If the `match` command encounters compressed files (e.g., .gz files), it will first decompress them. Files inside file archives (e.g., zip files) will also be searched. If no search pattern is specified, the `match`/`findURLs` command searches for URLs.   
+The `grep` (or `match`) command searches nodes in the biodiversity dataset graph for text that matches a specified pattern. For each match it finds, it outputs the text that was matched and its location, including the node it was found in and where to find the text inside the node. If the `match` command encounters compressed files (e.g., .gz files), it will first decompress them. Files inside file archives (e.g., zip files) will also be searched. If no search pattern is specified, the `match`/`findURLs` command searches for URLs.   
 
 Here's the basic idea of matching/grepping text in a preston archive:
 ```console
