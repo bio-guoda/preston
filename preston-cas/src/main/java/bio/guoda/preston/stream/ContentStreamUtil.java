@@ -66,7 +66,7 @@ public class ContentStreamUtil {
     }
 
     public static IRI extractContentHash(IRI iri) throws IllegalArgumentException {
-        final Pattern contentHashPattern = ValidatingKeyValueStreamSHA256IRI.SHA_256_PATTERN;
+        final Pattern contentHashPattern = ValidatingKeyValueStreamSHA256IRI.URI_PATTERN_HASH_URI_SHA_256_PATTERN;
         Matcher contentHashMatcher = contentHashPattern.matcher(iri.getIRIString());
 
         IRI contentHash = (contentHashMatcher.find())

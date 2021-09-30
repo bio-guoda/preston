@@ -25,7 +25,7 @@ public class AliasDereferencer implements Dereferencer<InputStream> {
     public InputStream dereference(IRI iri) throws DereferenceException {
         final AtomicReference<IRI> firstAliasHash = new AtomicReference<>(null);
 
-        if (HashKeyUtil.isValidHashKey(iri)) {
+        if (HashKeyUtil.isLikelyCompositeHashURI(iri)) {
             firstAliasHash.set(iri);
         } else {
             AliasUtil.findSelectedAlias(new StatementsListenerAdapter() {
@@ -38,11 +38,10 @@ public class AliasDereferencer implements Dereferencer<InputStream> {
                 }
             }, q -> q.getSubject().equals(iri), persisting);
         }
-        if (firstAliasHash.get() == null) {
-            throw new DereferenceException("failed to dereference " + iri + " : alias not found");
-        } else {
-            return dereferenceAliasedHash(iri, firstAliasHash);
-        }
+
+        return firstAliasHash.get() == null
+                ? null :
+                dereferenceAliasedHash(iri, firstAliasHash);
     }
 
     private InputStream dereferenceAliasedHash(IRI iri, AtomicReference<IRI> firstAliasHash) throws DereferenceException {

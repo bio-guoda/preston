@@ -11,6 +11,7 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.stream.ContentStreamUtil.cutBytes;
 
 public class ContentStreamFactory implements InputStreamFactory {
+    public static final String URI_PREFIX_CUT = "cut:";
     private final IRI targetIri;
     private final IRI contentReference;
 
@@ -79,7 +80,7 @@ public class ContentStreamFactory implements InputStreamFactory {
         private void cutAndParseBytes(IRI iri, InputStream in) throws ContentStreamException {
             // do not support open-ended cuts, e.g. "b5-" or "b-5"
             Matcher byteRangeMatcher = Pattern
-                    .compile(String.format("^cut:%s!/b(?<first>[0-9]+)-(?<last>[0-9]+)$", iri.getIRIString()))
+                    .compile(String.format("^" + URI_PREFIX_CUT + "%s!/b(?<first>[0-9]+)-(?<last>[0-9]+)$", iri.getIRIString()))
                     .matcher(targetIri.getIRIString());
 
             if (byteRangeMatcher.find()) {

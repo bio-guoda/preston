@@ -6,6 +6,7 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStore;
+import bio.guoda.preston.store.HashKeyUtil;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.IRI;
@@ -20,7 +21,7 @@ import java.util.function.Predicate;
 @Parameters(separators = "= ", commandDescription = "(friendly) aliases, or names, for content hashes")
 public class CmdAlias extends CmdAppend implements Runnable {
 
-    @Parameter(description = "[alias] [content hash] (e.g., [birds] [hash://sha256/123...])",
+    @Parameter(description = "[alias] [content hash] (e.g., [birds.zip] [hash://sha256/123...])",
             validateWith = IRIValidator.class,
             converter = IRIConverter.class)
     private List<IRI> params = new ArrayList<>();
@@ -39,6 +40,15 @@ public class CmdAlias extends CmdAppend implements Runnable {
         if (params.size() < 2) {
             findSelectedAlias(listener);
         } else {
+            IRI proposedAlias = params.get(0);
+            if (HashKeyUtil.isLikelyCompositeHashURI(proposedAlias)) {
+                throw new IllegalArgumentException("invalid alias: [" + proposedAlias.getIRIString() + "] is a (composite) hash uris cannot be used as alias");
+            }
+            IRI contentHash = params.get(1);
+            if (!HashKeyUtil.isLikelyCompositeHashURI(contentHash)) {
+                throw new IllegalArgumentException("invalid target: alias [" + proposedAlias.getIRIString() + "] points to invalid hash uri [" + contentHash.getIRIString() + "]");
+            }
+
             appendAliasToProvenanceLog();
         }
     }
