@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.StatementLogFactory;
@@ -58,8 +59,10 @@ public class CmdAlias extends CmdAppend implements Runnable {
         Predicate<Quad> selector = quad -> RefNodeConstants.HAS_VERSION.equals(quad.getPredicate());
 
         if (params.size() > 0) {
+            final IRI fixedIRI = new IRIFixingProcessor()
+                    .process(this.params.get(0));
             selector = selector
-                    .and(quad -> this.params.get(0).equals(quad.getSubject()));
+                    .and(quad -> fixedIRI.equals(quad.getSubject()));
         }
         return selector;
     }
