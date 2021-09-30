@@ -6,6 +6,7 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStore;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.HashKeyUtil;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -100,7 +101,7 @@ public class CmdAlias extends CmdAppend implements Runnable {
     }
 
     @Override
-    protected StatementsListener[] initListeners(BlobStore blobStore, StatementsListener archivingLogger, Queue<List<Quad>> statementQueue) {
+    protected StatementsListener[] initListeners(BlobStoreReadOnly blobStore, StatementsListener archivingLogger, Queue<List<Quad>> statementQueue) {
         return new StatementsListener[]{
                 archivingLogger,
                 StatementLogFactory.createPrintingLogger(getLogMode(), System.out)
