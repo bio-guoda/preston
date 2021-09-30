@@ -465,9 +465,9 @@ By running this periodically, you can keep track of dataset changes and retain h
 
 The `match` command searches nodes in the biodiversity dataset graph for text that matches a specified pattern. For each match it finds, it outputs the text that was matched and its location, including the node it was found in and where to find the text inside the node. If the `match` command encounters compressed files (e.g., .gz files), it will first decompress them. Files inside file archives (e.g., zip files) will also be searched. If no search pattern is specified, the `match`/`findURLs` command searches for URLs.   
 
-Here's the basic idea of matching text in a preston archive:
+Here's the basic idea of matching/grepping text in a preston archive:
 ```console
-$ preston ls | preston match "[some regex]"
+$ preston ls | preston grep "[some regex]"
 ```
 
 For a more complicated example, the entire Biodiversity Heritage Library is searched for occurrences "Aves" (birds) and characters preceding and following it. Notice the pattern ```preston ls | preston match [some regex]``` with a regex of ```[ A-Za-z]+Aves[ A-Za-z]+```. Also, note the remotes that point to various remote locations of the Biodiversity Heritage Library using the ```--remote``` option.
@@ -476,7 +476,9 @@ For more information, see Poelen, Jorrit H. (2019). A biodiversity dataset graph
 
 ```console
 # find all mentions of text mentioning Aves (birds) in Biodiversity Heritage Library
-$ preston ls --remote https://zenodo.org/record/3484555/files,https://deeplinker.bio | preston match --no-cache --remote https://deeplinker.bio,https://zenodo.org/record/3484555/files "[ A-Za-z]+Aves[ A-Za-z]+" | head
+$ preston ls --remote https://zenodo.org/record/3484555/files,https://deeplinker.bio\
+ | preston grep --no-cache --remote https://deeplinker.bio,https://zenodo.org/record/3484555/files "[ A-Za-z]+Aves[ A-Za-z]+"\
+ | head
 <urn:uuid:17087386-391d-4192-b6fc-9a79daf846c6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> <urn:uuid:17087386-391d-4192-b6fc-9a79daf846c6> .
 <urn:uuid:17087386-391d-4192-b6fc-9a79daf846c6> <http://www.w3.org/ns/prov#used> <hash://sha256/e0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e57b84f51f22ca> <urn:uuid:17087386-391d-4192-b6fc-9a79daf846c6> .
 <urn:uuid:17087386-391d-4192-b6fc-9a79daf846c6> <http://purl.org/dc/terms/description> "An activity that finds the locations of text matching the regular expression '[ A-Za-z]+Aves[ A-Za-z]+' inside any encountered content (e.g., hash://sha256/... identifiers)."@en <urn:uuid:17087386-391d-4192-b6fc-9a79daf846c6> .
@@ -489,7 +491,14 @@ In the example above, two matches are ``` Subclass Aves Carinate``` in content `
 
 Selecting the byte ranges using the unix tool ```cut``` can be done with:
 ```
-$ preston cat hash://sha256/e0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e57b84f51f22ca | cut -z -b217065-217087
+$ preston cat --remote https://deeplinker.bio hash://sha256/e0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e57b84f51f22ca\
+ | cut -z -b217065-217087
+ Subclass Aves Carinate
+```
+Alternative, you can use Preston's built in cut notation:
+
+```
+$ preston cat --no-progress --no-cache --remote https://deeplinker.bio 'cut:hash://sha256/e0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e57b84f51f22ca!/b217065-217087'
  Subclass Aves Carinate
 ```
 
