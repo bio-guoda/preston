@@ -75,7 +75,7 @@ public class CmdLine {
                 .addCommand("seeds", new CmdSeeds())
                 .addCommand("text", new CmdText(), "extract-text")
                 .addCommand("hash", new CmdHash())
-                .addCommand("alias", new CmdAlias(), "aliases", "nickname", "nick")
+                .addCommand("alias", new CmdAlias(), "aliases")
 
                 .build();
     }
