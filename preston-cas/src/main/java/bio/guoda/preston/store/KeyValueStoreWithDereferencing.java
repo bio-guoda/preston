@@ -20,7 +20,7 @@ public class KeyValueStoreWithDereferencing implements KeyValueStoreReadOnly {
     @Override
     public InputStream get(IRI key) throws IOException {
         IRI uri = RefNodeFactory.toIRI(keyToPath.toPath(key));
-        return dereferencer.dereference(uri);
+        return dereferencer.get(uri);
     }
 
 

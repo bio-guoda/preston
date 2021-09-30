@@ -24,21 +24,21 @@ public class ContentHashDereferencerTest {
     @Test
     public void getByteRange() throws IOException {
         BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("some bits and bytes", Charset.defaultCharset());
-        InputStream content = new ContentHashDereferencer(blobStore).dereference(toIRI("cut:" + aContentHash + "!/b6-9"));
+        InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("cut:" + aContentHash + "!/b6-9"));
         assertThat(IOUtils.toString(content, Charsets.DEFAULT_CHARSET), is("bits"));
     }
 
     @Test
     public void getFileInArchive() throws IOException {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
-        InputStream content = new ContentHashDereferencer(blobStore).dereference(toIRI("tar:gz:" + aContentHash + "!/level1.txt"));
+        InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("tar:gz:" + aContentHash + "!/level1.txt"));
         assertThat(IOUtils.toString(content, Charsets.DEFAULT_CHARSET), is("https://example.org"));
     }
 
     @Test
     public void getBytesFromFileInArchive() throws IOException {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
-        InputStream content = new ContentHashDereferencer(blobStore).dereference(toIRI("cut:tar:gz:" + aContentHash + "!/level1.txt!/b9-15"));
+        InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("cut:tar:gz:" + aContentHash + "!/level1.txt!/b9-15"));
         assertThat(IOUtils.toString(content, Charsets.DEFAULT_CHARSET), is("example"));
     }
 
@@ -54,7 +54,7 @@ public class ContentHashDereferencerTest {
             }
         };
 
-        InputStream content = new ContentHashDereferencer(blobStore).dereference(toIRI(aContentHash));
+        InputStream content = new ContentHashDereferencer(blobStore).get(toIRI(aContentHash));
         IOUtils.copyLarge(content, byteGobbler);
 
         assertThat(bytesWritten.get(), is(303));

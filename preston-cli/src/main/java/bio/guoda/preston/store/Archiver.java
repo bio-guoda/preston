@@ -46,7 +46,7 @@ public class Archiver extends VersionProcessor {
         if (getDereferencer() != null) {
             IRI newVersion = null;
             try {
-                newVersion = dereferencer.dereference(versionSource);
+                newVersion = dereferencer.get(versionSource);
             } catch (IOException e) {
                 LOG.warn("failed to dereference [" + versionSource.toString() + "]", e);
             } finally {

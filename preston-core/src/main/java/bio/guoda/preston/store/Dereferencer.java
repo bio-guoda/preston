@@ -6,6 +6,6 @@ import java.io.IOException;
 
 public interface Dereferencer<T> {
 
-    T dereference(IRI uri) throws IOException;
+    T get(IRI uri) throws IOException;
 
 }

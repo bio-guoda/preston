@@ -24,7 +24,7 @@ public class DereferencerContentAddressedTest {
         BlobStore blobStore = new BlobStoreAppendOnly(TestUtil.getTestPersistence());
         DereferencerContentAddressed dereferencerContentAddressed = new DereferencerContentAddressed(dereferencer, blobStore);
 
-        IRI contentHash = dereferencerContentAddressed.dereference(toIRI(URI.create("http://some")));
+        IRI contentHash = dereferencerContentAddressed.get(toIRI(URI.create("http://some")));
         InputStream content = blobStore.get(contentHash);
         assertNotNull(contentHash);
 
@@ -45,7 +45,7 @@ public class DereferencerContentAddressedTest {
         }
 
         @Override
-        public InputStream dereference(IRI uri) {
+        public InputStream get(IRI uri) {
             return IOUtils.toInputStream(prefix + uri.getIRIString(), StandardCharsets.UTF_8);
         }
     }

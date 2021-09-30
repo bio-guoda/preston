@@ -252,7 +252,7 @@ public class ArchiverTest {
         }
 
         @Override
-        public IRI dereference(IRI uri) throws IOException {
+        public IRI get(IRI uri) throws IOException {
             return RefNodeFactory.toIRI(uri.getIRIString() + prefix);
         }
     }

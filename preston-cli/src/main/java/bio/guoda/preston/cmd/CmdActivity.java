@@ -2,8 +2,8 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.Preston;
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.RegistryReaderALA;
 import bio.guoda.preston.process.RegistryReaderBHL;
 import bio.guoda.preston.process.RegistryReaderBioCASE;
@@ -18,18 +18,19 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
-import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.HexaStore;
 import bio.guoda.preston.store.HexaStoreImpl;
+import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,11 +69,15 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
     @Override
     public void run() {
-        KeyValueStore blobKeyValueStore = getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory());
+        KeyValueStore blobKeyValueStore = getKeyValueStore(
+                new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()
+        );
 
         BlobStore blobStore = new BlobStoreAppendOnly(blobKeyValueStore);
 
-        KeyValueStore logRelationsStore = getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values());
+        KeyValueStore logRelationsStore = getKeyValueStore(
+                new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()
+        );
 
         run(blobStore, new HexaStoreImpl(logRelationsStore));
     }
@@ -116,8 +121,20 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         }
     }
 
-    protected StatementsListener[] initListeners(BlobStore blobStore, StatementsListener archivingLogger, Queue<List<Quad>> statementQueue) {
-        StatementsListener printingLogger = StatementLogFactory.createPrintingLogger(getLogMode(), System.out);
+    protected StatementsListener[] initListeners(BlobStoreReadOnly blobStore,
+                                                 StatementsListener archivingLogger,
+                                                 Queue<List<Quad>> statementQueue) {
+
+        return createStatementListeners(
+                resolvingBlobStore(blobStore),
+                archivingLogger,
+                statementQueue
+        );
+    }
+
+    private StatementsListener[] createStatementListeners(BlobStoreReadOnly blobStore, StatementsListener archivingLogger, Queue<List<Quad>> statementQueue) {
+        StatementsListener printingLogger = StatementLogFactory
+                .createPrintingLogger(getLogMode(), System.out);
 
         return Stream.concat(
                 createProcessors(blobStore, new StatementsListener() {
@@ -149,7 +166,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                 archivingLogger);
     }
 
-    protected Stream<StatementsListener> createProcessors(BlobStore blobStore, StatementsListener queueAsListener) {
+    protected Stream<StatementsListener> createProcessors(BlobStoreReadOnly blobStore, StatementsListener queueAsListener) {
         return Stream.of(
                 new RegistryReaderIDigBio(blobStore, queueAsListener),
                 new RegistryReaderGBIF(blobStore, queueAsListener),
@@ -174,10 +191,15 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
             }
 
             @Override
-            public String getDescription() { return activityDescription; };
+            public String getDescription() {
+                return activityDescription;
+            }
+
+            ;
 
         };
     }
+
     static List<Quad> findActivityInfo(ActivityContext activity) {
 
         IRI crawlActivity = activity.getActivity();

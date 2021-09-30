@@ -25,7 +25,7 @@ public class PersistingIT {
             public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
                 gotUpdate.set(true);
             }
-        }).dereference(RefNodeFactory.toIRI("https://example.org"))) {
+        }).get(RefNodeFactory.toIRI("https://example.org"))) {
             assertTrue(gotUpdate.get());
         }
 

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class AliasDereferencer implements Dereferencer<InputStream> {
+public class AliasDereferencer implements BlobStoreReadOnly {
 
     private final Persisting persisting;
     private final Dereferencer<InputStream> proxy;
@@ -22,7 +22,7 @@ public class AliasDereferencer implements Dereferencer<InputStream> {
     }
 
     @Override
-    public InputStream dereference(IRI iri) throws DereferenceException {
+    public InputStream get(IRI iri) throws DereferenceException {
         final AtomicReference<IRI> firstAliasHash = new AtomicReference<>(null);
 
         if (HashKeyUtil.isLikelyCompositeHashURI(iri)) {
@@ -46,7 +46,7 @@ public class AliasDereferencer implements Dereferencer<InputStream> {
 
     private InputStream dereferenceAliasedHash(IRI iri, AtomicReference<IRI> firstAliasHash) throws DereferenceException {
         try {
-            return proxy.dereference(firstAliasHash.get());
+            return proxy.get(firstAliasHash.get());
         } catch (IOException | IllegalArgumentException e) {
             throw new DereferenceException(iri, e);
         }

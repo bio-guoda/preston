@@ -16,7 +16,7 @@ public class ContentHashDereferencer implements Dereferencer<InputStream> {
     }
 
     @Override
-    public InputStream dereference(IRI iri) throws DereferenceException {
+    public InputStream get(IRI iri) throws DereferenceException {
         try {
             IRI contentHash = ContentStreamUtil.extractContentHash(iri);
             InputStream is = blobStore.get(contentHash);

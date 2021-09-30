@@ -25,7 +25,7 @@ public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStre
     }
 
     @Override
-    public InputStream dereference(IRI uri) throws IOException {
+    public InputStream get(IRI uri) throws IOException {
         String iriString = uri == null ? null : uri.getIRIString();
         InputStream inputStream = null;
         if (StringUtils.startsWith(iriString, "tgz:")) {
@@ -38,7 +38,7 @@ public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStre
                 if (expectedHashIRI != null) {
                     InputStream data = dereferencer == null
                             ? null
-                            : dereferencer.dereference(RefNodeFactory.toIRI(archiveURL));
+                            : dereferencer.get(RefNodeFactory.toIRI(archiveURL));
                     if (data != null) {
                         TarArchiveInputStream tarInputStream = new TarArchiveInputStream(new GZIPInputStream(data));
                         TarArchiveEntry entry;

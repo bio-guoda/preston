@@ -2,7 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.TikaHashingActivity;
-import bio.guoda.preston.store.BlobStore;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.beust.jcommander.Parameters;
 
 import java.util.stream.Stream;
@@ -11,7 +11,8 @@ import java.util.stream.Stream;
 public class CmdTika extends CmdAppend {
 
     @Override
-    protected Stream<StatementsListener> createProcessors(BlobStore blobStore, StatementsListener queueAsListener) {
+    protected Stream<StatementsListener> createProcessors(BlobStoreReadOnly blobStore,
+                                                          StatementsListener queueAsListener) {
         return Stream.of(
                 new TikaHashingActivity(blobStore, queueAsListener)
         );

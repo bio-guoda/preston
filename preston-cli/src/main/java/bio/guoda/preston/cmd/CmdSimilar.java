@@ -3,6 +3,7 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.process.SimilarContentFinder;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStore;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.HexaStore;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -46,7 +47,8 @@ public class CmdSimilar extends CmdAppend {
     }
 
     @Override
-    protected Stream<StatementsListener> createProcessors(BlobStore blobStore, StatementsListener queueAsListener) {
+    protected Stream<StatementsListener> createProcessors(BlobStoreReadOnly blobStore,
+                                                          StatementsListener queueAsListener) {
         similarContentFinder = new SimilarContentFinder(blobStore, queueAsListener, getDataDir(indexPath), maxHits, similarityThreshold);
         return Stream.of(
                 similarContentFinder

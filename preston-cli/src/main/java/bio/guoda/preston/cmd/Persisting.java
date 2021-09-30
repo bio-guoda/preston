@@ -2,7 +2,10 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.ResourcesHTTP;
+import bio.guoda.preston.store.AliasDereferencer;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.ContentHashDereferencer;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.DereferencerContentAddressedTarGZ;
 import bio.guoda.preston.store.KeyTo1LevelPath;
@@ -74,32 +77,40 @@ public class Persisting extends PersistingLocal {
     protected KeyValueStore getKeyValueStore(KeyValueStreamFactory kvStreamFactory) {
         KeyValueStore store;
         if (hasRemotes()) {
-            Stream<Pair<URI, KeyToPath>> keyToPathStream =
-                    getRemotes().stream().flatMap(uri -> Stream.of(
-                            Pair.of(uri, new KeyTo3LevelPath(uri)),
-                            Pair.of(uri, new KeyTo1LevelPath(uri)),
-                            Pair.of(uri, new KeyTo1LevelSoftwareHeritagePath(uri)),
-                            Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri))
-                    ));
-
-            List<KeyValueStoreReadOnly> keyValueStoreRemotes =
-                    supportTarGzDiscovery
-                            ? includeTarGzSupport(keyToPathStream)
-                            : defaultRemotePathSupport(keyToPathStream).collect(Collectors.toList());
-
-            KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
-
-            if (disableCache) {
-                store = new KeyValueStoreWithFallback(
-                        super.getKeyValueStore(kvStreamFactory),
-                        failover);
-            } else {
-                store = new KeyValueStoreCopying(
-                        failover,
-                        super.getKeyValueStore(kvStreamFactory));
-            }
+            store = withRemoteSupport(kvStreamFactory);
         } else {
             store = super.getKeyValueStore(kvStreamFactory);
+        }
+        return store;
+    }
+
+    private KeyValueStore withRemoteSupport(KeyValueStreamFactory kvStreamFactory) {
+        KeyValueStore store;
+        Stream<Pair<URI, KeyToPath>> keyToPathStream =
+                getRemotes()
+                        .stream()
+                        .flatMap(uri -> Stream.of(
+                                Pair.of(uri, new KeyTo3LevelPath(uri)),
+                                Pair.of(uri, new KeyTo1LevelPath(uri)),
+                                Pair.of(uri, new KeyTo1LevelSoftwareHeritagePath(uri)),
+                                Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri))
+                        ));
+
+        List<KeyValueStoreReadOnly> keyValueStoreRemotes =
+                supportTarGzDiscovery
+                        ? includeTarGzSupport(keyToPathStream)
+                        : defaultRemotePathSupport(keyToPathStream).collect(Collectors.toList());
+
+        KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
+
+        if (disableCache) {
+            store = new KeyValueStoreWithFallback(
+                    super.getKeyValueStore(kvStreamFactory),
+                    failover);
+        } else {
+            store = new KeyValueStoreCopying(
+                    failover,
+                    super.getKeyValueStore(kvStreamFactory));
         }
         return store;
     }
@@ -175,8 +186,19 @@ public class Persisting extends PersistingLocal {
     }
 
     private KeyValueStoreReadOnly remoteWithTarGzCacheAll(URI baseURI, KeyValueStore keyValueStore) {
-        DereferencerContentAddressedTarGZ dereferencer = new DereferencerContentAddressedTarGZ(getDerefStream(baseURI, getProgressListener()), new BlobStoreAppendOnly(keyValueStore, false));
+        DereferencerContentAddressedTarGZ dereferencer =
+                new DereferencerContentAddressedTarGZ(getDerefStream(baseURI,
+                        getProgressListener()),
+                        new BlobStoreAppendOnly(keyValueStore, false));
+
         return withStoreAt(new KeyTo3LevelTarGzPath(baseURI), dereferencer);
+    }
+
+    protected BlobStoreReadOnly resolvingBlobStore(BlobStoreReadOnly blobStore) {
+        return new AliasDereferencer(
+                new ContentHashDereferencer(blobStore),
+                this
+        );
     }
 
 

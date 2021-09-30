@@ -1,16 +1,14 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.IRIFixingProcessor;
-import bio.guoda.preston.store.AliasDereferencer;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.ContentHashDereferencer;
-import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.rdf.api.IRI;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,15 +53,14 @@ public class CmdGet extends Persisting implements Runnable {
     }
 
     protected void handleContentQuery(BlobStoreReadOnly blobStore, String queryString, Persisting persisting) throws IOException {
-        Dereferencer<InputStream> query = new AliasDereferencer(
-                new ContentHashDereferencer(blobStore),
-                persisting
-        );
+        IRI queryIRI = toIRI(queryString);
+
+        BlobStoreReadOnly query = resolvingBlobStore(blobStore);
 
         try {
-            InputStream contentStream = query.dereference(
+            InputStream contentStream = query.get(
                     new IRIFixingProcessor()
-                            .process(toIRI(queryString))
+                            .process(queryIRI)
             );
             IOUtils.copyLarge(contentStream, System.out);
         } catch (IOException e) {
