@@ -69,13 +69,13 @@ public class CmdLine {
                 .addCommand("union", new CmdSketchUnion())
 
                 // utilities
-                .addCommand("match", new CmdMatch(), "grep", "findURLs")
+                .addCommand("grep", new CmdMatch(), "match", "findURLs")
                 .addCommand("test", new CmdVerify(), "verify", "check", "validate")
                 .addCommand("version", new CmdVersion())
                 .addCommand("seeds", new CmdSeeds())
                 .addCommand("text", new CmdText(), "extract-text")
                 .addCommand("hash", new CmdHash())
-                .addCommand("alias", new CmdAlias(), "aliases")
+                .addCommand("alias", new CmdAlias(), "aliases", "nickname", "nick")
 
                 .build();
     }
