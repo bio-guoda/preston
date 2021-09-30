@@ -32,6 +32,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,7 +42,7 @@ import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 public class Persisting extends PersistingLocal {
 
     @Parameter(names = {"--remote", "--remotes", "--include", "--repos", "--repositories"}, description = "included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)", converter = URIConverter.class, validateWith = URIValidator.class)
-    private List<URI> remotes;
+    private List<URI> remotes = new ArrayList<>();
 
     @Parameter(names = {"--no-cache", "--disable-cache"}, description = "disable local content cache")
     private Boolean disableCache = false;

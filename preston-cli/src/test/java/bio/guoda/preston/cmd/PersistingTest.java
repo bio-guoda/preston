@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
@@ -48,7 +47,7 @@ public class PersistingTest {
     public void defaultRemotes() {
         Persisting persisting = new Persisting();
         List<URI> remotes = persisting.getRemotes();
-        assertThat(remotes.size(), is(greaterThan(0)));
+        assertThat(remotes.size(), is(0));
     }
 
     @Test
