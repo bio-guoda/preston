@@ -192,7 +192,7 @@ description | a version of eBird's dwca
 resource (subject)	| http://ebirddata.ornith.cornell.edu/downloads/gbiff/dwca-1.0.zip	
 relationship (predicate) |	http://purl.org/pav/hasVersion
 search key (subject+predicate) |	hash://sha256/ae27e5a9612ab3754f8160922abf6c5c6ffc6b5a077f3e684d1ce57605929eb6	
-content hash (object)|	hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c (resolved via [deeplinker.bio](https://deeplinker.bio/ae27e5a9612ab3754f8160922abf6c5c6ffc6b5a077f3e684d1ce57605929eb6))
+content hash (object)|	hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c (resolved via [deeplinker.bio](https://deeplinker.bio/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c))
 
 ### a first biodiversity dataset graph version
 The record of a crawl session can also be interpreted as a version of a biodiversity graph. Here's how you retrieve the first version:
@@ -202,7 +202,7 @@ description | a version of biodiversity dataset graph
 resource (subject)  | 0659a54f-b713-4f86-a917-5be166a14110 (uuid of the biodiversity dataset graph)
 relationship (predicate) |  http://purl.org/pav/hasVersion
 search key (subject+predicate)	 | hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a
-content hash (object)	| hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 (resolved via [deeplinker.bio](https://deeplinker.bio/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a)).
+content hash (object)	| hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55 (resolved via [deeplinker.bio](https://deeplinker.bio/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55)).
 
 ## References
 
