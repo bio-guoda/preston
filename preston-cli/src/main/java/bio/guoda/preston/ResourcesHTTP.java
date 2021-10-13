@@ -10,6 +10,7 @@ import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -54,23 +55,30 @@ public class ResourcesHTTP {
     }
 
     public static InputStream asInputStream(IRI dataURI) throws IOException {
-        return asInputStream(dataURI, ContentStreamUtil.getNullDerefProgressListener());
+        return asInputStream(dataURI, ContentStreamUtil.getNOOPDerefProgressListener());
     }
 
 
     public static InputStream asInputStream(IRI dataURI,
                                             List<Integer> ignoreCodes,
                                             DerefProgressListener listener) throws IOException {
+        HttpGet get = new HttpGet(URI.create(dataURI.getIRIString()));
+        get.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
+        return asInputStream(dataURI, get, ignoreCodes, listener);
+    }
+
+    public static InputStream asInputStream(IRI dataURI,
+                                            HttpUriRequest request,
+                                            List<Integer> ignoreCodes,
+                                            DerefProgressListener listener) throws IOException {
         InputStream is = asInputStreamOfflineOnly(dataURI);
         if (is == null) {
-            HttpGet get = new HttpGet(URI.create(dataURI.getIRIString()));
-            get.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
 
             CloseableHttpClient client = shouldRedirect(dataURI)
                     ? getRedirectingHttpClient()
                     : getHttpClient();
 
-            CloseableHttpResponse response = client.execute(get);
+            CloseableHttpResponse response = client.execute(request);
 
             StatusLine statusLine = response.getStatusLine();
             HttpEntity entity = response.getEntity();

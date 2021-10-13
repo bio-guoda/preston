@@ -139,7 +139,7 @@ public class Persisting extends PersistingLocal {
 
     private DerefProgressListener getProgressListener() {
         return disableProgress
-                ? ContentStreamUtil.getNullDerefProgressListener()
+                ? ContentStreamUtil.getNOOPDerefProgressListener()
                 : new DerefProgressLogger();
     }
 

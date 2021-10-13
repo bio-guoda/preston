@@ -19,6 +19,9 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 
 public class ContentStreamUtil {
 
+    public static final DerefProgressListener NOOP_DEREF_PROGRESS_LISTENER = (dataURI, derefState, read, total) -> {
+    };
+
     /**
      * @param in a stream of bytes.
      * @param startOffset the offset to start reading bytes from {@code in}.
@@ -61,8 +64,8 @@ public class ContentStreamUtil {
         };
     }
 
-    public static DerefProgressListener getNullDerefProgressListener() {
-        return (dataURI, derefState, read, total) -> {};
+    public static DerefProgressListener getNOOPDerefProgressListener() {
+        return NOOP_DEREF_PROGRESS_LISTENER;
     }
 
     public static IRI extractContentHash(IRI iri) throws IllegalArgumentException {
