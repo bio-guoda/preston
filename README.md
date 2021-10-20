@@ -755,6 +755,8 @@ https://twitter.com/GlobalBiotic/status/1306710330148519936
 
 https://discourse.gbif.org/t/10-transactional-mechanisms-and-provenance/2667/13
 
+https://discourse.gbif.org/t/10-transactional-mechanisms-and-provenance/2667/51
+
 https://twitter.com/GlobalBiotic/status/1433517595475382278 (re: Data Dryad linkrot / content drift example) 
 
 https://github.com/ArctosDB/arctos/issues/3950 (re: internet no-fly list - internet addresses blacklisted from image retrieval) 
