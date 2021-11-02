@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.util.regex.Pattern;
 
 @Parameters(separators = "= ", commandDescription = "Searches identified contents for text that matches the provided regular expression")
-public class CmdMatch extends LoggingPersisting implements Runnable {
+public class CmdGrep extends LoggingPersisting implements Runnable {
 
     @Parameter(description = "regular expression",
             validateWith = RegexValidator.class)

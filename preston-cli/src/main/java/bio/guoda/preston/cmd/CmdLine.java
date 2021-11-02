@@ -69,7 +69,7 @@ public class CmdLine {
                 .addCommand("union", new CmdSketchUnion())
 
                 // utilities
-                .addCommand("grep", new CmdMatch(), "match", "findURLs")
+                .addCommand("grep", new CmdGrep(), "match", "findURLs")
                 .addCommand("test", new CmdVerify(), "verify", "check", "validate")
                 .addCommand("version", new CmdVersion())
                 .addCommand("seeds", new CmdSeeds())

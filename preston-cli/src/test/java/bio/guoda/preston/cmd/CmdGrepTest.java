@@ -15,7 +15,7 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class CmdMatchTest {
+public class CmdGrepTest {
 
     @Test
     public void processOneVersion() {
@@ -31,12 +31,12 @@ public class CmdMatchTest {
             }
         };
 
-        CmdMatch cmdMatch = new CmdMatch();
+        CmdGrep cmdGrep = new CmdGrep();
 
         Quad quad = toStatement(toIRI("something"), HAS_VERSION, aContentHash);
-        cmdMatch.setInputStream(new ByteArrayInputStream(quad.toString().getBytes()));
+        cmdGrep.setInputStream(new ByteArrayInputStream(quad.toString().getBytes()));
 
-        cmdMatch.run(blobStoreNull);
+        cmdGrep.run(blobStoreNull);
 
         assertThat(blobStoreNull.getAttemptCount.get(), is(1));
     }
