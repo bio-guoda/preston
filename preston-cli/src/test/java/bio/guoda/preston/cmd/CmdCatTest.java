@@ -15,7 +15,7 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class CmdGetTest {
+public class CmdCatTest {
 
     private String aContentHash = "hash://sha256/babababababababababababababababababababababababababababababababa";
 
@@ -34,8 +34,8 @@ public class CmdGetTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
 
-        CmdGet cmdGet = new CmdGet();
-        cmdGet.run(blobStoreNull, Collections.singletonList(aContentHash));
+        CmdCat cmdCat = new CmdCat();
+        cmdCat.run(blobStoreNull, Collections.singletonList(aContentHash));
 
         assertThat(blobStoreNull.getAttemptCount.get(), is(1));
         assertThat(out.toString(), is("some bits and bytes"));

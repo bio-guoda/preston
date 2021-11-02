@@ -52,7 +52,7 @@ public class CmdLine {
                 .addObject(new CommandMain())
                 // core operations
                 .addCommand("ls", new CmdList(), "log", "logs")
-                .addCommand("get", new CmdGet(), "cat")
+                .addCommand("cat", new CmdCat(), "get")
                 .addCommand("cp", new CmdCopyTo(), "copyTo", "export")
                 .addCommand("clone", new CmdClone(), "pull")
                 .addCommand("update", new CmdUpdate(), "track")
