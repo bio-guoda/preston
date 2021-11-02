@@ -22,6 +22,24 @@ public class KeyTo3LevelPathTest {
         assertThat(actualPath.toString(), Is.is("file:///4d/f3/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
     }
 
+    @Test
+    public void toPathNoTrailingSlash() {
+        IRI hash = Hasher.calcSHA256("bla");
+        assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+
+        URI actualPath = new KeyTo3LevelPath(URI.create("https://example.org")).toPath(hash);
+        assertThat(actualPath.toString(), Is.is("https://example.org/4d/f3/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+    }
+
+    @Test
+    public void toPathWithTrailingSlash() {
+        IRI hash = Hasher.calcSHA256("bla");
+        assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+
+        URI actualPath = new KeyTo3LevelPath(URI.create("https://example.org/")).toPath(hash);
+        assertThat(actualPath.toString(), Is.is("https://example.org/4d/f3/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void toPathTooShort() {
         new KeyTo3LevelPath(URI.create("some://")).toPath(RefNodeFactory.toIRI("too:short"));

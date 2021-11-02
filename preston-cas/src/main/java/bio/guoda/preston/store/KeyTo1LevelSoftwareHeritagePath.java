@@ -1,6 +1,7 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.Hasher;
+import com.uwyn.jhighlight.fastutil.Hash;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
@@ -24,8 +25,13 @@ public class KeyTo1LevelSoftwareHeritagePath implements KeyToPath {
 
         final String s = baseURI.toString();
 
-        String path = StringUtils.join(Arrays.asList(s, keyStr.substring(offset), "/raw/"), "");
-        return URI.create(path);
+        String suffix = keyStr.substring(offset) + "/raw/";
+        String path = StringUtils.join(Arrays.asList(s, suffix), "");
+
+
+        return StringUtils.endsWith(s, ":")
+                ? URI.create(path)
+                : HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
     }
 
 }

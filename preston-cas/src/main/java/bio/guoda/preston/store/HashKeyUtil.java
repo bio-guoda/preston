@@ -23,15 +23,20 @@ public class HashKeyUtil {
     }
 
     public static boolean isValidHashKey(IRI hashKey) {
-        Matcher matcher = ValidatingKeyValueStreamSHA256IRI.URI_PATTERN_HASH_URI_SHA_256_PATTERN.matcher(hashKey.getIRIString());
+        Matcher matcher
+                = ValidatingKeyValueStreamSHA256IRI
+                .URI_PATTERN_HASH_URI_SHA_256_PATTERN
+                .matcher(hashKey.getIRIString());
+
         return matcher.matches();
     }
 
 
-
     static URI insertSlashIfNeeded(URI uri, String suffix) {
         String baseURI = uri.toString();
-        return StringUtils.endsWith(baseURI, "/") ? URI.create(baseURI + suffix) : URI.create(baseURI + "/" + suffix);
+        return StringUtils.endsWith(baseURI, "/")
+                ? URI.create(baseURI + suffix)
+                : URI.create(baseURI + "/" + suffix);
     }
 
     public static boolean isLikelyCompositeHashURI(IRI comboHashURI) {

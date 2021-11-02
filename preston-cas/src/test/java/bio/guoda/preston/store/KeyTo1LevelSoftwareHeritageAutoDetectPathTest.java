@@ -23,6 +23,25 @@ public class KeyTo1LevelSoftwareHeritageAutoDetectPathTest {
     }
 
     @Test
+    public void nonSoftwareHeritageNoTrailingSlash() {
+        IRI hash = Hasher.calcSHA256("bla");
+        assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+
+        URI actualPath = new KeyTo1LevelSoftwareHeritageAutoDetectPath(URI.create("https://deeplinker.bio")).toPath(hash);
+        assertThat(actualPath.toString(), Is.is("https://deeplinker.bio/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703/raw/"));
+    }
+
+    @Test
+    public void nonSoftwareHeritageTrailingSlash() {
+        IRI hash = Hasher.calcSHA256("bla");
+        assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+
+        URI actualPath = new KeyTo1LevelSoftwareHeritageAutoDetectPath(URI.create("https://deeplinker.bio/")).toPath(hash);
+        assertThat(actualPath.toString(), Is.is("https://deeplinker.bio/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703/raw/"));
+    }
+
+
+    @Test
     public void toTryPath() {
         IRI hash = Hasher.calcSHA256("bla");
         assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
