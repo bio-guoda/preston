@@ -1,7 +1,6 @@
 package bio.guoda.preston.process;
 
 
-import bio.guoda.preston.cmd.ProcessorState;
 import org.apache.commons.rdf.api.Quad;
 
 import java.util.Collections;

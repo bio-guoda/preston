@@ -1,6 +1,5 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.cmd.ProcessorState;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;

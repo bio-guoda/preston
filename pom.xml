@@ -14,6 +14,7 @@
         <module>preston-test</module>
         <module>preston-cas</module>
         <module>preston-hexas</module>
+        <module>preston-get</module>
         <module>preston-cli</module>
     </modules>
 

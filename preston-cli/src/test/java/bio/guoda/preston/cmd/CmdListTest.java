@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.process.LogErrorHandler;
 import org.junit.Ignore;
 import org.junit.Test;
 

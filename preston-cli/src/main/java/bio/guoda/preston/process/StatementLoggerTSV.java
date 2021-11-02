@@ -1,7 +1,6 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RDFUtil;
-import bio.guoda.preston.cmd.LogErrorHandler;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.Quad;
 

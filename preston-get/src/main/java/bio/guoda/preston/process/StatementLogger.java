@@ -1,7 +1,5 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.cmd.LogErrorHandler;
-
 import java.io.PrintStream;
 
 abstract public class StatementLogger extends StatementsListenerAdapter {

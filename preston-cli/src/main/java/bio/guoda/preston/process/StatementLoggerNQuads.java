@@ -1,6 +1,5 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.cmd.LogErrorHandler;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.PrintStream;

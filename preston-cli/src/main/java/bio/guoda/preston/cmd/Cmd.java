@@ -1,5 +1,7 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.process.ProcessorState;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Cmd implements ProcessorState {

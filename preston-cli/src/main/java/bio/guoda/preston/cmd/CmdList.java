@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
+import bio.guoda.preston.process.LogErrorHandler;
 import bio.guoda.preston.process.StatementsListener;
 import com.beust.jcommander.Parameters;
 

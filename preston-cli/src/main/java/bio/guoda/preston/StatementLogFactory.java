@@ -1,7 +1,7 @@
 package bio.guoda.preston;
 
 import bio.guoda.preston.cmd.Cmd;
-import bio.guoda.preston.cmd.LogErrorHandler;
+import bio.guoda.preston.process.LogErrorHandler;
 import bio.guoda.preston.cmd.LogTypes;
 import bio.guoda.preston.process.StatementLogger;
 import bio.guoda.preston.process.StatementLoggerNQuads;
