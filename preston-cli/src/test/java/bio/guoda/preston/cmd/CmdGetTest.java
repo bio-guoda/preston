@@ -17,7 +17,7 @@ import static org.hamcrest.core.Is.is;
 
 public class CmdGetTest {
 
-    String aContentHash = "hash://sha256/babababababababababababababababababababababababababababababababa";
+    private String aContentHash = "hash://sha256/babababababababababababababababababababababababababababababababa";
 
     @Test
     public void getSomething() {
@@ -35,8 +35,7 @@ public class CmdGetTest {
         System.setOut(new PrintStream(out));
 
         CmdGet cmdGet = new CmdGet();
-        cmdGet.setContentIdsOrAliases(Collections.singletonList(aContentHash));
-        cmdGet.run(blobStoreNull);
+        cmdGet.run(blobStoreNull, Collections.singletonList(aContentHash));
 
         assertThat(blobStoreNull.getAttemptCount.get(), is(1));
         assertThat(out.toString(), is("some bits and bytes"));

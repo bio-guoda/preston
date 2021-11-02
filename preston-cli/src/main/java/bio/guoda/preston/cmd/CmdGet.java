@@ -34,16 +34,20 @@ public class CmdGet extends Persisting implements Runnable {
     }
 
     public void run(BlobStoreReadOnly blobStore) {
+        run(blobStore, contentIdsOrAliases);
+    }
+
+    void run(BlobStoreReadOnly blobStore, List<String> contentIdsOrAliases) {
         try {
             if (contentIdsOrAliases.isEmpty()) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    handleContentQuery(blobStore, StringUtils.trim(line), this);
+                    handleContentQuery(blobStore, StringUtils.trim(line));
                 }
             } else {
                 for (String s : contentIdsOrAliases) {
-                    handleContentQuery(blobStore, s, this);
+                    handleContentQuery(blobStore, s);
                 }
             }
         } catch (Throwable th) {
@@ -52,7 +56,7 @@ public class CmdGet extends Persisting implements Runnable {
         }
     }
 
-    protected void handleContentQuery(BlobStoreReadOnly blobStore, String queryString, Persisting persisting) throws IOException {
+    private void handleContentQuery(BlobStoreReadOnly blobStore, String queryString) throws IOException {
         IRI queryIRI = toIRI(queryString);
 
         BlobStoreReadOnly query = resolvingBlobStore(blobStore);
@@ -66,10 +70,6 @@ public class CmdGet extends Persisting implements Runnable {
         } catch (IOException e) {
             throw new IOException("problem retrieving [" + queryString + "]", e);
         }
-    }
-
-    public void setContentIdsOrAliases(List<String> contentIdsOrAliases) {
-        this.contentIdsOrAliases = contentIdsOrAliases;
     }
 
 }
