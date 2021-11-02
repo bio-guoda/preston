@@ -64,8 +64,10 @@ public class TextMatcher extends ProcessorReadOnly {
                 if (in != null) {
                     textReader.handle(version, in);
                 }
-            } catch (ContentStreamException | IOException e) {
+            } catch (ContentStreamException ex) {
                 // ignore; this is opportunistic
+            } catch (IOException ex) {
+                throw new RuntimeException("failed to get [" + version.getIRIString() +"]", ex);
             }
 
             // emit remaining

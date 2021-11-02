@@ -40,4 +40,23 @@ public class CmdGrepTest {
 
         assertThat(blobStoreNull.getAttemptCount.get(), is(1));
     }
+
+    @Test(expected = RuntimeException.class)
+    public void attemptToProcessUnvailableHash() {
+        IRI aContentHash = toIRI("hash://sha256/blabla");
+
+        BlobStoreNull blobStoreNull = new BlobStoreNull(){
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                throw new IOException("kaboom!");
+            }
+        };
+
+        CmdGrep cmdGrep = new CmdGrep();
+
+        Quad quad = toStatement(toIRI("something"), HAS_VERSION, aContentHash);
+        cmdGrep.setInputStream(new ByteArrayInputStream(quad.toString().getBytes()));
+
+        cmdGrep.run(blobStoreNull);
+    }
 }
