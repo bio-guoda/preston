@@ -1,5 +1,6 @@
-package bio.guoda.preston.cmd;
+package bio.guoda.preston;
 
+import bio.guoda.preston.cmd.CmdGet;
 import com.beust.jcommander.JCommander;
 
 import java.util.List;

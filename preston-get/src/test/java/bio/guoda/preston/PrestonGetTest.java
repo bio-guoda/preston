@@ -1,4 +1,4 @@
-package bio.guoda.preston.cmd;
+package bio.guoda.preston;
 
 import org.junit.Test;
 
