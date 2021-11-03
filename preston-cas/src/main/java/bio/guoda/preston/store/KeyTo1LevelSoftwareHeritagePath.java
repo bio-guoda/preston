@@ -1,7 +1,6 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.Hasher;
-import com.uwyn.jhighlight.fastutil.Hash;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
