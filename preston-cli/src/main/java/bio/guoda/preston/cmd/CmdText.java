@@ -7,7 +7,7 @@ import static java.lang.System.exit;
 import static org.apache.commons.io.IOUtils.read;
 
 @Parameters(separators = "= ", commandDescription = "extract text from binary stdin")
-public class CmdText extends CmdCat {
+public class CmdText extends CmdGet {
 
     @Override
     public void run() {

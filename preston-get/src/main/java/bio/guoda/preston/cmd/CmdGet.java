@@ -21,7 +21,7 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static java.lang.System.exit;
 
 @Parameters(separators = "= ", commandDescription = "get biodiversity data")
-public class CmdCat extends Persisting implements Runnable {
+public class CmdGet extends Persisting implements Runnable {
 
     @Parameter(description = "content ids or known aliases (e.g., [hash://sha256/8ed311...])",
             validateWith = URIValidator.class)

@@ -1,7 +1,6 @@
 package bio.guoda.preston.cmd;
 
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.MissingCommandException;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class PrestonGet {
 
     static void run(String[] args) {
         JCommander jc = JCommander.newBuilder()
-                .addObject(new CmdCat())
+                .addObject(new CmdGet())
                 .build();
         jc.parse(args);
         List<Object> objects = jc.getObjects();
