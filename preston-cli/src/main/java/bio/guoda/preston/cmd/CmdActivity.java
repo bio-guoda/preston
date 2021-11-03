@@ -1,9 +1,9 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.Preston;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.StatementLogFactory;
+import bio.guoda.preston.Version;
 import bio.guoda.preston.process.RegistryReaderALA;
 import bio.guoda.preston.process.RegistryReaderBHL;
 import bio.guoda.preston.process.RegistryReaderBioCASE;
@@ -205,8 +205,8 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         IRI crawlActivity = activity.getActivity();
 
 
-        String version = Preston.getVersion(null);
-        String versionString = version == null ? "" : (" (Version " + Preston.getVersion() + ")");
+        String version = Version.getVersion(null);
+        String versionString = version == null ? "" : (" (Version " + Version.getVersion() + ")");
         return Arrays.asList(
                 toStatement(crawlActivity, PRESTON, IS_A, SOFTWARE_AGENT),
                 toStatement(crawlActivity, PRESTON, IS_A, AGENT),

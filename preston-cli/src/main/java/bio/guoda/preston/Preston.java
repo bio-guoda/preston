@@ -24,20 +24,4 @@ public class Preston {
         }
     }
 
-    public static String getVersion(String defaultVersion) {
-        String version = null;
-        try (InputStream file = Preston.class.getResourceAsStream("/preston.properties")) {
-            Properties prop = new Properties();
-            prop.load(file);
-            version = prop.getProperty("version");
-        } catch (IOException e) {
-            //
-        }
-
-        return StringUtils.isBlank(version) ? defaultVersion : version;
-    }
-
-    public static String getVersion() {
-        return getVersion("dev");
-    }
 }

@@ -139,7 +139,7 @@ public class ResourcesHTTP {
                     .setSSLHostnameVerifier(new NoopHostnameVerifier()) // see https://github.com/bio-guoda/preston/issues/25
                     .setSSLContext(build)
                     .setRetryHandler(new DefaultHttpRequestRetryHandler(3, true))
-                    .setUserAgent("globalbioticinteractions/" + Preston.getVersion() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)")
+                    .setUserAgent("globalbioticinteractions/" + Version.getVersion() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)")
                     .setDefaultRequestConfig(config)
                     .build();
         } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
