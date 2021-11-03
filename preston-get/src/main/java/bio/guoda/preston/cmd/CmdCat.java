@@ -52,7 +52,7 @@ public class CmdCat extends Persisting implements Runnable {
             }
         } catch (Throwable th) {
             th.printStackTrace(System.err);
-            exit(1);
+            throw new RuntimeException(th);
         }
     }
 
@@ -66,6 +66,9 @@ public class CmdCat extends Persisting implements Runnable {
                     new IRIFixingProcessor()
                             .process(queryIRI)
             );
+            if (contentStream == null) {
+                throw new IOException("[" + queryString + "] not found.");
+            }
             IOUtils.copyLarge(contentStream, System.out);
         } catch (IOException e) {
             throw new IOException("problem retrieving [" + queryString + "]", e);
