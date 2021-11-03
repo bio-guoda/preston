@@ -205,4 +205,22 @@ public class Persisting extends PersistingLocal {
     public void setRemotes(List<URI> remotes) {
         this.remotes = remotes;
     }
+
+    public Boolean getDisableCache() {
+        return disableCache;
+    }
+
+    public Boolean getDisableProgress() {
+        return disableProgress;
+    }
+
+    public void setDisableProgress(Boolean disableProgress) {
+        this.disableProgress = disableProgress;
+    }
+
+    public boolean isSupportTarGzDiscovery() {
+        return supportTarGzDiscovery;
+    }
+
+
 }

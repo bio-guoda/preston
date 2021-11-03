@@ -75,4 +75,12 @@ public class CmdGet extends Persisting implements Runnable {
         }
     }
 
+    public List<String> getContentIdsOrAliases() {
+        return contentIdsOrAliases;
+    }
+
+    public void setContentIdsOrAliases(List<String> contentIdsOrAliases) {
+        this.contentIdsOrAliases = contentIdsOrAliases;
+    }
+
 }

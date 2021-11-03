@@ -58,4 +58,13 @@ public class PersistingLocal extends Cmd {
         return localTmpDir;
     }
 
+    public void setLocalDataDir(String localDataDir) {
+        this.localDataDir = localDataDir;
+    }
+
+    public void setLocalTmpDir(String localTmpDir) {
+        this.localTmpDir = localTmpDir;
+    }
+
+
 }
