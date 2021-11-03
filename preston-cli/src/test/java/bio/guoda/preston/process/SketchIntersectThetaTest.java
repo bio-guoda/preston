@@ -275,8 +275,8 @@ public class SketchIntersectThetaTest {
             sketchA.update(UUID.randomUUID().toString());
         }
 
-        assertEquals(185429, sketchA.getLowerBound(2), 10000);
-        assertEquals(192885, sketchA.getEstimate(), 10000);
+        assertEquals(185429, sketchA.getLowerBound(2), 15000);
+        assertEquals(192885, sketchA.getEstimate(), 15000);
         assertEquals(0.02, sketchA.getTheta(), 0.01d);
 
         UpdateSketch sketchB = UpdateSketch
