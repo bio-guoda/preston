@@ -4,12 +4,7 @@ package bio.guoda.preston;
     Preston - a commandline tool to help discover, access and archive the biodiversity data archives, identifiers and registries.
  */
 
-import org.apache.commons.lang3.StringUtils;
 import bio.guoda.preston.cmd.CmdLine;
-
-import java.io.InputStream;
-import java.io.IOException;
-import java.util.Properties;
 
 import static java.lang.System.exit;
 
