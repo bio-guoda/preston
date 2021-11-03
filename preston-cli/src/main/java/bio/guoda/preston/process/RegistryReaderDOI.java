@@ -2,11 +2,11 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.cxf.helpers.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,9 +18,7 @@ import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.getVersion;
 import static bio.guoda.preston.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
-import static bio.guoda.preston.RefNodeFactory.toBlank;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
-import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class RegistryReaderDOI extends ProcessorReadOnly {
 
@@ -52,7 +50,7 @@ public class RegistryReaderDOI extends ProcessorReadOnly {
     }
 
     static void parseGBIFDownloadHtmlPage(Quad statement, InputStream is, StatementsEmitter emitter) throws IOException {
-        String htmlPage = IOUtils.toString(is, StandardCharsets.UTF_8.name());
+        String htmlPage = IOUtils.toString(is, StandardCharsets.UTF_8);
         String[] split = htmlPage.split("key:\\s+");
         if (split.length > 1) {
             String[] split1 = split[1].split("'");

@@ -87,7 +87,7 @@ public class PersistingTest {
         InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/052c70c60e7c17123a1bdf18d2ce607cee1b0d96157b6174aae08a2f2f8d53d8"));
         assertNotNull(inputStream);
 
-        assertThat(org.apache.cxf.helpers.IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()), StringStartsWith.startsWith("{\"key\":\"58414378-4fb2-47e0-8dd5-8b55d5c77117\""));
+        assertThat(org.apache.commons.io.IOUtils.toString(inputStream, StandardCharsets.UTF_8), StringStartsWith.startsWith("{\"key\":\"58414378-4fb2-47e0-8dd5-8b55d5c77117\""));
 
     }
 
@@ -102,7 +102,7 @@ public class PersistingTest {
         InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/a12dd6335e7803027da3007e26926c5c946fea9803a5eb07908d978998d933da"));
         assertNotNull(inputStream);
 
-        assertThat(org.apache.cxf.helpers.IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()),
+        assertThat(org.apache.commons.io.IOUtils.toString(inputStream, StandardCharsets.UTF_8),
                 StringStartsWith.startsWith("THE EVOLUTION OF MAN"));
 
     }
@@ -118,7 +118,7 @@ public class PersistingTest {
         InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/162a17cbd1da43ac4eaba36b936104b09967ac29bfda7294201df34659e1a656"));
         assertNotNull(inputStream);
 
-        assertThat(org.apache.cxf.helpers.IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()),
+        assertThat(org.apache.commons.io.IOUtils.toString(inputStream, StandardCharsets.UTF_8),
                 StringStartsWith.startsWith("{\"key\":\"e10cb8d7-cf2d-4b2f-9758-76dbead48965\""));
 
     }
@@ -134,7 +134,7 @@ public class PersistingTest {
         InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/162a17cbd1da43ac4eaba36b936104b09967ac29bfda7294201df34659e1a656"));
         assertNotNull(inputStream);
 
-        assertThat(org.apache.cxf.helpers.IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()),
+        assertThat(org.apache.commons.io.IOUtils.toString(inputStream, StandardCharsets.UTF_8),
                 StringStartsWith.startsWith("{\"key\":\"e10cb8d7-cf2d-4b2f-9758-76dbead48965\""));
 
     }
