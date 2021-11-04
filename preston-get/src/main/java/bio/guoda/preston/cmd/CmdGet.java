@@ -14,11 +14,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
-import static java.lang.System.exit;
 
 @Parameters(separators = "= ", commandDescription = "get biodiversity data")
 public class CmdGet extends Persisting implements Runnable {
@@ -26,6 +26,8 @@ public class CmdGet extends Persisting implements Runnable {
     @Parameter(description = "content ids or known aliases (e.g., [hash://sha256/8ed311...])",
             validateWith = URIValidator.class)
     private List<String> contentIdsOrAliases = new ArrayList<>();
+
+    private OutputStream outputStream = System.out;
 
     @Override
     public void run() {
@@ -69,7 +71,7 @@ public class CmdGet extends Persisting implements Runnable {
             if (contentStream == null) {
                 throw new IOException("[" + queryString + "] not found.");
             }
-            IOUtils.copyLarge(contentStream, System.out);
+            IOUtils.copyLarge(contentStream, getOutputStream());
         } catch (IOException e) {
             throw new IOException("problem retrieving [" + queryString + "]", e);
         }
@@ -82,5 +84,14 @@ public class CmdGet extends Persisting implements Runnable {
     public void setContentIdsOrAliases(List<String> contentIdsOrAliases) {
         this.contentIdsOrAliases = contentIdsOrAliases;
     }
+
+    public OutputStream getOutputStream() {
+        return outputStream;
+    }
+
+    public void setOutputStream(OutputStream outputStream) {
+        this.outputStream = outputStream;
+    }
+
 
 }
