@@ -4,6 +4,7 @@ import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -133,7 +134,7 @@ public class CmdAppendTest {
                 .collect(Collectors.toList());
 
         long numActivities = activityUUIDs.stream()
-                .map(x -> StringUtils.replacePattern(x, "^" + RefNodeConstants.URN_UUID_PREFIX, ""))
+                .map(x -> RegExUtils.replacePattern(x, "^" + RefNodeConstants.URN_UUID_PREFIX, ""))
                 .map(UUID::fromString)
                 .distinct()
                 .count();

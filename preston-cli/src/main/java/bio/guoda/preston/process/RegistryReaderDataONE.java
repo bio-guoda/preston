@@ -5,6 +5,7 @@ import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,8 +153,8 @@ public class RegistryReaderDataONE extends ProcessorReadOnly {
 
     static void emitNextPage(int offset, int limit, StatementsEmitter emitter, String versionSourceURI) {
         String nextPageURL = versionSourceURI;
-        nextPageURL = StringUtils.replacePattern(nextPageURL, "rows=[0-9]*", "rows=" + limit);
-        nextPageURL = StringUtils.replacePattern(nextPageURL, "start=[0-9]*", "start=" + offset);
+        nextPageURL = RegExUtils.replacePattern(nextPageURL, "rows=[0-9]*", "rows=" + limit);
+        nextPageURL = RegExUtils.replacePattern(nextPageURL, "start=[0-9]*", "start=" + offset);
         nextPageURL = StringUtils.contains(nextPageURL, "?") ? nextPageURL : nextPageURL + "?";
         nextPageURL = StringUtils.contains(nextPageURL, "start") ? nextPageURL : nextPageURL + "&start=" + offset;
         nextPageURL = StringUtils.contains(nextPageURL, "rows") ? nextPageURL : nextPageURL + "&rows=" + limit;

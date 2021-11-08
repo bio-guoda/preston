@@ -5,6 +5,7 @@ import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.slf4j.Logger;
@@ -167,8 +168,8 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
 
     static void emitNextPage(int offset, int limit, StatementsEmitter emitter, String versionSourceURI) {
         String nextPageURL = versionSourceURI;
-        nextPageURL = StringUtils.replacePattern(nextPageURL, "limit=[0-9]*", "limit=" + limit);
-        nextPageURL = StringUtils.replacePattern(nextPageURL, "offset=[0-9]*", "offset=" + offset);
+        nextPageURL = RegExUtils.replacePattern(nextPageURL, "limit=[0-9]*", "limit=" + limit);
+        nextPageURL = RegExUtils.replacePattern(nextPageURL, "offset=[0-9]*", "offset=" + offset);
         nextPageURL = StringUtils.contains(nextPageURL, "?") ? nextPageURL : nextPageURL + "?";
         nextPageURL = StringUtils.contains(nextPageURL, "offset") ? nextPageURL : nextPageURL + "&offset=" + offset;
         nextPageURL = StringUtils.contains(nextPageURL, "limit") ? nextPageURL : nextPageURL + "&limit=" + limit;
