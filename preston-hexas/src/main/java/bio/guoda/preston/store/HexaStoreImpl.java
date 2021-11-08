@@ -1,7 +1,7 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.Hasher;
-import bio.guoda.preston.RDFUtil;
+import bio.guoda.preston.RDFValueUtil;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +36,7 @@ public class HexaStoreImpl implements HexaStore {
 
 
     protected static IRI calculateHashFor(RDFTerm term) {
-        return Hasher.calcSHA256(RDFUtil.getValueFor(term));
+        return Hasher.calcSHA256(RDFValueUtil.getValueFor(term));
     }
 
     @Override

@@ -28,14 +28,7 @@ public class RDFUtil {
     public static final RDF RDF_FACTORY = new JenaRDF();
 
     public static String getValueFor(RDFTerm entity) {
-        String value = null;
-        if (entity instanceof IRI) {
-            value = ((IRI) entity).getIRIString();
-        } else if (entity instanceof Literal) {
-            value = ((Literal) entity).getLexicalForm();
-        }
-        value = (value == null) ? entity.toString() : value;
-        return value;
+        return RDFValueUtil.getValueFor(entity);
     }
 
     public static Iterator<Quad> asQuads(InputStream inputStream) {
@@ -46,7 +39,7 @@ public class RDFUtil {
                 false);
 
         profile.setBaseIRI("urn:example:");
-        return RiotParsers.createIteratorNQuads(inputStream, (StreamRDF) null, profile);
+        return RiotParsers.createIteratorNQuads(inputStream, null, profile);
     }
 
     public static Stream<org.apache.commons.rdf.api.Quad> asQuadStream(InputStream inputStream) {
