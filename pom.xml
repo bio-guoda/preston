@@ -10,6 +10,7 @@
     <name>Preston Modules</name>
     <modules>
         <module>preston-parent</module>
+        <module>preston-rdf</module>
         <module>preston-core</module>
         <module>preston-test</module>
         <module>preston-cas</module>

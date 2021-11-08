@@ -25,14 +25,14 @@
             <version>2.7</version>
         </dependency>
         <dependency>
+            <groupId>bio.guoda</groupId>
+            <artifactId>preston-rdf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.10</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-rdf-simple</artifactId>
-            <version>${commons-rdf.version}</version>
         </dependency>
     </dependencies>
 
