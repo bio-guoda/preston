@@ -14,7 +14,7 @@
     <description>a biodiversity dataset tracker</description>
 
     <properties>
-        <jackson.version>2.11.2</jackson.version>
+        <jackson.version>2.11.3</jackson.version>
         <lucene.version>8.5.2</lucene.version>
     </properties>
 
