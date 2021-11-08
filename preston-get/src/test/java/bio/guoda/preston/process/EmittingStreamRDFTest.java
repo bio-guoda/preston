@@ -59,11 +59,11 @@ public class EmittingStreamRDFTest {
             public void emit(Quad statement) {
                 quads.add(statement);
             }
-        }).parseAndEmit(IOUtils.toInputStream("<5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> .", StandardCharsets.UTF_8));
+        }).parseAndEmit(IOUtils.toInputStream("<urn:uuid:5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> .", StandardCharsets.UTF_8));
 
         assertThat(quads.size(), Is.is(1));
 
-        assertThat(quads.get(0).getSubject().ntriplesString(), Is.is("<5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1>"));
+        assertThat(quads.get(0).getSubject().ntriplesString(), Is.is("<urn:uuid:5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1>"));
 
     }
 
