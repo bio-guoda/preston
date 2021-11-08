@@ -20,15 +20,15 @@ public class RDFUtilTest {
 
     @Test
     public void asQuadStream() {
-        Stream<Quad> quadStream = RDFUtil.asQuadStream(IOUtils.toInputStream("<subj> <verb> <obj> <graph> .", StandardCharsets.UTF_8));
+        Stream<Quad> quadStream = RDFUtil.asQuadStream(IOUtils.toInputStream("<urn:example:subj> <urn:example:verb> <urn:example:obj> <urn:example:graph> .", StandardCharsets.UTF_8));
         List<Quad> collect = quadStream.collect(Collectors.toList());
         assertThat(collect.size(), is(1));
         Quad quad = collect.get(0);
-        assertThat(quad.getObject().toString(), is("<obj>"));
-        assertThat(quad.getPredicate().toString(), is("<verb>"));
-        assertThat(quad.getSubject().toString(), is("<subj>"));
+        assertThat(quad.getObject().toString(), is("<urn:example:obj>"));
+        assertThat(quad.getPredicate().toString(), is("<urn:example:verb>"));
+        assertThat(quad.getSubject().toString(), is("<urn:example:subj>"));
         assertThat(quad.getGraphName().isPresent(), is(true));
-        assertThat(quad.getGraphName().get().toString(), is("<graph>"));
+        assertThat(quad.getGraphName().get().toString(), is("<urn:example:graph>"));
     }
 
     @Test

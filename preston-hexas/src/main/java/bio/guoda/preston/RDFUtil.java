@@ -9,7 +9,6 @@ import org.apache.jena.riot.lang.LabelToNode;
 import org.apache.jena.riot.lang.RiotParsers;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
 import org.apache.jena.riot.system.FactoryRDF;
-import org.apache.jena.riot.system.IRIResolver;
 import org.apache.jena.riot.system.ParserProfile;
 import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.sparql.core.Quad;
@@ -41,8 +40,12 @@ public class RDFUtil {
 
     public static Iterator<Quad> asQuads(InputStream inputStream) {
         FactoryRDF factory = factoryRDF(LabelToNode.createScopeByGraph());
-        ParserProfile profile = createParserProfile(factory, ErrorHandlerFactory.errorHandlerStd, false);
-        profile.setIRIResolver(IRIResolver.createNoResolve());
+        ParserProfile profile = createParserProfile(
+                factory,
+                ErrorHandlerFactory.errorHandlerStd,
+                false);
+
+        profile.setBaseIRI("urn:example:");
         return RiotParsers.createIteratorNQuads(inputStream, (StreamRDF) null, profile);
     }
 
