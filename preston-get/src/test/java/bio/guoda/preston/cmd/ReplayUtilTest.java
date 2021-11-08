@@ -29,12 +29,18 @@ public class ReplayUtilTest {
     @Test
     public void replay() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        StatementLoggerNQuads logger = new StatementLoggerNQuads(new PrintStream(out, true));
-        ReplayUtil.attemptReplay(getBlobStore(), getStatementStore(), new VersionRetriever(getBlobStore()), logger);
+        StatementLoggerNQuads logger = new StatementLoggerNQuads(
+                new PrintStream(out, true)
+        );
+        ReplayUtil.attemptReplay(
+                getBlobStore(),
+                getStatementStore(),
+                new VersionRetriever(getBlobStore()),
+                logger);
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), Is.is(
-                "<some> <other> <thing> .\n" +
-                        "<some> <newer> <thing> .\n"));
+                "<urn:example:some> <urn:example:other> <urn:example:thing> .\n" +
+                        "<urn:example:some> <urn:example:newer> <urn:example:thing> .\n"));
     }
 
     @Ignore(value = "re-enable after implementing prov root selection")
@@ -42,11 +48,16 @@ public class ReplayUtilTest {
     public void replayNonDefaultProvenanceRoot() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         StatementLoggerNQuads logger = new StatementLoggerNQuads(new PrintStream(out, true));
-        ReplayUtil.attemptReplay(getBlobStore(), getStatementStore(), TEST_KEY_IRI, new VersionRetriever(getBlobStore()), logger);
+        ReplayUtil.attemptReplay(
+                getBlobStore(),
+                getStatementStore(),
+                TEST_KEY_IRI,
+                new VersionRetriever(getBlobStore()),
+                logger);
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), Is.is(
-                "<some> <other> <thing> .\n" +
-                        "<some> <newer> <thing> .\n"));
+                "<urn:example:some> <urn:example:other> <urn:example:thing> .\n" +
+                        "<urn:example:some> <urn:example:newer> <urn:example:thing> .\n"));
 
     }
 
@@ -55,10 +66,16 @@ public class ReplayUtilTest {
     public void replayNonDefaultProvenanceRootHead() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         StatementLoggerNQuads logger = new StatementLoggerNQuads(new PrintStream(out, true));
-        ReplayUtil.attemptReplay(getBlobStore(), getStatementStore(), TEST_KEY_NEWER_IRI, new VersionRetriever(getBlobStore()), logger);
+        ReplayUtil.attemptReplay(
+                getBlobStore(),
+                getStatementStore(),
+                TEST_KEY_NEWER_IRI,
+                new VersionRetriever(getBlobStore()),
+                logger
+        );
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), Is.is(
-                "<some> <newer> <thing> .\n"));
+                "<urn:example:some> <urn:example:newer> <urn:example:thing> .\n"));
 
     }
 
@@ -66,7 +83,12 @@ public class ReplayUtilTest {
     public void replayNonExistingProvenanceRoot() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         StatementLoggerNQuads logger = new StatementLoggerNQuads(new PrintStream(out, true));
-        ReplayUtil.attemptReplay(getBlobStore(), getStatementStore(), RefNodeFactory.toIRI("non-existing"), new VersionRetriever(getBlobStore()), logger);
+        ReplayUtil.attemptReplay(
+                getBlobStore(),
+                getStatementStore(),
+                RefNodeFactory.toIRI("non-existing"),
+                new VersionRetriever(getBlobStore()), logger
+        );
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), Is.is(""));
 
@@ -105,9 +127,9 @@ public class ReplayUtilTest {
             @Override
             public InputStream get(IRI key) throws IOException {
                 if (key.equals(TEST_KEY_IRI)) {
-                    return IOUtils.toInputStream("<some> <other> <thing> .", StandardCharsets.UTF_8);
+                    return IOUtils.toInputStream("<urn:example:some> <urn:example:other> <urn:example:thing> .", StandardCharsets.UTF_8);
                 } else if (key.equals(TEST_KEY_NEWER_IRI)) {
-                    return IOUtils.toInputStream("<some> <newer> <thing> .", StandardCharsets.UTF_8);
+                    return IOUtils.toInputStream("<urn:example:some> <urn:example:newer> <urn:example:thing> .", StandardCharsets.UTF_8);
                 } else {
                     throw new IOException("no value for [" + key.getIRIString() + "] found.");
                 }
