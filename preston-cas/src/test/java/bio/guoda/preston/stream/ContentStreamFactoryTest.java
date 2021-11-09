@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 public class ContentStreamFactoryTest {
@@ -17,6 +19,24 @@ public class ContentStreamFactoryTest {
     @Test(expected = IllegalArgumentException.class)
     public void noContentStreamForNonContentHash() throws IOException {
         new ContentStreamFactory(RefNodeFactory.toIRI("foo:bar"));
+    }
+
+    @Test
+    public void matchingGZipPrefix() throws IOException {
+
+        assertTrue(ContentStreamFactory.hasMatchingGZipPrefix(
+                RefNodeFactory.toIRI("gz:something"),
+                RefNodeFactory.toIRI("gz:something!/something"))
+        );
+    }
+
+    @Test
+    public void notMatchingGZipPrefix() throws IOException {
+
+        assertFalse(ContentStreamFactory.hasMatchingGZipPrefix(
+                RefNodeFactory.toIRI("gz:else"),
+                RefNodeFactory.toIRI("gz:something!/something"))
+        );
     }
 
     @Test

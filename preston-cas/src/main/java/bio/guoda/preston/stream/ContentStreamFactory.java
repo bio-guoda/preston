@@ -1,5 +1,6 @@
 package bio.guoda.preston.stream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
@@ -14,6 +15,23 @@ public class ContentStreamFactory implements InputStreamFactory {
     public static final String URI_PREFIX_CUT = "cut:";
     private final IRI targetIri;
     private final IRI contentReference;
+
+    public static boolean hasMatchingGZipPrefix(IRI iri, IRI targetIri) {
+        boolean prefixMatches = false;
+        String iriString = iri.getIRIString();
+        String targetIriString = targetIri.getIRIString();
+
+        // turn gz:[something]!/bla.txt  (syntax used by Apache's Virtual Filesystem https://commons.apache.org/proper/commons-vfs/)
+        // into gz:[something]
+        //
+        if (StringUtils.startsWith(targetIriString, "gz:")
+                && StringUtils.startsWith(iriString, "gz:")
+                && StringUtils.length(targetIriString) > StringUtils.length(iriString)) {
+            prefixMatches = StringUtils.startsWith(targetIriString.substring(iriString.length()), "!/");
+        }
+        return prefixMatches;
+    }
+
 
     public ContentStreamFactory(IRI iri) {
         this.targetIri = iri;
@@ -63,7 +81,8 @@ public class ContentStreamFactory implements InputStreamFactory {
                     .compile(String.format("([^:]+):%s", iri.getIRIString()))
                     .matcher(targetIri.getIRIString());
 
-            if (iri.getIRIString().equals(targetIri.getIRIString())) {
+            if (iri.getIRIString().equals(targetIri.getIRIString())
+                    || hasMatchingGZipPrefix(iri, targetIri)) {
                 contentStream = in;
                 stopReading();
                 return true;
@@ -75,6 +94,7 @@ public class ContentStreamFactory implements InputStreamFactory {
                 return handler.handle(iri, in);
             }
         }
+
 
 
         private void cutAndParseBytes(IRI iri, InputStream in) throws ContentStreamException {

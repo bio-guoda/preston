@@ -36,6 +36,20 @@ public class ContentHashDereferencerTest {
     }
 
     @Test
+    public void getGzippedFile() throws IOException {
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/hello.txt.gz");
+        InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("gz:" + aContentHash + ""));
+        assertThat(IOUtils.toString(content, Charsets.DEFAULT_CHARSET), is("hello"));
+    }
+
+    @Test
+    public void getGzippedFileIgnoreSuffix() throws IOException {
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/hello.txt.gz");
+        InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("gz:" + aContentHash + "!/hello.txt"));
+        assertThat(IOUtils.toString(content, Charsets.DEFAULT_CHARSET), is("hello"));
+    }
+
+    @Test
     public void getBytesFromFileInArchive() throws IOException {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
         InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("cut:tar:gz:" + aContentHash + "!/level1.txt!/b9-15"));
