@@ -1,15 +1,18 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.cmd.AliasUtil;
 import bio.guoda.preston.cmd.Cmd;
 import bio.guoda.preston.cmd.Persisting;
 import bio.guoda.preston.process.StatementsListenerAdapter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 
 public class AliasDereferencer implements BlobStoreReadOnly {
 
@@ -28,20 +31,41 @@ public class AliasDereferencer implements BlobStoreReadOnly {
         if (HashKeyUtil.isLikelyCompositeHashURI(iri)) {
             firstAliasHash.set(iri);
         } else {
-            AliasUtil.findSelectedAlias(new StatementsListenerAdapter() {
-                @Override
-                public void on(Quad statement) {
-                    if (statement.getObject() instanceof IRI) {
-                        firstAliasHash.set((IRI) statement.getObject());
-                        Cmd.stopProcessing();
-                    }
-                }
-            }, q -> q.getSubject().equals(iri), persisting);
+            attemptToFindAlias(firstAliasHash, q -> q.getSubject().equals(iri));
+            attemptToFindInnerAlias(firstAliasHash, iri);
         }
 
         return firstAliasHash.get() == null
                 ? null :
                 dereferenceAliasedHash(iri, firstAliasHash);
+    }
+
+    private void attemptToFindInnerAlias(AtomicReference<IRI> firstAliasHash, IRI iri) {
+        if (firstAliasHash.get() == null) {
+            if (HashKeyUtil.isLikelyCompositeURI(iri)) {
+                IRI innerAlias = HashKeyUtil.extractInnerURI(iri);
+                attemptToFindAlias(firstAliasHash, q -> q.getSubject().equals(innerAlias));
+                if (firstAliasHash.get() != null) {
+                    String compositeHashURIString = StringUtils.replace(iri.getIRIString(), innerAlias.getIRIString(), firstAliasHash.get().getIRIString());
+                    firstAliasHash.set(RefNodeFactory.toIRI(compositeHashURIString));
+                }
+            }
+
+        }
+    }
+
+    private void attemptToFindAlias(AtomicReference<IRI> firstAliasHash, Predicate<Quad> selector) {
+        AliasUtil.findSelectedAlias(new StatementsListenerAdapter() {
+                                        @Override
+                                        public void on(Quad statement) {
+                                            if (statement.getObject() instanceof IRI) {
+                                                firstAliasHash.set((IRI) statement.getObject());
+                                                Cmd.stopProcessing();
+                                            }
+                                        }
+                                    },
+                selector,
+                persisting);
     }
 
     private InputStream dereferenceAliasedHash(IRI iri, AtomicReference<IRI> firstAliasHash) throws DereferenceException {

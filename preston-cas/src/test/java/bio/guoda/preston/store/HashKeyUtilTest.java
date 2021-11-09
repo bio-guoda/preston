@@ -1,9 +1,13 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeFactory;
+import org.hamcrest.core.Is;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertFalse;
 
 public class HashKeyUtilTest {
 
@@ -29,23 +33,70 @@ public class HashKeyUtilTest {
     }
 
     @Test
-    public void validComboHashURI() {
+    public void validCompositeHashURI() {
         String comboHashURI = "cut:hash://sha256/e0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e57b84f51f22ca!/b217065-217087";
-        boolean matches = HashKeyUtil.isLikelyCompositeHashURI(RefNodeFactory.toIRI(comboHashURI));
-        assertTrue(matches);
+        assertTrue(HashKeyUtil.isLikelyCompositeHashURI(RefNodeFactory.toIRI(comboHashURI)));
     }
 
     @Test
-    public void validComboHashURIPlainHashURI() {
+    public void validCompositeHashURIPlainHashURI() {
         String comboHashURI = "hash://sha256/e0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e57b84f51f22ca";
-        boolean matches = HashKeyUtil.isLikelyCompositeHashURI(RefNodeFactory.toIRI(comboHashURI));
-        assertTrue(matches);
+        assertTrue(HashKeyUtil.isLikelyCompositeHashURI(RefNodeFactory.toIRI(comboHashURI)));
     }
 
     @Test
-    public void invalidComboHashURI() {
+    public void invalidCompositeHashURI() {
         String comboHashURI = "foo:bar:123";
         assertFalse(HashKeyUtil.isLikelyCompositeHashURI(RefNodeFactory.toIRI(comboHashURI)));
     }
+
+    @Test
+    public void likelyCompositeURI() {
+        String comboHashURI = "foo:bar:123";
+        assertTrue(HashKeyUtil.isLikelyCompositeURI(RefNodeFactory.toIRI(comboHashURI)));
+    }
+
+    @Test
+    public void likelyCompositeURIWithPath() {
+        String comboHashURI = "foo:bar:123!/donald";
+        assertTrue(HashKeyUtil.isLikelyCompositeURI(RefNodeFactory.toIRI(comboHashURI)));
+    }
+
+
+    @Test
+    public void unlikelyCompositeURI() {
+        String comboHashURI = "foo";
+        assertFalse(HashKeyUtil.isLikelyCompositeURI(RefNodeFactory.toIRI(comboHashURI)));
+    }
+
+    @Test
+    public void parseCompositeURI() {
+        String uriString = "gz:file:foo.txt.gz!/foo.txt";
+        assertThat(HashKeyUtil.extractInnerURI(uriString), Is.is("file:foo.txt.gz"));
+    }
+
+    @Test
+    public void parseCompositeURI2() {
+        String uriString = "tar:gz:file:foo.txt.tar.gz!/foo.txt";
+        assertThat(
+                HashKeyUtil.extractInnerURI(uriString),
+                Is.is("file:foo.txt.tar.gz")
+        );
+    }
+
+    @Test
+    public void parseCompositeURI3() {
+        assertThat(
+                HashKeyUtil.extractInnerURI("gz:https://example.org/foo.txt.gz!/foo.txt"),
+                Is.is("https://example.org/foo.txt.gz")
+        );
+    }
+
+    @Test
+    public void parseNonCompositeURI3() {
+        String innerURIString = HashKeyUtil.extractInnerURI("blablabla");
+        assertThat(innerURIString, Is.is(nullValue()));
+    }
+
 
 }
