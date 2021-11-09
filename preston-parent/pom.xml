@@ -18,6 +18,7 @@
         <commons-rdf.version>0.5.0</commons-rdf.version>
         <jena.version>3.17.0</jena.version>
         <tika.version>1.27</tika.version>
+        <commons-codec.version>1.15</commons-codec.version>
     </properties>
 
     <dependencies>
