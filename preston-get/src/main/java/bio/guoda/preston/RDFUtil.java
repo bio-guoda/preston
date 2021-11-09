@@ -5,6 +5,7 @@ import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.RDF;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.jena.JenaRDF;
+import org.apache.jena.query.ARQ;
 import org.apache.jena.riot.lang.LabelToNode;
 import org.apache.jena.riot.lang.RiotParsers;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
@@ -32,6 +33,7 @@ public class RDFUtil {
     }
 
     public static Iterator<Quad> asQuads(InputStream inputStream) {
+        ARQ.init();
         FactoryRDF factory = factoryRDF(LabelToNode.createScopeByGraph());
         ParserProfile profile = createParserProfile(
                 factory,
