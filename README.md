@@ -10,7 +10,7 @@
 To install [a preston release](../../releases) on your linux/mac: 
 
 ```console
-sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.3.3/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
+sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.3.4/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston' && preston version
 ```
 :warning: Note that this installs preston using sudo privileges and makes preston.jar executable. Please inspect the script before running it. Also see [install](#install).
 
