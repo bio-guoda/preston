@@ -11,11 +11,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.store.TestUtil.getTestBlobStoreForResource;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
 
 public class ContentHashDereferencerTest {
 
@@ -33,6 +36,46 @@ public class ContentHashDereferencerTest {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
         InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("tar:gz:" + aContentHash + "!/level1.txt"));
         assertThat(IOUtils.toString(content, Charsets.DEFAULT_CHARSET), is("https://example.org"));
+    }
+
+    @Test
+    public void apacheVFSUrl() {
+        String input = "tar:gz:hash://sha256/bababab!/nested.tar!/file.txt";
+        assertThat(ContentStreamUtil.truncateGZNotationForVFSIfNeeded(input),
+                is("tar:gz:hash://sha256/bababab!/file.txt"));
+
+    }
+
+    @Test
+    public void apacheVFSUrl2() {
+        String input = "zip:tar:gz:hash://sha256/bababab!/nested.tar!/file.zip!/file.txt";
+        assertThat(ContentStreamUtil.truncateGZNotationForVFSIfNeeded(input),
+                is("zip:tar:gz:hash://sha256/bababab!/file.zip!/file.txt"));
+
+    }
+
+    @Test
+    public void apacheVFSUrl3() {
+        String url = "zip:tar:gz:hash://sha256/bababab!/file.zip!/file.txt";
+        url = ContentStreamUtil.truncateGZNotationForVFSIfNeeded(url);
+
+        assertThat(url, is("zip:tar:gz:hash://sha256/bababab!/file.zip!/file.txt"));
+
+    }
+
+    @Test
+    public void getFileInArchiveWithApacheVSF() throws IOException {
+
+
+
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
+        InputStream content = new ContentHashDereferencer(blobStore)
+                .get(toIRI("tar:gz:" + aContentHash + "!/nested.tar!/level1.txt"));
+
+        assertThat(
+                IOUtils.toString(content, Charsets.DEFAULT_CHARSET),
+                is("https://example.org")
+        );
     }
 
     @Test
