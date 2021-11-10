@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertFalse;
 
 public class HashKeyUtilTest {

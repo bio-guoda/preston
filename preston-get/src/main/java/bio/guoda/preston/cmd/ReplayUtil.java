@@ -43,7 +43,7 @@ public final class ReplayUtil {
                               final HexaStoreReadOnly provenanceLogIndex,
                               final IRI provRoot,
                               StatementsListener... listeners) {
-        attemptReplay(provenanceLogStore, provenanceLogIndex, new CmdContext(() -> true, provRoot, listeners));
+        attemptReplay(provenanceLogStore, provenanceLogIndex, new CmdContext(new ProcessorStateAlwaysContinue(), provRoot, listeners));
     }
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
@@ -80,7 +80,7 @@ public final class ReplayUtil {
         }
 
         if (!receivedSomething.get()) {
-            LOG.warn("No previous updates found. Please update first.");
+            LOG.warn("No provenance found. Please use/create a Preston data archive.");
         }
     }
 
@@ -97,4 +97,5 @@ public final class ReplayUtil {
                 ),
                 new CmdContext(persisting, processor));
     }
+
 }

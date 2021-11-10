@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.cmd.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import org.apache.commons.rdf.api.IRI;
@@ -13,13 +14,7 @@ public abstract class ProcessorReadOnly extends StatementProcessor implements Ke
     private final BlobStoreReadOnly blobStoreReadOnly;
 
     public ProcessorReadOnly(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
-        this(blobStoreReadOnly, new ProcessorState() {
-
-            @Override
-            public boolean shouldKeepProcessing() {
-                return true;
-            }
-        }, listeners);
+        this(blobStoreReadOnly, new ProcessorStateAlwaysContinue(), listeners);
     }
     public ProcessorReadOnly(BlobStoreReadOnly blobStoreReadOnly, ProcessorState state, StatementsListener... listeners) {
         super(state, listeners);

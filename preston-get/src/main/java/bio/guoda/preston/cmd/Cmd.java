@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Cmd implements ProcessorState {
 
-    private static AtomicBoolean shouldKeepProcessing = new AtomicBoolean(true);
+    private AtomicBoolean shouldKeepProcessing = new AtomicBoolean(true);
 
 //    static {
 //        try {
@@ -20,7 +20,8 @@ public class Cmd implements ProcessorState {
 //
 //    }
 
-    public static void stopProcessing() {
+    @Override
+    public void stopProcessing() {
         shouldKeepProcessing.set(false);
     }
 

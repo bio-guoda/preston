@@ -2,8 +2,8 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.cmd.AliasUtil;
-import bio.guoda.preston.cmd.Cmd;
 import bio.guoda.preston.cmd.Persisting;
+import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -31,7 +31,7 @@ public class AliasDereferencer implements BlobStoreReadOnly {
         if (HashKeyUtil.isLikelyCompositeHashURI(iri)) {
             firstAliasHash.set(iri);
         } else {
-            attemptToFindAlias(firstAliasHash, q -> q.getSubject().equals(iri));
+            attemptToFindAlias(firstAliasHash, q -> q.getSubject().equals(iri), persisting);
             attemptToFindInnerAlias(firstAliasHash, iri);
         }
 
@@ -45,7 +45,7 @@ public class AliasDereferencer implements BlobStoreReadOnly {
             if (HashKeyUtil.isLikelyCompositeURI(iri)) {
                 IRI innerAlias = HashKeyUtil.extractInnerURI(iri);
                 if (!innerAlias.equals(iri)) {
-                    attemptToFindAlias(firstAliasHash, q -> q.getSubject().equals(innerAlias));
+                    attemptToFindAlias(firstAliasHash, q -> q.getSubject().equals(innerAlias), persisting);
                     if (firstAliasHash.get() != null) {
                         String compositeHashURIString = StringUtils.replace(iri.getIRIString(), innerAlias.getIRIString(), firstAliasHash.get().getIRIString());
                         firstAliasHash.set(RefNodeFactory.toIRI(compositeHashURIString));
@@ -56,13 +56,13 @@ public class AliasDereferencer implements BlobStoreReadOnly {
         }
     }
 
-    private void attemptToFindAlias(AtomicReference<IRI> firstAliasHash, Predicate<Quad> selector) {
+    private void attemptToFindAlias(AtomicReference<IRI> firstAliasHash, Predicate<Quad> selector, final ProcessorState processorState) {
         AliasUtil.findSelectedAlias(new StatementsListenerAdapter() {
                                         @Override
                                         public void on(Quad statement) {
                                             if (statement.getObject() instanceof IRI) {
                                                 firstAliasHash.set((IRI) statement.getObject());
-                                                Cmd.stopProcessing();
+                                                processorState.stopProcessing();
                                             }
                                         }
                                     },

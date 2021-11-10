@@ -82,6 +82,11 @@ public class EmittingStreamRDFTest {
             public boolean shouldKeepProcessing() {
                 return counter.getAndIncrement() == 0;
             }
+
+            @Override
+            public void stopProcessing() {
+
+            }
         }).parseAndEmit(IOUtils.toInputStream(StringUtils.joinWith("\n", line0, line0), StandardCharsets.UTF_8));
 
         assertThat(quads.size(), Is.is(1));
@@ -102,6 +107,11 @@ public class EmittingStreamRDFTest {
             @Override
             public boolean shouldKeepProcessing() {
                 return false;
+            }
+
+            @Override
+            public void stopProcessing() {
+
             }
         }).parseAndEmit(IOUtils.toInputStream("bla bla", StandardCharsets.UTF_8));
 

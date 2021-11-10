@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.cmd.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;
 import bio.guoda.preston.store.TestUtilForProcessor;
@@ -304,7 +305,15 @@ public class TextMatcherTest {
 
         public ArrayList<Quad> findMatches() {
             ArrayList<Quad> nodes = new ArrayList<>();
-            TextMatcher textMatcher = new TextMatcher(pattern, maxNumMatches, reportOnlyMatchingText, separateLines, () -> true, blobStore, TestUtilForProcessor.testListener(nodes));
+            TextMatcher textMatcher = new TextMatcher(
+                    pattern,
+                    maxNumMatches,
+                    reportOnlyMatchingText,
+                    separateLines,
+                    new ProcessorStateAlwaysContinue(),
+                    blobStore,
+                    TestUtilForProcessor.testListener(nodes)
+            );
             textMatcher.setBatchSize(batchSize);
 
             Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/blub"));

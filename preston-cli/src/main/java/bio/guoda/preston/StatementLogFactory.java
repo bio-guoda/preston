@@ -1,8 +1,8 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.cmd.Cmd;
 import bio.guoda.preston.process.LogErrorHandler;
 import bio.guoda.preston.cmd.LogTypes;
+import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementLogger;
 import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.process.StatementLoggerTSV;
@@ -13,12 +13,12 @@ import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class StatementLogFactory {
-    public static StatementsListener createPrintingLogger(LogTypes logMode) {
-        return createPrintingLogger(logMode, System.out);
+    public static StatementsListener createPrintingLogger(LogTypes logMode, ProcessorState processorState) {
+        return createPrintingLogger(logMode, System.out, processorState);
     }
 
-    public static StatementsListener createPrintingLogger(LogTypes logMode, final PrintStream out) {
-        return createPrintingLogger(logMode, out, Cmd::stopProcessing);
+    public static StatementsListener createPrintingLogger(LogTypes logMode, final PrintStream out, ProcessorState processorState) {
+        return createPrintingLogger(logMode, out, processorState::stopProcessing);
     }
 
     public static StatementsListener createPrintingLogger(LogTypes logMode, final PrintStream out, LogErrorHandler handler) {

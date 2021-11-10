@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RDFUtil;
+import bio.guoda.preston.cmd.ProcessorStateAlwaysContinue;
 import org.apache.commons.rdf.api.RDF;
 import org.apache.commons.rdf.jena.JenaRDF;
 import org.apache.commons.rdf.simple.SimpleRDF;
@@ -17,7 +18,7 @@ public class EmittingStreamRDF {
     private final ProcessorState context;
 
     public EmittingStreamRDF(StatementsEmitter emitter) {
-        this(emitter, () -> true);
+        this(emitter, new ProcessorStateAlwaysContinue());
     }
 
     public EmittingStreamRDF(StatementsEmitter emitter, ProcessorState processorState) {

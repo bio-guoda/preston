@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 
+import bio.guoda.preston.cmd.ProcessorStateAlwaysContinue;
 import org.apache.commons.rdf.api.Quad;
 
 import java.util.Collections;
@@ -12,7 +13,7 @@ public abstract class StatementProcessor extends StatementsListenerEmitterAdapte
     private final ProcessorState state;
 
     public StatementProcessor(StatementsListener... listeners) {
-        this(() -> true, listeners);
+        this(new ProcessorStateAlwaysContinue(), listeners);
     }
 
     public StatementProcessor(ProcessorState state, StatementsListener... listeners) {

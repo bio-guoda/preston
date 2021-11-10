@@ -104,7 +104,7 @@ public class CmdAlias extends CmdAppend implements Runnable {
     protected StatementsListener[] initListeners(BlobStoreReadOnly blobStore, StatementsListener archivingLogger, Queue<List<Quad>> statementQueue) {
         return new StatementsListener[]{
                 archivingLogger,
-                StatementLogFactory.createPrintingLogger(getLogMode(), System.out)
+                StatementLogFactory.createPrintingLogger(getLogMode(), System.out, this)
         };
     }
 
