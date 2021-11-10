@@ -44,10 +44,12 @@ public class AliasDereferencer implements BlobStoreReadOnly {
         if (firstAliasHash.get() == null) {
             if (HashKeyUtil.isLikelyCompositeURI(iri)) {
                 IRI innerAlias = HashKeyUtil.extractInnerURI(iri);
-                attemptToFindAlias(firstAliasHash, q -> q.getSubject().equals(innerAlias));
-                if (firstAliasHash.get() != null) {
-                    String compositeHashURIString = StringUtils.replace(iri.getIRIString(), innerAlias.getIRIString(), firstAliasHash.get().getIRIString());
-                    firstAliasHash.set(RefNodeFactory.toIRI(compositeHashURIString));
+                if (!innerAlias.equals(iri)) {
+                    attemptToFindAlias(firstAliasHash, q -> q.getSubject().equals(innerAlias));
+                    if (firstAliasHash.get() != null) {
+                        String compositeHashURIString = StringUtils.replace(iri.getIRIString(), innerAlias.getIRIString(), firstAliasHash.get().getIRIString());
+                        firstAliasHash.set(RefNodeFactory.toIRI(compositeHashURIString));
+                    }
                 }
             }
 

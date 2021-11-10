@@ -73,6 +73,8 @@ public class HashKeyUtil {
             String innerPath = matcher.group(2);
             innerURIString = innerScheme + innerPath;
         }
-        return RefNodeFactory.toIRI(innerURIString);
+        return StringUtils.isBlank(innerURIString)
+                ? uriString
+                : RefNodeFactory.toIRI(innerURIString);
     }
 }

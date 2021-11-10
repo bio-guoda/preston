@@ -94,8 +94,8 @@ public class HashKeyUtilTest {
 
     @Test
     public void parseNonCompositeURI3() {
-        String innerURIString = HashKeyUtil.extractInnerURI("blablabla");
-        assertThat(innerURIString, Is.is(nullValue()));
+        String innerURIString = HashKeyUtil.extractInnerURI("foo:bar");
+        assertThat(innerURIString, Is.is("foo:bar"));
     }
 
 
