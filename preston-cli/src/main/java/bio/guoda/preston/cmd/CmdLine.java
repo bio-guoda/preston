@@ -60,7 +60,6 @@ public class CmdLine {
                 .addCommand("history", new CmdHistory())
 
                 // sketch generation (e.g, bloom, theta, tika-tlsh)
-                .addCommand("tika", new CmdTika(), "tika-tlsh")
                 .addCommand("sketch", new CmdCreateSketch(), "bloom")
 
                 // sketch operations
@@ -73,7 +72,6 @@ public class CmdLine {
                 .addCommand("test", new CmdVerify(), "verify", "check", "validate")
                 .addCommand("version", new CmdVersion())
                 .addCommand("seeds", new CmdSeeds())
-                .addCommand("text", new CmdText(), "extract-text")
                 .addCommand("hash", new CmdHash())
                 .addCommand("alias", new CmdAlias(), "aliases")
 
