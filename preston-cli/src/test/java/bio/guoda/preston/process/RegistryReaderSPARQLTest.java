@@ -2,13 +2,13 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.stream.ContentStreamUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QueryParseException;
-import org.apache.tika.io.IOUtils;
 import org.hamcrest.core.Is;
 import org.junit.Ignore;
 import org.junit.Test;

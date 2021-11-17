@@ -2,8 +2,8 @@ package bio.guoda.preston.stream;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.tika.io.IOUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 

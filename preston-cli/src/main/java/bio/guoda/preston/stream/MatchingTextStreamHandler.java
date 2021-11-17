@@ -1,9 +1,9 @@
 package bio.guoda.preston.stream;
 
 import bio.guoda.preston.process.StatementsEmitter;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.tika.io.IOUtils;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
 

@@ -1,18 +1,18 @@
 package bio.guoda.preston.index;
 
-import org.apache.commons.collections4.OrderedMap;
-import org.apache.commons.collections4.map.ListOrderedMap;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 
 public class SimilarityIndexTikaTLSHTest {
 
@@ -27,7 +27,7 @@ public class SimilarityIndexTikaTLSHTest {
         index.indexHashPair(toIRI("hash://sha256/blah2"), toIRI("hash://tika-tlsh/124"));
         index.indexHashPair(toIRI("hash://sha256/blah3"), toIRI("hash://tika-tlsh/789"));
 
-        OrderedMap<IRI, Float> scores = new ListOrderedMap<>();
+        Map<IRI, Float> scores = new HashMap<>();
         index.getSimilarContents(toIRI("hash://tika-tlsh/123"), 3)
                 .forEach(hit -> scores.put(hit.getSHA256(), hit.getScore()));
 

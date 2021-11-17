@@ -6,12 +6,12 @@ import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;
 import bio.guoda.preston.store.TestUtilForProcessor;
 import bio.guoda.preston.stream.MatchingTextStreamHandler;
-import com.mchange.v1.io.InputStreamUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ public class TextMatcherTest {
 
     @Test
     public void onNonparseable() {
-        BlobStoreReadOnly blobStore = key -> InputStreamUtils.getEmptyInputStream();
+        BlobStoreReadOnly blobStore = key -> new ByteArrayInputStream(new byte[0]);
 
         ArrayList<Quad> nodes = runTextFinder(blobStore);
         assertThat(nodes.size(), is(3));

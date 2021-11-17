@@ -4,6 +4,7 @@ import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
@@ -18,7 +19,6 @@ import org.apache.datasketches.theta.Intersection;
 import org.apache.datasketches.theta.SetOperation;
 import org.apache.datasketches.theta.Sketch;
 import org.apache.datasketches.theta.Sketches;
-import org.apache.tika.io.IOUtils;
 
 import java.io.Closeable;
 import java.io.IOException;

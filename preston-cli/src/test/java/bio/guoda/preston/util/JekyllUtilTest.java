@@ -2,16 +2,15 @@ package bio.guoda.preston.util;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsListener;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.commons.collections4.list.TreeList;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.tika.io.IOUtils;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.joda.time.DateTime;
@@ -29,6 +28,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -115,10 +115,10 @@ public class JekyllUtilTest {
     @Test
     public void compile() throws IOException {
         final List<String> absoluteList = JekyllUtil.staticFileTemplates().collect(Collectors.toList());
-        assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/index.md"));
-        assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot.png"));
-        assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot.svg"));
-        assertThat(new TreeList<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot"));
+        assertThat(new TreeSet<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/index.md"));
+        assertThat(new TreeSet<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot.png"));
+        assertThat(new TreeSet<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot.svg"));
+        assertThat(new TreeSet<>(absoluteList), hasItem("/bio/guoda/preston/jekyll/assets/preston.dot"));
     }
 
     @Test
