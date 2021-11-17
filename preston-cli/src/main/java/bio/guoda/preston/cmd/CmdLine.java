@@ -59,11 +59,10 @@ public class CmdLine {
                 .addCommand("append", new CmdAppend(), "handle", "process", "add")
                 .addCommand("history", new CmdHistory())
 
-                // sketch generation (e.g, bloom, theta, tika-tlsh)
+                // sketch generation (e.g, bloom, theta)
                 .addCommand("sketch", new CmdCreateSketch(), "bloom")
 
                 // sketch operations
-                .addCommand("similar", new CmdSimilar(), "similarity")
                 .addCommand("diff", new CmdSketchDiff(), "intersect")
                 .addCommand("union", new CmdSketchUnion())
 

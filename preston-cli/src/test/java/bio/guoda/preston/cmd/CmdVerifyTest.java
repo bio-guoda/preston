@@ -22,11 +22,4 @@ public class CmdVerifyTest {
         new CmdVerify().run();
     }
 
-    @Test
-    public void verifyShaLTSH() {
-        CmdVerify cmdVerify = new CmdVerify();
-        cmdVerify.setHashType(HashType.tlsh);
-        cmdVerify.run();
-    }
-
 }
