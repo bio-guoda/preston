@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.HashGeneratorTLSHTruncatedTest;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
@@ -17,6 +16,8 @@ import static org.hamcrest.core.Is.is;
 
 public class CmdGrepTest {
 
+    public static final String DWCA = "/bio/guoda/preston/dwca-20180905.zip";
+
     @Test
     public void processOneVersion() {
         IRI aContentHash = toIRI("hash://sha256/blabla");
@@ -27,7 +28,7 @@ public class CmdGrepTest {
                 if (getAttemptCount.incrementAndGet() > 2 || !aContentHash.equals(key)) {
                     throw new IOException("kaboom!");
                 }
-                return getClass().getResourceAsStream(HashGeneratorTLSHTruncatedTest.DWCA);
+                return getClass().getResourceAsStream(DWCA);
             }
         };
 
