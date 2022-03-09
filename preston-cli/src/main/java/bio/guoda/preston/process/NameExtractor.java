@@ -148,7 +148,7 @@ public class NameExtractor extends ProcessorReadOnly {
 
 
     private String getActivityDescription() {
-        return "An activity that finds taxonomic names in any encountered DwC-A content (e.g., hash://sha256/... identifiers).";
+        return "An activity that streams DwC-A content into line-json.";
     }
 
 }

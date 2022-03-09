@@ -18,7 +18,7 @@ import java.io.InputStream;
 import java.util.regex.Pattern;
 
 @Parameters(separators = "= ", commandDescription = "Extract records from DarwinCore archives in line-json")
-public class CmdNames extends LoggingPersisting implements Runnable {
+public class CmdDwc2Json extends LoggingPersisting implements Runnable {
 
     private InputStream inputStream = System.in;
 

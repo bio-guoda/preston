@@ -7,14 +7,9 @@ import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
-import org.gbif.dwc.Archive;
-import org.gbif.dwc.ArchiveFile;
-import org.gbif.dwc.DwcRecordIterator;
-import org.gbif.dwc.UnsupportedArchiveException;
 import org.gbif.dwc.meta.DwcMetaFiles;
 import org.gbif.dwc.record.Record;
 import org.gbif.dwc.terms.Term;
@@ -30,11 +25,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class DwCArchiveStreamHandler implements ContentStreamHandler {
 
@@ -66,17 +59,15 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
 
 
                 for (Pair<IRI, ArchiveFile> resourceIRIs : dwcaResourceIRIs) {
-                    IRI key = resourceIRIs.getKey();
-                    ClosableIterator<Record> iterator = iterator(resourceIRIs.getRight(), resourceIRIs.getLeft());
-                    while (iterator.hasNext()) {
-                        Record next = iterator.next();
-                        ObjectNode objectNode = new ObjectMapper().createObjectNode();
-                        objectNode.set("contentId", TextNode.valueOf(resourceIRIs.getLeft().getIRIString()));
-                        objectNode.set("rowType", TextNode.valueOf(resourceIRIs.getRight().getRowType().qualifiedName()));
-                        for (Term term : next.terms()) {
-                            objectNode.set(term.qualifiedName(), TextNode.valueOf(next.value(term)));
+                    ArchiveFile file = resourceIRIs.getRight();
+                    try {
+                        TabularDataFileReader<List<String>> tabularFileReader = createReader(file, resourceIRIs.getLeft());
+                        ClosableIterator<Record> iterator = createRecordIterator(file, tabularFileReader);
+                        while (iterator.hasNext()) {
+                            streamAsJson(resourceIRIs, tabularFileReader, iterator.next());
                         }
-                        System.out.println(objectNode.toString());
+                    } catch (IOException ex) {
+                        throw new ContentStreamException("failed to read or stream dwc records", ex);
                     }
                 }
 
@@ -86,6 +77,26 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
             throw new ContentStreamException("failed to parse [" + iriString + "]", e);
         }
         return false;
+    }
+
+    void streamAsJson(Pair<IRI, ArchiveFile> resourceIRIs, TabularDataFileReader<List<String>> tabularFileReader, Record next) {
+        ObjectNode objectNode = new ObjectMapper().createObjectNode();
+        objectNode.set("contentId", TextNode.valueOf("line:" + resourceIRIs.getLeft().getIRIString() + "!/L" + tabularFileReader.getLastRecordLineNumber()));
+        objectNode.set("rowType", TextNode.valueOf(resourceIRIs.getRight().getRowType().qualifiedName()));
+        for (Term term : next.terms()) {
+            objectNode.set(term.qualifiedName(), TextNode.valueOf(next.value(term)));
+        }
+        System.out.println(objectNode.toString());
+    }
+
+    ClosableIterator<Record> createRecordIterator(ArchiveFile file, TabularDataFileReader<List<String>> tabularFileReader) {
+        return new DwcRecordIterator(
+                                    tabularFileReader,
+                                    file.getId(),
+                                    file.getFields(),
+                                    file.getRowType(),
+                                    false,
+                                    false);
     }
 
     Pair<IRI, ArchiveFile> getLocation(String iriString, ArchiveFile core) {
@@ -100,30 +111,18 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
     }
 
 
-    public ClosableIterator<Record> iterator(ArchiveFile file, IRI resource) {
-        try {
-            CharsetDecoder decoder = Charset.forName(file.getEncoding()).newDecoder();
-            Reader reader = new InputStreamReader(dereferencer.get(resource), decoder);
-            BufferedReader bufferedReader = new BufferedReader(reader);
+    TabularDataFileReader<List<String>> createReader(ArchiveFile file, IRI resource) throws IOException {
+        CharsetDecoder decoder = Charset.forName(file.getEncoding()).newDecoder();
+        Reader reader = new InputStreamReader(dereferencer.get(resource), decoder);
+        BufferedReader bufferedReader = new BufferedReader(reader);
 
-            TabularDataFileReader<List<String>> tabularFileReader =
-                    TabularFiles.newTabularFileReader(bufferedReader,
-                            file.getFieldsTerminatedByChar(),
-                            file.getLinesTerminatedBy(),
-                            file.getFieldsEnclosedBy(),
-                            file.areHeaderLinesIncluded(),
-                            file.getLinesToSkipBeforeHeader()
-                    );
-            return new DwcRecordIterator(
-                    tabularFileReader,
-                    file.getId(),
-                    file.getFields(),
-                    file.getRowType(),
-                    false,
-                    false);
-        } catch (IOException var4) {
-            throw new UnsupportedArchiveException(var4);
-        }
+        return TabularFiles.newTabularFileReader(bufferedReader,
+                file.getFieldsTerminatedByChar(),
+                file.getLinesTerminatedBy(),
+                file.getFieldsEnclosedBy(),
+                file.areHeaderLinesIncluded(),
+                file.getLinesToSkipBeforeHeader()
+        );
     }
 
 
