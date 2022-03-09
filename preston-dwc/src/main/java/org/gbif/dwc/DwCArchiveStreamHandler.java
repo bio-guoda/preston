@@ -89,15 +89,6 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
         System.out.println(objectNode.toString());
     }
 
-    ClosableIterator<Record> createRecordIterator(ArchiveFile file, TabularDataFileReader<List<String>> tabularFileReader) {
-        return new DwcRecordIterator(
-                                    tabularFileReader,
-                                    file.getId(),
-                                    file.getFields(),
-                                    file.getRowType(),
-                                    false,
-                                    false);
-    }
 
     Pair<IRI, ArchiveFile> getLocation(String iriString, ArchiveFile core) {
         String baseIRI = StringUtils.substring(iriString, 0, StringUtils.length(iriString) - META_XML.length());
@@ -111,7 +102,7 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
     }
 
 
-    TabularDataFileReader<List<String>> createReader(ArchiveFile file, IRI resource) throws IOException {
+    private TabularDataFileReader<List<String>> createReader(ArchiveFile file, IRI resource) throws IOException {
         CharsetDecoder decoder = Charset.forName(file.getEncoding()).newDecoder();
         Reader reader = new InputStreamReader(dereferencer.get(resource), decoder);
         BufferedReader bufferedReader = new BufferedReader(reader);
@@ -124,6 +115,17 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
                 file.getLinesToSkipBeforeHeader()
         );
     }
+
+    private static ClosableIterator<Record> createRecordIterator(ArchiveFile file, TabularDataFileReader<List<String>> tabularFileReader) {
+        return new DwcRecordIterator(
+                tabularFileReader,
+                file.getId(),
+                file.getFields(),
+                file.getRowType(),
+                false,
+                false);
+    }
+
 
 
 }
