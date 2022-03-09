@@ -194,7 +194,7 @@ public class Persisting extends PersistingLocal {
         return withStoreAt(new KeyTo3LevelTarGzPath(baseURI), dereferencer);
     }
 
-    protected BlobStoreReadOnly resolvingBlobStore(BlobStoreReadOnly blobStore) {
+    protected BlobStoreReadOnly resolvingBlobStore(Dereferencer<InputStream> blobStore) {
         return new AliasDereferencer(
                 new ContentHashDereferencer(blobStore),
                 this

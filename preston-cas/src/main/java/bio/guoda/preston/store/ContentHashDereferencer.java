@@ -9,9 +9,9 @@ import java.io.InputStream;
 
 public class ContentHashDereferencer implements Dereferencer<InputStream> {
 
-    private final BlobStoreReadOnly blobStore;
+    private final Dereferencer<InputStream> blobStore;
 
-    public ContentHashDereferencer(BlobStoreReadOnly blobStore) {
+    public ContentHashDereferencer(Dereferencer<InputStream> blobStore) {
         this.blobStore = blobStore;
     }
 
