@@ -68,7 +68,8 @@ public class CmdLine {
 
                 // utilities
                 .addCommand("grep", new CmdGrep(), "match", "findURLs")
-                .addCommand("dwc-stream", new CmdDwc2Json(),"json-stream", "dwc-json-stream")
+                .addCommand("dwc-stream", new CmdDwcRecordStream(),"json-stream", "dwc-json-stream")
+                .addCommand("cite", new CmdCite())
                 .addCommand("test", new CmdVerify(), "verify", "check", "validate")
                 .addCommand("version", new CmdVersion())
                 .addCommand("seeds", new CmdSeeds())

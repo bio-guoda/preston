@@ -79,7 +79,7 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
         return false;
     }
 
-    void streamAsJson(Pair<IRI, ArchiveFile> resourceIRIs, TabularDataFileReader<List<String>> tabularFileReader, Record next) {
+    private void streamAsJson(Pair<IRI, ArchiveFile> resourceIRIs, TabularDataFileReader<List<String>> tabularFileReader, Record next) {
         ObjectNode objectNode = new ObjectMapper().createObjectNode();
         objectNode.set("contentId", TextNode.valueOf("line:" + resourceIRIs.getLeft().getIRIString() + "!/L" + tabularFileReader.getLastRecordLineNumber()));
         objectNode.set("rowType", TextNode.valueOf(resourceIRIs.getRight().getRowType().qualifiedName()));
@@ -90,7 +90,7 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
     }
 
 
-    Pair<IRI, ArchiveFile> getLocation(String iriString, ArchiveFile core) {
+    private Pair<IRI, ArchiveFile> getLocation(String iriString, ArchiveFile core) {
         String baseIRI = StringUtils.substring(iriString, 0, StringUtils.length(iriString) - META_XML.length());
 
         return Pair.of(RefNodeFactory.toIRI(baseIRI + core.getLocation()), core);

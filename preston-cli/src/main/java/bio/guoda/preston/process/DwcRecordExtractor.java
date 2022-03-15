@@ -3,7 +3,6 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ContentHashDereferencer;
-import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ArchiveStreamHandler;
 import bio.guoda.preston.stream.CompressedStreamHandler;
 import bio.guoda.preston.stream.ContentStreamException;
@@ -29,12 +28,12 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 
-public class NameExtractor extends ProcessorReadOnly {
+public class DwcRecordExtractor extends ProcessorReadOnly {
 
     private final ProcessorState processorState;
     private int batchSize = 256;
 
-    public NameExtractor(ProcessorState processorState, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
+    public DwcRecordExtractor(ProcessorState processorState, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
         this.processorState = processorState;
     }
@@ -76,7 +75,7 @@ public class NameExtractor extends ProcessorReadOnly {
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
                     new DwCArchiveStreamHandler(this,
-                            new ContentHashDereferencer(NameExtractor.this)
+                            new ContentHashDereferencer(DwcRecordExtractor.this)
                     )
             );
         }
@@ -123,11 +122,11 @@ public class NameExtractor extends ProcessorReadOnly {
                     Stream.concat(
                             Stream.of(
                                     toStatement(newActivity, USED, version),
-                                    toStatement(newActivity, DESCRIPTION, RefNodeFactory.toEnglishLiteral(NameExtractor.this.getActivityDescription()))
+                                    toStatement(newActivity, DESCRIPTION, RefNodeFactory.toEnglishLiteral(DwcRecordExtractor.this.getActivityDescription()))
                             ),
                             nodes.stream()
                     ),
-                    NameExtractor.this,
+                    DwcRecordExtractor.this,
                     statement.getGraphName(),
                     newActivity);
             nodes.clear();

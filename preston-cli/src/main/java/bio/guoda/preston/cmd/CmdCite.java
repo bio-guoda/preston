@@ -1,24 +1,21 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
+import bio.guoda.preston.process.CitationGenerator;
+import bio.guoda.preston.process.DwcRecordExtractor;
 import bio.guoda.preston.process.EmittingStreamRDF;
-import bio.guoda.preston.process.NameExtractor;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.process.TextMatcher;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import com.beust.jcommander.converters.IntegerConverter;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.InputStream;
-import java.util.regex.Pattern;
 
-@Parameters(separators = "= ", commandDescription = "Extract records from DarwinCore archives in line-json")
-public class CmdDwc2Json extends LoggingPersisting implements Runnable {
+@Parameters(separators = "= ", commandDescription = "Cites datasets in dataset archive")
+public class CmdCite extends LoggingPersisting implements Runnable {
 
     private InputStream inputStream = System.in;
 
@@ -37,7 +34,7 @@ public class CmdDwc2Json extends LoggingPersisting implements Runnable {
                 getLogMode(),
                 System.err, () -> System.exit(0));
 
-        NameExtractor textMatcher = new NameExtractor(
+        CitationGenerator textMatcher = new CitationGenerator(
                 this,
                 blobStoreReadOnly,
                 listener);

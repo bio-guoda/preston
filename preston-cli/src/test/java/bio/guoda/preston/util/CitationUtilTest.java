@@ -14,14 +14,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class CitationUtilTest {
 
     @Test
-    public void citePreston() throws IOException {
+    public void citeBiodiversityDataset() throws IOException {
+        // see https://github.com/bio-guoda/preston/issues/42
         CSLItemData item = new CSLItemDataBuilder()
-                .type(CSLType.WEBPAGE)
-                .title("citeproc-java: A Citation Style Language (CSL) processor for Java")
-                .author("Michel", "Krämer")
-                .issued(2020, 11, 8)
-                .URL("http://michel-kraemer.github.io/citeproc-java/")
-                .accessed(2022, 3, 15)
+                .type(CSLType.DATASET)
+                .title("A Biodiversity Dataset. hash://sha256/d79fb9207329a2813b60713cf0968fda10721d576dcb7a36038faf18027eebc1")
                 .build();
 
         String bibl = CSL
@@ -31,7 +28,24 @@ public class CitationUtilTest {
                         item)
                 .makeString();
 
-        assertThat(bibl, Is.is("[1]M. Krämer, “citeproc-java: A Citation Style Language (CSL) processor for Java,” Nov. 08, 2020. http://michel-kraemer.github.io/citeproc-java/ (accessed Mar. 15, 2022).\n"));
+        assertThat(bibl, Is.is("[1]“A Biodiversity Dataset. hash://sha256/d79fb9207329a2813b60713cf0968fda10721d576dcb7a36038faf18027eebc1.” .\n"));
+    }
 
+    @Test
+    public void citeDWCHash() throws IOException {
+        // see https://github.com/bio-guoda/preston/issues/42
+        CSLItemData item = new CSLItemDataBuilder()
+                .type(CSLType.DATASET)
+                .title("A Biodiversity Dataset. hash://sha256/d79fb9207329a2813b60713cf0968fda10721d576dcb7a36038faf18027eebc1")
+                .build();
+
+        String bibl = CSL
+                .makeAdhocBibliography(
+                        "/bio/guoda/preston/process/ieee-test",
+                        "text",
+                        item)
+                .makeString();
+
+        assertThat(bibl, Is.is("[1]“A Biodiversity Dataset. hash://sha256/d79fb9207329a2813b60713cf0968fda10721d576dcb7a36038faf18027eebc1.” .\n"));
     }
 }
