@@ -9,6 +9,7 @@ import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameters;
+import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.InputStream;
@@ -31,7 +32,8 @@ public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
     public void run(BlobStoreReadOnly blobStoreReadOnly) {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
-                System.err, () -> System.exit(0));
+                new NullPrintStream(),
+                () -> System.exit(0));
 
         DwcRecordExtractor textMatcher = new DwcRecordExtractor(
                 this,

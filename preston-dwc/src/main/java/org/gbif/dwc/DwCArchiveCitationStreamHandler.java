@@ -4,7 +4,6 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.gbif.dwc.meta.DwcMetaFiles;
@@ -40,8 +39,6 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
 
                 String metadataLocation = starRecords.getMetadataLocation();
 
-                System.out.println(metadataLocation);
-
                 if (StringUtils.isNotBlank(metadataLocation)
                         && !StringUtils.startsWith(metadataLocation, "/")
                         && !StringUtils.startsWith(metadataLocation, "http://")
@@ -51,45 +48,11 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
                     String metaDataIRI = prefix + metadataLocation;
                     InputStream emlStream = dereferencer.get(RefNodeFactory.toIRI(metaDataIRI));
 
-                    SAXParser p = SAX_FACTORY.newSAXParser();
-                    p.parse(emlStream, new SimpleSaxHandler() {
-
-                        AtomicBoolean inCitation = new AtomicBoolean(false);
-
-                        AtomicReference<StringBuilder> builder = new AtomicReference<>();
-
-                        @Override
-                        public void characters(char[] ch, int start, int length) {
-                            if (inCitation.get()) {
-                                builder.get().append(StringUtils.replace(new String(ch, start, length), "\n", ""));
-                            }
-                            super.characters(ch, start, length);
-                        }
-
-                        @Override
-                        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-                            if (StringUtils.equals(qName, "citation")) {
-                                builder.set(new StringBuilder());
-                                inCitation.set(true);
-                            }
-                            super.startElement(uri, localName, qName, attributes);
-                        }
-
-                        public void endElement(String uri, String localName, String qName) throws SAXException {
-                            if (StringUtils.equals(qName, "citation")) {
-                                inCitation.set(false);
-                                String citationString = builder.get().toString();
-                                if (StringUtils.isNoneBlank(citationString)) {
-                                    System.out.println(citationString);
-                                }
-                            }
-                            super.endElement(uri, localName, qName);
-                        }
-                    });
-
-                    IOUtils.copy(emlStream, System.out);
+                    if (emlStream != null) {
+                        SAXParser p = SAX_FACTORY.newSAXParser();
+                        p.parse(emlStream, new CitationSaxHandler(metaDataIRI));
+                    }
                 }
-
 
                 return true;
             }
@@ -105,4 +68,46 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
     }
 
 
+    private static class CitationSaxHandler extends SimpleSaxHandler {
+
+        AtomicBoolean inCitation = new AtomicBoolean(false);
+
+        AtomicReference<StringBuilder> builder = new AtomicReference<>();
+
+        private String namespace;
+
+
+        public CitationSaxHandler(String metaDataIRI) {
+            this.namespace = metaDataIRI;
+        }
+
+        @Override
+        public void characters(char[] ch, int start, int length) {
+            if (inCitation.get()) {
+                builder.get().append(StringUtils.replace(new String(ch, start, length), "\n", ""));
+            }
+            super.characters(ch, start, length);
+        }
+
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+            if (StringUtils.equals(qName, "citation")) {
+                builder.set(new StringBuilder());
+                inCitation.set(true);
+            }
+            super.startElement(uri, localName, qName, attributes);
+        }
+
+        public void endElement(String uri, String localName, String qName) throws SAXException {
+            if (StringUtils.equals(qName, "citation")) {
+                inCitation.set(false);
+                String citationString = StringUtils.trim(builder.get().toString());
+                if (StringUtils.isNoneBlank(citationString)) {
+                    System.out.println
+                            (StringUtils.removeEnd(citationString, ".") + ". Accessed at <" + namespace + "> .");
+                }
+            }
+            super.endElement(uri, localName, qName);
+        }
+    }
 }
