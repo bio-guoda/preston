@@ -48,9 +48,12 @@ public class CmdGet extends Persisting implements Runnable {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    Quad quad;
-                    if ((quad = RDFUtil.asQuad(line)) != null) {
-                        handleContentQuery(blobStore, VersionUtil.mostRecentVersionForStatement(quad).getIRIString());
+                    Quad quad = RDFUtil.asQuad(line);
+                    if (quad  != null) {
+                        IRI version = VersionUtil.mostRecentVersionForStatement(quad);
+                        if (version != null) {
+                            handleContentQuery(blobStore, version.getIRIString());
+                        }
                     } else {
                         handleContentQuery(blobStore, StringUtils.trim(line));
                     }

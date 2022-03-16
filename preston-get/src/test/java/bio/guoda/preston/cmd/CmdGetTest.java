@@ -93,4 +93,24 @@ public class CmdGetTest {
         assertThat(blobStoreNull.getAttemptCount.get(), is(1));
         assertThat(out.toString(), is("some bits and bytes"));
     }
+
+    @Test
+    public void getNothing() {
+        BlobStoreNull blobStoreNull = new BlobStoreNull(){
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                throw new IOException("kaboom!");
+            }
+        };
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        System.setIn(IOUtils.toInputStream("<blah> <blah> <blah> .", StandardCharsets.UTF_8));
+
+        CmdGet cmdGet = new CmdGet();
+        cmdGet.run(blobStoreNull, Collections.emptyList());
+
+        assertThat(out.toString(), is(""));
+    }
 }
