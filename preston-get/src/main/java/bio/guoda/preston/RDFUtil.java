@@ -8,6 +8,7 @@ import org.apache.jena.query.ARQ;
 import org.apache.jena.riot.RiotException;
 import org.apache.jena.riot.lang.LabelToNode;
 import org.apache.jena.riot.lang.RiotParsers;
+import org.apache.jena.riot.system.ErrorHandler;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
 import org.apache.jena.riot.system.FactoryRDF;
 import org.apache.jena.riot.system.ParserProfile;
@@ -33,7 +34,7 @@ public class RDFUtil {
     }
 
     public static org.apache.commons.rdf.api.Quad asQuad(String string) {
-        Iterator<Quad> quadIterator = asQuads(IOUtils.toInputStream(string, StandardCharsets.UTF_8));
+        Iterator<Quad> quadIterator = asQuads(IOUtils.toInputStream(string, StandardCharsets.UTF_8), ErrorHandlerFactory.errorHandlerNoLogging);
         if (quadIterator.hasNext()) {
             try {
                 return JenaRDF.asQuad(RDF_FACTORY, quadIterator.next());
@@ -45,16 +46,20 @@ public class RDFUtil {
         }
     }
 
-    public static Iterator<Quad> asQuads(InputStream inputStream) {
+    public static Iterator<Quad> asQuads(InputStream inputStream, ErrorHandler errorHandler) {
         ARQ.init();
         FactoryRDF factory = factoryRDF(LabelToNode.createScopeByGraph());
         ParserProfile profile = createParserProfile(
                 factory,
-                ErrorHandlerFactory.errorHandlerStd,
+                errorHandler,
                 false);
 
         profile.setBaseIRI("urn:example:");
         return RiotParsers.createIteratorNQuads(inputStream, null, profile);
+    }
+
+    public static Iterator<Quad> asQuads(InputStream inputStream) {
+        return asQuads(inputStream, ErrorHandlerFactory.errorHandlerStd);
     }
 
     public static Stream<org.apache.commons.rdf.api.Quad> asQuadStream(InputStream inputStream) {
