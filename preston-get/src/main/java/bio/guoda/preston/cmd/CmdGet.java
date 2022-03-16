@@ -1,14 +1,17 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.IRIFixingProcessor;
+import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.VersionUtil;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Quad;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,7 +48,12 @@ public class CmdGet extends Persisting implements Runnable {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    handleContentQuery(blobStore, StringUtils.trim(line));
+                    Quad quad;
+                    if ((quad = RDFUtil.asQuad(line)) != null) {
+                        handleContentQuery(blobStore, VersionUtil.mostRecentVersionForStatement(quad).getIRIString());
+                    } else {
+                        handleContentQuery(blobStore, StringUtils.trim(line));
+                    }
                 }
             } else {
                 for (String s : contentIdsOrAliases) {

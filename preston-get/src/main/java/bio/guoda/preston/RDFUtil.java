@@ -1,7 +1,6 @@
 package bio.guoda.preston;
 
-import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Literal;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.RDF;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.jena.JenaRDF;
@@ -11,10 +10,10 @@ import org.apache.jena.riot.lang.RiotParsers;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
 import org.apache.jena.riot.system.FactoryRDF;
 import org.apache.jena.riot.system.ParserProfile;
-import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.sparql.core.Quad;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -32,6 +31,15 @@ public class RDFUtil {
         return RDFValueUtil.getValueFor(entity);
     }
 
+    public static org.apache.commons.rdf.api.Quad asQuad(String string) {
+        Iterator<Quad> quadIterator = asQuads(IOUtils.toInputStream(string, StandardCharsets.UTF_8));
+        if (quadIterator.hasNext()) {
+            return JenaRDF.asQuad(RDF_FACTORY, quadIterator.next());
+        } else {
+            return null;
+        }
+    }
+
     public static Iterator<Quad> asQuads(InputStream inputStream) {
         ARQ.init();
         FactoryRDF factory = factoryRDF(LabelToNode.createScopeByGraph());
@@ -47,7 +55,6 @@ public class RDFUtil {
     public static Stream<org.apache.commons.rdf.api.Quad> asQuadStream(InputStream inputStream) {
         return StreamSupport
                 .stream(Spliterators.spliteratorUnknownSize(asQuads(inputStream), Spliterator.ORDERED), false)
-                .map(q -> JenaRDF.asQuad(RDF_FACTORY, q)
-                );
+                .map(q -> JenaRDF.asQuad(RDF_FACTORY, q));
     }
 }
