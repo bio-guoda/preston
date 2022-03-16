@@ -5,6 +5,7 @@ import org.apache.commons.rdf.api.RDF;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.jena.JenaRDF;
 import org.apache.jena.query.ARQ;
+import org.apache.jena.riot.RiotException;
 import org.apache.jena.riot.lang.LabelToNode;
 import org.apache.jena.riot.lang.RiotParsers;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
@@ -34,7 +35,11 @@ public class RDFUtil {
     public static org.apache.commons.rdf.api.Quad asQuad(String string) {
         Iterator<Quad> quadIterator = asQuads(IOUtils.toInputStream(string, StandardCharsets.UTF_8));
         if (quadIterator.hasNext()) {
-            return JenaRDF.asQuad(RDF_FACTORY, quadIterator.next());
+            try {
+                return JenaRDF.asQuad(RDF_FACTORY, quadIterator.next());
+            } catch (RiotException exception) {
+                return null;
+            }
         } else {
             return null;
         }
