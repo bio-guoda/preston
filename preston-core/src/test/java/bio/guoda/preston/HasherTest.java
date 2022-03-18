@@ -30,6 +30,13 @@ public class HasherTest {
     }
 
     @Test
+    public void testMD5Generator() throws IOException {
+        InputStream is = IOUtils.toInputStream("something", StandardCharsets.UTF_8);
+        String something = Hasher.createMD5HashGenerator().hash(is);
+        assertThat(something, is("437b930db84b8079c2dd804a71936b5f"));
+    }
+
+    @Test
     public void testSHA2562() {
         assertSHA(Hasher.calcSHA256("something"));
     }

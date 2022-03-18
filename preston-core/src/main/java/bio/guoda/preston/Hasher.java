@@ -48,6 +48,26 @@ public final class Hasher {
         };
     }
 
+    public static HashGenerator<String> createMD5HashGenerator() {
+        return new HashGenerator<String>() {
+
+            @Override
+            public String hash(InputStream is) throws IOException {
+                return hash(is, NullOutputStream.NULL_OUTPUT_STREAM);
+            }
+
+            @Override
+            public String hash(InputStream is, OutputStream os) throws IOException {
+                return calcMD5String(is, os, true);
+            }
+
+            @Override
+            public String hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
+                return calcMD5String(is, os, shouldCloseInputStream);
+            }
+        };
+    }
+
     public static HashGenerator<IRI> createSHA256HashIRIGenerator() {
         return new HashGeneratorSHA256();
     }
@@ -63,22 +83,38 @@ public final class Hasher {
     public static String calcSHA256String(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
         try {
             MessageDigest md = createDigest(is, os, shouldCloseInputStream);
-            return toHashString(md);
+            return toHashString64bit(md);
         } catch (IOException | NoSuchAlgorithmException var9) {
             throw new IOException("failed to cache dataset", var9);
         }
     }
 
-    public static String toHashString(MessageDigest md) {
+    public static String calcMD5String(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
+        try {
+            MessageDigest md = createMessageDigest(is, os, shouldCloseInputStream, "MD5");
+            return toHashString32bit(md);
+        } catch (IOException | NoSuchAlgorithmException var9) {
+            throw new IOException("failed to cache dataset", var9);
+        }
+    }
+
+    private static String toHashString64bit(MessageDigest md) {
         return String.format("%064x", new BigInteger(1, md.digest()));
+    }
+    private static String toHashString32bit(MessageDigest md) {
+        return String.format("%032x", new BigInteger(1, md.digest()));
     }
 
     public static IRI toSHA256IRI(MessageDigest md) {
-        return toSHA256IRI(toHashString(md));
+        return toSHA256IRI(toHashString64bit(md));
     }
 
     private static MessageDigest createDigest(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws NoSuchAlgorithmException, IOException {
-        MessageDigest md = MessageDigest.getInstance(getHashAlgorithm());
+        return createMessageDigest(is, os, shouldCloseInputStream, getHashAlgorithm());
+    }
+
+    private static MessageDigest createMessageDigest(InputStream is, OutputStream os, boolean shouldCloseInputStream, String hashAlgorithm) throws NoSuchAlgorithmException, IOException {
+        MessageDigest md = MessageDigest.getInstance(hashAlgorithm);
         DigestInputStream digestInputStream = new DigestInputStream(is, md);
         IOUtils.copy(digestInputStream, os);
         if (shouldCloseInputStream) {
