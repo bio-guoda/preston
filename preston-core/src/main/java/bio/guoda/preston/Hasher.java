@@ -152,10 +152,6 @@ public final class Hasher {
         return RefNodeFactory.toIRI(URI.create(type.getPrefix() + hash));
     }
 
-    public static String getHashPrefix() {
-        return HashType.sha256.getPrefix();
-    }
-
     public static List<IRI> calcHashIRIs(List<MessageDigest> messageDigests) {
         return messageDigests
                     .stream()

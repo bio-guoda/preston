@@ -1,6 +1,6 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.Hasher;
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -11,10 +11,8 @@ import java.util.regex.Pattern;
 
 public class HashKeyUtil {
 
-    public static final int EXPECTED_LENGTH = 64 + Hasher.getHashPrefix().length();
-
     public static final Pattern URI_PATTERN_HASH_URI_COMPOSITE = Pattern
-            .compile("([a-zA-Z0-9]+:)*(" + ValidatingKeyValueStreamSHA256IRI.SHA_256_PATTERN_STRING + "){1}(!/.*){0,1}");
+            .compile("([a-zA-Z0-9]+:)*(" + HashType.sha256.getIRIPatternString() + "){1}(!/.*){0,1}");
 
     public static final Pattern URI_PATTERN_URI_COMPOSITE = Pattern
             .compile("([a-zA-Z0-9]+[:]{1})+([^!:]*)(!/.*){0,1}");
@@ -24,17 +22,31 @@ public class HashKeyUtil {
 
     public static void validateHashKey(IRI hashKey) {
         if (!isValidHashKey(hashKey)) {
-            throw new IllegalArgumentException("expected id [" + hashKey + "] of [" + EXPECTED_LENGTH + "] characters, instead got [" + hashKey.getIRIString().length() + "] characters.");
+            throw new IllegalArgumentException("found unsupported or invalid hash key [" + hashKey + "]");
         }
     }
 
     public static boolean isValidHashKey(IRI hashKey) {
-        Matcher matcher
-                = ValidatingKeyValueStreamSHA256IRI
-                .URI_PATTERN_HASH_URI_SHA_256_PATTERN
-                .matcher(hashKey.getIRIString());
+        String iriString = hashKey.getIRIString();
 
-        return matcher.matches();
+        HashType type = hashTypeFor(iriString);
+
+        return type != null
+                && type
+                .getIRIPattern()
+                .matcher(iriString)
+                .matches();
+    }
+
+    static HashType hashTypeFor(String iriString) {
+        HashType type = null;
+
+        if (StringUtils.startsWith(iriString, HashType.sha256.getPrefix())) {
+            type = HashType.sha256;
+        } else if (StringUtils.startsWith(iriString, HashType.md5.getPrefix())) {
+            type = HashType.md5;
+        }
+        return type;
     }
 
 

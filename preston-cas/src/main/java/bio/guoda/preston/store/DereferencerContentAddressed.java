@@ -9,7 +9,9 @@ public class DereferencerContentAddressed implements Dereferencer<IRI> {
     private final Dereferencer<InputStream> dereferencer;
     private final BlobStore blobStore;
 
-    public DereferencerContentAddressed(Dereferencer<InputStream> dereferencer, BlobStore blobStore) {
+    public DereferencerContentAddressed(
+            Dereferencer<InputStream> dereferencer,
+            BlobStore blobStore) {
         this.dereferencer = dereferencer;
         this.blobStore = blobStore;
     }

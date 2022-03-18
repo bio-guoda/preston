@@ -1,6 +1,6 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.Hasher;
+import bio.guoda.preston.HashType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
@@ -20,7 +20,7 @@ public class KeyTo1LevelSoftwareHeritagePath implements KeyToPath {
         HashKeyUtil.validateHashKey(key);
 
         String keyStr = key.getIRIString();
-        int offset = Hasher.getHashPrefix().length();
+        int offset = HashType.sha256.getPrefix().length();
 
         final String s = baseURI.toString();
 

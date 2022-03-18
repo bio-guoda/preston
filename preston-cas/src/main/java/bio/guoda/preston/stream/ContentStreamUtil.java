@@ -2,8 +2,8 @@ package bio.guoda.preston.stream;
 
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.DerefState;
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.store.ValidatingKeyValueStreamSHA256IRI;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.io.input.CountingInputStream;
@@ -74,7 +74,7 @@ public class ContentStreamUtil {
     }
 
     public static IRI extractContentHash(IRI iri) throws IllegalArgumentException {
-        final Pattern contentHashPattern = ValidatingKeyValueStreamSHA256IRI.URI_PATTERN_HASH_URI_SHA_256_PATTERN;
+        final Pattern contentHashPattern = HashType.sha256.getIRIPattern();
         Matcher contentHashMatcher = contentHashPattern.matcher(iri.getIRIString());
 
         IRI contentHash = (contentHashMatcher.find())
