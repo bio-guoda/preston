@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Hashes bytes from stdin using some hash algorithm
@@ -35,12 +38,17 @@ public class CmdHash implements Runnable {
 
     @Override
     public void run() {
-        HashGenerator<IRI> iriHashGenerator = new HashGeneratorFactory().create(hashType);
+        HashGenerator<List<IRI>> iriHashGenerator
+                = new HashGeneratorFactory()
+                .create(Collections.singletonList(hashType));
         try {
-            InputStream hashIs = IOUtils.toInputStream(
-                    iriHashGenerator.hash(getInputStream()).getIRIString() + "\n",
-                    StandardCharsets.UTF_8);
-            IOUtils.copy(hashIs, os);
+            List<IRI> hashes = iriHashGenerator.hash(getInputStream());
+            for (IRI hash : hashes) {
+                InputStream hashIs = IOUtils.toInputStream(
+                        hash.getIRIString() + "\n",
+                        StandardCharsets.UTF_8);
+                IOUtils.copy(hashIs, os);
+            }
         } catch (IOException e) {
             throw new RuntimeException("failed to generate hash", e);
         }

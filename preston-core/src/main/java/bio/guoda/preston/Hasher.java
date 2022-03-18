@@ -2,6 +2,7 @@ package bio.guoda.preston;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
@@ -13,6 +14,11 @@ import java.nio.charset.StandardCharsets;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class Hasher {
 
@@ -28,88 +34,46 @@ public final class Hasher {
         return calcSHA256(is, NullOutputStream.NULL_OUTPUT_STREAM, true);
     }
 
-    public static HashGenerator<String> createSHA256HashGenerator() {
-        return new HashGenerator<String>() {
-
-            @Override
-            public String hash(InputStream is) throws IOException {
-                return hash(is, NullOutputStream.NULL_OUTPUT_STREAM);
-            }
-
-            @Override
-            public String hash(InputStream is, OutputStream os) throws IOException {
-                return calcSHA256String(is, os, true);
-            }
-
-            @Override
-            public String hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
-                return calcSHA256String(is, os, shouldCloseInputStream);
-            }
-        };
-    }
-
-    public static HashGenerator<String> createMD5HashGenerator() {
-        return new HashGenerator<String>() {
-
-            @Override
-            public String hash(InputStream is) throws IOException {
-                return hash(is, NullOutputStream.NULL_OUTPUT_STREAM);
-            }
-
-            @Override
-            public String hash(InputStream is, OutputStream os) throws IOException {
-                return calcMD5String(is, os, true);
-            }
-
-            @Override
-            public String hash(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
-                return calcMD5String(is, os, shouldCloseInputStream);
-            }
-        };
-    }
-
-    public static HashGenerator<IRI> createSHA256HashIRIGenerator() {
-        return new HashGeneratorSHA256();
-    }
-
     public static IRI calcSHA256(InputStream is, OutputStream os) throws IOException {
-        return calcSHA256(is, os, true);
+        return calcHashIRI(is, os, true, HashType.sha256.getAlgorithm());
+    }
+
+    static IRI calcHashIRI(InputStream is, OutputStream os, boolean shouldCloseInputStream, String algorithm) throws IOException {
+        List<IRI> iris = calcHashIRIs(
+                is,
+                os,
+                shouldCloseInputStream,
+                Stream.of(algorithm)
+        );
+
+        if (iris.size() != 1) {
+            throw new IOException("expected 1 hash iri, but got [" + iris.size() + "]");
+        }
+        return iris.get(0);
     }
 
     public static IRI calcMD5(InputStream is, OutputStream os) throws IOException {
-        return calcMD5(is, os, true);
+        return calcHashIRI(is, os, true, HashType.md5.getAlgorithm());
     }
 
     public static IRI calcSHA256(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
-        return toSHA256IRI(calcSHA256String(is, os, shouldCloseInputStream));
+        return calcHashIRI(is, os, shouldCloseInputStream, HashType.sha256.getAlgorithm());
     }
 
-    public static IRI calcMD5(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
-        return toMD5IRI(calcMD5String(is, os, shouldCloseInputStream));
-    }
-
-    public static String calcSHA256String(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
+    static String calcSHA256String(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
         try {
-            MessageDigest md = createDigest(is, os, shouldCloseInputStream);
-            return toHashString64bit(md);
-        } catch (IOException | NoSuchAlgorithmException var9) {
-            throw new IOException("failed to cache dataset", var9);
-        }
-    }
-
-    public static String calcMD5String(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
-        try {
-            MessageDigest md = createMessageDigest(is, os, shouldCloseInputStream, "MD5");
-            return toHashString32bit(md);
-        } catch (IOException | NoSuchAlgorithmException var9) {
-            throw new IOException("failed to cache dataset", var9);
+            IRI iri = calcHashIRI(is, os, shouldCloseInputStream, HashType.sha256.getAlgorithm());
+            return iri.getIRIString();
+        } catch (IOException e) {
+            throw new IOException("failed to cache dataset", e);
         }
     }
 
     private static String toHashString64bit(MessageDigest md) {
         return String.format("%064x", new BigInteger(1, md.digest()));
     }
-    private static String toHashString32bit(MessageDigest md) {
+
+    static String toHashString32bit(MessageDigest md) {
         return String.format("%032x", new BigInteger(1, md.digest()));
     }
 
@@ -117,32 +81,71 @@ public final class Hasher {
         return toSHA256IRI(toHashString64bit(md));
     }
 
-    private static MessageDigest createDigest(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws NoSuchAlgorithmException, IOException {
-        return createMessageDigest(is, os, shouldCloseInputStream, getHashAlgorithm());
+    private static IRI toMD5IRI(MessageDigest md) {
+        return toMD5IRI(toHashString32bit(md));
     }
 
-    private static MessageDigest createMessageDigest(InputStream is, OutputStream os, boolean shouldCloseInputStream, String hashAlgorithm) throws NoSuchAlgorithmException, IOException {
-        MessageDigest md = MessageDigest.getInstance(hashAlgorithm);
-        DigestInputStream digestInputStream = new DigestInputStream(is, md);
-        IOUtils.copy(digestInputStream, os);
+    public static MessageDigest createMessageDigest(
+            InputStream is,
+            OutputStream os,
+            boolean shouldCloseInputStream,
+            String hashAlgorithm)
+            throws NoSuchAlgorithmException, IOException {
+
+        Stream<String> algorithms = Stream.of(hashAlgorithm);
+
+        List<MessageDigest> digests = streamIntoMessageDigests(is, os, shouldCloseInputStream, algorithms);
+        if (digests.size() == 0) {
+            throw new NoSuchAlgorithmException("failed to create hash for [" + StringUtils.join(algorithms, ";") + "]");
+        }
+
+        return digests.get(0);
+    }
+
+    public static List<MessageDigest> streamIntoMessageDigests(
+            InputStream is,
+            OutputStream os,
+            boolean shouldCloseInputStream,
+            Stream<String> algorithms) throws IOException {
+
+        List<MessageDigest> digests = algorithms
+                .map(algorithm -> {
+                    try {
+                        return MessageDigest.getInstance(algorithm);
+                    } catch (NoSuchAlgorithmException e) {
+                        throw new RuntimeException("failed to create digest for [" + algorithm + "]", e);
+                    }
+                }).collect(Collectors.toList());
+
+        final AtomicReference<DigestInputStream> digestInputStream = new AtomicReference(null);
+        digests
+                .forEach(x -> {
+                    DigestInputStream chainedInputStream = digestInputStream.get() == null
+                            ? new DigestInputStream(is, x)
+                            : new DigestInputStream(digestInputStream.get(), x);
+                    digestInputStream.set(chainedInputStream);
+                });
+
+
+        IOUtils.copy(digestInputStream.get(), os);
         if (shouldCloseInputStream) {
-            digestInputStream.close();
+            digestInputStream.get().close();
         }
         os.flush();
         os.close();
-        return md;
+        return digests;
     }
 
     public static String getHashAlgorithm() {
-        return "SHA-256";
+        return HashType.sha256.getAlgorithm();
     }
 
     public static IRI toSHA256IRI(String sha256Hash) {
         return toHashIRI(HashType.sha256, sha256Hash);
     }
 
-    public static IRI toMD5IRI(String sha256Hash) {
-        return toHashIRI(HashType.md5, sha256Hash);
+    public static IRI toMD5IRI(String hexHash) {
+        return toHashIRI(HashType.md5, hexHash);
     }
 
     public static IRI toHashIRI(HashType type, String hash) {
@@ -153,4 +156,31 @@ public final class Hasher {
         return HashType.sha256.getPrefix();
     }
 
+    public static List<IRI> calcHashIRIs(List<MessageDigest> messageDigests) {
+        return messageDigests
+                    .stream()
+                    .map(md -> {
+                        String algorithm = md.getAlgorithm();
+                        Optional<IRI> hashIRI = Optional.empty();
+                        if (StringUtils.equals(algorithm, HashType.sha256.getAlgorithm())) {
+                            hashIRI = Optional.of(toSHA256IRI(md));
+                        } else if (StringUtils.equals(algorithm, HashType.md5.getAlgorithm())) {
+                            hashIRI = Optional.of(toMD5IRI(md));
+                        }
+                        return hashIRI;
+                    })
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toList());
+    }
+
+    public static List<IRI> calcHashIRIs(InputStream is, OutputStream os, boolean shouldCloseInputStream, Stream<String> algorithms) throws IOException {
+        List<MessageDigest> messageDigests = streamIntoMessageDigests(
+                is,
+                os,
+                shouldCloseInputStream,
+                algorithms);
+
+        return calcHashIRIs(messageDigests);
+    }
 }
