@@ -76,8 +76,16 @@ public final class Hasher {
         return calcSHA256(is, os, true);
     }
 
+    public static IRI calcMD5(InputStream is, OutputStream os) throws IOException {
+        return calcMD5(is, os, true);
+    }
+
     public static IRI calcSHA256(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
         return toSHA256IRI(calcSHA256String(is, os, shouldCloseInputStream));
+    }
+
+    public static IRI calcMD5(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
+        return toMD5IRI(calcMD5String(is, os, shouldCloseInputStream));
     }
 
     public static String calcSHA256String(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
@@ -131,6 +139,10 @@ public final class Hasher {
 
     public static IRI toSHA256IRI(String sha256Hash) {
         return toHashIRI(HashType.sha256, sha256Hash);
+    }
+
+    public static IRI toMD5IRI(String sha256Hash) {
+        return toHashIRI(HashType.md5, sha256Hash);
     }
 
     public static IRI toHashIRI(HashType type, String hash) {

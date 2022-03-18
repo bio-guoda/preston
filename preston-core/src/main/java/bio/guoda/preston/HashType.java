@@ -1,7 +1,8 @@
 package bio.guoda.preston;
 
 public enum HashType {
-    sha256("hash://sha256/");
+    sha256("hash://sha256/"),
+    md5("hash://md5/");
 
     private final String prefix;
 
