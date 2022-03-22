@@ -114,9 +114,4 @@ public class ContentHashDereferencerTest {
         assertThat(bytesWritten.get(), is(303));
     }
 
-    @Test
-    public void extractContentHash() {
-        IRI contentHash = ContentStreamUtil.extractContentHash(toIRI("blub:hash://sha256/babababababababababababababababababababababababababababababababa!/blah"));
-        assertThat(contentHash.getIRIString(), is("hash://sha256/babababababababababababababababababababababababababababababababa"));
-    }
 }

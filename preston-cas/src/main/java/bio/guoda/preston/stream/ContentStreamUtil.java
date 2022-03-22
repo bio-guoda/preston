@@ -73,20 +73,6 @@ public class ContentStreamUtil {
         return NOOP_DEREF_PROGRESS_LISTENER;
     }
 
-    public static IRI extractContentHash(IRI iri) throws IllegalArgumentException {
-        final Pattern contentHashPattern = HashType.sha256.getIRIPattern();
-        Matcher contentHashMatcher = contentHashPattern.matcher(iri.getIRIString());
-
-        IRI contentHash = (contentHashMatcher.find())
-                ? toIRI(contentHashMatcher.group())
-                : null;
-        if (contentHash == null) {
-            throw new IllegalArgumentException("[" + iri.getIRIString() + "] is not a content-based URI (e.g. \"...hash://sha256/abc123...\"");
-        } else {
-            return contentHash;
-        }
-    }
-
     public static InputStream getMarkSupportedInputStream(InputStream in) {
         return (in.markSupported()) ? in : new BufferedInputStream(in);
     }

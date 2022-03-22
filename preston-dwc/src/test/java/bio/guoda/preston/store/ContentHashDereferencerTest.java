@@ -2,7 +2,6 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -114,9 +113,4 @@ public class ContentHashDereferencerTest {
         assertThat(bytesWritten.get(), is(303));
     }
 
-    @Test
-    public void extractContentHash() {
-        IRI contentHash = ContentStreamUtil.extractContentHash(toIRI("blub:hash://sha256/babababababababababababababababababababababababababababababababa!/blah"));
-        assertThat(contentHash.getIRIString(), is("hash://sha256/babababababababababababababababababababababababababababababababa"));
-    }
 }

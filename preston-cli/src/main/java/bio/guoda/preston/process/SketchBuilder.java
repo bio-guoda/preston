@@ -1,7 +1,6 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.store.BlobStore;
-import bio.guoda.preston.stream.ContentStreamUtil;
+import bio.guoda.preston.store.HashKeyUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
@@ -25,7 +24,7 @@ abstract public class SketchBuilder extends StatementProcessor implements Closea
         if (HAS_VALUE.equals(statement.getPredicate())
                 && statement.getSubject() instanceof IRI) {
 
-            IRI contentId = ContentStreamUtil.extractContentHash((IRI) statement.getSubject());
+            IRI contentId = HashKeyUtil.extractContentHash((IRI) statement.getSubject());
 
             updateSketch(statement, contentId);
         }

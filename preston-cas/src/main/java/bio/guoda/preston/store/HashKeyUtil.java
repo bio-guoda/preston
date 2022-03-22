@@ -9,6 +9,8 @@ import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+
 public class HashKeyUtil {
 
     public static final Pattern URI_PATTERN_HASH_URI_COMPOSITE = Pattern
@@ -88,5 +90,19 @@ public class HashKeyUtil {
         return StringUtils.isBlank(innerURIString)
                 ? uriString
                 : RefNodeFactory.toIRI(innerURIString);
+    }
+
+    public static IRI extractContentHash(IRI iri) throws IllegalArgumentException {
+        final Pattern contentHashPattern = HashType.sha256.getIRIPattern();
+        Matcher contentHashMatcher = contentHashPattern.matcher(iri.getIRIString());
+
+        IRI contentHash = (contentHashMatcher.find())
+                ? toIRI(contentHashMatcher.group())
+                : null;
+        if (contentHash == null) {
+            throw new IllegalArgumentException("[" + iri.getIRIString() + "] is not a content-based URI (e.g. \"...hash://sha256/abc123...\"");
+        } else {
+            return contentHash;
+        }
     }
 }

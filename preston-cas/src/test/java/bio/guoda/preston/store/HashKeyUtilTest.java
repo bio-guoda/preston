@@ -1,11 +1,14 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeFactory;
+import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
+import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 
 public class HashKeyUtilTest {
@@ -97,5 +100,10 @@ public class HashKeyUtilTest {
         assertThat(innerURIString, Is.is("foo:bar"));
     }
 
+    @Test
+    public void extractContentHash() {
+        IRI contentHash = HashKeyUtil.extractContentHash(toIRI("blub:hash://sha256/babababababababababababababababababababababababababababababababa!/blah"));
+        assertThat(contentHash.getIRIString(), is("hash://sha256/babababababababababababababababababababababababababababababababa"));
+    }
 
 }

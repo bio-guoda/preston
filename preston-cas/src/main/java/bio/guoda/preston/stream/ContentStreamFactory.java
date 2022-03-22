@@ -1,5 +1,6 @@
 package bio.guoda.preston.stream;
 
+import bio.guoda.preston.store.HashKeyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
@@ -35,7 +36,7 @@ public class ContentStreamFactory implements InputStreamFactory {
 
     public ContentStreamFactory(IRI iri) {
         this.targetIri = iri;
-        this.contentReference = ContentStreamUtil.extractContentHash(targetIri);
+        this.contentReference = HashKeyUtil.extractContentHash(targetIri);
     }
 
     @Override

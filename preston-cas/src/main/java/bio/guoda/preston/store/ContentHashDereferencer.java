@@ -18,7 +18,7 @@ public class ContentHashDereferencer implements Dereferencer<InputStream> {
     @Override
     public InputStream get(IRI iri) throws DereferenceException {
         try {
-            IRI contentHash = ContentStreamUtil.extractContentHash(iri);
+            IRI contentHash = HashKeyUtil.extractContentHash(iri);
             InputStream is = blobStore.get(contentHash);
             return new ContentStreamFactory(ContentStreamUtil.truncateGZNotationForVFSIfNeeded(iri)).create(is);
         } catch (IOException | IllegalArgumentException e) {
