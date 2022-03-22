@@ -10,9 +10,11 @@ import java.util.Arrays;
 public class KeyTo1LevelSoftwareHeritagePath implements KeyToPath {
 
     private final URI baseURI;
+    private final HashType type;
 
     public KeyTo1LevelSoftwareHeritagePath(URI baseURI) {
         this.baseURI = baseURI;
+        this.type = HashType.sha256;
     }
 
     @Override
@@ -20,7 +22,7 @@ public class KeyTo1LevelSoftwareHeritagePath implements KeyToPath {
         HashKeyUtil.validateHashKey(key);
 
         String keyStr = key.getIRIString();
-        int offset = HashType.sha256.getPrefix().length();
+        int offset = type.getPrefix().length();
 
         final String s = baseURI.toString();
 

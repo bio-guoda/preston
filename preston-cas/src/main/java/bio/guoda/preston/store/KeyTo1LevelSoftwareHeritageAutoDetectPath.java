@@ -1,11 +1,8 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.Hasher;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.rdf.api.IRI;
 
 import java.net.URI;
-import java.util.Arrays;
 
 public class KeyTo1LevelSoftwareHeritageAutoDetectPath extends KeyTo1LevelSoftwareHeritagePath {
 

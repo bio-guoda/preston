@@ -12,6 +12,8 @@ public class QueryKeyCalculatorImpl implements QueryKeyCalculator {
     public IRI calculateKeyFor(Pair<RDFTerm, RDFTerm> unhashedKeyPair) {
         IRI left = HexaStoreImpl.calculateHashFor(unhashedKeyPair.getLeft());
         IRI right = HexaStoreImpl.calculateHashFor(unhashedKeyPair.getRight());
-        return Hasher.calcHashIRI(left.getIRIString() + right.getIRIString(), HashType.sha256);
+        return Hasher.calcHashIRI(
+                left.getIRIString() + right.getIRIString(),
+                HexaStoreConstants.HASH_TYPE_DEFAULT);
     }
 }

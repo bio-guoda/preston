@@ -10,9 +10,11 @@ import java.util.Arrays;
 public class KeyTo3LevelPath implements KeyToPath {
 
     private final URI baseURI;
+    private final HashType type;
 
-    public KeyTo3LevelPath(URI baseURI) {
+    public KeyTo3LevelPath(URI baseURI, HashType type) {
         this.baseURI = baseURI;
+        this.type = type;
     }
 
     @Override
@@ -20,7 +22,7 @@ public class KeyTo3LevelPath implements KeyToPath {
         HashKeyUtil.validateHashKey(key);
 
         String keyStr = key.getIRIString();
-        int offset = HashType.sha256.getPrefix().length();
+        int offset = type.getPrefix().length();
         String u0 = keyStr.substring(offset + 0, offset + 2);
         String u1 = keyStr.substring(offset + 2, offset + 4);
 

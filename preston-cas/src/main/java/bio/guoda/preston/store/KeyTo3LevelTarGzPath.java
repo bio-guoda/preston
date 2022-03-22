@@ -6,13 +6,17 @@ import org.apache.commons.rdf.api.IRI;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Hashtable;
 
 public class KeyTo3LevelTarGzPath implements KeyToPath {
 
     private final URI baseURI;
+    private final HashType type;
 
-    public KeyTo3LevelTarGzPath(URI baseURI) {
+
+    public KeyTo3LevelTarGzPath(URI baseURI, HashType type) {
         this.baseURI = baseURI;
+        this.type = type;
     }
 
     @Override
@@ -21,7 +25,7 @@ public class KeyTo3LevelTarGzPath implements KeyToPath {
 
         String keyStr = key.getIRIString();
 
-        int offset = HashType.sha256.getPrefix().length();
+        int offset = type.getPrefix().length();
         String u0 = keyStr.substring(offset + 0, offset + 2);
         String u1 = keyStr.substring(offset + 2, offset + 4);
 

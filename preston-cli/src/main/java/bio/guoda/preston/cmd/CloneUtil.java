@@ -22,12 +22,15 @@ import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 public class CloneUtil {
     private static final Logger LOG = LoggerFactory.getLogger(CloneUtil.class);
 
-    public static void clone(KeyValueStore blobKeyValueStore, KeyValueStore provenanceLogKeyValueStore, KeyValueStore provenanceIndexKeyValueStore) {
+    public static void clone(KeyValueStore blobKeyValueStore,
+                             KeyValueStore provenanceLogKeyValueStore,
+                             KeyValueStore provenanceIndexKeyValueStore,
+                             HashType type) {
         final BlobStoreReadOnly blobStore
-                = new BlobStoreAppendOnly(blobKeyValueStore, true, HashType.sha256);
+                = new BlobStoreAppendOnly(blobKeyValueStore, true, type);
 
         final BlobStoreReadOnly provenanceLogStore
-                = new BlobStoreAppendOnly(provenanceLogKeyValueStore, true, HashType.sha256);
+                = new BlobStoreAppendOnly(provenanceLogKeyValueStore, true, type);
 
         final HexaStoreReadOnly provenanceIndex
                 = new HexaStoreImpl(provenanceIndexKeyValueStore);

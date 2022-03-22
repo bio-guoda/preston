@@ -14,10 +14,6 @@ public class ValidatingKeyValueStreamContentAddressed implements ValidatingKeyVa
     private final MessageDigestCalculatingInputStream value;
     private final HashType type;
 
-    public ValidatingKeyValueStreamContentAddressed(InputStream value) {
-        this(value, HashType.sha256);
-    }
-
     public ValidatingKeyValueStreamContentAddressed(InputStream value, HashType type) {
         try {
             this.type = type;
@@ -34,7 +30,7 @@ public class ValidatingKeyValueStreamContentAddressed implements ValidatingKeyVa
 
     @Override
     public boolean acceptValueStreamForKey(IRI key) {
-        IRI iri = Hasher.toHashIRI(value.getMessageDigest(), HashType.sha256);
+        IRI iri = Hasher.toHashIRI(value.getMessageDigest(), type);
         return iri != null
                 && key != null
                 && StringUtils.equals(key.getIRIString(), iri.getIRIString());

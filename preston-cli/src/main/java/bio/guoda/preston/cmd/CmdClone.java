@@ -39,7 +39,7 @@ public class CmdClone extends LoggingPersisting implements Runnable {
                 keyValueStore,
                 getKeyValueStore(new KeyValueStoreLocalFileSystem
                         .KeyValueStreamFactoryValues(getHashType())
-                )
+                ), getHashType()
         );
     }
 

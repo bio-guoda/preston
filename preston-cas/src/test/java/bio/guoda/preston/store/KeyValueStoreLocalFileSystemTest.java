@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -45,7 +46,7 @@ public class KeyValueStoreLocalFileSystemTest {
     public void writeAlwaysAccepting() throws IOException {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
                 new File(path.toFile(), "tmp"),
-                new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()),
+                new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI(), HashType.sha256),
                 getAlwaysAccepting()
         );
 
@@ -58,7 +59,7 @@ public class KeyValueStoreLocalFileSystemTest {
 
     @Test
     public void writeDefault() throws IOException {
-        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory());
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI(), HashType.sha256), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory());
 
         IRI someValueKey = RefNodeFactory.toIRI("hash://sha256/ab3d07f3169ccbd0ed6c4b45de21519f9f938c72d24124998aab949ce83bb51b");
         assertNull(filePersistence.get(someValueKey));
@@ -84,14 +85,14 @@ public class KeyValueStoreLocalFileSystemTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void writeKeyTooShort() throws IOException {
-        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory());
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI(), HashType.sha256), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory());
         IRI somethingIRI = RefNodeFactory.toIRI("something");
         filePersistence.get(somethingIRI);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void writeKeyTooShort2() throws IOException {
-        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory());
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(new File(path.toFile(), "tmp"), new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI(), HashType.sha256), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory());
         IRI somethingIRI = RefNodeFactory.toIRI("something");
         filePersistence.put(somethingIRI, IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
     }
@@ -114,7 +115,7 @@ public class KeyValueStoreLocalFileSystemTest {
         KeyValueStoreLocalFileSystem filePersistence1 =
                 new KeyValueStoreLocalFileSystem(
                         new File(path.toFile(), "tmp"),
-                        new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()),
+                        new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI(), HashType.sha256),
                         keyValueStreamFactory);
 
         assertThat(filePersistence1.get(SOME_HASH), is(nullValue()));

@@ -102,14 +102,14 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
                 new KeyValueStoreLocalFileSystem(tmp, getKeyToPath(target),
                         new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())));
 
-        CloneUtil.clone(copyingKeyValueStore, copyingKeyValueStore, copyingKeyValueStoreIndex);
+        CloneUtil.clone(copyingKeyValueStore, copyingKeyValueStore, copyingKeyValueStoreIndex, getHashType());
     }
 
     private KeyToPath getKeyToPath(File target) {
         if (HashPathPattern.directoryDepth0.equals(pathPattern)) {
-            return new KeyTo1LevelPath(target.toURI());
+            return new KeyTo1LevelPath(target.toURI(), getHashType());
         } else {
-            return new KeyTo3LevelPath(target.toURI());
+            return new KeyTo3LevelPath(target.toURI(), getHashType());
         }
     }
 
@@ -122,7 +122,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         CloneUtil.clone(
                 new NullKeyValueStore(),
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())),
-                copyingKeyValueStoreProv
+                copyingKeyValueStoreProv, getHashType()
         );
     }
 
@@ -134,7 +134,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         CloneUtil.clone(
                 new NullKeyValueStore(),
                 copyingKeyValueStoreProv,
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType()))
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())), getHashType()
         );
     }
 
@@ -148,7 +148,8 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         CloneUtil.clone(
                 copyingKeyValueStoreBlob,
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())),
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())));
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())),
+                getHashType());
     }
 
     private static class NullKeyValueStore implements KeyValueStore {

@@ -1,7 +1,6 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.DerefProgressListener;
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.store.AliasDereferencer;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
@@ -91,8 +90,8 @@ public class Persisting extends PersistingLocal {
                 getRemotes()
                         .stream()
                         .flatMap(uri -> Stream.of(
-                                Pair.of(uri, new KeyTo3LevelPath(uri)),
-                                Pair.of(uri, new KeyTo1LevelPath(uri)),
+                                Pair.of(uri, new KeyTo3LevelPath(uri, getHashType())),
+                                Pair.of(uri, new KeyTo1LevelPath(uri, getHashType())),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritagePath(uri)),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri))
                         ));
@@ -182,7 +181,7 @@ public class Persisting extends PersistingLocal {
     }
 
     private KeyValueStoreReadOnly remoteWithTarGz(URI baseURI) {
-        return withStoreAt(new KeyTo3LevelTarGzPath(baseURI),
+        return withStoreAt(new KeyTo3LevelTarGzPath(baseURI, getHashType()),
                 new DereferencerContentAddressedTarGZ(getDerefStream(baseURI, getProgressListener())));
     }
 
@@ -190,9 +189,9 @@ public class Persisting extends PersistingLocal {
         DereferencerContentAddressedTarGZ dereferencer =
                 new DereferencerContentAddressedTarGZ(getDerefStream(baseURI,
                         getProgressListener()),
-                        new BlobStoreAppendOnly(keyValueStore, false, HashType.sha256));
+                        new BlobStoreAppendOnly(keyValueStore, false, getHashType()));
 
-        return withStoreAt(new KeyTo3LevelTarGzPath(baseURI), dereferencer);
+        return withStoreAt(new KeyTo3LevelTarGzPath(baseURI, getHashType()), dereferencer);
     }
 
     protected BlobStoreReadOnly resolvingBlobStore(Dereferencer<InputStream> blobStore) {

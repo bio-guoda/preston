@@ -90,7 +90,7 @@ public final class ReplayUtil {
         processor.setIriProcessor(new IRIFixingProcessor());
 
         attemptReplay(
-                new BlobStoreAppendOnly(persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())), true, HashType.sha256),
+                new BlobStoreAppendOnly(persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())), true, persisting.getHashType()),
                 new HexaStoreImpl(
                         persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(persisting.getHashType()))
                 ),

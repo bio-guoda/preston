@@ -53,7 +53,7 @@ public class KeyTo1LevelSoftwareHeritageAutoDetectPathTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void toPathTooShort() {
-        new KeyTo3LevelPath(URI.create("some://")).toPath(RefNodeFactory.toIRI("too:short"));
+        new KeyTo3LevelPath(URI.create("some://"), HashType.sha256).toPath(RefNodeFactory.toIRI("too:short"));
     }
 
     @Test
