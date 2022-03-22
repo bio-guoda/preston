@@ -37,6 +37,7 @@ public class DwcRecordExtractorTest {
             public InputStream get(IRI key) {
                 URL resource = getClass().getResource("/bio/guoda/preston/plazidwca.zip");
 
+                System.out.println("found XXXX [" + resource.toString() + "]");
                 IRI iri = toIRI(resource.toExternalForm());
 
                 if (StringUtils.equals("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1", key.getIRIString())) {
