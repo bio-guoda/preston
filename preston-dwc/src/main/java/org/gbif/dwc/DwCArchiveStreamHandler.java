@@ -81,8 +81,8 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
 
     private void streamAsJson(Pair<IRI, ArchiveFile> resourceIRIs, TabularDataFileReader<List<String>> tabularFileReader, Record next) {
         ObjectNode objectNode = new ObjectMapper().createObjectNode();
-        objectNode.set("contentId", TextNode.valueOf("line:" + resourceIRIs.getLeft().getIRIString() + "!/L" + tabularFileReader.getLastRecordLineNumber()));
-        objectNode.set("rowType", TextNode.valueOf(resourceIRIs.getRight().getRowType().qualifiedName()));
+        objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf("line:" + resourceIRIs.getLeft().getIRIString() + "!/L" + tabularFileReader.getLastRecordLineNumber()));
+        objectNode.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf(resourceIRIs.getRight().getRowType().qualifiedName()));
         for (Term term : next.terms()) {
             objectNode.set(term.qualifiedName(), TextNode.valueOf(next.value(term)));
         }
