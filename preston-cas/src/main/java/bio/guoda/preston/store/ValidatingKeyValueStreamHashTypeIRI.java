@@ -9,19 +9,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class ValidatingKeyValueStreamSHA256IRI implements ValidatingKeyValueStream {
+public class ValidatingKeyValueStreamHashTypeIRI implements ValidatingKeyValueStream {
 
     private final ByteArrayOutputStream baos;
     private final InputStream value;
     private final HashType type;
 
-    public ValidatingKeyValueStreamSHA256IRI(InputStream value) {
-        this(value, HashType.sha256);
-    }
-
-    public ValidatingKeyValueStreamSHA256IRI(InputStream value, HashType type) {
+    public ValidatingKeyValueStreamHashTypeIRI(InputStream value, HashType type) {
         this.baos = new ByteArrayOutputStream();
-        this.value = new TeeInputStream(new BoundedInputStream(value, 79), baos);
+        this.value = new TeeInputStream(new BoundedInputStream(value, type.getIriStringLength() + 1), baos);
         this.type = type;
 
     }

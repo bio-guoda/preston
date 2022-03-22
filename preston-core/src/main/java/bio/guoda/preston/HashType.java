@@ -3,21 +3,23 @@ package bio.guoda.preston;
 import java.util.regex.Pattern;
 
 public enum HashType {
-    sha256("hash://sha256/", "SHA-256", 64),
-    md5("hash://md5/", "MD5", 32);
+    sha256("hash://sha256/", "SHA-256", 64, 78),
+    md5("hash://md5/", "MD5", 32, 43);
 
     private final String prefix;
     private final String algorithm;
     private final int hexLength;
     private final Pattern iriPattern;
     private final String iriPatternString;
+    private final int iriStringLength;
 
-    HashType(String prefix, String algorithm, int hexLength) {
+    HashType(String prefix, String algorithm, int hexLength, int iriStringLength) {
         this.prefix = prefix;
         this.algorithm = algorithm;
         this.hexLength = hexLength;
         this.iriPatternString = prefix + "([a-fA-F0-9])" + "{" + hexLength +  "}";
         this.iriPattern = Pattern.compile(iriPatternString);
+        this.iriStringLength = iriStringLength;
     }
 
     public String getPrefix() {
@@ -38,5 +40,9 @@ public enum HashType {
 
     public String getIRIPatternString() {
         return iriPatternString;
+    }
+
+    public int getIriStringLength() {
+        return iriStringLength;
     }
 }

@@ -115,7 +115,7 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
 
         @Override
         public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
-            return new ValidatingKeyValueStreamSHA256IRI(is, type);
+            return new ValidatingKeyValueStreamHashTypeIRI(is, type);
         }
     }
 
