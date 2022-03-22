@@ -112,4 +112,9 @@ public class HashKeyUtilTest {
         assertThat(contentHash.getIRIString(), is("hash://md5/b1946ac92492d2347c6235b4d2611184"));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void extractNonContentHash() {
+        HashKeyUtil.extractContentHash(toIRI("urn:uuid:619e692b-e75d-487b-b80e-0f86958be405"));
+    }
+
 }

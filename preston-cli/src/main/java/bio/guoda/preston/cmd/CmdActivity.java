@@ -21,6 +21,7 @@ import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.HexaStore;
+import bio.guoda.preston.store.HexaStoreConstants;
 import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
@@ -77,7 +78,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         BlobStore blobStore = new BlobStoreAppendOnly(blobKeyValueStore, true, getHashType());
 
         KeyValueStore logRelationsStore = getKeyValueStore(
-                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())
+                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(HexaStoreConstants.HASH_TYPE_DEFAULT)
         );
 
         run(blobStore, new HexaStoreImpl(logRelationsStore));
