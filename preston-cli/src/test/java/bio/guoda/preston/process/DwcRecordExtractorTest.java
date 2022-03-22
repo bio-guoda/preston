@@ -43,7 +43,6 @@ public class DwcRecordExtractorTest {
                     try {
                         return new FileInputStream(new File(URI.create(iri.getIRIString())));
                     } catch (FileNotFoundException e) {
-                        e.printStackTrace();
                         throw new RuntimeException(e);
                     }
                 }
@@ -60,7 +59,13 @@ public class DwcRecordExtractorTest {
                 blobStore,
                 byteArrayOutputStream
         );
-        dwcRecordExtractor.on(statement);
+
+        try {
+            dwcRecordExtractor.on(statement);
+        } catch (RuntimeException ex) {
+            ex.printStackTrace();
+            throw ex;
+        }
 
         String actual = IOUtils.toString(byteArrayOutputStream.toByteArray(), StandardCharsets.UTF_8.name());
         String expected = IOUtils.toString(getClass().getResourceAsStream("dwc-json-stream.json"), StandardCharsets.UTF_8);
