@@ -30,8 +30,8 @@ public class ValidatingKeyValueStreamHashTypeIRI implements ValidatingKeyValueSt
     @Override
     public boolean acceptValueStreamForKey(IRI key) {
         byte[] bytes = baos.toByteArray();
-        String sha256Hash = new String(bytes, StandardCharsets.UTF_8);
-        return bytes.length == 78
-                && type.getIRIPattern().matcher(sha256Hash).matches();
+        String hashString = new String(bytes, StandardCharsets.UTF_8);
+        return bytes.length == type.getIriStringLength()
+                && type.getIRIPattern().matcher(hashString).matches();
     }
 }

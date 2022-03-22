@@ -29,6 +29,19 @@ public class ValidatingKeyValueStreamHashTypeIRITest {
     }
 
     @Test
+    public void validLengthMD5() throws IOException {
+        HashType type = HashType.md5;
+        IRI iri = Hasher.calcHashIRI("bla", type);
+        InputStream is = IOUtils.toInputStream(iri.getIRIString(), StandardCharsets.UTF_8);
+        IRI somekey = RefNodeFactory.toIRI("somekey");
+        ValidatingKeyValueStreamHashTypeIRI someiri
+                = new ValidatingKeyValueStreamHashTypeIRI(is, type);
+        IOUtils.copy(someiri.getValueStream(), NullOutputStream.NULL_OUTPUT_STREAM);
+
+        assertThat(someiri.acceptValueStreamForKey(somekey), Is.is(true));
+    }
+
+    @Test
     public void tooShort() throws IOException {
         InputStream is = IOUtils.toInputStream("short", StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
