@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
@@ -29,7 +30,7 @@ public class RegistryReaderRSSTest {
     @Test
     public void onNotRSSVersion() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        StatementsListener registryReader = new RegistryReaderRSS(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        StatementsListener registryReader = new RegistryReaderRSS(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
 
         registryReader.on(toStatement(toIRI("donaldduck"), HAS_VERSION, toIRI("somehash")));
         assertThat(nodes.size(), is(0));

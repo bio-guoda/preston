@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -17,8 +18,8 @@ public class TestUtil {
         return BlobStoreAppendOnlyTest.getTestPersistence();
     }
 
-    public static BlobStoreReadOnly getTestBlobStore() {
-        return new BlobStoreAppendOnly(getTestPersistence());
+    public static BlobStoreReadOnly getTestBlobStore(HashType type) {
+        return new BlobStoreAppendOnly(getTestPersistence(), true, type);
     }
 
     public static BlobStoreReadOnly getTestBlobStoreForResource(String pathToResource) {

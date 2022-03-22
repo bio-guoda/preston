@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.process.EmittingStreamRDF;
@@ -21,8 +22,7 @@ public class CmdSketchUnion extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        BlobStoreAppendOnly blobStoreAppendOnly = new BlobStoreAppendOnly(
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())));
+        BlobStoreAppendOnly blobStoreAppendOnly = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         run(blobStoreAppendOnly);
     }
 

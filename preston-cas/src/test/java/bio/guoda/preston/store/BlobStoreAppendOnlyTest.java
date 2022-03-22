@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
@@ -30,7 +31,7 @@ public class BlobStoreAppendOnlyTest {
     }
 
     private void assertClosingStream(boolean expectedClosingStream) throws IOException {
-        BlobStore blobStore = new BlobStoreAppendOnly(getTestPersistence(), expectedClosingStream);
+        BlobStore blobStore = new BlobStoreAppendOnly(getTestPersistence(), expectedClosingStream, HashType.sha256);
         AtomicBoolean wasClosed = new AtomicBoolean(false);
         InputStream testing123 = IOUtils.toInputStream("testing123", StandardCharsets.UTF_8);
 

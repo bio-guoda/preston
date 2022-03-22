@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.RefNodeFactory;
@@ -40,7 +41,7 @@ public class RegistryReaderBioCASETest {
     @Before
     public void init() {
         nodes = new ArrayList<>();
-        registryReader = new RegistryReaderBioCASE(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        registryReader = new RegistryReaderBioCASE(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
     }
 
     @Test

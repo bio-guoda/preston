@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.DwcRecordExtractor;
@@ -14,7 +15,6 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 
 @Parameters(separators = "= ", commandDescription = "Extract records from DarwinCore archives in line-json")
 public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
@@ -25,9 +25,7 @@ public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
     @Override
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
-                = new BlobStoreAppendOnly(
-                        getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType()))
-        );
+                = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         run(resolvingBlobStore(blobStoreAppendOnly));
 
     }

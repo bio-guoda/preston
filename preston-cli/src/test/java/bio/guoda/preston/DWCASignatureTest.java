@@ -54,7 +54,7 @@ public class DWCASignatureTest {
             }
         };
         Collection<String> hashesOld = FileHasherTest.hashDWCA(dwcaInputStream, ignoreEML);
-        return Hasher.calcHashIRI(StringUtils.join(hashesOld, ""));
+        return Hasher.calcHashIRI(StringUtils.join(hashesOld, ""), HashType.sha256);
     }
 
     private InputStream dwcaInputStream(String name) {

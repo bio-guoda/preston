@@ -48,9 +48,10 @@ public class ContentResolverTest {
     public void init() throws IOException {
         tempDir = Files.createTempDirectory(Paths.get("target/"), "caching");
         datasetDir = Files.createTempDirectory(Paths.get("target/"), "datasets");
-        KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory keyValueStreamFactory = new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(HashType.sha256);
+        HashType type = HashType.sha256;
+        KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory keyValueStreamFactory = new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(type);
         KeyValueStoreLocalFileSystem persistence = new KeyValueStoreLocalFileSystem(tempDir.toFile(), new KeyTo3LevelPath(datasetDir.toFile().toURI()), keyValueStreamFactory);
-        this.blobStore = new BlobStoreAppendOnly(persistence);
+        this.blobStore = new BlobStoreAppendOnly(persistence, true, type);
     }
 
     private Archiver createStatementStore(StatementsListener... listeners) {

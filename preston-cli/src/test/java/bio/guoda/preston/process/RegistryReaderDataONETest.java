@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;
@@ -37,7 +38,7 @@ public class RegistryReaderDataONETest {
     @Test
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
         reader.on(toStatement(Seeds.DATA_ONE, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         assertThat(nodes.size(), is(7));
         assertThat(getVersionSource(nodes.get(6)).getIRIString(), is(FIRST_PAGE));
@@ -46,7 +47,7 @@ public class RegistryReaderDataONETest {
     @Test
     public void onEmptyPage() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
 
         reader.on(toStatement(toIRI(FIRST_PAGE),
                 HAS_VERSION,
@@ -57,7 +58,7 @@ public class RegistryReaderDataONETest {
     @Test
     public void onNotSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        RegistryReaderDataONE reader = new RegistryReaderDataONE(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
         RDFTerm bla = toLiteral("bla");
         reader.on(toStatement(Seeds.DATA_ONE, toIRI("http://example.org"), bla));
         assertThat(nodes.size(), is(0));

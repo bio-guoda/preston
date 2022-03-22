@@ -63,7 +63,7 @@ public class HasherTest {
 
     @Test
     public void testSHA2562() {
-        assertSHA(Hasher.calcHashIRI("something"));
+        assertSHA(Hasher.calcHashIRI("something", HashType.sha256));
     }
 
     private void assertSHA(IRI calculated) {

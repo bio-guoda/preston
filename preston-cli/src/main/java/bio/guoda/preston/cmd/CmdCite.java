@@ -1,8 +1,8 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.CitationGenerator;
-import bio.guoda.preston.process.DwcRecordExtractor;
 import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
@@ -23,9 +23,7 @@ public class CmdCite extends LoggingPersisting implements Runnable {
     @Override
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
-                = new BlobStoreAppendOnly(
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType()))
-        );
+                = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         run(resolvingBlobStore(blobStoreAppendOnly));
 
     }

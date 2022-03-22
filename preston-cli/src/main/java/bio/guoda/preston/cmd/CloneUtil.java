@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
@@ -23,10 +24,10 @@ public class CloneUtil {
 
     public static void clone(KeyValueStore blobKeyValueStore, KeyValueStore provenanceLogKeyValueStore, KeyValueStore provenanceIndexKeyValueStore) {
         final BlobStoreReadOnly blobStore
-                = new BlobStoreAppendOnly(blobKeyValueStore);
+                = new BlobStoreAppendOnly(blobKeyValueStore, true, HashType.sha256);
 
         final BlobStoreReadOnly provenanceLogStore
-                = new BlobStoreAppendOnly(provenanceLogKeyValueStore);
+                = new BlobStoreAppendOnly(provenanceLogKeyValueStore, true, HashType.sha256);
 
         final HexaStoreReadOnly provenanceIndex
                 = new HexaStoreImpl(provenanceIndexKeyValueStore);

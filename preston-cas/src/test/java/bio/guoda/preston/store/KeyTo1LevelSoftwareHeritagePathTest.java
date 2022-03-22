@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.rdf.api.IRI;
@@ -15,7 +16,7 @@ public class KeyTo1LevelSoftwareHeritagePathTest {
 
     @Test
     public void toPath() {
-        IRI hash = Hasher.calcHashIRI("bla");
+        IRI hash = Hasher.calcHashIRI("bla", HashType.sha256);
         assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
 
         URI actualPath = new KeyTo1LevelSoftwareHeritagePath(URI.create("https://archive.softwareheritage.org/api/1/content/sha256:")).toPath(hash);
@@ -24,7 +25,7 @@ public class KeyTo1LevelSoftwareHeritagePathTest {
 
     @Test
     public void noSoftwareHeritageNoTrailingSlash() {
-        IRI hash = Hasher.calcHashIRI("bla");
+        IRI hash = Hasher.calcHashIRI("bla", HashType.sha256);
         assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
 
         URI actualPath = new KeyTo1LevelSoftwareHeritagePath(URI.create("https://deeplinker.bio")).toPath(hash);
@@ -33,7 +34,7 @@ public class KeyTo1LevelSoftwareHeritagePathTest {
 
     @Test
     public void noSoftwareHeritageTrailingSlash() {
-        IRI hash = Hasher.calcHashIRI("bla");
+        IRI hash = Hasher.calcHashIRI("bla", HashType.sha256);
         assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
 
         URI actualPath = new KeyTo1LevelSoftwareHeritagePath(URI.create("https://deeplinker.bio/")).toPath(hash);

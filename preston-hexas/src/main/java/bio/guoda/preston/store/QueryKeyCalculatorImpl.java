@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -11,6 +12,6 @@ public class QueryKeyCalculatorImpl implements QueryKeyCalculator {
     public IRI calculateKeyFor(Pair<RDFTerm, RDFTerm> unhashedKeyPair) {
         IRI left = HexaStoreImpl.calculateHashFor(unhashedKeyPair.getLeft());
         IRI right = HexaStoreImpl.calculateHashFor(unhashedKeyPair.getRight());
-        return Hasher.calcHashIRI(left.getIRIString() + right.getIRIString());
+        return Hasher.calcHashIRI(left.getIRIString() + right.getIRIString(), HashType.sha256);
     }
 }

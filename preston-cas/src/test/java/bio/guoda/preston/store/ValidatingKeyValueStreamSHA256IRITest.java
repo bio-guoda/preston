@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
@@ -18,7 +19,7 @@ public class ValidatingKeyValueStreamSHA256IRITest {
 
     @Test
     public void validLength() throws IOException {
-        IRI iri = Hasher.calcHashIRI("bla");
+        IRI iri = Hasher.calcHashIRI("bla", HashType.sha256);
         InputStream is = IOUtils.toInputStream(iri.getIRIString(), StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
         ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(is);
@@ -39,7 +40,7 @@ public class ValidatingKeyValueStreamSHA256IRITest {
 
     @Test
     public void tooLong() throws IOException {
-        IRI iri = Hasher.calcHashIRI("bla");
+        IRI iri = Hasher.calcHashIRI("bla", HashType.sha256);
         InputStream is = IOUtils.toInputStream(iri.getIRIString() + "toolong", StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
         ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(is);

@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
@@ -38,9 +39,7 @@ public class CmdGrep extends LoggingPersisting implements Runnable {
     @Override
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
-                = new BlobStoreAppendOnly(
-                        getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType()))
-        );
+                = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         run(resolvingBlobStore(blobStoreAppendOnly));
 
     }

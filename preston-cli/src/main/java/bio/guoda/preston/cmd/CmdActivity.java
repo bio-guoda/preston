@@ -74,10 +74,10 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                 new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())
         );
 
-        BlobStore blobStore = new BlobStoreAppendOnly(blobKeyValueStore);
+        BlobStore blobStore = new BlobStoreAppendOnly(blobKeyValueStore, true, getHashType());
 
         KeyValueStore logRelationsStore = getKeyValueStore(
-                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(HashType.sha256)
+                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())
         );
 
         run(blobStore, new HexaStoreImpl(logRelationsStore));

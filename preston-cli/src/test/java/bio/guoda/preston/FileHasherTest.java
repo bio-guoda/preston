@@ -55,7 +55,7 @@ public class FileHasherTest {
 
         Stream<String> sortedHashes = hashList.stream().distinct().sorted();
         String sortedJoin = sortedHashes.collect(Collectors.joining());
-        IRI actualHashOfSortedHash = Hasher.calcHashIRI(sortedJoin);
+        IRI actualHashOfSortedHash = Hasher.calcHashIRI(sortedJoin, HashType.sha256);
 
         assertThat(sortedJoin, startsWith("hash://sha256/066e685fa9b5ef8a01d7d69f2f0e7f4074a646e5ae437f741a4629d881ade9eb"));
 
@@ -64,7 +64,7 @@ public class FileHasherTest {
 
         String joinedUnsorted = String.join("", expectedHashes);
 
-        IRI multihashUnsorted = Hasher.calcHashIRI(joinedUnsorted);
+        IRI multihashUnsorted = Hasher.calcHashIRI(joinedUnsorted, HashType.sha256);
         assertThat(multihashUnsorted.getIRIString(), is(not(expectedHashOfSortedHash)));
     }
 

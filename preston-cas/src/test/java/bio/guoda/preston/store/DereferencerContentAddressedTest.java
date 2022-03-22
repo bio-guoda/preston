@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -21,7 +22,8 @@ public class DereferencerContentAddressedTest {
     @Test
     public void dereference() throws IOException {
         Dereferencer<InputStream> dereferencer = new DereferenceTest("derefData@");
-        BlobStore blobStore = new BlobStoreAppendOnly(TestUtil.getTestPersistence());
+        HashType type = HashType.sha256;
+        BlobStore blobStore = new BlobStoreAppendOnly(TestUtil.getTestPersistence(), true, type);
         DereferencerContentAddressed dereferencerContentAddressed = new DereferencerContentAddressed(dereferencer, blobStore);
 
         IRI contentHash = dereferencerContentAddressed.get(toIRI(URI.create("http://some")));
@@ -32,7 +34,7 @@ public class DereferencerContentAddressedTest {
 
         String actualContent = toUTF8(content);
         assertThat(actualContent, Is.is(expectedContent));
-        assertThat(contentHash, Is.is(Hasher.calcHashIRI(expectedContent)));
+        assertThat(contentHash, Is.is(Hasher.calcHashIRI(expectedContent, type)));
 
     }
 

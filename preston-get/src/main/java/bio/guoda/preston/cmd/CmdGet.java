@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
@@ -34,9 +35,7 @@ public class CmdGet extends Persisting implements Runnable {
 
     @Override
     public void run() {
-        BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType()))
-        );
+        BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         run(blobStore);
     }
 

@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
@@ -45,7 +46,7 @@ public class RegistryReaderGBIFTest {
     @Test
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
         registryReaderGBIF.on(toStatement(Seeds.GBIF, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         assertThat(new HashSet<>(nodes).size(), is(6));
         assertThat(nodes.size(), is(6));
@@ -55,7 +56,7 @@ public class RegistryReaderGBIFTest {
     @Test
     public void onEmptyPage() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
 
         registryReaderGBIF.on(toStatement(toIRI("https://api.gbif.org/v1/dataset"),
                 HAS_VERSION,
@@ -66,7 +67,7 @@ public class RegistryReaderGBIFTest {
     @Test
     public void onNotSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
         RDFTerm bla = toLiteral("bla");
         registryReaderGBIF.on(toStatement(Seeds.GBIF, toIRI("http://example.org"), bla));
         assertThat(nodes.size(), is(0));

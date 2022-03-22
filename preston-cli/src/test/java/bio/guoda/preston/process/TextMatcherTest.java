@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.cmd.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStoreReadOnly;
@@ -33,7 +34,7 @@ public class TextMatcherTest {
 
     @Test
     public void onUnresolvable() {
-        BlobStoreReadOnly blobStore = TestUtil.getTestBlobStore();
+        BlobStoreReadOnly blobStore = TestUtil.getTestBlobStore(HashType.sha256);
 
         ArrayList<Quad> nodes = runTextFinder(blobStore);
         assertThat(nodes.size(), is(3));

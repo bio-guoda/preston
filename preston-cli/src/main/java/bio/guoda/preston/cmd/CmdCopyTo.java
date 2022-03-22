@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyGeneratingStream;
@@ -70,7 +71,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     private void generateJekyllSiteContent(File target) {
         final BlobStoreAppendOnly provenanceLogStore
-                = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())));
+                = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         final StatementsListener listener;
         try {
             listener = JekyllUtil.createJekyllSiteGenerator(provenanceLogStore, target);

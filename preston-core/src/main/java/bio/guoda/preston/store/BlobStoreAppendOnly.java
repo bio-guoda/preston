@@ -14,14 +14,6 @@ public class BlobStoreAppendOnly implements BlobStore {
     private final boolean shouldCloseInputStream;
     private final HashType type;
 
-    public BlobStoreAppendOnly(KeyValueStore keyValueStore) {
-        this(keyValueStore, true);
-    }
-
-    public BlobStoreAppendOnly(KeyValueStore keyValueStore, boolean shouldCloseInputStream) {
-        this(keyValueStore, shouldCloseInputStream, HashType.sha256);
-    }
-
     public BlobStoreAppendOnly(KeyValueStore keyValueStore, boolean shouldCloseInputStream, HashType type) {
         this.keyValueStore = keyValueStore;
         this.shouldCloseInputStream = shouldCloseInputStream;

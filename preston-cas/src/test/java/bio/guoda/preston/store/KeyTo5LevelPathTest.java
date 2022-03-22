@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.rdf.api.IRI;
@@ -15,7 +16,7 @@ public class KeyTo5LevelPathTest {
 
     @Test
     public void toPath() {
-        IRI hash = Hasher.calcHashIRI("bla");
+        IRI hash = Hasher.calcHashIRI("bla", HashType.sha256);
         assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
         URI actual = new KeyTo5LevelPath(URI.create("some:///")).toPath(hash);
         assertThat(actual, is(URI.create("some:///4d/f3/c3/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703/data")));

@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
@@ -32,7 +33,7 @@ public class RegistryReaderALATest {
     @Test
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
         registryReader.on(toStatement(Seeds.ALA, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         assertThat(nodes.size(), is(7));
         assertThat(getVersionSource(nodes.get(6)).getIRIString(), is("https://collections.ala.org.au/ws/dataResource?status=dataAvailable"));
@@ -41,7 +42,7 @@ public class RegistryReaderALATest {
     @Test
     public void onEmptyPage() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
 
         registryReader.on(toStatement(toIRI("https://collections.ala.org.au/ws/dataResource?status=dataAvailable&resourceType=records"),
                 HAS_VERSION,
@@ -52,7 +53,7 @@ public class RegistryReaderALATest {
     @Test
     public void onNotSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        RegistryReaderALA registryReader = new RegistryReaderALA(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
         RDFTerm bla = toLiteral("bla");
         registryReader.on(toStatement(Seeds.GBIF, toIRI("http://example.org"), bla));
         assertThat(nodes.size(), is(0));

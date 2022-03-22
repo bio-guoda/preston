@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.SketchBuilder;
 import bio.guoda.preston.process.SketchBuilderBloomFilter;
@@ -28,7 +29,7 @@ public class CmdCreateSketch extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        BlobStoreAppendOnly blobStoreAppendOnly = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())));
+        BlobStoreAppendOnly blobStoreAppendOnly = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         run(blobStoreAppendOnly);
 
     }

@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
@@ -37,7 +38,7 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
         RDFTerm bla = toLiteral("bla");
         reader.on(toStatement(Seeds.IDIGBIO, WAS_ASSOCIATED_WITH, bla));
         assertThat(nodes.size(), is(10));
@@ -46,7 +47,7 @@ public class RegistryReaderIDigBioTest {
     @Test
     public void onNotSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(), TestUtilForProcessor.testListener(nodes));
+        RegistryReaderIDigBio reader = new RegistryReaderIDigBio(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
         RDFTerm bla = toLiteral("bla");
         reader.on(toStatement(Seeds.IDIGBIO, toIRI("https://example.org/bla"), bla));
         assertThat(nodes.size(), is(0));

@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;
 import bio.guoda.preston.store.TestUtilForProcessor;
@@ -53,7 +54,7 @@ public class SketchIntersectBloomFilterTest {
     public void oneContentMissingBloomFilter() {
         ArrayList<Quad> nodes = new ArrayList<>();
         StatementProcessor processor = new SketchIntersectBloomFilter(
-                TestUtil.getTestBlobStore(),
+                TestUtil.getTestBlobStore(HashType.sha256),
                 TestUtilForProcessor.testListener(nodes)
         );
 

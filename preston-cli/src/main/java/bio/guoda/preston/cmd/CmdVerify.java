@@ -54,7 +54,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
                 = new HashGeneratorFactory().create(getHashType());
 
         final BlobStore blobStore
-                = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())));
+                = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         final HexaStore statementPersistence
                 = new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())));
 

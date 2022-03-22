@@ -22,9 +22,9 @@ import java.util.stream.Stream;
 
 public final class Hasher {
 
-    public static IRI calcHashIRI(String content) {
+    public static IRI calcHashIRI(String content, HashType hashType) {
         try {
-            return calcHashIRI(IOUtils.toInputStream(content, StandardCharsets.UTF_8), NullOutputStream.NULL_OUTPUT_STREAM, HashType.sha256);
+            return calcHashIRI(IOUtils.toInputStream(content, StandardCharsets.UTF_8), NullOutputStream.NULL_OUTPUT_STREAM, hashType);
         } catch (IOException e) {
             throw new IllegalStateException("unexpected failure of hash calculation", e);
         }

@@ -190,7 +190,7 @@ public class Persisting extends PersistingLocal {
         DereferencerContentAddressedTarGZ dereferencer =
                 new DereferencerContentAddressedTarGZ(getDerefStream(baseURI,
                         getProgressListener()),
-                        new BlobStoreAppendOnly(keyValueStore, false));
+                        new BlobStoreAppendOnly(keyValueStore, false, HashType.sha256));
 
         return withStoreAt(new KeyTo3LevelTarGzPath(baseURI), dereferencer);
     }
