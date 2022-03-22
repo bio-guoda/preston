@@ -25,7 +25,7 @@ public class FileHasherTest {
 
     @Test
     public void sha256Binary() throws IOException {
-        IRI shaIRI = Hasher.calcSHA256(dwcaInputStream(), NullOutputStream.NULL_OUTPUT_STREAM);
+        IRI shaIRI = Hasher.calcHashIRI(dwcaInputStream(), NullOutputStream.NULL_OUTPUT_STREAM, HashType.sha256);
         assertThat(shaIRI.getIRIString(), is("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
     }
 
@@ -55,7 +55,7 @@ public class FileHasherTest {
 
         Stream<String> sortedHashes = hashList.stream().distinct().sorted();
         String sortedJoin = sortedHashes.collect(Collectors.joining());
-        IRI actualHashOfSortedHash = Hasher.calcSHA256(sortedJoin);
+        IRI actualHashOfSortedHash = Hasher.calcHashIRI(sortedJoin);
 
         assertThat(sortedJoin, startsWith("hash://sha256/066e685fa9b5ef8a01d7d69f2f0e7f4074a646e5ae437f741a4629d881ade9eb"));
 
@@ -64,7 +64,7 @@ public class FileHasherTest {
 
         String joinedUnsorted = String.join("", expectedHashes);
 
-        IRI multihashUnsorted = Hasher.calcSHA256(joinedUnsorted);
+        IRI multihashUnsorted = Hasher.calcHashIRI(joinedUnsorted);
         assertThat(multihashUnsorted.getIRIString(), is(not(expectedHashOfSortedHash)));
     }
 
@@ -78,7 +78,7 @@ public class FileHasherTest {
         ZipEntry entry;
         while ((entry = is.getNextEntry()) != null) {
             if (filter.accept(entry)) {
-                String iriString = Hasher.calcSHA256(is, NullOutputStream.NULL_OUTPUT_STREAM
+                String iriString = Hasher.calcHashIRI(is, NullOutputStream.NULL_OUTPUT_STREAM
                         , false).getIRIString();
                 hashList.add(iriString);
             } else {

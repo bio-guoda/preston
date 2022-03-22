@@ -36,7 +36,7 @@ public class HexaStoreImpl implements HexaStore {
 
 
     protected static IRI calculateHashFor(RDFTerm term) {
-        return Hasher.calcSHA256(RDFValueUtil.getValueFor(term));
+        return Hasher.calcHashIRI(RDFValueUtil.getValueFor(term));
     }
 
     @Override

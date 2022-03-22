@@ -32,7 +32,7 @@ public class DereferencerContentAddressedTest {
 
         String actualContent = toUTF8(content);
         assertThat(actualContent, Is.is(expectedContent));
-        assertThat(contentHash, Is.is(Hasher.calcSHA256(expectedContent)));
+        assertThat(contentHash, Is.is(Hasher.calcHashIRI(expectedContent)));
 
     }
 

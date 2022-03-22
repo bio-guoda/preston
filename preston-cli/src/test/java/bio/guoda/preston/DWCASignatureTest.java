@@ -22,14 +22,14 @@ public class DWCASignatureTest {
     @Test
     public void sha256Binary() throws IOException {
         InputStream is = dwcaInputStream("dwca-20180905.zip");
-        IRI shaIRI = Hasher.calcSHA256(is, NullOutputStream.NULL_OUTPUT_STREAM);
+        IRI shaIRI = Hasher.calcHashIRI(is, NullOutputStream.NULL_OUTPUT_STREAM, HashType.sha256);
         assertThat(shaIRI.getIRIString(), is("hash://sha256/59f32445a50646d923f8ba462a7d87a848632f28bd93ac579de210e3375714de"));
     }
 
     @Test
     public void straightEMLShaDiff() throws IOException {
-        IRI iri = Hasher.calcSHA256(dwcaInputStream("dwca-20180905.zip"), NullOutputStream.NULL_OUTPUT_STREAM);
-        assertThat(iri, is(not(Hasher.calcSHA256(dwcaInputStream("dwca-20180916.zip"), NullOutputStream.NULL_OUTPUT_STREAM))));
+        IRI iri = Hasher.calcHashIRI(dwcaInputStream("dwca-20180905.zip"), NullOutputStream.NULL_OUTPUT_STREAM, HashType.sha256);
+        assertThat(iri, is(not(Hasher.calcHashIRI(dwcaInputStream("dwca-20180916.zip"), NullOutputStream.NULL_OUTPUT_STREAM, HashType.sha256))));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class DWCASignatureTest {
             }
         };
         Collection<String> hashesOld = FileHasherTest.hashDWCA(dwcaInputStream, ignoreEML);
-        return Hasher.calcSHA256(StringUtils.join(hashesOld, ""));
+        return Hasher.calcHashIRI(StringUtils.join(hashesOld, ""));
     }
 
     private InputStream dwcaInputStream(String name) {

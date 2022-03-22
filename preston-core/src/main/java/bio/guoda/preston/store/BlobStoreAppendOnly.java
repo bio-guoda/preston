@@ -27,7 +27,7 @@ public class BlobStoreAppendOnly implements BlobStore {
     @Override
     public IRI put(InputStream is) throws IOException {
         return keyValueStore.put(
-                (is1, os1) -> Hasher.calcHashIRI(is1, os1, shouldCloseInputStream, types.getAlgorithm()), is);
+                (is1, os1) -> Hasher.calcHashIRI(is1, os1, shouldCloseInputStream, types), is);
     }
 
     @Override

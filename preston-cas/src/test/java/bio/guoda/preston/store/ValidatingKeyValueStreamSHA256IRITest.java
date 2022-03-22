@@ -18,7 +18,7 @@ public class ValidatingKeyValueStreamSHA256IRITest {
 
     @Test
     public void validLength() throws IOException {
-        IRI iri = Hasher.calcSHA256("bla");
+        IRI iri = Hasher.calcHashIRI("bla");
         InputStream is = IOUtils.toInputStream(iri.getIRIString(), StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
         ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(is);
@@ -39,7 +39,7 @@ public class ValidatingKeyValueStreamSHA256IRITest {
 
     @Test
     public void tooLong() throws IOException {
-        IRI iri = Hasher.calcSHA256("bla");
+        IRI iri = Hasher.calcHashIRI("bla");
         InputStream is = IOUtils.toInputStream(iri.getIRIString() + "toolong", StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
         ValidatingKeyValueStreamSHA256IRI someiri = new ValidatingKeyValueStreamSHA256IRI(is);

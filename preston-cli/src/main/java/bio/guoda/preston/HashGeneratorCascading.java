@@ -26,6 +26,6 @@ class HashGeneratorCascading extends HashGeneratorAbstract<List<IRI>> {
                         is,
                         os,
                         shouldCloseInputStream,
-                        types.stream().map(HashType::getAlgorithm));
+                        types.stream());
     }
 }

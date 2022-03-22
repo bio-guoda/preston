@@ -15,7 +15,7 @@ public class KeyTo3LevelPathTest {
 
     @Test
     public void toPath() {
-        IRI hash = Hasher.calcSHA256("bla");
+        IRI hash = Hasher.calcHashIRI("bla");
         assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
 
         URI actualPath = new KeyTo3LevelPath(URI.create("file:///")).toPath(hash);
@@ -24,7 +24,7 @@ public class KeyTo3LevelPathTest {
 
     @Test
     public void toPathNoTrailingSlash() {
-        IRI hash = Hasher.calcSHA256("bla");
+        IRI hash = Hasher.calcHashIRI("bla");
         assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
 
         URI actualPath = new KeyTo3LevelPath(URI.create("https://example.org")).toPath(hash);
@@ -33,7 +33,7 @@ public class KeyTo3LevelPathTest {
 
     @Test
     public void toPathWithTrailingSlash() {
-        IRI hash = Hasher.calcSHA256("bla");
+        IRI hash = Hasher.calcHashIRI("bla");
         assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
 
         URI actualPath = new KeyTo3LevelPath(URI.create("https://example.org/")).toPath(hash);
