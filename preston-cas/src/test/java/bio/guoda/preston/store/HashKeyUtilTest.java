@@ -101,9 +101,15 @@ public class HashKeyUtilTest {
     }
 
     @Test
-    public void extractContentHash() {
+    public void extractContentHashSHA256() {
         IRI contentHash = HashKeyUtil.extractContentHash(toIRI("blub:hash://sha256/babababababababababababababababababababababababababababababababa!/blah"));
         assertThat(contentHash.getIRIString(), is("hash://sha256/babababababababababababababababababababababababababababababababa"));
+    }
+
+    @Test
+    public void extractContentHashMD5() {
+        IRI contentHash = HashKeyUtil.extractContentHash(toIRI("blub:hash://md5/b1946ac92492d2347c6235b4d2611184!/blah"));
+        assertThat(contentHash.getIRIString(), is("hash://md5/b1946ac92492d2347c6235b4d2611184"));
     }
 
 }

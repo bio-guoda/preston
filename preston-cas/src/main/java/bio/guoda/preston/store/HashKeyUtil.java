@@ -93,12 +93,16 @@ public class HashKeyUtil {
     }
 
     public static IRI extractContentHash(IRI iri) throws IllegalArgumentException {
-        final Pattern contentHashPattern = HashType.sha256.getIRIPattern();
-        Matcher contentHashMatcher = contentHashPattern.matcher(iri.getIRIString());
+        IRI contentHash = null;
+        for (HashType hashType : HashType.values()) {
+            final Pattern contentHashPattern = hashType.getIRIPattern();
+            Matcher contentHashMatcher = contentHashPattern.matcher(iri.getIRIString());
 
-        IRI contentHash = (contentHashMatcher.find())
-                ? toIRI(contentHashMatcher.group())
-                : null;
+            contentHash = (contentHashMatcher.find())
+                    ? toIRI(contentHashMatcher.group())
+                    : null;
+        }
+
         if (contentHash == null) {
             throw new IllegalArgumentException("[" + iri.getIRIString() + "] is not a content-based URI (e.g. \"...hash://sha256/abc123...\"");
         } else {
