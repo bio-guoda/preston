@@ -38,7 +38,7 @@ public final class Hasher {
         return calcHashIRI(is, os, true, HashType.sha256.getAlgorithm());
     }
 
-    static IRI calcHashIRI(InputStream is, OutputStream os, boolean shouldCloseInputStream, String algorithm) throws IOException {
+    public static IRI calcHashIRI(InputStream is, OutputStream os, boolean shouldCloseInputStream, String algorithm) throws IOException {
         List<IRI> iris = calcHashIRIs(
                 is,
                 os,
@@ -58,15 +58,6 @@ public final class Hasher {
 
     public static IRI calcSHA256(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
         return calcHashIRI(is, os, shouldCloseInputStream, HashType.sha256.getAlgorithm());
-    }
-
-    static String calcSHA256String(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
-        try {
-            IRI iri = calcHashIRI(is, os, shouldCloseInputStream, HashType.sha256.getAlgorithm());
-            return iri.getIRIString();
-        } catch (IOException e) {
-            throw new IOException("failed to cache dataset", e);
-        }
     }
 
     private static String toHashString64bit(MessageDigest md) {

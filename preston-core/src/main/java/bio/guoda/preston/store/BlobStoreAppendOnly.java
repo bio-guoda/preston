@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import org.apache.commons.rdf.api.IRI;
 
@@ -11,6 +12,7 @@ public class BlobStoreAppendOnly implements BlobStore {
 
     private final KeyValueStore keyValueStore;
     private final boolean shouldCloseInputStream;
+    private final HashType types = HashType.sha256;
 
     public BlobStoreAppendOnly(KeyValueStore keyValueStore) {
         this(keyValueStore, true);
@@ -25,7 +27,7 @@ public class BlobStoreAppendOnly implements BlobStore {
     @Override
     public IRI put(InputStream is) throws IOException {
         return keyValueStore.put(
-                (is1, os1) -> Hasher.calcSHA256(is1, os1, shouldCloseInputStream), is);
+                (is1, os1) -> Hasher.calcHashIRI(is1, os1, shouldCloseInputStream, types.getAlgorithm()), is);
     }
 
     @Override
