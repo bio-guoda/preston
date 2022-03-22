@@ -13,11 +13,14 @@ import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 @Parameters(separators = "= ", commandDescription = "Extract records from DarwinCore archives in line-json")
 public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
 
     private InputStream inputStream = System.in;
+    private OutputStream out = System.out;
 
     @Override
     public void run() {
@@ -35,9 +38,11 @@ public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
                 new NullPrintStream(),
                 () -> System.exit(0));
 
+        out = System.out;
         DwcRecordExtractor textMatcher = new DwcRecordExtractor(
                 this,
                 blobStoreReadOnly,
+                out,
                 listener);
 
         StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {

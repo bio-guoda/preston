@@ -7,6 +7,7 @@ import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -22,9 +23,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -34,10 +37,14 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
     public static final String META_XML = "meta.xml";
     private final Dereferencer<InputStream> dereferencer;
     private ContentStreamHandler contentStreamHandler;
+    private final OutputStream outputStream;
 
-    public DwCArchiveStreamHandler(ContentStreamHandler contentStreamHandler, Dereferencer<InputStream> inputStreamDereferencer) {
+    public DwCArchiveStreamHandler(ContentStreamHandler contentStreamHandler,
+                                   Dereferencer<InputStream> inputStreamDereferencer,
+                                   OutputStream os) {
         this.contentStreamHandler = contentStreamHandler;
         this.dereferencer = inputStreamDereferencer;
+        this.outputStream = os;
     }
 
     @Override
@@ -79,14 +86,15 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
         return false;
     }
 
-    private void streamAsJson(Pair<IRI, ArchiveFile> resourceIRIs, TabularDataFileReader<List<String>> tabularFileReader, Record next) {
+    private void streamAsJson(Pair<IRI, ArchiveFile> resourceIRIs, TabularDataFileReader<List<String>> tabularFileReader, Record next) throws IOException {
         ObjectNode objectNode = new ObjectMapper().createObjectNode();
         objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf("line:" + resourceIRIs.getLeft().getIRIString() + "!/L" + tabularFileReader.getLastRecordLineNumber()));
         objectNode.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf(resourceIRIs.getRight().getRowType().qualifiedName()));
         for (Term term : next.terms()) {
             objectNode.set(term.qualifiedName(), TextNode.valueOf(next.value(term)));
         }
-        System.out.println(objectNode.toString());
+        IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), outputStream);
+        IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
     }
 
 

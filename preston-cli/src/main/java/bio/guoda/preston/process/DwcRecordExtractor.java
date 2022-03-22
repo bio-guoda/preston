@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.cmd.CmdDwcRecordStream;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ContentHashDereferencer;
 import bio.guoda.preston.stream.ArchiveStreamHandler;
@@ -15,6 +16,7 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -31,11 +33,22 @@ import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 public class DwcRecordExtractor extends ProcessorReadOnly {
 
     private final ProcessorState processorState;
+    private final OutputStream outputStream;
     private int batchSize = 256;
 
-    public DwcRecordExtractor(ProcessorState processorState, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
-        super(blobStoreReadOnly, listeners);
+    public DwcRecordExtractor(ProcessorState processorState,
+                              BlobStoreReadOnly blobStoreReadOnly,
+                              StatementsListener... listeners) {
+        this(processorState, blobStoreReadOnly, System.out, listeners);
+    }
+
+    public DwcRecordExtractor(ProcessorState processorState,
+                              BlobStoreReadOnly blobStoreReadOnly,
+                              OutputStream out,
+                              StatementsListener... listeners) {
+        super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
+        this.outputStream = out;
     }
 
     @Override
@@ -75,7 +88,8 @@ public class DwcRecordExtractor extends ProcessorReadOnly {
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
                     new DwCArchiveStreamHandler(this,
-                            new ContentHashDereferencer(DwcRecordExtractor.this)
+                            new ContentHashDereferencer(DwcRecordExtractor.this),
+                            outputStream
                     )
             );
         }
