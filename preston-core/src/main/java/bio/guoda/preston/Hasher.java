@@ -61,11 +61,15 @@ public final class Hasher {
     }
 
     private static String toHashString64bit(MessageDigest md) {
-        return String.format("%064x", new BigInteger(1, md.digest()));
+        return toHashString(md, HashType.sha256);
+    }
+
+    private static String toHashString(MessageDigest md, HashType type) {
+        return String.format("%0" + type.getHexLength() + "x", new BigInteger(1, md.digest()));
     }
 
     static String toHashString32bit(MessageDigest md) {
-        return String.format("%032x", new BigInteger(1, md.digest()));
+        return toHashString(md, HashType.md5);
     }
 
     public static IRI toSHA256IRI(MessageDigest md) {

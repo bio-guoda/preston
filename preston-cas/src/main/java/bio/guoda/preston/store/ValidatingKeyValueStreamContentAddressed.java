@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import org.apache.commons.io.input.MessageDigestCalculatingInputStream;
 import org.apache.commons.lang3.StringUtils;
@@ -11,10 +12,11 @@ import java.security.NoSuchAlgorithmException;
 public class ValidatingKeyValueStreamContentAddressed implements ValidatingKeyValueStream {
 
     private final MessageDigestCalculatingInputStream value;
+    private final HashType type = HashType.sha256;
 
     public ValidatingKeyValueStreamContentAddressed(InputStream value) {
         try {
-            this.value = new MessageDigestCalculatingInputStream(value, Hasher.getHashAlgorithm());
+            this.value = new MessageDigestCalculatingInputStream(value, type.getAlgorithm());
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException("failed to instantiate hash algorithm", e);
         }
