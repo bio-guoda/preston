@@ -120,7 +120,7 @@ public class ContentResolverTest {
         String label = cachedNode.getObject().toString();
         assertThat(label, is("<hash://sha256/" + expectedHash + ">"));
 
-        InputStream inputStream = blobStore.get(Hasher.toHashIRI(HashType.sha256, expectedHash));
+        InputStream inputStream = blobStore.get(Hasher.toHashIRI(expectedHash, HashType.sha256));
 
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is(expectedValue));
     }

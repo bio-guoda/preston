@@ -53,7 +53,7 @@ public final class Hasher {
     }
 
     public static IRI toHashIRI(MessageDigest md, HashType type) {
-        return toHashIRI(type, toHashString(md, type));
+        return toHashIRI(toHashString(md, type), type);
     }
 
 
@@ -89,6 +89,10 @@ public final class Hasher {
         os.flush();
         os.close();
         return digests;
+    }
+
+    public static IRI toHashIRI(String hexHash, HashType type) {
+        return toHashIRI(type, hexHash);
     }
 
     public static IRI toHashIRI(HashType type, String hash) {
