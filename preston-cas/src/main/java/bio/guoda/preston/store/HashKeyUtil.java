@@ -101,6 +101,10 @@ public class HashKeyUtil {
             contentHash = (contentHashMatcher.find())
                     ? toIRI(contentHashMatcher.group())
                     : null;
+
+            if (contentHash != null) {
+                break;
+            }
         }
 
         if (contentHash == null) {

@@ -67,9 +67,10 @@ public class CmdUpdate extends CmdActivity {
         return "A crawl event that discovers biodiversity archives.";
     }
 
-
-    private StatementsListener createActivityProcessor(BlobStore blobStore, ActivityContext ctx,
-                                                      StatementsListener[] listeners) {
+    private StatementsListener createActivityProcessor(
+            BlobStore blobStore,
+            ActivityContext ctx,
+            StatementsListener[] listeners) {
         return new Archiver(
                 new DereferencerContentAddressed(ResourcesHTTP::asInputStream, blobStore),
                 ctx,
