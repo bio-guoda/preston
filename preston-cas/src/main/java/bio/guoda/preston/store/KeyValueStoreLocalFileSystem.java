@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.rdf.api.IRI;
 
@@ -92,16 +93,29 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
     }
 
     public static class ValidatingKeyValueStreamContentAddressedFactory implements KeyValueStreamFactory {
+
+        private final HashType type;
+
+        public ValidatingKeyValueStreamContentAddressedFactory(HashType type) {
+            this.type = type;
+        }
         @Override
         public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
-            return new ValidatingKeyValueStreamContentAddressed(is);
+            return new ValidatingKeyValueStreamContentAddressed(is, type);
         }
     }
 
-    public static class KeyValueStreamFactorySHA256Values implements KeyValueStreamFactory {
+    public static class KeyValueStreamFactoryValues implements KeyValueStreamFactory {
+
+        private final HashType type;
+
+        public KeyValueStreamFactoryValues(HashType type) {
+            this.type = type;
+        }
+
         @Override
         public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
-            return new ValidatingKeyValueStreamSHA256IRI(is);
+            return new ValidatingKeyValueStreamSHA256IRI(is, type);
         }
     }
 

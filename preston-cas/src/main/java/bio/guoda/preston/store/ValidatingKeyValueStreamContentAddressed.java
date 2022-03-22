@@ -12,10 +12,15 @@ import java.security.NoSuchAlgorithmException;
 public class ValidatingKeyValueStreamContentAddressed implements ValidatingKeyValueStream {
 
     private final MessageDigestCalculatingInputStream value;
-    private final HashType type = HashType.sha256;
+    private final HashType type;
 
     public ValidatingKeyValueStreamContentAddressed(InputStream value) {
+        this(value, HashType.sha256);
+    }
+
+    public ValidatingKeyValueStreamContentAddressed(InputStream value, HashType type) {
         try {
+            this.type = type;
             this.value = new MessageDigestCalculatingInputStream(value, type.getAlgorithm());
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException("failed to instantiate hash algorithm", e);

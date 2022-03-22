@@ -90,10 +90,10 @@ public final class ReplayUtil {
 
         attemptReplay(
                 new BlobStoreAppendOnly(
-                        persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory())
+                        persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType()))
                 ),
                 new HexaStoreImpl(
-                        persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values())
+                        persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(persisting.getHashType()))
                 ),
                 new CmdContext(persisting, processor));
     }

@@ -26,7 +26,7 @@ public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
                 = new BlobStoreAppendOnly(
-                        getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory())
+                        getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType()))
         );
         run(resolvingBlobStore(blobStoreAppendOnly));
 

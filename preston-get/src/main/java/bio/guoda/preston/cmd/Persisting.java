@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.DerefProgressListener;
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.store.AliasDereferencer;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
@@ -130,7 +131,7 @@ public class Persisting extends PersistingLocal {
         return getRemotes().stream().map(uri ->
                 disableCache
                         ? this.remoteWithTarGz(uri)
-                        : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory())));
+                        : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType()))));
     }
 
     private KeyValueStoreReadOnly withStoreAt(URI baseURI, KeyToPath keyToPath) {
@@ -221,6 +222,5 @@ public class Persisting extends PersistingLocal {
     public boolean isSupportTarGzDiscovery() {
         return supportTarGzDiscovery;
     }
-
 
 }

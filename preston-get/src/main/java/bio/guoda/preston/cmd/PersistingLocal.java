@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyTo5LevelPath;
 import bio.guoda.preston.store.KeyToPath;
@@ -21,6 +22,10 @@ public class PersistingLocal extends Cmd {
 
     @Parameter(names = {"--tmp-dir"}, description = "location of local tmp dir")
     private String localTmpDir = "tmp";
+
+    @Parameter(names = {"--hash-algorithm", "--algo", "-a"}, description = "hash algorithm used to generate primary content identifiers")
+    private HashType hashType = HashType.sha256;
+
 
     File getDefaultDataDir() {
         return getDataDir(getLocalDataDir());
@@ -66,5 +71,12 @@ public class PersistingLocal extends Cmd {
         this.localTmpDir = localTmpDir;
     }
 
+    public HashType getHashType() {
+        return hashType;
+    }
+
+    public void setHashType(HashType hashType) {
+        this.hashType = hashType;
+    }
 
 }

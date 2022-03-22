@@ -25,7 +25,7 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
 
         StatementsListener logger = StatementLogFactory.createPrintingLogger(getLogMode(), this);
 
-        HexaStore hexastore = new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
+        HexaStore hexastore = new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())));
         AtomicBoolean foundHistory = new AtomicBoolean(false);
         try {
             VersionUtil.findMostRecentVersion(

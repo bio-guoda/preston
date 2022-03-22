@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.StatementLogFactory;
@@ -70,13 +71,13 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     @Override
     public void run() {
         KeyValueStore blobKeyValueStore = getKeyValueStore(
-                new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()
+                new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())
         );
 
         BlobStore blobStore = new BlobStoreAppendOnly(blobKeyValueStore);
 
         KeyValueStore logRelationsStore = getKeyValueStore(
-                new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()
+                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(HashType.sha256)
         );
 
         run(blobStore, new HexaStoreImpl(logRelationsStore));

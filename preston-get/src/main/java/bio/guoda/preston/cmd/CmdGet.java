@@ -35,7 +35,7 @@ public class CmdGet extends Persisting implements Runnable {
     @Override
     public void run() {
         BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory())
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType()))
         );
         run(blobStore);
     }

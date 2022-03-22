@@ -1,5 +1,6 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.ResourcesHTTP;
@@ -47,7 +48,8 @@ public class ContentResolverTest {
     public void init() throws IOException {
         tempDir = Files.createTempDirectory(Paths.get("target/"), "caching");
         datasetDir = Files.createTempDirectory(Paths.get("target/"), "datasets");
-        KeyValueStoreLocalFileSystem persistence = new KeyValueStoreLocalFileSystem(tempDir.toFile(), new KeyTo3LevelPath(datasetDir.toFile().toURI()), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory());
+        KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory keyValueStreamFactory = new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(HashType.sha256);
+        KeyValueStoreLocalFileSystem persistence = new KeyValueStoreLocalFileSystem(tempDir.toFile(), new KeyTo3LevelPath(datasetDir.toFile().toURI()), keyValueStreamFactory);
         this.blobStore = new BlobStoreAppendOnly(persistence);
     }
 

@@ -13,10 +13,17 @@ public class ValidatingKeyValueStreamSHA256IRI implements ValidatingKeyValueStre
 
     private final ByteArrayOutputStream baos;
     private final InputStream value;
+    private final HashType type;
 
     public ValidatingKeyValueStreamSHA256IRI(InputStream value) {
+        this(value, HashType.sha256);
+    }
+
+    public ValidatingKeyValueStreamSHA256IRI(InputStream value, HashType type) {
         this.baos = new ByteArrayOutputStream();
         this.value = new TeeInputStream(new BoundedInputStream(value, 79), baos);
+        this.type = type;
+
     }
 
     @Override
@@ -29,6 +36,6 @@ public class ValidatingKeyValueStreamSHA256IRI implements ValidatingKeyValueStre
         byte[] bytes = baos.toByteArray();
         String sha256Hash = new String(bytes, StandardCharsets.UTF_8);
         return bytes.length == 78
-                && HashType.sha256.getIRIPattern().matcher(sha256Hash).matches();
+                && type.getIRIPattern().matcher(sha256Hash).matches();
     }
 }

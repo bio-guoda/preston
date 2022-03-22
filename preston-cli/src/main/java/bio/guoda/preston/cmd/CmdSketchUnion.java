@@ -22,7 +22,7 @@ public class CmdSketchUnion extends LoggingPersisting implements Runnable {
     @Override
     public void run() {
         BlobStoreAppendOnly blobStoreAppendOnly = new BlobStoreAppendOnly(
-                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())));
         run(blobStoreAppendOnly);
     }
 

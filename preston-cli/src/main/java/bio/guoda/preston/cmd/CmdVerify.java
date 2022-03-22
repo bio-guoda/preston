@@ -44,23 +44,19 @@ public class CmdVerify extends PersistingLocal implements Runnable {
         CONTENT_PRESENT_HASH_NOT_VERIFIED
     }
 
-    ;
-
     @Parameter(names = {"--skip-hash-verification"}, description = "do not verify hash, just check availability")
     private Boolean skipHashVerification = false;
-
-
-    @Parameter(names = {"--hash-algorithm"}, description = "hash algorithm used for verification")
-    private HashType hashType = HashType.sha256;
-
 
     @Override
     public void run() {
 
-        final HashGenerator<IRI> hashGenerator = new HashGeneratorFactory().create(hashType);
+        final HashGenerator<IRI> hashGenerator
+                = new HashGeneratorFactory().create(getHashType());
 
-        final BlobStore blobStore = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory()));
-        final HexaStore statementPersistence = new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactorySHA256Values()));
+        final BlobStore blobStore
+                = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())));
+        final HexaStore statementPersistence
+                = new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())));
 
         Map<String, State> verifiedMap = new TreeMap<>();
 
@@ -111,10 +107,6 @@ public class CmdVerify extends PersistingLocal implements Runnable {
         CmdContext ctx = new CmdContext(this, statementListener);
 
         attemptReplay(blobStore, statementPersistence, ctx);
-    }
-
-    public void setHashType(HashType hashType) {
-        this.hashType = hashType;
     }
 
 }
