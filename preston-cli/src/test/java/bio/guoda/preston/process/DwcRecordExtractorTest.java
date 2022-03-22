@@ -43,6 +43,7 @@ public class DwcRecordExtractorTest {
                     try {
                         return new FileInputStream(new File(URI.create(iri.getIRIString())));
                     } catch (FileNotFoundException e) {
+                        e.printStackTrace();
                         throw new RuntimeException(e);
                     }
                 }
