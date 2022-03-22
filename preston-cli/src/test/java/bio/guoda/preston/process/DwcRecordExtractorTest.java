@@ -29,8 +29,9 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertTrue;
 
 public class DwcRecordExtractorTest {
+
     @Test
-    public void onZipBatchSize100() throws IOException {
+    public void streamDwcRecordsToJSON() throws IOException {
 
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
@@ -69,9 +70,9 @@ public class DwcRecordExtractorTest {
         }
 
         String actual = IOUtils.toString(byteArrayOutputStream.toByteArray(), StandardCharsets.UTF_8.name());
-        String expected = IOUtils.toString(getClass().getResourceAsStream("dwc-json-stream.json"), StandardCharsets.UTF_8);
 
         String[] jsonObjects = StringUtils.split(actual, "\n");
+        assertThat(jsonObjects.length, is(15));
 
         JsonNode jsonNode = new ObjectMapper().readTree(jsonObjects[0]);
 
@@ -79,7 +80,6 @@ public class DwcRecordExtractorTest {
         assertThat(jsonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("http://rs.tdwg.org/dwc/terms/Taxon"));
         assertThat(jsonNode.get("http://rs.tdwg.org/dwc/terms/scientificName").asText(), is("Calyptraeotheres Campos 1990"));
 
-        assertThat(jsonObjects.length, is(15));
 
     }
 
