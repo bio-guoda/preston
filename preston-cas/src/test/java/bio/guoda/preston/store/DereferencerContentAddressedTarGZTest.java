@@ -25,7 +25,7 @@ public class DereferencerContentAddressedTarGZTest {
 
         try (InputStream is = getDerefTarGZ(null).get(RefNodeFactory.toIRI("tgz:https://example.com/preston-a1.tar.gz!/1a/57/1a57e55a780b86cff38697cf1b857751ab7b389973d35113564fe5a9a58d6a99"))) {
             assertNotNull(is);
-            IRI iri = Hasher.calcHashIRI(is, NullOutputStream.NULL_OUTPUT_STREAM, false);
+            IRI iri = Hasher.calcHashIRI(is, NullOutputStream.NULL_OUTPUT_STREAM, false, HashType.sha256);
             assertThat(iri, Is.is(RefNodeFactory.toIRI(knownPresentHash)));
         }
     }
@@ -40,7 +40,7 @@ public class DereferencerContentAddressedTarGZTest {
 
         try (InputStream is = getDerefTarGZ(testBlobStore).get(RefNodeFactory.toIRI("tgz:https://example.com/preston-a1.tar.gz!/1a/57/1a57e55a780b86cff38697cf1b857751ab7b389973d35113564fe5a9a58d6a99"))) {
             assertNotNull(is);
-            IRI iri = Hasher.calcHashIRI(is, NullOutputStream.NULL_OUTPUT_STREAM, false);
+            IRI iri = Hasher.calcHashIRI(is, NullOutputStream.NULL_OUTPUT_STREAM, false, HashType.sha256);
             assertThat(iri, Is.is(RefNodeFactory.toIRI(knownPresentHash)));
         }
 

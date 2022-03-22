@@ -78,8 +78,7 @@ public class FileHasherTest {
         ZipEntry entry;
         while ((entry = is.getNextEntry()) != null) {
             if (filter.accept(entry)) {
-                String iriString = Hasher.calcHashIRI(is, NullOutputStream.NULL_OUTPUT_STREAM
-                        , false).getIRIString();
+                String iriString = Hasher.calcHashIRI(is, NullOutputStream.NULL_OUTPUT_STREAM, false, HashType.sha256).getIRIString();
                 hashList.add(iriString);
             } else {
                 IOUtils.copy(is, NullOutputStream.NULL_OUTPUT_STREAM);

@@ -30,10 +30,6 @@ public final class Hasher {
         }
     }
 
-    public static IRI calcHashIRI(InputStream is) throws IOException {
-        return calcHashIRI(is, NullOutputStream.NULL_OUTPUT_STREAM, true);
-    }
-
     public static IRI calcHashIRI(InputStream is, OutputStream os, HashType type) throws IOException {
         return calcHashIRI(is, os, true, type);
     }
@@ -52,24 +48,12 @@ public final class Hasher {
         return iris.get(0);
     }
 
-    public static IRI calcMD5(InputStream is, OutputStream os) throws IOException {
-        return calcHashIRI(is, os, true, HashType.md5);
-    }
-
-    public static IRI calcHashIRI(InputStream is, OutputStream os, boolean shouldCloseInputStream) throws IOException {
-        return calcHashIRI(is, os, shouldCloseInputStream, HashType.sha256);
-    }
-
     public static String toHashString(MessageDigest md, HashType type) {
         return String.format("%0" + type.getHexLength() + "x", new BigInteger(1, md.digest()));
     }
 
-    public static IRI toSHA256IRI(MessageDigest md) {
-        return toSHA256IRI(toHashString(md, HashType.sha256));
-    }
-
-    private static IRI toMD5IRI(MessageDigest md) {
-        return toMD5IRI(toHashString(md, HashType.md5));
+    public static IRI toHashIRI(MessageDigest md, HashType type) {
+        return toHashIRI(type, toHashString(md, type));
     }
 
 
@@ -107,18 +91,6 @@ public final class Hasher {
         return digests;
     }
 
-    public static String getHashAlgorithm() {
-        return HashType.sha256.getAlgorithm();
-    }
-
-    public static IRI toSHA256IRI(String sha256Hash) {
-        return toHashIRI(HashType.sha256, sha256Hash);
-    }
-
-    public static IRI toMD5IRI(String hexHash) {
-        return toHashIRI(HashType.md5, hexHash);
-    }
-
     public static IRI toHashIRI(HashType type, String hash) {
         return RefNodeFactory.toIRI(URI.create(type.getPrefix() + hash));
     }
@@ -130,9 +102,9 @@ public final class Hasher {
                         String algorithm = md.getAlgorithm();
                         Optional<IRI> hashIRI = Optional.empty();
                         if (StringUtils.equals(algorithm, HashType.sha256.getAlgorithm())) {
-                            hashIRI = Optional.of(toSHA256IRI(md));
+                            hashIRI = Optional.of(toHashIRI(md, HashType.sha256));
                         } else if (StringUtils.equals(algorithm, HashType.md5.getAlgorithm())) {
-                            hashIRI = Optional.of(toMD5IRI(md));
+                            hashIRI = Optional.of(toHashIRI(md, HashType.md5));
                         }
                         return hashIRI;
                     })

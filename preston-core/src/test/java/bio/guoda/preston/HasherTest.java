@@ -41,9 +41,7 @@ public class HasherTest {
 
     @Test
     public void testMD5() throws IOException {
-        assertThat(Hasher.calcMD5(
-                IOUtils.toInputStream("something", StandardCharsets.UTF_8),
-                new ByteArrayOutputStream()).getIRIString(),
+        assertThat(Hasher.calcHashIRI(IOUtils.toInputStream("something", StandardCharsets.UTF_8), new ByteArrayOutputStream(), true, HashType.md5).getIRIString(),
                 is("hash://md5/437b930db84b8079c2dd804a71936b5f"));
     }
 

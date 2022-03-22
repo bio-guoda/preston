@@ -34,7 +34,7 @@ public class ValidatingKeyValueStreamContentAddressed implements ValidatingKeyVa
 
     @Override
     public boolean acceptValueStreamForKey(IRI key) {
-        IRI iri = Hasher.toSHA256IRI(value.getMessageDigest());
+        IRI iri = Hasher.toHashIRI(value.getMessageDigest(), HashType.sha256);
         return iri != null
                 && key != null
                 && StringUtils.equals(key.getIRIString(), iri.getIRIString());
