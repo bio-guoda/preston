@@ -43,6 +43,11 @@ public class HashKeyUtil {
                 .matches();
     }
 
+    static HashType hashTypeFor(IRI contentId) {
+        return hashTypeFor(contentId.getIRIString());
+    }
+
+
     static HashType hashTypeFor(String iriString) {
         HashType type = null;
 

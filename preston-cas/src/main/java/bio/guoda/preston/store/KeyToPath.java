@@ -6,4 +6,6 @@ import java.net.URI;
 
 public interface KeyToPath {
     URI toPath(IRI key);
+
+    boolean supports(IRI key);
 }

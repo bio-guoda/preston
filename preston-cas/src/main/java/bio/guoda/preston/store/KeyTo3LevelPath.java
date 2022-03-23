@@ -7,7 +7,7 @@ import org.apache.commons.rdf.api.IRI;
 import java.net.URI;
 import java.util.Arrays;
 
-public class KeyTo3LevelPath implements KeyToPath {
+public class KeyTo3LevelPath extends KeyToPathAcceptsAnyValid {
 
     private final URI baseURI;
     private final HashType type;

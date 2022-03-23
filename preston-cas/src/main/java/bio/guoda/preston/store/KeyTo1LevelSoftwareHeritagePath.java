@@ -35,4 +35,17 @@ public class KeyTo1LevelSoftwareHeritagePath implements KeyToPath {
                 : HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
     }
 
+    @Override
+    public boolean supports(IRI key) {
+        return HashType.sha256.equals(HashKeyUtil.hashTypeFor(key));
+    }
+
+    private static URI detectPath(URI baseURI) {
+        return StringUtils.contains(baseURI.getHost(), "softwareheritage.org")
+                && !StringUtils.endsWith(baseURI.getPath(), "sha256:")
+                ? URI.create("https://archive.softwareheritage.org/api/1/content/sha256:")
+                : baseURI;
+    }
+
+
 }

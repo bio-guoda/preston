@@ -19,6 +19,7 @@
         <jena.version>3.17.0</jena.version>
         <tika.version>2.1.0</tika.version>
         <commons-codec.version>1.15</commons-codec.version>
+        <jackson.version>2.11.3</jackson.version>
     </properties>
 
     <dependencies>

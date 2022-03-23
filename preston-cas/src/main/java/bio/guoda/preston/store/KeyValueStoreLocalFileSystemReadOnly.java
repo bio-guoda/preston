@@ -17,8 +17,13 @@ public class KeyValueStoreLocalFileSystemReadOnly implements KeyValueStoreReadOn
 
     @Override
     public InputStream get(IRI key) throws IOException {
-        File dataFile = getDataFile(getPathForKey(key));
-        return dataFile.exists() ? FileUtils.openInputStream(dataFile) : null;
+        File dataFile = null;
+        if (keyToPath.supports(key)) {
+            dataFile = getDataFile(getPathForKey(key));
+        }
+        return dataFile != null && dataFile.exists()
+                ? FileUtils.openInputStream(dataFile)
+                : null;
     }
 
     URI getPathForKey(IRI key) {

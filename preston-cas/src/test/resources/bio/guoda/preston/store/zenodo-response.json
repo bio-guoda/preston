@@ -1,0 +1,221 @@
+{
+  "aggregations": {
+    "access_right": {
+      "buckets": [
+        {
+          "doc_count": 1,
+          "key": "open"
+        }
+      ],
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0
+    },
+    "file_type": {
+      "buckets": [
+        {
+          "doc_count": 1,
+          "key": "png"
+        },
+        {
+          "doc_count": 1,
+          "key": "svg"
+        }
+      ],
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0
+    },
+    "keywords": {
+      "buckets": [
+        {
+          "doc_count": 1,
+          "key": "Biodiversity"
+        },
+        {
+          "doc_count": 1,
+          "key": "Taxonomy"
+        }
+      ],
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0
+    },
+    "type": {
+      "buckets": [
+        {
+          "doc_count": 1,
+          "key": "image",
+          "subtype": {
+            "buckets": [
+              {
+                "doc_count": 1,
+                "key": "figure"
+              }
+            ],
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0
+          }
+        }
+      ],
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0
+    }
+  },
+  "hits": {
+    "hits": [
+      {
+        "conceptdoi": "10.5281/zenodo.4589979",
+        "conceptrecid": "4589979",
+        "created": "2021-03-09T08:05:08.814424+00:00",
+        "doi": "10.5281/zenodo.4589980",
+        "files": [
+          {
+            "bucket": "cbb44724-b635-4c75-94e8-c7a824efbc72",
+            "checksum": "md5:eb5e8f37583644943b86d1d9ebd4ded5",
+            "key": "figure.png",
+            "links": {
+              "self": "https://zenodo.org/api/files/cbb44724-b635-4c75-94e8-c7a824efbc72/figure.png"
+            },
+            "size": 32594,
+            "type": "png"
+          },
+          {
+            "bucket": "cbb44724-b635-4c75-94e8-c7a824efbc72",
+            "checksum": "md5:75b362eb1058eff2dcf836cd4293c4ff",
+            "key": "figure.svg",
+            "links": {
+              "self": "https://zenodo.org/api/files/cbb44724-b635-4c75-94e8-c7a824efbc72/figure.svg"
+            },
+            "size": 33721,
+            "type": "svg"
+          }
+        ],
+        "id": 4589980,
+        "links": {
+          "badge": "https://zenodo.org/badge/doi/10.5281/zenodo.4589980.svg",
+          "bucket": "https://zenodo.org/api/files/cbb44724-b635-4c75-94e8-c7a824efbc72",
+          "conceptbadge": "https://zenodo.org/badge/doi/10.5281/zenodo.4589979.svg",
+          "conceptdoi": "https://doi.org/10.5281/zenodo.4589979",
+          "doi": "https://doi.org/10.5281/zenodo.4589980",
+          "html": "https://zenodo.org/record/4589980",
+          "latest": "https://zenodo.org/api/records/4589980",
+          "latest_html": "https://zenodo.org/record/4589980",
+          "self": "https://zenodo.org/api/records/4589980",
+          "thumb250": "https://zenodo.org/api/iiif/v2/cbb44724-b635-4c75-94e8-c7a824efbc72:47be7606-1335-4cd9-99c7-ec327ac5fd52:figure.png/full/250,/0/default.png",
+          "thumbs": {
+            "10": "https://zenodo.org/record/4589980/thumb10",
+            "100": "https://zenodo.org/record/4589980/thumb100",
+            "1200": "https://zenodo.org/record/4589980/thumb1200",
+            "250": "https://zenodo.org/record/4589980/thumb250",
+            "50": "https://zenodo.org/record/4589980/thumb50",
+            "750": "https://zenodo.org/record/4589980/thumb750"
+          }
+        },
+        "metadata": {
+          "access_right": "open",
+          "access_right_category": "success",
+          "communities": [
+            {
+              "id": "biosyslit"
+            }
+          ],
+          "creators": [
+            {
+              "name": "Bartonička, Tomáš"
+            },
+            {
+              "name": "Bielik, Andrej"
+            },
+            {
+              "name": "Řehák, Zdeněk"
+            }
+          ],
+          "description": "Fig. 4. Linear regression (R 2 = 0.18, F = 5.43, p = 0.027) describing changes in maximum distance between night and day roosts. * indicates nights when females visited a male roost.",
+          "doi": "10.5281/zenodo.4589980",
+          "journal": {
+            "issue": "6",
+            "pages": "503-512",
+            "title": "Annales Zoologici Fennici",
+            "volume": "45"
+          },
+          "keywords": [
+            "Biodiversity",
+            "Taxonomy"
+          ],
+          "license": {
+            "id": "CC-BY-4.0"
+          },
+          "notes": "Published as part of <i>Bartonička, Tomáš, Bielik, Andrej &amp; Řehák, Zdeněk, 2008, Roost Switching and Activity Patterns in the Soprano Pipistrelle,Pipistrellus pygmaeus, during Lactation, pp. 503-512 in Annales Zoologici Fennici 45 (6)</i> on page 508, DOI: 10.5735/086.045.0605, <a href=\"http://zenodo.org/record/4589970\">http://zenodo.org/record/4589970</a>",
+          "publication_date": "2008-12-31",
+          "related_identifiers": [
+            {
+              "identifier": "10.5735/086.045.0605",
+              "relation": "isPartOf",
+              "resource_type": "publication-article",
+              "scheme": "doi"
+            },
+            {
+              "identifier": "urn:lsid:plazi.org:pub:5319FF80DE7EA039FF95AE028A531C26",
+              "relation": "isPartOf",
+              "resource_type": "publication-article",
+              "scheme": "lsid"
+            },
+            {
+              "identifier": "https://zenodo.org/record/4589970",
+              "relation": "isPartOf",
+              "resource_type": "publication-article",
+              "scheme": "url"
+            },
+            {
+              "identifier": "10.5281/zenodo.4589979",
+              "relation": "isVersionOf",
+              "scheme": "doi"
+            }
+          ],
+          "relations": {
+            "version": [
+              {
+                "count": 1,
+                "index": 0,
+                "is_last": true,
+                "last_child": {
+                  "pid_type": "recid",
+                  "pid_value": "4589980"
+                },
+                "parent": {
+                  "pid_type": "recid",
+                  "pid_value": "4589979"
+                }
+              }
+            ]
+          },
+          "resource_type": {
+            "subtype": "figure",
+            "title": "Figure",
+            "type": "image"
+          },
+          "title": "Fig. 4 in Roost Switching and Activity Patterns in the Soprano Pipistrelle,Pipistrellus pygmaeus, during Lactation"
+        },
+        "owners": [
+          1161
+        ],
+        "revision": 2,
+        "stats": {
+          "downloads": 4,
+          "unique_downloads": 3,
+          "unique_views": 9,
+          "version_downloads": 4,
+          "version_unique_downloads": 3,
+          "version_unique_views": 9,
+          "version_views": 11,
+          "version_volume": 132630,
+          "views": 11,
+          "volume": 132630
+        },
+        "updated": "2021-03-09T08:08:22.072185+00:00"
+      }
+    ],
+    "total": 1
+  },
+  "links": {
+    "self": "https://zenodo.org/api/records/?sort=bestmatch&q=_files.checksum%3A%22md5%3Aeb5e8f37583644943b86d1d9ebd4ded5%22&page=1&size=10"
+  }
+}

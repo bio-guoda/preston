@@ -8,7 +8,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Hashtable;
 
-public class KeyTo3LevelTarGzPath implements KeyToPath {
+public class KeyTo3LevelTarGzPath extends KeyToPathAcceptsAnyValid {
 
     private final URI baseURI;
     private final HashType type;

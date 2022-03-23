@@ -12,8 +12,8 @@ public class KeyTo1LevelSoftwareHeritageAutoDetectPath extends KeyTo1LevelSoftwa
 
     private static URI detectPath(URI baseURI) {
         return StringUtils.contains(baseURI.getHost(), "softwareheritage.org")
-                && !StringUtils.endsWith(baseURI.getPath(), "sha256:")
-                ? URI.create("https://archive.softwareheritage.org/api/1/content/sha256:")
+                && (!StringUtils.endsWith(baseURI.getPath(), "sha256:") && !StringUtils.endsWith(baseURI.getPath(), "md65:"))
+                ? URI.create("https://archive.softwareheritage.org/api/1/content/")
                 : baseURI;
     }
 

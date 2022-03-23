@@ -11,6 +11,7 @@ import bio.guoda.preston.store.DereferencerContentAddressedTarGZ;
 import bio.guoda.preston.store.KeyTo1LevelPath;
 import bio.guoda.preston.store.KeyTo1LevelSoftwareHeritageAutoDetectPath;
 import bio.guoda.preston.store.KeyTo1LevelSoftwareHeritagePath;
+import bio.guoda.preston.store.KeyTo1LevelZenodoPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelTarGzPath;
 import bio.guoda.preston.store.KeyToPath;
@@ -93,7 +94,8 @@ public class Persisting extends PersistingLocal {
                                 Pair.of(uri, new KeyTo3LevelPath(uri, getHashType())),
                                 Pair.of(uri, new KeyTo1LevelPath(uri, getHashType())),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritagePath(uri)),
-                                Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri))
+                                Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri)),
+                                Pair.of(uri, new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, getProgressListener())))
                         ));
 
         List<KeyValueStoreReadOnly> keyValueStoreRemotes =

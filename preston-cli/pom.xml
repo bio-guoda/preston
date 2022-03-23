@@ -14,7 +14,6 @@
     <description>a biodiversity dataset tracker</description>
 
     <properties>
-        <jackson.version>2.11.3</jackson.version>
         <lucene.version>8.5.2</lucene.version>
     </properties>
 
@@ -33,11 +32,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>31.0.1-jre</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
