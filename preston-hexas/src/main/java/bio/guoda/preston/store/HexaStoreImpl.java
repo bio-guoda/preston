@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RDFValueUtil;
 import bio.guoda.preston.RefNodeFactory;
@@ -19,9 +20,9 @@ public class HexaStoreImpl implements HexaStore {
     private final QueryKeyCalculator queryKeyCalculator;
     private final KeyValueStore keyValueStore;
 
-    public HexaStoreImpl(KeyValueStore keyValueStore) {
+    public HexaStoreImpl(KeyValueStore keyValueStore, HashType type) {
         this.keyValueStore = keyValueStore;
-        this.queryKeyCalculator = new QueryKeyCalculatorBackwardCompatible();
+        this.queryKeyCalculator = new QueryKeyCalculatorBackwardCompatible(type);
     }
 
     @Override
@@ -35,8 +36,8 @@ public class HexaStoreImpl implements HexaStore {
     }
 
 
-    protected static IRI calculateHashFor(RDFTerm term) {
-        return Hasher.calcHashIRI(RDFValueUtil.getValueFor(term), HexaStoreConstants.HASH_TYPE_DEFAULT);
+    protected static IRI calculateHashFor(RDFTerm term, HashType type) {
+        return Hasher.calcHashIRI(RDFValueUtil.getValueFor(term), type);
     }
 
     @Override

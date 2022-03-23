@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -20,7 +21,7 @@ public class VersionUtilTest {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore);
+        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore, HashType.sha256);
         hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
 
 
@@ -33,7 +34,7 @@ public class VersionUtilTest {
     public void getTwoVersions() throws IOException {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
-        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore);
+        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore, HashType.sha256);
         hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
         hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/later/version"));
 
@@ -48,7 +49,7 @@ public class VersionUtilTest {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore);
+        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore, HashType.sha256);
         hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
         hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/version"));
 
@@ -63,7 +64,7 @@ public class VersionUtilTest {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore);
+        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore, HashType.sha256);
         hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
         hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
         hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/other/version")), toIRI("http://some/version"));
@@ -81,7 +82,7 @@ public class VersionUtilTest {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore);
+        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore, HashType.sha256);
         hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
         hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
         hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/other/version")), toIRI("http://some/version"));
@@ -100,7 +101,7 @@ public class VersionUtilTest {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
 
-        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore);
+        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore, HashType.sha256);
         hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
         hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
 

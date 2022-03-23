@@ -1,11 +1,16 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 
 public class QueryKeyCalculatorBackwardCompatible extends QueryKeyCalculatorImpl {
+
+    public QueryKeyCalculatorBackwardCompatible(HashType type) {
+        super(type);
+    }
 
     @Override
     public IRI calculateKeyFor(Pair<RDFTerm, RDFTerm> unhashedKeyPair) {

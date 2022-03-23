@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.StatementsListener;
+import bio.guoda.preston.store.HexaStoreConstants;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.HexaStore;
 import bio.guoda.preston.store.HexaStoreImpl;
@@ -25,7 +26,9 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
 
         StatementsListener logger = StatementLogFactory.createPrintingLogger(getLogMode(), this);
 
-        HexaStore hexastore = new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())));
+        HexaStore hexastore = new HexaStoreImpl(getKeyValueStore(
+                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())), getHashType());
+
         AtomicBoolean foundHistory = new AtomicBoolean(false);
         try {
             VersionUtil.findMostRecentVersion(

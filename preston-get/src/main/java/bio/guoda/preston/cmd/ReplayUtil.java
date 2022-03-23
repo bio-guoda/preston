@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.StatementIRIProcessor;
 import bio.guoda.preston.process.StatementsListener;
@@ -9,6 +8,7 @@ import bio.guoda.preston.process.VersionedRDFChainEmitter;
 import bio.guoda.preston.store.ArchiverReadOnly;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.HexaStoreConstants;
 import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.HexaStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
@@ -92,7 +92,7 @@ public final class ReplayUtil {
         attemptReplay(
                 new BlobStoreAppendOnly(persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())), true, persisting.getHashType()),
                 new HexaStoreImpl(
-                        persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(persisting.getHashType()))
+                        persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(persisting.getHashType())), persisting.getHashType()
                 ),
                 new CmdContext(persisting, processor));
     }

@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.cmd.ActivityContext;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementsListener;
@@ -49,7 +50,7 @@ public class ArchiverTest {
             throw new IOException("fails to dereference");
         };
 
-        final HexaStoreImpl versionStore = new HexaStoreImpl(TestUtil.getTestPersistence());
+        final HexaStoreImpl versionStore = new HexaStoreImpl(TestUtil.getTestPersistence(), HashType.sha256);
         StatementsListener versionLogger = createVersionLogger(versionStore);
 
         Archiver relationStore = new Archiver(
@@ -100,7 +101,7 @@ public class ArchiverTest {
 
         List<Quad> nodes = new ArrayList<>();
 
-        HexaStoreImpl versionStore = new HexaStoreImpl(testKeyValueStore);
+        HexaStoreImpl versionStore = new HexaStoreImpl(testKeyValueStore, HashType.sha256);
 
         Archiver relationStore = new Archiver(
                 dereferencer,
@@ -140,7 +141,7 @@ public class ArchiverTest {
 
         List<Quad> nodes = new ArrayList<>();
 
-        HexaStoreImpl versionStore = new HexaStoreImpl(testKeyValueStore);
+        HexaStoreImpl versionStore = new HexaStoreImpl(testKeyValueStore, HashType.sha256);
 
         Archiver relationStore = new Archiver(
                 dereferencer,
@@ -179,7 +180,7 @@ public class ArchiverTest {
         Dereferencer<IRI> dereferencer = new DereferenceTest("#derefData");
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 
-        HexaStoreImpl versionStore = new HexaStoreImpl(testKeyValueStore);
+        HexaStoreImpl versionStore = new HexaStoreImpl(testKeyValueStore, HashType.sha256);
         Archiver relationStore = getAppendOnlyRelationStore(dereferencer, versionStore);
 
         relationStore.on(statement);
@@ -201,7 +202,7 @@ public class ArchiverTest {
         Quad statement = toStatement(SOME_IRI, HAS_VERSION, toBlank());
 
         KeyValueStore keyValueStore = TestUtil.getTestPersistence();
-        HexaStore versionStore = new HexaStoreImpl(keyValueStore);
+        HexaStore versionStore = new HexaStoreImpl(keyValueStore, HashType.sha256);
 
         final DereferenceTest dereferencer = new DereferenceTest("#derefData");
         Archiver relationstore = getAppendOnlyRelationStore(dereferencer, versionStore);
@@ -225,7 +226,7 @@ public class ArchiverTest {
         Quad statement = toStatement(SOME_IRI, HAS_VERSION, toBlank());
 
         KeyValueStore keyValueStore = TestUtil.getTestPersistence();
-        HexaStore versionStore = new HexaStoreImpl(keyValueStore);
+        HexaStore versionStore = new HexaStoreImpl(keyValueStore, HashType.sha256);
 
         Archiver relationstore = getAppendOnlyRelationStore(
                 new DereferenceTest("#derefData"), versionStore);

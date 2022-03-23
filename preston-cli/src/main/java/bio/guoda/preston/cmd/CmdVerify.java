@@ -2,11 +2,11 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.HashGenerator;
 import bio.guoda.preston.HashGeneratorFactory;
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.HexaStoreConstants;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.HexaStore;
 import bio.guoda.preston.store.HexaStoreImpl;
@@ -56,7 +56,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
         final BlobStore blobStore
                 = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         final HexaStore statementPersistence
-                = new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())));
+                = new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())), getHashType());
 
         Map<String, State> verifiedMap = new TreeMap<>();
 

@@ -1,8 +1,8 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.HexaStoreConstants;
 import bio.guoda.preston.store.KeyGeneratingStream;
 import bio.guoda.preston.store.KeyTo1LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
@@ -82,7 +82,10 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         final AtomicReference<DateTime> lastCrawlTime = new AtomicReference<>();
         final CmdContext ctx = new CmdContext(this, listener, JekyllUtil.createPrestonStartTimeListener(lastCrawlTime::set));
 
-        final HexaStore hexastore = new HexaStoreImpl(getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())));
+        final HexaStore hexastore = new HexaStoreImpl(
+                getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())), getHashType());
+
+
         attemptReplay(
                 provenanceLogStore,
                 hexastore,
