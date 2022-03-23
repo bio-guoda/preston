@@ -54,7 +54,20 @@ public class QueryKeyCalculatorBackwardCompatibleTest {
         assertThat(iri.getIRIString(),
                 is("hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a"));
         assertThat(iri.getIRIString(),
-                is(RefNodeConstants.PROVENANCE_ROOT_QUERY_HASH));
+                is(RefNodeConstants.PROVENANCE_ROOT_QUERY_HASH_SHA256));
+    }
+
+    @Test
+    public void calculateRootArchiveQueryKeyMD5() {
+        IRI iri = new QueryKeyCalculatorBackwardCompatible(HashType.md5).calculateKeyFor(
+                Pair.of(RefNodeFactory.toIRI(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH_UUID_STRING),
+                        RefNodeConstants.HAS_VERSION)
+        );
+
+        assertThat(iri.getIRIString(),
+                is("hash://md5/27f552c25bc733d05a5cc67e9ba63850"));
+        assertThat(iri.getIRIString(),
+                is(RefNodeConstants.PROVENANCE_ROOT_QUERY_HASH_MD5));
     }
 
     @Test
@@ -68,7 +81,7 @@ public class QueryKeyCalculatorBackwardCompatibleTest {
         assertThat(iri.getIRIString(),
                 is("hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a"));
         assertThat(iri.getIRIString(),
-                is(RefNodeConstants.PROVENANCE_ROOT_QUERY_HASH));
+                is(RefNodeConstants.PROVENANCE_ROOT_QUERY_HASH_SHA256));
     }
 
 

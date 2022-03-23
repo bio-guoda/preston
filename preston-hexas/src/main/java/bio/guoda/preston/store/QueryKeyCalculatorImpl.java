@@ -8,18 +8,24 @@ import org.apache.commons.rdf.api.RDFTerm;
 
 public class QueryKeyCalculatorImpl implements QueryKeyCalculator {
 
-    private final HashType type;
+    private final HashType hashType;
 
-    public QueryKeyCalculatorImpl(HashType type) {
-        this.type = type;
+
+    public QueryKeyCalculatorImpl(HashType hashType) {
+        this.hashType = hashType;
     }
 
     @Override
     public IRI calculateKeyFor(Pair<RDFTerm, RDFTerm> unhashedKeyPair) {
-        IRI left = HexaStoreImpl.calculateHashFor(unhashedKeyPair.getLeft(), type);
-        IRI right = HexaStoreImpl.calculateHashFor(unhashedKeyPair.getRight(), type);
+        IRI left = HexaStoreImpl.calculateHashFor(unhashedKeyPair.getLeft(), hashType);
+        IRI right = HexaStoreImpl.calculateHashFor(unhashedKeyPair.getRight(), hashType);
         return Hasher.calcHashIRI(
                 left.getIRIString() + right.getIRIString(),
-                type);
+                hashType);
     }
+
+    public HashType getHashType() {
+        return hashType;
+    }
+
 }

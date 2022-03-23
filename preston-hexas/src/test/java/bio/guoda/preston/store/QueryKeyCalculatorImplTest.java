@@ -38,7 +38,7 @@ public class QueryKeyCalculatorImplTest {
         assertThat(iri.getIRIString(),
                 is("hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a"));
         assertThat(iri.getIRIString(),
-                is(RefNodeConstants.PROVENANCE_ROOT_QUERY_HASH));
+                is(RefNodeConstants.PROVENANCE_ROOT_QUERY_HASH_SHA256));
     }
 
     @Test

@@ -46,8 +46,11 @@ public class RefNodeConstants {
     // for backwards compatibility, this root query is calculated from the *bare*, none URN uuid,
     // of the Biodiversity Dataset Graph Concept UUID.
     public static final Pair<RDFTerm, RDFTerm> PROVENANCE_ROOT_QUERY = Pair.of(BIODIVERSITY_DATASET_GRAPH, HAS_VERSION);
-    public static final String PROVENANCE_ROOT_QUERY_HASH = "hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a";
-    public static final IRI PROVENANCE_ROOT_QUERY_HASH_URI = toIRI(PROVENANCE_ROOT_QUERY_HASH);
+    public static final String PROVENANCE_ROOT_QUERY_HASH_SHA256 = "hash://sha256/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a";
+    public static final IRI PROVENANCE_ROOT_QUERY_HASH_SHA256_URI = toIRI(PROVENANCE_ROOT_QUERY_HASH_SHA256);
+
+    public static final String PROVENANCE_ROOT_QUERY_HASH_MD5 = "hash://md5/27f552c25bc733d05a5cc67e9ba63850";
+    public static final IRI PROVENANCE_ROOT_QUERY_HASH_MD5_URI = toIRI(PROVENANCE_ROOT_QUERY_HASH_MD5);
 
     public static final IRI STARTED_AT_TIME = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#startedAtTime"));
     public static final IRI ENDED_AT_TIME = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#endedAtTime"));
