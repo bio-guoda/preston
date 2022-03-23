@@ -10,10 +10,6 @@ public class HashGeneratorImpl extends HashGeneratorAbstract<IRI> {
 
     private final HashType type;
 
-    public HashGeneratorImpl() {
-        this(HashType.sha256);
-    }
-
     public HashGeneratorImpl(HashType type) {
         this.type = type;
     }
