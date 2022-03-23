@@ -8,7 +8,6 @@ import bio.guoda.preston.process.VersionedRDFChainEmitter;
 import bio.guoda.preston.store.ArchiverReadOnly;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.HexaStoreConstants;
 import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.HexaStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;

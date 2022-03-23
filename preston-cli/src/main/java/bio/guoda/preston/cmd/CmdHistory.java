@@ -2,7 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.store.HexaStoreConstants;
+
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.HexaStore;
 import bio.guoda.preston.store.HexaStoreImpl;

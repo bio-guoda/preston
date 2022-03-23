@@ -10,9 +10,9 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class VersionUtilTest {
 

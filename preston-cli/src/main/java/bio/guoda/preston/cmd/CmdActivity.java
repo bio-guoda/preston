@@ -20,7 +20,6 @@ import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.HexaStore;
-import bio.guoda.preston.store.HexaStoreConstants;
 import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;

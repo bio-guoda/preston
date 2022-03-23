@@ -6,7 +6,7 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
-import bio.guoda.preston.store.HexaStoreConstants;
+
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.HexaStore;
 import bio.guoda.preston.store.HexaStoreImpl;
