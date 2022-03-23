@@ -123,22 +123,6 @@ public class PersistingTest {
 
     }
 
-    @Test
-    public void softwareHeritageExact() throws IOException {
-
-        Persisting persisting = new Persisting();
-        persisting.setRemotes(Collections.singletonList(URI.create("https://archive.softwareheritage.org/api/1/content/sha256:")));
-        persisting.setDisableCache(true);
-
-        KeyValueStore keyValueStore = persisting.getKeyValueStore(getAlwaysAccepting());
-        InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/162a17cbd1da43ac4eaba36b936104b09967ac29bfda7294201df34659e1a656"));
-        assertNotNull(inputStream);
-
-        assertThat(org.apache.commons.io.IOUtils.toString(inputStream, StandardCharsets.UTF_8),
-                StringStartsWith.startsWith("{\"key\":\"e10cb8d7-cf2d-4b2f-9758-76dbead48965\""));
-
-    }
-
     private static KeyValueStreamFactory getAlwaysAccepting() {
         return (key, is) -> new ValidatingKeyValueStream() {
             @Override
