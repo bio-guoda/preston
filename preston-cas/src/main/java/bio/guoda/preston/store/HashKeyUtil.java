@@ -13,8 +13,11 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 
 public class HashKeyUtil {
 
-    public static final Pattern URI_PATTERN_HASH_URI_COMPOSITE = Pattern
+    public static final Pattern URI_PATTERN_HASH_URI_COMPOSITE_SHA256 = Pattern
             .compile("([a-zA-Z0-9]+:)*(" + HashType.sha256.getIRIPatternString() + "){1}(!/.*){0,1}");
+
+    public static final Pattern URI_PATTERN_HASH_URI_COMPOSITE_MD5 = Pattern
+            .compile("([a-zA-Z0-9]+:)*(" + HashType.md5.getIRIPatternString() + "){1}(!/.*){0,1}");
 
     public static final Pattern URI_PATTERN_URI_COMPOSITE = Pattern
             .compile("([a-zA-Z0-9]+[:]{1})+([^!:]*)(!/.*){0,1}");
@@ -61,8 +64,10 @@ public class HashKeyUtil {
 
     public static boolean isLikelyCompositeHashURI(IRI comboHashURI) {
         return comboHashURI != null
-                && URI_PATTERN_HASH_URI_COMPOSITE
-                .matcher(comboHashURI.getIRIString()).matches();
+                && (URI_PATTERN_HASH_URI_COMPOSITE_SHA256
+                .matcher(comboHashURI.getIRIString()).matches()
+                || URI_PATTERN_HASH_URI_COMPOSITE_MD5
+                .matcher(comboHashURI.getIRIString()).matches());
     }
 
     public static boolean isLikelyCompositeURI(IRI comboHashURI) {
