@@ -10,11 +10,9 @@ import java.util.Arrays;
 public class KeyTo1LevelSoftwareHeritagePath implements KeyToPath {
 
     private final URI baseURI;
-    private final HashType type;
 
     public KeyTo1LevelSoftwareHeritagePath(URI baseURI) {
         this.baseURI = baseURI;
-        this.type = HashType.sha256;
     }
 
     @Override
@@ -22,15 +20,16 @@ public class KeyTo1LevelSoftwareHeritagePath implements KeyToPath {
         HashKeyUtil.validateHashKey(key);
 
         String keyStr = key.getIRIString();
-        int offset = type.getPrefix().length();
+        HashType hashType = HashKeyUtil.hashTypeFor(key);
+        int offset = hashType.getPrefix().length();
 
         final String s = baseURI.toString();
 
         String suffix = keyStr.substring(offset) + "/raw/";
-        String path = StringUtils.join(Arrays.asList(s, suffix), "");
+        String path = StringUtils.join(Arrays.asList(s, hashType.name(), ":", suffix), "");
 
 
-        return StringUtils.endsWith(s, ":")
+        return StringUtils.equals(s, KeyTo1LevelSoftwareHeritageAutoDetectPath.SOFTWARE_HERITAGE_API_ENDPOINT)
                 ? URI.create(path)
                 : HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
     }
@@ -39,13 +38,5 @@ public class KeyTo1LevelSoftwareHeritagePath implements KeyToPath {
     public boolean supports(IRI key) {
         return HashType.sha256.equals(HashKeyUtil.hashTypeFor(key));
     }
-
-    private static URI detectPath(URI baseURI) {
-        return StringUtils.contains(baseURI.getHost(), "softwareheritage.org")
-                && !StringUtils.endsWith(baseURI.getPath(), "sha256:")
-                ? URI.create("https://archive.softwareheritage.org/api/1/content/sha256:")
-                : baseURI;
-    }
-
 
 }

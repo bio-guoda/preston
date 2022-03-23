@@ -16,8 +16,7 @@ public class KeyTo1LevelSoftwareHeritageAutoDetectPathTest {
 
     @Test
     public void toPath() {
-        IRI hash = Hasher.calcHashIRI("bla", HashType.sha256);
-        assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+        IRI hash = getSHA256Hash();
 
         URI actualPath = new KeyTo1LevelSoftwareHeritageAutoDetectPath(URI.create("https://softwareheritage.org")).toPath(hash);
         assertThat(actualPath.toString(), Is.is("https://archive.softwareheritage.org/api/1/content/sha256:4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703/raw/"));
@@ -25,8 +24,7 @@ public class KeyTo1LevelSoftwareHeritageAutoDetectPathTest {
 
     @Test
     public void nonSoftwareHeritageNoTrailingSlash() {
-        IRI hash = Hasher.calcHashIRI("bla", HashType.sha256);
-        assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+        IRI hash = getSHA256Hash();
 
         URI actualPath = new KeyTo1LevelSoftwareHeritageAutoDetectPath(URI.create("https://deeplinker.bio")).toPath(hash);
         assertThat(actualPath.toString(), Is.is("https://deeplinker.bio/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703/raw/"));
@@ -34,21 +32,25 @@ public class KeyTo1LevelSoftwareHeritageAutoDetectPathTest {
 
     @Test
     public void nonSoftwareHeritageTrailingSlash() {
-        IRI hash = Hasher.calcHashIRI("bla", HashType.sha256);
-        assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+        IRI hash = getSHA256Hash();
 
         URI actualPath = new KeyTo1LevelSoftwareHeritageAutoDetectPath(URI.create("https://deeplinker.bio/")).toPath(hash);
         assertThat(actualPath.toString(), Is.is("https://deeplinker.bio/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703/raw/"));
     }
 
+    private IRI getSHA256Hash() {
+        IRI hash = Hasher.calcHashIRI("bla", HashType.sha256);
+        assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+        return hash;
+    }
+
 
     @Test
     public void toTryPath() {
-        IRI hash = Hasher.calcHashIRI("bla", HashType.sha256);
-        assertThat(hash.getIRIString(), is("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
+        IRI hash = getSHA256Hash();
 
         URI actualPath = new KeyTo1LevelSoftwareHeritageAutoDetectPath(URI.create("https://softwareheritage.org/blabla/")).toPath(hash);
-        assertThat(actualPath.toString(), Is.is("https://archive.softwareheritage.org/api/1/content/sha256:4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703/raw/"));
+        assertThat(actualPath.toString(), Is.is("https://softwareheritage.org/blabla/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703/raw/"));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -58,16 +60,16 @@ public class KeyTo1LevelSoftwareHeritageAutoDetectPathTest {
 
     @Test
     public void insertSlash() {
-        URI actualPath = new KeyTo1LevelSoftwareHeritageAutoDetectPath(URI.create("file:///some/sha256:"))
+        URI actualPath = new KeyTo1LevelSoftwareHeritageAutoDetectPath(URI.create("file:///some/"))
                 .toPath(RefNodeFactory.toIRI("hash://sha256/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703"));
-        assertThat(actualPath.toString(), Is.is("file:///some/sha256:4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703/raw/"));
+        assertThat(actualPath.toString(), Is.is("file:///some/4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703/raw/"));
 
     }
 
     @Test
     public void softwareHeritage() {
         IRI key = RefNodeFactory.toIRI("hash://sha256/29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c");
-        URI baseURI = URI.create("https://archive.softwareheritage.org/api/1/content/sha256:");
+        URI baseURI = URI.create("https://archive.softwareheritage.org/api/1/content/");
         URI actualPath = new KeyTo1LevelSoftwareHeritageAutoDetectPath(baseURI)
                 .toPath(key);
         assertThat(actualPath.toString(), Is.is("https://archive.softwareheritage.org/api/1/content/sha256:29d30b566f924355a383b13cd48c3aa239d42cba0a55f4ccfc2930289b88b43c/raw/"));
