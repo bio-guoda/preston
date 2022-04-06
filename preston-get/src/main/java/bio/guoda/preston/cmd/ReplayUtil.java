@@ -8,9 +8,8 @@ import bio.guoda.preston.process.VersionedRDFChainEmitter;
 import bio.guoda.preston.store.ArchiverReadOnly;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.HexaStoreImpl;
-import bio.guoda.preston.store.HexaStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.ProvenanceTracker;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
@@ -34,21 +33,21 @@ public final class ReplayUtil {
 
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
-                              final HexaStoreReadOnly provenanceLogIndex,
+                              ProvenanceTracker provenanceTracker,
                               StatementsListener... listeners) {
-        attemptReplay(provenanceLogStore, provenanceLogIndex, BIODIVERSITY_DATASET_GRAPH, listeners);
+        attemptReplay(provenanceLogStore, BIODIVERSITY_DATASET_GRAPH, provenanceTracker, listeners);
     }
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
-                              final HexaStoreReadOnly provenanceLogIndex,
                               final IRI provRoot,
+                              ProvenanceTracker provenanceTracker,
                               StatementsListener... listeners) {
-        attemptReplay(provenanceLogStore, provenanceLogIndex, new CmdContext(new ProcessorStateAlwaysContinue(), provRoot, listeners));
+        attemptReplay(provenanceLogStore, new CmdContext(new ProcessorStateAlwaysContinue(), provRoot, listeners), provenanceTracker);
     }
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
-                              final HexaStoreReadOnly provenanceLogIndex,
-                              final CmdContext ctx) {
+                              final CmdContext ctx,
+                              ProvenanceTracker provenanceTracker) {
 
         final Queue<Quad> statementQueue =
                 new ConcurrentLinkedQueue<Quad>() {{
@@ -72,7 +71,7 @@ public final class ReplayUtil {
         );
 
         StatementsListener offlineArchive = new ArchiverReadOnly(
-                provenanceLogIndex,
+                provenanceTracker,
                 provenanceLogEmitter);
 
         while (ctx.getState().shouldKeepProcessing() && !statementQueue.isEmpty()) {
@@ -94,11 +93,9 @@ public final class ReplayUtil {
                         true,
                         persisting.getHashType()
                 ),
-                new HexaStoreImpl(
-                        persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(persisting.getHashType())),
-                        persisting.getHashType()
-                ),
-                new CmdContext(persisting, processor));
+                new CmdContext(persisting, processor),
+                persisting.getProvenanceTracker()
+        );
     }
 
 }

@@ -2,11 +2,6 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.StatementsListener;
-
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.HexaStore;
-import bio.guoda.preston.store.HexaStoreImpl;
-import bio.guoda.preston.store.VersionUtil;
 import com.beust.jcommander.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +21,19 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
 
         StatementsListener logger = StatementLogFactory.createPrintingLogger(getLogMode(), this);
 
-        HexaStore hexastore = new HexaStoreImpl(getKeyValueStore(
-                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())), getHashType());
 
         AtomicBoolean foundHistory = new AtomicBoolean(false);
         try {
-            VersionUtil.findMostRecentVersion(
-                    getProvenanceRoot()
-                    , hexastore
-                    , statement -> {
-                        foundHistory.set(true);
-                        logger.on(statement);
-                    });
+
+            getProvenanceTracker()
+                    .findDescendants(
+                            getProvenanceRoot(),
+                            statement -> {
+                                foundHistory.set(true);
+                                logger.on(statement);
+                            }
+                    );
+
         } catch (IOException e) {
             throw new RuntimeException("Failed to get version history.", e);
         }

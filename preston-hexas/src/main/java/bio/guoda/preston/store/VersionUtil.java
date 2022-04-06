@@ -16,12 +16,15 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class VersionUtil {
 
-    public static IRI findMostRecentVersion(IRI versionSource, HexaStore hexastore) throws IOException {
-        return findMostRecentVersion(versionSource, hexastore, null);
+    public static IRI findMostRecentVersion(IRI provenanceRoot, HexaStore hexastore) throws IOException {
+        return findMostRecentVersion(provenanceRoot, hexastore, null);
     }
 
-    public static IRI findMostRecentVersion(IRI versionSource, HexaStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
-        IRI mostRecentVersion = findVersion(versionSource, statementStore, versionListener);
+    static IRI findMostRecentVersion(IRI provenanceRoot, HexaStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
+        IRI mostRecentVersion = findVersion(provenanceRoot, statementStore, versionListener);
+        if (mostRecentVersion == null) {
+            mostRecentVersion = findByPreviousVersion(provenanceRoot, statementStore, versionListener);
+        }
 
         List<IRI> versions = new ArrayList<>();
         versions.add(mostRecentVersion);
@@ -30,7 +33,7 @@ public class VersionUtil {
             IRI lastVersionId = mostRecentVersion;
             IRI newerVersionId;
 
-            while ((newerVersionId = findPreviousVersion(lastVersionId, statementStore, versionListener)) != null) {
+            while ((newerVersionId = findByPreviousVersion(lastVersionId, statementStore, versionListener)) != null) {
                 versions.add(mostRecentVersion);
                 if (versions.contains(newerVersionId)) {
                     break;
@@ -45,7 +48,7 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    public static IRI findPreviousVersion(IRI versionSource, HexaStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
+    private static IRI findByPreviousVersion(IRI versionSource, HexaStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
         IRI mostRecentVersion = statementStore.get(Pair.of(HAS_PREVIOUS_VERSION, versionSource));
 
         if (versionListener != null && mostRecentVersion != null) {
@@ -54,11 +57,11 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    public static IRI findVersion(IRI versionSource, HexaStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
-        IRI mostRecentVersion = statementStore.get(Pair.of(versionSource, HAS_VERSION));
+    private static IRI findVersion(IRI provenanceRoot, HexaStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
+        IRI mostRecentVersion = statementStore.get(Pair.of(provenanceRoot, HAS_VERSION));
 
         if (versionListener != null && mostRecentVersion != null) {
-            versionListener.on(toStatement(versionSource, HAS_VERSION, mostRecentVersion));
+            versionListener.on(toStatement(provenanceRoot, HAS_VERSION, mostRecentVersion));
         }
         return mostRecentVersion;
     }

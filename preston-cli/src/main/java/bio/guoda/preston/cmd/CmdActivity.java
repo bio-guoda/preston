@@ -23,7 +23,10 @@ import bio.guoda.preston.store.HexaStore;
 import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.ProvenanceTracker;
+import bio.guoda.preston.store.ProvenanceTrackerImpl;
 import bio.guoda.preston.store.VersionUtil;
+import bio.guoda.preston.util.MostRecentVersionListener;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -75,18 +78,18 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
         BlobStore blobStore = new BlobStoreAppendOnly(blobKeyValueStore, true, getHashType());
 
-        KeyValueStore logRelationsStore = getKeyValueStore(
+        KeyValueStore provenanceIndex = getKeyValueStore(
                 new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())
         );
 
-        run(blobStore, new HexaStoreImpl(logRelationsStore, getHashType()));
+        run(blobStore, new HexaStoreImpl(provenanceIndex, getHashType()));
     }
 
 
-    protected void run(BlobStore blobStore, HexaStore logRelations) {
+    protected void run(BlobStore blobStore, HexaStore provIndex) {
         ActivityContext ctx = createNewActivityContext(getActivityDescription());
 
-        final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, logRelations, ctx);
+        final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, provIndex, ctx);
         try {
             Runtime.getRuntime().addShutdownHook(new LoggerExitHook(archivingLogger));
 
@@ -96,11 +99,14 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                     new ConcurrentLinkedQueue<List<Quad>>() {
                         {
                             add(findActivityInfo(ctx));
-                            addPreviousVersionReference();
+                            addProvenanceRoots();
                         }
 
-                        private void addPreviousVersionReference() throws IOException {
-                            IRI mostRecentVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), logRelations);
+                        private void addProvenanceRoots() throws IOException {
+                            ProvenanceTracker provenanceTracker = new ProvenanceTrackerImpl(provIndex);
+                            MostRecentVersionListener listener = new MostRecentVersionListener();
+                            provenanceTracker.findDescendants(getProvenanceRoot(), listener);
+                            IRI mostRecentVersion = listener.getMostRecent();
                             if (mostRecentVersion != null) {
                                 add(Collections.singletonList(toStatement(ctx.getActivity(), mostRecentVersion, USED_BY, ctx.getActivity())));
                             }
@@ -259,9 +265,9 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         PrintStream printStream;
         StatementsListener listener;
 
-        public ArchivingLogger(BlobStore blobStore, HexaStore hexastore, ActivityContext ctx) {
+        public ArchivingLogger(BlobStore blobStore, HexaStore provIndex, ActivityContext ctx) {
             this.blobStore = blobStore;
-            this.hexastore = hexastore;
+            this.hexastore = provIndex;
             this.ctx = ctx;
             tmpArchive = null;
             printStream = null;

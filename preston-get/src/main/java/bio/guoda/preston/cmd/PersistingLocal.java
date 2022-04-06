@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.HashType;
+import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyTo5LevelPath;
 import bio.guoda.preston.store.KeyToPath;
@@ -9,6 +10,8 @@ import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.KeyValueStreamFactory;
+import bio.guoda.preston.store.ProvenanceTracker;
+import bio.guoda.preston.store.ProvenanceTrackerImpl;
 import com.beust.jcommander.Parameter;
 import org.apache.commons.io.FileUtils;
 
@@ -50,6 +53,23 @@ public class PersistingLocal extends Cmd {
         KeyValueStoreReadOnly fallback = new KeyValueStoreLocalFileSystem(getTmpDir(), new KeyTo5LevelPath(getDefaultDataDir().toURI(), getHashType()), keyValueStreamFactory);
         return new KeyValueStoreWithFallback(primary, fallback);
     }
+
+    protected ProvenanceTracker getProvenanceTracker() {
+        KeyValueStore keyValueStore = getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType()));
+        return new ProvenanceTrackerImpl(new HexaStoreImpl(
+                keyValueStore,
+                getHashType()
+        ));
+    }
+
+    protected ProvenanceTracker getProvenanceTracker(KeyValueStore keyValueStore) {
+        return new ProvenanceTrackerImpl(
+                new HexaStoreImpl(
+                        keyValueStore,
+                        getHashType()
+                ));
+    }
+
 
     KeyToPath getKeyToPathLocal() {
         return new KeyTo3LevelPath(getDefaultDataDir().toURI(), getHashType());

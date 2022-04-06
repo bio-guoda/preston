@@ -41,8 +41,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
-
 public class Persisting extends PersistingLocal {
 
     @Parameter(names = {"--remote", "--remotes", "--include", "--repos", "--repositories"}, description = "included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)", converter = URIConverter.class, validateWith = URIValidator.class)
@@ -55,12 +53,6 @@ public class Persisting extends PersistingLocal {
     private Boolean disableProgress = false;
 
     private boolean supportTarGzDiscovery = true;
-
-    private final IRI provenanceRoot = BIODIVERSITY_DATASET_GRAPH;
-
-    public IRI getProvenanceRoot() {
-        return this.provenanceRoot;
-    }
 
     protected List<URI> getRemotes() {
         return remotes;

@@ -5,16 +5,15 @@ import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.Version;
-import bio.guoda.preston.process.ValueListener;
-import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.process.RegistryReaderGBIF;
 import bio.guoda.preston.process.RegistryReaderIDigBio;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerTSV;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
-import bio.guoda.preston.store.HexaStore;
-import bio.guoda.preston.store.VersionUtil;
+import bio.guoda.preston.process.ValueListener;
+import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.ProvenanceTracker;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -185,12 +184,17 @@ public class JekyllUtil {
         return resourceList.stream().map(x -> "/" + x);
     }
 
-    public static void writePrestonConfigFile(File target, AtomicReference<DateTime> lastCrawlTime, HexaStore hexastore, IRI provenanceRoot) {
+    public static void writePrestonConfigFile(File target,
+                                              AtomicReference<DateTime> lastCrawlTime,
+                                              IRI provenanceRoot,
+                                              ProvenanceTracker provenanceTracker) {
         final File data = new File(new File(target, "_data"), "preston.yml");
         try {
             FileUtils.forceMkdirParent(data);
             try (final FileOutputStream out = new FileOutputStream(data)) {
-                final IRI mostRecentVersion = VersionUtil.findMostRecentVersion(provenanceRoot, hexastore);
+                MostRecentVersionListener listener = new MostRecentVersionListener();
+                provenanceTracker.findDescendants(provenanceRoot, listener);
+                final IRI mostRecentVersion = listener.getMostRecent();
                 final YAMLMapper yamlMapper = new YAMLMapper();
                 final ObjectNode objectNode = yamlMapper.createObjectNode();
                 objectNode.put("archive", mostRecentVersion.getIRIString());
@@ -260,4 +264,5 @@ public class JekyllUtil {
             }
         }
     }
+
 }
