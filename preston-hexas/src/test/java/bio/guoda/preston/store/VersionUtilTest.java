@@ -78,26 +78,6 @@ public class VersionUtilTest {
         assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));
     }
 
-    @Ignore(value = "enable after implementing prov root selection")
-    @Test
-    public void versionPointingToItself2NonRoot() throws IOException {
-        KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
-
-
-        HexaStore hexastore = new HexaStoreImpl(testKeyValueStore, HashType.sha256);
-        hexastore.put(Pair.of(toIRI("http://some"), RefNodeConstants.HAS_VERSION), toIRI("http://some/version"));
-        hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
-        hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/other/version")), toIRI("http://some/version"));
-        hexastore.put(Pair.of(RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("http://some/version")), toIRI("http://some/other/version"));
-
-
-        IRI mostRecentVersion = VersionUtil.findMostRecentVersion(toIRI("http://some/version"), hexastore);
-
-        assertNotNull(mostRecentVersion);
-        assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));
-    }
-
-    @Ignore(value = "enable after implementing prov root selection")
     @Test
     public void historyOfSpecificNonRootVersion() throws IOException {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
