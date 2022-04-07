@@ -2,8 +2,10 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Quad;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -110,6 +112,48 @@ public class VersionUtilTest {
 
         assertNotNull(mostRecentVersion);
         assertThat(mostRecentVersion.toString(), is("<http://some/other/version>"));
+    }
+
+    @Test
+    public void mostRecentForVersionStatement() {
+        Quad provenanceStatement = RefNodeFactory.toStatement(
+                toIRI("foo:bar/newer"),
+                RefNodeConstants.HAS_PREVIOUS_VERSION,
+                toIRI("foo:bar/older")
+        );
+
+        IRI iri = VersionUtil.mostRecentVersionForStatement(provenanceStatement);
+
+        assertThat(iri.getIRIString(), is("foo:bar/newer"));
+
+    }
+
+    @Test
+    public void mostRecentForVersionStatement2() {
+        Quad provenanceStatement = RefNodeFactory.toStatement(
+                toIRI("foo:bar/older"),
+                RefNodeConstants.HAS_VERSION,
+                toIRI("foo:bar/newer")
+        );
+
+        IRI iri = VersionUtil.mostRecentVersionForStatement(provenanceStatement);
+
+        assertThat(iri.getIRIString(), is("foo:bar/newer"));
+
+    }
+
+    @Test
+    public void mostRecentForVersionStatement3() {
+        Quad provenanceStatement = RefNodeFactory.toStatement(
+                toIRI("foo:bar/newer"),
+                RefNodeConstants.WAS_DERIVED_FROM,
+                toIRI("foo:bar/older")
+        );
+
+        IRI iri = VersionUtil.mostRecentVersionForStatement(provenanceStatement);
+
+        assertThat(iri.getIRIString(), is("foo:bar/newer"));
+
     }
 
 

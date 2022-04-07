@@ -93,7 +93,7 @@ public class ProvenanceTrackerImplTest {
     @Test(expected = UnsupportedOperationException.class)
     public void cameBefore() throws IOException {
         new ProvenanceTrackerImpl(null, null)
-                .findOrigins(null, null);
+                .traceOrigins(null, null);
     }
 
     @Test
@@ -112,7 +112,7 @@ public class ProvenanceTrackerImplTest {
 
         List<Quad> versionStatements = new ArrayList<>();
         new ProvenanceTrackerImpl(null, blobStore)
-                .findOrigins(RefNodeFactory.toIRI("hash://sha256/8d1cbbfdbc366b4f2cf47dec44c9e20d7059e771037c3ff389dc44710280b66d"),
+                .traceOrigins(RefNodeFactory.toIRI("hash://sha256/8d1cbbfdbc366b4f2cf47dec44c9e20d7059e771037c3ff389dc44710280b66d"),
                         new StatementListener() {
                             @Override
                             public void on(Quad statement) {
@@ -120,7 +120,16 @@ public class ProvenanceTrackerImplTest {
                             }
                         });
 
-        assertThat(versionStatements.size(), Is.is(0));
+        assertThat(versionStatements.size(), Is.is(1));
+        assertRootOrigin(versionStatements.get(0));
+
+    }
+
+    private void assertRootOrigin(Quad originStatement) {
+        assertThat(originStatement.getSubject(), Is.is(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH));
+        assertThat(originStatement.getPredicate(), Is.is(RefNodeConstants.HAS_VERSION));
+        assertThat(originStatement.getObject(), Is.is(RefNodeFactory.toIRI("hash://sha256/8d1cbbfdbc366b4f2cf47dec44c9e20d7059e771037c3ff389dc44710280b66d")));
+        assertThat(originStatement.getGraphName().isPresent(), Is.is(false));
     }
 
     @Test
@@ -143,7 +152,7 @@ public class ProvenanceTrackerImplTest {
 
         List<Quad> versionStatements = new ArrayList<>();
         new ProvenanceTrackerImpl(null, blobStore)
-                .findOrigins(RefNodeFactory.toIRI("hash://sha256/f663ab51cd63cce9598fd5b5782aa7638726347a6e8295f967b981fcf9481ad8"),
+                .traceOrigins(RefNodeFactory.toIRI("hash://sha256/f663ab51cd63cce9598fd5b5782aa7638726347a6e8295f967b981fcf9481ad8"),
                         new StatementListener() {
                             @Override
                             public void on(Quad statement) {
@@ -154,11 +163,13 @@ public class ProvenanceTrackerImplTest {
         assertThat(requested.size(), Is.is(2));
         assertThat(requested, hasItems("hash://sha256/f663ab51cd63cce9598fd5b5782aa7638726347a6e8295f967b981fcf9481ad8", "hash://sha256/8d1cbbfdbc366b4f2cf47dec44c9e20d7059e771037c3ff389dc44710280b66d"));
 
-        assertThat(versionStatements.size(), Is.is(1));
-        assertThat(versionStatements.get(0).getSubject(), Is.is(RefNodeFactory.toIRI("hash://sha256/8d1cbbfdbc366b4f2cf47dec44c9e20d7059e771037c3ff389dc44710280b66d")));
-        assertThat(versionStatements.get(0).getPredicate(), Is.is(RefNodeConstants.USED_BY));
-        assertThat(versionStatements.get(0).getObject(), Is.is(RefNodeFactory.toIRI("urn:uuid:239c403c-cf67-4297-9e80-b9fc26f0e208")));
-        assertThat(versionStatements.get(0).getGraphName().get(), Is.is(RefNodeFactory.toIRI("urn:uuid:239c403c-cf67-4297-9e80-b9fc26f0e208")));
+        assertThat(versionStatements.size(), Is.is(2));
+        assertThat(versionStatements.get(0).getSubject(), Is.is(RefNodeFactory.toIRI("hash://sha256/f663ab51cd63cce9598fd5b5782aa7638726347a6e8295f967b981fcf9481ad8")));
+        assertThat(versionStatements.get(0).getPredicate(), Is.is(RefNodeConstants.WAS_DERIVED_FROM));
+        assertThat(versionStatements.get(0).getObject(), Is.is(RefNodeFactory.toIRI("hash://sha256/8d1cbbfdbc366b4f2cf47dec44c9e20d7059e771037c3ff389dc44710280b66d")));
+        assertThat(versionStatements.get(0).getGraphName().isPresent(), Is.is(false));
+
+        assertRootOrigin(versionStatements.get(1));
     }
 
     private IRI getVersion(Pair<RDFTerm, RDFTerm> queryKey) {

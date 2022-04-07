@@ -1,8 +1,10 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.RDFUtil;
+import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
@@ -50,18 +52,15 @@ public class CmdGet extends Persisting implements Runnable {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     Quad quad = RDFUtil.asQuad(line);
-                    if (quad  != null) {
-                        IRI version = VersionUtil.mostRecentVersionForStatement(quad);
-                        if (version != null) {
-                            handleContentQuery(blobStore, version.getIRIString());
-                        }
-                    } else {
-                        handleContentQuery(blobStore, StringUtils.trim(line));
+                    if (quad == null) {
+                        IRI queryIRI = toIRI(StringUtils.trim(line));
+                        quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, queryIRI);
                     }
+                    handleContentQuery(blobStore, quad);
                 }
             } else {
                 for (String s : contentIdsOrAliases) {
-                    handleContentQuery(blobStore, s);
+                    handleContentQuery(blobStore, RefNodeFactory.toIRI(s));
                 }
             }
         } catch (Throwable th) {
@@ -70,8 +69,14 @@ public class CmdGet extends Persisting implements Runnable {
         }
     }
 
-    private void handleContentQuery(BlobStoreReadOnly blobStore, String queryString) throws IOException {
-        IRI queryIRI = toIRI(queryString);
+    private void handleContentQuery(BlobStoreReadOnly blobStore, Quad quad) throws IOException {
+        IRI version = VersionUtil.mostRecentVersionForStatement(quad);
+        if (version != null) {
+            handleContentQuery(blobStore, version);
+        }
+    }
+
+    private void handleContentQuery(BlobStoreReadOnly blobStore, IRI queryIRI) throws IOException {
 
         BlobStoreReadOnly query = resolvingBlobStore(blobStore);
 
@@ -81,11 +86,11 @@ public class CmdGet extends Persisting implements Runnable {
                             .process(queryIRI)
             );
             if (contentStream == null) {
-                throw new IOException("[" + queryString + "] not found.");
+                throw new IOException("[" + queryIRI.getIRIString() + "] not found.");
             }
             IOUtils.copyLarge(contentStream, getOutputStream());
         } catch (IOException e) {
-            throw new IOException("problem retrieving [" + queryString + "]", e);
+            throw new IOException("problem retrieving [" + queryIRI.getIRIString() + "]", e);
         }
     }
 

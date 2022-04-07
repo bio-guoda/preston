@@ -20,14 +20,14 @@ public class ProvenanceTrackerImpl implements ProvenanceTracker {
 
     private final HexaStoreReadOnly hexastore;
 
-    private final BlobStoreReadOnly blobStore;
+    private final KeyValueStoreReadOnly blobStore;
 
     public ProvenanceTrackerImpl(HexaStoreReadOnly hexastore) {
         this.hexastore = hexastore;
         this.blobStore = null;
     }
 
-    public ProvenanceTrackerImpl(HexaStoreReadOnly hexastore, BlobStoreReadOnly blobStore) {
+    public ProvenanceTrackerImpl(HexaStoreReadOnly hexastore, KeyValueStoreReadOnly blobStore) {
         this.hexastore = hexastore;
         this.blobStore = blobStore;
     }
@@ -38,9 +38,9 @@ public class ProvenanceTrackerImpl implements ProvenanceTracker {
     }
 
     @Override
-    public void findOrigins(IRI provenanceAnchor, StatementListener listener) throws IOException {
+    public void traceOrigins(IRI provenanceAnchor, StatementListener listener) throws IOException {
         if (blobStore == null) {
-            throw new UnsupportedOperationException("finding origins of provenance logs is not possible (yet) with this hexastore-based provenance tracker");
+            throw new UnsupportedOperationException("finding origins of provenance logs is not possible without configuring a content store");
         }
 
 
@@ -63,31 +63,48 @@ public class ProvenanceTrackerImpl implements ProvenanceTracker {
                 }};
 
 
-        StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {
+        while (state.shouldKeepProcessing() && !statementQueue.isEmpty()) {
+            IRI origin = statementQueue.poll();
+            InputStream inputStream = blobStore.get(origin);
+            if (inputStream != null) {
+                StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {
 
-            @Override
-            public void emit(Quad statement) {
-                if (RefNodeConstants.USED_BY.equals(statement.getPredicate())) {
-                    if (statement.getSubject() instanceof IRI) {
-                        IRI subject = (IRI) statement.getSubject();
-                        if (HashKeyUtil.isValidHashKey(subject)) {
-                            listener.on(statement);
-                            statementQueue.add(subject);
+                    @Override
+                    public void emit(Quad statement) {
+                        if (RefNodeConstants.USED_BY.equals(statement.getPredicate())) {
+                            if (statement.getSubject() instanceof IRI) {
+                                IRI subject = (IRI) statement.getSubject();
+                                if (HashKeyUtil.isValidHashKey(subject)) {
+                                    Quad originStatement =
+                                            toStatement(origin,
+                                                    RefNodeConstants.WAS_DERIVED_FROM,
+                                                    subject);
+                                    listener.on(originStatement);
+                                    statementQueue.add(subject);
+                                }
+                            }
                         }
                     }
-                }
-            }
-        };
-
-        while (state.shouldKeepProcessing() && !statementQueue.isEmpty()) {
-            InputStream inputStream = blobStore.get(statementQueue.poll());
-            if (inputStream != null) {
+                };
                 new EmittingStreamRDF(emitter, state)
                         .parseAndEmit(inputStream);
+                emitOriginRootIfFound(origin, listener, state, statementQueue);
             }
 
         }
 
 
+    }
+
+    void emitOriginRootIfFound(IRI provenanceAnchor, StatementListener listener, ProcessorState state, Queue<IRI> statementQueue) {
+        if (state.shouldKeepProcessing() && statementQueue.isEmpty()) {
+            // reached the origin
+            listener.on(
+                    toStatement(
+                            RefNodeConstants.BIODIVERSITY_DATASET_GRAPH,
+                            RefNodeConstants.HAS_VERSION,
+                            provenanceAnchor)
+            );
+        }
     }
 }

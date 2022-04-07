@@ -13,6 +13,7 @@ import java.util.List;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class VersionUtil {
@@ -70,7 +71,8 @@ public class VersionUtil {
     public static IRI mostRecentVersionForStatement(Quad statement) {
         IRI mostRecentVersion = null;
         RDFTerm mostRecentTerm = null;
-        if (statement.getPredicate().equals(HAS_PREVIOUS_VERSION)) {
+        if (statement.getPredicate().equals(HAS_PREVIOUS_VERSION)
+                || statement.getPredicate().equals(WAS_DERIVED_FROM)) {
             mostRecentTerm = statement.getSubject();
         } else if (statement.getPredicate().equals(HAS_VERSION)) {
             mostRecentTerm = statement.getObject();

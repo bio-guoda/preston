@@ -9,7 +9,7 @@ public interface ProvenanceTracker {
 
     void findDescendants(IRI provenanceAnchor, StatementListener listener) throws IOException;
 
-    void findOrigins(IRI provenanceAnchor, StatementListener listener) throws IOException;
+    void traceOrigins(IRI provenanceAnchor, StatementListener listener) throws IOException;
 
 
 }

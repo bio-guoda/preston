@@ -58,6 +58,7 @@ public class CmdLine {
                 .addCommand("update", new CmdUpdate(), "track")
                 .addCommand("append", new CmdAppend(), "handle", "process", "add")
                 .addCommand("history", new CmdHistory())
+                .addCommand("origins", new CmdOrigins(), "origin", "prov", "provenance")
 
                 // sketch generation (e.g, bloom, theta)
                 .addCommand("sketch", new CmdCreateSketch(), "bloom")
