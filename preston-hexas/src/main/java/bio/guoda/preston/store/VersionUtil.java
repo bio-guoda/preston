@@ -1,6 +1,7 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.StatementListener;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -20,7 +21,7 @@ public class VersionUtil {
         return findMostRecentVersion(provenanceRoot, hexastore, null);
     }
 
-    static IRI findMostRecentVersion(IRI provenanceRoot, HexaStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
+    static IRI findMostRecentVersion(IRI provenanceRoot, HexaStoreReadOnly statementStore, StatementListener versionListener) throws IOException {
         IRI mostRecentVersion = findVersion(provenanceRoot, statementStore, versionListener);
         if (mostRecentVersion == null) {
             mostRecentVersion = findByPreviousVersion(provenanceRoot, statementStore, versionListener);
@@ -48,7 +49,7 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    private static IRI findByPreviousVersion(IRI versionSource, HexaStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
+    private static IRI findByPreviousVersion(IRI versionSource, HexaStoreReadOnly statementStore, StatementListener versionListener) throws IOException {
         IRI mostRecentVersion = statementStore.get(Pair.of(HAS_PREVIOUS_VERSION, versionSource));
 
         if (versionListener != null && mostRecentVersion != null) {
@@ -57,7 +58,7 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    private static IRI findVersion(IRI provenanceRoot, HexaStoreReadOnly statementStore, VersionListener versionListener) throws IOException {
+    private static IRI findVersion(IRI provenanceRoot, HexaStoreReadOnly statementStore, StatementListener versionListener) throws IOException {
         IRI mostRecentVersion = statementStore.get(Pair.of(provenanceRoot, HAS_VERSION));
 
         if (versionListener != null && mostRecentVersion != null) {

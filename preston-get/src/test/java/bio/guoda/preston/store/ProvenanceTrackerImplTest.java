@@ -1,0 +1,173 @@
+
+package bio.guoda.preston.store;
+
+import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.StatementListener;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.rdf.api.RDFTerm;
+import org.hamcrest.core.Is;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import static junit.framework.TestCase.assertNotNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItems;
+
+public class ProvenanceTrackerImplTest {
+
+    @Test
+    public void comesAfter() throws IOException {
+
+        HexaStoreReadOnly hexastore = new HexaStoreReadOnly() {
+            @Override
+            public IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException {
+                return getVersion(queryKey);
+            }
+        };
+
+        ProvenanceTracker tracker = new ProvenanceTrackerImpl(hexastore);
+
+        List<IRI> iris = new ArrayList<>();
+
+        tracker.findDescendants(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, new StatementListener() {
+            @Override
+            public void on(Quad statement) {
+                IRI version = VersionUtil.mostRecentVersionForStatement(statement);
+                if (version != null) {
+                    iris.add(version);
+                }
+            }
+        });
+
+        assertThat(iris.size(), Is.is(1));
+        assertThat(iris.get(0), Is.is(RefNodeFactory.toIRI("some:iri")));
+    }
+
+    @Test
+    public void comesAfter2() throws IOException {
+
+        HexaStoreReadOnly hexastore = new HexaStoreReadOnly() {
+            @Override
+            public IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException {
+                IRI iri = null;
+
+                if (RefNodeFactory.toIRI("some:older/iri").equals(queryKey.getValue())
+                        && RefNodeConstants.HAS_PREVIOUS_VERSION.equals(queryKey.getKey())) {
+                    iri = RefNodeFactory.toIRI("some:newer/iri");
+                } else {
+                    iri = getVersion(queryKey);
+                }
+
+                return iri;
+            }
+
+        };
+
+        ProvenanceTracker tracker = new ProvenanceTrackerImpl(hexastore);
+
+        List<IRI> iris = new ArrayList<>();
+
+        IRI someCurrent = RefNodeFactory.toIRI("some:older/iri");
+
+        tracker.findDescendants(someCurrent, new StatementListener() {
+            @Override
+            public void on(Quad statement)  {
+                IRI version = VersionUtil.mostRecentVersionForStatement(statement);
+                if (version != null) {
+                    iris.add(version);
+                }
+            }
+        });
+
+        assertThat(iris.size(), Is.is(1));
+        assertThat(iris.get(0), Is.is(RefNodeFactory.toIRI("some:newer/iri")));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void cameBefore() throws IOException {
+        new ProvenanceTrackerImpl(null, null)
+                .findOrigins(null, null);
+    }
+
+    @Test
+    public void nothingCameBeforeRootVersion() throws IOException {
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                if (uri.equals(RefNodeFactory.toIRI("hash://sha256/8d1cbbfdbc366b4f2cf47dec44c9e20d7059e771037c3ff389dc44710280b66d"))) {
+                    InputStream resourceAsStream = getClass().getResourceAsStream("versionRoot.nq");
+                    assertNotNull(resourceAsStream);
+                    return resourceAsStream;
+                }
+                throw new IOException("content unknown");
+            }
+        };
+
+        List<Quad> versionStatements = new ArrayList<>();
+        new ProvenanceTrackerImpl(null, blobStore)
+                .findOrigins(RefNodeFactory.toIRI("hash://sha256/8d1cbbfdbc366b4f2cf47dec44c9e20d7059e771037c3ff389dc44710280b66d"),
+                        new StatementListener() {
+                            @Override
+                            public void on(Quad statement) {
+                                versionStatements.add(statement);
+                            }
+                        });
+
+        assertThat(versionStatements.size(), Is.is(0));
+    }
+
+    @Test
+    public void somethingCameBeforeNonRootVersion() throws IOException {
+
+        List<String> requested = new ArrayList<>();
+
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                requested.add(uri.getIRIString());
+                if (uri.equals(RefNodeFactory.toIRI("hash://sha256/8d1cbbfdbc366b4f2cf47dec44c9e20d7059e771037c3ff389dc44710280b66d"))) {
+                    return getClass().getResourceAsStream("versionRoot.nq");
+                } else if (uri.equals(RefNodeFactory.toIRI("hash://sha256/f663ab51cd63cce9598fd5b5782aa7638726347a6e8295f967b981fcf9481ad8"))) {
+                    return getClass().getResourceAsStream("versionNonRoot.nq");
+                }
+                throw new IOException("content unknown");
+            }
+        };
+
+        List<Quad> versionStatements = new ArrayList<>();
+        new ProvenanceTrackerImpl(null, blobStore)
+                .findOrigins(RefNodeFactory.toIRI("hash://sha256/f663ab51cd63cce9598fd5b5782aa7638726347a6e8295f967b981fcf9481ad8"),
+                        new StatementListener() {
+                            @Override
+                            public void on(Quad statement) {
+                                versionStatements.add(statement);
+                            }
+                        });
+
+        assertThat(requested.size(), Is.is(2));
+        assertThat(requested, hasItems("hash://sha256/f663ab51cd63cce9598fd5b5782aa7638726347a6e8295f967b981fcf9481ad8", "hash://sha256/8d1cbbfdbc366b4f2cf47dec44c9e20d7059e771037c3ff389dc44710280b66d"));
+
+        assertThat(versionStatements.size(), Is.is(1));
+        assertThat(versionStatements.get(0).getSubject(), Is.is(RefNodeFactory.toIRI("hash://sha256/8d1cbbfdbc366b4f2cf47dec44c9e20d7059e771037c3ff389dc44710280b66d")));
+        assertThat(versionStatements.get(0).getPredicate(), Is.is(RefNodeConstants.USED_BY));
+        assertThat(versionStatements.get(0).getObject(), Is.is(RefNodeFactory.toIRI("urn:uuid:239c403c-cf67-4297-9e80-b9fc26f0e208")));
+        assertThat(versionStatements.get(0).getGraphName().get(), Is.is(RefNodeFactory.toIRI("urn:uuid:239c403c-cf67-4297-9e80-b9fc26f0e208")));
+    }
+
+    private IRI getVersion(Pair<RDFTerm, RDFTerm> queryKey) {
+        IRI iri = null;
+        if (RefNodeConstants.BIODIVERSITY_DATASET_GRAPH.equals(queryKey.getKey())
+                && RefNodeConstants.HAS_VERSION.equals(queryKey.getValue())) {
+            iri = RefNodeFactory.toIRI("some:iri");
+        }
+        return iri;
+    }
+
+}

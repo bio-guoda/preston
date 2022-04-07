@@ -1,14 +1,13 @@
 package bio.guoda.preston.util;
 
-import bio.guoda.preston.store.VersionListener;
+import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MostRecentVersionListener implements VersionListener {
+public class MostRecentVersionListener implements StatementListener {
     private final AtomicReference<IRI> mostRecent;
 
     public MostRecentVersionListener() {
@@ -16,7 +15,7 @@ public class MostRecentVersionListener implements VersionListener {
     }
 
     @Override
-    public void on(Quad statement) throws IOException {
+    public void on(Quad statement) {
         IRI mostRecentCandidate = VersionUtil.mostRecentVersionForStatement(statement);
         if (mostRecentCandidate != null) {
             mostRecent.set(mostRecentCandidate);

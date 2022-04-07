@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.StatementIRIProcessor;
+import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.process.VersionedRDFChainEmitter;
@@ -84,17 +85,28 @@ public final class ReplayUtil {
     }
 
     public static void replay(StatementsListener listener, Persisting persisting) {
+        ProcessorState state = persisting;
+        ProvenanceTracker provenanceTracker = persisting.getProvenanceTracker();
+        BlobStoreReadOnly blobstoreReadOnly = new BlobStoreAppendOnly(
+                persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())),
+                true,
+                persisting.getHashType()
+        );
+
+        attemptReplay(listener, state, provenanceTracker, blobstoreReadOnly);
+    }
+
+    static void attemptReplay(StatementsListener listener,
+                              ProcessorState state,
+                              ProvenanceTracker provenanceTracker,
+                              BlobStoreReadOnly blobstoreReadOnly) {
         StatementIRIProcessor processor = new StatementIRIProcessor(listener);
         processor.setIriProcessor(new IRIFixingProcessor());
 
         attemptReplay(
-                new BlobStoreAppendOnly(
-                        persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())),
-                        true,
-                        persisting.getHashType()
-                ),
-                new CmdContext(persisting, processor),
-                persisting.getProvenanceTracker()
+                blobstoreReadOnly,
+                new CmdContext(state, processor),
+                provenanceTracker
         );
     }
 
