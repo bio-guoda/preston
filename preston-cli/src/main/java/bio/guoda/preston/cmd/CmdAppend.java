@@ -65,8 +65,7 @@ public class CmdAppend extends CmdActivity {
 
     protected void handleQueuedMessages(Queue<List<Quad>> queue, StatementsListener[] listeners) {
         while (!queue.isEmpty()) {
-            List<Quad> polled = queue.poll();
-            handleNonBlankMessages(polled, listeners);
+            handleNonBlankMessages(queue.poll(), listeners);
         }
     }
 

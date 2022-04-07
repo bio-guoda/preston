@@ -59,6 +59,7 @@ public class CmdLine {
                 .addCommand("append", new CmdAppend(), "handle", "process", "add")
                 .addCommand("history", new CmdHistory())
                 .addCommand("origins", new CmdOrigins(), "origin", "prov", "provenance")
+                .addCommand("merge", new CmdMerge(), "join", "use", "import")
 
                 // sketch generation (e.g, bloom, theta)
                 .addCommand("sketch", new CmdCreateSketch(), "bloom")
