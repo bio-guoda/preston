@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementListener;
 import org.apache.commons.lang3.tuple.Pair;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeConstants.USED_BY;
 import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
@@ -72,14 +74,16 @@ public class VersionUtil {
         IRI mostRecentVersion = null;
         RDFTerm mostRecentTerm = null;
         if (statement.getPredicate().equals(HAS_PREVIOUS_VERSION)
-                || statement.getPredicate().equals(WAS_DERIVED_FROM)) {
+                || statement.getPredicate().equals(WAS_DERIVED_FROM)
+                || statement.getPredicate().equals(USED_BY)) {
             mostRecentTerm = statement.getSubject();
         } else if (statement.getPredicate().equals(HAS_VERSION)) {
             mostRecentTerm = statement.getObject();
         }
+
         if (mostRecentTerm instanceof IRI) {
             IRI mostRecentIRI = (IRI) mostRecentTerm;
-            if (!RefNodeFactory.isBlankOrSkolemizedBlank(mostRecentIRI)) {
+            if (HashKeyUtil.isValidHashKey(mostRecentIRI)) {
                 mostRecentVersion = mostRecentIRI;
             }
         }

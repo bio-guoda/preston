@@ -7,6 +7,8 @@ import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.jena.riot.RiotException;
+import org.apache.jena.riot.system.ErrorHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -86,9 +88,28 @@ public class ProvenanceTrackerImpl implements ProvenanceTracker {
                         }
                     }
                 };
-                new EmittingStreamRDF(emitter, state)
-                        .parseAndEmit(inputStream);
-                emitOriginRootIfFound(origin, listener, state, statementQueue);
+                try {
+                    new EmittingStreamRDF(emitter, state, new ErrorHandler() {
+                        @Override
+                        public void warning(String message, long line, long col) {
+                            // ignore
+                        }
+
+                        @Override
+                        public void error(String message, long line, long col) {
+                            // ignore
+                        }
+
+                        @Override
+                        public void fatal(String message, long line, long col) {
+                            // ignore
+                        }
+                    })
+                            .parseAndEmit(inputStream);
+                    emitOriginRootIfFound(origin, listener, state, statementQueue);
+                } catch (RiotException ex) {
+                    // ignore opportunistic failure to parse possible provenance logs
+                }
             }
 
         }
@@ -96,9 +117,9 @@ public class ProvenanceTrackerImpl implements ProvenanceTracker {
 
     }
 
-    void emitOriginRootIfFound(IRI provenanceAnchor, StatementListener listener, ProcessorState state, Queue<IRI> statementQueue) {
+    private void emitOriginRootIfFound(IRI provenanceAnchor, StatementListener listener, ProcessorState state, Queue<IRI> statementQueue) {
         if (state.shouldKeepProcessing() && statementQueue.isEmpty()) {
-            // reached the origin
+            // reached likely origin (or dead-end)
             listener.on(
                     toStatement(
                             RefNodeConstants.BIODIVERSITY_DATASET_GRAPH,

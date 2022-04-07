@@ -117,43 +117,51 @@ public class VersionUtilTest {
     @Test
     public void mostRecentForVersionStatement() {
         Quad provenanceStatement = RefNodeFactory.toStatement(
-                toIRI("foo:bar/newer"),
+                toIRI(getNewer()),
                 RefNodeConstants.HAS_PREVIOUS_VERSION,
-                toIRI("foo:bar/older")
+                toIRI(getOlder())
         );
 
         IRI iri = VersionUtil.mostRecentVersionForStatement(provenanceStatement);
 
-        assertThat(iri.getIRIString(), is("foo:bar/newer"));
+        assertThat(iri.getIRIString(), is(getNewer()));
 
     }
 
     @Test
     public void mostRecentForVersionStatement2() {
         Quad provenanceStatement = RefNodeFactory.toStatement(
-                toIRI("foo:bar/older"),
+                toIRI(getOlder()),
                 RefNodeConstants.HAS_VERSION,
-                toIRI("foo:bar/newer")
+                toIRI(getNewer())
         );
 
         IRI iri = VersionUtil.mostRecentVersionForStatement(provenanceStatement);
 
-        assertThat(iri.getIRIString(), is("foo:bar/newer"));
+        assertThat(iri.getIRIString(), is(getNewer()));
 
     }
 
     @Test
     public void mostRecentForVersionStatement3() {
         Quad provenanceStatement = RefNodeFactory.toStatement(
-                toIRI("foo:bar/newer"),
+                toIRI(getNewer()),
                 RefNodeConstants.WAS_DERIVED_FROM,
-                toIRI("foo:bar/older")
+                toIRI(getOlder())
         );
 
         IRI iri = VersionUtil.mostRecentVersionForStatement(provenanceStatement);
 
-        assertThat(iri.getIRIString(), is("foo:bar/newer"));
+        assertThat(iri.getIRIString(), is(getNewer()));
 
+    }
+
+    private String getOlder() {
+        return "hash://sha256/f5851620a22110d6ebb73809df89c6321e79b4483dd2eb84ea77948505561463";
+    }
+
+    private String getNewer() {
+        return "hash://sha256/77e30f34ca80fc7e2683e3953d0701a800862b2290d5617e8e5ef8230999e35f";
     }
 
 

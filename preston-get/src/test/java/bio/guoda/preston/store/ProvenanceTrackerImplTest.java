@@ -78,7 +78,7 @@ public class ProvenanceTrackerImplTest {
 
         tracker.findDescendants(someCurrent, new StatementListener() {
             @Override
-            public void on(Quad statement)  {
+            public void on(Quad statement) {
                 IRI version = VersionUtil.mostRecentVersionForStatement(statement);
                 if (version != null) {
                     iris.add(version);
@@ -145,6 +145,8 @@ public class ProvenanceTrackerImplTest {
                     return getClass().getResourceAsStream("versionRoot.nq");
                 } else if (uri.equals(RefNodeFactory.toIRI("hash://sha256/f663ab51cd63cce9598fd5b5782aa7638726347a6e8295f967b981fcf9481ad8"))) {
                     return getClass().getResourceAsStream("versionNonRoot.nq");
+                } else if (uri.equals(RefNodeFactory.toIRI("hash://sha256/306ebe483d15970210add6552225835116f79ed78e66b08b170b2e761722f89d"))) {
+                    return getClass().getResourceAsStream("nonRDF.html");
                 }
                 throw new IOException("content unknown");
             }
@@ -170,6 +172,38 @@ public class ProvenanceTrackerImplTest {
         assertThat(versionStatements.get(0).getGraphName().isPresent(), Is.is(false));
 
         assertRootOrigin(versionStatements.get(1));
+    }
+
+    @Test
+    public void nonRDF() throws IOException {
+
+        List<String> requested = new ArrayList<>();
+
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                requested.add(uri.getIRIString());
+                if (uri.equals(RefNodeFactory.toIRI("hash://sha256/306ebe483d15970210add6552225835116f79ed78e66b08b170b2e761722f89d"))) {
+                    return getClass().getResourceAsStream("nonRDF.html");
+                }
+                throw new IOException("content unknown");
+            }
+        };
+
+        List<Quad> versionStatements = new ArrayList<>();
+        new ProvenanceTrackerImpl(null, blobStore)
+                .traceOrigins(RefNodeFactory.toIRI("hash://sha256/306ebe483d15970210add6552225835116f79ed78e66b08b170b2e761722f89d"),
+                        new StatementListener() {
+                            @Override
+                            public void on(Quad statement) {
+                                versionStatements.add(statement);
+                            }
+                        });
+
+        assertThat(requested.size(), Is.is(1));
+        assertThat(requested, hasItems("hash://sha256/306ebe483d15970210add6552225835116f79ed78e66b08b170b2e761722f89d"));
+
+        assertThat(versionStatements.size(), Is.is(0));
     }
 
     private IRI getVersion(Pair<RDFTerm, RDFTerm> queryKey) {

@@ -43,12 +43,12 @@ public class HashKeyUtil {
                 .matches();
     }
 
-    static HashType hashTypeFor(IRI contentId) {
+    public static HashType hashTypeFor(IRI contentId) {
         return hashTypeFor(contentId.getIRIString());
     }
 
 
-    static HashType hashTypeFor(String iriString) {
+    public static HashType hashTypeFor(String iriString) {
         HashType type = null;
 
         if (StringUtils.startsWith(iriString, HashType.sha256.getPrefix())) {
@@ -60,7 +60,7 @@ public class HashKeyUtil {
     }
 
 
-    static URI insertSlashIfNeeded(URI uri, String suffix) {
+    public static URI insertSlashIfNeeded(URI uri, String suffix) {
         String baseURI = uri.toString();
         return StringUtils.endsWith(baseURI, "/")
                 ? URI.create(baseURI + suffix)

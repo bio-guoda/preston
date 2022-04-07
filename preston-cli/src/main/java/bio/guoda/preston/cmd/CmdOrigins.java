@@ -41,22 +41,7 @@ public class CmdOrigins extends LoggingPersisting implements Runnable {
         try {
 
             if (provenanceAnchors.isEmpty()) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    Quad quad = RDFUtil.asQuad(line);
-                    IRI provenanceAnchor = VersionUtil.mostRecentVersionForStatement(quad);
-                    getProvenanceTracker()
-                            .traceOrigins(
-                                    provenanceAnchor,
-                                    statement -> {
-                                        foundHistory.set(true);
-                                        logger.on(statement);
-                                    }
-                            );
-
-                }
-
+                handleStdIn(logger, foundHistory);
             } else {
                 for (IRI provenanceAnchor : provenanceAnchors) {
                     getProvenanceTracker()
@@ -77,6 +62,35 @@ public class CmdOrigins extends LoggingPersisting implements Runnable {
 
         if (!foundHistory.get()) {
             LOG.warn("No origins found.");
+        }
+    }
+
+    private void handleStdIn(StatementsListener logger, AtomicBoolean foundHistory) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            Quad quad;
+            try {
+                quad = RDFUtil.asQuad(line);
+            } catch (org.apache.jena.riot.RiotException ex) {
+                // opportunistic parsing
+                // skip if not able to parse first line as RDF
+                break;
+            }
+
+            if (quad != null) {
+                IRI provenanceAnchor = VersionUtil.mostRecentVersionForStatement(quad);
+                if (provenanceAnchor != null) {
+                    getProvenanceTracker()
+                            .traceOrigins(
+                                    provenanceAnchor,
+                                    statement -> {
+                                        foundHistory.set(true);
+                                        logger.on(statement);
+                                    }
+                            );
+                }
+            }
         }
     }
 }

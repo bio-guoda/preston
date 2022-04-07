@@ -80,7 +80,7 @@ public class HashKeyUtilTest {
     @Test
     public void parseCompositeURI() {
         String uriString = "gz:file:foo.txt.gz!/foo.txt";
-        assertThat(HashKeyUtil.extractInnerURI(uriString), Is.is("file:foo.txt.gz"));
+        assertThat(HashKeyUtil.extractInnerURI(uriString), is("file:foo.txt.gz"));
     }
 
     @Test
@@ -88,7 +88,7 @@ public class HashKeyUtilTest {
         String uriString = "tar:gz:file:foo.txt.tar.gz!/foo.txt";
         assertThat(
                 HashKeyUtil.extractInnerURI(uriString),
-                Is.is("file:foo.txt.tar.gz")
+                is("file:foo.txt.tar.gz")
         );
     }
 
@@ -96,14 +96,14 @@ public class HashKeyUtilTest {
     public void parseCompositeURI3() {
         assertThat(
                 HashKeyUtil.extractInnerURI("gz:https://example.org/foo.txt.gz!/foo.txt"),
-                Is.is("https://example.org/foo.txt.gz")
+                is("https://example.org/foo.txt.gz")
         );
     }
 
     @Test
     public void parseNonCompositeURI3() {
         String innerURIString = HashKeyUtil.extractInnerURI("foo:bar");
-        assertThat(innerURIString, Is.is("foo:bar"));
+        assertThat(innerURIString, is("foo:bar"));
     }
 
     @Test
