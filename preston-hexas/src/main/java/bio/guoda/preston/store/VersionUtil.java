@@ -1,6 +1,5 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementListener;
 import org.apache.commons.lang3.tuple.Pair;
@@ -83,7 +82,7 @@ public class VersionUtil {
 
         if (mostRecentTerm instanceof IRI) {
             IRI mostRecentIRI = (IRI) mostRecentTerm;
-            if (HashKeyUtil.isValidHashKey(mostRecentIRI)) {
+            if (!RefNodeFactory.isBlankOrSkolemizedBlank(mostRecentIRI)) {
                 mostRecentVersion = mostRecentIRI;
             }
         }

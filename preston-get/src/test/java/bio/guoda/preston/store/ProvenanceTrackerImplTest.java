@@ -58,9 +58,9 @@ public class ProvenanceTrackerImplTest {
             public IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException {
                 IRI iri = null;
 
-                if (RefNodeFactory.toIRI("some:older/iri").equals(queryKey.getValue())
+                if (RefNodeFactory.toIRI(getOlder()).equals(queryKey.getValue())
                         && RefNodeConstants.HAS_PREVIOUS_VERSION.equals(queryKey.getKey())) {
-                    iri = RefNodeFactory.toIRI("some:newer/iri");
+                    iri = RefNodeFactory.toIRI(getNewer());
                 } else {
                     iri = getVersion(queryKey);
                 }
@@ -74,7 +74,7 @@ public class ProvenanceTrackerImplTest {
 
         List<IRI> iris = new ArrayList<>();
 
-        IRI someCurrent = RefNodeFactory.toIRI("some:older/iri");
+        IRI someCurrent = RefNodeFactory.toIRI(getOlder());
 
         tracker.findDescendants(someCurrent, new StatementListener() {
             @Override
@@ -87,7 +87,7 @@ public class ProvenanceTrackerImplTest {
         });
 
         assertThat(iris.size(), Is.is(1));
-        assertThat(iris.get(0), Is.is(RefNodeFactory.toIRI("some:newer/iri")));
+        assertThat(iris.get(0), Is.is(RefNodeFactory.toIRI(getNewer())));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -214,5 +214,14 @@ public class ProvenanceTrackerImplTest {
         }
         return iri;
     }
+
+    private String getOlder() {
+        return "hash://sha256/f5851620a22110d6ebb73809df89c6321e79b4483dd2eb84ea77948505561463";
+    }
+
+    private String getNewer() {
+        return "hash://sha256/77e30f34ca80fc7e2683e3953d0701a800862b2290d5617e8e5ef8230999e35f";
+    }
+
 
 }
