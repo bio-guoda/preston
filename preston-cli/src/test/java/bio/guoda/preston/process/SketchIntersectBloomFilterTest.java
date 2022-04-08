@@ -202,8 +202,6 @@ public class SketchIntersectBloomFilterTest {
 
         stopWatch.stop();
 
-        System.out.println("generating 2 bloom filter with 10 million entries each took [" + stopWatch.getTime() / 1000.0 + "]s");
-
         filter.putAll(filter2);
 
         assertThat(filter.approximateElementCount(), allOf(greaterThan(1900L * 10000), lessThan(2100L * 10000)));

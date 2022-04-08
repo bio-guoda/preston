@@ -218,8 +218,6 @@ public class SketchIntersectThetaTest {
 
         stopWatch.stop();
 
-        System.out.println("generating 2 theta sketches with 20*10^6 elements each took [" + (stopWatch.getTime() - uuidOverheadEstimate) / 1000.0 + "]s");
-
 
         stopWatch.reset();
         stopWatch.start();
@@ -227,7 +225,6 @@ public class SketchIntersectThetaTest {
         Sketch unionResult = union.union(filter, filter2);
 
         stopWatch.stop();
-        System.out.println("calculating union of 2 theta sketches with 20*10^6 elements each took [" + stopWatch.getTime() / 1000.0 + "]s");
         assertThat(unionResult.getEstimate(), allOf(greaterThan(1900 * 10000.0d), lessThan(2100 * 10000d)));
 
         assertThat((unionResult.getUpperBound(2) - unionResult.getLowerBound(2)) / unionResult.getEstimate(),
