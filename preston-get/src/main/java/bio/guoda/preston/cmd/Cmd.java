@@ -41,6 +41,12 @@ public class Cmd implements ProcessorState {
         return outputStream;
     }
 
+    public PrintStream getPrintStream() {
+        return outputStream instanceof PrintStream
+                ? (PrintStream) outputStream
+                : new PrintStream(outputStream);
+    }
+
     public void setOutputStream(OutputStream outputStream) {
         this.outputStream = outputStream;
     }

@@ -32,7 +32,7 @@ public class CmdCreateSketch extends LoggingPersisting implements Runnable {
     public void run(BlobStore blobStore) {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
-                System.out, () -> System.exit(0));
+                getOutputStream(), () -> System.exit(0));
 
         try (SketchBuilder sketchCreator = getSketchCreator(blobStore, listener)) {
             StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {

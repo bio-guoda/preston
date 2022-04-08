@@ -33,6 +33,7 @@ public class CmdOrigins extends LoggingPersisting implements Runnable {
     public void run() {
         StatementsListener logger = createPrintingLogger(
                 getLogMode(),
+                getOutputStream(),
                 this
         );
 

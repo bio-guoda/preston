@@ -27,7 +27,8 @@ public class CmdSketchUnion extends LoggingPersisting implements Runnable {
     public void run(BlobStoreReadOnly blobStoreReadOnly) {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
-                System.out, () -> System.exit(0));
+                getOutputStream(),
+                () -> System.exit(0));
 
 
         try (SketchUnionTheta unionSketch = new SketchUnionTheta(blobStoreReadOnly, listener)) {

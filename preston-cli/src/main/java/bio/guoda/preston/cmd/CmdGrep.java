@@ -44,7 +44,9 @@ public class CmdGrep extends LoggingPersisting implements Runnable {
     public void run(BlobStoreReadOnly blobStoreReadOnly) {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
-                System.out, () -> System.exit(0));
+                getOutputStream(),
+                () -> System.exit(0)
+        );
 
         TextMatcher textMatcher = new TextMatcher(
                 Pattern.compile(regex),

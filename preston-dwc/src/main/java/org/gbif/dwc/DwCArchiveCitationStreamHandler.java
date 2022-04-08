@@ -15,6 +15,8 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -23,11 +25,15 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
 
     public static final String META_XML = "meta.xml";
     private final Dereferencer<InputStream> dereferencer;
+    private final OutputStream os;
     private ContentStreamHandler contentStreamHandler;
 
-    public DwCArchiveCitationStreamHandler(ContentStreamHandler contentStreamHandler, Dereferencer<InputStream> inputStreamDereferencer) {
+    public DwCArchiveCitationStreamHandler(ContentStreamHandler contentStreamHandler,
+                                           Dereferencer<InputStream> inputStreamDereferencer,
+                                           OutputStream os) {
         this.contentStreamHandler = contentStreamHandler;
         this.dereferencer = inputStreamDereferencer;
+        this.os = os;
     }
 
     @Override
@@ -50,7 +56,7 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
 
                     if (emlStream != null) {
                         SAXParser p = SAX_FACTORY.newSAXParser();
-                        p.parse(emlStream, new CitationSaxHandler(metaDataIRI));
+                        p.parse(emlStream, new CitationSaxHandler(metaDataIRI, os));
                     }
                 }
 
@@ -68,8 +74,9 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
     }
 
 
-    private static class CitationSaxHandler extends SimpleSaxHandler {
+    public class CitationSaxHandler extends SimpleSaxHandler {
 
+        private final PrintStream os;
         AtomicBoolean inCitation = new AtomicBoolean(false);
 
         AtomicReference<StringBuilder> builder = new AtomicReference<>();
@@ -77,8 +84,9 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
         private String namespace;
 
 
-        public CitationSaxHandler(String metaDataIRI) {
+        public CitationSaxHandler(String metaDataIRI, OutputStream os) {
             this.namespace = metaDataIRI;
+            this.os = new PrintStream(os);
         }
 
         @Override
@@ -103,11 +111,12 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
                 inCitation.set(false);
                 String citationString = StringUtils.trim(builder.get().toString());
                 if (StringUtils.isNoneBlank(citationString)) {
-                    System.out.println
+                    os.println
                             (StringUtils.removeEnd(citationString, ".") + ". Accessed at <" + namespace + "> .");
                 }
             }
             super.endElement(uri, localName, qName);
         }
     }
+
 }

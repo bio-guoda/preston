@@ -9,6 +9,7 @@ import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameters;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.Quad;
 
@@ -28,7 +29,7 @@ public class CmdCite extends LoggingPersisting implements Runnable {
     public void run(BlobStoreReadOnly blobStoreReadOnly) {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
-                new NullPrintStream(),
+                NullOutputStream.NULL_OUTPUT_STREAM,
                 () -> System.exit(0));
 
         CitationGenerator textMatcher = new CitationGenerator(

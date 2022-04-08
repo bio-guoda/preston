@@ -32,8 +32,6 @@ public class CmdActivityTest {
         });
 
         assertFalse(crawlInfo.isEmpty());
-
-        crawlInfo.forEach(quad -> System.out.print(quad + "\n"));
     }
 
     @Test

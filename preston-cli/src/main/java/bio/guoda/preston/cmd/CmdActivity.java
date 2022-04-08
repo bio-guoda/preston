@@ -140,7 +140,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
     private StatementsListener[] createStatementListeners(BlobStoreReadOnly blobStore, StatementsListener archivingLogger, Queue<List<Quad>> statementQueue) {
         StatementsListener printingLogger = StatementLogFactory
-                .createPrintingLogger(getLogMode(), System.out, this);
+                .createPrintingLogger(getLogMode(), getOutputStream(), this);
 
         return Stream.concat(
                 createProcessors(blobStore, new StatementsListener() {

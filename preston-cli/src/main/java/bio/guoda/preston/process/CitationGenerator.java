@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.cmd.Cmd;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ContentHashDereferencer;
 import bio.guoda.preston.stream.ArchiveStreamHandler;
@@ -31,12 +32,12 @@ import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 
 public class CitationGenerator extends ProcessorReadOnly {
 
-    private final ProcessorState processorState;
+    private final Cmd processorState;
     private int batchSize = 256;
 
-    public CitationGenerator(ProcessorState processorState, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
+    public CitationGenerator(Cmd cmd, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
-        this.processorState = processorState;
+        this.processorState = cmd;
     }
 
     @Override
@@ -76,7 +77,8 @@ public class CitationGenerator extends ProcessorReadOnly {
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
                     new DwCArchiveCitationStreamHandler(this,
-                            new ContentHashDereferencer(CitationGenerator.this)
+                            new ContentHashDereferencer(CitationGenerator.this),
+                            processorState.getOutputStream()
                     )
             );
         }

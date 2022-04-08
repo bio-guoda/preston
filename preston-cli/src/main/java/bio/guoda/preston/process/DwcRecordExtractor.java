@@ -38,12 +38,6 @@ public class DwcRecordExtractor extends ProcessorReadOnly {
 
     public DwcRecordExtractor(ProcessorState processorState,
                               BlobStoreReadOnly blobStoreReadOnly,
-                              StatementsListener... listeners) {
-        this(processorState, blobStoreReadOnly, System.out, listeners);
-    }
-
-    public DwcRecordExtractor(ProcessorState processorState,
-                              BlobStoreReadOnly blobStoreReadOnly,
                               OutputStream out,
                               StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);

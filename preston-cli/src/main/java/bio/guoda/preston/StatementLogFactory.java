@@ -9,16 +9,18 @@ import bio.guoda.preston.process.StatementLoggerTSV;
 import bio.guoda.preston.process.StatementsListener;
 import org.apache.commons.rdf.api.Quad;
 
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class StatementLogFactory {
-    public static StatementsListener createPrintingLogger(LogTypes logMode, ProcessorState processorState) {
-        return createPrintingLogger(logMode, System.out, processorState);
+
+    public static StatementsListener createPrintingLogger(LogTypes logMode, final OutputStream out, ProcessorState processorState) {
+        return createPrintingLogger(logMode, new PrintStream(out), processorState::stopProcessing);
     }
 
-    public static StatementsListener createPrintingLogger(LogTypes logMode, final PrintStream out, ProcessorState processorState) {
-        return createPrintingLogger(logMode, out, processorState::stopProcessing);
+    public static StatementsListener createPrintingLogger(LogTypes logMode, final OutputStream out, LogErrorHandler handler) {
+        return createPrintingLogger(logMode, new PrintStream(out), handler);
     }
 
     public static StatementsListener createPrintingLogger(LogTypes logMode, final PrintStream out, LogErrorHandler handler) {

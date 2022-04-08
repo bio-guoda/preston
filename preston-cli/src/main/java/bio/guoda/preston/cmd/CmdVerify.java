@@ -19,6 +19,7 @@ import org.apache.commons.rdf.api.Quad;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -88,7 +89,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
                         //
                     } finally {
                         verifiedMap.put(iri.getIRIString(), state);
-                        System.out.print(iri.getIRIString() + "\t" +
+                        new PrintStream(getOutputStream()).print(iri.getIRIString() + "\t" +
                                 getKeyToPathLocal().toPath(iri) + "\t" +
                                 (OK_STATES.contains(state) ? "OK" : "FAIL") + "\t" +
                                 state + "\t" +

@@ -8,7 +8,7 @@ public class CmdVersion extends Cmd implements Runnable {
 
     @Override
     public void run() {
-        System.out.print(Version.getVersion() + "\n");
+        getPrintStream().print(Version.getVersion() + "\n");
     }
 
 }
