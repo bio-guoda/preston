@@ -33,9 +33,6 @@ public class CmdGrep extends LoggingPersisting implements Runnable {
     @Parameter(names = {"--no-line", "--no-lines"}, description = "don't report line numbers for matches")
     private boolean dontSeparateLines = false;
 
-    private InputStream inputStream = System.in;
-
-
     @Override
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
@@ -67,12 +64,8 @@ public class CmdGrep extends LoggingPersisting implements Runnable {
         };
 
         new EmittingStreamRDF(emitter, this)
-                .parseAndEmit(inputStream);
+                .parseAndEmit(getInputStream());
 
-    }
-
-    public void setInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
     }
 
 }

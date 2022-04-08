@@ -66,7 +66,7 @@ public class CmdOrigins extends LoggingPersisting implements Runnable {
     }
 
     private void handleStdIn(StatementsListener logger, AtomicBoolean foundHistory) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(getInputStream()));
         String line;
         while ((line = reader.readLine()) != null) {
             Quad quad;

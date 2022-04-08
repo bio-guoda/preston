@@ -2,11 +2,17 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.ProcessorState;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Cmd implements ProcessorState {
 
     private AtomicBoolean shouldKeepProcessing = new AtomicBoolean(true);
+
+    private OutputStream outputStream = System.out;
+
+    private InputStream inputStream = System.in;
 
 //    static {
 //        try {
@@ -29,5 +35,22 @@ public class Cmd implements ProcessorState {
     public boolean shouldKeepProcessing() {
         return shouldKeepProcessing.get();
     }
+
+    public OutputStream getOutputStream() {
+        return outputStream;
+    }
+
+    public void setOutputStream(OutputStream outputStream) {
+        this.outputStream = outputStream;
+    }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
 
 }

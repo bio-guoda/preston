@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.CitationGenerator;
 import bio.guoda.preston.process.EmittingStreamRDF;
@@ -17,8 +16,6 @@ import java.io.InputStream;
 
 @Parameters(separators = "= ", commandDescription = "Cites datasets in dataset archive")
 public class CmdCite extends LoggingPersisting implements Runnable {
-
-    private InputStream inputStream = System.in;
 
     @Override
     public void run() {
@@ -48,12 +45,8 @@ public class CmdCite extends LoggingPersisting implements Runnable {
         };
 
         new EmittingStreamRDF(emitter, this)
-                .parseAndEmit(inputStream);
+                .parseAndEmit(getInputStream());
 
-    }
-
-    public void setInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
     }
 
 }

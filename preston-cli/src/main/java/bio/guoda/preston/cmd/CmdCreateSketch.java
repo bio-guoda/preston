@@ -1,10 +1,9 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.StatementLogFactory;
+import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.SketchBuilder;
 import bio.guoda.preston.process.SketchBuilderBloomFilter;
-import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.SketchBuilderTheta;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
@@ -21,17 +20,13 @@ import java.io.InputStream;
 @Parameters(separators = "= ", commandDescription = "creates sketches (e.g., bloom filters or theta sketches) from matched content for estimating content overlap")
 public class CmdCreateSketch extends LoggingPersisting implements Runnable {
 
-    private InputStream inputStream = System.in;
-
     @Parameter(names = {"-s", "--sketch-type",}, description = "sketch type", converter = SketchTypeConverter.class)
     private SketchType sketch = SketchType.bloom;
-
 
     @Override
     public void run() {
         BlobStoreAppendOnly blobStoreAppendOnly = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         run(blobStoreAppendOnly);
-
     }
 
     public void run(BlobStore blobStore) {
@@ -49,7 +44,7 @@ public class CmdCreateSketch extends LoggingPersisting implements Runnable {
             };
 
             new EmittingStreamRDF(emitter, this)
-                    .parseAndEmit(inputStream);
+                    .parseAndEmit(getInputStream());
         } catch (IOException e) {
             throw new RuntimeException("failed to generate bloom filter", e);
         }
@@ -60,10 +55,6 @@ public class CmdCreateSketch extends LoggingPersisting implements Runnable {
         return sketch.equals(SketchType.theta)
                 ? new SketchBuilderTheta(blobStore, listener)
                 : new SketchBuilderBloomFilter(blobStore, listener);
-    }
-
-    public void setInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
     }
 
 }

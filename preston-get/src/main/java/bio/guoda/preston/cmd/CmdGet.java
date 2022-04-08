@@ -33,10 +33,6 @@ public class CmdGet extends Persisting implements Runnable {
             validateWith = URIValidator.class)
     private List<String> contentIdsOrAliases = new ArrayList<>();
 
-    private OutputStream outputStream = System.out;
-
-    private InputStream inputStream = System.in;
-
     @Override
     public void run() {
         BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
@@ -104,21 +100,6 @@ public class CmdGet extends Persisting implements Runnable {
         this.contentIdsOrAliases = contentIdsOrAliases;
     }
 
-    public OutputStream getOutputStream() {
-        return outputStream;
-    }
-
-    public void setOutputStream(OutputStream outputStream) {
-        this.outputStream = outputStream;
-    }
-
-    public InputStream getInputStream() {
-        return inputStream;
-    }
-
-    public void setInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
-    }
 
 
 }

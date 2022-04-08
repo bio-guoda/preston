@@ -19,9 +19,6 @@ import java.io.OutputStream;
 @Parameters(separators = "= ", commandDescription = "Extract records from DarwinCore archives in line-json")
 public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
 
-    private InputStream inputStream = System.in;
-    private OutputStream out = System.out;
-
     @Override
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
@@ -36,11 +33,10 @@ public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
                 new NullPrintStream(),
                 () -> System.exit(0));
 
-        out = System.out;
         DwcRecordExtractor textMatcher = new DwcRecordExtractor(
                 this,
                 blobStoreReadOnly,
-                out,
+                getOutputStream(),
                 listener);
 
         StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {
@@ -52,12 +48,8 @@ public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
         };
 
         new EmittingStreamRDF(emitter, this)
-                .parseAndEmit(inputStream);
+                .parseAndEmit(getInputStream());
 
-    }
-
-    public void setInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
     }
 
 }

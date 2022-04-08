@@ -27,8 +27,6 @@ import java.util.stream.Stream;
 @Parameters(separators = "= ", commandDescription = "offline (re-)processing of tracked biodiversity dataset graph using stdin")
 public class CmdAppend extends CmdActivity {
 
-    private InputStream is = System.in;
-
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
         // no initial seeds
@@ -84,11 +82,4 @@ public class CmdAppend extends CmdActivity {
         return quadStream.collect(Collectors.toList());
     }
 
-    public void setInputStream(InputStream inputStream) {
-        this.is = inputStream;
-    }
-
-    private InputStream getInputStream() {
-        return(this.is);
-    }
 }

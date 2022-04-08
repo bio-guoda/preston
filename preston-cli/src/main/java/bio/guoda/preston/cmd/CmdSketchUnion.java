@@ -18,8 +18,6 @@ import java.io.InputStream;
 @Parameters(separators = "= ", commandDescription = "uses pre-calculated sketches (only theta sketches for now) to calculates union of distinct elements found in datasets")
 public class CmdSketchUnion extends LoggingPersisting implements Runnable {
 
-    private InputStream inputStream = System.in;
-
     @Override
     public void run() {
         BlobStoreAppendOnly blobStoreAppendOnly = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
@@ -41,15 +39,11 @@ public class CmdSketchUnion extends LoggingPersisting implements Runnable {
             };
 
             new EmittingStreamRDF(emitter, this)
-                    .parseAndEmit(inputStream);
+                    .parseAndEmit(getInputStream());
         } catch (IOException ex) {
             throw new RuntimeException("failed to calculate union of sketches", ex);
         }
 
-    }
-
-    public void setInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
     }
 
 }

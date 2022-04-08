@@ -21,8 +21,6 @@ import java.util.List;
 @Parameters(separators = "= ", commandDescription = "uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets")
 public class CmdSketchDiff extends LoggingPersisting implements Runnable {
 
-    private InputStream inputStream = System.in;
-
     @Override
     public void run() {
         BlobStoreAppendOnly blobStoreAppendOnly = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
@@ -48,12 +46,8 @@ public class CmdSketchDiff extends LoggingPersisting implements Runnable {
         };
 
         new EmittingStreamRDF(emitter, this)
-                .parseAndEmit(inputStream);
+                .parseAndEmit(getInputStream());
 
-    }
-
-    public void setInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
     }
 
 }
