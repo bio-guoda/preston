@@ -23,11 +23,11 @@ public class AWSEventHandler implements RequestStreamHandler {
         LambdaLogger logger = context.getLogger();
 
         RequestData requestData = gson.fromJson(IOUtils.toString(inputStream, StandardCharsets.UTF_8), RequestData.class);
-        System.setIn(IOUtils.toInputStream(requestData.id, StandardCharsets.UTF_8));
         logger.log("Received request with body " + gson.toJson(requestData));
 
         CmdGet get = new CmdGet();
         get.setDisableCache(true);
+        get.setInputStream(IOUtils.toInputStream(requestData.id, StandardCharsets.UTF_8));
         get.setRemotes(Collections.singletonList(requestData.remote));
         get.setOutputStream(outputStream);
         get.run();

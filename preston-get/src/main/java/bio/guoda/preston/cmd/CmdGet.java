@@ -35,6 +35,8 @@ public class CmdGet extends Persisting implements Runnable {
 
     private OutputStream outputStream = System.out;
 
+    private InputStream inputStream = System.in;
+
     @Override
     public void run() {
         BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
@@ -48,7 +50,7 @@ public class CmdGet extends Persisting implements Runnable {
     void run(BlobStoreReadOnly blobStore, List<String> contentIdsOrAliases) {
         try {
             if (contentIdsOrAliases.isEmpty()) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(getInputStream()));
                 String line;
                 while ((line = reader.readLine()) != null) {
                     Quad quad = RDFUtil.asQuad(line);
@@ -108,6 +110,14 @@ public class CmdGet extends Persisting implements Runnable {
 
     public void setOutputStream(OutputStream outputStream) {
         this.outputStream = outputStream;
+    }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
     }
 
 
