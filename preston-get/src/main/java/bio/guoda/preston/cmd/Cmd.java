@@ -5,6 +5,8 @@ import bio.guoda.preston.process.ProcessorState;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Cmd implements ProcessorState {
@@ -42,9 +44,13 @@ public class Cmd implements ProcessorState {
     }
 
     public PrintStream getPrintStream() {
-        return outputStream instanceof PrintStream
-                ? (PrintStream) outputStream
-                : new PrintStream(outputStream);
+        try {
+            return outputStream instanceof PrintStream
+                    ? (PrintStream) outputStream
+                    : new PrintStream(outputStream, false, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("no support for request encoding [" + StandardCharsets.UTF_8 + "]");
+        }
     }
 
     public void setOutputStream(OutputStream outputStream) {
