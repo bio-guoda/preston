@@ -13,7 +13,6 @@ import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.gbif.dwc.DwCArchiveCitationStreamHandler;
-import org.gbif.dwc.DwCArchiveStreamHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,12 +31,12 @@ import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 
 public class CitationGenerator extends ProcessorReadOnly {
 
-    private final Cmd processorState;
+    private final Cmd cmd;
     private int batchSize = 256;
 
     public CitationGenerator(Cmd cmd, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
-        this.processorState = cmd;
+        this.cmd = cmd;
     }
 
     @Override
@@ -78,7 +77,7 @@ public class CitationGenerator extends ProcessorReadOnly {
                     new CompressedStreamHandler(this),
                     new DwCArchiveCitationStreamHandler(this,
                             new ContentHashDereferencer(CitationGenerator.this),
-                            processorState.getOutputStream()
+                            cmd.getOutputStream()
                     )
             );
         }
@@ -90,7 +89,7 @@ public class CitationGenerator extends ProcessorReadOnly {
 
         @Override
         public boolean shouldKeepReading() {
-            return processorState.shouldKeepProcessing();
+            return cmd.shouldKeepProcessing();
         }
 
         @Override

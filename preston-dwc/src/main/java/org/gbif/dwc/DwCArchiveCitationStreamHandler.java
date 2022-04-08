@@ -111,8 +111,8 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
                 inCitation.set(false);
                 String citationString = StringUtils.trim(builder.get().toString());
                 if (StringUtils.isNoneBlank(citationString)) {
-                    os.println
-                            (StringUtils.removeEnd(citationString, ".") + ". Accessed at <" + namespace + "> .");
+                    os.print
+                            (StringUtils.removeEnd(citationString, ".") + ". Accessed at <" + namespace + "> .\n");
                 }
             }
             super.endElement(uri, localName, qName);
