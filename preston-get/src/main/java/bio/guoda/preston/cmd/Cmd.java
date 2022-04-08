@@ -4,6 +4,7 @@ import bio.guoda.preston.process.ProcessorState;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Cmd implements ProcessorState {

@@ -10,11 +10,11 @@ import java.util.Optional;
 
 public class StatementLoggerTSV extends StatementLogger {
 
-    public StatementLoggerTSV(OutputStream printWriter) {
+    public StatementLoggerTSV(PrintStream printWriter) {
         super(printWriter);
     }
 
-    public StatementLoggerTSV(OutputStream printWriter, LogErrorHandler handler) {
+    public StatementLoggerTSV(PrintStream printWriter, LogErrorHandler handler) {
         super(printWriter, handler);
     }
 
