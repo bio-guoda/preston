@@ -15,7 +15,10 @@ public class CmdList extends LoggingPersisting implements Runnable {
 
     public void run(LogErrorHandler handler) {
         StatementsListener listener = StatementLogFactory
-                .createPrintingLogger(getLogMode(), getOutputStream(), handler);
+                .createPrintingLogger(
+                        getLogMode(),
+                        getPrintStream(),
+                        handler);
 
         ReplayUtil.replay(listener, this);
     }

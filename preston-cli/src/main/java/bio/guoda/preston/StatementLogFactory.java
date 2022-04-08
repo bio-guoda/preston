@@ -15,12 +15,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class StatementLogFactory {
 
-    public static StatementsListener createPrintingLogger(LogTypes logMode, final OutputStream out, ProcessorState processorState) {
-        return createPrintingLogger(logMode, new PrintStream(out), processorState::stopProcessing);
-    }
-
-    public static StatementsListener createPrintingLogger(LogTypes logMode, final OutputStream out, LogErrorHandler handler) {
-        return createPrintingLogger(logMode, new PrintStream(out), handler);
+    public static StatementsListener createPrintingLogger(LogTypes logMode, final PrintStream out, ProcessorState processorState) {
+        return createPrintingLogger(logMode, out, processorState::stopProcessing);
     }
 
     public static StatementsListener createPrintingLogger(LogTypes logMode, final PrintStream out, LogErrorHandler handler) {

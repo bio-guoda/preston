@@ -29,7 +29,7 @@ public class CmdCite extends LoggingPersisting implements Runnable {
     public void run(BlobStoreReadOnly blobStoreReadOnly) {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
-                NullOutputStream.NULL_OUTPUT_STREAM,
+                NullPrintStream.NULL_PRINT_STREAM,
                 () -> System.exit(0));
 
         CitationGenerator textMatcher = new CitationGenerator(

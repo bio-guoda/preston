@@ -31,7 +31,11 @@ public class CmdAlias extends CmdAppend implements Runnable {
     public void run() {
 
         final StatementsListener listener = StatementLogFactory
-                .createPrintingLogger(getLogMode(), getOutputStream(), () -> System.exit(0));
+                .createPrintingLogger(
+                        getLogMode(),
+                        getPrintStream(),
+                        () -> System.exit(0)
+                );
 
         run(listener);
 
@@ -104,7 +108,11 @@ public class CmdAlias extends CmdAppend implements Runnable {
     protected StatementsListener[] initListeners(BlobStoreReadOnly blobStore, StatementsListener archivingLogger, Queue<List<Quad>> statementQueue) {
         return new StatementsListener[]{
                 archivingLogger,
-                StatementLogFactory.createPrintingLogger(getLogMode(), getOutputStream(), this)
+                StatementLogFactory.createPrintingLogger(
+                        getLogMode(),
+                        getPrintStream(),
+                        this
+                )
         };
     }
 
