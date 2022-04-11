@@ -231,7 +231,7 @@ public class TracerOfOriginsTest {
     }
 
     private KeyValueStore getKeyValueStoreForGraph(String graphName) throws URISyntaxException {
-        String prefix = "/bio/guoda/preston/store/merged/";
+        String prefix = "/bio/guoda/preston/store/merged-a-into-b/";
         String suffix = "2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a";
         URL resource = getClass().getResource(prefix + graphName + suffix);
         File file = new File(resource.toURI());
