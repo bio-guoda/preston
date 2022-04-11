@@ -23,8 +23,9 @@ import bio.guoda.preston.store.HexaStore;
 import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.ProvenanceTracker;
-import bio.guoda.preston.store.ProvenanceTrackerImpl;
+import bio.guoda.preston.store.ProvenanceTracer;
+import bio.guoda.preston.store.TracerOfDescendants;
+import bio.guoda.preston.store.TracerOfOrigins;
 import bio.guoda.preston.store.VersionUtil;
 import bio.guoda.preston.util.MostRecentVersionListener;
 import org.apache.commons.io.FileUtils;
@@ -103,9 +104,9 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                         }
 
                         private void addProvenanceRoots() throws IOException {
-                            ProvenanceTracker provenanceTracker = new ProvenanceTrackerImpl(provIndex);
+                            ProvenanceTracer provenanceTracer = new TracerOfDescendants(provIndex, CmdActivity.this);
                             MostRecentVersionListener listener = new MostRecentVersionListener();
-                            provenanceTracker.findDescendants(getProvenanceRoot(), listener);
+                            provenanceTracer.trace(getProvenanceRoot(), listener);
                             IRI mostRecentVersion = listener.getMostRecent();
                             if (mostRecentVersion != null) {
                                 add(Collections.singletonList(toStatement(ctx.getActivity(), mostRecentVersion, USED_BY, ctx.getActivity())));

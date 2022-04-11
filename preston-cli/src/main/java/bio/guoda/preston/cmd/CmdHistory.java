@@ -28,16 +28,14 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
 
         AtomicBoolean foundHistory = new AtomicBoolean(false);
         try {
-
-            getProvenanceTracker()
-                    .findDescendants(
+            getTracerOfDescendants()
+                    .trace(
                             getProvenanceRoot(),
                             statement -> {
                                 foundHistory.set(true);
                                 logger.on(statement);
                             }
                     );
-
         } catch (IOException e) {
             throw new RuntimeException("Failed to get version history.", e);
         }

@@ -10,7 +10,7 @@ import bio.guoda.preston.store.ArchiverReadOnly;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.ProvenanceTracker;
+import bio.guoda.preston.store.ProvenanceTracer;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
@@ -34,21 +34,21 @@ public final class ReplayUtil {
 
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
-                              ProvenanceTracker provenanceTracker,
+                              ProvenanceTracer provenanceTracer,
                               StatementsListener... listeners) {
-        attemptReplay(provenanceLogStore, BIODIVERSITY_DATASET_GRAPH, provenanceTracker, listeners);
+        attemptReplay(provenanceLogStore, BIODIVERSITY_DATASET_GRAPH, provenanceTracer, listeners);
     }
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
                               final IRI provRoot,
-                              ProvenanceTracker provenanceTracker,
+                              ProvenanceTracer provenanceTracer,
                               StatementsListener... listeners) {
-        attemptReplay(provenanceLogStore, new CmdContext(new ProcessorStateAlwaysContinue(), provRoot, listeners), provenanceTracker);
+        attemptReplay(provenanceLogStore, new CmdContext(new ProcessorStateAlwaysContinue(), provRoot, listeners), provenanceTracer);
     }
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
                               final CmdContext ctx,
-                              ProvenanceTracker provenanceTracker) {
+                              ProvenanceTracer provenanceTracer) {
 
         final Queue<Quad> statementQueue =
                 new ConcurrentLinkedQueue<Quad>() {{
@@ -72,7 +72,7 @@ public final class ReplayUtil {
         );
 
         StatementsListener offlineArchive = new ArchiverReadOnly(
-                provenanceTracker,
+                provenanceTracer,
                 provenanceLogEmitter);
 
         while (ctx.getState().shouldKeepProcessing() && !statementQueue.isEmpty()) {
@@ -86,19 +86,19 @@ public final class ReplayUtil {
 
     public static void replay(StatementsListener listener, Persisting persisting) {
         ProcessorState state = persisting;
-        ProvenanceTracker provenanceTracker = persisting.getProvenanceTracker();
+        ProvenanceTracer provenanceTracer = persisting.getTracerOfDescendants();
         BlobStoreReadOnly blobstoreReadOnly = new BlobStoreAppendOnly(
                 persisting.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())),
                 true,
                 persisting.getHashType()
         );
 
-        attemptReplay(listener, state, provenanceTracker, blobstoreReadOnly);
+        attemptReplay(listener, state, provenanceTracer, blobstoreReadOnly);
     }
 
     static void attemptReplay(StatementsListener listener,
                               ProcessorState state,
-                              ProvenanceTracker provenanceTracker,
+                              ProvenanceTracer provenanceTracer,
                               BlobStoreReadOnly blobstoreReadOnly) {
         StatementIRIProcessor processor = new StatementIRIProcessor(listener);
         processor.setIriProcessor(new IRIFixingProcessor());
@@ -106,7 +106,7 @@ public final class ReplayUtil {
         attemptReplay(
                 blobstoreReadOnly,
                 new CmdContext(state, processor),
-                provenanceTracker
+                provenanceTracer
         );
     }
 

@@ -10,7 +10,7 @@ import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.ProvenanceTracker;
+import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.util.JekyllUtil;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -46,7 +46,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         File source = getDefaultDataDir();
         File target = Persisting.getDataDir(targetDir);
         if (ArchiveType.jekyll.equals(getArchiveType())) {
-            generateJekyllSiteContent(target, getProvenanceTracker());
+            generateJekyllSiteContent(target, getTracerOfDescendants());
         } else {
             if (source.equals(target)) {
                 throw new IllegalArgumentException("source dir [" + source.getAbsolutePath() + "] must be different from target dir [" + target.getAbsolutePath() + "].");
@@ -54,13 +54,13 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
             File tmp = getTmpDir();
 
             if (ArchiveType.data_prov_provindex.equals(getArchiveType())) {
-                copyAll(target, tmp, getProvenanceTracker(getCopyingKeyValueStore(target, tmp)));
+                copyAll(target, tmp, getTracerOfOrigins(getCopyingKeyValueStore(target, tmp)));
             } else if (ArchiveType.data.equals(getArchiveType())) {
-                copyDataOnly(target, tmp, getProvenanceTracker());
+                copyDataOnly(target, tmp, getTracerOfDescendants());
             } else if (ArchiveType.prov.equals(getArchiveType())) {
-                copyProvLogsOnly(target, tmp, getProvenanceTracker());
+                copyProvLogsOnly(target, tmp, getTracerOfDescendants());
             } else if (ArchiveType.provindex.equals(getArchiveType())) {
-                copyProvIndexOnly(getProvenanceTracker(getCopyingKeyValueStore(target, tmp)));
+                copyProvIndexOnly(getTracerOfOrigins(getCopyingKeyValueStore(target, tmp)));
             } else {
                 throw new IllegalStateException("unsupport archive type [" + getArchiveType().name() + "]");
             }
@@ -68,7 +68,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     }
 
-    private void generateJekyllSiteContent(File target, ProvenanceTracker provenanceTracker) {
+    private void generateJekyllSiteContent(File target, ProvenanceTracer provenanceTracer) {
         final BlobStoreAppendOnly provenanceLogStore
                 = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())),
                 true,
@@ -92,17 +92,19 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
         attemptReplay(
                 provenanceLogStore,
-                ctx, provenanceTracker);
+                ctx,
+                provenanceTracer
+        );
 
         JekyllUtil.writePrestonConfigFile(
                 target,
                 lastCrawlTime,
                 getProvenanceRoot(),
-                provenanceTracker
+                provenanceTracer
         );
     }
 
-    private void copyAll(File target, File tmp, ProvenanceTracker provenanceTracker) {
+    private void copyAll(File target, File tmp, ProvenanceTracer provenanceTracer) {
         KeyValueStore copyingKeyValueStore = new KeyValueStoreCopying(
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())),
                 new KeyValueStoreLocalFileSystem(tmp, getKeyToPath(target),
@@ -111,7 +113,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         CloneUtil.clone(copyingKeyValueStore,
                 copyingKeyValueStore,
                 getHashType(),
-                provenanceTracker);
+                provenanceTracer);
     }
 
     private KeyToPath getKeyToPath(File target) {
@@ -122,13 +124,13 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         }
     }
 
-    private void copyProvIndexOnly(ProvenanceTracker provenanceTracker) {
+    private void copyProvIndexOnly(ProvenanceTracer provenanceTracer) {
 
         CloneUtil.clone(
                 new NullKeyValueStore(),
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())),
                 getHashType(),
-                provenanceTracker
+                provenanceTracer
         );
     }
 
@@ -139,7 +141,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
                         new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())));
     }
 
-    private void copyProvLogsOnly(File target, File tmp, ProvenanceTracker provenanceTracker) {
+    private void copyProvLogsOnly(File target, File tmp, ProvenanceTracer provenanceTracer) {
         KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())),
                 new KeyValueStoreLocalFileSystem(tmp, getKeyToPath(target), new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())));
@@ -148,11 +150,11 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
                 new NullKeyValueStore(),
                 copyingKeyValueStoreProv,
                 getHashType(),
-                provenanceTracker
+                provenanceTracer
         );
     }
 
-    private void copyDataOnly(File target, File tmp, ProvenanceTracker provenanceTracker) {
+    private void copyDataOnly(File target, File tmp, ProvenanceTracer provenanceTracer) {
         KeyValueStore copyingKeyValueStoreBlob = new KeyValueStoreCopying(
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())),
                 new KeyValueStoreLocalFileSystem(tmp,
@@ -163,7 +165,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
                 copyingKeyValueStoreBlob,
                 getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())),
                 getHashType(),
-                provenanceTracker);
+                provenanceTracer);
     }
 
     private static class NullKeyValueStore implements KeyValueStore {

@@ -7,8 +7,7 @@ import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 
 import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.ProvenanceTracker;
-import bio.guoda.preston.store.ProvenanceTrackerImpl;
+import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,7 @@ public class CloneUtil {
     public static void clone(KeyValueStore blobKeyValueStore,
                              KeyValueStore provenanceLogKeyValueStore,
                              HashType type,
-                             ProvenanceTracker provenanceTracker) {
+                             ProvenanceTracer provenanceTracer) {
 
         final BlobStoreReadOnly blobStore
                 = new BlobStoreAppendOnly(blobKeyValueStore, true, type);
@@ -36,7 +35,7 @@ public class CloneUtil {
 
         StatementsListener statementListener = blobToucher(blobStore);
         attemptReplay(provenanceLogStore,
-                provenanceTracker,
+                provenanceTracer,
                 statementListener);
     }
 

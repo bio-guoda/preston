@@ -11,17 +11,17 @@ import static bio.guoda.preston.RefNodeFactory.getVersionSource;
 
 public class ArchiverReadOnly extends VersionProcessor {
 
-    private final ProvenanceTracker provenanceTracker;
+    private final ProvenanceTracer provenanceTracer;
 
-    public ArchiverReadOnly(ProvenanceTracker provenanceTracker, StatementsListener... listeners) {
+    public ArchiverReadOnly(ProvenanceTracer provenanceTracer, StatementsListener... listeners) {
         super(listeners);
-        this.provenanceTracker = provenanceTracker;
+        this.provenanceTracer = provenanceTracer;
     }
 
     @Override
     void handleBlankVersion(Quad statement, BlankNode blankVersion) throws IOException {
         IRI versionSource = getVersionSource(statement);
-        provenanceTracker.findDescendants(versionSource, this::emit);
+        provenanceTracer.trace(versionSource, this::emit);
     }
 
 }

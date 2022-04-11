@@ -14,48 +14,25 @@ import java.io.InputStream;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static bio.guoda.preston.RefNodeFactory.toBlank;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
-public class ProvenanceTrackerImpl implements ProvenanceTracker {
-
-    private final HexaStoreReadOnly hexastore;
+public class TracerOfOrigins implements ProvenanceTracer {
 
     private final KeyValueStoreReadOnly blobStore;
 
-    public ProvenanceTrackerImpl(HexaStoreReadOnly hexastore) {
-        this(hexastore, null);
-    }
+    private final ProcessorState cmd;
 
-
-    public ProvenanceTrackerImpl(HexaStoreReadOnly hexastore, KeyValueStoreReadOnly blobStore) {
-        this.hexastore = hexastore;
+    public TracerOfOrigins(KeyValueStoreReadOnly blobStore, ProcessorState cmd) {
         this.blobStore = blobStore;
+        this.cmd = cmd;
+
     }
 
     @Override
-    public void findDescendants(IRI provenanceAnchor, StatementListener listener) throws IOException {
-        VersionUtil.findMostRecentVersion(provenanceAnchor, getHexastore(), listener);
-    }
-
-    @Override
-    public void traceOrigins(IRI provenanceAnchor, StatementListener listener) throws IOException {
+    public void trace(IRI provenanceAnchor, StatementListener listener) throws IOException {
         if (getBlobStore() == null) {
             throw new UnsupportedOperationException("finding origins of provenance logs is not possible without configuring a content store");
         }
-
-        ProcessorState state = new ProcessorState() {
-
-            @Override
-            public boolean shouldKeepProcessing() {
-                return true;
-            }
-
-            @Override
-            public void stopProcessing() {
-
-            }
-        };
 
         final Queue<IRI> statementQueue =
                 new ConcurrentLinkedQueue<IRI>() {{
@@ -63,7 +40,7 @@ public class ProvenanceTrackerImpl implements ProvenanceTracker {
                 }};
 
 
-        while (state.shouldKeepProcessing() && !statementQueue.isEmpty()) {
+        while (cmd.shouldKeepProcessing() && !statementQueue.isEmpty()) {
             IRI someOrigin = statementQueue.poll();
             InputStream inputStream = getBlobStore().get(someOrigin);
             if (inputStream != null) {
@@ -73,10 +50,10 @@ public class ProvenanceTrackerImpl implements ProvenanceTracker {
                         statementQueue
                 );
                 try {
-                    new EmittingStreamRDF(emitter, state, new ErrorHandlerNOOP())
+                    new EmittingStreamRDF(emitter, cmd, new ErrorHandlerNOOP())
                             .parseAndEmit(inputStream);
 
-                    emitOriginRootIfFound(someOrigin, listener, state, statementQueue);
+                    emitOriginRootIfFound(someOrigin, listener, cmd, statementQueue);
                 } catch (RiotException ex) {
                     // ignore opportunistic failure to parse possible provenance logs
                 }
@@ -97,10 +74,6 @@ public class ProvenanceTrackerImpl implements ProvenanceTracker {
                             provenanceAnchor)
             );
         }
-    }
-
-    public HexaStoreReadOnly getHexastore() {
-        return hexastore;
     }
 
     public KeyValueStoreReadOnly getBlobStore() {

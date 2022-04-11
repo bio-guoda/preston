@@ -102,7 +102,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
         };
         CmdContext ctx = new CmdContext(this, statementListener);
 
-        attemptReplay(blobStore, ctx, getProvenanceTracker());
+        attemptReplay(blobStore, ctx, getTracerOfDescendants());
     }
 
 

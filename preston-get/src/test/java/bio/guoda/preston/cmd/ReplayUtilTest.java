@@ -5,7 +5,8 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.HexaStore;
-import bio.guoda.preston.store.ProvenanceTrackerImpl;
+import bio.guoda.preston.store.TracerOfDescendants;
+import bio.guoda.preston.store.TracerOfOrigins;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -35,7 +36,7 @@ public class ReplayUtilTest {
         );
         ReplayUtil.attemptReplay(
                 getBlobStore(),
-                new ProvenanceTrackerImpl(getStatementStore()),
+                new TracerOfDescendants(getStatementStore(), new ProcessorStateAlwaysContinue()),
                 new VersionRetriever(getBlobStore()),
                 logger);
 
@@ -51,7 +52,8 @@ public class ReplayUtilTest {
         StatementLoggerNQuads logger = new StatementLoggerNQuads(new PrintStream(out, true));
         ReplayUtil.attemptReplay(
                 getBlobStore(),
-                TEST_KEY_IRI, new ProvenanceTrackerImpl(getStatementStore()),
+                TEST_KEY_IRI,
+                new TracerOfDescendants(getStatementStore(), new ProcessorStateAlwaysContinue()),
                 new VersionRetriever(getBlobStore()),
                 logger);
 
@@ -68,7 +70,8 @@ public class ReplayUtilTest {
         StatementLoggerNQuads logger = new StatementLoggerNQuads(new PrintStream(out, true));
         ReplayUtil.attemptReplay(
                 getBlobStore(),
-                TEST_KEY_NEWER_IRI, new ProvenanceTrackerImpl(getStatementStore()),
+                TEST_KEY_NEWER_IRI,
+                new TracerOfDescendants(getStatementStore(), new ProcessorStateAlwaysContinue()),
                 new VersionRetriever(getBlobStore()),
                 logger
         );
@@ -84,8 +87,10 @@ public class ReplayUtilTest {
         StatementLoggerNQuads logger = new StatementLoggerNQuads(new PrintStream(out, true));
         ReplayUtil.attemptReplay(
                 getBlobStore(),
-                RefNodeFactory.toIRI("non-existing"), new ProvenanceTrackerImpl(getStatementStore()),
-                new VersionRetriever(getBlobStore()), logger
+                RefNodeFactory.toIRI("non-existing"),
+                new TracerOfDescendants(getStatementStore(), new ProcessorStateAlwaysContinue()),
+                new VersionRetriever(getBlobStore()),
+                logger
         );
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), Is.is(""));

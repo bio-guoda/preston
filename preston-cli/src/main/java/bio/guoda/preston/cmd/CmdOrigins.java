@@ -1,10 +1,10 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RDFUtil;
-import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.VersionUtil;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -38,30 +38,21 @@ public class CmdOrigins extends LoggingPersisting implements Runnable {
                         .ValidatingKeyValueStreamContentAddressedFactory(getHashType())
         );
 
-
-
         StatementsListener logger = createPrintingLogger(
                 getLogMode(),
                 getPrintStream(),
                 this
         );
 
-
         AtomicBoolean foundHistory = new AtomicBoolean(false);
         try {
+            ProvenanceTracer tracer = getTracerOfOrigins(keyValueStore);
 
             if (provenanceAnchors.isEmpty()) {
-                handleStdIn(logger, foundHistory);
+                handleStdIn(logger, foundHistory, tracer);
             } else {
                 for (IRI provenanceAnchor : provenanceAnchors) {
-                    getProvenanceTracker()
-                            .traceOrigins(
-                                    provenanceAnchor,
-                                    statement -> {
-                                        foundHistory.set(true);
-                                        logger.on(statement);
-                                    }
-                            );
+                    handleProvAnchor(logger, foundHistory, tracer, provenanceAnchor);
                 }
 
             }
@@ -75,7 +66,18 @@ public class CmdOrigins extends LoggingPersisting implements Runnable {
         }
     }
 
-    private void handleStdIn(StatementsListener logger, AtomicBoolean foundHistory) throws IOException {
+    private void handleProvAnchor(StatementsListener logger, AtomicBoolean foundHistory, ProvenanceTracer tracer, IRI provenanceAnchor) throws IOException {
+        tracer
+                .trace(
+                        provenanceAnchor,
+                        statement -> {
+                            foundHistory.set(true);
+                            logger.on(statement);
+                        }
+                );
+    }
+
+    private void handleStdIn(StatementsListener logger, AtomicBoolean foundHistory, ProvenanceTracer tracer) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(getInputStream()));
         String line;
         while ((line = reader.readLine()) != null) {
@@ -91,14 +93,7 @@ public class CmdOrigins extends LoggingPersisting implements Runnable {
             if (quad != null) {
                 IRI provenanceAnchor = VersionUtil.mostRecentVersionForStatement(quad);
                 if (provenanceAnchor != null) {
-                    getProvenanceTracker()
-                            .traceOrigins(
-                                    provenanceAnchor,
-                                    statement -> {
-                                        foundHistory.set(true);
-                                        logger.on(statement);
-                                    }
-                            );
+                    handleProvAnchor(logger, foundHistory, tracer, provenanceAnchor);
                 }
             }
         }

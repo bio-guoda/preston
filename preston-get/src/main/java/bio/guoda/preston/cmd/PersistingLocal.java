@@ -10,13 +10,16 @@ import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.KeyValueStreamFactory;
-import bio.guoda.preston.store.ProvenanceTracker;
-import bio.guoda.preston.store.ProvenanceTrackerImpl;
+import bio.guoda.preston.store.ProvenanceTracer;
+import bio.guoda.preston.store.ProvenanceTracerFactoryImpl;
+import bio.guoda.preston.store.TracerOfDescendants;
+import bio.guoda.preston.store.TracerOfOrigins;
 import com.beust.jcommander.Parameter;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 
 public class PersistingLocal extends Cmd {
 
@@ -54,7 +57,7 @@ public class PersistingLocal extends Cmd {
         return new KeyValueStoreWithFallback(primary, fallback);
     }
 
-    protected ProvenanceTracker getProvenanceTracker() {
+    protected ProvenanceTracer getTracerOfDescendants() {
         KeyValueStore keyValueStore = getKeyValueStore(
                 new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())
         );
@@ -64,15 +67,11 @@ public class PersistingLocal extends Cmd {
                 getHashType()
         );
 
-        return new ProvenanceTrackerImpl(hexastore, keyValueStore);
+        return new TracerOfDescendants(hexastore, this);
     }
 
-    protected ProvenanceTracker getProvenanceTracker(KeyValueStore keyValueStore) {
-        return new ProvenanceTrackerImpl(
-                new HexaStoreImpl(
-                        keyValueStore,
-                        getHashType()
-                ));
+    protected ProvenanceTracer getTracerOfOrigins(KeyValueStore keyValueStore) {
+        return new TracerOfOrigins(keyValueStore, this);
     }
 
 

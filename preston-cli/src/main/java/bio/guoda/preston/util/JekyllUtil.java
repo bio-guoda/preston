@@ -13,7 +13,7 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.process.ValueListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.ProvenanceTracker;
+import bio.guoda.preston.store.ProvenanceTracer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -187,13 +187,13 @@ public class JekyllUtil {
     public static void writePrestonConfigFile(File target,
                                               AtomicReference<DateTime> lastCrawlTime,
                                               IRI provenanceRoot,
-                                              ProvenanceTracker provenanceTracker) {
+                                              ProvenanceTracer provenanceTracer) {
         final File data = new File(new File(target, "_data"), "preston.yml");
         try {
             FileUtils.forceMkdirParent(data);
             try (final FileOutputStream out = new FileOutputStream(data)) {
                 MostRecentVersionListener listener = new MostRecentVersionListener();
-                provenanceTracker.findDescendants(provenanceRoot, listener);
+                provenanceTracer.trace(provenanceRoot, listener);
                 final IRI mostRecentVersion = listener.getMostRecent();
                 final YAMLMapper yamlMapper = new YAMLMapper();
                 final ObjectNode objectNode = yamlMapper.createObjectNode();
