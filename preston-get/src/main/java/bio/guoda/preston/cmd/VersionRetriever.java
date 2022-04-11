@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementsListenerAdapter;
+import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +15,9 @@ import java.io.InputStream;
 public class VersionRetriever extends StatementsListenerAdapter {
     private static final Logger LOG = LoggerFactory.getLogger(VersionRetriever.class);
 
-    private final BlobStoreReadOnly blobStore;
+    private final KeyValueStoreReadOnly blobStore;
 
-    public VersionRetriever(BlobStoreReadOnly blobStore) {
+    public VersionRetriever(KeyValueStoreReadOnly blobStore) {
         this.blobStore = blobStore;
     }
 

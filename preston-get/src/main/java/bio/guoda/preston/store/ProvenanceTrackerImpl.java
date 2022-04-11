@@ -6,7 +6,6 @@ import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Quad;
 import org.apache.jena.riot.RiotException;
 import org.apache.jena.riot.system.ErrorHandler;
 
@@ -25,9 +24,9 @@ public class ProvenanceTrackerImpl implements ProvenanceTracker {
     private final KeyValueStoreReadOnly blobStore;
 
     public ProvenanceTrackerImpl(HexaStoreReadOnly hexastore) {
-        this.hexastore = hexastore;
-        this.blobStore = null;
+        this(hexastore, null);
     }
+
 
     public ProvenanceTrackerImpl(HexaStoreReadOnly hexastore, KeyValueStoreReadOnly blobStore) {
         this.hexastore = hexastore;
@@ -36,15 +35,14 @@ public class ProvenanceTrackerImpl implements ProvenanceTracker {
 
     @Override
     public void findDescendants(IRI provenanceAnchor, StatementListener listener) throws IOException {
-        VersionUtil.findMostRecentVersion(provenanceAnchor, hexastore, listener);
+        VersionUtil.findMostRecentVersion(provenanceAnchor, getHexastore(), listener);
     }
 
     @Override
     public void traceOrigins(IRI provenanceAnchor, StatementListener listener) throws IOException {
-        if (blobStore == null) {
+        if (getBlobStore() == null) {
             throw new UnsupportedOperationException("finding origins of provenance logs is not possible without configuring a content store");
         }
-
 
         ProcessorState state = new ProcessorState() {
 
@@ -66,47 +64,19 @@ public class ProvenanceTrackerImpl implements ProvenanceTracker {
 
 
         while (state.shouldKeepProcessing() && !statementQueue.isEmpty()) {
-            IRI origin = statementQueue.poll();
-            InputStream inputStream = blobStore.get(origin);
+            IRI someOrigin = statementQueue.poll();
+            InputStream inputStream = getBlobStore().get(someOrigin);
             if (inputStream != null) {
-                StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {
-
-                    @Override
-                    public void emit(Quad statement) {
-                        if (RefNodeConstants.USED_BY.equals(statement.getPredicate())) {
-                            if (statement.getSubject() instanceof IRI) {
-                                IRI subject = (IRI) statement.getSubject();
-                                if (HashKeyUtil.isValidHashKey(subject)) {
-                                    Quad originStatement =
-                                            toStatement(origin,
-                                                    RefNodeConstants.WAS_DERIVED_FROM,
-                                                    subject);
-                                    listener.on(originStatement);
-                                    statementQueue.add(subject);
-                                }
-                            }
-                        }
-                    }
-                };
+                StatementsEmitterAdapter emitter = new EmitsDerivedFrom(
+                        someOrigin,
+                        listener,
+                        statementQueue
+                );
                 try {
-                    new EmittingStreamRDF(emitter, state, new ErrorHandler() {
-                        @Override
-                        public void warning(String message, long line, long col) {
-                            // ignore
-                        }
-
-                        @Override
-                        public void error(String message, long line, long col) {
-                            // ignore
-                        }
-
-                        @Override
-                        public void fatal(String message, long line, long col) {
-                            // ignore
-                        }
-                    })
+                    new EmittingStreamRDF(emitter, state, new ErrorHandlerNOOP())
                             .parseAndEmit(inputStream);
-                    emitOriginRootIfFound(origin, listener, state, statementQueue);
+
+                    emitOriginRootIfFound(someOrigin, listener, state, statementQueue);
                 } catch (RiotException ex) {
                     // ignore opportunistic failure to parse possible provenance logs
                 }
@@ -126,6 +96,31 @@ public class ProvenanceTrackerImpl implements ProvenanceTracker {
                             RefNodeConstants.HAS_VERSION,
                             provenanceAnchor)
             );
+        }
+    }
+
+    public HexaStoreReadOnly getHexastore() {
+        return hexastore;
+    }
+
+    public KeyValueStoreReadOnly getBlobStore() {
+        return blobStore;
+    }
+
+    private static class ErrorHandlerNOOP implements ErrorHandler {
+        @Override
+        public void warning(String message, long line, long col) {
+            // ignore
+        }
+
+        @Override
+        public void error(String message, long line, long col) {
+            // ignore
+        }
+
+        @Override
+        public void fatal(String message, long line, long col) {
+            // ignore
         }
     }
 }

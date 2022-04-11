@@ -2,6 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.stream.ArchiveStreamHandler;
 import bio.guoda.preston.stream.CompressedStreamHandler;
 import bio.guoda.preston.stream.ContentStreamException;
@@ -42,7 +43,13 @@ public class TextMatcher extends ProcessorReadOnly {
     private int batchSize = 256;
     private final int maxNumMatchesPerContent;
 
-    public TextMatcher(Pattern pattern, int maxNumMatchesPerContent, boolean reportOnlyMatchingText, boolean separateLines, ProcessorState processorState, BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
+    public TextMatcher(Pattern pattern,
+                       int maxNumMatchesPerContent,
+                       boolean reportOnlyMatchingText,
+                       boolean separateLines,
+                       ProcessorState processorState,
+                       KeyValueStoreReadOnly blobStoreReadOnly,
+                       StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
         this.pattern = pattern;
         this.reportOnlyMatchingText = reportOnlyMatchingText;

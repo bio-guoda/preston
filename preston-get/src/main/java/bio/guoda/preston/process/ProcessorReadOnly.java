@@ -11,12 +11,12 @@ import java.util.Objects;
 
 public abstract class ProcessorReadOnly extends StatementProcessor implements KeyValueStoreReadOnly {
 
-    private final BlobStoreReadOnly blobStoreReadOnly;
+    private final KeyValueStoreReadOnly blobStoreReadOnly;
 
-    public ProcessorReadOnly(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
+    public ProcessorReadOnly(KeyValueStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         this(blobStoreReadOnly, new ProcessorStateAlwaysContinue(), listeners);
     }
-    public ProcessorReadOnly(BlobStoreReadOnly blobStoreReadOnly, ProcessorState state, StatementsListener... listeners) {
+    public ProcessorReadOnly(KeyValueStoreReadOnly blobStoreReadOnly, ProcessorState state, StatementsListener... listeners) {
         super(state, listeners);
         Objects.requireNonNull(blobStoreReadOnly);
         this.blobStoreReadOnly = blobStoreReadOnly;

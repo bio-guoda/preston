@@ -4,6 +4,7 @@ import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.cmd.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;
 import bio.guoda.preston.store.TestUtilForProcessor;
 import bio.guoda.preston.stream.MatchingTextStreamHandler;
@@ -263,14 +264,14 @@ public class TextMatcherTest {
     }
 
     private class TextFinder {
-        private final BlobStoreReadOnly blobStore;
+        private final KeyValueStoreReadOnly blobStore;
         private Pattern pattern;
         private int batchSize;
         private int maxNumMatches;
         private boolean reportOnlyMatchingText;
         private boolean separateLines;
 
-        public TextFinder(BlobStoreReadOnly blobStore) {
+        public TextFinder(KeyValueStoreReadOnly blobStore) {
             this.blobStore = blobStore;
             this.pattern = TextMatcher.URL_PATTERN;
             this.batchSize = 256;
