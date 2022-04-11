@@ -3,6 +3,8 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.StatementsListener;
+import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.VersionUtil;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -31,6 +33,13 @@ public class CmdOrigins extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
+        KeyValueStore keyValueStore = getKeyValueStore(
+                new KeyValueStoreLocalFileSystem
+                        .ValidatingKeyValueStreamContentAddressedFactory(getHashType())
+        );
+
+
+
         StatementsListener logger = createPrintingLogger(
                 getLogMode(),
                 getPrintStream(),

@@ -55,11 +55,15 @@ public class PersistingLocal extends Cmd {
     }
 
     protected ProvenanceTracker getProvenanceTracker() {
-        KeyValueStore keyValueStore = getKeyValueStore(new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType()));
+        KeyValueStore keyValueStore = getKeyValueStore(
+                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())
+        );
+
         HexaStoreImpl hexastore = new HexaStoreImpl(
                 keyValueStore,
                 getHashType()
         );
+
         return new ProvenanceTrackerImpl(hexastore, keyValueStore);
     }
 
