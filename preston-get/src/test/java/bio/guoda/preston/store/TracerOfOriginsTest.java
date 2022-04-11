@@ -119,7 +119,7 @@ public class TracerOfOriginsTest {
 
     @Test
     public void tracingMergedOriginsNoRemote() throws IOException, URISyntaxException {
-        KeyValueStore graphB = getKeyValueStoreForGraph("graphB/");
+        KeyValueStore graphB = getKeyValueStoreForGraph("b/");
 
         assertNotNull(graphB.get(RefNodeFactory.toIRI("hash://sha256/0cfebefb2c2de0de893ab11071dcbaac2b75c217a566a1f3739577b9b12265e8")));
 
@@ -168,8 +168,8 @@ public class TracerOfOriginsTest {
     @Ignore("see related https://github.com/bio-guoda/preston/issues/8")
     @Test
     public void tracingMergedOriginsWithRemote() throws IOException, URISyntaxException {
-        KeyValueStore graphB = getKeyValueStoreForGraph("graphB/");
-        KeyValueStore graphA = getKeyValueStoreForGraph("graphA/");
+        KeyValueStore graphB = getKeyValueStoreForGraph("b/");
+        KeyValueStore graphA = getKeyValueStoreForGraph("a/");
 
         assertNotNull(graphB.get(RefNodeFactory.toIRI("hash://sha256/0cfebefb2c2de0de893ab11071dcbaac2b75c217a566a1f3739577b9b12265e8")));
 
@@ -231,8 +231,8 @@ public class TracerOfOriginsTest {
     }
 
     private KeyValueStore getKeyValueStoreForGraph(String graphName) throws URISyntaxException {
-        String prefix = "/bio/guoda/preston/store/merged-a-into-b/";
-        String suffix = "data/2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a";
+        String prefix = "/bio/guoda/preston/store/merged/";
+        String suffix = "2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a";
         URL resource = getClass().getResource(prefix + graphName + suffix);
         File file = new File(resource.toURI());
         File dataDir = file.getParentFile().getParentFile().getParentFile();
