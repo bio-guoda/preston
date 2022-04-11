@@ -56,7 +56,7 @@ public class TracerOfDescendantsTest {
         HexaStoreReadOnly hexastore = new HexaStoreReadOnly() {
             @Override
             public IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException {
-                IRI iri = null;
+                IRI iri;
 
                 if (RefNodeFactory.toIRI(getOlder()).equals(queryKey.getValue())
                         && RefNodeConstants.HAS_PREVIOUS_VERSION.equals(queryKey.getKey())) {
