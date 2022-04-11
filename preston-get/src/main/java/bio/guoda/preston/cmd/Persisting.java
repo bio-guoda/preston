@@ -146,7 +146,7 @@ public class Persisting extends PersistingLocal {
     }
 
 
-    public static Dereferencer<InputStream> getDerefStream(URI baseURI, DerefProgressListener listener) {
+    private static Dereferencer<InputStream> getDerefStream(URI baseURI, DerefProgressListener listener) {
         Dereferencer<InputStream> dereferencer;
         if (StringUtils.equalsAnyIgnoreCase(baseURI.getScheme(), "file")) {
             dereferencer = getInputStreamDereferencerFile(listener);
@@ -156,7 +156,7 @@ public class Persisting extends PersistingLocal {
         return dereferencer;
     }
 
-    public static Dereferencer<InputStream> getInputStreamDereferencerFile(DerefProgressListener listener) {
+    private static Dereferencer<InputStream> getInputStreamDereferencerFile(DerefProgressListener listener) {
         return uri -> {
             URI uri1 = URI.create(uri.getIRIString());
             File file = new File(uri1);
@@ -166,7 +166,7 @@ public class Persisting extends PersistingLocal {
         };
     }
 
-    public static InputStream getInputStreamForFile(IRI uri, File file, DerefProgressListener listener) throws FileNotFoundException {
+    private static InputStream getInputStreamForFile(IRI uri, File file, DerefProgressListener listener) throws FileNotFoundException {
         return ContentStreamUtil.getInputStreamWithProgressLogger(uri, listener, file.length(), IOUtils.buffer(new FileInputStream(file)));
     }
 
