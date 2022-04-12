@@ -7,6 +7,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.text.StringEscapeUtils;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -60,7 +61,14 @@ public class CitationGeneratorTest {
 
         String actual = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
 
-        assertThat(actual, startsWith("Campos, Ernesto, Hernández-Ávila, Iván (2010): Phylogeny of Calyptraeotheres Campos, 1990 (Crustacea, Decapoda, Brachyura, Pinnotheridae) with the description of C. pepeluisi new species from the tropical Mexican Pacific. Zootaxa 2691: 41-52, DOI: 10.5281/zenodo.199558. Accessed at <zip:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/eml.xml> ."));
+        String expected =
+      //          "Campos, Ernesto, Hernández-Ávila, Iván (2010): Phylogeny of Calyptraeotheres Campos, 1990 (Crustacea, Decapoda, Brachyura, Pinnotheridae) with the description of C. pepeluisi new species from the tropical Mexican Pacific. Zootaxa 2691: 41-52, DOI: 10.5281/zenodo.199558. Accessed at <zip:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/eml.xml> .\n" +
+                "Campos, Ernesto, Hernández-Ávila, Iván (2010): Phylogeny of Calyptraeotheres Campos, 1990 (Crustacea, Decapoda, Brachyura, Pinnotheridae) with the description of C. pepeluisi new species from the tropical Mexican Pacific. Zootaxa 2691: 41-52, DOI: 10.5281/zenodo.199558. Accessed at <zip:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/eml.xml> .\n";
+        String difference = StringUtils.difference(expected, actual);
+        System.out.println("difference: [" + StringEscapeUtils.escapeJava(difference) + "]");
+        assertThat(difference, Is.is(""));
+
+        assertThat(actual, Is.is(expected));
     }
 
 }
