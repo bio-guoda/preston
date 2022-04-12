@@ -1,26 +1,31 @@
 package bio.guoda.preston.process;
 
-import java.io.PrintStream;
+import org.apache.commons.io.IOUtils;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 abstract public class StatementLogger extends StatementsListenerAdapter {
 
-    private final PrintStream out;
+    private final OutputStream os;
     private final LogErrorHandler handler;
 
-    public StatementLogger(PrintStream printWriter) {
-        this(printWriter, () -> {
+    public StatementLogger(OutputStream os) {
+        this(os, () -> {
             // ignore
         });
     }
 
-    public StatementLogger(PrintStream printWriter, LogErrorHandler handler) {
-        this.out = printWriter;
+    public StatementLogger(OutputStream os, LogErrorHandler handler) {
+        this.os = os;
         this.handler = handler;
     }
 
     protected void print(String message) {
-        out.print(message);
-        if (out.checkError()) {
+        try {
+            IOUtils.write(message, os, StandardCharsets.UTF_8);
+        } catch (IOException e) {
             handler.handleError();
         }
     }
