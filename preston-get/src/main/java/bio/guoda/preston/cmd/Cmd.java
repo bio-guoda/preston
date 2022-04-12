@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -49,6 +50,11 @@ public class Cmd implements ProcessorState {
     public void print(String msg, LogErrorHandler handler) {
         try {
             IOUtils.write(msg, getOutputStream(), StandardCharsets.UTF_8);
+            if (getOutputStream() instanceof PrintStream) {
+                if (((PrintStream) getOutputStream()).checkError()) {
+                    handler.handleError();
+                }
+            }
         } catch (IOException e) {
             handler.handleError();
         }
