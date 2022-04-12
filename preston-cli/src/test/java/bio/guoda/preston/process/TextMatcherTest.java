@@ -203,7 +203,7 @@ public class TextMatcherTest {
 
     @Test
     public void detectMatchesAcrossBufferBoundaries() {
-        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/textmatcher-4KB-boundary-test.tsv");
+        BlobStoreReadOnly blobStore = getTestBlobStoreForTextResource("/bio/guoda/preston/process/textmatcher-4KB-boundary-test.tsv");
 
         ArrayList<Quad> nodes = runTextFinder(blobStore);
         assertThat(nodes.size(), is(4));
@@ -214,7 +214,7 @@ public class TextMatcherTest {
 
     @Test
     public void detectSymbiotaOccurrenceReferences() {
-        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/textmatcher-symbiota-test.tsv");
+        BlobStoreReadOnly blobStore = getTestBlobStoreForTextResource("/bio/guoda/preston/process/textmatcher-symbiota-test.tsv");
 
         ArrayList<Quad> nodes = runTextFinder(blobStore, Pattern.compile("http[s]{0,1}://[a-zA-Z0-9.]+/portal/collections/individual/index.php[?]{1}occid=[0-9]+"));
 

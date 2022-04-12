@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static bio.guoda.preston.store.TestUtil.getTestBlobStoreForResource;
+import static bio.guoda.preston.store.TestUtil.getTestBlobStoreForTextResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -26,7 +27,7 @@ public class MatchingTextStreamHandlerTest {
         ContentStreamHandler handler = getLineTextMatcher(nodes, true);
 
         IRI contentIri = RefNodeFactory.toIRI("blah");
-        BlobStoreReadOnly store = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item_no_BOM.txt");
+        BlobStoreReadOnly store = getTestBlobStoreForTextResource("/bio/guoda/preston/process/bhl_item_no_BOM.txt");
 
         handler.handle(contentIri, store.get(contentIri));
 
@@ -41,7 +42,7 @@ public class MatchingTextStreamHandlerTest {
         ContentStreamHandler handler = getLineTextMatcher(nodes, false);
 
         IRI contentIri = RefNodeFactory.toIRI("blah");
-        BlobStoreReadOnly store = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
+        BlobStoreReadOnly store = getTestBlobStoreForTextResource("/bio/guoda/preston/process/bhl_item.txt");
 
         handler.handle(contentIri, store.get(contentIri));
 
