@@ -26,6 +26,7 @@ import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static bio.guoda.preston.store.TestUtil.getTestBlobStoreForResource;
+import static bio.guoda.preston.store.TestUtil.getTestBlobStoreForTextResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
@@ -101,7 +102,7 @@ public class TextMatcherTest {
 
     @Test
     public void onText() {
-        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
+        BlobStoreReadOnly blobStore = getTestBlobStoreForTextResource("/bio/guoda/preston/process/bhl_item.txt");
 
         ArrayList<Quad> nodes = runTextFinder(blobStore);
         assertThat(nodes.size(), is(12));
@@ -115,7 +116,7 @@ public class TextMatcherTest {
 
     @Test
     public void findMatchesInLines() {
-        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
+        BlobStoreReadOnly blobStore = getTestBlobStoreForTextResource("/bio/guoda/preston/process/bhl_item.txt");
 
         ArrayList<Quad> nodes = new TextFinder(blobStore).separateLines(true).findMatches();
         assertThat(nodes.size(), is(12));
@@ -129,7 +130,7 @@ public class TextMatcherTest {
 
     @Test
     public void findMatchingLines() {
-        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/bhl_item.txt");
+        BlobStoreReadOnly blobStore = getTestBlobStoreForTextResource("/bio/guoda/preston/process/bhl_item.txt");
 
         ArrayList<Quad> nodes = new TextFinder(blobStore).reportOnlyMatchingText(false).separateLines(true).findMatches();
         assertThat(nodes.size(), is(12));

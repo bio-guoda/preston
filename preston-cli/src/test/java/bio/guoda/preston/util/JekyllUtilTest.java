@@ -5,13 +5,13 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.TestUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.commons.text.StringEscapeUtils;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.joda.time.DateTime;
@@ -54,12 +54,7 @@ public class JekyllUtilTest {
         assertThat(osMap.size(), Is.is(1));
 
         final String actual = osMap.get(RefNodeFactory.toIRI("https://api.gbif.org/v1/occurrence/1142366485")).toString("UTF-8");
-        String expected = IOUtils.toString(getClass().getResourceAsStream("/bio/guoda/preston/process/jekyll/occurrence.md"), StandardCharsets.UTF_8.name());
-
-        System.out.println(StringEscapeUtils.escapeJava("actual [" + actual + "]"));
-        System.out.println(StringEscapeUtils.escapeJava("expected [" + expected + "]"));
-
-        assertThat(actual, Is.is(expected));
+        assertThat(actual, Is.is(TestUtil.removeCarriageReturn(getClass(), "/bio/guoda/preston/process/jekyll/occurrence.md")));
     }
 
     @Test
@@ -69,7 +64,7 @@ public class JekyllUtilTest {
         assertThat(osMap.size(), Is.is(100));
 
         final String actual = osMap.get(RefNodeFactory.toIRI(UUID.fromString("d2e46893-099f-45eb-9a76-d2a66f43bec8"))).toString("UTF-8");
-        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("/bio/guoda/preston/process/jekyll/recordset.md"), StandardCharsets.UTF_8.name())));
+        assertThat(actual, Is.is(TestUtil.removeCarriageReturn(getClass(),"/bio/guoda/preston/process/jekyll/recordset.md")));
     }
 
     @Test
@@ -81,7 +76,7 @@ public class JekyllUtilTest {
         assertThat(osMap.size(), Is.is(1));
 
         final String actual = StringUtils.toEncodedString(osMap.get(RefNodeFactory.toIRI(UUID.fromString("45e8135c-5cd9-4424-ae6e-a5910d3f2bb4"))).toByteArray(), StandardCharsets.UTF_8);
-        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("/bio/guoda/preston/process/jekyll/mediarecord.md"), StandardCharsets.UTF_8.name())));
+        assertThat(actual, Is.is(TestUtil.removeCarriageReturn(getClass(), "/bio/guoda/preston/process/jekyll/mediarecord.md")));
     }
 
     @Test
@@ -93,7 +88,7 @@ public class JekyllUtilTest {
         assertThat(osMap.size(), Is.is(2));
 
         final String actual = osMap.get(RefNodeFactory.toIRI(UUID.fromString("e6c5dffc-4ad1-4d9d-800f-5796baec1f65"))).toString("UTF-8");
-        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("/bio/guoda/preston/process/jekyll/record.md"), StandardCharsets.UTF_8.name())));
+        assertThat(actual, Is.is(TestUtil.removeCarriageReturn(getClass(),"/bio/guoda/preston/process/jekyll/record.md")));
     }
 
     private Map<IRI, ByteArrayOutputStream> writePagesIDigBio(String resource, JekyllUtil.RecordType recordType) throws IOException {

@@ -35,13 +35,30 @@ public class TestUtil {
         };
     }
 
+    public static BlobStoreReadOnly getTestBlobStoreForTextResource(String pathToResource) {
+        return new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                try {
+                    return filterLineFeedFromTextInputStream(getClass().getResourceAsStream(pathToResource));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+    }
+
     public static InputStream filterLineFeedFromTextInputStream(InputStream is) throws IOException {
         // Git client for windows is configured to insert \r (carriage returns) when checking out text files ; See e.g., https://github.com/nodejs/node/pull/20754
         // this causes issues when using hashes that reply on byte sequences.
         // https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
-        String s = IOUtils.toString(is, StandardCharsets.UTF_8);
-        String replace = StringUtils.replace(s, "\r\n", "\n");
+        String replace = removeCarriageReturn(is);
         return IOUtils.toInputStream(replace, StandardCharsets.UTF_8);
+    }
+
+    public static String removeCarriageReturn(InputStream is) throws IOException {
+        String s = IOUtils.toString(is, StandardCharsets.UTF_8);
+        return StringUtils.replace(s, "\r\n", "\n");
     }
 
     private static KeyValueStore getTestPersistence2() {
@@ -71,4 +88,7 @@ public class TestUtil {
     }
 
 
+    public static String removeCarriageReturn(Class clazz, String generatedResource) throws IOException {
+        return removeCarriageReturn(clazz.getResourceAsStream(generatedResource));
+    }
 }
