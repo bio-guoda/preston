@@ -65,9 +65,6 @@ public class CitationGeneratorTest {
                 "Campos, Ernesto, Hernández-Ávila, Iván (2010): Phylogeny of Calyptraeotheres Campos, 1990 (Crustacea, Decapoda, Brachyura, Pinnotheridae) with the description of C. pepeluisi new species from the tropical Mexican Pacific. Zootaxa 2691: 41-52, DOI: 10.5281/zenodo.199558. Accessed at <zip:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/eml.xml> .\n" +
                 "Campos, Ernesto, Hernández-Ávila, Iván (2010): Phylogeny of Calyptraeotheres Campos, 1990 (Crustacea, Decapoda, Brachyura, Pinnotheridae) with the description of C. pepeluisi new species from the tropical Mexican Pacific. Zootaxa 2691: 41-52, DOI: 10.5281/zenodo.199558. Accessed at <zip:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/eml.xml> .\n";
         String difference = StringUtils.difference(expected, actual);
-        System.out.println("actual: [" + StringEscapeUtils.escapeJava(actual) + "]");
-        System.out.println("expected: [" + StringEscapeUtils.escapeJava(expected) + "]");
-        System.out.println("difference: [" + StringEscapeUtils.escapeJava(difference) + "]");
         assertThat(difference, Is.is(""));
 
         assertThat(actual, Is.is(expected));
