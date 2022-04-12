@@ -11,6 +11,8 @@ import org.apache.jena.riot.system.ErrorHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -31,7 +33,7 @@ public class TracerOfOrigins implements ProvenanceTracer {
     @Override
     public void trace(IRI provenanceAnchor, StatementListener listener) throws IOException {
         if (getBlobStore() == null) {
-            throw new UnsupportedOperationException("finding origins of provenance logs is not possible without configuring a content store");
+            throw new UnsupportedOperationException("finding origins is not possible without configuring a content store");
         }
 
         final Queue<IRI> statementQueue =
@@ -44,16 +46,26 @@ public class TracerOfOrigins implements ProvenanceTracer {
             IRI someOrigin = statementQueue.poll();
             InputStream inputStream = getBlobStore().get(someOrigin);
             if (inputStream != null) {
+                List<IRI> discoveredStatements = new ArrayList<>();
                 StatementsEmitterAdapter emitter = new EmitsDerivedFrom(
                         someOrigin,
                         listener,
-                        statementQueue
+                        discoveredStatements
                 );
                 try {
                     new EmittingStreamRDF(emitter, cmd, new ErrorHandlerNOOP())
                             .parseAndEmit(inputStream);
 
-                    emitOriginRootIfFound(someOrigin, listener, cmd, statementQueue);
+                    if (discoveredStatements.size() == 0) {
+                        listener.on(
+                                toStatement(
+                                        RefNodeConstants.BIODIVERSITY_DATASET_GRAPH,
+                                        RefNodeConstants.HAS_VERSION,
+                                        someOrigin)
+                        );
+                    }
+                    statementQueue.addAll(discoveredStatements);
+
                 } catch (RiotException ex) {
                     // ignore opportunistic failure to parse possible provenance logs
                 }
@@ -62,18 +74,6 @@ public class TracerOfOrigins implements ProvenanceTracer {
         }
 
 
-    }
-
-    private void emitOriginRootIfFound(IRI provenanceAnchor, StatementListener listener, ProcessorState state, Queue<IRI> statementQueue) {
-        if (state.shouldKeepProcessing() && statementQueue.isEmpty()) {
-            // reached likely origin (or dead-end)
-            listener.on(
-                    toStatement(
-                            RefNodeConstants.BIODIVERSITY_DATASET_GRAPH,
-                            RefNodeConstants.HAS_VERSION,
-                            provenanceAnchor)
-            );
-        }
     }
 
     public KeyValueStoreReadOnly getBlobStore() {

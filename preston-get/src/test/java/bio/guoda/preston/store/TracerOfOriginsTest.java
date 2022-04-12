@@ -9,7 +9,6 @@ import bio.guoda.preston.process.StatementListener;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.hamcrest.core.Is;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -165,7 +164,6 @@ public class TracerOfOriginsTest {
         assertRootOrigin(versionStatements.get(3), "hash://sha256/431bef77364c1fda0740d18b4161ed40d1390b758b967eae1fd980971e1fac20");
     }
 
-    @Ignore("see related https://github.com/bio-guoda/preston/issues/8")
     @Test
     public void tracingMergedOriginsWithRemote() throws IOException, URISyntaxException {
         KeyValueStore graphB = getKeyValueStoreForGraph("b/");
@@ -217,16 +215,11 @@ public class TracerOfOriginsTest {
         assertThat(versionStatements.get(3).getObject(), Is.is(RefNodeFactory.toIRI("hash://sha256/685bba795be181b6643652387e0d9907ae282200e52f6357b49429d99db073fd")));
         assertThat(versionStatements.get(3).getGraphName().isPresent(), Is.is(false));
 
-        assertRootOrigin(versionStatements.get(4), "hash://sha256/685bba795be181b6643652387e0d9907ae282200e52f6357b49429d99db073fd");
+        assertRootOrigin(versionStatements.get(4), "hash://sha256/431bef77364c1fda0740d18b4161ed40d1390b758b967eae1fd980971e1fac20");
 
-        assertThat(versionStatements.get(5).getSubject(), Is.is(RefNodeFactory.toIRI("hash://sha256/19e965c900468b56f226bd7685dedb18940e07a1c044f166e6a602083583eb56")));
-        assertThat(versionStatements.get(5).getPredicate(), Is.is(RefNodeConstants.WAS_DERIVED_FROM));
-        assertThat(versionStatements.get(5).getObject(), Is.is(RefNodeFactory.toIRI("hash://sha256/431bef77364c1fda0740d18b4161ed40d1390b758b967eae1fd980971e1fac20")));
-        assertThat(versionStatements.get(5).getGraphName().isPresent(), Is.is(false));
+        assertRootOrigin(versionStatements.get(5), "hash://sha256/685bba795be181b6643652387e0d9907ae282200e52f6357b49429d99db073fd");
 
-        assertRootOrigin(versionStatements.get(6), "hash://sha256/431bef77364c1fda0740d18b4161ed40d1390b758b967eae1fd980971e1fac20");
-
-        assertThat(versionStatements.size(), Is.is(7));
+        assertThat(versionStatements.size(), Is.is(6));
 
     }
 

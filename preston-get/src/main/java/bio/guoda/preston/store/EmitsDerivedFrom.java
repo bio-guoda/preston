@@ -6,6 +6,8 @@ import bio.guoda.preston.process.StatementsEmitterAdapter;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Queue;
 
 import static bio.guoda.preston.RefNodeFactory.toStatement;
@@ -14,9 +16,9 @@ public class EmitsDerivedFrom extends StatementsEmitterAdapter {
 
     private final IRI origin;
     private final StatementListener listener;
-    private final Queue<IRI> statementQueue;
+    private final Collection<IRI> statementQueue;
 
-    public EmitsDerivedFrom(IRI origin, StatementListener listener, Queue<IRI> statementQueue) {
+    public EmitsDerivedFrom(IRI origin, StatementListener listener, Collection<IRI> statementQueue) {
         this.origin = origin;
         this.listener = listener;
         this.statementQueue = statementQueue;
