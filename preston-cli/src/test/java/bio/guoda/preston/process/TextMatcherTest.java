@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,7 @@ public class TextMatcherTest {
 
     @Test
     public void onTextWithNoUrls() {
-        BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("haha no URLs to see here", Charset.defaultCharset());
+        BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("haha no URLs to see here", StandardCharsets.UTF_8);
 
         ArrayList<Quad> nodes = runTextFinder(blobStore);
         assertThat(nodes.size(), is(3));
@@ -193,7 +194,7 @@ public class TextMatcherTest {
 
     @Test
     public void findMultiLineMatches() {
-        BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("one\ntwo\nthree", Charset.defaultCharset());
+        BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("one\ntwo\nthree", StandardCharsets.UTF_8);
 
         ArrayList<Quad> nodes = runTextFinder(blobStore, Pattern.compile("one\ntwo"));
         assertThat(nodes.size(), is(4));
@@ -222,7 +223,7 @@ public class TextMatcherTest {
 
     @Test
     public void usingRegexGroups() {
-        BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("the duck is in the pond", Charset.defaultCharset());
+        BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("the duck is in the pond", StandardCharsets.UTF_8);
 
         ArrayList<Quad> nodes = runTextFinder(blobStore, Pattern.compile("(?:the) (?<what>\\S+) (?>is) in the (\\S+)"));
         assertThat(nodes.size(), is(9));

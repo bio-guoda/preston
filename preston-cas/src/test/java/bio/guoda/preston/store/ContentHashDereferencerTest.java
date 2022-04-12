@@ -23,7 +23,7 @@ public class ContentHashDereferencerTest {
 
     @Test
     public void getByteRange() throws IOException {
-        BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("some bits and bytes", Charset.defaultCharset());
+        BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("some bits and bytes", StandardCharsets.UTF_8);
         InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("cut:" + aContentHash + "!/b6-9"));
         assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), is("bits"));
     }

@@ -30,7 +30,7 @@ public class CmdGetTest {
                 if (getAttemptCount.incrementAndGet() > 1 || !toIRI(aContentHash).equals(key)) {
                     throw new IOException("kaboom!");
                 }
-                return IOUtils.toInputStream("some bits and bytes", Charset.defaultCharset());
+                return IOUtils.toInputStream("some bits and bytes", StandardCharsets.UTF_8);
             }
         };
 
@@ -52,7 +52,7 @@ public class CmdGetTest {
                 if (getAttemptCount.incrementAndGet() > 1 || !toIRI(aContentHash).equals(key)) {
                     throw new IOException("kaboom!");
                 }
-                return IOUtils.toInputStream("some bits and bytes", Charset.defaultCharset());
+                return IOUtils.toInputStream("some bits and bytes", StandardCharsets.UTF_8);
             }
         };
 
@@ -77,7 +77,7 @@ public class CmdGetTest {
                 if (getAttemptCount.incrementAndGet() > 1 || !toIRI(aContentHash).equals(key)) {
                     throw new IOException("kaboom!");
                 }
-                return IOUtils.toInputStream("some bits and bytes", Charset.defaultCharset());
+                return IOUtils.toInputStream("some bits and bytes", StandardCharsets.UTF_8);
             }
         };
 
