@@ -15,11 +15,11 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class StatementLogFactory {
 
-    public static StatementsListener createPrintingLogger(LogTypes logMode, final PrintStream out, ProcessorState processorState) {
+    public static StatementsListener createPrintingLogger(LogTypes logMode, final OutputStream out, ProcessorState processorState) {
         return createPrintingLogger(logMode, out, processorState::stopProcessing);
     }
 
-    public static StatementsListener createPrintingLogger(LogTypes logMode, final PrintStream out, LogErrorHandler handler) {
+    public static StatementsListener createPrintingLogger(LogTypes logMode, final OutputStream out, LogErrorHandler handler) {
         StatementsListener logger;
         if (LogTypes.tsv == logMode) {
             logger = new StatementLoggerTSV(out, handler);

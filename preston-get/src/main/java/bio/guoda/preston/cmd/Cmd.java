@@ -1,7 +1,10 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.process.LogErrorHandler;
 import bio.guoda.preston.process.ProcessorState;
+import org.apache.commons.io.IOUtils;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -43,13 +46,11 @@ public class Cmd implements ProcessorState {
         return outputStream;
     }
 
-    public PrintStream getPrintStream() {
+    public void print(String msg, LogErrorHandler handler) {
         try {
-            return outputStream instanceof PrintStream
-                    ? (PrintStream) outputStream
-                    : new PrintStream(outputStream, false, StandardCharsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("no support for request encoding [" + StandardCharsets.UTF_8 + "]");
+            IOUtils.write(msg, getOutputStream(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            handler.handleError();
         }
     }
 

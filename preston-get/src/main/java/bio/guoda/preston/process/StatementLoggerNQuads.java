@@ -2,16 +2,17 @@ package bio.guoda.preston.process;
 
 import org.apache.commons.rdf.api.Quad;
 
+import java.io.OutputStream;
 import java.io.PrintStream;
 
 public class StatementLoggerNQuads extends StatementLogger {
 
-    public StatementLoggerNQuads(PrintStream printWriter) {
-        super(printWriter);
+    public StatementLoggerNQuads(OutputStream os) {
+        super(os);
     }
 
-    public StatementLoggerNQuads(PrintStream printWriter, LogErrorHandler handler) {
-        super(printWriter, handler);
+    public StatementLoggerNQuads(OutputStream os, LogErrorHandler handler) {
+        super(os, handler);
     }
 
     @Override

@@ -21,7 +21,7 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
 
         StatementsListener logger = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
-                getPrintStream(),
+                getOutputStream(),
                 this
         );
 

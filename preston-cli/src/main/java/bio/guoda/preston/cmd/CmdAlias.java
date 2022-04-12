@@ -33,7 +33,7 @@ public class CmdAlias extends CmdAppend implements Runnable {
         final StatementsListener listener = StatementLogFactory
                 .createPrintingLogger(
                         getLogMode(),
-                        getPrintStream(),
+                        getOutputStream(),
                         () -> System.exit(0)
                 );
 
@@ -110,7 +110,7 @@ public class CmdAlias extends CmdAppend implements Runnable {
                 archivingLogger,
                 StatementLogFactory.createPrintingLogger(
                         getLogMode(),
-                        getPrintStream(),
+                        getOutputStream(),
                         this
                 )
         };

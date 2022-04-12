@@ -30,7 +30,7 @@ public class CmdSketchDiff extends LoggingPersisting implements Runnable {
     public void run(BlobStoreReadOnly blobStoreReadOnly) {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
-                getPrintStream(),
+                getOutputStream(),
                 () -> System.exit(0));
 
 
