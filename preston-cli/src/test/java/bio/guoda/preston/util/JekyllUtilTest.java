@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.text.StringEscapeUtils;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.joda.time.DateTime;
@@ -53,6 +54,8 @@ public class JekyllUtilTest {
         assertThat(osMap.size(), Is.is(1));
 
         final String actual = osMap.get(RefNodeFactory.toIRI("https://api.gbif.org/v1/occurrence/1142366485")).toString("UTF-8");
+        System.out.println(StringEscapeUtils.escapeJava("actual [" + actual + "]"));
+
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("/bio/guoda/preston/process/jekyll/occurrence.md"), StandardCharsets.UTF_8.name())));
     }
 
