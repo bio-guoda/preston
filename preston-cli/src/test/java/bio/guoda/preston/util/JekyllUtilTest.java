@@ -54,9 +54,12 @@ public class JekyllUtilTest {
         assertThat(osMap.size(), Is.is(1));
 
         final String actual = osMap.get(RefNodeFactory.toIRI("https://api.gbif.org/v1/occurrence/1142366485")).toString("UTF-8");
-        System.out.println(StringEscapeUtils.escapeJava("actual [" + actual + "]"));
+        String expected = IOUtils.toString(getClass().getResourceAsStream("/bio/guoda/preston/process/jekyll/occurrence.md"), StandardCharsets.UTF_8.name());
 
-        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("/bio/guoda/preston/process/jekyll/occurrence.md"), StandardCharsets.UTF_8.name())));
+        System.out.println(StringEscapeUtils.escapeJava("actual [" + actual + "]"));
+        System.out.println(StringEscapeUtils.escapeJava("expected [" + expected + "]"));
+
+        assertThat(actual, Is.is(expected));
     }
 
     @Test
