@@ -69,7 +69,7 @@ public class JekyllUtil {
             FileUtils.deleteQuietly(contentVersions);
         }
         final PrintStream printWriter = new PrintStream(new FileOutputStream(contentVersions));
-        printWriter.println("url\tverb\thash\tgraphname");
+        printWriter.print("url\tverb\thash\tgraphname\n");
         final StatementListener versionLogger = new StatementLoggerTSV(printWriter);
         return createPageGenerators(store, posts, versionLogger);
     }
@@ -172,7 +172,8 @@ public class JekyllUtil {
         jsonFactory.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
         final ObjectWriter writer = new YAMLMapper(jsonFactory)
                 .writer(new DefaultPrettyPrinter()
-                        .withObjectIndenter(new DefaultIndenter().withLinefeed("\n")));
+                        .withObjectIndenter(new DefaultIndenter().withLinefeed("\n"))
+                );
         writer.writeValue(os, jekyllFrontMatterNode);
         org.apache.commons.io.IOUtils.write("---\n", os, StandardCharsets.UTF_8);
     }
