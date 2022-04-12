@@ -31,7 +31,7 @@ public class CmdSketchDiff extends LoggingPersisting implements Runnable {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
                 getOutputStream(),
-                () -> System.exit(0));
+                LogErrorHandlerExitOnError.EXIT_ON_ERROR);
 
 
         List<ProcessorReadOnly> diffCalculators = Arrays.asList(

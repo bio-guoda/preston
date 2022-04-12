@@ -10,7 +10,7 @@ public class CmdList extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        run(() -> System.exit(0));
+        run(LogErrorHandlerExitOnError.EXIT_ON_ERROR);
     }
 
     public void run(LogErrorHandler handler) {

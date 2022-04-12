@@ -34,7 +34,7 @@ public class CmdAlias extends CmdAppend implements Runnable {
                 .createPrintingLogger(
                         getLogMode(),
                         getOutputStream(),
-                        () -> System.exit(0)
+                        LogErrorHandlerExitOnError.EXIT_ON_ERROR
                 );
 
         run(listener);

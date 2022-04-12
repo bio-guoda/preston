@@ -32,7 +32,7 @@ public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
                 NullPrintStream.NULL_PRINT_STREAM,
-                () -> System.exit(0));
+                LogErrorHandlerExitOnError.EXIT_ON_ERROR);
 
         DwcRecordExtractor textMatcher = new DwcRecordExtractor(
                 this,

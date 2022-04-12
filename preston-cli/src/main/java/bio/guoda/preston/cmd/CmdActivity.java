@@ -25,7 +25,6 @@ import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.TracerOfDescendants;
-import bio.guoda.preston.store.TracerOfOrigins;
 import bio.guoda.preston.store.VersionUtil;
 import bio.guoda.preston.util.MostRecentVersionListener;
 import org.apache.commons.io.FileUtils;
@@ -40,8 +39,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -266,7 +264,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         private final HexaStore hexastore;
         private final ActivityContext ctx;
         File tmpArchive;
-        PrintStream printStream;
+        OutputStream os;
         StatementsListener listener;
 
         public ArchivingLogger(BlobStore blobStore, HexaStore provIndex, ActivityContext ctx) {
@@ -274,7 +272,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
             this.hexastore = provIndex;
             this.ctx = ctx;
             tmpArchive = null;
-            printStream = null;
+            os = null;
             listener = null;
         }
 
@@ -287,16 +285,16 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
         void start() throws IOException {
             tmpArchive = File.createTempFile("archive", "nq", getTmpDir());
-            printStream = new PrintStream(IOUtils.buffer(new FileOutputStream(tmpArchive)), true, StandardCharsets.UTF_8.name());
-            listener = new StatementLoggerNQuads(printStream);
+            os = IOUtils.buffer(new FileOutputStream(tmpArchive));
+            listener = new StatementLoggerNQuads(os);
         }
 
         void stop() throws IOException {
-            if (tmpArchive != null && tmpArchive.exists() && printStream != null && listener != null) {
-                printStream.flush();
-                printStream.close();
+            if (tmpArchive != null && tmpArchive.exists() && os != null && listener != null) {
+                os.flush();
+                os.close();
 
-                printStream = null;
+                os = null;
 
                 try (FileInputStream is = new FileInputStream(tmpArchive)) {
                     IRI newVersion = blobStore.put(is);
@@ -314,9 +312,13 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         }
 
         void destroy() {
-            if (printStream != null) {
-                printStream.flush();
-                printStream.close();
+            if (os != null) {
+                try {
+                    os.flush();
+                    os.close();
+                } catch (IOException e) {
+                    // ignore
+                }
             }
             if (tmpArchive != null) {
                 FileUtils.deleteQuietly(tmpArchive);

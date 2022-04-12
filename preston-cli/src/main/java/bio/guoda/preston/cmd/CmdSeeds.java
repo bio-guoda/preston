@@ -4,8 +4,6 @@ import bio.guoda.preston.Seeds;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.IRI;
 
-import java.io.PrintStream;
-
 @Parameters(separators = "= ", commandDescription = "lists supported biodiversity networks")
 public class CmdSeeds extends Cmd implements Runnable {
 
@@ -14,7 +12,9 @@ public class CmdSeeds extends Cmd implements Runnable {
         Seeds.AVAILABLE
                 .stream()
                 .map(IRI::getIRIString)
-                .forEach(x -> new PrintStream(getOutputStream()).print(x + "\n"));
+                .forEach(x -> {
+                    print(x + "\n", LogErrorHandlerExitOnError.EXIT_ON_ERROR);
+                });
     }
 
 }

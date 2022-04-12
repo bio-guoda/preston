@@ -21,7 +21,7 @@ public class StatementLoggerTest {
     @Test
     public void print() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        new StatementLogger(new PrintStream(out)) {
+        new StatementLogger(out) {
             @Override
             public void on(Quad statement) {
                 print("print me");

@@ -15,7 +15,6 @@ import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 @Parameters(separators = "= ", commandDescription = "creates sketches (e.g., bloom filters or theta sketches) from matched content for estimating content overlap")
 public class CmdCreateSketch extends LoggingPersisting implements Runnable {
@@ -33,7 +32,7 @@ public class CmdCreateSketch extends LoggingPersisting implements Runnable {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
                 getOutputStream(),
-                () -> System.exit(0)
+                LogErrorHandlerExitOnError.EXIT_ON_ERROR
         );
 
         try (SketchBuilder sketchCreator = getSketchCreator(blobStore, listener)) {

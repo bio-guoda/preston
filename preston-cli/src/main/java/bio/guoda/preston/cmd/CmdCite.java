@@ -9,11 +9,8 @@ import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameters;
-import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.Quad;
-
-import java.io.InputStream;
 
 @Parameters(separators = "= ", commandDescription = "Cites datasets in dataset archive")
 public class CmdCite extends LoggingPersisting implements Runnable {
@@ -30,7 +27,7 @@ public class CmdCite extends LoggingPersisting implements Runnable {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
                 NullPrintStream.NULL_PRINT_STREAM,
-                () -> System.exit(0));
+                LogErrorHandlerExitOnError.EXIT_ON_ERROR);
 
         CitationGenerator textMatcher = new CitationGenerator(
                 this,
