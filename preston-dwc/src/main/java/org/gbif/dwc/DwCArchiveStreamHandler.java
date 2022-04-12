@@ -73,8 +73,8 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
                         while (iterator.hasNext()) {
                             streamAsJson(resourceIRIs, tabularFileReader, iterator.next());
                         }
-                    } catch (IOException ex) {
-                        throw new ContentStreamException("failed to read or stream dwc records", ex);
+                    } catch (Throwable ex) {
+                        throw new ContentStreamException("failed to handle dwc records from [" + resourceIRIs.getLeft().getIRIString() + "]", ex);
                     }
                 }
 
