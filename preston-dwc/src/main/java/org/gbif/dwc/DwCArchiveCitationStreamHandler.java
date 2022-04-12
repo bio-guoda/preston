@@ -4,6 +4,7 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.gbif.dwc.meta.DwcMetaFiles;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -76,7 +78,7 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
 
     public class CitationSaxHandler extends SimpleSaxHandler {
 
-        private final PrintStream os;
+        private final OutputStream os;
         AtomicBoolean inCitation = new AtomicBoolean(false);
 
         AtomicReference<StringBuilder> builder = new AtomicReference<>();
@@ -86,7 +88,7 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
 
         public CitationSaxHandler(String metaDataIRI, OutputStream os) {
             this.namespace = metaDataIRI;
-            this.os = new PrintStream(os);
+            this.os = os;
         }
 
         @Override
@@ -106,13 +108,17 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
             super.startElement(uri, localName, qName, attributes);
         }
 
+        @Override
         public void endElement(String uri, String localName, String qName) throws SAXException {
             if (StringUtils.equals(qName, "citation")) {
                 inCitation.set(false);
                 String citationString = StringUtils.trim(builder.get().toString());
                 if (StringUtils.isNoneBlank(citationString)) {
-                    os.print
-                            (StringUtils.removeEnd(citationString, ".") + ". Accessed at <" + namespace + "> .\n");
+                    try {
+                        IOUtils.write(StringUtils.removeEnd(citationString, ".") + ". Accessed at <" + namespace + "> .\n", os, StandardCharsets.UTF_8);
+                    } catch (IOException e) {
+                        throw new SAXException("failed to handle [" + uri + "]", e);
+                    }
                 }
             }
             super.endElement(uri, localName, qName);
