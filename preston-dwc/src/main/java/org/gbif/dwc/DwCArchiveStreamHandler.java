@@ -50,40 +50,43 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
     @Override
     public boolean handle(IRI version, InputStream is) throws ContentStreamException {
         String iriString = version.getIRIString();
-        try {
-            if (StringUtils.endsWith(iriString, "/" + META_XML)) {
-                Archive starRecords = DwcMetaFiles.fromMetaDescriptor(is);
-                ArchiveFile core = starRecords.getCore();
-
-                List<Pair<IRI, ArchiveFile>> dwcaResourceIRIs = new ArrayList<>();
-
-
-                dwcaResourceIRIs.add(getLocation(iriString, core));
-                Set<ArchiveFile> extensions = starRecords.getExtensions();
-                for (ArchiveFile extension : extensions) {
-                    dwcaResourceIRIs.add(getLocation(iriString, extension));
-                }
-
-
-                for (Pair<IRI, ArchiveFile> resourceIRIs : dwcaResourceIRIs) {
-                    ArchiveFile file = resourceIRIs.getRight();
-                    try {
-                        TabularDataFileReader<List<String>> tabularFileReader = createReader(file, resourceIRIs.getLeft());
-                        ClosableIterator<Record> iterator = createRecordIterator(file, tabularFileReader);
-                        while (iterator.hasNext()) {
-                            streamAsJson(resourceIRIs, tabularFileReader, iterator.next());
-                        }
-                    } catch (Throwable ex) {
-                        throw new ContentStreamException("failed to handle dwc records from [" + resourceIRIs.getLeft().getIRIString() + "]", ex);
-                    }
-                }
-
+        if (StringUtils.endsWith(iriString, "/" + META_XML)) {
+            try {
+                handleAssumedDwCArchive(is, iriString);
                 return true;
+            } catch (IOException | SAXException e) {
+                throw new ContentStreamException("failed to handle assumed DwC resource [" + iriString + "]", e);
             }
-        } catch (IOException | SAXException e) {
-            throw new ContentStreamException("failed to parse [" + iriString + "]", e);
         }
         return false;
+    }
+
+    void handleAssumedDwCArchive(InputStream is, String iriString) throws SAXException, IOException, ContentStreamException {
+        Archive starRecords = DwcMetaFiles.fromMetaDescriptor(is);
+        ArchiveFile core = starRecords.getCore();
+
+        List<Pair<IRI, ArchiveFile>> dwcaResourceIRIs = new ArrayList<>();
+
+
+        dwcaResourceIRIs.add(getLocation(iriString, core));
+        Set<ArchiveFile> extensions = starRecords.getExtensions();
+        for (ArchiveFile extension : extensions) {
+            dwcaResourceIRIs.add(getLocation(iriString, extension));
+        }
+
+
+        for (Pair<IRI, ArchiveFile> resourceIRIs : dwcaResourceIRIs) {
+            ArchiveFile file = resourceIRIs.getRight();
+            try {
+                TabularDataFileReader<List<String>> tabularFileReader = createReader(file, resourceIRIs.getLeft());
+                ClosableIterator<Record> iterator = createRecordIterator(file, tabularFileReader);
+                while (iterator.hasNext()) {
+                    streamAsJson(resourceIRIs, tabularFileReader, iterator.next());
+                }
+            } catch (Throwable ex) {
+                throw new ContentStreamException("failed to handle dwc records from [" + resourceIRIs.getLeft().getIRIString() + "]", ex);
+            }
+        }
     }
 
     private void streamAsJson(Pair<IRI, ArchiveFile> resourceIRIs, TabularDataFileReader<List<String>> tabularFileReader, Record next) throws IOException {
@@ -133,7 +136,6 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
                 false,
                 false);
     }
-
 
 
 }

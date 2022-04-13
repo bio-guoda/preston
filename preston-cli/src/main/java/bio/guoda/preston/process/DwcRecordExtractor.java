@@ -13,6 +13,8 @@ import org.gbif.dwc.DwCArchiveStreamHandler;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +33,7 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 
 public class DwcRecordExtractor extends ProcessorReadOnly {
+    private final Logger LOG = LoggerFactory.getLogger(DwcRecordExtractor.class);
 
     private final ProcessorState processorState;
     private final OutputStream outputStream;
@@ -55,10 +58,12 @@ public class DwcRecordExtractor extends ProcessorReadOnly {
             MyContentStreamHandlerImpl nameReader = new MyContentStreamHandlerImpl(batchingStatementEmitter);
             try (InputStream in = get(version)) {
                 if (in != null) {
-                    nameReader.handle(version, in);
+                    try {
+                        nameReader.handle(version, in);
+                    } catch (ContentStreamException ex) {
+                        LOG.warn("suspicious DwC resource [" + version.getIRIString() + "] caused errors in processing", ex);
+                    }
                 }
-            } catch (ContentStreamException ex) {
-                // ignore; this is opportunistic
             } catch (IOException ex) {
                 throw new RuntimeException("failed to get [" + version.getIRIString() + "]", ex);
             }

@@ -80,4 +80,46 @@ public class DwcRecordExtractorTest {
 
     }
 
+    @Test
+    public void errorOnStreamingInvalidDwcRecordsToJSON() throws IOException {
+
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                URL resource = getClass().getResource("/bio/guoda/preston/plazidwca-broken-meta.xml.zip");
+                IRI iri = toIRI(resource.toExternalForm());
+
+                if (StringUtils.equals("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1", key.getIRIString())) {
+                    try {
+                        return new FileInputStream(new File(URI.create(iri.getIRIString())));
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return null;
+            }
+        };
+
+
+        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        DwcRecordExtractor dwcRecordExtractor = new DwcRecordExtractor(
+                new ProcessorStateAlwaysContinue(),
+                blobStore,
+                byteArrayOutputStream
+        );
+
+        try {
+            dwcRecordExtractor.on(statement);
+        } catch (RuntimeException ex) {
+            throw ex;
+        }
+
+        String actual = IOUtils.toString(byteArrayOutputStream.toByteArray(), StandardCharsets.UTF_8.name());
+
+        String[] jsonObjects = StringUtils.split(actual, "\n");
+        assertThat(jsonObjects.length, is(0));
+    }
+
 }
