@@ -1,11 +1,11 @@
-package bio.guoda.preston.process;
+package bio.guoda.preston;
 
-import bio.guoda.preston.RDFUtil;
+import bio.guoda.preston.process.LogErrorHandler;
+import bio.guoda.preston.process.StatementLogger;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.Optional;
 
 public class StatementLoggerTSV extends StatementLogger {

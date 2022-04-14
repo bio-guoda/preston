@@ -5,12 +5,10 @@ import bio.guoda.preston.cmd.LogTypes;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementLogger;
 import bio.guoda.preston.process.StatementLoggerNQuads;
-import bio.guoda.preston.process.StatementLoggerTSV;
 import bio.guoda.preston.process.StatementsListener;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class StatementLogFactory {
