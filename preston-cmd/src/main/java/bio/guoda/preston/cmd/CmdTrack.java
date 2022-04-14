@@ -61,4 +61,8 @@ public class CmdTrack extends CmdActivity {
                 listeners);
     }
 
+    public List<String> getIRIs() {
+        return IRIs;
+    }
+
 }

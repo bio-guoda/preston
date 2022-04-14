@@ -22,11 +22,15 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static bio.guoda.preston.RefNodeFactory.toBlank;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
@@ -39,6 +43,18 @@ public class CmdUpdate extends CmdTrack {
         add(Seeds.GBIF.getIRIString());
         add(Seeds.BIOCASE.getIRIString());
     }};
+
+    @Override
+    void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
+        if (getIRIs().isEmpty()) {
+            statementQueue.add(generateSeeds(ctx.getActivity()));
+        } else {
+            getIRIs().forEach(iri -> {
+                Quad quad = toStatement(ctx.getActivity(), toIRI(iri), HAS_VERSION, toBlank());
+                statementQueue.add(Collections.singletonList(quad));
+            });
+        }
+    }
 
     @Override
     String getActivityDescription() {
@@ -59,18 +75,6 @@ public class CmdUpdate extends CmdTrack {
                 new RegistryReaderALA(blobStore, queueAsListener)
         );
     }
-
-
-    private StatementsListener createActivityProcessor(
-            BlobStore blobStore,
-            ActivityContext ctx,
-            StatementsListener[] listeners) {
-        return new Archiver(
-                new DereferencerContentAddressed(ResourcesHTTP::asInputStream, blobStore),
-                ctx,
-                listeners);
-    }
-
 
     private List<Quad> generateSeeds(final IRI crawlActivity) {
         return seedUrls.stream()
