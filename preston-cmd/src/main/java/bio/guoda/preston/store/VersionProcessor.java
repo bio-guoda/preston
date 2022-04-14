@@ -1,6 +1,5 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.process.StatementProcessor;
 import bio.guoda.preston.process.StatementsListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

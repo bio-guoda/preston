@@ -1,4 +1,4 @@
-package bio.guoda.preston.cmd;
+package bio.guoda.preston.store;
 
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;

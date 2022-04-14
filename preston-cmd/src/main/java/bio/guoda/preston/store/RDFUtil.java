@@ -1,5 +1,6 @@
-package bio.guoda.preston;
+package bio.guoda.preston.store;
 
+import bio.guoda.preston.RDFValueUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.RDF;
 import org.apache.commons.rdf.api.RDFTerm;

@@ -1,8 +1,7 @@
-package bio.guoda.preston.process;
+package bio.guoda.preston.store;
 
-import bio.guoda.preston.cmd.ProcessorStateAlwaysContinue;
-import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.KeyValueStoreReadOnly;
+import bio.guoda.preston.process.ProcessorState;
+import bio.guoda.preston.process.StatementsListener;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;

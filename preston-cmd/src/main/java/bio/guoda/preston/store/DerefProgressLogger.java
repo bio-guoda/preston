@@ -1,4 +1,4 @@
-package bio.guoda.preston.cmd;
+package bio.guoda.preston.store;
 
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.DerefState;

@@ -1,4 +1,4 @@
-package bio.guoda.preston;
+package bio.guoda.preston.store;
 
 /*
     Preston - a commandline tool to help discover, access and archive the biodiversity data archives, identifiers and registries.

@@ -1,5 +1,6 @@
 package bio.guoda.preston;
 
+import bio.guoda.preston.store.ResourcesHTTP;
 import org.junit.Test;
 
 import java.io.File;

@@ -1,5 +1,6 @@
-package bio.guoda.preston.cmd;
+package bio.guoda.preston.store;
 
+import bio.guoda.preston.cmd.SelectiveListener;
 import bio.guoda.preston.process.StatementsListener;
 import org.apache.commons.rdf.api.Quad;
 

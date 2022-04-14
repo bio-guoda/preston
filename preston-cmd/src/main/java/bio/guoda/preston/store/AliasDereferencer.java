@@ -1,8 +1,6 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.cmd.AliasUtil;
-import bio.guoda.preston.cmd.Persisting;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import org.apache.commons.lang3.StringUtils;

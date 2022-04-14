@@ -9,11 +9,11 @@ public class CmdContext implements ProcessorContext {
     private IRI provRoot;
     private StatementsListener[] listeners;
 
-    CmdContext(ProcessorState state, StatementsListener... listeners) {
+    public CmdContext(ProcessorState state, StatementsListener... listeners) {
         this(state, RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, listeners);
     }
 
-    CmdContext(ProcessorState state, IRI provRoot, StatementsListener... listeners) {
+    public CmdContext(ProcessorState state, IRI provRoot, StatementsListener... listeners) {
         this.state = state;
         this.provRoot = provRoot;
         this.listeners = listeners;

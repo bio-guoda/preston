@@ -2,6 +2,7 @@ package bio.guoda.preston;
 
 import bio.guoda.preston.process.LogErrorHandler;
 import bio.guoda.preston.process.StatementLogger;
+import bio.guoda.preston.store.RDFUtil;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.Quad;
 

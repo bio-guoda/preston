@@ -1,6 +1,6 @@
-package bio.guoda.preston;
+package bio.guoda.preston.store;
 
-import bio.guoda.preston.process.StatementProcessor;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementsListener;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
