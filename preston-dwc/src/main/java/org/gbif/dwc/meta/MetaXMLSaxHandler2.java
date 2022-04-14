@@ -81,18 +81,19 @@ class MetaXMLSaxHandler2 extends SimpleSaxHandler {
         if (getAttr(attr, "encoding") != null) {
             dwcFile.setEncoding(getAttr(attr, "encoding"));
         }
-        if (getAttrRaw(attr, "fieldsTerminatedBy") != null) {
-            dwcFile.setFieldsTerminatedBy(unescapeBackslash(getAttrRaw(attr, "fieldsTerminatedBy")));
+        String fieldsTerminatedBy = getAttrRaw(attr, "fieldsTerminatedBy");
+        if (hasNonWhitespaceNonNullValue(fieldsTerminatedBy)) {
+            dwcFile.setFieldsTerminatedBy(unescapeBackslash(fieldsTerminatedBy));
         }
         // for fieldsEnclosedBy there is a distinction between not provided and provided with an empty string
         if (getAttr(attr, "fieldsEnclosedBy") != null) {
             dwcFile.setFieldsEnclosedBy(getFirstChar(getAttr(attr, "fieldsEnclosedBy")));
-        }
-        else if (getAttrRaw(attr, "fieldsEnclosedBy") != null) {
+        } else if (getAttrRaw(attr, "fieldsEnclosedBy") != null) {
             dwcFile.setFieldsEnclosedBy(null);
         }
-        if (getAttrRaw(attr, "linesTerminatedBy") != null) {
-            dwcFile.setLinesTerminatedBy(unescapeBackslash(getAttrRaw(attr, "linesTerminatedBy")));
+        String linesTerminatedBy = getAttrRaw(attr, "linesTerminatedBy");
+        if (hasNonWhitespaceNonNullValue(linesTerminatedBy)) {
+            dwcFile.setLinesTerminatedBy(unescapeBackslash(linesTerminatedBy));
         }
         if (getAttr(attr, "rowType") != null) {
             dwcFile.setRowType(TERM_FACTORY.findClassTerm(getAttr(attr, "rowType")));
@@ -103,6 +104,10 @@ class MetaXMLSaxHandler2 extends SimpleSaxHandler {
         } catch (NumberFormatException ignored) { // swallow null or bad value
         }
         return dwcFile;
+    }
+
+    private boolean hasNonWhitespaceNonNullValue(String linesTerminatedBy) {
+        return linesTerminatedBy != null && !StringUtils.containsOnly(linesTerminatedBy, " ");
     }
 
     /**
@@ -165,7 +170,6 @@ class MetaXMLSaxHandler2 extends SimpleSaxHandler {
      *
      * @param attributes
      * @param key
-     *
      * @return attributes value or null
      */
     private static String getAttr(Attributes attributes, String key) {
@@ -179,7 +183,6 @@ class MetaXMLSaxHandler2 extends SimpleSaxHandler {
      *
      * @param attributes
      * @param key
-     *
      * @return attribute value or null if not found
      */
     private static String getAttrRaw(Attributes attributes, String key) {
