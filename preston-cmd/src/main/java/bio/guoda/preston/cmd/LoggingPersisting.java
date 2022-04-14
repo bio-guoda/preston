@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.store.Persisting;
 import com.beust.jcommander.Parameter;
 import org.apache.commons.rdf.api.IRI;
 

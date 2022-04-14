@@ -1,7 +1,7 @@
 package bio.guoda.preston;
 
 import bio.guoda.preston.process.StatementsListenerAdapter;
-import bio.guoda.preston.store.StatementIRIProcessor;
+import bio.guoda.preston.process.StatementIRIProcessor;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 

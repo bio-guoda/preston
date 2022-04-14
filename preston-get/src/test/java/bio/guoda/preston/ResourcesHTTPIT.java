@@ -1,6 +1,5 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.store.ResourcesHTTP;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;

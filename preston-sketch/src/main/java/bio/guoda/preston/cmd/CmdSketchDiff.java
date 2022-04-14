@@ -1,20 +1,18 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.process.SketchIntersectBloomFilter;
-import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.ProcessorReadOnly;
+import bio.guoda.preston.process.SketchIntersectBloomFilter;
+import bio.guoda.preston.process.SketchIntersectTheta;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.process.SketchIntersectTheta;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.Quad;
 
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 

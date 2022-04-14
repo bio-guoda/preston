@@ -1,9 +1,9 @@
-package bio.guoda.preston.store;
+package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.cmd.Persisting;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStreamFactory;
-import bio.guoda.preston.store.Persisting;
 import bio.guoda.preston.store.ValidatingKeyValueStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;

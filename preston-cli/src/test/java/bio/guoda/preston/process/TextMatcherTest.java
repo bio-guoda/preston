@@ -2,7 +2,6 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.cmd.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;

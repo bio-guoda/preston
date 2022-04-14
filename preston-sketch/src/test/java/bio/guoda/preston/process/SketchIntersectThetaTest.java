@@ -2,6 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.StatementProcessor;
 import bio.guoda.preston.store.TestUtil;
 import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.io.IOUtils;

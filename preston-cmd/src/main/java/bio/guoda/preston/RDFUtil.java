@@ -1,4 +1,4 @@
-package bio.guoda.preston.store;
+package bio.guoda.preston;
 
 import bio.guoda.preston.RDFValueUtil;
 import org.apache.commons.io.IOUtils;

@@ -1,6 +1,9 @@
-package bio.guoda.preston.process;
+package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.process.ProcessorContext;
+import bio.guoda.preston.process.ProcessorState;
+import bio.guoda.preston.process.StatementsListener;
 import org.apache.commons.rdf.api.IRI;
 
 public class CmdContext implements ProcessorContext {

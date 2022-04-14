@@ -1,6 +1,7 @@
-package bio.guoda.preston.store;
+package bio.guoda.preston;
 
 import bio.guoda.preston.DerefProgressListener;
+import bio.guoda.preston.Version;
 import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;

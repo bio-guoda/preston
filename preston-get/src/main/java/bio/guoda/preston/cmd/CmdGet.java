@@ -1,14 +1,12 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.store.IRIFixingProcessor;
-import bio.guoda.preston.store.Persisting;
-import bio.guoda.preston.store.RDFUtil;
+import bio.guoda.preston.IRIFixingProcessor;
+import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.URIValidator;
 import bio.guoda.preston.store.VersionUtil;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;

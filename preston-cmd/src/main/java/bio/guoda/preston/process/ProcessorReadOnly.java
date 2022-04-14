@@ -1,7 +1,7 @@
-package bio.guoda.preston.store;
+package bio.guoda.preston.process;
 
-import bio.guoda.preston.process.ProcessorState;
-import bio.guoda.preston.process.StatementsListener;
+import bio.guoda.preston.store.KeyValueStoreReadOnly;
+import bio.guoda.preston.store.StatementProcessor;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;

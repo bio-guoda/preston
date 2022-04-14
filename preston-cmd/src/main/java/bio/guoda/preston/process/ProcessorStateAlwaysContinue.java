@@ -1,4 +1,4 @@
-package bio.guoda.preston.store;
+package bio.guoda.preston.process;
 
 import bio.guoda.preston.process.ProcessorState;
 

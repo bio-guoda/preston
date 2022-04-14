@@ -1,7 +1,10 @@
-package bio.guoda.preston.store;
+package bio.guoda.preston.process;
 
+import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.IRIProcessor;
 import bio.guoda.preston.process.StatementsListener;
+import bio.guoda.preston.store.StatementProcessor;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;

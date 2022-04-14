@@ -1,7 +1,6 @@
-package bio.guoda.preston.store;
+package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.HashType;
-import bio.guoda.preston.process.Cmd;
 import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyTo5LevelPath;

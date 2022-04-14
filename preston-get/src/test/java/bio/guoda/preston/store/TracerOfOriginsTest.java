@@ -4,6 +4,7 @@ package bio.guoda.preston.store;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.process.StatementListener;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;

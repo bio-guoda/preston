@@ -1,8 +1,8 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStore;
+import bio.guoda.preston.RDFUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
