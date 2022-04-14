@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<eml:eml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ds="eml://ecoinformatics.org/dataset-2.1.1" packageId="ie.nbdc.dataset.MammalsOfIreland2016-2025" system="http://gbif.biodiversityireland.ie/" scope="system" xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml.xsd" xmlns:eml="eml://ecoinformatics.org/eml-2.1.1">
+  <dataset>
+    <alternateIdentifier>MammalsOfIreland2016-2025</alternateIdentifier>
+    <title>Mammals of Ireland 2016-2025</title>
+    <creator>
+      <individualName>
+        <surName>Dr. Liam Lysaght</surName>
+      </individualName>
+      <organizationName>Collated by the National Biodiversity Data Centre from different sources</organizationName>
+      <address>
+        <deliveryPoint>National Biodiversity Data Centre, Carriganore WIT West Campus, Waterford, Ireland.</deliveryPoint>
+        <country>Ireland</country>
+      </address>
+      <phone>+353 51 306240</phone>
+      <electronicMailAddress>llysaght@biodiversityireland.ie</electronicMailAddress>
+      <onlineUrl>http://www.biodiversityireland.ie/</onlineUrl>
+    </creator>
+    <metadataProvider>
+      <organizationName>National Biodiversity Data Centre, Ireland</organizationName>
+      <address>
+        <deliveryPoint>Beechfield house, Carriganore WIT West Campus</deliveryPoint>
+        <city>Waterford</city>
+        <administrativeArea>County Waterford</administrativeArea>
+        <country>Ireland</country>
+      </address>
+      <phone>+353 (0)51 306 240</phone>
+      <electronicMailAddress>info@biodiversityireland.ie</electronicMailAddress>
+      <onlineUrl>http://www.biodiversityireland.ie/</onlineUrl>
+    </metadataProvider>
+    <pubDate>2019-04-18Z</pubDate>
+    <language>en</language>
+    <abstract>
+      <para>Observations of wild and feral mammals.</para>
+    </abstract>
+    <additionalInfo>
+      <para />
+    </additionalInfo>
+    <intellectualRights>
+      <para>This work is licensed under a<ulink url="http://creativecommons.org/licenses/by/4.0/legalcode"><citetitle>Creative Commons Attribution (CC-BY) 4.0 License</citetitle></ulink></para>
+    </intellectualRights>
+    <distribution>
+      <online>
+        <url function="information">http://maps.biodiversityireland.ie/DataSet/253</url>
+      </online>
+    </distribution>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>The island of Ireland.</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-10.6135758400</westBoundingCoordinate>
+          <eastBoundingCoordinate>-5.5487835600</eastBoundingCoordinate>
+          <northBoundingCoordinate>55.4314995200</northBoundingCoordinate>
+          <southBoundingCoordinate>51.4243568300</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>1987</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2018</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <purpose>
+      <para>To maintain data on sightings of mammals made by the general  and to make these data available for research, to inform decision-making and for other conservation-related purposes.</para>
+    </purpose>
+    <contact>
+      <individualName>
+        <givenName>Barry</givenName>
+        <surName>O'Neill</surName>
+      </individualName>
+      <organizationName>National Biodiversity Data Centre, Ireland</organizationName>
+      <address>
+        <deliveryPoint>Beechfield house, Carriganore WIT West Campus</deliveryPoint>
+        <city>Waterford</city>
+        <administrativeArea>County Waterford</administrativeArea>
+        <country>Ireland</country>
+      </address>
+      <phone>+353 (0)51 306 240</phone>
+      <electronicMailAddress>boneill@biodiversityireland.ie</electronicMailAddress>
+      <onlineUrl>http://www.biodiversityireland.ie/</onlineUrl>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>Mostly collation of casual sightings of wild and feral mammals submitted directly to the National Biodiversity Data Centre.</para>
+        </description>
+      </methodStep>
+      <qualityControl>
+        <description>
+          <para>All data have undergone validation.</para>
+        </description>
+      </qualityControl>
+    </methods>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <gbif>
+        <dateStamp>2019-04-18T15:42:51.7067268+01:00</dateStamp>
+        <citation>National Biodiversity Data Centre: Collated by the National Biodiversity Data Centre from different sources - Mammals of Ireland 2016-2025. Dataset/Occurrence.</citation>
+      </gbif>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

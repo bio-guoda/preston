@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<archive xmlns="http://rs.tdwg.org/dwc/text/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xsi:schemaLocation="http://rs.tdwg.org/dwc/text/ http://rs.tdwg.org/dwc/text/tdwg_dwc_text.xsd"
+  metadata="eml.xml">
+  <core encoding="UTF-8" fieldsTerminatedBy="," linesTerminatedBy="\n" fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/DarwinCore">
+    <files>
+      <location>DarwinCore.txt</location>
+    </files>
+    <id index="0" />
+    <field term="http://purl.org/dc/terms/type" default="Occurrence" vocabulary="http://rs.gbif.org/vocabulary/gbif/resource_type.xml" />
+    <field index="1" term="http://purl.org/dc/terms/modified" />
+    <field term="http://rs.tdwg.org/dwc/terms/basisOfRecord" default="HumanObservation" vocabulary="http://rs.gbif.org/vocabulary/dwc/basis_of_record.xml" />
+    <field index="2" term="http://rs.tdwg.org/dwc/terms/dynamicProperties" />
+    <field index="3" term="http://rs.tdwg.org/dwc/terms/datasetID" />
+    <field term="http://rs.tdwg.org/dwc/terms/institutionCode" default="NBDC" />
+    <field index="4" term="http://rs.tdwg.org/dwc/terms/collectionCode" />
+    <field index="5" term="http://rs.tdwg.org/dwc/terms/catalogNumber" />
+    <field index="6" term="http://rs.tdwg.org/dwc/terms/recordedBy" />
+    <field index="7" term="http://rs.tdwg.org/dwc/terms/individualCount" />
+    <field index="8" term="http://rs.tdwg.org/dwc/terms/eventDate" />
+    <field index="9" term="http://rs.tdwg.org/dwc/terms/eventRemarks" />
+    <field term="http://rs.tdwg.org/dwc/terms/continent" default="Europe" />
+    <field term="http://rs.tdwg.org/dwc/terms/country" default="Ireland" />
+    <field term="http://rs.tdwg.org/dwc/terms/countryCode" default="IE" />
+    <field index="10" term="http://rs.tdwg.org/dwc/terms/locality" />
+    <field index="11" term="http://rs.tdwg.org/dwc/terms/decimalLatitude" />
+    <field index="12" term="http://rs.tdwg.org/dwc/terms/decimalLongitude" />
+    <field term="http://rs.tdwg.org/dwc/terms/geodeticDatum" default="EPSG:4326" />
+    <field index="13" term="http://rs.tdwg.org/dwc/terms/coordinateUncertaintyInMeters" />
+    <field term="http://rs.tdwg.org/dwc/terms/georeferenceVerificationStatus" default="verified by contributor" />
+    <field index="14" term="http://rs.tdwg.org/dwc/terms/scientificName" />
+    <field index="15" term="http://rs.tdwg.org/dwc/terms/taxonRank" />
+    <field index="16" term="http://rs.tdwg.org/dwc/terms/scientificNameAuthorship" />
+    <field index="17" term="http://rs.tdwg.org/dwc/terms/taxonomicStatus" vocabulary="http://rs.gbif.org/vocabulary/gbif/taxonomic_status.xml" />
+    <field index="18" term="http://rs.tdwg.org/dwc/terms/vernacularName" /> 
+    <field index="19" term="http://rs.tdwg.org/dwc/terms/occurrenceID" />
+    <field term="http://purl.org/dc/terms/license" default="http://creativecommons.org/licenses/by/4.0/legalcode" />
+    <field term="http://rs.tdwg.org/dwc/terms/#georeferenceRemarks" default="Data has been captured using a grid reference system. Provided location represents cell’s centre point and uncertainty represents cell’s size" />
+  </core>
+</archive>
