@@ -82,13 +82,11 @@ public class Archiver extends VersionProcessor {
                 downloadActivity,
                 IS_A,
                 toIRI("http://www.w3.org/ns/prov#Generation")));
-        if (sourceActivity.isPresent()) {
-            emitter.emit(toStatement(
-                    downloadActivity,
-                    downloadActivity,
-                    toIRI("http://www.w3.org/ns/prov#wasInformedBy"),
-                    sourceActivity.get()));
-        }
+        sourceActivity.ifPresent(blankNodeOrIRI -> emitter.emit(toStatement(
+                downloadActivity,
+                downloadActivity,
+                toIRI("http://www.w3.org/ns/prov#wasInformedBy"),
+                blankNodeOrIRI)));
         emitter.emit(toStatement(
                 downloadActivity,
                 downloadActivity,

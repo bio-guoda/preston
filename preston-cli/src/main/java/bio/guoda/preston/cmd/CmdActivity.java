@@ -144,18 +144,19 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                         getOutputStream(),
                         this);
 
-        return Stream.concat(
-                createProcessors(blobStore, new StatementsListener() {
-                    @Override
-                    public void on(Quad statement) {
-                        on(Collections.singletonList(statement));
-                    }
+        Stream<StatementsListener> processors = createProcessors(blobStore, new StatementsListener() {
+            @Override
+            public void on(Quad statement) {
+                on(Collections.singletonList(statement));
+            }
 
-                    @Override
-                    public void on(List<Quad> statements) {
-                        statementQueue.add(statements);
-                    }
-                }),
+            @Override
+            public void on(List<Quad> statements) {
+                statementQueue.add(statements);
+            }
+        });
+        return Stream.concat(
+                processors,
                 createLoggers(archivingLogger, printingLogger)
         ).toArray(StatementsListener[]::new);
     }
@@ -175,17 +176,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     }
 
     protected Stream<StatementsListener> createProcessors(BlobStoreReadOnly blobStore, StatementsListener queueAsListener) {
-        return Stream.of(
-                new RegistryReaderIDigBio(blobStore, queueAsListener),
-                new RegistryReaderGBIF(blobStore, queueAsListener),
-                new RegistryReaderBioCASE(blobStore, queueAsListener),
-                new RegistryReaderDataONE(blobStore, queueAsListener),
-                new RegistryReaderRSS(blobStore, queueAsListener),
-                new RegistryReaderBHL(blobStore, queueAsListener),
-                new RegistryReaderOBIS(blobStore, queueAsListener),
-                new RegistryReaderDOI(blobStore, queueAsListener),
-                new RegistryReaderALA(blobStore, queueAsListener)
-        );
+        return Stream.empty();
     }
 
 
