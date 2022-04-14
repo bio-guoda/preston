@@ -1,13 +1,11 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.cmd.CitationGenerator;
 import bio.guoda.preston.cmd.Cmd;
-import bio.guoda.preston.cmd.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.commons.text.StringEscapeUtils;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -24,7 +22,6 @@ import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.startsWith;
 
 public class CitationGeneratorTest {
     @Test

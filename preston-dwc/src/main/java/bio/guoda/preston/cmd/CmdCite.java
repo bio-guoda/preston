@@ -1,7 +1,6 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.process.CitationGenerator;
 import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
