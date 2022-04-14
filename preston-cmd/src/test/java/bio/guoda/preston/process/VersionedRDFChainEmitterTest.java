@@ -8,6 +8,7 @@ import bio.guoda.preston.store.VersionedRDFChainEmitter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -17,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class VersionedRDFChainEmitterTest {
@@ -32,11 +34,11 @@ public class VersionedRDFChainEmitterTest {
         reader.on(RefNodeFactory
                 .toStatement(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, RefNodeConstants.HAS_VERSION, SOME));
 
-        MatcherAssert.assertThat(nodes.size(), Is.is(10));
+        assertThat(nodes.size(), Is.is(10));
 
-        MatcherAssert.assertThat(nodes.get(0).getObject(),
+        assertThat(nodes.get(0).getObject(),
                 Is.is(RefNodeFactory.toIRI("http://www.w3.org/ns/prov#SoftwareAgent")));
-        MatcherAssert.assertThat(nodes.get(3).getSubject(),
+        assertThat(nodes.get(3).getSubject(),
                 Is.is(RefNodeFactory.toIRI("urn:uuid:5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1")));
     }
 
@@ -65,12 +67,12 @@ public class VersionedRDFChainEmitterTest {
         reader.on(RefNodeFactory
                 .toStatement(OTHER, RefNodeConstants.HAS_PREVIOUS_VERSION, RefNodeFactory.toIRI("http://some")));
 
-        MatcherAssert.assertThat(nodes.size(), Is.is(20));
+        assertThat(nodes.size(), Is.is(20));
 
-        MatcherAssert.assertThat(nodes.get(0).getObject(), Is.is(RefNodeFactory.toIRI("http://www.w3.org/ns/prov#SoftwareAgent")));
-        MatcherAssert.assertThat(nodes.get(3).getSubject(), Is.is(RefNodeFactory.toIRI("urn:uuid:5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1")));
-        MatcherAssert.assertThat(nodes.get(10).getObject(), Is.is(RefNodeFactory.toIRI("http://www.w3.org/ns/prov#SoftwareAgent")));
-        MatcherAssert.assertThat(nodes.get(13).getSubject(), Is.is(RefNodeFactory.toIRI("urn:uuid:653d230a-4cdc-46da-99b6-3df33fb48a55")));
+        assertThat(nodes.get(0).getObject(), Is.is(RefNodeFactory.toIRI("http://www.w3.org/ns/prov#SoftwareAgent")));
+        assertThat(nodes.get(3).getSubject(), Is.is(RefNodeFactory.toIRI("urn:uuid:5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1")));
+        assertThat(nodes.get(10).getObject(), Is.is(RefNodeFactory.toIRI("http://www.w3.org/ns/prov#SoftwareAgent")));
+        assertThat(nodes.get(13).getSubject(), Is.is(RefNodeFactory.toIRI("urn:uuid:653d230a-4cdc-46da-99b6-3df33fb48a55")));
 
     }
 
@@ -107,7 +109,7 @@ public class VersionedRDFChainEmitterTest {
             }
         }).parseAndEmit(IOUtils.toInputStream(nqString, StandardCharsets.UTF_8));
 
-        MatcherAssert.assertThat(actual.toString(), Is.is(nqString));
+        assertThat(actual.toString(), Is.is(nqString));
     }
 
 }
