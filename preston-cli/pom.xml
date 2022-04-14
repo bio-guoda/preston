@@ -16,11 +16,6 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>preston-get</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>preston-dwc</artifactId>
             <version>${project.version}</version>
         </dependency>

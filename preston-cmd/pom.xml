@@ -9,39 +9,22 @@
         <relativePath>../preston-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>preston-dwc</artifactId>
-    <name>Preston Darwin Core</name>
-    <description>Preston Content Handler for Darwin Core Archives</description>
+    <artifactId>preston-cmd</artifactId>
+    <name>Preston Commands</name>
+    <description>basic Preston commands</description>
 
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>preston-cmd</artifactId>
+            <artifactId>preston-get</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.gbif</groupId>
-            <artifactId>dwca-io</artifactId>
-            <version>2.11</version>
-        </dependency>
-        <dependency>
+         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>preston-test</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-        <repository>
-            <id>gbif-repository</id>
-            <url>https://repository.gbif.org/content/groups/gbif</url>
-        </repository>
-    </repositories>
-
 
 </project>

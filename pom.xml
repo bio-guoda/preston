@@ -17,6 +17,7 @@
         <module>preston-dwc</module>
         <module>preston-hexas</module>
         <module>preston-get</module>
+        <module>preston-cmd</module>
         <module>preston-cli</module>
         <module>preston-sketch</module>
         <module>preston-aws</module>
