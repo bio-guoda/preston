@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.gbif.dwc.meta.DwcMetaFiles;
+import org.gbif.dwc.meta.DwcMetaFiles2;
 import org.gbif.dwc.record.Record;
 import org.gbif.dwc.terms.Term;
 import org.gbif.utils.file.ClosableIterator;
@@ -52,7 +53,7 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
         String iriString = version.getIRIString();
         if (StringUtils.endsWith(iriString, "/" + META_XML)) {
             try {
-                handleAssumedDwCArchive(is, iriString);
+                handleAssumedDwCArchive(is, iriString, outputStream, dereferencer);
                 return true;
             } catch (IOException | SAXException e) {
                 throw new ContentStreamException("failed to handle assumed DwC resource [" + iriString + "]", e);
@@ -61,8 +62,11 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
         return false;
     }
 
-    void handleAssumedDwCArchive(InputStream is, String iriString) throws SAXException, IOException, ContentStreamException {
-        Archive starRecords = DwcMetaFiles.fromMetaDescriptor(is);
+    protected static void handleAssumedDwCArchive(InputStream is,
+                                                  String iriString,
+                                                  OutputStream outputStream,
+                                                  Dereferencer<InputStream> dereferencer) throws SAXException, IOException, ContentStreamException {
+        Archive starRecords = DwcMetaFiles2.fromMetaDescriptor(is);
         ArchiveFile core = starRecords.getCore();
 
         List<Pair<IRI, ArchiveFile>> dwcaResourceIRIs = new ArrayList<>();
@@ -78,10 +82,10 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
         for (Pair<IRI, ArchiveFile> resourceIRIs : dwcaResourceIRIs) {
             ArchiveFile file = resourceIRIs.getRight();
             try {
-                TabularDataFileReader<List<String>> tabularFileReader = createReader(file, resourceIRIs.getLeft());
+                TabularDataFileReader<List<String>> tabularFileReader = createReader(file, resourceIRIs.getLeft(), dereferencer);
                 ClosableIterator<Record> iterator = createRecordIterator(file, tabularFileReader);
                 while (iterator.hasNext()) {
-                    streamAsJson(resourceIRIs, tabularFileReader, iterator.next());
+                    streamAsJson(resourceIRIs, tabularFileReader, iterator.next(), outputStream);
                 }
             } catch (Throwable ex) {
                 throw new ContentStreamException("failed to handle dwc records from [" + resourceIRIs.getLeft().getIRIString() + "]", ex);
@@ -89,7 +93,10 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
         }
     }
 
-    private void streamAsJson(Pair<IRI, ArchiveFile> resourceIRIs, TabularDataFileReader<List<String>> tabularFileReader, Record next) throws IOException {
+    private static void streamAsJson(Pair<IRI, ArchiveFile> resourceIRIs,
+                                     TabularDataFileReader<List<String>> tabularFileReader,
+                                     Record next,
+                                     OutputStream outputStream) throws IOException {
         ObjectNode objectNode = new ObjectMapper().createObjectNode();
         objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf("line:" + resourceIRIs.getLeft().getIRIString() + "!/L" + tabularFileReader.getLastRecordLineNumber()));
         objectNode.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf(resourceIRIs.getRight().getRowType().qualifiedName()));
@@ -101,7 +108,7 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
     }
 
 
-    private Pair<IRI, ArchiveFile> getLocation(String iriString, ArchiveFile core) {
+    private static Pair<IRI, ArchiveFile> getLocation(String iriString, ArchiveFile core) {
         String baseIRI = StringUtils.substring(iriString, 0, StringUtils.length(iriString) - META_XML.length());
 
         return Pair.of(RefNodeFactory.toIRI(baseIRI + core.getLocation()), core);
@@ -113,7 +120,7 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
     }
 
 
-    private TabularDataFileReader<List<String>> createReader(ArchiveFile file, IRI resource) throws IOException {
+    private static TabularDataFileReader<List<String>> createReader(ArchiveFile file, IRI resource, Dereferencer<InputStream> dereferencer) throws IOException {
         CharsetDecoder decoder = Charset.forName(file.getEncoding()).newDecoder();
         Reader reader = new InputStreamReader(dereferencer.get(resource), decoder);
         BufferedReader bufferedReader = new BufferedReader(reader);
@@ -127,7 +134,8 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
         );
     }
 
-    private static ClosableIterator<Record> createRecordIterator(ArchiveFile file, TabularDataFileReader<List<String>> tabularFileReader) {
+    private static ClosableIterator<Record> createRecordIterator(ArchiveFile file,
+                                                                 TabularDataFileReader<List<String>> tabularFileReader) {
         return new DwcRecordIterator(
                 tabularFileReader,
                 file.getId(),
