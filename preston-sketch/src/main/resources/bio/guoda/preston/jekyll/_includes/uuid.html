@@ -1,3 +1,0 @@
-
-{%- assign hostname = include.url | split: "://" | reverse | first | split: "/" | first | split: ':' | first -%}
-urn:uuid:{{ include.uuid }}@{{ hostname }}
