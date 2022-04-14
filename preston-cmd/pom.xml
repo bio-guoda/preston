@@ -10,8 +10,7 @@
     </parent>
 
     <artifactId>preston-cmd</artifactId>
-    <name>Preston Commands</name>
-    <description>basic Preston commands</description>
+    <name>Preston Command Library</name>
 
     <dependencies>
         <dependency>
