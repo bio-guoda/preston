@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.StatementIRIProcessor;
+import bio.guoda.preston.process.CmdContext;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;

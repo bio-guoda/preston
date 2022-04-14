@@ -1,7 +1,4 @@
-package bio.guoda.preston.cmd;
-
-import bio.guoda.preston.process.LogErrorHandler;
-import bio.guoda.preston.process.ProcessorState;
+package bio.guoda.preston.process;
 
 import java.io.InputStream;
 import java.io.OutputStream;

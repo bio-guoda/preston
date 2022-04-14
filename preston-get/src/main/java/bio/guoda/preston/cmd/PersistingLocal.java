@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.HashType;
+import bio.guoda.preston.process.Cmd;
 import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyTo5LevelPath;
@@ -11,7 +12,6 @@ import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.KeyValueStreamFactory;
 import bio.guoda.preston.store.ProvenanceTracer;
-import bio.guoda.preston.store.ProvenanceTracerFactoryImpl;
 import bio.guoda.preston.store.TracerOfDescendants;
 import bio.guoda.preston.store.TracerOfOrigins;
 import com.beust.jcommander.Parameter;
@@ -19,7 +19,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 
 public class PersistingLocal extends Cmd {
 

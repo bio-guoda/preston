@@ -1,4 +1,4 @@
-package bio.guoda.preston.cmd;
+package bio.guoda.preston.process;
 
 import bio.guoda.preston.process.LogErrorHandler;
 import org.apache.commons.io.IOUtils;
