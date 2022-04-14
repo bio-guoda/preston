@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>{{ page.id }}</title>
+    <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
+  </head>
+  <body>
+    {{ content}}
+    <code id="idigbio-meta" style="white-space: pre-line; white-space: pre-wrap;"></code>
+  </body>
+
+  <script>
+    var year = document.getElementById("year");
+    if (year) {
+      year.textContent=new Date().getFullYear();
+    }
+
+    document.querySelectorAll(".meta").forEach(function(metaElem) {
+      var uuid = metaElem.getAttribute("id");
+      var obj = JSON.parse(decodeURIComponent(uuid));
+      var pretty_json = JSON.stringify(obj, null, 2);  // Pretty-printed JSON (indented 2 spaces).
+      metaElem.textContent = pretty_json;
+      metaElem.style = "white-space: pre-line; white-space: pre-wrap; font-size: 0.8em;";
+    });
+  </script>
+
+</html>

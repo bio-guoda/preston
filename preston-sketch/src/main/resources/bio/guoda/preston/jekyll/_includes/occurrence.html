@@ -1,0 +1,16 @@
+<div style="display: flex; flex-direction: row; border: solid;">
+  <div style="display: flex; flex-direction: column; border: solid;">
+    <div>Occurrence</div>
+    <div><a href="{{ include.occurrence.gbif.key }}">{%- include key.html url=site.url key=include.occurrence.gbif.key -%}</a></div>
+    <div>
+      <a href="{{ include.occurrence.gbif.key | prepend: "https://www.gbif.org/occurrence/" }}">{%- include key.html url="gbif.org" key=include.occurrence.gbif.key -%}</a>
+    </div>
+    <div id="{{ include.occurrence.gbif | jsonify | uri_escape }}" class="meta"></div>
+  </div>
+  {%-   assign media_gbif_list = include.occurrence.gbif.media | where: "type", "StillImage" -%}
+  {%-   for media_gbif in media_gbif_list -%}
+  {%      include media_gbif.html media_gbif=media_gbif %}
+  {%-   endfor -%}
+
+</div>
+

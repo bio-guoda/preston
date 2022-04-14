@@ -1,0 +1,17 @@
+---
+---
+{%- assign records = site.pages -%}
+{%- for page in records -%}
+{% assign layout = page.layout %}
+{%- case layout -%}
+  {%- when "occurrence" -%}
+{{ page.gbif | jsonify | strip_newlines }}
+{{ "" }}
+  {%- when "record" -%}
+{{ page.idigbio | jsonify | strip_newlines }}
+{{ "" }}
+  {%- when "mediarecord" -%}
+{{ page.idigbio | jsonify | strip_newlines }}
+{{ "" }}
+{%- endcase -%}
+{%- endfor -%}

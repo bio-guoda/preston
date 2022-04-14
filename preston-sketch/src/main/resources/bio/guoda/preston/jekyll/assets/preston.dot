@@ -1,0 +1,21 @@
+digraph idigbio {
+    
+    "Preston"->"GBIF/iDigBio\nSearch API"[label="query"]
+    "Preston"->"Collections"[label="access"]
+    "Preston"->"Biodiversity Data Archive"[label="update"]
+    "Biodiversity Data Archive"->"Preston"[label="clone"]
+    "Preston"->"Jekyll site"[label="generate"]
+    "Biodiversity Data Archive"->"Jekyll site"[label="include"]
+    "Jekyll site"->"Static Website"[label="build"]
+
+    "Static Website"->"Webserver"[label="host"]
+    "Static Website"->"Laptop"[label="host"]
+    "Static Website"->"Archive.org"[label="archive"]
+    "Static Website"->"Zenodo.org"[label="publish"]
+    "Static Website"->"external harddisk"[label="backup"]
+
+    "Webserver"->"R"[label="programmatic access"]
+    "Webserver"->"Jypiter notebook"[label="programmatic access"]
+
+    label="Independent Content-based Biodiversity Archives"
+}

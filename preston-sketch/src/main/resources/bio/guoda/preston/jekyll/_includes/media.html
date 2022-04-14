@@ -1,0 +1,20 @@
+<div style="display: flex; flex-direction: column; border: solid; border-style: top;">
+  Media Record
+  <div style="display: flex;">
+    <a href="{{ include.mediarecord.uuid }}">{%- include uuid.html url=site.url uuid=include.mediarecord.uuid -%}</a>
+  </div>
+  <div style="display: flex;">
+    <a href="{{ include.mediarecord.uuid | prepend: "https://www.idigbio.org/portal/mediarecords/" }}">{%- include uuid.html url="idigbio.org" uuid=include.mediarecord.uuid -%}</a>
+  </div>
+  <div style="display: flex; justify-content: space-evenly;">
+    <div>
+        {% assign fullsize_url_online = include.mediarecord.uuid | prepend: "https://api.idigbio.org/v2/media/" | append: "?size=fullsize" %}
+        {% include media_frag.html origin=fullsize_url_online %}
+    </div>
+    <div>
+        {% assign original_online = include.mediarecord.data["ac:accessURI"] %} 
+        {% include media_frag.html origin=original_online %}
+    </div>
+  </div>
+  <div id="{{ include.mediarecord.data | jsonify | uri_escape }}" class="meta"></div>
+</div>

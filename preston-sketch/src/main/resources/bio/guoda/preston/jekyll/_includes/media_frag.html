@@ -1,0 +1,9 @@
+
+{%- capture origin_local -%}
+{%-   include local_hash_for.html url=include.origin -%}
+{%- endcapture -%}
+<a href="{{ origin_local }}"><img src="{{ origin_local }}" width="260"/></a>
+<div id="hash"><a href="{{ origin_local }}" title="unique content identifier of original content">sha256:{{ origin_local | slice: 12,17 }}...</a></div>
+<div id="hash">location of <a href="{{ origin_local }}" title="access image via their content hash, a unique fingerprint of original content">clone</a> or <a href="{{ include.origin }}" title="the original location the media was retrieved from">original</a></div>
+<div id="register">register <a href="https://hash-archive.org/history/{{ origin_local | prepend: '/' | prepend: site.baseurl | prepend: site.url }}" title="register with hash-archive.org">clone</a> or <a href="https://hash-archive.org/history/{{ include.origin }}" title="register with hash-archive.org">original</a></div>
+<div id="copies"><a href="https://hash-archive.org/sources/hash://sha256/{{ origin_local | slice: 12,90 }}" title="find identical copies via hash-archive.org">find more copies</a></div>

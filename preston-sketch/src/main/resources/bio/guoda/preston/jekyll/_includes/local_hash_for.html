@@ -1,0 +1,2 @@
+{%- assign content_for_url = site.data.content | where: "url", include.url | first -%}
+{%- include local_url_for_hash.html hash=content_for_url.hash location=site.data.preston.data_location -%}
