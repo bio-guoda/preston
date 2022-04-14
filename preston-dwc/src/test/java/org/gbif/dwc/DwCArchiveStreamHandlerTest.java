@@ -17,7 +17,7 @@ public class DwCArchiveStreamHandlerTest {
 
     @Ignore("this test fails")
     @Test
-    public void escapedTerminationCharactersInMetaXML() throws SAXException, IOException, ContentStreamException {
+    public void handleEscapedTerminationCharacters() throws SAXException, IOException, ContentStreamException {
         // from https://github.com/bio-guoda/preston/issues/161
         InputStream is = getClass().getResourceAsStream("issue161/meta.xml");
 
@@ -29,7 +29,7 @@ public class DwCArchiveStreamHandlerTest {
     }
 
     @Test
-    public void escapedFieldDelimitersInMetaXMLPatched() throws SAXException, IOException, ContentStreamException {
+    public void handleEscapedTerminationCharactersPatched() throws SAXException, IOException, ContentStreamException {
         // from https://github.com/bio-guoda/preston/issues/161
         InputStream is = getClass().getResourceAsStream("issue161/meta.xml");
 
