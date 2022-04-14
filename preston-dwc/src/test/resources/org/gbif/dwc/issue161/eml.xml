@@ -1,0 +1,110 @@
+<eml:eml xmlns:eml="eml://ecoinformatics.org/eml-2.1.1"
+         xmlns:dc="http://purl.org/dc/terms/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml.xsd"
+         packageId="62d82928-dc6f-40dc-85b3-f2be47e7b49a" system="http://gbif.org" scope="system"
+         xml:lang="eng">
+
+<dataset>
+  <alternateIdentifier></alternateIdentifier>
+  <title xml:lang="eng">Naturalis Biodiversity Center (NL) - Museum collection digitized at storage unit level</title>
+<creator>
+    <individualName>
+        <givenName>Jeroen</givenName>
+      <surName>Creuwels</surName>
+    </individualName>
+    <organizationName>Naturalis Biodiversity Center</organizationName>
+    <positionName>Data manager</positionName>
+    <address>
+        <deliveryPoint>PO Box 9517</deliveryPoint>
+        <city>Leiden</city>
+        <administrativeArea>Zuid Holland</administrativeArea>
+        <postalCode>NL-2300 RA</postalCode>
+        <country>NL</country>
+    </address>
+    <phone>+31.71.7519600</phone>
+    <electronicMailAddress>informatiemanagement@naturalis.nl</electronicMailAddress>
+    <onlineUrl>http://science.naturalis.nl</onlineUrl>
+</creator>
+<metadataProvider>
+    <individualName>
+        <givenName>Jeroen</givenName>
+      <surName>Creuwels</surName>
+    </individualName>
+    <organizationName>Naturalis Biodiversity Center</organizationName>
+    <positionName>Data manager</positionName>
+    <address>
+        <deliveryPoint>PO Box 9517</deliveryPoint>
+        <city>Leiden</city>
+        <administrativeArea>Zuid Holland</administrativeArea>
+        <postalCode>NL-2300 RA</postalCode>
+        <country>NL</country>
+    </address>
+    <phone>+31.71.7519600</phone>
+    <electronicMailAddress>informatiemanagement@naturalis.nl</electronicMailAddress>
+    <onlineUrl>http://science.naturalis.nl</onlineUrl>
+</metadataProvider>
+<pubDate>2017-02-23</pubDate>
+<language>mul</language>
+<abstract>
+  <para>Naturalis Biodiversity Center has carried out one of the largest projects for natural history collection digitization to date. At least 7 million specimens are digitized in detail (see our other occurrence datasets) from a total collection of 37 million. Information of the other 30 million specimen is now digitally available on a higher, less detailed level. These 30 million specimen were digitized at the storage unit level, a storage unit being a unit in (or on) which objects are stored, such as boxes, drawers, and shelves. These specimens are stored in approximately 150,000 of these units, which contain Zoological and Paleontological collections. For each storage unit, the species and quantities it contains and the gathering location were digitized. This information can be used for research and collection management, but also in deciding which taxonomic groups need further registration at the object level. The project was funded by the Dutch Economic Structure Enhancing Fund (FES).
+  </para>
+  <para>This database provides a current and comprehensive overview of the Zoological and Paleontological collection at Naturalis Biodiversity Center (Leiden, Netherlands), digitized at storage unit level. The data is presented as specimen occurrence data, in which each record represents one taxon from one geographic location from one storage unit. Generally a record contains more than one specimen. These specimens originate from the collections of the National Museum of Natural History (RMNH; Rijksmuseum voor Natuurlijke Historie), later National Museum of Natural History, Naturalis in Leiden, from the former Zoological Museum Amsterdam (ZMA), and from the former National Museum of Geology and Mineralogy (RGM; Rijksmuseum voor Geologie en Mineralogie).
+  </para>
+    <para>All zoological and paleontological records, with at least a family or genus name, are included. The number of specimens gives the count at the end of the FES project, in 2015. 
+  </para>
+    <para>On request more information or pictures (if available) can be provided.
+  </para>
+</abstract>
+      <keywordSet>
+            <keyword>Occurrence</keyword>
+        <keywordThesaurus>GBIF Dataset Type Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_type.xml</keywordThesaurus>
+      </keywordSet>
+      <keywordSet>
+            <keyword>Specimen</keyword>
+        <keywordThesaurus>GBIF Dataset Subtype Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_subtype.xml</keywordThesaurus>
+      </keywordSet>
+  <intellectualRights>
+   <para>To the extent possible under law, the publisher has waived all rights to these data and has dedicated them to the <ulink url="http://creativecommons.org/publicdomain/zero/1.0/legalcode"><citetitle>Public Domain (CC0 1.0)</citetitle></ulink>. Users may copy, modify, distribute and use the work, including for commercial purposes, without restriction</para>
+  </intellectualRights>
+  <coverage>
+      <geographicCoverage>
+          <geographicDescription>Global coverage</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-180</westBoundingCoordinate>
+          <eastBoundingCoordinate>180</eastBoundingCoordinate>
+          <northBoundingCoordinate>90</northBoundingCoordinate>
+          <southBoundingCoordinate>-90</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+  </coverage>
+  <contact>
+    <individualName>
+        <givenName>Jeroen</givenName>
+      <surName>Snijders</surName>
+    </individualName>
+    <organizationName>Naturalis Biodiversity Center</organizationName>
+    <positionName>Deputy director Collection</positionName>
+    <address>
+        <deliveryPoint>PO Box 9517</deliveryPoint>
+        <city>Leiden</city>
+        <administrativeArea>Zuid Holland</administrativeArea>
+        <postalCode>NL-2300 RA</postalCode>
+        <country>NL</country>
+    </address>
+    <phone>+31.71.7519600</phone>
+    <electronicMailAddress>collectie@naturalis.nl</electronicMailAddress>
+    <onlineUrl>https://science.naturalis.nl/en/collection/naturalis-collections/</onlineUrl>
+  </contact>
+</dataset>
+  <additionalMetadata>
+    <metadata>
+      <gbif>
+          <dateStamp>2017-02-23T09:00:00.000+01:00</dateStamp>
+          <hierarchyLevel>dataset</hierarchyLevel>
+          <resourceLogoUrl>http://www.naturalis.nl/media/library/2012/07/Naturalis_logo_staand_rood_01.jpg</resourceLogoUrl>
+          <dc:replaces></dc:replaces>
+      </gbif>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>
