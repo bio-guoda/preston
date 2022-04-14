@@ -63,7 +63,9 @@ public class DwCArchiveStreamHandlerTest {
         }, new Dereferencer<InputStream>() {
             @Override
             public InputStream get(IRI uri) throws IOException {
-                return DwCArchiveStreamHandlerTest.this.getClass().getResourceAsStream(StringUtils.replace(uri.getIRIString(), "foo:bar!", "issue162"));
+                String resourceNAme = StringUtils.replace(uri.getIRIString(), "foo:bar!", "issue162");
+                return DwCArchiveStreamHandlerTest.this.getClass()
+                        .getResourceAsStream(resourceNAme);
             }
         }, os);
 

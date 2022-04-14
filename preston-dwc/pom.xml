@@ -13,10 +13,6 @@
     <name>Preston Darwin Core</name>
     <description>Preston Content Handler for Darwin Core Archives</description>
 
-    <properties>
-        <stax2.version>4.2.1</stax2.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -27,16 +23,6 @@
             <groupId>org.gbif</groupId>
             <artifactId>dwca-io</artifactId>
             <version>2.11</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.woodstox</groupId>
-            <artifactId>woodstox-core-asl</artifactId>
-            <version>${stax2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.woodstox</groupId>
-            <artifactId>stax2-api</artifactId>
-            <version>${stax2.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
