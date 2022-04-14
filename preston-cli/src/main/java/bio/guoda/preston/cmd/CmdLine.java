@@ -61,13 +61,6 @@ public class CmdLine {
                 .addCommand("origins", new CmdOrigins(), "origin", "prov", "provenance")
                 .addCommand("merge", new CmdMerge(), "join", "use", "import")
 
-                // sketch generation (e.g, bloom, theta)
-                .addCommand("sketch", new CmdCreateSketch(), "bloom")
-
-                // sketch operations
-                .addCommand("diff", new CmdSketchDiff(), "intersect")
-                .addCommand("union", new CmdSketchUnion())
-
                 // utilities
                 .addCommand("grep", new CmdGrep(), "match", "findURLs")
                 .addCommand("dwc-stream", new CmdDwcRecordStream(),"json-stream", "dwc-json-stream")
