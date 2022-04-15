@@ -9,8 +9,8 @@
         <relativePath>../preston-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>preston-update</artifactId>
-    <name>Preston Update Biodiversity Graphs</name>
+    <artifactId>preston-track</artifactId>
+    <name>Preston tracks digital datasets using provenance logs and content-addressed storage. Includes functionality to keep track of biodiversity data networks like iDigBio, GBIF, Biodiversity Heritage Library, and DataONE.</name>
     
     <dependencies>
         <dependency>
