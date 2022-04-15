@@ -10,8 +10,8 @@
     </parent>
 
     <artifactId>preston-get</artifactId>
-    <name>Preston Content Access</name>
-    <description>Get Access to Preston Tracked Content</description>
+    <name>Preston Get</name>
+    <description>Uses content-based identifiers to access digital datasets.</description>
 
     <dependencies>
         <dependency>
