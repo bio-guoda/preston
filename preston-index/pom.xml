@@ -9,9 +9,9 @@
         <relativePath>../preston-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>preston-hexas</artifactId>
-    <name>Preston Simplified Hexastore</name>
-    <description>Preston Simplified Hexastore helps to index a forward pointing version history of Preston provenance logs</description>
+    <artifactId>preston-index</artifactId>
+    <name>Preston Index</name>
+    <description>Preston Index uses a simplified Hexastore implement a forward pointing version history of Preston provenance logs. Used to find the most recent update, or "head", of a Preston graph.</description>
 
     <dependencies>
         <dependency>
