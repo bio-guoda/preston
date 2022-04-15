@@ -63,6 +63,7 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
 ## Table of Contents
  
  * [Usage](#usage) - command available on the preston commandline tool
+   * [Documentation](docs/preston.adoc)
    * [Command Line Tool](#command-line-tool)
       * [`update`](#update) - update or track a biodiversity dataset graph
       * [`ls`](#ls) - list/print biodiversity dataset graph
@@ -94,6 +95,10 @@ If you haven't yet tried Preston, please see the [Installation](#install) sectio
 ## Usage
 
 Preston was designed with the [unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) in mind: a simple tool with a specific focus that works well with others. For Preston, the focus is keeping track of biodiversity archives available through registries like [GBIF](https://gbif.org), [iDigBio](https://idigbio.org) and [BioCASe](http://biocasemonitor.biodiv.naturkundemuseum-berlin.de/index.php/Main_Page). The functionality is currently available through a command line tool.
+
+### Docs
+
+For documentation in man-pages style, see [docs/preston.adoc](docs/preston.adoc).
 
 ### Command Line Tool
 
