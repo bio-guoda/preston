@@ -31,23 +31,17 @@ import static bio.guoda.preston.RefNodeFactory.toBlank;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
-@Parameters(separators = "= ", commandDescription = CmdUpdate.UPDATE_BIODIVERSITY_DATASET_GRAPH)
-
 @CommandLine.Command(
         name = "update",
         aliases = {"track"},
-        description = CmdUpdate.UPDATE_BIODIVERSITY_DATASET_GRAPH
+        description = "Update biodiversity dataset graph"
 )
 
 public class CmdUpdate extends CmdTrack {
 
-    public static final String UPDATE_BIODIVERSITY_DATASET_GRAPH = "Update biodiversity dataset graph";
-    public static final String STARTING_POINTS_FOR_GRAPH_DISCOVERY_ONLY_ACTIVE_WHEN_NO_CONTENT_URLS_ARE_PROVIDED = "Starting points for graph discovery. Only active when no content urls are provided.";
-
-    @Parameter(names = {"-u", "--seed"}, description = STARTING_POINTS_FOR_GRAPH_DISCOVERY_ONLY_ACTIVE_WHEN_NO_CONTENT_URLS_ARE_PROVIDED, validateWith = URIValidator.class)
     @CommandLine.Option(
             names = {"-u", "--seed"},
-            description = STARTING_POINTS_FOR_GRAPH_DISCOVERY_ONLY_ACTIVE_WHEN_NO_CONTENT_URLS_ARE_PROVIDED
+            description = "Starting points for graph discovery. Only active when no content urls are provided."
     )
     private List<String> seedUrls = new ArrayList<String>() {{
         add(Seeds.IDIGBIO.getIRIString());

@@ -13,7 +13,6 @@ import bio.guoda.preston.store.KeyValueStreamFactory;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.TracerOfDescendants;
 import bio.guoda.preston.store.TracerOfOrigins;
-import com.beust.jcommander.Parameter;
 import org.apache.commons.io.FileUtils;
 import picocli.CommandLine;
 
@@ -25,25 +24,22 @@ public class PersistingLocal extends Cmd {
     public static final String LOCATION_OF_LOCAL_CONTENT_CACHE = "Location of local content cache";
     public static final String LOCATION_OF_LOCAL_TMP_DIR = "Location of local tmp dir";
     public static final String HASH_ALGORITHM_USED_TO_GENERATE_PRIMARY_CONTENT_IDENTIFIERS = "Hash algorithm used to generate primary content identifiers";
-    @Parameter(names = {"--data-dir"}, description = LOCATION_OF_LOCAL_CONTENT_CACHE)
 
     @CommandLine.Option(
             names = {"--data-dir"},
-            description = LOCATION_OF_LOCAL_CONTENT_CACHE
+            description = "Location of local content cache"
     )
     private String localDataDir = "data";
 
-    @Parameter(names = {"--tmp-dir"}, description = LOCATION_OF_LOCAL_TMP_DIR)
     @CommandLine.Option(
             names = {"--tmp-dir"},
-            description = LOCATION_OF_LOCAL_TMP_DIR
+            description = "Location of local tmp dir"
     )
     private String localTmpDir = "tmp";
 
-    @Parameter(names = {"--hash-algorithm", "--algo", "-a"}, description = HASH_ALGORITHM_USED_TO_GENERATE_PRIMARY_CONTENT_IDENTIFIERS)
     @CommandLine.Option(
             names = {"--hash-algorithm", "--algo", "-a"},
-            description = HASH_ALGORITHM_USED_TO_GENERATE_PRIMARY_CONTENT_IDENTIFIERS
+            description = "Hash algorithm used to generate primary content identifiers"
     )
     private HashType hashType = HashType.sha256;
 

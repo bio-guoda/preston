@@ -17,17 +17,15 @@ import picocli.CommandLine;
 import java.util.Arrays;
 import java.util.List;
 
-@Parameters(separators = "= ", commandDescription = CmdSketchDiff.USES_PRE_CALCULATED_SKETCHES_E_G_BLOOM_FILTER_THETA_SKETCH_TO_CALCULATES_ESTIMATES_FOR_OVERLAP_BETWEEN_DATASETS)
+@Parameters(separators = "= ", commandDescription = "Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets")
 
 @CommandLine.Command(
         name = "diff",
         aliases = {"intersect"},
-        description = CmdSketchDiff.USES_PRE_CALCULATED_SKETCHES_E_G_BLOOM_FILTER_THETA_SKETCH_TO_CALCULATES_ESTIMATES_FOR_OVERLAP_BETWEEN_DATASETS
+        description = "Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets"
 )
 
 public class CmdSketchDiff extends LoggingPersisting implements Runnable {
-
-    public static final String USES_PRE_CALCULATED_SKETCHES_E_G_BLOOM_FILTER_THETA_SKETCH_TO_CALCULATES_ESTIMATES_FOR_OVERLAP_BETWEEN_DATASETS = "Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets";
 
     @Override
     public void run() {

@@ -5,12 +5,10 @@ import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStore;
-import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
-import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
@@ -25,17 +23,13 @@ import java.util.stream.Stream;
  * See https://github.com/bio-guoda/preston/issues/15 .
  */
 
-@Parameters(separators = "= ", commandDescription = CmdAppend.OFFLINE_RE_PROCESSING_OF_TRACKED_BIODIVERSITY_DATASET_GRAPH_USING_STDIN)
-
 @CommandLine.Command(
         name = "append",
         aliases = {"handle", "process", "add"},
-        description = CmdAppend.OFFLINE_RE_PROCESSING_OF_TRACKED_BIODIVERSITY_DATASET_GRAPH_USING_STDIN
+        description = "Offline (re-)processing of tracked biodiversity dataset graph using stdin"
 )
 
 public class CmdAppend extends CmdActivity {
-
-    public static final String OFFLINE_RE_PROCESSING_OF_TRACKED_BIODIVERSITY_DATASET_GRAPH_USING_STDIN = "Offline (re-)processing of tracked biodiversity dataset graph using stdin";
 
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {

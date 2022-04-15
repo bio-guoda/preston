@@ -4,11 +4,14 @@ import bio.guoda.preston.Version;
 import com.beust.jcommander.Parameters;
 import picocli.CommandLine;
 
-@Parameters(separators = "= ", commandDescription = "show version")
+@Parameters(separators = "= ", commandDescription = CmdVersion.SHOW_VERSION)
 @CommandLine.Command(
-        name = "version"
+        name = "version",
+        description = CmdVersion.SHOW_VERSION
 )
 public class CmdVersion extends Cmd implements Runnable {
+
+    public static final String SHOW_VERSION = "Show version";
 
     @Override
     public void run() {

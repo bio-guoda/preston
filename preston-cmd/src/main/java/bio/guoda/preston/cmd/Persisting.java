@@ -25,8 +25,6 @@ import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.KeyValueStreamFactory;
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.stream.ContentStreamUtil;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.converters.URIConverter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -49,7 +47,6 @@ public class Persisting extends PersistingLocal {
     private static final String DISABLE_LOCAL_CONTENT_CACHE = "Disable local content cache";
     private static final String DISABLE_PROGRESS_MONITOR = "Disable progress monitor";
 
-    @Parameter(names = {"--remote", "--remotes", "--include", "--repos", "--repositories"}, description = REMOTES, converter = URIConverter.class, validateWith = URIValidator.class)
     @CommandLine.Option(
             names = {"--remote", "--remotes", "--include", "--repos", "--repositories"},
             description = REMOTES
@@ -57,14 +54,12 @@ public class Persisting extends PersistingLocal {
 
     private List<URI> remotes = new ArrayList<>();
 
-    @Parameter(names = {"--no-cache", "--disable-cache"}, description = DISABLE_LOCAL_CONTENT_CACHE)
     @CommandLine.Option(
             names = {"--no-cache", "--disable-cache"},
             description = DISABLE_LOCAL_CONTENT_CACHE
     )
     private Boolean disableCache = false;
 
-    @Parameter(names = {"--no-progress"}, description = DISABLE_PROGRESS_MONITOR)
     @CommandLine.Option(
             names = {"--no-process"},
             description = DISABLE_PROGRESS_MONITOR

@@ -6,8 +6,6 @@ import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.VersionUtil;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
@@ -21,25 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static bio.guoda.preston.StatementLogFactory.*;
-
-@Parameters(separators = "= ", commandDescription = CmdOrigins.TRACES_TO_ORIGIN_OF_BIODIVERSITY_DATASET_GRAPHS)
+import static bio.guoda.preston.StatementLogFactory.createPrintingLogger;
 
 @CommandLine.Command(
         name = "origins",
         aliases = {"origin", "prov", "provenance"},
-        description = CmdOrigins.TRACES_TO_ORIGIN_OF_BIODIVERSITY_DATASET_GRAPHS
+        description = "Traces to origin of biodiversity dataset graphs"
 )
 public class CmdOrigins extends LoggingPersisting implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(CmdOrigins.class);
-    public static final String TRACES_TO_ORIGIN_OF_BIODIVERSITY_DATASET_GRAPHS = "Traces to origin of biodiversity dataset graphs";
-    public static final String CONTENT_ID_OF_PROVENANCE_ANCHORS_E_G_HASH_SHA_256_8_ED_311 = "Content id of provenance anchors (e.g., [hash://sha256/8ed311...])";
 
-    @Parameter(description = CONTENT_ID_OF_PROVENANCE_ANCHORS_E_G_HASH_SHA_256_8_ED_311,
-            validateWith = IRIValidator.class, converter = IRIConverter.class)
     @CommandLine.Parameters(
-            description = CONTENT_ID_OF_PROVENANCE_ANCHORS_E_G_HASH_SHA_256_8_ED_311
+            description = "Content id of provenance anchors (e.g., [hash://sha256/8ed311...])"
     )
     private List<IRI> provenanceAnchors = new ArrayList<>();
 

@@ -54,6 +54,7 @@ public class CmdVerify extends PersistingLocal implements Runnable {
     @CommandLine.Option(
             names = "--skip-hash-verification",
             description = DO_NOT_VERIFY_HASH_JUST_CHECK_AVAILABILITY
+
     )
     private Boolean skipHashVerification = false;
 
