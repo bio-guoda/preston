@@ -8,8 +8,6 @@ import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.VersionUtil;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
@@ -29,7 +27,6 @@ import java.util.TreeMap;
 
 import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 
-@Parameters(separators = "= ", commandDescription = CmdVerify.VERIFIES_COMPLETENESS_AND_INTEGRITY_OF_THE_LOCAL_BIODIVERSITY_DATASET_GRAPH)
 @CommandLine.Command(
         name = "test",
         aliases = {"verify", "check", "validate"},
@@ -50,7 +47,6 @@ public class CmdVerify extends PersistingLocal implements Runnable {
         CONTENT_PRESENT_HASH_NOT_VERIFIED
     }
 
-    @Parameter(names = {"--skip-hash-verification"}, description = DO_NOT_VERIFY_HASH_JUST_CHECK_AVAILABILITY)
     @CommandLine.Option(
             names = "--skip-hash-verification",
             description = DO_NOT_VERIFY_HASH_JUST_CHECK_AVAILABILITY

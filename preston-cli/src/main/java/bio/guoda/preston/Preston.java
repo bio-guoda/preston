@@ -27,6 +27,7 @@ import bio.guoda.preston.cmd.CmdVersion;
 import bio.guoda.preston.cmd.TypeConverterIRI;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
+import picocli.codegen.docgen.manpage.ManPageGenerator;
 
 import static java.lang.System.exit;
 
@@ -53,21 +54,27 @@ import static java.lang.System.exit;
                 CmdAlias.class,
                 CmdDwcRecordStream.class,
                 CmdCite.class,
+                ManPageGenerator.class,
                 CommandLine.HelpCommand.class
         },
         description = "preston - a biodiversity dataset tracker",
         mixinStandardHelpOptions = true)
+
 public class Preston {
     public static void main(String[] args) {
         try {
-            CommandLine commandLine = new CommandLine(new Preston());
-            commandLine.registerConverter(IRI.class, new TypeConverterIRI());
-            int exitCode = commandLine.execute(args);
+            int exitCode = run(args);
             System.exit(exitCode);
         } catch (Throwable t) {
             t.printStackTrace(System.err);
             exit(1);
         }
+    }
+
+    public static int run(String[] args) {
+        CommandLine commandLine = new CommandLine(new Preston());
+        commandLine.registerConverter(IRI.class, new TypeConverterIRI());
+        return commandLine.execute(args);
     }
 
 }
