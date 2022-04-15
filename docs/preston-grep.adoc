@@ -1,0 +1,88 @@
+// tag::picocli-generated-full-manpage[]
+// tag::picocli-generated-man-section-header[]
+:doctype: manpage
+:revnumber: 
+:manmanual: Preston Manual
+:mansource: 
+:man-linkstyle: pass:[blue R < >]
+= preston-grep(1)
+
+// end::picocli-generated-man-section-header[]
+
+// tag::picocli-generated-man-section-name[]
+== Name
+
+preston-grep - Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets
+
+// end::picocli-generated-man-section-name[]
+
+// tag::picocli-generated-man-section-synopsis[]
+== Synopsis
+
+*preston grep* [*-o*] [*--no-cache*] [*--no-line*] [*--no-process*] [*-a*=_<hashType>_]
+             [*--data-dir*=_<localDataDir>_] [*-l*=_<logMode>_]
+             [*--max*=_<maxHitsPerContent>_] [*--tmp-dir*=_<localTmpDir>_]
+             [*--repos*=_<remotes>_]... _<regex>_
+
+// end::picocli-generated-man-section-synopsis[]
+
+// tag::picocli-generated-man-section-description[]
+== Description
+
+Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets
+
+// end::picocli-generated-man-section-description[]
+
+// tag::picocli-generated-man-section-options[]
+== Options
+
+*-a*, *--algo, --hash-algorithm*=_<hashType>_::
+  Hash algorithm used to generate primary content identifiers
+
+*--data-dir*=_<localDataDir>_::
+  Location of local content cache
+
+*-l*, *--log*=_<logMode>_::
+  Log format
+
+*--max, --max-per-content*=_<maxHitsPerContent>_::
+  Maximum number of matched texts to record for each content; set to 0 for no limit
+
+*--no-cache, --disable-cache*::
+  Disable local content cache
+
+*--no-line, --no-lines*::
+  Don't report line numbers for matches
+
+*--no-process*::
+  Disable progress monitor
+
+*-o*, *--only-matching*::
+  Report only the text that was matched
+
+*--repos, --remote, --remotes, --include, --repositories*=_<remotes>_::
+  Included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)
+
+*--tmp-dir*=_<localTmpDir>_::
+  Location of local tmp dir
+
+// end::picocli-generated-man-section-options[]
+
+// tag::picocli-generated-man-section-arguments[]
+== Arguments
+
+_<regex>_::
+  regular expression
+
+// end::picocli-generated-man-section-arguments[]
+
+// tag::picocli-generated-man-section-commands[]
+// end::picocli-generated-man-section-commands[]
+
+// tag::picocli-generated-man-section-exit-status[]
+// end::picocli-generated-man-section-exit-status[]
+
+// tag::picocli-generated-man-section-footer[]
+// end::picocli-generated-man-section-footer[]
+
+// end::picocli-generated-full-manpage[]

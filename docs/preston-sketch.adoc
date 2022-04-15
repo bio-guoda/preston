@@ -1,0 +1,76 @@
+// tag::picocli-generated-full-manpage[]
+// tag::picocli-generated-man-section-header[]
+:doctype: manpage
+:revnumber: 
+:manmanual: Preston Manual
+:mansource: 
+:man-linkstyle: pass:[blue R < >]
+= preston-sketch(1)
+
+// end::picocli-generated-man-section-header[]
+
+// tag::picocli-generated-man-section-name[]
+== Name
+
+preston-sketch - Creates sketches (e.g., bloom filters or theta sketches) from matched content for estimating content overlap
+
+// end::picocli-generated-man-section-name[]
+
+// tag::picocli-generated-man-section-synopsis[]
+== Synopsis
+
+*preston sketch* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
+               [*--data-dir*=_<localDataDir>_] [*-l*=_<logMode>_] [*-s*=_<sketch>_]
+               [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
+
+// end::picocli-generated-man-section-synopsis[]
+
+// tag::picocli-generated-man-section-description[]
+== Description
+
+Creates sketches (e.g., bloom filters or theta sketches) from matched content for estimating content overlap
+
+// end::picocli-generated-man-section-description[]
+
+// tag::picocli-generated-man-section-options[]
+== Options
+
+*-a*, *--algo, --hash-algorithm*=_<hashType>_::
+  Hash algorithm used to generate primary content identifiers
+
+*--data-dir*=_<localDataDir>_::
+  Location of local content cache
+
+*-l*, *--log*=_<logMode>_::
+  Log format
+
+*--no-cache, --disable-cache*::
+  Disable local content cache
+
+*--no-process*::
+  Disable progress monitor
+
+*--repos, --remote, --remotes, --include, --repositories*=_<remotes>_::
+  Included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)
+
+*-s*, *--sketch-type*=_<sketch>_::
+  Sketch type
+
+*--tmp-dir*=_<localTmpDir>_::
+  Location of local tmp dir
+
+// end::picocli-generated-man-section-options[]
+
+// tag::picocli-generated-man-section-arguments[]
+// end::picocli-generated-man-section-arguments[]
+
+// tag::picocli-generated-man-section-commands[]
+// end::picocli-generated-man-section-commands[]
+
+// tag::picocli-generated-man-section-exit-status[]
+// end::picocli-generated-man-section-exit-status[]
+
+// tag::picocli-generated-man-section-footer[]
+// end::picocli-generated-man-section-footer[]
+
+// end::picocli-generated-full-manpage[]

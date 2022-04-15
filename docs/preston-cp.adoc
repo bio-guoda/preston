@@ -1,0 +1,85 @@
+// tag::picocli-generated-full-manpage[]
+// tag::picocli-generated-man-section-header[]
+:doctype: manpage
+:revnumber: 
+:manmanual: Preston Manual
+:mansource: 
+:man-linkstyle: pass:[blue R < >]
+= preston-cp(1)
+
+// end::picocli-generated-man-section-header[]
+
+// tag::picocli-generated-man-section-name[]
+== Name
+
+preston-cp - Copy biodiversity dataset graph
+
+// end::picocli-generated-man-section-name[]
+
+// tag::picocli-generated-man-section-synopsis[]
+== Synopsis
+
+*preston cp* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
+           [*--data-dir*=_<localDataDir>_] [*-l*=_<logMode>_] [*-p*=_<pathPattern>_]
+           [*-t*=_<archiveType>_] [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
+           _<targetDir>_
+
+// end::picocli-generated-man-section-synopsis[]
+
+// tag::picocli-generated-man-section-description[]
+== Description
+
+Copy biodiversity dataset graph
+
+// end::picocli-generated-man-section-description[]
+
+// tag::picocli-generated-man-section-options[]
+== Options
+
+*-a*, *--algo, --hash-algorithm*=_<hashType>_::
+  Hash algorithm used to generate primary content identifiers
+
+*--data-dir*=_<localDataDir>_::
+  Location of local content cache
+
+*-l*, *--log*=_<logMode>_::
+  Log format
+
+*--no-cache, --disable-cache*::
+  Disable local content cache
+
+*--no-process*::
+  Disable progress monitor
+
+*-p*, *--target-hash-path-pattern*=_<pathPattern>_::
+  Hash path pattern of content to be copied
+
+*--repos, --remote, --remotes, --include, --repositories*=_<remotes>_::
+  Included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)
+
+*-t*, *--type*=_<archiveType>_::
+  Archive type
+
+*--tmp-dir*=_<localTmpDir>_::
+  Location of local tmp dir
+
+// end::picocli-generated-man-section-options[]
+
+// tag::picocli-generated-man-section-arguments[]
+== Arguments
+
+_<targetDir>_::
+  Target directory
+
+// end::picocli-generated-man-section-arguments[]
+
+// tag::picocli-generated-man-section-commands[]
+// end::picocli-generated-man-section-commands[]
+
+// tag::picocli-generated-man-section-exit-status[]
+// end::picocli-generated-man-section-exit-status[]
+
+// tag::picocli-generated-man-section-footer[]
+// end::picocli-generated-man-section-footer[]
+
+// end::picocli-generated-full-manpage[]

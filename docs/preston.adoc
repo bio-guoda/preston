@@ -1,0 +1,124 @@
+// tag::picocli-generated-full-manpage[]
+// tag::picocli-generated-man-section-header[]
+:doctype: manpage
+:revnumber: 0.0.1-SNAPSHOT
+:manmanual: Preston Manual
+:mansource: 0.0.1-SNAPSHOT
+:man-linkstyle: pass:[blue R < >]
+= preston(1)
+
+// end::picocli-generated-man-section-header[]
+
+// tag::picocli-generated-man-section-name[]
+== Name
+
+preston - preston - a biodiversity dataset tracker
+
+// end::picocli-generated-man-section-name[]
+
+// tag::picocli-generated-man-section-synopsis[]
+== Synopsis
+
+*preston* [*-hV*] [COMMAND]
+
+// end::picocli-generated-man-section-synopsis[]
+
+// tag::picocli-generated-man-section-description[]
+== Description
+
+preston - a biodiversity dataset tracker
+
+// end::picocli-generated-man-section-description[]
+
+// tag::picocli-generated-man-section-options[]
+== Options
+
+*-h*, *--help*::
+  Show this help message and exit.
+
+*-V*, *--version*::
+  Print version information and exit.
+
+// end::picocli-generated-man-section-options[]
+
+// tag::picocli-generated-man-section-arguments[]
+// end::picocli-generated-man-section-arguments[]
+
+// tag::picocli-generated-man-section-commands[]
+== Commands
+
+xref:preston-cat.adoc[*cat*, *get*]::
+  Get biodiversity data
+
+xref:preston-ls.adoc[*ls*, *log*, *logs*]::
+  Show biodiversity dataset provenance logs
+
+xref:preston-cp.adoc[*cp*, *copyTo*, *export*]::
+  Copy biodiversity dataset graph
+
+xref:preston-clone.adoc[*clone*, *pull*]::
+  Clone biodiversity dataset graph
+
+xref:preston-update.adoc[*update*, *track*]::
+  Update biodiversity dataset graph
+
+xref:preston-append.adoc[*append*, *handle*, *process*, *add*]::
+  Offline (re-)processing of tracked biodiversity dataset graph using stdin
+
+xref:preston-history.adoc[*history*]::
+  Show history of biodiversity dataset graph
+
+xref:preston-origins.adoc[*origins*, *origin*, *prov*, *provenance*]::
+  Traces to origin of biodiversity dataset graphs
+
+xref:preston-merge.adoc[*merge*, *join*, *use*, *import*]::
+  Merges biodiversity dataset graphs
+
+xref:preston-sketch.adoc[*sketch*, *bloom*]::
+  Creates sketches (e.g., bloom filters or theta sketches) from matched content for estimating content overlap
+
+xref:preston-diff.adoc[*diff*, *intersect*]::
+  Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets
+
+xref:preston-union.adoc[*union*]::
+  Uses pre-calculated sketches (only theta sketches for now) to calculates union of distinct elements found in datasets
+
+xref:preston-grep.adoc[*grep*, *match*, *findURLs*]::
+  Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets
+
+xref:preston-test.adoc[*test*, *verify*, *check*, *validate*]::
+  Verifies completeness and integrity of the local biodiversity dataset graph
+
+xref:preston-version.adoc[*version*]::
+  Show version
+
+xref:preston-seeds.adoc[*seeds*]::
+  Lists supported biodiversity networks
+
+xref:preston-hash.adoc[*hash*]::
+  Offline (re-)processing of tracked biodiversity dataset graph using stdin
+
+xref:preston-alias.adoc[*alias*, *aliases*]::
+  Search for (friendly) aliases, or names, for content hashes
+
+xref:preston-dwc-stream.adoc[*dwc-stream*, *json-stream*, *dwc-json-stream*]::
+  Extract records from DarwinCore archives in line-json
+
+xref:preston-cite.adoc[*cite*]::
+  Cites datasets in dataset archive
+
+xref:preston-gen-manpage.adoc[*gen-manpage*]::
+  Generates man pages for all commands in the specified directory.
+
+xref:preston-help.adoc[*help*]::
+  Displays help information about the specified command
+
+// end::picocli-generated-man-section-commands[]
+
+// tag::picocli-generated-man-section-exit-status[]
+// end::picocli-generated-man-section-exit-status[]
+
+// tag::picocli-generated-man-section-footer[]
+// end::picocli-generated-man-section-footer[]
+
+// end::picocli-generated-full-manpage[]

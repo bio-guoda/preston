@@ -1,0 +1,63 @@
+// tag::picocli-generated-full-manpage[]
+// tag::picocli-generated-man-section-header[]
+:doctype: manpage
+:revnumber: 
+:manmanual: Preston Manual
+:mansource: 
+:man-linkstyle: pass:[blue R < >]
+= preston-test(1)
+
+// end::picocli-generated-man-section-header[]
+
+// tag::picocli-generated-man-section-name[]
+== Name
+
+preston-test - Verifies completeness and integrity of the local biodiversity dataset graph
+
+// end::picocli-generated-man-section-name[]
+
+// tag::picocli-generated-man-section-synopsis[]
+== Synopsis
+
+*preston test* [*--skip-hash-verification*] [*-a*=_<hashType>_]
+             [*--data-dir*=_<localDataDir>_] [*--tmp-dir*=_<localTmpDir>_]
+
+// end::picocli-generated-man-section-synopsis[]
+
+// tag::picocli-generated-man-section-description[]
+== Description
+
+Verifies completeness and integrity of the local biodiversity dataset graph
+
+// end::picocli-generated-man-section-description[]
+
+// tag::picocli-generated-man-section-options[]
+== Options
+
+*-a*, *--algo, --hash-algorithm*=_<hashType>_::
+  Hash algorithm used to generate primary content identifiers
+
+*--data-dir*=_<localDataDir>_::
+  Location of local content cache
+
+*--skip-hash-verification*::
+  Do not verify hash, just check availability
+
+*--tmp-dir*=_<localTmpDir>_::
+  Location of local tmp dir
+
+// end::picocli-generated-man-section-options[]
+
+// tag::picocli-generated-man-section-arguments[]
+// end::picocli-generated-man-section-arguments[]
+
+// tag::picocli-generated-man-section-commands[]
+// end::picocli-generated-man-section-commands[]
+
+// tag::picocli-generated-man-section-exit-status[]
+// end::picocli-generated-man-section-exit-status[]
+
+// tag::picocli-generated-man-section-footer[]
+// end::picocli-generated-man-section-footer[]
+
+// end::picocli-generated-full-manpage[]
