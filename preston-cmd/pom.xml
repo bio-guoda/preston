@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>preston-hexas</artifactId>
+            <artifactId>preston-index</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
