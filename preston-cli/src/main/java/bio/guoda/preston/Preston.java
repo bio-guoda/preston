@@ -55,7 +55,7 @@ import static java.lang.System.exit;
                 CmdCite.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Preston - a biodiversity dataset tracker",
+        description = "preston - a biodiversity dataset tracker",
         mixinStandardHelpOptions = true)
 public class Preston {
     public static void main(String[] args) {
