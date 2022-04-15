@@ -14,6 +14,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import picocli.CommandLine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,11 +25,20 @@ import java.util.List;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 
-@Parameters(separators = "= ", commandDescription = "get biodiversity data")
+@Parameters(separators = "= ", commandDescription = CmdGet.GET_BIODIVERSITY_DATA)
+
+@CommandLine.Command(
+        name = "cat",
+        aliases = {"get"},
+        description = CmdGet.GET_BIODIVERSITY_DATA
+)
 public class CmdGet extends Persisting implements Runnable {
 
-    @Parameter(description = "content ids or known aliases (e.g., [hash://sha256/8ed311...])",
+    public static final String CONTENT_ID = "Content ids or known aliases (e.g., [hash://sha256/8ed311...])";
+    public static final String GET_BIODIVERSITY_DATA = "Get biodiversity data";
+    @Parameter(description = CONTENT_ID,
             validateWith = URIValidator.class)
+    @CommandLine.Parameters(description = CONTENT_ID)
     private List<String> contentIdsOrAliases = new ArrayList<>();
 
     @Override
@@ -97,7 +107,6 @@ public class CmdGet extends Persisting implements Runnable {
     public void setContentIdsOrAliases(List<String> contentIdsOrAliases) {
         this.contentIdsOrAliases = contentIdsOrAliases;
     }
-
 
 
 }

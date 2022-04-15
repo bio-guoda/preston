@@ -7,7 +7,9 @@ import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.DereferencerContentAddressed;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import picocli.CommandLine;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,20 +18,25 @@ import java.util.Queue;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toBlank;
-import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 @Parameters(separators = "= ", commandDescription = "tracks resources via their IRIs")
 public class CmdTrack extends CmdActivity {
 
-    @Parameter(description = "[url1] [url2] ...",
+    public static final String URL_1_URL_2 = "[url1] [url2] ...";
+    @Parameter(description = URL_1_URL_2,
             validateWith = IRIValidator.class)
-    private List<String> IRIs = new ArrayList<>();
+    @CommandLine.Parameters(
+            description = URL_1_URL_2
+    )
+
+    private List<IRI> IRIs = new ArrayList<>();
+
 
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
         IRIs.forEach(iri -> {
-            Quad quad = toStatement(ctx.getActivity(), toIRI(iri), HAS_VERSION, toBlank());
+            Quad quad = toStatement(ctx.getActivity(), iri, HAS_VERSION, toBlank());
             statementQueue.add(Collections.singletonList(quad));
         });
     }
@@ -61,7 +68,7 @@ public class CmdTrack extends CmdActivity {
                 listeners);
     }
 
-    public List<String> getIRIs() {
+    public List<IRI> getIRIs() {
         return IRIs;
     }
 

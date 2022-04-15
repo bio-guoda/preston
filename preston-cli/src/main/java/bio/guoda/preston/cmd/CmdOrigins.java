@@ -12,6 +12,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import picocli.CommandLine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,13 +23,24 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static bio.guoda.preston.StatementLogFactory.*;
 
-@Parameters(separators = "= ", commandDescription = "traces to origin of biodiversity dataset graphs")
+@Parameters(separators = "= ", commandDescription = CmdOrigins.TRACES_TO_ORIGIN_OF_BIODIVERSITY_DATASET_GRAPHS)
+
+@CommandLine.Command(
+        name = "origins",
+        aliases = {"origin", "prov", "provenance"},
+        description = CmdOrigins.TRACES_TO_ORIGIN_OF_BIODIVERSITY_DATASET_GRAPHS
+)
 public class CmdOrigins extends LoggingPersisting implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(CmdOrigins.class);
+    public static final String TRACES_TO_ORIGIN_OF_BIODIVERSITY_DATASET_GRAPHS = "Traces to origin of biodiversity dataset graphs";
+    public static final String CONTENT_ID_OF_PROVENANCE_ANCHORS_E_G_HASH_SHA_256_8_ED_311 = "Content id of provenance anchors (e.g., [hash://sha256/8ed311...])";
 
-    @Parameter(description = "content id of provenance anchors (e.g., [hash://sha256/8ed311...])",
+    @Parameter(description = CONTENT_ID_OF_PROVENANCE_ANCHORS_E_G_HASH_SHA_256_8_ED_311,
             validateWith = IRIValidator.class, converter = IRIConverter.class)
+    @CommandLine.Parameters(
+            description = CONTENT_ID_OF_PROVENANCE_ANCHORS_E_G_HASH_SHA_256_8_ED_311
+    )
     private List<IRI> provenanceAnchors = new ArrayList<>();
 
     @Override

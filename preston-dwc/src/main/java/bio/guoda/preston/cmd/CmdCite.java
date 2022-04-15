@@ -10,9 +10,16 @@ import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.Quad;
+import picocli.CommandLine;
 
-@Parameters(separators = "= ", commandDescription = "Cites datasets in dataset archive")
+@Parameters(separators = "= ", commandDescription = CmdCite.CITES_DATASETS_IN_DATASET_ARCHIVE)
+@CommandLine.Command(
+        name = "cite",
+        description = CmdCite.CITES_DATASETS_IN_DATASET_ARCHIVE
+)
 public class CmdCite extends LoggingPersisting implements Runnable {
+
+    public static final String CITES_DATASETS_IN_DATASET_ARCHIVE = "Cites datasets in dataset archive";
 
     @Override
     public void run() {

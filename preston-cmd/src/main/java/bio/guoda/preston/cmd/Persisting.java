@@ -31,6 +31,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
+import picocli.CommandLine;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,13 +45,30 @@ import java.util.stream.Stream;
 
 public class Persisting extends PersistingLocal {
 
-    @Parameter(names = {"--remote", "--remotes", "--include", "--repos", "--repositories"}, description = "included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)", converter = URIConverter.class, validateWith = URIValidator.class)
+    private static final String REMOTES = "Included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)";
+    private static final String DISABLE_LOCAL_CONTENT_CACHE = "Disable local content cache";
+    private static final String DISABLE_PROGRESS_MONITOR = "Disable progress monitor";
+
+    @Parameter(names = {"--remote", "--remotes", "--include", "--repos", "--repositories"}, description = REMOTES, converter = URIConverter.class, validateWith = URIValidator.class)
+    @CommandLine.Option(
+            names = {"--remote", "--remotes", "--include", "--repos", "--repositories"},
+            description = REMOTES
+    )
+
     private List<URI> remotes = new ArrayList<>();
 
-    @Parameter(names = {"--no-cache", "--disable-cache"}, description = "disable local content cache")
+    @Parameter(names = {"--no-cache", "--disable-cache"}, description = DISABLE_LOCAL_CONTENT_CACHE)
+    @CommandLine.Option(
+            names = {"--no-cache", "--disable-cache"},
+            description = DISABLE_LOCAL_CONTENT_CACHE
+    )
     private Boolean disableCache = false;
 
-    @Parameter(names = {"--no-progress"}, description = "disable progress monitor")
+    @Parameter(names = {"--no-progress"}, description = DISABLE_PROGRESS_MONITOR)
+    @CommandLine.Option(
+            names = {"--no-process"},
+            description = DISABLE_PROGRESS_MONITOR
+    )
     private Boolean disableProgress = false;
 
     private boolean supportTarGzDiscovery = true;

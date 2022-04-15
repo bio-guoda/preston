@@ -1,7 +1,5 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.DerefProgressListener;
-import bio.guoda.preston.Version;
 import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -141,7 +139,7 @@ public class ResourcesHTTP {
                     .setSSLHostnameVerifier(new NoopHostnameVerifier()) // see https://github.com/bio-guoda/preston/issues/25
                     .setSSLContext(build)
                     .setRetryHandler(new DefaultHttpRequestRetryHandler(3, true))
-                    .setUserAgent("globalbioticinteractions/" + Version.getVersion() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)")
+                    .setUserAgent("globalbioticinteractions/" + Version.getVersionString() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)")
                     .setDefaultRequestConfig(config)
                     .build();
         } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {

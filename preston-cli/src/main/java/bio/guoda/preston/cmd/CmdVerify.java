@@ -15,6 +15,7 @@ import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import picocli.CommandLine;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,12 +29,19 @@ import java.util.TreeMap;
 
 import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 
-@Parameters(separators = "= ", commandDescription = "verifies completeness and integrity of the local biodiversity dataset graph")
+@Parameters(separators = "= ", commandDescription = CmdVerify.VERIFIES_COMPLETENESS_AND_INTEGRITY_OF_THE_LOCAL_BIODIVERSITY_DATASET_GRAPH)
+@CommandLine.Command(
+        name = "test",
+        aliases = {"verify", "check", "validate"},
+        description = CmdVerify.VERIFIES_COMPLETENESS_AND_INTEGRITY_OF_THE_LOCAL_BIODIVERSITY_DATASET_GRAPH
+)
 public class CmdVerify extends PersistingLocal implements Runnable {
 
     public static final List<State> OK_STATES = Arrays.asList(
             State.CONTENT_PRESENT_VALID_HASH,
             State.CONTENT_PRESENT_HASH_NOT_VERIFIED);
+    public static final String VERIFIES_COMPLETENESS_AND_INTEGRITY_OF_THE_LOCAL_BIODIVERSITY_DATASET_GRAPH = "Verifies completeness and integrity of the local biodiversity dataset graph";
+    public static final String DO_NOT_VERIFY_HASH_JUST_CHECK_AVAILABILITY = "Do not verify hash, just check availability";
 
     enum State {
         MISSING,
@@ -42,7 +50,11 @@ public class CmdVerify extends PersistingLocal implements Runnable {
         CONTENT_PRESENT_HASH_NOT_VERIFIED
     }
 
-    @Parameter(names = {"--skip-hash-verification"}, description = "do not verify hash, just check availability")
+    @Parameter(names = {"--skip-hash-verification"}, description = DO_NOT_VERIFY_HASH_JUST_CHECK_AVAILABILITY)
+    @CommandLine.Option(
+            names = "--skip-hash-verification",
+            description = DO_NOT_VERIFY_HASH_JUST_CHECK_AVAILABILITY
+    )
     private Boolean skipHashVerification = false;
 
     @Override

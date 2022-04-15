@@ -5,13 +5,14 @@ package bio.guoda.preston;
  */
 
 import org.apache.commons.lang3.StringUtils;
+import picocli.CommandLine;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class Version {
-    public static String getVersion(String defaultVersion) {
+public final class Version implements CommandLine.IVersionProvider {
+    public static String getVersionString(String defaultVersion) {
         String version = null;
         try (InputStream file = Version.class.getResourceAsStream("/preston.properties")) {
             Properties prop = new Properties();
@@ -24,7 +25,12 @@ public class Version {
         return StringUtils.isBlank(version) ? defaultVersion : version;
     }
 
-    public static String getVersion() {
-        return getVersion("dev");
+    public static String getVersionString() {
+        return getVersionString("dev");
+    }
+
+    @Override
+    public String[] getVersion() throws Exception {
+        return new String[] { getVersionString("dev") };
     }
 }

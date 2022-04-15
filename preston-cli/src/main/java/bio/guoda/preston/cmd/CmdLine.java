@@ -62,7 +62,7 @@ public class CmdLine {
                 .addCommand("merge", new CmdMerge(), "join", "use", "import")
 
                 // sketch generation (e.g, bloom, theta)
-                .addCommand("sketch", new CmdCreateSketch(), "bloom")
+                .addCommand("sketch", new CmdSketchCreate(), "bloom")
 
                 // sketch operations
                 .addCommand("diff", new CmdSketchDiff(), "intersect")

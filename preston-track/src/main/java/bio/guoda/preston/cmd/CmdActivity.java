@@ -195,8 +195,8 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         IRI crawlActivity = activity.getActivity();
 
 
-        String version = Version.getVersion(null);
-        String versionString = version == null ? "" : (" (Version " + Version.getVersion() + ")");
+        String version = Version.getVersionString(null);
+        String versionString = version == null ? "" : (" (Version " + Version.getVersionString() + ")");
         return Arrays.asList(
                 toStatement(crawlActivity, PRESTON, IS_A, SOFTWARE_AGENT),
                 toStatement(crawlActivity, PRESTON, IS_A, AGENT),

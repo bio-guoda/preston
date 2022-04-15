@@ -12,6 +12,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import picocli.CommandLine;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,9 +20,15 @@ import java.util.List;
 import java.util.Queue;
 import java.util.function.Predicate;
 
-@Parameters(separators = "= ", commandDescription = "(friendly) aliases, or names, for content hashes")
+@Parameters(separators = "= ", commandDescription = CmdAlias.FRIENDLY_ALIASES_OR_NAMES_FOR_CONTENT_HASHES)
+@CommandLine.Command(
+        name = "alias",
+        aliases = "aliases",
+        description = CmdAlias.FRIENDLY_ALIASES_OR_NAMES_FOR_CONTENT_HASHES
+)
 public class CmdAlias extends CmdAppend implements Runnable {
 
+    public static final String FRIENDLY_ALIASES_OR_NAMES_FOR_CONTENT_HASHES = "Search for (friendly) aliases, or names, for content hashes";
     @Parameter(description = "[alias] [content hash] (e.g., [birds.zip] [hash://sha256/123...])",
             validateWith = IRIValidator.class,
             converter = IRIConverter.class)

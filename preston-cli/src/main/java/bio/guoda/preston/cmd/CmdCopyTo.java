@@ -16,6 +16,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.IRI;
 import org.joda.time.DateTime;
+import picocli.CommandLine;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,16 +25,41 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 
-@Parameters(separators = "= ", commandDescription = "Copy biodiversity dataset graph")
+@Parameters(separators = "= ", commandDescription = CmdCopyTo.COPY_BIODIVERSITY_DATASET_GRAPH)
+
+@CommandLine.Command(
+        name = "cp",
+        aliases = {"copyTo", "export"},
+        description = CmdCopyTo.COPY_BIODIVERSITY_DATASET_GRAPH
+)
 public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
-    @Parameter(description = "[target directory]")
+    public static final String COPY_BIODIVERSITY_DATASET_GRAPH = "Copy biodiversity dataset graph";
+    public static final String ARCHIVE_TYPE = "Archive type";
+    public static final String TARGET_DIRECTORY = "target directory";
+    public static final String HASH_PATH_PATTERN_OF_CONTENT_TO_BE_COPIED = "Hash path pattern of content to be copied";
+
+    @Parameter(description = TARGET_DIRECTORY)
+    @CommandLine.Parameters(
+            description = TARGET_DIRECTORY
+    )
     private String targetDir;
 
-    @Parameter(names = {"-t", "--type",}, description = "archive type", converter = ArchiveTypeConverter.class)
+    @Parameter(names = {"-t", "--type"}, description = ARCHIVE_TYPE, converter = ArchiveTypeConverter.class)
+
+    @CommandLine.Option(
+            names = {"-t", "--type"},
+            description = ARCHIVE_TYPE
+    )
     private ArchiveType archiveType = ArchiveType.data_prov_provindex;
 
-    @Parameter(names = {"-p", "--target-hash-path-pattern",}, description = "hash path pattern of content to be copied", converter = HashPathPatternConverter.class)
+    @Parameter(names = {"-p", "--target-hash-path-pattern",}, description = HASH_PATH_PATTERN_OF_CONTENT_TO_BE_COPIED, converter = HashPathPatternConverter.class)
+
+    @CommandLine.Option(
+            names = {"-p", "--target-hash-path-pattern"},
+            description = HASH_PATH_PATTERN_OF_CONTENT_TO_BE_COPIED
+    )
+
     private HashPathPattern pathPattern = HashPathPattern.directoryDepth2;
 
     protected ArchiveType getArchiveType() {

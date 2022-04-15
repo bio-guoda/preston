@@ -10,9 +10,18 @@ import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import com.beust.jcommander.Parameters;
 import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.Quad;
+import picocli.CommandLine;
 
-@Parameters(separators = "= ", commandDescription = "Extract records from DarwinCore archives in line-json")
+@Parameters(separators = "= ", commandDescription = CmdDwcRecordStream.EXTRACT_RECORDS_FROM_DARWIN_CORE_ARCHIVES_IN_LINE_JSON)
+
+@CommandLine.Command(
+        name = "dwc-stream",
+        aliases = {"json-stream", "dwc-json-stream"},
+        description = CmdDwcRecordStream.EXTRACT_RECORDS_FROM_DARWIN_CORE_ARCHIVES_IN_LINE_JSON
+)
 public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
+
+    public static final String EXTRACT_RECORDS_FROM_DARWIN_CORE_ARCHIVES_IN_LINE_JSON = "Extract records from DarwinCore archives in line-json";
 
     @Override
     public void run() {
