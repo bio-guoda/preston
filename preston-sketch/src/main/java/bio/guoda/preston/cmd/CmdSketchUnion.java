@@ -13,7 +13,9 @@ import picocli.CommandLine;
 
 import java.io.IOException;
 
-@CommandLine.Command(description =  "Uses pre-calculated sketches (only theta sketches for now) to calculates union of distinct elements found in datasets")
+@CommandLine.Command(
+        name = "union",
+        description =  "Uses pre-calculated sketches (only theta sketches for now) to calculates union of distinct elements found in datasets")
 public class CmdSketchUnion extends LoggingPersisting implements Runnable {
 
     @Override

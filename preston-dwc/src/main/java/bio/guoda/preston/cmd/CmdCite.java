@@ -7,12 +7,10 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import com.beust.jcommander.Parameters;
 import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
-@Parameters(separators = "= ", commandDescription = CmdCite.CITES_DATASETS_IN_DATASET_ARCHIVE)
 @CommandLine.Command(
         name = "cite",
         description = CmdCite.CITES_DATASETS_IN_DATASET_ARCHIVE

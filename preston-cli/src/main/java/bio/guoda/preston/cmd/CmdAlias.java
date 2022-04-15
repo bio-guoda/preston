@@ -25,7 +25,10 @@ import java.util.function.Predicate;
 )
 public class CmdAlias extends CmdAppend implements Runnable {
 
-    @CommandLine.Parameters(description = "[alias] [content hash] (e.g., [birds.zip] [hash://sha256/123...])")
+    @CommandLine.Parameters(
+            description = "[alias] [content hash] (e.g., [birds.zip] [hash://sha256/123...])",
+            converter = TypeConverterIRI.class
+    )
     private List<IRI> params = new ArrayList<>();
 
     @Override

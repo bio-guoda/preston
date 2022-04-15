@@ -6,6 +6,7 @@ package bio.guoda.preston;
 
 import bio.guoda.preston.cmd.CmdAlias;
 import bio.guoda.preston.cmd.CmdAppend;
+import bio.guoda.preston.cmd.CmdCite;
 import bio.guoda.preston.cmd.CmdClone;
 import bio.guoda.preston.cmd.CmdCopyTo;
 import bio.guoda.preston.cmd.CmdDwcRecordStream;
@@ -51,6 +52,7 @@ import static java.lang.System.exit;
                 CmdHash.class,
                 CmdAlias.class,
                 CmdDwcRecordStream.class,
+                CmdCite.class,
                 CommandLine.HelpCommand.class
         },
         description = "Preston - a biodiversity dataset tracker",
