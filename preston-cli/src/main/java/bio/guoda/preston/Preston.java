@@ -8,6 +8,7 @@ import bio.guoda.preston.cmd.CmdAlias;
 import bio.guoda.preston.cmd.CmdAppend;
 import bio.guoda.preston.cmd.CmdClone;
 import bio.guoda.preston.cmd.CmdCopyTo;
+import bio.guoda.preston.cmd.CmdDwcRecordStream;
 import bio.guoda.preston.cmd.CmdGrep;
 import bio.guoda.preston.cmd.CmdHash;
 import bio.guoda.preston.cmd.CmdSeeds;
@@ -18,6 +19,7 @@ import bio.guoda.preston.cmd.CmdList;
 import bio.guoda.preston.cmd.CmdMerge;
 import bio.guoda.preston.cmd.CmdOrigins;
 import bio.guoda.preston.cmd.CmdSketchDiff;
+import bio.guoda.preston.cmd.CmdSketchUnion;
 import bio.guoda.preston.cmd.CmdUpdate;
 import bio.guoda.preston.cmd.CmdVerify;
 import bio.guoda.preston.cmd.CmdVersion;
@@ -41,12 +43,14 @@ import static java.lang.System.exit;
                 CmdMerge.class,
                 CmdSketchCreate.class,
                 CmdSketchDiff.class,
+                CmdSketchUnion.class,
                 CmdGrep.class,
                 CmdVerify.class,
                 CmdVersion.class,
                 CmdSeeds.class,
                 CmdHash.class,
                 CmdAlias.class,
+                CmdDwcRecordStream.class,
                 CommandLine.HelpCommand.class
         },
         description = "Preston - a biodiversity dataset tracker",
@@ -54,13 +58,10 @@ import static java.lang.System.exit;
 public class Preston {
     public static void main(String[] args) {
         try {
-            //CmdLine.run(args);
-
             CommandLine commandLine = new CommandLine(new Preston());
             commandLine.registerConverter(IRI.class, new TypeConverterIRI());
             int exitCode = commandLine.execute(args);
             System.exit(exitCode);
-            exit(0);
         } catch (Throwable t) {
             t.printStackTrace(System.err);
             exit(1);

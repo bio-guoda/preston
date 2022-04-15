@@ -7,12 +7,9 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import com.beust.jcommander.Parameters;
 import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
-
-@Parameters(separators = "= ", commandDescription = CmdDwcRecordStream.EXTRACT_RECORDS_FROM_DARWIN_CORE_ARCHIVES_IN_LINE_JSON)
 
 @CommandLine.Command(
         name = "dwc-stream",

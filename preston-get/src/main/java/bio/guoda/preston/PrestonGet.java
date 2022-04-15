@@ -1,7 +1,9 @@
 package bio.guoda.preston;
 
 import bio.guoda.preston.cmd.CmdGet;
-import com.beust.jcommander.JCommander;
+import bio.guoda.preston.cmd.TypeConverterIRI;
+import org.apache.commons.rdf.api.IRI;
+import picocli.CommandLine;
 
 import java.util.List;
 
@@ -10,7 +12,8 @@ import static java.lang.System.exit;
 public class PrestonGet {
     public static void main(String[] args) {
         try {
-            run(args);
+            int exitCode = run(args);
+            System.exit(exitCode);
             exit(0);
         } catch (Throwable t) {
             t.printStackTrace(System.err);
@@ -18,15 +21,10 @@ public class PrestonGet {
         }
     }
 
-    static void run(String[] args) {
-        JCommander jc = JCommander.newBuilder()
-                .addObject(new CmdGet())
-                .build();
-        jc.parse(args);
-        List<Object> objects = jc.getObjects();
-        if (objects.size() > 0) {
-            ((Runnable) objects.get(0)).run();
-        }
+    static int run(String[] args) {
+        CommandLine commandLine = new CommandLine(new CmdGet());
+        commandLine.registerConverter(IRI.class, new TypeConverterIRI());
+        return commandLine.execute(args);
     }
 
 }

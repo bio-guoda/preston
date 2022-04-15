@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
+import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.ProcessorReadOnly;
 import bio.guoda.preston.process.SketchIntersectBloomFilter;
 import bio.guoda.preston.process.SketchIntersectTheta;
@@ -8,23 +9,18 @@ import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
 import java.util.Arrays;
 import java.util.List;
 
-@Parameters(separators = "= ", commandDescription = "Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets")
-
 @CommandLine.Command(
         name = "diff",
         aliases = {"intersect"},
         description = "Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets"
 )
-
 public class CmdSketchDiff extends LoggingPersisting implements Runnable {
 
     @Override

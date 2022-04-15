@@ -8,8 +8,6 @@ import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.VersionUtil;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -25,8 +23,6 @@ import java.util.List;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 
-@Parameters(separators = "= ", commandDescription = CmdGet.GET_BIODIVERSITY_DATA)
-
 @CommandLine.Command(
         name = "cat",
         aliases = {"get"},
@@ -36,10 +32,8 @@ public class CmdGet extends Persisting implements Runnable {
 
     public static final String CONTENT_ID = "Content ids or known aliases (e.g., [hash://sha256/8ed311...])";
     public static final String GET_BIODIVERSITY_DATA = "Get biodiversity data";
-    @Parameter(description = CONTENT_ID,
-            validateWith = URIValidator.class)
     @CommandLine.Parameters(description = CONTENT_ID)
-    private List<String> contentIdsOrAliases = new ArrayList<>();
+    private List<IRI> contentIdsOrAliases = new ArrayList<>();
 
     @Override
     public void run() {
@@ -51,7 +45,7 @@ public class CmdGet extends Persisting implements Runnable {
         run(blobStore, contentIdsOrAliases);
     }
 
-    void run(BlobStoreReadOnly blobStore, List<String> contentIdsOrAliases) {
+    void run(BlobStoreReadOnly blobStore, List<IRI> contentIdsOrAliases) {
         try {
             if (contentIdsOrAliases.isEmpty()) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(getInputStream()));
@@ -65,8 +59,8 @@ public class CmdGet extends Persisting implements Runnable {
                     handleContentQuery(blobStore, quad);
                 }
             } else {
-                for (String s : contentIdsOrAliases) {
-                    handleContentQuery(blobStore, RefNodeFactory.toIRI(s));
+                for (IRI s : contentIdsOrAliases) {
+                    handleContentQuery(blobStore, s);
                 }
             }
         } catch (Throwable th) {
@@ -100,11 +94,11 @@ public class CmdGet extends Persisting implements Runnable {
         }
     }
 
-    public List<String> getContentIdsOrAliases() {
+    public List<IRI> getContentIdsOrAliases() {
         return contentIdsOrAliases;
     }
 
-    public void setContentIdsOrAliases(List<String> contentIdsOrAliases) {
+    public void setContentIdsOrAliases(List<IRI> contentIdsOrAliases) {
         this.contentIdsOrAliases = contentIdsOrAliases;
     }
 

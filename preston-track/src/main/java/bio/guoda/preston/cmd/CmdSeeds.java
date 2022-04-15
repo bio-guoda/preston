@@ -1,11 +1,9 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.Seeds;
-import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
 
-@Parameters(separators = "= ", commandDescription = CmdSeeds.LISTS_SUPPORTED_BIODIVERSITY_NETWORKS)
 @CommandLine.Command(name = "seeds", description = CmdSeeds.LISTS_SUPPORTED_BIODIVERSITY_NETWORKS)
 public class CmdSeeds extends Cmd implements Runnable {
 

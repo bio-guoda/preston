@@ -10,7 +10,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
@@ -38,7 +37,7 @@ public class CmdGetTest {
         System.setOut(new PrintStream(out));
 
         CmdGet cmdGet = new CmdGet();
-        cmdGet.run(blobStoreNull, Collections.singletonList(aContentHash));
+        cmdGet.run(blobStoreNull, Collections.singletonList(RefNodeFactory.toIRI(aContentHash)));
 
         assertThat(blobStoreNull.getAttemptCount.get(), is(1));
         assertThat(out.toString(), is("some bits and bytes"));

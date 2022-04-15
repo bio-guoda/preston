@@ -5,8 +5,6 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.DereferencerContentAddressed;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
@@ -20,18 +18,14 @@ import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toBlank;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
-@Parameters(separators = "= ", commandDescription = "tracks resources via their IRIs")
 public class CmdTrack extends CmdActivity {
 
     public static final String URL_1_URL_2 = "[url1] [url2] ...";
-    @Parameter(description = URL_1_URL_2,
-            validateWith = IRIValidator.class)
     @CommandLine.Parameters(
             description = URL_1_URL_2
     )
 
     private List<IRI> IRIs = new ArrayList<>();
-
 
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
