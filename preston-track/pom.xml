@@ -10,8 +10,9 @@
     </parent>
 
     <artifactId>preston-track</artifactId>
-    <name>Preston tracks digital datasets using provenance logs and content-addressed storage. Includes functionality to keep track of biodiversity data networks like iDigBio, GBIF, Biodiversity Heritage Library, and DataONE.</name>
-    
+    <name>Preston Track</name>
+    <description>Preston tracks digital datasets using provenance logs and content-addressed storage. Includes functionality to keep track of biodiversity data networks like iDigBio, GBIF, Biodiversity Heritage Library, and DataONE.</description>
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

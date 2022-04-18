@@ -12,6 +12,7 @@ import bio.guoda.preston.cmd.CmdCopyTo;
 import bio.guoda.preston.cmd.CmdDwcRecordStream;
 import bio.guoda.preston.cmd.CmdGrep;
 import bio.guoda.preston.cmd.CmdHash;
+import bio.guoda.preston.cmd.CmdInstallManual;
 import bio.guoda.preston.cmd.CmdSeeds;
 import bio.guoda.preston.cmd.CmdSketchCreate;
 import bio.guoda.preston.cmd.CmdGet;
@@ -33,6 +34,8 @@ import static java.lang.System.exit;
 
 @CommandLine.Command(name = "preston",
         versionProvider = Version.class,
+        description = "a biodiversity dataset tracker",
+        mixinStandardHelpOptions = true,
         subcommands = {
                 CmdGet.class,
                 CmdList.class,
@@ -54,11 +57,10 @@ import static java.lang.System.exit;
                 CmdAlias.class,
                 CmdDwcRecordStream.class,
                 CmdCite.class,
+                CmdInstallManual.class,
                 ManPageGenerator.class,
                 CommandLine.HelpCommand.class
-        },
-        description = "preston - a biodiversity dataset tracker",
-        mixinStandardHelpOptions = true)
+        })
 
 public class Preston {
     public static void main(String[] args) {

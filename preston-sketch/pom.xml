@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>preston-sketch</artifactId>
-    <name>Preston with Sketches and Similarity Hash Support</name>
+    <name>Preston Sketch</name>
     <description>prototypes for extending Preston with similarity hashes to related content ids</description>
 
     <properties>
