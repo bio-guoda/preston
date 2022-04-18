@@ -13,7 +13,7 @@ import java.io.InputStream;
 @CommandLine.Command(
         name = "config-man",
         aliases = {"config-manpage"},
-        description = "Installs/configures Preston man page, so you can do [man preston]. "
+        description = "Installs/configures Preston man page, so you can type [man preston] on unix-like system to learn more about Preston. "
 )
 public class CmdInstallManual extends Cmd implements Runnable {
 
