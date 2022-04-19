@@ -12,7 +12,7 @@
 // tag::picocli-generated-man-section-name[]
 == Name
 
-preston - preston - a biodiversity dataset tracker
+preston - a biodiversity dataset tracker
 
 // end::picocli-generated-man-section-name[]
 
@@ -26,7 +26,7 @@ preston - preston - a biodiversity dataset tracker
 // tag::picocli-generated-man-section-description[]
 == Description
 
-preston - a biodiversity dataset tracker
+a biodiversity dataset tracker
 
 // end::picocli-generated-man-section-description[]
 
@@ -104,8 +104,14 @@ xref:preston-alias.adoc[*alias*, *aliases*]::
 xref:preston-dwc-stream.adoc[*dwc-stream*, *json-stream*, *dwc-json-stream*]::
   Extract records from DarwinCore archives in line-json
 
+xref:preston-dbase-json-stream.adoc[*dbase-json-stream*, *dbase2json*, *dbase-stream*]::
+  Extract records from DBase files (*.DBF) in line-json
+
 xref:preston-cite.adoc[*cite*]::
   Cites datasets in dataset archive
+
+xref:preston-config-man.adoc[*config-man*, *config-manpage*, *install-manpage*]::
+  Installs/configures Preston man page, so you can type [man preston] on unix-like system to learn more about Preston. 
 
 xref:preston-gen-manpage.adoc[*gen-manpage*]::
   Generates man pages for all commands in the specified directory.
