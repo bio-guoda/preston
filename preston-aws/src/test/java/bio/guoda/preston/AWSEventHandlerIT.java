@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
 
-public class AWSEventHandlerTest {
+public class AWSEventHandlerIT {
 
     @Ignore("In case something happens to https://deeplinker.bio")
     @Test
