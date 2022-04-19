@@ -3,7 +3,7 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.process.LogErrorHandler;
 
 public class LogErrorHandlerExitOnError implements LogErrorHandler {
-    static final LogErrorHandlerExitOnError EXIT_ON_ERROR = LogErrorHandlerExitOnError.EXIT_ON_ERROR;
+    public static final LogErrorHandlerExitOnError EXIT_ON_ERROR = LogErrorHandlerExitOnError.EXIT_ON_ERROR;
 
     private LogErrorHandlerExitOnError() {
 
