@@ -15,7 +15,7 @@ MJ Elliott, JH Poelen, JAB Fortes (2020). Toward Reliable Biodiversity Dataset R
 To install [a preston release](../../releases) on your linux/mac: 
 
 ```console
-sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.3.7/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
+sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.3.8/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
 ```
 :warning: Note that this installs preston using sudo privileges and makes preston.jar executable. Please inspect the script before running it. Also see [install](#install).
 
@@ -548,7 +548,7 @@ On linux (and Mac) you can install Preston by running:
 
 
 ```console
-sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.3.7/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
+sudo sh -c '(echo "#!/usr/bin/env sh" && curl -L https://github.com/bio-guoda/preston/releases/download/0.3.8/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
 ```
 :warning: Note that this installs preston using sudo privileges and makes preston.jar executable. Please inspect the script before running it.
 
