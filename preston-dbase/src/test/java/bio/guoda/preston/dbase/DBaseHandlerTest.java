@@ -2,6 +2,7 @@ package bio.guoda.preston.dbase;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
+import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.Is;
@@ -35,7 +36,7 @@ public class DBaseHandlerTest {
 
         asJsonStream(out, resourceIRI, contentStore);
 
-        String expected = IOUtils.toString(getClass().getResourceAsStream("CMMUS2K.json"), StandardCharsets.UTF_8);
+        String expected = IOUtils.toString(TestUtil.filterLineFeedFromTextInputStream(getClass().getResourceAsStream("CMMUS2K.json")), StandardCharsets.UTF_8);
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
         assertThat(actual, Is.is(expected));
     }
