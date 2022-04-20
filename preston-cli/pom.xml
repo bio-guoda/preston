@@ -16,7 +16,7 @@
     <properties>
         <asciidoctor-maven-plugin.version>2.2.2</asciidoctor-maven-plugin.version>
         <asciidoctorj.version>2.5.3</asciidoctorj.version>
-        <generated.docs.dir>${project.build.outputDirectory}/org/globalbioticinteractions/${project.artifactId}/docs</generated.docs.dir>
+        <generated.docs.dir>${project.build.outputDirectory}/bio/guoda/${project.artifactId}/docs</generated.docs.dir>
     </properties>
 
     <dependencies>
