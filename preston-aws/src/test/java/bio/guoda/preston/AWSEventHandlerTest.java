@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
 
-public class AWSEventHandlerIT {
+public class AWSEventHandlerTest {
 
     @Ignore("In case something happens to https://deeplinker.bio")
     @Test
@@ -37,6 +37,7 @@ public class AWSEventHandlerIT {
 
     @Test
     public void getSomethingInATarGz() throws IOException {
+        // this test may fail if Zenodo is down, or loses data.
         InputStream in = IOUtils.toInputStream(
                 String.format("{ %s, %s }",
                         "\"id\": \"hash://sha256/d61c5f1747b2e95a53028db1958d6993ca2cd1b7d2352b7bc7619cd15752482d\"",
@@ -45,11 +46,11 @@ public class AWSEventHandlerIT {
 
         Context context = new TestContext();
 
-        OutputStream out = new ByteArrayOutputStream();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         AWSEventHandler handler = new AWSEventHandler();
         handler.handleRequest(in, out, context);
 
-        String theOut = out.toString();
-        assertThat(theOut, startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"));
+        assertThat(new String(out.toByteArray(),
+                StandardCharsets.UTF_8), startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"));
     }
 }
