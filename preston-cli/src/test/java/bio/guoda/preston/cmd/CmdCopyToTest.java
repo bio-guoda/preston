@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.store.KeyTo1LevelPath;
+import net.lingala.zip4j.ZipFile;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,7 +13,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,25 +26,28 @@ public class CmdCopyToTest {
     @Test
     public void trackAndCopy() throws URISyntaxException, IOException {
         // https://github.com/bio-guoda/preston/issues/166
-        URL resource = getClass().getResource("/bio/guoda/preston/cmd/copy-test-data/2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a");
-        assertNotNull(resource);
-        File file = new File(resource.toURI());
-        File dataDir = file.getParentFile().getParentFile().getParentFile();
+        File src = prepareSrcDir();
+        File copyTo = tmpDir.newFolder("dst");
+        assertCopy(src, copyTo);
+    }
 
-        File copyTo = tmpDir.newFolder();
-        assertCopy(dataDir, copyTo);
+    private File prepareSrcDir() throws URISyntaxException, IOException {
+        URL resource = getClass().getResource("/bio/guoda/preston/cmd/copy-test-data.zip");
+        assertNotNull(resource);
+
+        ZipFile zipFile = new ZipFile(new File(resource.toURI()));
+        File src = tmpDir.newFolder("src");
+        zipFile.extractAll(src.getAbsolutePath());
+        return src;
     }
 
     @Test
     public void trackAndCopyTwice() throws URISyntaxException, IOException {
         // https://github.com/bio-guoda/preston/issues/166
-        URL resource = getClass().getResource("/bio/guoda/preston/cmd/copy-test-data/2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a");
-        assertNotNull(resource);
-        File file = new File(resource.toURI());
-        File dataDir = file.getParentFile().getParentFile().getParentFile();
+        File src = prepareSrcDir();
 
         File copyTo = tmpDir.newFolder("foo");
-        assertCopy(dataDir, copyTo);
+        assertCopy(src, copyTo);
         File copyToAgain = tmpDir.newFolder("bar");
         CmdCopyTo cmdCopyTo = new CmdCopyTo();
         cmdCopyTo.setLocalDataDir(copyTo.getAbsolutePath());
