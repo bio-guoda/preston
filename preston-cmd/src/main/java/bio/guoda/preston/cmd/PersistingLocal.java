@@ -42,6 +42,7 @@ public class PersistingLocal extends Cmd {
             description = "Hash algorithm used to generate primary content identifiers"
     )
     private HashType hashType = HashType.sha256;
+    private KeyToPath keyToPathLocal = null;
 
 
     File getDefaultDataDir() {
@@ -73,6 +74,10 @@ public class PersistingLocal extends Cmd {
                 new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())
         );
 
+        return getTracerOfDescendants(keyValueStore);
+    }
+
+    public ProvenanceTracer getTracerOfDescendants(KeyValueStore keyValueStore) {
         HexaStoreImpl hexastore = new HexaStoreImpl(
                 keyValueStore,
                 getHashType()
@@ -86,8 +91,19 @@ public class PersistingLocal extends Cmd {
     }
 
 
-    KeyToPath getKeyToPathLocal() {
-        return new KeyTo3LevelPath(getDefaultDataDir().toURI(), getHashType());
+    public KeyToPath getKeyToPathLocal() {
+        initIfNeeded();
+        return keyToPathLocal;
+    }
+
+    public void setKeyToPathLocal(KeyToPath keyToPath) {
+        this.keyToPathLocal = keyToPath;
+    }
+
+    private void initIfNeeded() {
+        if (keyToPathLocal == null) {
+            keyToPathLocal = new KeyTo3LevelPath(getDefaultDataDir().toURI(), getHashType());
+        }
     }
 
     public String getLocalDataDir() {
