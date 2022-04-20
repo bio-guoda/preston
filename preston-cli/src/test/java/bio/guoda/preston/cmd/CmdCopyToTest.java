@@ -20,6 +20,7 @@ public class CmdCopyToTest {
 
     @Test
     public void trackAndCopy() throws URISyntaxException, IOException {
+        // https://github.com/bio-guoda/preston/issues/166
         URL resource = getClass().getResource("/bio/guoda/preston/cmd/copy-test-data/2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a");
         assertNotNull(resource);
         File file = new File(resource.toURI());

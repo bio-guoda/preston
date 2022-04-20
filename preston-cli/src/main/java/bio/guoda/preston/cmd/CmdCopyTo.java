@@ -197,4 +197,17 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
             return null;
         }
     }
+
+    public void setTargetDir(String targetDir) {
+        this.targetDir = targetDir;
+    }
+
+    public void setArchiveType(ArchiveType archiveType) {
+        this.archiveType = archiveType;
+    }
+
+    public void setPathPattern(HashPathPattern pathPattern) {
+        this.pathPattern = pathPattern;
+    }
+
 }
