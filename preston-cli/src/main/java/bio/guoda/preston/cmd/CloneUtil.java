@@ -6,6 +6,7 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 
+import bio.guoda.preston.store.HashKeyUtil;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.VersionUtil;
@@ -45,7 +46,7 @@ public class CloneUtil {
             @Override
             public void on(Quad statement) {
                 IRI mostRecent = VersionUtil.mostRecentVersionForStatement(statement);
-                if (mostRecent != null) {
+                if (mostRecent != null && HashKeyUtil.isValidHashKey(mostRecent)) {
                     try (InputStream is = blobStore.get(mostRecent)) {
                     } catch (IOException e) {
                         LOG.warn("failed to copy [" + mostRecent + "]");

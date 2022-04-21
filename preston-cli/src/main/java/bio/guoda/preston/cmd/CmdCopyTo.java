@@ -65,14 +65,16 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
             }
             File tmp = getTmpDir();
 
+            ProvenanceTracer tracerOfDescendants = getTracerOfDescendants(getCopyingKeyValueStore(target, tmp));
+
             if (ArchiveType.data_prov_provindex.equals(getArchiveType())) {
-                copyAll(target, tmp, getTracerOfOrigins(getCopyingKeyValueStore(target, tmp)));
+                copyAll(target, tmp, tracerOfDescendants);
             } else if (ArchiveType.data.equals(getArchiveType())) {
-                copyDataOnly(target, tmp, getTracerOfDescendants());
+                copyDataOnly(target, tmp, tracerOfDescendants);
             } else if (ArchiveType.prov.equals(getArchiveType())) {
-                copyProvLogsOnly(target, tmp, getTracerOfDescendants());
+                copyProvLogsOnly(target, tmp, tracerOfDescendants);
             } else if (ArchiveType.provindex.equals(getArchiveType())) {
-                copyProvIndexOnly(getTracerOfOrigins(getCopyingKeyValueStore(target, tmp)));
+                copyProvIndexOnly(tracerOfDescendants);
             } else {
                 throw new IllegalStateException("unsupport archive type [" + getArchiveType().name() + "]");
             }
@@ -197,4 +199,17 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
             return null;
         }
     }
+
+    public void setTargetDir(String targetDir) {
+        this.targetDir = targetDir;
+    }
+
+    public void setArchiveType(ArchiveType archiveType) {
+        this.archiveType = archiveType;
+    }
+
+    public void setPathPattern(HashPathPattern pathPattern) {
+        this.pathPattern = pathPattern;
+    }
+
 }

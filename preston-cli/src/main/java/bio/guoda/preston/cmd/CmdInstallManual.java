@@ -30,7 +30,7 @@ public class CmdInstallManual extends Cmd implements Runnable {
             } else {
                 throw new IOException("no man page directory found at [" + manPageDir.getAbsolutePath() + "]");
             }
-            LOG.info("installed man page at [", file.getAbsolutePath() + "]");
+            LOG.info("installed man page at [" + file.getAbsolutePath() + "]");
         } catch (IOException e) {
             LOG.error("failed to install man page at [" + file.getAbsolutePath() + "]", e);
         }
