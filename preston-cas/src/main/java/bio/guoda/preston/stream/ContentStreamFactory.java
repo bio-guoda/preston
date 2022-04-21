@@ -18,6 +18,7 @@ import java.util.stream.LongStream;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.stream.ContentStreamUtil.cutBytes;
+import static bio.guoda.preston.stream.ContentStreamUtil.getMarkSupportedInputStream;
 
 public class ContentStreamFactory implements InputStreamFactory {
     public static final String URI_PREFIX_CUT = "cut";
@@ -108,15 +109,16 @@ public class ContentStreamFactory implements InputStreamFactory {
         }
 
         private InputStream createInputStreamForSelectedLines(IRI iri, InputStream in) throws ContentStreamException {
+            InputStream markableIn = getMarkSupportedInputStream(in);
             Charset charset;
             try {
-                charset = new UniversalEncodingDetector().detect(in, new Metadata());
+                charset = new UniversalEncodingDetector().detect(markableIn, new Metadata());
             } catch (IOException e) {
                 throw new ContentStreamException("failed to detect charset", e);
             }
             
             SelectedLinesReader lineReader = new SelectedLinesReader(getLineNumberStream(iri).iterator(),
-                    new InputStreamReader(in, charset));
+                    new InputStreamReader(markableIn, charset));
             return new ReaderInputStream(lineReader, charset);
         }
 
