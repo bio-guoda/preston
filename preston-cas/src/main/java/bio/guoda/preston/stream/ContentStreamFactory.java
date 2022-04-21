@@ -1,19 +1,27 @@
 package bio.guoda.preston.stream;
 
 import bio.guoda.preston.store.HashKeyUtil;
+import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.txt.UniversalEncodingDetector;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.LongStream;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.stream.ContentStreamUtil.cutBytes;
 
 public class ContentStreamFactory implements InputStreamFactory {
-    public static final String URI_PREFIX_CUT = "cut:";
+    public static final String URI_PREFIX_CUT = "cut";
+    public static final String URI_PREFIX_LINE = "line";
     private final IRI targetIri;
     private final IRI contentReference;
 
@@ -53,11 +61,10 @@ public class ContentStreamFactory implements InputStreamFactory {
         try {
             streamRequest.handle(contentReference, is);
         } catch (ContentStreamException e) {
-            throw new IOException("failed create inputstream", e);
+            throw new IOException("failed to create inputstream", e);
         }
         return streamRequest.getContentStream();
     }
-
 
     private class ContentStreamRequest implements ContentStreamHandler {
 
@@ -79,7 +86,7 @@ public class ContentStreamFactory implements InputStreamFactory {
             }
 
             Matcher nextOperatorMatcher = Pattern
-                    .compile(String.format("([^:]+):%s", iri.getIRIString()))
+                    .compile(String.format("([^:]+):%s(!/[^//]*)?", iri.getIRIString()))
                     .matcher(targetIri.getIRIString());
 
             if (iri.getIRIString().equals(targetIri.getIRIString())
@@ -87,28 +94,73 @@ public class ContentStreamFactory implements InputStreamFactory {
                 contentStream = in;
                 stopReading();
                 return true;
-            } else if (nextOperatorMatcher.find()
-                    && nextOperatorMatcher.group(1).equals("cut")) {
-                cutAndParseBytes(iri, in);
-                return true;
+            } else if (nextOperatorMatcher.find()) {
+                if (nextOperatorMatcher.group(1).equals(URI_PREFIX_CUT)) {
+                    cutAndParseBytes(iri, in);
+                    return true;
+                } else if (nextOperatorMatcher.group(1).equals(URI_PREFIX_LINE) && lineQueryIsComplex(iri)) {
+                    handle(toIRI(nextOperatorMatcher.group()), createInputStreamForSelectedLines(iri, in));
+                    return true;
+                }
+            }
+
+            return handler.handle(iri, in);
+        }
+
+        private InputStream createInputStreamForSelectedLines(IRI iri, InputStream in) throws ContentStreamException {
+            Charset charset;
+            try {
+                charset = new UniversalEncodingDetector().detect(in, new Metadata());
+            } catch (IOException e) {
+                throw new ContentStreamException("failed to detect charset", e);
+            }
+            
+            SelectedLinesReader lineReader = new SelectedLinesReader(getLineNumberStream(iri).iterator(),
+                    new InputStreamReader(in, charset));
+            return new ReaderInputStream(lineReader, charset);
+        }
+
+        private LongStream getLineNumberStream(IRI iri) {
+            Matcher lineQueryMatcher = Pattern
+                    .compile(String.format("%s:%s!/([L0-9\\-,]*)", URI_PREFIX_LINE, iri.getIRIString()))
+                    .matcher(targetIri.getIRIString());
+
+            if (lineQueryMatcher.find()) {
+                String linesQuery = lineQueryMatcher.group(1);
+
+                return Arrays.stream(linesQuery.split(","))
+                        .flatMapToLong(lineRange -> {
+                            final Pattern lineRangePattern = Pattern.compile("L([0-9]+)(?:-L([0-9]+))?");
+                            Matcher lineRangeMatcher = lineRangePattern.matcher(lineRange);
+
+                            if (lineRangeMatcher.find()) {
+                                long firstLine = Long.parseLong(lineRangeMatcher.group(1));
+                                long lastLine = lineRangeMatcher.group(2) == null ? firstLine : Long.parseLong(lineRangeMatcher.group(2));
+                                return LongStream.rangeClosed(firstLine, lastLine);
+                            } else {
+                                return LongStream.empty();
+                            }
+                        });
             } else {
-                return handler.handle(iri, in);
+                throw new IllegalArgumentException("[" + iri + "] is not a valid line URI");
             }
         }
 
-
+        private boolean lineQueryIsComplex(IRI iri) {
+            return getLineNumberStream(iri).limit(2).count() > 1;
+        }
 
         private void cutAndParseBytes(IRI iri, InputStream in) throws ContentStreamException {
             // do not support open-ended cuts, e.g. "b5-" or "b-5"
             Matcher byteRangeMatcher = Pattern
-                    .compile(String.format("^" + URI_PREFIX_CUT + "%s!/b(?<first>[0-9]+)-(?<last>[0-9]+)$", iri.getIRIString()))
+                    .compile(String.format("^%s:%s!/b(?<first>[0-9]+)-(?<last>[0-9]+)$", URI_PREFIX_CUT, iri.getIRIString()))
                     .matcher(targetIri.getIRIString());
 
             if (byteRangeMatcher.find()) {
                 long firstByteIndex = Long.parseLong(byteRangeMatcher.group("first")) - 1;
                 long lastByteIndex = Long.parseLong(byteRangeMatcher.group("last"));
 
-                InputStream cutIs = null;
+                InputStream cutIs;
                 try {
                     cutIs = cutBytes(in, firstByteIndex, lastByteIndex);
                 } catch (IOException e) {
