@@ -5,24 +5,33 @@ import org.apache.commons.io.input.AbstractCharacterFilterReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class SelectedLinesReader extends AbstractCharacterFilterReader {
     private final Iterator<Long> lineNumberIterator;
     private long currentLine;
     private long seekLine;
     private boolean done;
+    private long markedCurrentLine;
+    private long markedSeekLine;
+    private final Queue<Long> seekLinesSinceMark;
 
     public SelectedLinesReader(Iterator<Long> lineNumberIterator, Reader reader) {
         super(reader);
         this.lineNumberIterator = lineNumberIterator;
         this.currentLine = 1;
         this.seekLine = -1;
+        seekLinesSinceMark = new LinkedList<>();
         updateSeekLine();
     }
 
     private void updateSeekLine() {
         if (lineNumberIterator.hasNext()) {
-            seekLine = lineNumberIterator.next();
+            seekLine = seekLinesSinceMark.isEmpty() ? lineNumberIterator.next() : seekLinesSinceMark.poll();
+            if (markedCurrentLine > 0) {
+                seekLinesSinceMark.add(seekLine);
+            }
         } else {
             done = true;
         }
@@ -74,17 +83,19 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
     }
 
     @Override
-    public boolean markSupported() {
-        return false;
-    }
-
-    @Override
     public void mark(int readAheadLimit) throws IOException {
-        throw new IOException("mark() not supported");
+        super.mark(readAheadLimit);
+        markedCurrentLine = currentLine;
+        markedSeekLine = seekLine;
     }
 
     @Override
     public void reset() throws IOException {
-        throw new IOException("reset() not supported");
+        super.reset();
+        if (markedCurrentLine > 0) {
+            currentLine = markedCurrentLine;
+            seekLine = markedSeekLine;
+            markedCurrentLine = -1;
+        }
     }
 }
