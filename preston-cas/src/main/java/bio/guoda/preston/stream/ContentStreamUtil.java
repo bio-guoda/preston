@@ -10,9 +10,7 @@ import org.apache.commons.io.input.CountingInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,6 +73,10 @@ public class ContentStreamUtil {
 
     public static InputStream getMarkSupportedInputStream(InputStream in) {
         return (in.markSupported()) ? in : new BufferedInputStream(in);
+    }
+
+    public static Reader getMarkSupportedReader(Reader reader) {
+        return (reader.markSupported()) ? reader : new BufferedReader(reader);
     }
 
     public static IRI truncateGZNotationForVFSIfNeeded(IRI iri) {

@@ -27,8 +27,10 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
     }
 
     private void updateSeekLine() {
-        if (lineNumberIterator.hasNext()) {
-            seekLine = seekLinesSinceMark.isEmpty() ? lineNumberIterator.next() : seekLinesSinceMark.poll();
+        if (!seekLinesSinceMark.isEmpty()) {
+            seekLine = seekLinesSinceMark.poll();
+        } else if (lineNumberIterator.hasNext()) {
+            seekLine = lineNumberIterator.next();
             if (markedCurrentLine > 0) {
                 seekLinesSinceMark.add(seekLine);
             }
@@ -60,7 +62,17 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
 
     @Override
     public int read(char[] cbuf, int off, int len) throws IOException {
-        return done ? -1 : super.read(cbuf, off, len);
+        int i = off;
+        int end = off + len;
+        while (i < end) {
+            int ch = read();
+            if (ch != -1) {
+                cbuf[i++] = (char) ch;
+            } else {
+                break;
+            }
+        }
+        return i;
     }
 
     @Override
@@ -71,13 +83,8 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
     @Override
     public long skip(long n) throws IOException {
         long i = 0;
-        while (i < n) {
-            int numCharsRead = read();
-            if (numCharsRead > 0) {
-                i += numCharsRead;
-            } else {
-                break;
-            }
+        while (i < n && read() != -1) {
+            ++i;
         }
         return i;
     }
@@ -87,6 +94,7 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
         super.mark(readAheadLimit);
         markedCurrentLine = currentLine;
         markedSeekLine = seekLine;
+        seekLinesSinceMark.clear();
     }
 
     @Override
@@ -96,6 +104,8 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
             currentLine = markedCurrentLine;
             seekLine = markedSeekLine;
             markedCurrentLine = -1;
+        } else {
+            throw new IOException("can't reset reader without marking");
         }
     }
 }
