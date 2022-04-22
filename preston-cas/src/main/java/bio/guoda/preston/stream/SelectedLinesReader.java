@@ -72,7 +72,7 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
                 break;
             }
         }
-        return i;
+        return i > 0 ? i : -1;
     }
 
     @Override

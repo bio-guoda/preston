@@ -68,4 +68,14 @@ public class SelectedLinesReaderTest {
         reader.read(buffer, 8, 8);
         assertEquals("apple\nscapple\nsc", new String(buffer, 0, 16));
     }
+
+    @Test
+    public void readFromEmptyStream() throws IOException {
+        InputStream in = IOUtils.toInputStream("", CHARSET);
+        SelectedLinesReader reader = new SelectedLinesReader(LongStream.of(1, 3).iterator(), new InputStreamReader(in, CHARSET));
+
+        char[] buffer = new char[16];
+        int numBytesRead = reader.read(buffer, 0, 8);
+        assertEquals(-1, numBytesRead);
+    }
 }
