@@ -11,7 +11,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
-import org.gbif.dwc.meta.DwcMetaFiles;
 import org.gbif.dwc.meta.DwcMetaFiles2;
 import org.gbif.dwc.record.Record;
 import org.gbif.dwc.terms.Term;
