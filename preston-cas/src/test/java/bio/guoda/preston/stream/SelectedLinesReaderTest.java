@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.stream.LongStream;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 
 public class SelectedLinesReaderTest {
@@ -53,17 +55,17 @@ public class SelectedLinesReaderTest {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     public void markAndReset() throws IOException {
-        InputStream in = ContentStreamUtil.getMarkSupportedInputStream(IOUtils.toInputStream("apple\nbeet\nscone\n", CHARSET));
-        SelectedLinesReader reader = new SelectedLinesReader(LongStream.of(1, 2, 3).iterator(), new BufferedReader(new InputStreamReader(in, CHARSET)));
+        InputStream in = ContentStreamUtil.getMarkSupportedInputStream(IOUtils.toInputStream("1\n2\n3\n", CHARSET));
+        SelectedLinesReader reader = new SelectedLinesReader(LongStream.of(1, 2, 3, 4).iterator(), new BufferedReader(new InputStreamReader(in, CHARSET)));
 
-        char[] buffer = new char[32];
+        char[] buffer = new char[16];
         reader.mark(10);
-        int numBytesRead = reader.read(buffer, 0, 16);
-        assertEquals(16, numBytesRead);
+        int numBytesRead = reader.read(buffer, 0, 4);
+        assertThat(numBytesRead, is(4));
 
         reader.reset();
-        reader.read(buffer, 16, 8);
-        assertEquals("apple\nbeet\nsconeapple\nsc", new String(buffer, 0, 24));
+        reader.read(buffer, 4, 6);
+        assertThat(new String(buffer, 0, 10), is("1\n2\n1\n2\n3\n"));
     }
 
     @Test

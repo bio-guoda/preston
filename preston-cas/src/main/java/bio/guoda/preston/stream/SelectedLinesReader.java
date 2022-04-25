@@ -1,14 +1,12 @@
 package bio.guoda.preston.stream;
 
-import org.apache.commons.io.input.AbstractCharacterFilterReader;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class SelectedLinesReader extends AbstractCharacterFilterReader {
+public class SelectedLinesReader extends Reader {
     private final Iterator<Long> lineNumberIterator;
     private long currentLine;
     private long seekLine;
@@ -16,18 +14,20 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
     private long markedCurrentLine;
     private long markedSeekLine;
     private final Queue<Long> seekLinesSinceMark;
+    private final Reader in;
 
     public SelectedLinesReader(Iterator<Long> lineNumberIterator, Reader reader) {
         super(reader);
         this.lineNumberIterator = lineNumberIterator;
-        this.currentLine = 1;
-        this.seekLine = -1;
+        in = reader;
+        currentLine = 1;
+        seekLine = -1;
         seekLinesSinceMark = new LinkedList<>();
         updateSeekLine();
     }
 
     private void updateSeekLine() {
-        if (!seekLinesSinceMark.isEmpty()) {
+        if (!getMarked() && !seekLinesSinceMark.isEmpty()) {
             seekLine = seekLinesSinceMark.poll();
         } else if (lineNumberIterator.hasNext()) {
             seekLine = lineNumberIterator.next();
@@ -40,24 +40,28 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
     }
 
     @Override
-    protected boolean filter(int ch) {
-        if (done) {
-            return true;
-        } else {
-            boolean omit = currentLine < seekLine;
-            if (ch == '\n') {
-                ++currentLine;
-                if (currentLine > seekLine) {
-                    updateSeekLine();
+    public int read() throws IOException {
+        while (!done) {
+            int ch = this.in.read();
+            if (ch == -1) {
+                done = true;
+            } else {
+                boolean print = currentLine == seekLine;
+                if (ch == '\n') {
+                    ++currentLine;
+                    if (currentLine > seekLine) {
+                        updateSeekLine();
+                    }
+                }
+
+                // To preserve existing behavior, do not print the final newline character
+                if (print && !done) {
+                    return ch;
                 }
             }
-            return omit || done;
         }
-    }
 
-    @Override
-    public int read() throws IOException {
-        return done ? -1 : super.read();
+        return -1;
     }
 
     @Override
@@ -77,7 +81,7 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
 
     @Override
     public boolean ready() throws IOException {
-        return super.ready() && !done;
+        return !done && super.ready();
     }
 
     @Override
@@ -89,9 +93,18 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
         return i;
     }
 
+    private boolean getMarked() {
+        return markedCurrentLine > -1;
+    }
+
+    @Override
+    public boolean markSupported() {
+        return in.markSupported();
+    }
+
     @Override
     public void mark(int readAheadLimit) throws IOException {
-        super.mark(readAheadLimit);
+        in.mark(readAheadLimit);
         markedCurrentLine = currentLine;
         markedSeekLine = seekLine;
         seekLinesSinceMark.clear();
@@ -99,7 +112,7 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
 
     @Override
     public void reset() throws IOException {
-        super.reset();
+        in.reset();
         if (markedCurrentLine > 0) {
             currentLine = markedCurrentLine;
             seekLine = markedSeekLine;
@@ -107,5 +120,10 @@ public class SelectedLinesReader extends AbstractCharacterFilterReader {
         } else {
             throw new IOException("can't reset reader without marking");
         }
+    }
+
+    @Override
+    public void close() throws IOException {
+        in.close();
     }
 }
