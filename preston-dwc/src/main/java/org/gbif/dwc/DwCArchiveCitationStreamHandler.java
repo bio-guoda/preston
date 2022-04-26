@@ -7,7 +7,7 @@ import bio.guoda.preston.stream.ContentStreamHandler;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
-import org.gbif.dwc.meta.DwcMetaFiles;
+import org.gbif.dwc.meta.DwcMetaFiles2;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -42,7 +42,7 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
         String iriString = version.getIRIString();
         try {
             if (StringUtils.endsWith(iriString, "/" + META_XML)) {
-                Archive starRecords = DwcMetaFiles.fromMetaDescriptor(is);
+                Archive starRecords = DwcMetaFiles2.fromMetaDescriptor(is);
 
                 String metadataLocation = starRecords.getMetadataLocation();
 

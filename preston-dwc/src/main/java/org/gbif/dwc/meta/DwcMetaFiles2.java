@@ -15,25 +15,19 @@
  */
 package org.gbif.dwc.meta;
 
+import org.apache.commons.io.input.BOMInputStream;
 import org.gbif.dwc.Archive;
 import org.gbif.dwc.UnsupportedArchiveException;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
-import org.apache.commons.io.input.BOMInputStream;
-import org.xml.sax.SAXException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Collections of static methods to work with Metadata files (e.g. metadata.xml, eml.xml) in
@@ -73,29 +67,4 @@ public class DwcMetaFiles2 {
         return archive;
     }
 
-    /**
-     * Try to find a metadata file inside a DarwinCore folder or check the file name if the provided location is a file.
-     * The test is strictly based on the file name.
-     *
-     * Usually, the metadata file is a EML file.
-     *
-     * @param dwcLocation
-     * @return name of the possible metadata file or @{code Optional.empty()} if none were found.
-     */
-    public static Optional<String> discoverMetadataFile(Path dwcLocation) {
-
-        if(Files.isRegularFile(dwcLocation)){
-            String possibleEml = dwcLocation.getFileName().toString();
-            return POSSIBLE_METADATA_FILE.contains(possibleEml) ? Optional.of(possibleEml) : Optional.empty();
-        }
-
-        // search for popular metadata filenames
-        for (String metadataFN : POSSIBLE_METADATA_FILE) {
-            File emlFile = new File(dwcLocation.toFile(), metadataFN);
-            if (emlFile.exists()) {
-                return Optional.of(metadataFN);
-            }
-        }
-        return Optional.empty();
-    }
 }
