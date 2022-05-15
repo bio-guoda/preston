@@ -29,15 +29,14 @@ import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 
 @CommandLine.Command(
         name = "test",
-        aliases = {"verify", "check", "validate"},
-        description = CmdVerify.VERIFIES_COMPLETENESS_AND_INTEGRITY_OF_THE_LOCAL_BIODIVERSITY_DATASET_GRAPH
+        aliases = {"verify", "check", "validate", "touch"},
+        description = "Verifies completeness and, optionally, the integrity, of a biodiversity dataset graph by touching (or visiting) all associated content."
 )
 public class CmdVerify extends Persisting implements Runnable {
 
     public static final List<State> OK_STATES = Arrays.asList(
             State.CONTENT_PRESENT_VALID_HASH,
             State.CONTENT_PRESENT_HASH_NOT_VERIFIED);
-    public static final String VERIFIES_COMPLETENESS_AND_INTEGRITY_OF_THE_LOCAL_BIODIVERSITY_DATASET_GRAPH = "Verifies completeness and integrity of the local biodiversity dataset graph";
     public static final String DO_NOT_VERIFY_HASH_JUST_CHECK_AVAILABILITY = "Do not verify hash, just check availability";
 
     enum State {
