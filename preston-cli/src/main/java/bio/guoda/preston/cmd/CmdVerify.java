@@ -32,7 +32,7 @@ import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
         aliases = {"verify", "check", "validate"},
         description = CmdVerify.VERIFIES_COMPLETENESS_AND_INTEGRITY_OF_THE_LOCAL_BIODIVERSITY_DATASET_GRAPH
 )
-public class CmdVerify extends PersistingLocal implements Runnable {
+public class CmdVerify extends Persisting implements Runnable {
 
     public static final List<State> OK_STATES = Arrays.asList(
             State.CONTENT_PRESENT_VALID_HASH,
