@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.HashType;
 import org.junit.Test;
 
 public class CmdVerifyTest {

@@ -3,23 +3,12 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.HashGenerator;
 import bio.guoda.preston.HashGeneratorFactory;
 import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.VersionUtil;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.CountingOutputStream;
-import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -34,17 +23,19 @@ import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 )
 public class CmdVerify extends Persisting implements Runnable {
 
-    public static final List<State> OK_STATES = Arrays.asList(
-            State.CONTENT_PRESENT_VALID_HASH,
-            State.CONTENT_PRESENT_HASH_NOT_VERIFIED);
-    public static final String DO_NOT_VERIFY_HASH_JUST_CHECK_AVAILABILITY = "Do not verify hash, just check availability";
+    public static final List<VerificationState> OK_STATES = Arrays.asList(
+            VerificationState.CONTENT_PRESENT_VALID_HASH,
+            VerificationState.CONTENT_PRESENT_HASH_NOT_VERIFIED);
 
-    enum State {
-        MISSING,
-        CONTENT_PRESENT_INVALID_HASH,
-        CONTENT_PRESENT_VALID_HASH,
-        CONTENT_PRESENT_HASH_NOT_VERIFIED
-    }
+    public static final List<VerificationState> SKIP_STATES = Arrays.asList(
+            VerificationState.UNSUPPORTED_CONTENT_HASH);
+
+    public static final List<VerificationState> FAIL_STATES = Arrays.asList(
+            VerificationState.CONTENT_PRESENT_INVALID_HASH,
+            VerificationState.MISSING);
+
+
+    public static final String DO_NOT_VERIFY_HASH_JUST_CHECK_AVAILABILITY = "Do not verify hash, just check availability";
 
     @CommandLine.Option(
             names = "--skip-hash-verification",
@@ -62,52 +53,14 @@ public class CmdVerify extends Persisting implements Runnable {
         final BlobStore blobStore
                 = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
 
-        Map<String, State> verifiedMap = new TreeMap<>();
+        Map<String, VerificationState> verifiedMap = new TreeMap<>();
 
-        StatementsListener statementListener = new StatementsListenerAdapter() {
-            @Override
-            public void on(Quad statement) {
-                final IRI iri = VersionUtil.mostRecentVersionForStatement(statement);
-                if (iri != null && !verifiedMap.containsKey(iri.getIRIString())) {
-                    State state = State.MISSING;
-                    IRI calculatedHashIRI = null;
-                    long fileSize = 0;
-                    try (InputStream is = blobStore.get(iri)) {
-                        if (is != null) {
-                            if (skipHashVerification) {
-                                // try a shortcut via filesystem
-                                URI uri = getKeyToPathLocal().toPath(iri);
-                                fileSize = new File(uri).length();
-                                if (fileSize == 0) {
-                                    try (CountingOutputStream counting = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM)) {
-                                        IOUtils.copy(is, counting);
-                                        fileSize = counting.getByteCount();
-                                    }
-                                }
-                                state = State.CONTENT_PRESENT_HASH_NOT_VERIFIED;
-                            } else {
-                                try (CountingOutputStream counting = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM)) {
-                                    calculatedHashIRI = hashGenerator.hash(is, counting);
-                                    state = calculatedHashIRI.equals(iri) ? State.CONTENT_PRESENT_VALID_HASH : State.CONTENT_PRESENT_INVALID_HASH;
-                                    fileSize = counting.getByteCount();
-                                }
-                            }
-                        }
-                    } catch (IOException e) {
-                        //
-                    } finally {
-                        verifiedMap.put(iri.getIRIString(), state);
-                        new PrintStream(getOutputStream()).print(iri.getIRIString() + "\t" +
-                                getKeyToPathLocal().toPath(iri) + "\t" +
-                                (OK_STATES.contains(state) ? "OK" : "FAIL") + "\t" +
-                                state + "\t" +
-                                fileSize + "\t" +
-                                (calculatedHashIRI == null ? "" : calculatedHashIRI.getIRIString()) +
-                                "\n");
-                    }
-                }
-            }
-        };
+        StatementsListener statementListener = new HashVerifier(
+                verifiedMap,
+                blobStore,
+                hashGenerator,
+                skipHashVerification, this.getOutputStream(), this.getKeyToPathLocal()
+        );
         CmdContext ctx = new CmdContext(this, statementListener);
 
         attemptReplay(blobStore, ctx, getTracerOfDescendants());

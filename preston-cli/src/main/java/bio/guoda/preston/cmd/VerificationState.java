@@ -1,0 +1,9 @@
+package bio.guoda.preston.cmd;
+
+enum VerificationState {
+    MISSING,
+    UNSUPPORTED_CONTENT_HASH,
+    CONTENT_PRESENT_INVALID_HASH,
+    CONTENT_PRESENT_VALID_HASH,
+    CONTENT_PRESENT_HASH_NOT_VERIFIED
+}
