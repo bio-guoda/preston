@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +25,11 @@ public class CmdInstallManual extends Cmd implements Runnable {
         File manPageDir = new File("/usr/local/share/man/man1/");
         File file = new File(manPageDir, "preston.1");
         try (InputStream resourceAsStream = getClass().getResourceAsStream("/bio/guoda/preston/docs/manpage/preston.1")) {
-            if (manPageDir.exists()) {
-                IOUtils.copy(resourceAsStream,
-                        new FileOutputStream(file));
-            } else {
-                throw new IOException("no man page directory found at [" + manPageDir.getAbsolutePath() + "]");
+            if (!manPageDir.exists()) {
+                FileUtils.forceMkdir(manPageDir);
             }
+            IOUtils.copy(resourceAsStream,
+                    new FileOutputStream(file));
             LOG.info("installed man page at [" + file.getAbsolutePath() + "]");
         } catch (IOException e) {
             LOG.error("failed to install man page at [" + file.getAbsolutePath() + "]", e);
