@@ -30,9 +30,9 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 @CommandLine.Command(
-        name = "update",
-        aliases = {"track"},
-        description = "Update biodiversity dataset graph"
+        name = "track",
+        aliases = {"update"},
+        description = "Tracks a biodiversity dataset graph"
 )
 
 public class CmdUpdate extends CmdTrack {
