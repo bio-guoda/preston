@@ -58,24 +58,25 @@ public class DwcRecordExtractorTest {
                 byteArrayOutputStream
         );
 
-        try {
-            dwcRecordExtractor.on(statement);
-        } catch (RuntimeException ex) {
-            throw ex;
-        }
+        dwcRecordExtractor.on(statement);
 
         String actual = IOUtils.toString(byteArrayOutputStream.toByteArray(), StandardCharsets.UTF_8.name());
 
         String[] jsonObjects = StringUtils.split(actual, "\n");
         assertThat(jsonObjects.length, is(15));
 
-        JsonNode jsonNode = new ObjectMapper().readTree(jsonObjects[0]);
+        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
 
-        assertThat(jsonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:zip:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/taxa.txt!/L2"));
-        assertThat(jsonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("http://rs.tdwg.org/dwc/terms/Taxon"));
-        assertThat(jsonNode.get("http://rs.tdwg.org/dwc/terms/scientificName").asText(), is("Calyptraeotheres Campos 1990"));
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:zip:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/taxa.txt!/L2"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("http://rs.tdwg.org/dwc/terms/Taxon"));
+        assertThat(taxonNode.get("http://rs.tdwg.org/dwc/text/id").asText(), is("D51D87C0FFC4C76F4B9C5298FC31DFDF.taxon"));
+        assertThat(taxonNode.get("http://rs.tdwg.org/dwc/terms/scientificName").asText(), is("Calyptraeotheres Campos 1990"));
 
+        JsonNode documentNode = new ObjectMapper().readTree(jsonObjects[2]);
+        assertThat(documentNode.get("http://rs.tdwg.org/dwc/text/id").asText(), is("D51D87C0FFC4C76F4B9C5298FC31DFDF.taxon"));
 
+        JsonNode multimediaNode = new ObjectMapper().readTree(jsonObjects[11]);
+        assertThat(multimediaNode.get("http://rs.tdwg.org/dwc/text/id").asText(), is("D51D87C0FFC4C76F4B9C5298FC31DFDF.taxon"));
     }
 
     @Test
