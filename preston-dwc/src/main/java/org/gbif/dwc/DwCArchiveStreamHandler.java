@@ -99,10 +99,10 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
         ObjectNode objectNode = new ObjectMapper().createObjectNode();
         objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf("line:" + resourceIRIs.getLeft().getIRIString() + "!/L" + tabularFileReader.getLastRecordLineNumber()));
         objectNode.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf(resourceIRIs.getRight().getRowType().qualifiedName()));
+        objectNode.set("http://rs.tdwg.org/dwc/text/id", TextNode.valueOf(record.id()));
         for (Term term : record.terms()) {
             objectNode.set(term.qualifiedName(), TextNode.valueOf(record.value(term)));
         }
-        objectNode.set("http://rs.tdwg.org/dwc/text/id", TextNode.valueOf(record.id()));
         IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), outputStream);
         IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
     }
