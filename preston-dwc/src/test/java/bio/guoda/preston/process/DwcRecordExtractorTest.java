@@ -23,7 +23,11 @@ import java.nio.charset.StandardCharsets;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
+import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 
 public class DwcRecordExtractorTest {
@@ -48,8 +52,11 @@ public class DwcRecordExtractorTest {
             }
         };
 
-
-        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
+        Quad statement = toStatement(
+                toIRI("blip"),
+                HAS_VERSION,
+                toIRI("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1")
+        );
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         DwcRecordExtractor dwcRecordExtractor = new DwcRecordExtractor(
@@ -60,7 +67,10 @@ public class DwcRecordExtractorTest {
 
         dwcRecordExtractor.on(statement);
 
-        String actual = IOUtils.toString(byteArrayOutputStream.toByteArray(), StandardCharsets.UTF_8.name());
+        String actual = IOUtils.toString(
+                byteArrayOutputStream.toByteArray(),
+                StandardCharsets.UTF_8.name()
+        );
 
         String[] jsonObjects = StringUtils.split(actual, "\n");
         assertThat(jsonObjects.length, is(15));
@@ -72,11 +82,21 @@ public class DwcRecordExtractorTest {
         assertThat(taxonNode.get("http://rs.tdwg.org/dwc/text/id").asText(), is("D51D87C0FFC4C76F4B9C5298FC31DFDF.taxon"));
         assertThat(taxonNode.get("http://rs.tdwg.org/dwc/terms/scientificName").asText(), is("Calyptraeotheres Campos 1990"));
 
-//        JsonNode documentNode = new ObjectMapper().readTree(jsonObjects[2]);
-//        assertThat(documentNode.get("http://rs.tdwg.org/dwc/text/id").asText(), is("D51D87C0FFC4C76F4B9C5298FC31DFDF.taxon"));
-//
-//        JsonNode multimediaNode = new ObjectMapper().readTree(jsonObjects[11]);
-//        assertThat(multimediaNode.get("http://rs.tdwg.org/dwc/text/id").asText(), is("D51D87C0FFC4C76F4B9C5298FC31DFDF.taxon"));
+        for (String jsonString : jsonObjects) {
+            JsonNode documentNode = new ObjectMapper().readTree(jsonString);
+            if (StringUtils.equals(
+                    documentNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(),
+                    "http://rs.tdwg.org/dwc/terms/Taxon")
+            ) {
+                assertThat(documentNode.get("http://rs.tdwg.org/dwc/text/id").asText(), not(isEmptyString()));
+                assertNull(documentNode.get("http://rs.tdwg.org/dwc/text/coreid"));
+            } else {
+                assertThat(documentNode.get("http://rs.tdwg.org/dwc/text/coreid").asText(), not(isEmptyString()));
+                assertNull(documentNode.get("http://rs.tdwg.org/dwc/text/id"));
+            }
+
+        }
+
     }
 
     @Test

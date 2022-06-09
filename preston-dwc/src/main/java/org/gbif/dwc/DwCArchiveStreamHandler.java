@@ -68,38 +68,51 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
         Archive starRecords = DwcMetaFiles2.fromMetaDescriptor(is);
         ArchiveFile core = starRecords.getCore();
 
-        List<Pair<IRI, ArchiveFile>> dwcaResourceIRIs = new ArrayList<>();
+        streamRecords(
+                outputStream,
+                dereferencer,
+                getLocation(iriString, core),
+                "http://rs.tdwg.org/dwc/text/id"
+        );
 
-
-        dwcaResourceIRIs.add(getLocation(iriString, core));
         Set<ArchiveFile> extensions = starRecords.getExtensions();
         for (ArchiveFile extension : extensions) {
-            dwcaResourceIRIs.add(getLocation(iriString, extension));
+            streamRecords(
+                    outputStream,
+                    dereferencer,
+                    getLocation(iriString, extension),
+                    "http://rs.tdwg.org/dwc/text/coreid"
+            );
         }
 
+    }
 
-        for (Pair<IRI, ArchiveFile> resourceIRIs : dwcaResourceIRIs) {
-            ArchiveFile file = resourceIRIs.getRight();
-            try {
-                TabularDataFileReader<List<String>> tabularFileReader = createReader(file, resourceIRIs.getLeft(), dereferencer);
-                ClosableIterator<Record> iterator = createRecordIterator(file, tabularFileReader);
-                while (iterator.hasNext()) {
-                    streamAsJson(resourceIRIs, tabularFileReader, iterator.next(), outputStream);
-                }
-            } catch (Throwable ex) {
-                throw new ContentStreamException("failed to handle dwc records from [" + resourceIRIs.getLeft().getIRIString() + "]", ex);
+    private static void streamRecords(OutputStream outputStream,
+                                      Dereferencer<InputStream> dereferencer,
+                                      Pair<IRI, ArchiveFile> resourceIRIs,
+                                      String idIRI) throws ContentStreamException {
+        ArchiveFile file = resourceIRIs.getRight();
+        try {
+            TabularDataFileReader<List<String>> tabularFileReader = createReader(file, resourceIRIs.getLeft(), dereferencer);
+            ClosableIterator<Record> iterator = createRecordIterator(file, tabularFileReader);
+            while (iterator.hasNext()) {
+                streamAsJson(resourceIRIs, tabularFileReader, iterator.next(), outputStream, idIRI);
             }
+        } catch (Throwable ex) {
+            throw new ContentStreamException("failed to handle dwc records from [" + resourceIRIs.getLeft().getIRIString() + "]", ex);
         }
     }
 
     private static void streamAsJson(Pair<IRI, ArchiveFile> resourceIRIs,
                                      TabularDataFileReader<List<String>> tabularFileReader,
                                      Record record,
-                                     OutputStream outputStream) throws IOException {
+                                     OutputStream outputStream,
+                                     String idIRI) throws IOException {
         ObjectNode objectNode = new ObjectMapper().createObjectNode();
         objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf("line:" + resourceIRIs.getLeft().getIRIString() + "!/L" + tabularFileReader.getLastRecordLineNumber()));
         objectNode.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf(resourceIRIs.getRight().getRowType().qualifiedName()));
-        objectNode.set("http://rs.tdwg.org/dwc/text/id", TextNode.valueOf(record.id()));
+
+        objectNode.set(idIRI, TextNode.valueOf(record.id()));
         for (Term term : record.terms()) {
             objectNode.set(term.qualifiedName(), TextNode.valueOf(record.value(term)));
         }
