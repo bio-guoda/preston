@@ -26,7 +26,7 @@ public class PlaziUtilTest {
         assertThat(treatment.get("docId").asText(), Is.is("03D587F2FFC94C03F8F13AECFBD8F765"));
         assertThat(treatment.get("docName").asText(), Is.is("hbmw-9.emballorunidae.pdf.imd"));
         assertThat(treatment.get("docOrigin").asText(), Is.is("Handbook of the Mammals of the World, Vol. 9, Lyny Edicions"));
-        assertThat(treatment.get("ID-ISBN").asText(), Is.is("978-84-16728-19-0"));
+        assertThat(treatment.get("docISBN").asText(), Is.is("978-84-16728-19-0"));
         assertNull(treatment.get("box"));
         assertThat(treatment.get("genus").asText(), Is.is("Taphozous"));
         assertThat(treatment.get("species").asText(), Is.is("troughtoni"));

@@ -58,6 +58,7 @@ public class PlaziTreatmentStreamHandler implements ContentStreamHandler {
             if (treatment.size() > 2) {
                 IOUtils.copy(IOUtils.toInputStream(treatment.toString(), StandardCharsets.UTF_8), outputStream);
                 IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
+                outputStream.flush();
             }
 
         } catch (ParserConfigurationException | XPathExpressionException e) {

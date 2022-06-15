@@ -40,7 +40,9 @@ public class PlaziUtil {
             setIfNotNull(treatment, docAttributes, "docId");
             setIfNotNull(treatment, docAttributes, "docName");
             setIfNotNull(treatment, docAttributes, "docOrigin");
-            setIfNotNull(treatment, docAttributes, "ID-ISBN");
+            if (docAttributes.getNamedItem("ID-ISBN") != null) {
+                treatment.put("docISBN", docAttributes.getNamedItem("ID-ISBN").getTextContent());
+            }
 
             handleNomenclature(s, treatment);
             handleDistribution(s, treatment);
@@ -109,7 +111,11 @@ public class PlaziUtil {
             String textContent = distributionNode.getTextContent();
             treatment.put("distribution", StringUtils.trim(StringUtils.replace(textContent, "Distribution.", "")));
 
-            treatment.put("distributionImageURL", distributionNode.getParentNode().getAttributes().getNamedItem("httpUri").getTextContent());
+            Node parentNode = distributionNode.getParentNode();
+            NamedNodeMap attributes = parentNode.getAttributes();
+            if (attributes.getNamedItem("httpUri") != null) {
+                treatment.put("distributionImageURL", attributes.getNamedItem("httpUri").getTextContent());
+            }
         }
     }
 
