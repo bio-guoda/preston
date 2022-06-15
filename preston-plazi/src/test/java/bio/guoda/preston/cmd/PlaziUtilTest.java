@@ -24,6 +24,7 @@ public class PlaziUtilTest {
         JsonNode treatment = PlaziUtil.parseTreatment(is);
 
         assertThat(treatment.get("docId").asText(), Is.is("03D587F2FFC94C03F8F13AECFBD8F765"));
+        assertThat(treatment.get("docMasterId").asText(), Is.is("hash://md5/ffecff8affcf4c04ffa53577fff8ffe9"));
         assertThat(treatment.get("docName").asText(), Is.is("hbmw-9.emballorunidae.pdf.imd"));
         assertThat(treatment.get("docOrigin").asText(), Is.is("Handbook of the Mammals of the World, Vol. 9, Lyny Edicions"));
         assertThat(treatment.get("docISBN").asText(), Is.is("978-84-16728-19-0"));

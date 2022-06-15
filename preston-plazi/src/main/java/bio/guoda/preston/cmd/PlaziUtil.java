@@ -44,6 +44,11 @@ public class PlaziUtil {
             setIfNotNull(treatment, docAttributes, "docId");
             setIfNotNull(treatment, docAttributes, "docName");
             setIfNotNull(treatment, docAttributes, "docOrigin");
+            if (docAttributes.getNamedItem("masterDocId") != null) {
+                String masterDocId = docAttributes.getNamedItem("masterDocId").getTextContent();
+                treatment.put("docMasterId", "hash://md5/" + StringUtils.lowerCase(masterDocId));
+            }
+
             if (docAttributes.getNamedItem("ID-ISBN") != null) {
                 treatment.put("docISBN", docAttributes.getNamedItem("ID-ISBN").getTextContent());
             }
