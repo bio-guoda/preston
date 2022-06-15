@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tika.utils.RegexUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -19,6 +20,8 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PlaziUtil {
 
@@ -64,12 +67,26 @@ public class PlaziUtil {
                     "activityPatterns",
                     "Activity patterns", 1
             );
-            parseAttemptOfEmphasisSection(
-                    docu,
-                    treatment,
-                    "bibliography",
-                    "Bibliography", 2
+            NodeList emphasisNodes3 = XMLUtil.evaluateXPath(
+                    "//emphasis",
+                    docu
             );
+            for (int i2 = 0; i2 < emphasisNodes3.getLength(); i2++) {
+                Node emphasisNode2 = emphasisNodes3.item(i2);
+                String textContent2 = emphasisNode2.getTextContent();
+                if (StringUtils.startsWith(textContent2, "Bibliography")) {
+                    Node expectedParagraphNode2 = emphasisNode2.getParentNode().getParentNode();
+                    String bibliography = replaceTabsNewlinesWithSpaces(expectedParagraphNode2);
+                    String bibliographyString = StringUtils.trim(RegExUtils.replaceFirst(bibliography, "Bibliography" + "[. ]+", ""));
+                    String[] references = StringUtils.split(bibliographyString, ",");
+                    List<String> referenceList = new ArrayList<>();
+                    for (String reference : references) {
+                        String removeEndingPeriod = RegExUtils.replaceAll(reference, "[.]$", "");
+                        referenceList.add(RegExUtils.replaceAll(StringUtils.trim(removeEndingPeriod), "(eta/\\.|eta /\\.)", "et al."));
+                    }
+                    treatment.put("bibliography", StringUtils.join(referenceList, " | "));
+                }
+            }
 
             NodeList emphasisNodes1 = XMLUtil.evaluateXPath(
                     "//emphasis",
@@ -169,19 +186,29 @@ public class PlaziUtil {
                     } else if (StringUtils.contains(languageString, "Spanish")) {
                         language = "es";
                     }
-                    String commonNameWithoutLanguage = languageAndCommonName[j+1];
+                    String commonNameWithoutLanguage = languageAndCommonName[j + 1];
 
-                    String commonNameWithISOLanguage = StringUtils.trim(StringUtils.replace(commonNameWithoutLanguage, " I ", "")) + " @" + language;
+                    String trim = StringUtils.trim(StringUtils.replace(commonNameWithoutLanguage, " I ", ""));
+                    Pattern compile = Pattern.compile("(.*)([a-z][A-Z])(.*)");
+                    Matcher matcher = compile.matcher(trim);
+                    if (matcher.matches()) {
+                        String group = matcher.group(2);
+                        trim = matcher.group(1) + group.substring(0, 1) + " " + group.substring(1) + matcher.group(3);
+                    }
+                    String commonNameWithISOLanguage = trim + " @" + language;
                     if (!commonNameList.contains(commonNameWithISOLanguage)) {
                         commonNameList.add(commonNameWithISOLanguage);
                     }
                 } else {
-                    commonNameList.add(StringUtils.trim(languageAndCommonName[0]) + " @en");
+                    String trim = StringUtils.trim(languageAndCommonName[0]);
+                    commonNameList.add(trim + " @en");
                 }
             }
         }
 
-        treatment.put("commonNames", StringUtils.join(commonNameList, " | "));
+        if (commonNameList.size() > 1) {
+            treatment.put("commonNames", StringUtils.join(commonNameList, " | "));
+        }
     }
 
 

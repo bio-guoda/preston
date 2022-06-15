@@ -45,7 +45,13 @@ public class PlaziUtilTest {
                 Is.is("Troughton’s Sheath-tailed Bat roosts in caves, mines and tunnels, rock crevices, and rocky escarpments. Echolocation call is less than 25 kHz and distinguishes it from the Common Sheath-tailed Bat (. georgianus ) where they co-occur . Movements, Home range and Social organization. Large colonies of Troughton’s Sheath-tailed Bat can be found in landscapes with abundant rocky outcrops, especially in tower karst. Colony size might be limited by roosting structures, especially in more arid areas where there are few caves deep enough to support large colonies."));
 
         assertThat(treatment.get("bibliography").asText(),
-                Is.is("Chimimba & Kitchener (1991), Hall (2008b), McKean & Price (1967), Reardon & Thomson (2002), Tate (1952),Thomson eta /. (2001), Woinarski eta/. (2014)."));
+                Is.is("Chimimba & Kitchener (1991)" +
+                        " | Hall (2008b)" +
+                        " | McKean & Price (1967)" +
+                        " | Reardon & Thomson (2002)" +
+                        " | Tate (1952)" +
+                        " | Thomson et al. (2001)" +
+                        " | Woinarski et al. (2014)"));
 
         assertThat(treatment.get("habitat").asText(),
                 Is.is("Wide variety of habitats and bioregions of interior Queensland."));
@@ -60,10 +66,10 @@ public class PlaziUtilTest {
 
         assertThat(treatment.get("commonNames").asText(),
                 Is.is("Troughton’s Sheath-tailed Bat @en" +
-                        " | Taphien deTroughton @fr" +
+                        " | Taphien de Troughton @fr" +
                         " | Troughton-Grabfledermaus @de" +
                         " | Tafozo de Troughton @es" +
-                        " | Troughton'sTomb Bat @en"));
+                        " | Troughton's Tomb Bat @en"));
 
     }
 
