@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tika.utils.RegexUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -164,51 +163,58 @@ public class PlaziUtil {
 
     private static void handleCommonNames(Document docu, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         NodeList commonNames = XMLUtil.evaluateXPath(
-                "//subSubSection[@type='vernacular_names']//emphasis",
+                "//subSubSection[@type='vernacular_names']/paragraph/emphasis",
                 docu
         );
 
         List<String> commonNameList = new ArrayList<>();
         for (int i = 0; i < commonNames.getLength(); i++) {
             Node expectedCommonName = commonNames.item(i);
-            String commonName = replaceTabsNewlinesWithSpaces(expectedCommonName.getParentNode());
-            String[] commonNameSplit = StringUtils.split(commonName, ".");
+            String commonNameSegment = replaceTabsNewlinesWithSpaces(expectedCommonName.getParentNode());
+            String[] commonNameSplit = StringUtils.split(commonNameSegment, ".");
             String commonNameTrimmed = commonNameSplit.length > 1 ? commonNameSplit[1] : commonNameSplit[0];
-            String[] languageAndCommonName = StringUtils.split(commonNameTrimmed, ":I");
-            String language = "en";
-            for (int j = 0; j < languageAndCommonName.length; j += 2) {
-                if (languageAndCommonName.length > 1) {
-                    String languageString = languageAndCommonName[j];
-                    if (StringUtils.contains(languageString, "French")) {
-                        language = "fr";
-                    } else if (StringUtils.contains(languageString, "German")) {
-                        language = "de";
-                    } else if (StringUtils.contains(languageString, "Spanish")) {
-                        language = "es";
-                    }
-                    String commonNameWithoutLanguage = languageAndCommonName[j + 1];
-
-                    String trim = StringUtils.trim(StringUtils.replace(commonNameWithoutLanguage, " I ", ""));
-                    Pattern compile = Pattern.compile("(.*)([a-z][A-Z])(.*)");
-                    Matcher matcher = compile.matcher(trim);
-                    if (matcher.matches()) {
-                        String group = matcher.group(2);
-                        trim = matcher.group(1) + group.substring(0, 1) + " " + group.substring(1) + matcher.group(3);
-                    }
-                    String commonNameWithISOLanguage = trim + " @" + language;
-                    if (!commonNameList.contains(commonNameWithISOLanguage)) {
-                        commonNameList.add(commonNameWithISOLanguage);
-                    }
-                } else {
-                    String trim = StringUtils.trim(languageAndCommonName[0]);
-                    commonNameList.add(trim + " @en");
-                }
+            String[] commonNamesSplit = StringUtils.split(commonNameTrimmed, "I/");
+            for (String commonName : commonNamesSplit) {
+                addCommonName(commonNameList, commonName);
             }
         }
 
         if (commonNameList.size() > 1) {
             treatment.put("commonNames", StringUtils.join(commonNameList, " | "));
         }
+
+    }
+
+    private static String addCommonName(List<String> commonNameList, String str) {
+        String language = "en";
+        String[] languageAndCommonName = StringUtils.split(str, ":");
+        String commonNameWithoutLanguage = languageAndCommonName[0];
+        if (languageAndCommonName.length > 1) {
+            String languageString = languageAndCommonName[0];
+            if (StringUtils.contains(languageString, "French")) {
+                language = "fr";
+            } else if (StringUtils.contains(languageString, "German")) {
+                language = "de";
+            } else if (StringUtils.contains(languageString, "Spanish")) {
+                language = "es";
+            } else if (StringUtils.contains(languageString, "Other common names")) {
+                language = "en";
+            }
+            commonNameWithoutLanguage = languageAndCommonName[1];
+        }
+
+        String trim = StringUtils.trim(commonNameWithoutLanguage);
+        Pattern compile = Pattern.compile("(.*)([a-z][A-Z])(.*)");
+        Matcher matcher = compile.matcher(trim);
+        if (matcher.matches()) {
+            String group = matcher.group(2);
+            trim = matcher.group(1) + group.substring(0, 1) + " " + group.substring(1) + matcher.group(3);
+        }
+        String commonNameWithISOLanguage = trim + " @" + language;
+        if (!commonNameList.contains(commonNameWithISOLanguage)) {
+            commonNameList.add(commonNameWithISOLanguage);
+        }
+        return language;
     }
 
 
