@@ -43,6 +43,9 @@ public class PlaziUtil {
             if (docAttributes.getNamedItem("ID-ISBN") != null) {
                 treatment.put("docISBN", docAttributes.getNamedItem("ID-ISBN").getTextContent());
             }
+            if (docAttributes.getNamedItem("pageNumber") != null) {
+                treatment.put("docPageNumber", docAttributes.getNamedItem("pageNumber").getTextContent());
+            }
 
             handleNomenclature(docu, treatment);
             handleDistribution(docu, treatment);
