@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.cmd.PlaziUtil;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
@@ -8,8 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,8 +20,8 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 public class PlaziTreatmentStreamHandler implements ContentStreamHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(PlaziTreatmentStreamHandler.class);
 
-    public static final String META_XML = "meta.xml";
     private final Dereferencer<InputStream> dereferencer;
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
@@ -37,13 +37,17 @@ public class PlaziTreatmentStreamHandler implements ContentStreamHandler {
     @Override
     public boolean handle(IRI version, InputStream is) throws ContentStreamException {
         String iriString = version.getIRIString();
-        try {
-            handleAssumedPlaziTreatment(is, iriString, outputStream);
-            return true;
-        } catch (IOException | SAXException e) {
-            // opportunistic parsing, skip those with exceptions
-            return false;
+        if (!iriString.endsWith("/")) {
+            try {
+                handleAssumedPlaziTreatment(is, iriString, outputStream);
+                return true;
+            } catch (IOException | SAXException e) {
+                // opportunistic parsing, skip those with exceptions
+                // LOG.error("failed to handle [" + version.getIRIString() + "]", e);
+                return false;
+            }
         }
+        return false;
     }
 
     protected static void handleAssumedPlaziTreatment(InputStream is,
@@ -62,6 +66,7 @@ public class PlaziTreatmentStreamHandler implements ContentStreamHandler {
             }
 
         } catch (ParserConfigurationException | XPathExpressionException e) {
+            LOG.error("failed to parse [" + iriString + "]", e);
             // ignore
         }
 

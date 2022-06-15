@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -26,11 +27,10 @@ public class PlaziUtil {
 
     public static ObjectNode parseTreatment(InputStream is, ObjectNode objectNode) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         ObjectNode treatment = objectNode;
-        String s = IOUtils.toString(is, StandardCharsets.UTF_8);
-
+        Document docu = parseDocument(is);
         NodeList doc = XMLUtil.evaluateXPath(
                 "/document",
-                IOUtils.toInputStream(s, StandardCharsets.UTF_8)
+                docu
         );
 
         if (doc.getLength() > 0) {
@@ -44,29 +44,29 @@ public class PlaziUtil {
                 treatment.put("docISBN", docAttributes.getNamedItem("ID-ISBN").getTextContent());
             }
 
-            handleNomenclature(s, treatment);
-            handleDistribution(s, treatment);
+            handleNomenclature(docu, treatment);
+            handleDistribution(docu, treatment);
             parseAttemptOfEmphasisSection(
-                    s,
+                    docu,
                     treatment,
                     "eats",
                     "Food and Feeding", 2
             );
             parseAttemptOfEmphasisSection(
-                    s,
+                    docu,
                     treatment,
                     "activity",
                     "Activity patterns", 1
             );
             parseAttemptOfEmphasisSection(
-                    s,
+                    docu,
                     treatment,
                     "bibliography",
                     "Bibliography", 2
             );
 
             parseAttemptOfEmphasisSection(
-                    s,
+                    docu,
                     treatment,
                     "habitat",
                     "Habitat", 1
@@ -77,39 +77,48 @@ public class PlaziUtil {
         return treatment;
     }
 
+    static Document parseDocument(InputStream is) throws IOException, ParserConfigurationException, SAXException {
+        String s = IOUtils.toString(is, StandardCharsets.UTF_8);
+
+        return XMLUtil.parseDoc(IOUtils.toInputStream(s, StandardCharsets.UTF_8));
+    }
+
     static void setIfNotNull(ObjectNode treatment, NamedNodeMap docAttributes, String attributeName) {
         if (docAttributes.getNamedItem(attributeName) != null) {
             treatment.put(attributeName, docAttributes.getNamedItem(attributeName).getTextContent());
         }
     }
 
-    private static void handleNomenclature(String s, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    private static void handleNomenclature(Document docu, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         NodeList taxonomicNames = XMLUtil.evaluateXPath(
                 "//subSubSection[@type='nomenclature']/paragraph/taxonomicName",
-                IOUtils.toInputStream(s, StandardCharsets.UTF_8)
+                docu
         );
-        for (int i = 0; i < taxonomicNames.getLength(); i++) {
-            Node expectedTaxonomicName = taxonomicNames.item(i);
+
+        if (taxonomicNames.getLength() > 0) {
+            Node expectedTaxonomicName = taxonomicNames.item(0);
             NamedNodeMap attributes = expectedTaxonomicName.getAttributes();
             for (int j = 0; j < attributes.getLength(); j++) {
                 Node attribute = attributes.item(j);
                 String nodeName = attribute.getNodeName();
                 if (!StringUtils.equals(nodeName, "box")) {
-                    treatment.put(nodeName, attribute.getTextContent());
+                    treatment.put("interpreted" + StringUtils.capitalize(nodeName), attribute.getTextContent());
                 }
             }
+            String nameWithoutNewlines = replaceTabsNewlinesWithSpaces(expectedTaxonomicName);
+            treatment.put("name", nameWithoutNewlines);
         }
     }
 
-    private static void handleDistribution(String s, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    private static void handleDistribution(Document docu, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         NodeList distribution = XMLUtil.evaluateXPath(
                 "//subSubSection[@type='distribution']/caption/paragraph",
-                IOUtils.toInputStream(s, StandardCharsets.UTF_8)
+                docu
         );
         for (int i = 0; i < distribution.getLength(); i++) {
             Node distributionNode = distribution.item(i);
             String textContent = distributionNode.getTextContent();
-            treatment.put("distribution", StringUtils.trim(StringUtils.replace(textContent, "Distribution.", "")));
+            treatment.put("distribution", replaceTabsNewlinesWithSpaces(StringUtils.replace(textContent, "Distribution.", "")));
 
             Node parentNode = distributionNode.getParentNode();
             NamedNodeMap attributes = parentNode.getAttributes();
@@ -119,10 +128,10 @@ public class PlaziUtil {
         }
     }
 
-    private static void parseAttemptOfEmphasisSection(String s, ObjectNode treatment, String label, String sectionText, int depth) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    private static void parseAttemptOfEmphasisSection(Document docu, ObjectNode treatment, String label, String sectionText, int depth) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         NodeList emphasisNodes = XMLUtil.evaluateXPath(
                 "//emphasis",
-                IOUtils.toInputStream(s, StandardCharsets.UTF_8)
+                docu
         );
         for (int i = 0; i < emphasisNodes.getLength(); i++) {
             Node emphasisNode = emphasisNodes.item(i);
@@ -131,10 +140,19 @@ public class PlaziUtil {
                 Node expectedParagraphNode = depth == 2
                         ? emphasisNode.getParentNode().getParentNode()
                         : emphasisNode.getParentNode();
-                String eatingText = RegExUtils.replaceAll(expectedParagraphNode.getTextContent(), "\\s+", " ");
+                String eatingText = replaceTabsNewlinesWithSpaces(expectedParagraphNode);
                 treatment.put(label, StringUtils.trim(RegExUtils.replaceFirst(eatingText, sectionText + "[. ]+", "")));
             }
         }
+    }
+
+    private static String replaceTabsNewlinesWithSpaces(Node expectedParagraphNode) {
+        String textContent = expectedParagraphNode.getTextContent();
+        return replaceTabsNewlinesWithSpaces(textContent);
+    }
+
+    private static String replaceTabsNewlinesWithSpaces(String textContent) {
+        return StringUtils.trim(RegExUtils.replaceAll(textContent, "\\s+", " "));
     }
 
 }

@@ -28,8 +28,9 @@ public class PlaziUtilTest {
         assertThat(treatment.get("docOrigin").asText(), Is.is("Handbook of the Mammals of the World, Vol. 9, Lyny Edicions"));
         assertThat(treatment.get("docISBN").asText(), Is.is("978-84-16728-19-0"));
         assertNull(treatment.get("box"));
-        assertThat(treatment.get("genus").asText(), Is.is("Taphozous"));
-        assertThat(treatment.get("species").asText(), Is.is("troughtoni"));
+        assertThat(treatment.get("interpretedGenus").asText(), Is.is("Taphozous"));
+        assertThat(treatment.get("interpretedSpecies").asText(), Is.is("troughtoni"));
+        assertThat(treatment.get("name").asText(), Is.is("Taphozous troughtoni"));
 
 
         assertThat(treatment.get("distribution").asText(), Is.is("NE Australia endemic, in WC, C & E Queensland."));

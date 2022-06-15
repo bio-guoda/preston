@@ -35,11 +35,15 @@ public class XMLUtil {
     }
 
     public static NodeList evaluateXPath(String expression, InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        Document doc = parseDoc(resourceAsStream);
+        return evaluateXPath(expression, doc);
+    }
+
+    public static Document parseDoc(InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(resourceAsStream);
-        return evaluateXPath(expression, doc);
+        return builder.parse(resourceAsStream);
     }
 
     public static NodeList evaluateXPath(String expression, Document doc) throws XPathExpressionException {
