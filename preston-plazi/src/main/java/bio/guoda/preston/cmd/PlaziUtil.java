@@ -17,6 +17,8 @@ import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlaziUtil {
 
@@ -47,18 +49,19 @@ public class PlaziUtil {
                 treatment.put("docPageNumber", docAttributes.getNamedItem("pageNumber").getTextContent());
             }
 
+            handleCommonNames(docu, treatment);
             handleNomenclature(docu, treatment);
             handleDistribution(docu, treatment);
             parseAttemptOfEmphasisSection(
                     docu,
                     treatment,
-                    "eats",
+                    "foodAndFeeding",
                     "Food and Feeding", 2
             );
             parseAttemptOfEmphasisSection(
                     docu,
                     treatment,
-                    "activity",
+                    "activityPatterns",
                     "Activity patterns", 1
             );
             parseAttemptOfEmphasisSection(
@@ -68,12 +71,62 @@ public class PlaziUtil {
                     "Bibliography", 2
             );
 
+            NodeList emphasisNodes1 = XMLUtil.evaluateXPath(
+                    "//emphasis",
+                    docu
+            );
+            for (int i1 = 0; i1 < emphasisNodes1.getLength(); i1++) {
+                Node emphasisNode1 = emphasisNodes1.item(i1);
+                String textContent1 = replaceTabsNewlinesWithSpaces(emphasisNode1);
+                String prefix = "Movements, Home range and Social organization.";
+                if (StringUtils.startsWith(textContent1, prefix)) {
+                    Node expectedParagraphNode1 = emphasisNode1.getParentNode();
+                    String movementsHomeRangeAndSocialOrganization = replaceTabsNewlinesWithSpaces(expectedParagraphNode1);
+                    String[] movementsHomeRangeAndSocialOrganizationChunk = StringUtils.splitByWholeSeparator(movementsHomeRangeAndSocialOrganization, prefix);
+                    if (movementsHomeRangeAndSocialOrganizationChunk.length > 1) {
+                        treatment.put("movementsHomeRangeAndSocialOrganization", StringUtils.trim(RegExUtils.replaceFirst(movementsHomeRangeAndSocialOrganizationChunk[1], "Movements," + "[. ]+", "")));
+                    }
+
+                }
+            }
+
             parseAttemptOfEmphasisSection(
                     docu,
                     treatment,
                     "habitat",
                     "Habitat", 1
             );
+
+            NodeList emphasisNodes2 = XMLUtil.evaluateXPath(
+                    "//emphasis",
+                    docu
+            );
+            for (int i1 = 0; i1 < emphasisNodes2.getLength(); i1++) {
+                Node emphasisNode1 = emphasisNodes2.item(i1);
+                String textContent1 = replaceTabsNewlinesWithSpaces(emphasisNode1);
+                if (StringUtils.startsWith(textContent1, "Status")) {
+                    Node expectedParagraphNode1 = emphasisNode1.getParentNode();
+                    String statusAndConservation = replaceTabsNewlinesWithSpaces(expectedParagraphNode1);
+                    treatment.put("statusAndConservation", StringUtils.trim(RegExUtils.replaceFirst(statusAndConservation, "Status and Conservation" + "[. ]+", "")));
+                }
+            }
+
+            NodeList emphasisNodes = XMLUtil.evaluateXPath(
+                    "//emphasis",
+                    docu
+            );
+            for (int i = 0; i < emphasisNodes.getLength(); i++) {
+                Node emphasisNode = emphasisNodes.item(i);
+                String textContent = emphasisNode.getTextContent();
+                if (StringUtils.startsWith(textContent, "notes")) {
+                    Node expectedParagraphNode = emphasisNode.getParentNode();
+                    String descriptiveNotes = replaceTabsNewlinesWithSpaces(expectedParagraphNode);
+                    String[] descriptiveNotesMinusHabitat = StringUtils.splitByWholeSeparator(descriptiveNotes, "Habitat");
+                    String descriptiveNotesTrimmed = descriptiveNotesMinusHabitat[0];
+                    treatment.put("descriptiveNotes", StringUtils.trim(RegExUtils.replaceFirst(descriptiveNotesTrimmed, "Descriptive notes" + "[. ]+", "")));
+                }
+            }
+
         }
 
 
@@ -91,6 +144,46 @@ public class PlaziUtil {
             treatment.put(attributeName, docAttributes.getNamedItem(attributeName).getTextContent());
         }
     }
+
+    private static void handleCommonNames(Document docu, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        NodeList commonNames = XMLUtil.evaluateXPath(
+                "//subSubSection[@type='vernacular_names']//emphasis",
+                docu
+        );
+
+        List<String> commonNameList = new ArrayList<>();
+        for (int i = 0; i < commonNames.getLength(); i++) {
+            Node expectedCommonName = commonNames.item(i);
+            String commonName = replaceTabsNewlinesWithSpaces(expectedCommonName.getParentNode());
+            String[] commonNameSplit = StringUtils.split(commonName, ".");
+            String commonNameTrimmed = commonNameSplit.length > 1 ? commonNameSplit[1] : commonNameSplit[0];
+            String[] languageAndCommonName = StringUtils.split(commonNameTrimmed, ":I");
+            String language = "en";
+            for (int j = 0; j < languageAndCommonName.length; j += 2) {
+                if (languageAndCommonName.length > 1) {
+                    String languageString = languageAndCommonName[j];
+                    if (StringUtils.contains(languageString, "French")) {
+                        language = "fr";
+                    } else if (StringUtils.contains(languageString, "German")) {
+                        language = "de";
+                    } else if (StringUtils.contains(languageString, "Spanish")) {
+                        language = "es";
+                    }
+                    String commonNameWithoutLanguage = languageAndCommonName[j+1];
+
+                    String commonNameWithISOLanguage = StringUtils.trim(StringUtils.replace(commonNameWithoutLanguage, " I ", "")) + " @" + language;
+                    if (!commonNameList.contains(commonNameWithISOLanguage)) {
+                        commonNameList.add(commonNameWithISOLanguage);
+                    }
+                } else {
+                    commonNameList.add(StringUtils.trim(languageAndCommonName[0]) + " @en");
+                }
+            }
+        }
+
+        treatment.put("commonNames", StringUtils.join(commonNameList, " | "));
+    }
+
 
     private static void handleNomenclature(Document docu, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         NodeList taxonomicNames = XMLUtil.evaluateXPath(
@@ -121,7 +214,7 @@ public class PlaziUtil {
         for (int i = 0; i < distribution.getLength(); i++) {
             Node distributionNode = distribution.item(i);
             String textContent = distributionNode.getTextContent();
-            treatment.put("distribution", replaceTabsNewlinesWithSpaces(StringUtils.replace(textContent, "Distribution.", "")));
+            treatment.put("subspeciesAndDistribution", replaceTabsNewlinesWithSpaces(StringUtils.replace(textContent, "Distribution.", "")));
 
             Node parentNode = distributionNode.getParentNode();
             NamedNodeMap attributes = parentNode.getAttributes();
