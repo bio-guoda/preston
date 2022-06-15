@@ -1,7 +1,6 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.XMLUtil;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
@@ -38,10 +37,10 @@ public class PlaziUtil {
 
             Node document = doc.item(0);
             NamedNodeMap docAttributes = document.getAttributes();
-            treatment.put("docId", docAttributes.getNamedItem("docId").getTextContent());
-            treatment.put("docName", docAttributes.getNamedItem("docName").getTextContent());
-            treatment.put("docOrigin", docAttributes.getNamedItem("docOrigin").getTextContent());
-            treatment.put("docISBN", docAttributes.getNamedItem("ID-ISBN").getTextContent());
+            setIfNotNull(treatment, docAttributes, "docId");
+            setIfNotNull(treatment, docAttributes, "docName");
+            setIfNotNull(treatment, docAttributes, "docOrigin");
+            setIfNotNull(treatment, docAttributes, "ID-ISBN");
 
             handleNomenclature(s, treatment);
             handleDistribution(s, treatment);
@@ -76,6 +75,12 @@ public class PlaziUtil {
         return treatment;
     }
 
+    static void setIfNotNull(ObjectNode treatment, NamedNodeMap docAttributes, String attributeName) {
+        if (docAttributes.getNamedItem(attributeName) != null) {
+            treatment.put(attributeName, docAttributes.getNamedItem(attributeName).getTextContent());
+        }
+    }
+
     private static void handleNomenclature(String s, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         NodeList taxonomicNames = XMLUtil.evaluateXPath(
                 "//subSubSection[@type='nomenclature']/paragraph/taxonomicName",
@@ -86,7 +91,10 @@ public class PlaziUtil {
             NamedNodeMap attributes = expectedTaxonomicName.getAttributes();
             for (int j = 0; j < attributes.getLength(); j++) {
                 Node attribute = attributes.item(j);
-                treatment.put(attribute.getNodeName(), attribute.getTextContent());
+                String nodeName = attribute.getNodeName();
+                if (!StringUtils.equals(nodeName, "box")) {
+                    treatment.put(nodeName, attribute.getTextContent());
+                }
             }
         }
     }
