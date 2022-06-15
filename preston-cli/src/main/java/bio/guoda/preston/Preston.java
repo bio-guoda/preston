@@ -13,6 +13,7 @@ import bio.guoda.preston.cmd.CmdDwcRecordStream;
 import bio.guoda.preston.cmd.CmdGrep;
 import bio.guoda.preston.cmd.CmdHash;
 import bio.guoda.preston.cmd.CmdInstallManual;
+import bio.guoda.preston.cmd.CmdPlazi;
 import bio.guoda.preston.cmd.CmdSeeds;
 import bio.guoda.preston.cmd.CmdSketchCreate;
 import bio.guoda.preston.cmd.CmdGet;
@@ -58,6 +59,7 @@ import static java.lang.System.exit;
                 CmdAlias.class,
                 CmdDwcRecordStream.class,
                 CmdDBaseRecordStream.class,
+                CmdPlazi.class,
                 CmdCite.class,
                 CmdInstallManual.class,
                 ManPageGenerator.class,

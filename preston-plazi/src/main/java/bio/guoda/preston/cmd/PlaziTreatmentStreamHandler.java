@@ -52,7 +52,7 @@ public class PlaziTreatmentStreamHandler implements ContentStreamHandler {
         try {
             ObjectNode treatment = new ObjectMapper().createObjectNode();
             treatment.set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf(iriString));
-            treatment.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf("xml/plazi-treatment"));
+            treatment.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf("application/plazi+xml"));
 
             PlaziUtil.parseTreatment(is, treatment);
             if (treatment.size() > 2) {

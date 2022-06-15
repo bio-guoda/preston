@@ -82,7 +82,7 @@ public class PlaziTreatmentExtractorTest {
     }
 
     private void assertTreatmentValues(JsonNode taxonNode) {
-        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("xml/plazi-treatment"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("application/plazi+xml"));
         assertThat(taxonNode.get("docId").asText(), is("03D587F2FFC94C03F8F13AECFBD8F765"));
         assertThat(taxonNode.get("genus").asText(), is("Taphozous"));
         assertThat(taxonNode.get("species").asText(), is("troughtoni"));
