@@ -27,18 +27,27 @@ public class XMLUtil {
                                    StatementsEmitter emitter,
                                    InputStream resourceAsStream) throws IOException {
         try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(resourceAsStream);
-            XPathFactory xPathfactory = XPathFactory.newInstance();
-            XPath xpath = xPathfactory.newXPath();
-            xpath.setNamespaceContext(getNsContext());
-            XPathExpression expr = xpath.compile(expression);
-            handler.evaluateXPath(emitter, (NodeList) expr.evaluate(doc, XPathConstants.NODESET));
+            NodeList resultList = evaluateXPath(expression, resourceAsStream);
+            handler.evaluateXPath(emitter, resultList);
         } catch (XPathExpressionException | ParserConfigurationException | IOException | SAXException e) {
             throw new IOException("failed to handle xpath", e);
         }
+    }
+
+    public static NodeList evaluateXPath(String expression, InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.parse(resourceAsStream);
+        return evaluateXPath(expression, doc);
+    }
+
+    public static NodeList evaluateXPath(String expression, Document doc) throws XPathExpressionException {
+        XPathFactory xPathfactory = XPathFactory.newInstance();
+        XPath xpath = xPathfactory.newXPath();
+        xpath.setNamespaceContext(getNsContext());
+        XPathExpression expr = xpath.compile(expression);
+        return (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
     }
 
     private static NamespaceContext getNsContext() {
