@@ -24,6 +24,11 @@ import java.util.regex.Pattern;
 
 public class PlaziUtil {
 
+    public static final String PATTERN_SUB_DISTRIBUTION = "([.].*Distribution[ .]+)";
+    public static final Pattern PATTERN_BIBLIOGRAPHY = Pattern.compile("(.*)([.].*Bibliography[ .]+)(.*)");
+    public static final Pattern PATTERN_TAXONOMY = Pattern.compile("(.*)(Taxonomy[ .]+)(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)");
+    public static final Pattern PATTERN_DISTRIBUTION = Pattern.compile("(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)([.].*Descriptive notes[ .]+)(.*)");
+
     public static ObjectNode parseTreatment(InputStream is) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         return parseTreatment(is, new ObjectMapper().createObjectNode());
     }
@@ -58,8 +63,11 @@ public class PlaziUtil {
 
             handleCommonNames(docu, treatment);
             handleNomenclature(docu, treatment);
-            handleTaxonomy(docu, treatment);
-            handleDistribution(docu, treatment);
+            handleTaxonomy(treatment, extractTreatment(docu));
+            handleDistribution(extractTreatment(docu), treatment, docu);
+            handleBibliography(treatment, extractTreatment(docu));
+
+
             parseAttemptOfEmphasisSection(
                     docu,
                     treatment,
@@ -78,26 +86,6 @@ public class PlaziUtil {
                     "activityPatterns",
                     "Activity patterns", 1
             );
-            NodeList emphasisNodes3 = XMLUtil.evaluateXPath(
-                    "//emphasis",
-                    docu
-            );
-            for (int i2 = 0; i2 < emphasisNodes3.getLength(); i2++) {
-                Node emphasisNode2 = emphasisNodes3.item(i2);
-                String textContent2 = emphasisNode2.getTextContent();
-                if (StringUtils.startsWith(textContent2, "Bibliography")) {
-                    Node expectedParagraphNode2 = emphasisNode2.getParentNode().getParentNode();
-                    String bibliography = replaceTabsNewlinesWithSpaces(expectedParagraphNode2);
-                    String bibliographyString = StringUtils.trim(RegExUtils.replaceFirst(bibliography, "Bibliography" + "[. ]+", ""));
-                    String[] references = StringUtils.split(bibliographyString, ",");
-                    List<String> referenceList = new ArrayList<>();
-                    for (String reference : references) {
-                        String removeEndingPeriod = RegExUtils.replaceAll(reference, "[.]$", "");
-                        referenceList.add(RegExUtils.replaceAll(StringUtils.trim(removeEndingPeriod), "(eta/\\.|eta /\\.)", "et al."));
-                    }
-                    treatment.put("bibliography", StringUtils.join(referenceList, " | "));
-                }
-            }
 
             NodeList emphasisNodes1 = XMLUtil.evaluateXPath(
                     "//emphasis",
@@ -159,6 +147,21 @@ public class PlaziUtil {
 
 
         return treatment;
+    }
+
+    static void handleBibliography(ObjectNode treatment, String treatmentText) throws XPathExpressionException {
+        String bibliographyString = extractSegment(treatmentText, PATTERN_BIBLIOGRAPHY);
+
+        String[] references = StringUtils.split(bibliographyString, ")");
+        List<String> referenceList = new ArrayList<>();
+        for (String reference : references) {
+            String removeEndingPeriod = RegExUtils.replaceAll(reference, "^[ ,.]+", "");
+            String individualReference = StringUtils.trim(RegExUtils.replaceAll(StringUtils.trim(removeEndingPeriod), "(eta/\\.|eta /\\.)", "et al."));
+            if (StringUtils.isNoneBlank(individualReference)) {
+                referenceList.add(individualReference + ")");
+            }
+        }
+        treatment.put("bibliography", StringUtils.join(referenceList, " | "));
     }
 
     static Document parseDocument(InputStream is) throws IOException, ParserConfigurationException, SAXException {
@@ -251,16 +254,18 @@ public class PlaziUtil {
         }
     }
 
-    private static void handleDistribution(Document docu, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    private static void handleDistribution(String treatmentText, ObjectNode treatment, Document docu) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        String taxonomySegment = extractDistributionSegment(treatmentText);
+        if (StringUtils.isNoneBlank(taxonomySegment)) {
+            treatment.put("subspeciesAndDistribution", StringUtils.trim(taxonomySegment));
+        }
+
         NodeList distribution = XMLUtil.evaluateXPath(
                 "//subSubSection[@type='distribution']/caption/paragraph",
                 docu
         );
         for (int i = 0; i < distribution.getLength(); i++) {
             Node distributionNode = distribution.item(i);
-            String textContent = distributionNode.getTextContent();
-            treatment.put("subspeciesAndDistribution", replaceTabsNewlinesWithSpaces(StringUtils.replace(textContent, "Distribution.", "")));
-
             Node parentNode = distributionNode.getParentNode();
             NamedNodeMap attributes = parentNode.getAttributes();
             if (attributes.getNamedItem("httpUri") != null) {
@@ -269,35 +274,23 @@ public class PlaziUtil {
         }
     }
 
-    private static void handleTaxonomy(Document docu, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    private static void handleTaxonomy(ObjectNode treatment, String treatmentText) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        String taxonomySegment = extractTaxonomySegment(treatmentText);
+        if (StringUtils.isNoneBlank(taxonomySegment)) {
+            treatment.put("taxonomy", StringUtils.trim(taxonomySegment));
+        }
+    }
 
-        StringBuilder taxonomyString = new StringBuilder();
+    private static String extractTreatment(Document docu) throws XPathExpressionException {
         NodeList emphasisNodes = XMLUtil.evaluateXPath(
-                "//subSubSection/paragraph/emphasis/emphasis",
+                "//treatment",
                 docu
         );
+        StringBuilder builder = new StringBuilder();
         for (int i = 0; i < emphasisNodes.getLength(); i++) {
-            Node emphasisNode = emphasisNodes.item(i);
-            String textContent = emphasisNode.getTextContent();
-            if (StringUtils.startsWith(textContent, "Taxonomy")) {
-                Node expectedSubSectionNode = emphasisNode
-                        .getParentNode()
-                        .getParentNode()
-                        .getParentNode();
-                String taxonomy = replaceTabsNewlinesWithSpaces(expectedSubSectionNode);
-                taxonomyString.append(StringUtils.trim(RegExUtils.replaceFirst(taxonomy, "Taxonomy" + "[. ]+", "")));
-
-                Node nextSibling = expectedSubSectionNode;
-                while ((nextSibling = nextSibling.getNextSibling()) != null) {
-                    if (StringUtils.equals("subSubSection", nextSibling.getLocalName())) {
-                        taxonomyString.append(StringUtils.trim(replaceTabsNewlinesWithSpaces(nextSibling)));
-                        break;
-                    }
-                }
-            }
+            builder.append(emphasisNodes.item(i).getTextContent());
         }
-
-        treatment.put("taxonomy", taxonomyString.toString());
+        return replaceTabsNewlinesWithSpaces(builder.toString());
     }
 
     private static void parseAttemptOfEmphasisSection(Document docu, ObjectNode treatment, String label, String sectionText, int depth) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
@@ -323,8 +316,24 @@ public class PlaziUtil {
         return replaceTabsNewlinesWithSpaces(textContent);
     }
 
-    private static String replaceTabsNewlinesWithSpaces(String textContent) {
+    public static String replaceTabsNewlinesWithSpaces(String textContent) {
         return StringUtils.trim(RegExUtils.replaceAll(textContent, "\\s+", " "));
     }
 
+    public static String extractTaxonomySegment(String taxonomyText1) {
+        return extractSegment(taxonomyText1, PATTERN_TAXONOMY);
+    }
+
+    public static String extractDistributionSegment(String taxonomyText1) {
+        return extractSegment(taxonomyText1, PATTERN_DISTRIBUTION);
+    }
+
+    private static String extractSegment(String taxonomyText1, Pattern pattern) {
+        Matcher matcher = pattern.matcher(taxonomyText1);
+        String taxonomyText = null;
+        if (matcher.matches()) {
+            taxonomyText = replaceTabsNewlinesWithSpaces(matcher.group(3));
+        }
+        return taxonomyText + ".";
+    }
 }
