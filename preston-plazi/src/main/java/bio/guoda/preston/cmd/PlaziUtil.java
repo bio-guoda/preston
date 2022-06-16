@@ -25,9 +25,15 @@ import java.util.regex.Pattern;
 public class PlaziUtil {
 
     public static final String PATTERN_SUB_DISTRIBUTION = "([.].*Distribution[ .]+)";
+    public static final String PATTERN_SUB_DESCRIPTIVE_NOTES = "([.].*Descriptive notes[ .]+)";
+    public static final String PATTERN_SUB_HABITAT = "([.].*Habitat[ .]+)";
+    public static final String PATTERN_SUB_MOVEMENTS = "([.].*Movements, Home range and Social organization[ .]+)";
+    public static final String PATTERN_SUB_CONSERVATION = "([.].*Conservation.*[ .]+)";
     public static final Pattern PATTERN_BIBLIOGRAPHY = Pattern.compile("(.*)([.].*Bibliography[ .]+)(.*)");
     public static final Pattern PATTERN_TAXONOMY = Pattern.compile("(.*)(Taxonomy[ .]+)(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)");
-    public static final Pattern PATTERN_DISTRIBUTION = Pattern.compile("(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)([.].*Descriptive notes[ .]+)(.*)");
+    public static final Pattern PATTERN_DISTRIBUTION = Pattern.compile("(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)");
+    public static final Pattern PATTERN_DESCRIPTIVE_NOTES = Pattern.compile("(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)" + PATTERN_SUB_HABITAT + "(.*)");
+    public static final Pattern PATTERN_MOVEMENTS = Pattern.compile("(.*)" + PATTERN_SUB_MOVEMENTS + "(.*)" + PATTERN_SUB_CONSERVATION + "(.*)");
 
     public static ObjectNode parseTreatment(InputStream is) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         return parseTreatment(is, new ObjectMapper().createObjectNode());
@@ -64,7 +70,7 @@ public class PlaziUtil {
             String treatmentText = extractTreatment(docu);
             treatment.put("verbatimText", treatmentText);
             handleTaxonomy(treatment, treatmentText);
-            if (treatment.has("commonNames")) {
+            if (treatment.has("taxonomy")) {
                 handleRemainingTreatment(treatment, docu, treatmentText);
 
             }
@@ -82,27 +88,24 @@ public class PlaziUtil {
         handleFoodAndFeeding(treatment, docu);
         handleBreeding(treatment, docu);
         handleActivityPatterns(treatment, docu);
-        handleMovements(treatment, docu);
-        handleHabitat(treatment, docu);
+        handleMovements(treatment, treatmentText);
         handleStatusAndConservation(treatment, docu);
-        handleDescriptiveNotes(treatment, docu);
+
+        handleDescriptiveNotes(treatment, treatmentText);
+        handleHabitat(treatment, docu);
     }
 
-    private static void handleDescriptiveNotes(ObjectNode treatment, Document docu) throws XPathExpressionException {
-        NodeList emphasisNodes = XMLUtil.evaluateXPath(
-                "//emphasis",
-                docu
-        );
-        for (int i = 0; i < emphasisNodes.getLength(); i++) {
-            Node emphasisNode = emphasisNodes.item(i);
-            String textContent = emphasisNode.getTextContent();
-            if (StringUtils.startsWith(textContent, "notes")) {
-                Node expectedParagraphNode = emphasisNode.getParentNode();
-                String descriptiveNotes = replaceTabsNewlinesWithSpaces(expectedParagraphNode);
-                String[] descriptiveNotesMinusHabitat = StringUtils.splitByWholeSeparator(descriptiveNotes, "Habitat");
-                String descriptiveNotesTrimmed = descriptiveNotesMinusHabitat[0];
-                treatment.put("descriptiveNotes", StringUtils.trim(RegExUtils.replaceFirst(descriptiveNotesTrimmed, "Descriptive notes" + "[. ]+", "")));
-            }
+    static void handleMovements(ObjectNode treatment, String treatmentText) {
+        String segment = extractMovementsSegment(treatmentText);
+        if (StringUtils.isNoneBlank(segment)) {
+            treatment.put("movementsHomeRangeAndSocialOrganization", segment);
+        }
+    }
+
+    static void handleDescriptiveNotes(ObjectNode treatment, String treatmentText) {
+        String descriptiveNoteSegment = extractDescriptiveNoteSegment(treatmentText);
+        if (StringUtils.isNoneBlank(descriptiveNoteSegment)) {
+            treatment.put("descriptiveNotes", descriptiveNoteSegment);
         }
     }
 
@@ -208,7 +211,7 @@ public class PlaziUtil {
 
     private static void handleCommonNames(Document docu, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         NodeList commonNames = XMLUtil.evaluateXPath(
-                "//subSubSection[@type='vernacular_names']/paragraph/emphasis",
+                "//subSubSection[@type='vernacular_names']//emphasis",
                 docu
         );
 
@@ -230,10 +233,10 @@ public class PlaziUtil {
 
     }
 
-    private static String addCommonName(List<String> commonNameList, String str) {
+    private static void addCommonName(List<String> commonNameList, String str) {
         String language = "en";
         String[] languageAndCommonName = StringUtils.split(str, ":");
-        String commonNameWithoutLanguage = languageAndCommonName[0];
+        String commonNamesWithoutLanguage = languageAndCommonName[0];
         if (languageAndCommonName.length > 1) {
             String languageString = languageAndCommonName[0];
             if (StringUtils.contains(languageString, "French")) {
@@ -245,27 +248,29 @@ public class PlaziUtil {
             } else if (StringUtils.contains(languageString, "Other common names")) {
                 language = "en";
             }
-            commonNameWithoutLanguage = languageAndCommonName[1];
+            commonNamesWithoutLanguage = languageAndCommonName[1];
         }
 
-        String trim = StringUtils.trim(commonNameWithoutLanguage);
-        Pattern compile = Pattern.compile("(.*)([a-z][A-Z])(.*)");
-        Matcher matcher = compile.matcher(trim);
-        if (matcher.matches()) {
-            String group = matcher.group(2);
-            trim = matcher.group(1) + group.substring(0, 1) + " " + group.substring(1) + matcher.group(3);
+        String[] commonNamesWithoutLanguageList = StringUtils.split(commonNamesWithoutLanguage, ",");
+        for (String commonNameWithoutLanguage : commonNamesWithoutLanguageList) {
+            String trim = StringUtils.trim(commonNameWithoutLanguage);
+            Pattern compile = Pattern.compile("(.*)([a-z][A-Z])(.*)");
+            Matcher matcher = compile.matcher(trim);
+            if (matcher.matches()) {
+                String group = matcher.group(2);
+                trim = matcher.group(1) + group.substring(0, 1) + " " + group.substring(1) + matcher.group(3);
+            }
+            String commonNameWithISOLanguage = trim + " @" + language;
+            if (!commonNameList.contains(commonNameWithISOLanguage)) {
+                commonNameList.add(commonNameWithISOLanguage);
+            }
         }
-        String commonNameWithISOLanguage = trim + " @" + language;
-        if (!commonNameList.contains(commonNameWithISOLanguage)) {
-            commonNameList.add(commonNameWithISOLanguage);
-        }
-        return language;
     }
 
 
     private static void handleNomenclature(Document docu, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         NodeList taxonomicNames = XMLUtil.evaluateXPath(
-                "//subSubSection[@type='nomenclature']/paragraph/taxonomicName",
+                "//subSubSection[@type='nomenclature']//taxonomicName",
                 docu
         );
 
@@ -354,8 +359,16 @@ public class PlaziUtil {
         return extractSegment(taxonomyText1, PATTERN_TAXONOMY);
     }
 
-    public static String extractDistributionSegment(String taxonomyText1) {
-        return extractSegment(taxonomyText1, PATTERN_DISTRIBUTION);
+    public static String extractDescriptiveNoteSegment(String taxonomyText1) {
+        return extractSegment(taxonomyText1, PATTERN_DESCRIPTIVE_NOTES);
+    }
+
+    public static String extractMovementsSegment(String text) {
+        return extractSegment(text, PATTERN_MOVEMENTS);
+    }
+
+    public static String extractDistributionSegment(String text) {
+        return extractSegment(text, PATTERN_DISTRIBUTION);
     }
 
     private static String extractSegment(String taxonomyText1, Pattern pattern) {

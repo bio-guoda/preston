@@ -79,6 +79,55 @@ public class PlaziUtilTest {
 
     }
 
+    @Test
+    public void processXML2() throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
+        InputStream is = getClass().getResourceAsStream("038F4B5AFFA1FFD6A892FDF8B80ECA7D.xml");
+
+
+        JsonNode treatment = PlaziUtil.parseTreatment(is);
+
+        assertThat(treatment.get("docId").asText(), Is.is("038F4B5AFFA1FFD6A892FDF8B80ECA7D"));
+        assertThat(treatment.get("taxonomy").asText(), Is.is("Bathyergus damarensis Ogilby, 1838 , Damaraland, Namibia. This species is monotypic."));
+        assertThat(treatment.get("name").asText(), Is.is("Fukomys damarensis"));
+
+
+        assertThat(treatment.get("subspeciesAndDistribution").asText(), Is.is("S Angola, S Zambia, E Namibia, most of Botswana, W Zimbabwe, and NW South Africa (Northern Cape)."));
+        assertThat(treatment.get("distributionImageURL").asText(), Is.is("https://zenodo.org/record/6584728/files/figure.png"));
+
+
+        assertThat(treatment.get("foodAndFeeding").asText(),
+                Is.is("The Damara Mole-rat is herbivorous and eats geophytes, tubers, and bulbs; it does not drink standing water."));
+
+
+        assertThat(treatment.get("activityPatterns").asText(),
+                Is.is("The Damara Mole-rat burrows and digs with upper incisors. It is most active after rainfall and has a circadian rhythm."));
+
+        assertThat(treatment.get("bibliography").asText(),
+                Is.is("Barnett et al. (2003) | Bennett & Faulkes (2000) | Bennett & Jarvis (1988a, 2004) | Bennett, Faulkes & Molteno (1996) | Bennett, Jarvis, Millar et al. (1994) | Burland et al. (2004) | De Graaff (1972) | Faulkes & Bennett (2001) | Hazell et al. (2000) | Lovegrove (1988) | Lovegrove et al. (1993) | Maree & Faulkes (2008b) | Nevo et al. (1986) | Roper et al. (2001)"));
+
+        assertThat(treatment.get("habitat").asText(),
+                Is.is("Open sandy soils in semiarid thornscrub, savanna, and grassland areas."));
+
+        assertThat(treatment.get("descriptiveNotes").asText(),
+                Is.is("Head-body 169-9-178-7 mm (males) and 155-2-163 mm (females), tail 23-6-24-4 mm (males) and 21-5-22-5 mm (females); weight 119-8-210-2 g (males) and 113-6-169-4 g (females). The Damara Mole-rat is medium-sized, with short legs, cylindrical body, short tail, and vibrissae on tail and feet. Dorsal pelage is dark brown to black; large head has white head spot. Chromosomal complement is 2n = 74 or 78, FN = 92."));
+
+        assertThat(treatment.get("movementsHomeRangeAndSocialOrganization").asText(),
+                Is.is("Non-reproductive and unrelated Damara Mole-rats in a colony disperse. Home range averages 1-3 ha. Colonies of Damara Mole-rats are eusocial, with a single breeding female and 1-2 breeding males, overlapping generations, and non-reproductive individuals. Offspring are cared for cooperatively, and non-reproductive individuals forage, defend burrow systems, and care of young. Reproductive female suppresses ovulation of other females. There is widespread multiple paternity and unrelated immigrants in colony; colony size averages eleven individuals (range 2-14); and sex ratio is male-biased."));
+
+        assertThat(treatment.get("statusAndConservation").asText(),
+                Is.is("Classified as Least Concern on The IUCN Red List."));
+
+        assertThat(treatment.get("commonNames").asText(),
+                Is.is("Bathyergue de Damara @fr | Damara-Graumull @de | Rata topo de Damara @es | Botswanan Mole-rat @en | Damara Mole Rat @en | Damaraland Blesmol @en"));
+
+        assertThat(treatment.get("taxonomy").asText(),
+                Is.is("Bathyergus damarensis Ogilby, 1838 , Damaraland, Namibia. This species is monotypic."));
+
+        assertThat(treatment.get("breeding").asText(),
+                Is.is("Breeding of the Damara Mole-rat is aseasonal. Gestation is 78-92 days;litter size averages three young (range 1-6), with up to three litters per year. Sex ratio is skewed toward males."));
+
+    }
+
 
     @Test
     public void parseTaxonomy() {
