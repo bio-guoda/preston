@@ -87,7 +87,7 @@ public class PlaziUtilTest {
         JsonNode treatment = PlaziUtil.parseTreatment(is);
 
         assertThat(treatment.get("docId").asText(), Is.is("038F4B5AFFA1FFD6A892FDF8B80ECA7D"));
-        assertThat(treatment.get("taxonomy").asText(), Is.is("Bathyergus damarensis Ogilby, 1838 , Damaraland, Namibia. This species is monotypic."));
+        assertThat(treatment.get("taxonomy").asText(), Is.is("Bathyergus damarensis Ogilby, 1838, Damaraland, Namibia.This species is monotypic."));
         assertThat(treatment.get("name").asText(), Is.is("Fukomys damarensis"));
 
 
@@ -118,10 +118,10 @@ public class PlaziUtilTest {
                 Is.is("Classified as Least Concern on The IUCN Red List."));
 
         assertThat(treatment.get("commonNames").asText(),
-                Is.is("Bathyergue de Damara @fr | Damara-Graumull @de | Rata topo de Damara @es | Botswanan Mole-rat @en | Damara Mole Rat @en | Damaraland Blesmol @en"));
+                Is.is("Bathyergue de Damara @fr | Damara-Graumull @de | Ratatopo de Damara @es | Botswanan Mole-rat @en | Damara Mole Rat @en | Damaraland Blesmol @en"));
 
         assertThat(treatment.get("taxonomy").asText(),
-                Is.is("Bathyergus damarensis Ogilby, 1838 , Damaraland, Namibia. This species is monotypic."));
+                Is.is("Bathyergus damarensis Ogilby, 1838, Damaraland, Namibia.This species is monotypic."));
 
         assertThat(treatment.get("breeding").asText(),
                 Is.is("Breeding of the Damara Mole-rat is aseasonal. Gestation is 78-92 days;litter size averages three young (range 1-6), with up to three litters per year. Sex ratio is skewed toward males."));

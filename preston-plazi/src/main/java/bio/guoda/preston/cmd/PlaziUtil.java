@@ -34,6 +34,8 @@ public class PlaziUtil {
     public static final Pattern PATTERN_DISTRIBUTION = Pattern.compile("(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)");
     public static final Pattern PATTERN_DESCRIPTIVE_NOTES = Pattern.compile("(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)" + PATTERN_SUB_HABITAT + "(.*)");
     public static final Pattern PATTERN_MOVEMENTS = Pattern.compile("(.*)" + PATTERN_SUB_MOVEMENTS + "(.*)" + PATTERN_SUB_CONSERVATION + "(.*)");
+    public static final Pattern DETECT_TAB_AND_NEWLINE = Pattern.compile("[\t\n]+");
+    public static final Pattern DETECT_WHITESPACE = Pattern.compile("[\\s]+");
 
     public static ObjectNode parseTreatment(InputStream is) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         return parseTreatment(is, new ObjectMapper().createObjectNode());
@@ -352,7 +354,10 @@ public class PlaziUtil {
     }
 
     public static String replaceTabsNewlinesWithSpaces(String textContent) {
-        return StringUtils.trim(RegExUtils.replaceAll(textContent, "\\s+", " "));
+        return StringUtils.trim(
+                RegExUtils.replaceAll(
+                        RegExUtils.replaceAll(textContent, DETECT_TAB_AND_NEWLINE, ""),
+                        DETECT_WHITESPACE, " "));
     }
 
     public static String extractTaxonomySegment(String taxonomyText1) {
@@ -373,6 +378,10 @@ public class PlaziUtil {
 
     private static String extractSegment(String taxonomyText1, Pattern pattern) {
         Matcher matcher = pattern.matcher(taxonomyText1);
+        return cleanText(matcher);
+    }
+
+    private static String cleanText(Matcher matcher) {
         String taxonomyText = null;
         if (matcher.matches()) {
             taxonomyText = replaceTabsNewlinesWithSpaces(matcher.group(3));
