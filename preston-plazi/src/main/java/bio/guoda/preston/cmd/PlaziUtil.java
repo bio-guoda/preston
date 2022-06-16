@@ -58,12 +58,19 @@ public class PlaziUtil {
 
             handleCommonNames(docu, treatment);
             handleNomenclature(docu, treatment);
+            handleTaxonomy(docu, treatment);
             handleDistribution(docu, treatment);
             parseAttemptOfEmphasisSection(
                     docu,
                     treatment,
                     "foodAndFeeding",
                     "Food and Feeding", 2
+            );
+            parseAttemptOfEmphasisSection(
+                    docu,
+                    treatment,
+                    "breeding",
+                    "Breeding", 1
             );
             parseAttemptOfEmphasisSection(
                     docu,
@@ -260,6 +267,37 @@ public class PlaziUtil {
                 treatment.put("distributionImageURL", attributes.getNamedItem("httpUri").getTextContent());
             }
         }
+    }
+
+    private static void handleTaxonomy(Document docu, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+
+        StringBuilder taxonomyString = new StringBuilder();
+        NodeList emphasisNodes = XMLUtil.evaluateXPath(
+                "//subSubSection/paragraph/emphasis/emphasis",
+                docu
+        );
+        for (int i = 0; i < emphasisNodes.getLength(); i++) {
+            Node emphasisNode = emphasisNodes.item(i);
+            String textContent = emphasisNode.getTextContent();
+            if (StringUtils.startsWith(textContent, "Taxonomy")) {
+                Node expectedSubSectionNode = emphasisNode
+                        .getParentNode()
+                        .getParentNode()
+                        .getParentNode();
+                String taxonomy = replaceTabsNewlinesWithSpaces(expectedSubSectionNode);
+                taxonomyString.append(StringUtils.trim(RegExUtils.replaceFirst(taxonomy, "Taxonomy" + "[. ]+", "")));
+
+                Node nextSibling = expectedSubSectionNode;
+                while ((nextSibling = nextSibling.getNextSibling()) != null) {
+                    if (StringUtils.equals("subSubSection", nextSibling.getLocalName())) {
+                        taxonomyString.append(StringUtils.trim(replaceTabsNewlinesWithSpaces(nextSibling)));
+                        break;
+                    }
+                }
+            }
+        }
+
+        treatment.put("taxonomy", taxonomyString.toString());
     }
 
     private static void parseAttemptOfEmphasisSection(Document docu, ObjectNode treatment, String label, String sectionText, int depth) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {

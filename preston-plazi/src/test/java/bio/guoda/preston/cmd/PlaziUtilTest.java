@@ -72,6 +72,12 @@ public class PlaziUtilTest {
                         " | Tafozo de Troughton @es" +
                         " | Troughton's Tomb Bat @en"));
 
+        assertThat(treatment.get("taxonomy").asText(),
+                Is.is("Taphozous troughtoni Tate, 1952 , “ Rifle Creek, Mt. Isa, northwest Queensland ,” Australia .Taphozous troughtoni is in the subgenus Taphozous . It was considered ajunior synonym of T georgianus , but. T. Chimimba and D. J. Kitchener in 1991 raised it to a distinct species. Monotypic."));
+
+        assertThat(treatment.get("breeding").asText(),
+                Is.is("No information."));
+
     }
 
 
