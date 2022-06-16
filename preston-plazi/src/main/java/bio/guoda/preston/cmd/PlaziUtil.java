@@ -61,92 +61,122 @@ public class PlaziUtil {
                 treatment.put("docPageNumber", docAttributes.getNamedItem("pageNumber").getTextContent());
             }
 
-            handleCommonNames(docu, treatment);
-            handleNomenclature(docu, treatment);
-            handleTaxonomy(treatment, extractTreatment(docu));
-            handleDistribution(extractTreatment(docu), treatment, docu);
-            handleBibliography(treatment, extractTreatment(docu));
+            String treatmentText = extractTreatment(docu);
+            treatment.put("verbatimText", treatmentText);
+            handleTaxonomy(treatment, treatmentText);
+            if (treatment.has("commonNames")) {
+                handleRemainingTreatment(treatment, docu, treatmentText);
 
-
-            parseAttemptOfEmphasisSection(
-                    docu,
-                    treatment,
-                    "foodAndFeeding",
-                    "Food and Feeding", 2
-            );
-            parseAttemptOfEmphasisSection(
-                    docu,
-                    treatment,
-                    "breeding",
-                    "Breeding", 1
-            );
-            parseAttemptOfEmphasisSection(
-                    docu,
-                    treatment,
-                    "activityPatterns",
-                    "Activity patterns", 1
-            );
-
-            NodeList emphasisNodes1 = XMLUtil.evaluateXPath(
-                    "//emphasis",
-                    docu
-            );
-            for (int i1 = 0; i1 < emphasisNodes1.getLength(); i1++) {
-                Node emphasisNode1 = emphasisNodes1.item(i1);
-                String textContent1 = replaceTabsNewlinesWithSpaces(emphasisNode1);
-                String prefix = "Movements, Home range and Social organization.";
-                if (StringUtils.startsWith(textContent1, prefix)) {
-                    Node expectedParagraphNode1 = emphasisNode1.getParentNode();
-                    String movementsHomeRangeAndSocialOrganization = replaceTabsNewlinesWithSpaces(expectedParagraphNode1);
-                    String[] movementsHomeRangeAndSocialOrganizationChunk = StringUtils.splitByWholeSeparator(movementsHomeRangeAndSocialOrganization, prefix);
-                    if (movementsHomeRangeAndSocialOrganizationChunk.length > 1) {
-                        treatment.put("movementsHomeRangeAndSocialOrganization", StringUtils.trim(RegExUtils.replaceFirst(movementsHomeRangeAndSocialOrganizationChunk[1], "Movements," + "[. ]+", "")));
-                    }
-
-                }
             }
-
-            parseAttemptOfEmphasisSection(
-                    docu,
-                    treatment,
-                    "habitat",
-                    "Habitat", 1
-            );
-
-            NodeList emphasisNodes2 = XMLUtil.evaluateXPath(
-                    "//emphasis",
-                    docu
-            );
-            for (int i1 = 0; i1 < emphasisNodes2.getLength(); i1++) {
-                Node emphasisNode1 = emphasisNodes2.item(i1);
-                String textContent1 = replaceTabsNewlinesWithSpaces(emphasisNode1);
-                if (StringUtils.startsWith(textContent1, "Status")) {
-                    Node expectedParagraphNode1 = emphasisNode1.getParentNode();
-                    String statusAndConservation = replaceTabsNewlinesWithSpaces(expectedParagraphNode1);
-                    treatment.put("statusAndConservation", StringUtils.trim(RegExUtils.replaceFirst(statusAndConservation, "Status and Conservation" + "[. ]+", "")));
-                }
-            }
-
-            NodeList emphasisNodes = XMLUtil.evaluateXPath(
-                    "//emphasis",
-                    docu
-            );
-            for (int i = 0; i < emphasisNodes.getLength(); i++) {
-                Node emphasisNode = emphasisNodes.item(i);
-                String textContent = emphasisNode.getTextContent();
-                if (StringUtils.startsWith(textContent, "notes")) {
-                    Node expectedParagraphNode = emphasisNode.getParentNode();
-                    String descriptiveNotes = replaceTabsNewlinesWithSpaces(expectedParagraphNode);
-                    String[] descriptiveNotesMinusHabitat = StringUtils.splitByWholeSeparator(descriptiveNotes, "Habitat");
-                    String descriptiveNotesTrimmed = descriptiveNotesMinusHabitat[0];
-                    treatment.put("descriptiveNotes", StringUtils.trim(RegExUtils.replaceFirst(descriptiveNotesTrimmed, "Descriptive notes" + "[. ]+", "")));
-                }
-            }
-
         }
 
 
         return treatment;
+    }
+
+    public static void handleRemainingTreatment(ObjectNode treatment, Document docu, String treatmentText) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        handleCommonNames(docu, treatment);
+        handleNomenclature(docu, treatment);
+        handleDistribution(treatmentText, treatment, docu);
+        handleBibliography(treatment, treatmentText);
+        handleFoodAndFeeding(treatment, docu);
+        handleBreeding(treatment, docu);
+        handleActivityPatterns(treatment, docu);
+        handleMovements(treatment, docu);
+        handleHabitat(treatment, docu);
+        handleStatusAndConservation(treatment, docu);
+        handleDescriptiveNotes(treatment, docu);
+    }
+
+    private static void handleDescriptiveNotes(ObjectNode treatment, Document docu) throws XPathExpressionException {
+        NodeList emphasisNodes = XMLUtil.evaluateXPath(
+                "//emphasis",
+                docu
+        );
+        for (int i = 0; i < emphasisNodes.getLength(); i++) {
+            Node emphasisNode = emphasisNodes.item(i);
+            String textContent = emphasisNode.getTextContent();
+            if (StringUtils.startsWith(textContent, "notes")) {
+                Node expectedParagraphNode = emphasisNode.getParentNode();
+                String descriptiveNotes = replaceTabsNewlinesWithSpaces(expectedParagraphNode);
+                String[] descriptiveNotesMinusHabitat = StringUtils.splitByWholeSeparator(descriptiveNotes, "Habitat");
+                String descriptiveNotesTrimmed = descriptiveNotesMinusHabitat[0];
+                treatment.put("descriptiveNotes", StringUtils.trim(RegExUtils.replaceFirst(descriptiveNotesTrimmed, "Descriptive notes" + "[. ]+", "")));
+            }
+        }
+    }
+
+    private static void handleStatusAndConservation(ObjectNode treatment, Document docu) throws XPathExpressionException {
+        NodeList emphasisNodes2 = XMLUtil.evaluateXPath(
+                "//emphasis",
+                docu
+        );
+        for (int i1 = 0; i1 < emphasisNodes2.getLength(); i1++) {
+            Node emphasisNode1 = emphasisNodes2.item(i1);
+            String textContent1 = replaceTabsNewlinesWithSpaces(emphasisNode1);
+            if (StringUtils.startsWith(textContent1, "Status")) {
+                Node expectedParagraphNode1 = emphasisNode1.getParentNode();
+                String statusAndConservation = replaceTabsNewlinesWithSpaces(expectedParagraphNode1);
+                treatment.put("statusAndConservation", StringUtils.trim(RegExUtils.replaceFirst(statusAndConservation, "Status and Conservation" + "[. ]+", "")));
+            }
+        }
+    }
+
+    private static void handleHabitat(ObjectNode treatment, Document docu) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        parseAttemptOfEmphasisSection(
+                docu,
+                treatment,
+                "habitat",
+                "Habitat", 1
+        );
+    }
+
+    private static void handleMovements(ObjectNode treatment, Document docu) throws XPathExpressionException {
+        NodeList emphasisNodes1 = XMLUtil.evaluateXPath(
+                "//emphasis",
+                docu
+        );
+        for (int i1 = 0; i1 < emphasisNodes1.getLength(); i1++) {
+            Node emphasisNode1 = emphasisNodes1.item(i1);
+            String textContent1 = replaceTabsNewlinesWithSpaces(emphasisNode1);
+            String prefix = "Movements, Home range and Social organization.";
+            if (StringUtils.startsWith(textContent1, prefix)) {
+                Node expectedParagraphNode1 = emphasisNode1.getParentNode();
+                String movementsHomeRangeAndSocialOrganization = replaceTabsNewlinesWithSpaces(expectedParagraphNode1);
+                String[] movementsHomeRangeAndSocialOrganizationChunk = StringUtils.splitByWholeSeparator(movementsHomeRangeAndSocialOrganization, prefix);
+                if (movementsHomeRangeAndSocialOrganizationChunk.length > 1) {
+                    treatment.put("movementsHomeRangeAndSocialOrganization", StringUtils.trim(RegExUtils.replaceFirst(movementsHomeRangeAndSocialOrganizationChunk[1], "Movements," + "[. ]+", "")));
+                }
+
+            }
+        }
+    }
+
+    private static void handleActivityPatterns(ObjectNode treatment, Document docu) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        parseAttemptOfEmphasisSection(
+                docu,
+                treatment,
+                "activityPatterns",
+                "Activity patterns", 1
+        );
+    }
+
+    private static void handleBreeding(ObjectNode treatment, Document docu) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        parseAttemptOfEmphasisSection(
+                docu,
+                treatment,
+                "breeding",
+                "Breeding", 1
+        );
+    }
+
+    private static void handleFoodAndFeeding(ObjectNode treatment, Document docu) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        parseAttemptOfEmphasisSection(
+                docu,
+                treatment,
+                "foodAndFeeding",
+                "Food and Feeding", 2
+        );
     }
 
     static void handleBibliography(ObjectNode treatment, String treatmentText) throws XPathExpressionException {
@@ -290,7 +320,7 @@ public class PlaziUtil {
         for (int i = 0; i < emphasisNodes.getLength(); i++) {
             builder.append(emphasisNodes.item(i).getTextContent());
         }
-        return replaceTabsNewlinesWithSpaces(builder.toString());
+        return StringUtils.trim(replaceTabsNewlinesWithSpaces(builder.toString()));
     }
 
     private static void parseAttemptOfEmphasisSection(Document docu, ObjectNode treatment, String label, String sectionText, int depth) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
