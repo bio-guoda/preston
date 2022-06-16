@@ -1,0 +1,164 @@
+<document ID-DOI="http://doi.org/10.5281/zenodo.6584692" ID-ISBN="978-84-941892-3-4" ID-Zenodo-Dep="6584692" approvalRequired="14" approvalRequired_for_taxonomicNames="8" approvalRequired_for_treatments="6" checkinTime="1653580629925" checkinUser="carolina" docAuthor="Don E. Wilson, Thomas E. Lacher, Jr &amp; Russell A. Mittermeier" docDate="2016" docId="038F4B5AFFA1FFD6A892FDF8B80ECA7D" docLanguage="en" docName="hbmw_6_Bathyergidae_0352.pdf.imf" docOrigin="Handbook of the Mammals of the World – Volume 6 Lagomorphs and Rodents I, Barcelona: Lynx Edicions" docTitle="Fukomys damarensis" docType="treatment" docVersion="5" lastPageNumber="370" masterDocId="FFB63322FFA4FFD3AD42FFDCBF08C256" masterDocTitle="Bathyergidae" masterLastPageNumber="370" masterPageNumber="352" pageNumber="370" updateTime="1653585382471" updateUser="ExternalLinkService">
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:titleInfo>
+<mods:title>Bathyergidae</mods:title>
+</mods:titleInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Don E. Wilson</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Thomas E. Lacher, Jr</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Russell A. Mittermeier</mods:namePart>
+</mods:name>
+<mods:typeOfResource>text</mods:typeOfResource>
+<mods:relatedItem type="host">
+<mods:originInfo>
+<mods:dateIssued>2016</mods:dateIssued>
+<mods:dateOther type="pubDate">2016-07-31</mods:dateOther>
+<mods:publisher>Lynx Edicions</mods:publisher>
+<mods:place>
+<mods:placeTerm>Barcelona</mods:placeTerm>
+</mods:place>
+</mods:originInfo>
+<mods:titleInfo>
+<mods:title>Handbook of the Mammals of the World – Volume 6 Lagomorphs and Rodents I</mods:title>
+</mods:titleInfo>
+<mods:part>
+<mods:extent unit="page">
+<mods:start>352</mods:start>
+<mods:end>370</mods:end>
+</mods:extent>
+</mods:part>
+</mods:relatedItem>
+<mods:classification>book chapter</mods:classification>
+<mods:identifier type="DOI">http://doi.org/10.5281/zenodo.6584692</mods:identifier>
+<mods:identifier type="ISBN">978-84-941892-3-4</mods:identifier>
+<mods:identifier type="Zenodo-Dep">6584692</mods:identifier>
+</mods:mods>
+<treatment ID-DOI="http://doi.org/10.5281/zenodo.6584550" ID-Zenodo-Dep="6584550" LSID="urn:lsid:plazi:treatment:038F4B5AFFA1FFD6A892FDF8B80ECA7D" httpUri="http://treatment.plazi.org/id/038F4B5AFFA1FFD6A892FDF8B80ECA7D" lastPageNumber="370" pageId="5" pageNumber="370">
+<subSubSection box="[1488,1541,548,594]" pageId="5" pageNumber="370" type="multiple">
+<paragraph blockId="5.[1482,2426,548,674]" box="[1488,1541,548,594]" pageId="5" pageNumber="370">
+<heading box="[1488,1541,548,594]" pageId="5" pageNumber="370">
+<figureCitation box="[1488,1541,548,594]" captionStart="Plate 22: Bathyergidae" captionStartId="2.[110,140,3366,3391]" captionTargetBox="[12,2732,15,3643]" captionTargetPageId="1" captionText="1. Silvery Mole-rat (Heliophobius argenteocinereus), 2. Namaqua Dune Mole-rat (Bathyergus janetta), 3. Cape Dune Mole-rat (Bathyergus suillus), 4. Cape Mole-rat (Georychus capensis), 5. Common Mole-rat (Cryptomys hottentotus), 6. Ghana Mole-rat (Fukomys zechi), 7. Nigerian Mole-rat (Fukomys foxi), 8. Ochre Mole-rat (Fukomys ochraceocinereus), 9. Bocage’s Mole-rat (Fukomys bocagei), 10. Zambian Mole-rat (Fukomys amatus), 11. Ansell’s Mole-rat (Fukomys anselli), 12. Katue Mole-rat (Fukomys kafuensis), 13. Mechow’s Mole-rat (Fukomys mechowu), 14. Caroline’s Mole-rat (Fukomys vandewoestijneae), 15. Whyte’s Mole-rat (Fukomys whytei), 16. Damara Mole-rat (Fukomys damarensis), 17. Mashona Mole-rat (Fukomys darlingi)" figureDoi="http://doi.org/10.5281/zenodo.6584732" httpUri="https://zenodo.org/record/6584732/files/figure.png" pageId="5" pageNumber="370">16.</figureCitation>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection box="[1559,1913,548,594]" pageId="5" pageNumber="370" type="vernacular_names">
+<paragraph blockId="5.[1482,2426,548,674]" box="[1559,1913,548,594]" pageId="5" pageNumber="370">
+<heading box="[1559,1913,548,594]" pageId="5" pageNumber="370">
+<vernacularName box="[1559,1913,548,594]" pageId="5" pageNumber="370">Damara Mole-rat</vernacularName>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection box="[1982,2349,548,594]" pageId="5" pageNumber="370" type="nomenclature">
+<paragraph blockId="5.[1482,2426,548,674]" box="[1982,2349,548,594]" pageId="5" pageNumber="370">
+<heading box="[1982,2349,548,594]" pageId="5" pageNumber="370">
+<taxonomicName baseAuthorityName="Ogilby" baseAuthorityYear="1838" box="[1982,2349,548,594]" class="Mammalia" family="Bathyergidae" genus="Fukomys" higherTaxonomySource="GBIF" kingdom="Animalia" order="Rodentia" pageId="5" pageNumber="370" phylum="Chordata" rank="species" species="damarensis">
+<emphasis box="[1982,2349,548,594]" italics="true" pageId="5" pageNumber="370">Fukomys damarensis</emphasis>
+</taxonomicName>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="5" pageNumber="370" type="vernacular_names">
+<paragraph blockId="5.[1482,2426,548,674]" box="[1484,2425,612,633]" pageId="5" pageNumber="370">
+<heading box="[1484,2425,612,633]" pageId="5" pageNumber="370">
+<emphasis bold="true" box="[1484,1559,612,633]" pageId="5" pageNumber="370">French:</emphasis>
+<vernacularName box="[1569,1797,612,633]" pageId="5" pageNumber="370">Bathyergue de Damara</vernacularName>
+/ 
+<emphasis bold="true" box="[1818,1909,612,633]" pageId="5" pageNumber="370">German:</emphasis>
+<vernacularName box="[1919,2092,612,633]" pageId="5" pageNumber="370">Damara-Graumull</vernacularName>
+/ 
+<emphasis bold="true" box="[2113,2204,612,633]" pageId="5" pageNumber="370">Spanish:</emphasis>
+<vernacularName box="[2215,2257,612,633]" pageId="5" pageNumber="370">Rata</vernacularName>
+topo de Damara
+</heading>
+</paragraph>
+<paragraph blockId="5.[1482,2426,548,674]" box="[1483,2352,651,672]" pageId="5" pageNumber="370">
+<heading box="[1483,2352,651,672]" pageId="5" pageNumber="370">
+<emphasis bold="true" box="[1483,1730,651,672]" pageId="5" pageNumber="370">Other common names:</emphasis>
+<vernacularName box="[1740,1943,651,672]" pageId="5" pageNumber="370">Botswanan Mole-rat</vernacularName>
+, 
+<vernacularName box="[1957,2133,651,672]" pageId="5" pageNumber="370">Damara Mole Rat</vernacularName>
+, 
+<vernacularName box="[2147,2352,651,672]" pageId="5" pageNumber="370">Damaraland Blesmol</vernacularName>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="5" pageNumber="370" type="reference_group">
+<paragraph blockId="5.[2094,2687,720,1147]" pageId="5" pageNumber="370">
+<emphasis bold="true" box="[2095,2250,720,753]" pageId="5" pageNumber="370">Taxonomy.</emphasis>
+<taxonomicName authority="Ogilby" class="Mammalia" family="Bathyergidae" genus="Bathyergus" kingdom="Animalia" order="Rodentia" pageId="5" pageNumber="370" phylum="Chordata" rank="species" species="damarensis">Bathyergus damarensis Ogilby, 1838</taxonomicName>
+, 
+<materialsCitation box="[2180,2497,759,792]" pageId="5" pageNumber="370">Damaraland, Namibia.</materialsCitation>
+</paragraph>
+<paragraph blockId="5.[2094,2687,720,1147]" box="[2095,2457,798,831]" pageId="5" pageNumber="370">This species is monotypic.</paragraph>
+</subSubSection>
+<subSubSection pageId="5" pageNumber="370" type="distribution">
+<caption ID-DOI="http://doi.org/10.5281/zenodo.6584728" ID-Zenodo-Dep="6584728" httpUri="https://zenodo.org/record/6584728/files/figure.png" inLine="true" pageId="5" pageNumber="370" targetBox="[1480,2070,731,1144]" targetPageId="5">
+<paragraph blockId="5.[2094,2687,720,1147]" pageId="5" pageNumber="370">
+<emphasis bold="true" box="[2095,2271,838,871]" pageId="5" pageNumber="370">Distribution.</emphasis>
+S Angola, S Zambia, E Namibia, most of Botswana, W Zimbabwe, and NW South Africa (Northern Cape).
+</paragraph>
+</caption>
+</subSubSection>
+<subSubSection pageId="5" pageNumber="370" type="description">
+<paragraph blockId="5.[2094,2687,720,1147]" lastBlockId="5.[1479,2686,1152,2091]" pageId="5" pageNumber="370">
+<emphasis bold="true" box="[2094,2365,956,989]" pageId="5" pageNumber="370">Descriptive notes.</emphasis>
+Head-body 169-9-178-7 mm (males) and 155-2-163 mm (females), tail 23-6-24-4 mm (males) and 21-5-22-5 mm (females); weight 119-8-210-2 g (males) and 113-6-169-4 g (females). The Damara Mole-rat is medium-sized, with short legs, cylindrical body, short tail, and vibrissae on tail and feet. Dorsal pelage is dark brown to black; large head has white head spot. Chromosomal complement is 2n = 74 or 78, FN = 92.
+</paragraph>
+</subSubSection>
+<subSubSection box="[1481,2597,1270,1303]" pageId="5" pageNumber="370" type="biology_ecology">
+<paragraph blockId="5.[1479,2686,1152,2091]" box="[1481,2597,1270,1303]" pageId="5" pageNumber="370">
+<emphasis bold="true" box="[1481,1592,1270,1303]" pageId="5" pageNumber="370">Habitat.</emphasis>
+Open sandy soils in semiarid thornscrub, savanna, and grassland areas.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="5" pageNumber="370" type="food_feeding">
+<paragraph blockId="5.[1479,2686,1152,2091]" pageId="5" pageNumber="370">
+<emphasis bold="true" box="[1481,1748,1310,1343]" pageId="5" pageNumber="370">Food and Feeding.</emphasis>
+The Damara Mole-rat is herbivorous and eats geophytes, tubers, and bulbs; it does not drink standing water.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="5" pageNumber="370" type="breeding">
+<paragraph blockId="5.[1479,2686,1152,2091]" pageId="5" pageNumber="370">
+<emphasis bold="true" box="[1481,1615,1389,1422]" pageId="5" pageNumber="370">Breeding.</emphasis>
+Breeding of the Damara Mole-rat is aseasonal. Gestation is 78-92 days;litter size averages three young (range 1-6), with up to three litters per year. Sex ratio is skewed toward males.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="5" pageNumber="370" type="activity">
+<paragraph blockId="5.[1479,2686,1152,2091]" pageId="5" pageNumber="370">
+<emphasis bold="true" box="[1479,1713,1507,1540]" pageId="5" pageNumber="370">Activity patterns.</emphasis>
+The Damara Mole-rat burrows and digs with upper incisors. It is most active after rainfall and has a circadian rhythm.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="5" pageNumber="370" type="biology_ecology">
+<paragraph blockId="5.[1479,2686,1152,2091]" pageId="5" pageNumber="370">
+<emphasis bold="true" box="[1481,2201,1586,1619]" pageId="5" pageNumber="370">Movements, Home range and Social organization.</emphasis>
+Non-reproductive and unrelated Damara Mole-rats in a colony disperse. Home range averages 1-3 ha. Colonies of Damara Mole-rats are eusocial, with a single breeding female and 1-2 breeding males, overlapping generations, and non-reproductive individuals. Offspring are cared for cooperatively, and non-reproductive individuals forage, defend burrow systems, and care of young. Reproductive female suppresses ovulation of other females. There is widespread multiple paternity and unrelated immigrants in colony; colony size averages eleven individuals (range 2-14); and sex ratio is male-biased.
+</paragraph>
+</subSubSection>
+<subSubSection box="[1480,2530,1901,1934]" pageId="5" pageNumber="370" type="conservation">
+<paragraph blockId="5.[1479,2686,1152,2091]" box="[1480,2530,1901,1934]" pageId="5" pageNumber="370">
+<emphasis bold="true" box="[1480,1829,1901,1934]" pageId="5" pageNumber="370">Status and Conservation.</emphasis>
+Classified as Least Concern on The IUCN Red List.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="5" pageNumber="370" type="bibRefCitation_list">
+<paragraph blockId="5.[1479,2686,1152,2091]" pageId="5" pageNumber="370">
+<emphasis bold="true" box="[1480,1633,1949,1974]" pageId="5" pageNumber="370">Bibliography.</emphasis>
+Barnett et al. (2003), Bennett &amp; Faulkes (2000), Bennett &amp; Jarvis (1988a, 2004), Bennett, Faulkes &amp; Molteno (1996), Bennett, Jarvis, Millar et al. (1994), Burland et al. (2004), De Graaff (1972), Faulkes &amp; Bennett (2001), Hazell et al. (2000), Lovegrove (1988), Lovegrove et al. (1993), Maree &amp; Faulkes (2008b), Nevo et al. (1986), Roper et al. (2001).
+</paragraph>
+</subSubSection>
+</treatment>
+</document>
