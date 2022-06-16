@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>preston-plazi</artifactId>
-    <name>Preston Darwin Plazi</name>
+    <name>Preston Plazi</name>
     <description>Preston Content Handler for Plazi Treatments</description>
 
     <dependencies>
