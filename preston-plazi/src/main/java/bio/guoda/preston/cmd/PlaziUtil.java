@@ -211,7 +211,7 @@ public class PlaziUtil {
         }
     }
 
-    private static void handleCommonNames(Document docu, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    private static void handleCommonNames(Document docu, ObjectNode treatment) throws XPathExpressionException {
         NodeList commonNames = XMLUtil.evaluateXPath(
                 "//subSubSection[@type='vernacular_names']//emphasis",
                 docu
