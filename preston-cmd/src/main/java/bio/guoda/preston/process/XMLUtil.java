@@ -36,7 +36,7 @@ public class XMLUtil {
 
     public static NodeList evaluateXPath(String expression, InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         Document doc = parseDoc(resourceAsStream);
-        return evaluateXPath(expression, doc);
+        return evaluateXPath(doc, expression);
     }
 
     public static Document parseDoc(InputStream resourceAsStream) throws ParserConfigurationException, SAXException, IOException {
@@ -46,12 +46,24 @@ public class XMLUtil {
         return builder.parse(resourceAsStream);
     }
 
-    public static NodeList evaluateXPath(String expression, Document doc) throws XPathExpressionException {
+    public static NodeList evaluateXPath(Document doc, String expression) throws XPathExpressionException {
+        XPathExpression expr = compilePathExpression(expression);
+        return evaluateXPath(doc, expr);
+    }
+
+    public static NodeList evaluateXPath(Document doc, XPathExpression expr) throws XPathExpressionException {
+        return (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+    }
+
+    public static XPathExpression compilePathExpression(String expression)  {
         XPathFactory xPathfactory = XPathFactory.newInstance();
         XPath xpath = xPathfactory.newXPath();
         xpath.setNamespaceContext(getNsContext());
-        XPathExpression expr = xpath.compile(expression);
-        return (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+        try {
+            return xpath.compile(expression);
+        } catch (XPathExpressionException e) {
+            throw new RuntimeException("suspicious xpath expression [" + expression + "]", e);
+        }
     }
 
     private static NamespaceContext getNsContext() {

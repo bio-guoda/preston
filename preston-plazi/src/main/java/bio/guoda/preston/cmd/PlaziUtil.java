@@ -1,10 +1,8 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.XMLUtil;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
@@ -14,16 +12,19 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PlaziUtil implements TreatmentParser {
+import static bio.guoda.preston.process.XMLUtil.compilePathExpression;
+import static bio.guoda.preston.process.XMLUtil.evaluateXPath;
+
+public class PlaziUtil {
 
     public static final String PATTERN_SUB_DISTRIBUTION = "([.].*Distribution[ .]+)";
     public static final String PATTERN_SUB_DESCRIPTIVE_NOTES = "([.].*Descriptive notes[ .]+)";
@@ -37,29 +38,21 @@ public class PlaziUtil implements TreatmentParser {
     public static final Pattern PATTERN_MOVEMENTS = Pattern.compile("(.*)" + PATTERN_SUB_MOVEMENTS + "(.*)" + PATTERN_SUB_CONSERVATION + "(.*)");
     public static final Pattern DETECT_TAB_AND_NEWLINE = Pattern.compile("[\t\n]+");
     public static final Pattern DETECT_WHITESPACE = Pattern.compile("[\\s]+");
-
-    @Override
-    public JsonNode parse(InputStream is) throws IOException {
-        try {
-            return parseTreatment(is);
-        } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
-            throw new IOException("failed to parse treatment", e);
-        }
-    }
-
+    public static final XPathExpression X_PATH_DOCUMENT = compilePathExpression("/document");
+    public static final XPathExpression X_PATH_EMPHASIS = compilePathExpression("//emphasis");
+    public static final XPathExpression X_PATH_TAXONOMIC_NAME = XMLUtil.compilePathExpression("//subSubSection[@type='nomenclature']//taxonomicName");
+    public static final XPathExpression X_PATH_DISTRIBUTION = XMLUtil.compilePathExpression("//subSubSection[@type='distribution']/caption/paragraph");
+    public static final XPathExpression X_PATH_TREATMENT = compilePathExpression("//treatment");
+    public static final XPathExpression X_PATH_VERNACULAR = compilePathExpression("//subSubSection[@type='vernacular_names']//emphasis");
 
     public static ObjectNode parseTreatment(InputStream is) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         return parseTreatment(is, new ObjectMapper().createObjectNode());
     }
 
-
-    public static ObjectNode parseTreatment(InputStream is, ObjectNode objectNode) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
-        ObjectNode treatment = objectNode;
+    public static ObjectNode parseTreatment(InputStream is, ObjectNode treatment) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         Document docu = parseDocument(is);
-        NodeList doc = XMLUtil.evaluateXPath(
-                "/document",
-                docu
-        );
+
+        NodeList doc = evaluateXPath(docu, X_PATH_DOCUMENT);
 
         if (doc.getLength() > 0) {
 
@@ -123,9 +116,8 @@ public class PlaziUtil implements TreatmentParser {
     }
 
     private static void handleStatusAndConservation(ObjectNode treatment, Document docu) throws XPathExpressionException {
-        NodeList emphasisNodes2 = XMLUtil.evaluateXPath(
-                "//emphasis",
-                docu
+        NodeList emphasisNodes2 = evaluateXPath(
+                docu, X_PATH_EMPHASIS
         );
         for (int i1 = 0; i1 < emphasisNodes2.getLength(); i1++) {
             Node emphasisNode1 = emphasisNodes2.item(i1);
@@ -148,9 +140,8 @@ public class PlaziUtil implements TreatmentParser {
     }
 
     private static void handleMovements(ObjectNode treatment, Document docu) throws XPathExpressionException {
-        NodeList emphasisNodes1 = XMLUtil.evaluateXPath(
-                "//emphasis",
-                docu
+        NodeList emphasisNodes1 = evaluateXPath(
+                docu, X_PATH_EMPHASIS
         );
         for (int i1 = 0; i1 < emphasisNodes1.getLength(); i1++) {
             Node emphasisNode1 = emphasisNodes1.item(i1);
@@ -211,9 +202,7 @@ public class PlaziUtil implements TreatmentParser {
     }
 
     static Document parseDocument(InputStream is) throws IOException, ParserConfigurationException, SAXException {
-        String s = IOUtils.toString(is, StandardCharsets.UTF_8);
-
-        return XMLUtil.parseDoc(IOUtils.toInputStream(s, StandardCharsets.UTF_8));
+        return XMLUtil.parseDoc(is);
     }
 
     static void setIfNotNull(ObjectNode treatment, NamedNodeMap docAttributes, String attributeName) {
@@ -223,9 +212,8 @@ public class PlaziUtil implements TreatmentParser {
     }
 
     private static void handleCommonNames(Document docu, ObjectNode treatment) throws XPathExpressionException {
-        NodeList commonNames = XMLUtil.evaluateXPath(
-                "//subSubSection[@type='vernacular_names']//emphasis",
-                docu
+        NodeList commonNames = evaluateXPath(
+                docu, X_PATH_VERNACULAR
         );
 
         List<String> commonNameList = new ArrayList<>();
@@ -282,9 +270,8 @@ public class PlaziUtil implements TreatmentParser {
 
 
     private static void handleNomenclature(Document docu, ObjectNode treatment) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        NodeList taxonomicNames = XMLUtil.evaluateXPath(
-                "//subSubSection[@type='nomenclature']//taxonomicName",
-                docu
+        NodeList taxonomicNames = evaluateXPath(
+                docu, X_PATH_TAXONOMIC_NAME
         );
 
         if (taxonomicNames.getLength() > 0) {
@@ -308,9 +295,8 @@ public class PlaziUtil implements TreatmentParser {
             treatment.put("subspeciesAndDistribution", StringUtils.trim(taxonomySegment));
         }
 
-        NodeList distribution = XMLUtil.evaluateXPath(
-                "//subSubSection[@type='distribution']/caption/paragraph",
-                docu
+        NodeList distribution = evaluateXPath(
+                docu, X_PATH_DISTRIBUTION
         );
         for (int i = 0; i < distribution.getLength(); i++) {
             Node distributionNode = distribution.item(i);
@@ -330,9 +316,8 @@ public class PlaziUtil implements TreatmentParser {
     }
 
     private static String extractTreatment(Document docu) throws XPathExpressionException {
-        NodeList emphasisNodes = XMLUtil.evaluateXPath(
-                "//treatment",
-                docu
+        NodeList emphasisNodes = evaluateXPath(
+                docu, X_PATH_TREATMENT
         );
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < emphasisNodes.getLength(); i++) {
@@ -342,9 +327,8 @@ public class PlaziUtil implements TreatmentParser {
     }
 
     private static void parseAttemptOfEmphasisSection(Document docu, ObjectNode treatment, String label, String sectionText, int depth) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        NodeList emphasisNodes = XMLUtil.evaluateXPath(
-                "//emphasis",
-                docu
+        NodeList emphasisNodes = evaluateXPath(
+                docu, X_PATH_EMPHASIS
         );
         for (int i = 0; i < emphasisNodes.getLength(); i++) {
             Node emphasisNode = emphasisNodes.item(i);
@@ -387,17 +371,17 @@ public class PlaziUtil implements TreatmentParser {
         return extractSegment(text, PATTERN_DISTRIBUTION);
     }
 
-    private static String extractSegment(String taxonomyText1, Pattern pattern) {
-        Matcher matcher = pattern.matcher(taxonomyText1);
+    private static String extractSegment(String segmentCandidate, Pattern segmentPattern) {
+        Matcher matcher = segmentPattern.matcher(segmentCandidate);
         return cleanText(matcher);
     }
 
     private static String cleanText(Matcher matcher) {
-        String taxonomyText = null;
+        String text = null;
         if (matcher.matches()) {
-            taxonomyText = replaceTabsNewlinesWithSpaces(matcher.group(3));
+            text = matcher.group(3);
         }
-        return taxonomyText + ".";
+        return StringUtils.isBlank(text) ? "" : text + ".";
     }
 
 }
