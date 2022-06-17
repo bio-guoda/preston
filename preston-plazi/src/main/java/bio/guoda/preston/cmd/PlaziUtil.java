@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.XMLUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PlaziUtil {
+public class PlaziUtil implements TreatmentParser {
 
     public static final String PATTERN_SUB_DISTRIBUTION = "([.].*Distribution[ .]+)";
     public static final String PATTERN_SUB_DESCRIPTIVE_NOTES = "([.].*Descriptive notes[ .]+)";
@@ -36,6 +37,16 @@ public class PlaziUtil {
     public static final Pattern PATTERN_MOVEMENTS = Pattern.compile("(.*)" + PATTERN_SUB_MOVEMENTS + "(.*)" + PATTERN_SUB_CONSERVATION + "(.*)");
     public static final Pattern DETECT_TAB_AND_NEWLINE = Pattern.compile("[\t\n]+");
     public static final Pattern DETECT_WHITESPACE = Pattern.compile("[\\s]+");
+
+    @Override
+    public JsonNode parse(InputStream is) throws IOException {
+        try {
+            return parseTreatment(is);
+        } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
+            throw new IOException("failed to parse treatment", e);
+        }
+    }
+
 
     public static ObjectNode parseTreatment(InputStream is) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         return parseTreatment(is, new ObjectMapper().createObjectNode());
@@ -388,4 +399,5 @@ public class PlaziUtil {
         }
         return taxonomyText + ".";
     }
+
 }
