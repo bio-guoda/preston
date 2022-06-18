@@ -135,26 +135,6 @@ public class PlaziUtil {
         );
     }
 
-    private static void handleMovements(ObjectNode treatment, Document docu) throws XPathExpressionException {
-        NodeList emphasisNodes1 = evaluateXPath(
-                docu, X_PATH_EMPHASIS
-        );
-        for (int i1 = 0; i1 < emphasisNodes1.getLength(); i1++) {
-            Node emphasisNode1 = emphasisNodes1.item(i1);
-            String textContent1 = replaceTabsNewlinesWithSpaces(emphasisNode1);
-            String prefix = "Movements, Home range and Social organization.";
-            if (StringUtils.startsWith(textContent1, prefix)) {
-                Node expectedParagraphNode1 = emphasisNode1.getParentNode();
-                String movementsHomeRangeAndSocialOrganization = replaceTabsNewlinesWithSpaces(expectedParagraphNode1);
-                String[] movementsHomeRangeAndSocialOrganizationChunk = StringUtils.splitByWholeSeparator(movementsHomeRangeAndSocialOrganization, prefix);
-                if (movementsHomeRangeAndSocialOrganizationChunk.length > 1) {
-                    treatment.put("movementsHomeRangeAndSocialOrganization", StringUtils.trim(RegExUtils.replaceFirst(movementsHomeRangeAndSocialOrganizationChunk[1], "Movements," + "[. ]+", "")));
-                }
-
-            }
-        }
-    }
-
     private static void handleActivityPatterns(ObjectNode treatment, Document docu) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         parseAttemptOfEmphasisSection(
                 docu,
@@ -351,28 +331,28 @@ public class PlaziUtil {
                         DETECT_WHITESPACE, " "));
     }
 
-    public static String extractTaxonomySegment(String taxonomyText1) {
-        return extractSegment(taxonomyText1, PATTERN_TAXONOMY);
+    public static String extractTaxonomySegment(String treatmentText) {
+        return extractSegment(treatmentText, PATTERN_TAXONOMY);
     }
 
-    public static String extractDescriptiveNoteSegment(String taxonomyText1) {
-        return extractSegment(taxonomyText1, PATTERN_DESCRIPTIVE_NOTES);
+    public static String extractDescriptiveNoteSegment(String treatmentText) {
+        return extractSegment(treatmentText, PATTERN_DESCRIPTIVE_NOTES);
     }
 
-    public static String extractMovementsSegment(String text) {
-        return extractSegment(text, PATTERN_MOVEMENTS);
+    public static String extractMovementsSegment(String treatmentText) {
+        return extractSegment(treatmentText, PATTERN_MOVEMENTS);
     }
 
-    public static String extractDistributionSegment(String text) {
-        return extractSegment(text, PATTERN_DISTRIBUTION);
+    public static String extractDistributionSegment(String treatmentText) {
+        return extractSegment(treatmentText, PATTERN_DISTRIBUTION);
     }
 
     private static String extractSegment(String segmentCandidate, Pattern segmentPattern) {
         Matcher matcher = segmentPattern.matcher(segmentCandidate);
-        return cleanText(matcher);
+        return matchSegmentAttempt(matcher);
     }
 
-    private static String cleanText(Matcher matcher) {
+    private static String matchSegmentAttempt(Matcher matcher) {
         String text = null;
         if (matcher.matches()) {
             text = matcher.group(3);
