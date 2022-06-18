@@ -1,5 +1,7 @@
 package bio.guoda.preston.process;
 
+import org.apache.commons.io.input.CloseShieldInputStream;
+import org.apache.commons.io.input.ClosedInputStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -43,7 +45,7 @@ public class XMLUtil {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
-        return builder.parse(resourceAsStream);
+        return builder.parse(new CloseShieldInputStream(resourceAsStream));
     }
 
     public static NodeList evaluateXPath(Document doc, String expression) throws XPathExpressionException {

@@ -1,27 +1,32 @@
 package bio.guoda.preston.cmd;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.Is;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class PlaziParserTest {
+public class PlaziTreatmentParserTest {
 
 
     private TreatmentParser getParser() {
-        return new PlaziParser();
+        return new PlaziTreatmentParser();
+    }
+
+    @Test(expected = TreatmentParseException.class)
+    public void processInvalidXML() throws IOException, TreatmentParseException {
+        InputStream is = IOUtils.toInputStream("not xml", StandardCharsets.UTF_8);
+        getParser().parse(is);
     }
 
     @Test
-    public void processXML() throws IOException {
+    public void processXML() throws IOException, TreatmentParseException {
         JsonNode treatment = parseTestResource();
 
         assertThat(treatment.get("docId").asText(), Is.is("03D587F2FFC94C03F8F13AECFBD8F765"));
@@ -81,7 +86,7 @@ public class PlaziParserTest {
 
     }
 
-    JsonNode parseTestResource() throws IOException {
+    JsonNode parseTestResource() throws IOException, TreatmentParseException {
         InputStream is = getClass().getResourceAsStream("03D587F2FFC94C03F8F13AECFBD8F765.xml");
 
 
@@ -90,7 +95,7 @@ public class PlaziParserTest {
 
 
     @Test
-    public void processXML2() throws IOException {
+    public void processXML2() throws IOException, TreatmentParseException {
         InputStream is = getClass().getResourceAsStream("038F4B5AFFA1FFD6A892FDF8B80ECA7D.xml");
 
 
@@ -139,9 +144,9 @@ public class PlaziParserTest {
     }
 
     @Test
-    public void processXML3() throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
+    public void processXML3() throws IOException, TreatmentParseException {
         InputStream is = getClass().getResourceAsStream("03D587F2FFC94C03F8F13AECFBD8F765.xml");
-        JsonNode treatment = new PlaziParser().parse(is);
+        JsonNode treatment = new PlaziTreatmentParser().parse(is);
 
         assertThat(treatment.get("docId").asText(), Is.is("03D587F2FFC94C03F8F13AECFBD8F765"));
         assertThat(treatment.get("docMasterId").asText(), Is.is("hash://md5/ffecff8affcf4c04ffa53577fff8ffe9"));

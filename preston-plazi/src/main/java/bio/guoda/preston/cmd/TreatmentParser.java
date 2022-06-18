@@ -7,5 +7,5 @@ import java.io.InputStream;
 
 public interface TreatmentParser {
 
-    JsonNode parse(InputStream is) throws IOException;
+    JsonNode parse(InputStream is) throws IOException, TreatmentParseException;
 }

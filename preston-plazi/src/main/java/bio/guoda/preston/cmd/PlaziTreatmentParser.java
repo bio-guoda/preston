@@ -10,14 +10,16 @@ import java.io.InputStream;
 
 import static bio.guoda.preston.cmd.PlaziUtil.parseTreatment;
 
-public class PlaziParser implements TreatmentParser {
+public class PlaziTreatmentParser implements TreatmentParser {
 
     @Override
-    public JsonNode parse(InputStream is) throws IOException {
+    public JsonNode parse(InputStream is) throws IOException, TreatmentParseException {
         try {
             return parseTreatment(is);
-        } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
-            throw new IOException("failed to parse treatment", e);
+        } catch (ParserConfigurationException | SAXException | XPathExpressionException e) {
+            throw new TreatmentParseException("failed to parse treatment", e);
+        } catch (IOException e) {
+            throw new IOException("error receiving treatment", e);
         }
     }
 }

@@ -51,7 +51,6 @@ public class PlaziUtil {
 
     public static ObjectNode parseTreatment(InputStream is, ObjectNode treatment) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         Document docu = parseDocument(is);
-
         NodeList doc = evaluateXPath(docu, X_PATH_DOCUMENT);
 
         if (doc.getLength() > 0) {
@@ -78,11 +77,8 @@ public class PlaziUtil {
             handleTaxonomy(treatment, treatmentText);
             if (treatment.has("taxonomy")) {
                 handleRemainingTreatment(treatment, docu, treatmentText);
-
             }
         }
-
-
         return treatment;
     }
 

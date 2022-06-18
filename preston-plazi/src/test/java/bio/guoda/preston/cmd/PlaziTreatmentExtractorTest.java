@@ -55,6 +55,114 @@ public class PlaziTreatmentExtractorTest {
     }
 
     @Test
+    public void skipNonTreatmentInZip() throws IOException {
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                URL resource = getClass().getResource("/bio/guoda/preston/cmd/skip-non-treatments.zip");
+                IRI iri = toIRI(resource.toExternalForm());
+
+                if (StringUtils.equals("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1", key.getIRIString())) {
+                    try {
+                        return new FileInputStream(new File(URI.create(iri.getIRIString())));
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return null;
+            }
+        };
+
+        Quad statement = toStatement(
+                toIRI("blip"),
+                HAS_VERSION,
+                toIRI("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1")
+        );
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PlaziTreatmentExtractor treatmentExractor = new PlaziTreatmentExtractor(
+                new ProcessorStateAlwaysContinue(),
+                blobStore,
+                byteArrayOutputStream
+        );
+
+        treatmentExractor.on(statement);
+
+        String actual = IOUtils.toString(
+                byteArrayOutputStream.toByteArray(),
+                StandardCharsets.UTF_8.name()
+        );
+
+        String[] jsonObjects = StringUtils.split(actual, "\n");
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("zip:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/03BD87A2C660A212FF52F3F7F35547D7.xml"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("application/plazi+xml"));
+        assertThat(taxonNode.get("docId").asText(), is("03BD87A2C660A212FF52F3F7F35547D7"));
+        assertThat(taxonNode.get("interpretedGenus").asText(), is("Hipposideros"));
+        assertThat(taxonNode.get("interpretedSpecies").asText(), is("tephrus"));
+
+    }
+
+    @Test
+    public void onlyTwoTreatmentInZip() throws IOException {
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                URL resource = getClass().getResource("/bio/guoda/preston/cmd/only-two-treatments.zip");
+                IRI iri = toIRI(resource.toExternalForm());
+
+                if (StringUtils.equals("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1", key.getIRIString())) {
+                    try {
+                        return new FileInputStream(new File(URI.create(iri.getIRIString())));
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return null;
+            }
+        };
+
+        Quad statement = toStatement(
+                toIRI("blip"),
+                HAS_VERSION,
+                toIRI("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1")
+        );
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PlaziTreatmentExtractor treatmentExractor = new PlaziTreatmentExtractor(
+                new ProcessorStateAlwaysContinue(),
+                blobStore,
+                byteArrayOutputStream
+        );
+
+        treatmentExractor.on(statement);
+
+        String actual = IOUtils.toString(
+                byteArrayOutputStream.toByteArray(),
+                StandardCharsets.UTF_8.name()
+        );
+
+        String[] jsonObjects = StringUtils.split(actual, "\n");
+
+        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(),
+                is("zip:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/038F4B5AFFA1FFD6A892FDF8B80ECA7D.xml"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("application/plazi+xml"));
+        assertThat(taxonNode.get("docId").asText(), is("038F4B5AFFA1FFD6A892FDF8B80ECA7D"));
+        assertThat(taxonNode.get("interpretedGenus").asText(), is("Fukomys"));
+        assertThat(taxonNode.get("interpretedSpecies").asText(), is("damarensis"));
+
+        assertThat(jsonObjects.length, is(2));
+
+
+    }
+
+
+    @Test
     public void streamSingleTreatmentFromXML() throws IOException {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
