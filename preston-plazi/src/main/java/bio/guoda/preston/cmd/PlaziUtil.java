@@ -32,7 +32,7 @@ public class PlaziUtil {
     public static final String PATTERN_SUB_MOVEMENTS = "([.].*Movements, Home range and Social organization[ .]+)";
     public static final String PATTERN_SUB_CONSERVATION = "([.].*Conservation.*[ .]+)";
     public static final Pattern PATTERN_BIBLIOGRAPHY = Pattern.compile("(.*)([.].*Bibliography[ .]+)(.*)");
-    public static final Pattern PATTERN_TAXONOMY = Pattern.compile("(.*)(Taxonomy[ .]+)(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)");
+    public static final Pattern PATTERN_TAXONOMY = Pattern.compile("(.{1,20000})(Taxonomy[ .]+)(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)");
     public static final Pattern PATTERN_DISTRIBUTION = Pattern.compile("(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)");
     public static final Pattern PATTERN_DESCRIPTIVE_NOTES = Pattern.compile("(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)" + PATTERN_SUB_HABITAT + "(.*)");
     public static final Pattern PATTERN_MOVEMENTS = Pattern.compile("(.*)" + PATTERN_SUB_MOVEMENTS + "(.*)" + PATTERN_SUB_CONSERVATION + "(.*)");
@@ -41,7 +41,7 @@ public class PlaziUtil {
     public static final XPathExpression X_PATH_DOCUMENT = compilePathExpression("/document");
     public static final XPathExpression X_PATH_EMPHASIS = compilePathExpression("//emphasis");
     public static final XPathExpression X_PATH_TAXONOMIC_NAME = XMLUtil.compilePathExpression("//subSubSection[@type='nomenclature']//taxonomicName");
-    public static final XPathExpression X_PATH_DISTRIBUTION = XMLUtil.compilePathExpression("//subSubSection[@type='distribution']/caption/paragraph");
+    public static final XPathExpression X_PATH_DISTRIBUTION = XMLUtil.compilePathExpression("//subSubSection[@type='distribution' or 'synonymic_list']/caption/paragraph");
     public static final XPathExpression X_PATH_TREATMENT = compilePathExpression("//treatment");
     public static final XPathExpression X_PATH_VERNACULAR = compilePathExpression("//subSubSection[@type='vernacular_names']//emphasis");
 

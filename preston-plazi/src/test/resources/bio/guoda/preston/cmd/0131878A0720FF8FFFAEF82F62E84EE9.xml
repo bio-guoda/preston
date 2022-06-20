@@ -1,0 +1,179 @@
+<document ID-DOI="http://doi.org/10.5281/zenodo.6603807" ID-ISBN="978-84-941892-3-4" ID-Zenodo-Dep="6603807" approvalRequired="34" approvalRequired_for_taxonomicNames="31" approvalRequired_for_textStreams="3" checkinTime="1654101401716" checkinUser="carolina" docAuthor="Don E. Wilson, Thomas E. Lacher, Jr &amp; Russell A. Mittermeier" docDate="2016" docId="0131878A0720FF8FFFAEF82F62E84EE9" docLanguage="en" docName="hbmw_6_Geomyidae_0234.pdf.imf" docOrigin="Handbook of the Mammals of the World – Volume 6 Lagomorphs and Rodents I, Barcelona: Lynx Edicions" docTitle="Geomys pinetis Rafinesque 1817" docType="treatment" docVersion="2" lastPageNumber="261" masterDocId="FD08FFF2072CFF83FFF3FFF96B0F4602" masterDocTitle="Geomyidae" masterLastPageNumber="269" masterPageNumber="234" pageNumber="261" updateTime="1654106538268" updateUser="ExternalLinkService">
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:titleInfo>
+<mods:title>Geomyidae</mods:title>
+</mods:titleInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Don E. Wilson</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Thomas E. Lacher, Jr</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Russell A. Mittermeier</mods:namePart>
+</mods:name>
+<mods:typeOfResource>text</mods:typeOfResource>
+<mods:relatedItem type="host">
+<mods:originInfo>
+<mods:dateIssued>2016</mods:dateIssued>
+<mods:dateOther type="pubDate">2016-07-31</mods:dateOther>
+<mods:publisher>Lynx Edicions</mods:publisher>
+<mods:place>
+<mods:placeTerm>Barcelona</mods:placeTerm>
+</mods:place>
+</mods:originInfo>
+<mods:titleInfo>
+<mods:title>Handbook of the Mammals of the World – Volume 6 Lagomorphs and Rodents I</mods:title>
+</mods:titleInfo>
+<mods:part>
+<mods:extent unit="page">
+<mods:start>234</mods:start>
+<mods:end>269</mods:end>
+</mods:extent>
+</mods:part>
+</mods:relatedItem>
+<mods:classification>book chapter</mods:classification>
+<mods:identifier type="DOI">http://doi.org/10.5281/zenodo.6603807</mods:identifier>
+<mods:identifier type="ISBN">978-84-941892-3-4</mods:identifier>
+<mods:identifier type="Zenodo-Dep">6603807</mods:identifier>
+</mods:mods>
+<treatment ID-DOI="http://doi.org/10.5281/zenodo.6603723" ID-Zenodo-Dep="6603723" LSID="urn:lsid:plazi:treatment:0131878A0720FF8FFFAEF82F62E84EE9" httpUri="http://treatment.plazi.org/id/0131878A0720FF8FFFAEF82F62E84EE9" lastPageNumber="261" pageId="12" pageNumber="261">
+<heading pageId="12" pageNumber="261">
+<subSubSection box="[93,150,2006,2052]" pageId="12" pageNumber="261" type="multiple">
+<paragraph blockId="12.[90,1208,2006,2172]" box="[93,150,2006,2052]" pageId="12" pageNumber="261">
+<figureCitation box="[93,150,2006,2052]" captionStart="Plate 12: Geomyidae" captionStartId="2.[97,127,3289,3314]" captionTargetBox="[13,2733,15,3642]" captionTargetPageId="1" captionText="1. Mountain Pocket Gopher (Thomomys monticola), 2. Western Pocket Gopher (Thomomys mazama), 3. Idaho Pocket Gopher (Thomomys idahoensis), 4. Wyoming Pocket Gopher (Thomomys clusius), 5. Northern Pocket Gopher (Thomomys talpoides), 6. Camas Pocket Gopher (Thomomys bulbrvorus), 7. Townsend’s Pocket Gopher (Thomomys townsendii), 8. Southern Pocket Gopher (Thomomys umbrinus), 9. Sierra Madre Occidental Pocket Gopher (Thomomys sheldoni), 10. Black-and-Brown Pocket Gopher (Thomomys atrovarius), 11. Nayar Pocket Gopher (Thomomys nayarensis), 12. Botta’s Pocket Gopher (Thomomys bottae), 13. Plains Pocket Gopher (Geomys bursarius), 14. Hall's Pocket Gopher (Geomys jugossicularis), 15. Sand Hills Pocket Gopher (Geomys lutescens), 16. Desert Pocket Gopher (Geomys arenarius), 17. Jones's Pocket Gopher (Geomys knoxjonesi), 18. Attwater’s Pocket Gopher (Geomys attwateri), 19. Texas Pocket Gopher (Geomys personatus), 20. Strecker’s Pocket (Gopher Geomysstreckeri), 21. Tropical Pocket Gopher (Geomys tropicalis), 22. Llano Pocket Gopher (Geomys texensis), 23. Baird's Pocket Gopher (Geomys breviceps), 24. South-eastern Pocket Gopher (Geomys pinetis)" figureDoi="http://doi.org/10.5281/zenodo.6603899" httpUri="https://zenodo.org/record/6603899/files/figure.png" pageId="12" pageNumber="261">24.</figureCitation>
+</paragraph>
+</subSubSection>
+<subSubSection box="[167,783,2006,2052]" pageId="12" pageNumber="261" type="vernacular_names">
+<paragraph blockId="12.[90,1208,2006,2172]" box="[167,783,2006,2052]" pageId="12" pageNumber="261">
+<vernacularName box="[167,783,2006,2052]" pageId="12" pageNumber="261">South-eastern Pocket Gopher</vernacularName>
+</paragraph>
+</subSubSection>
+<subSubSection box="[857,1107,2006,2052]" pageId="12" pageNumber="261" type="nomenclature">
+<paragraph blockId="12.[90,1208,2006,2172]" box="[857,1107,2006,2052]" pageId="12" pageNumber="261">
+<taxonomicName authorityName="Rafinesque" authorityYear="1817" box="[857,1107,2006,2052]" class="Mammalia" family="Geomyidae" genus="Geomys" kingdom="Animalia" order="Rodentia" pageId="12" pageNumber="261" phylum="Chordata" rank="species" species="pinetis">
+<emphasis box="[857,1107,2006,2052]" italics="true" pageId="12" pageNumber="261">Geomys pinetis</emphasis>
+</taxonomicName>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="12" pageNumber="261" type="vernacular_names">
+<paragraph blockId="12.[90,1208,2006,2172]" box="[92,1011,2070,2091]" pageId="12" pageNumber="261">
+<emphasis bold="true" box="[92,167,2070,2091]" pageId="12" pageNumber="261">French:</emphasis>
+<vernacularName box="[176,371,2070,2091]" pageId="12" pageNumber="261">Gaufre des pinédes</vernacularName>
+/ 
+<emphasis bold="true" box="[393,483,2070,2091]" pageId="12" pageNumber="261">German:</emphasis>
+<vernacularName box="[492,738,2070,2091]" pageId="12" pageNumber="261">Stidostliche Taschenratte</vernacularName>
+/ 
+<emphasis bold="true" box="[759,850,2070,2091]" pageId="12" pageNumber="261">Spanish:</emphasis>
+<vernacularName box="[855,1011,2070,2091]" pageId="12" pageNumber="261">Tuza suroriental</vernacularName>
+</paragraph>
+<paragraph blockId="12.[90,1208,2006,2172]" pageId="12" pageNumber="261">
+<emphasis bold="true" box="[91,338,2109,2130]" pageId="12" pageNumber="261">Other common names:</emphasis>
+<vernacularName box="[348,852,2109,2130]" pageId="12" pageNumber="261">Sandy Mounder; Colonial Pocket Gopher (colonus)</vernacularName>
+, 
+<vernacularName pageId="12" pageNumber="261">Cumberland Island Pocket Gopher (cumberlandius)</vernacularName>
+, 
+<vernacularName box="[266,541,2150,2171]" pageId="12" pageNumber="261">Goff's Pocket Gopher (goffi)</vernacularName>
+, 
+<vernacularName box="[555,936,2150,2171]" pageId="12" pageNumber="261">Sherman's Pocket Gopher (fontanelus)</vernacularName>
+</paragraph>
+</subSubSection>
+</heading>
+<subSubSection pageId="12" pageNumber="261" type="reference_group">
+<paragraph blockId="12.[90,1295,2219,2295]" pageId="12" pageNumber="261">
+<emphasis bold="true" box="[91,247,2219,2248]" pageId="12" pageNumber="261">Taxonomy.</emphasis>
+<taxonomicName authority="Rafinesque, 1817" authorityName="Rafinesque" authorityYear="1817" box="[262,697,2219,2248]" class="Mammalia" family="Geomyidae" genus="Geomys" kingdom="Animalia" order="Rodentia" pageId="12" pageNumber="261" phylum="Chordata" rank="species" species="pinetis">Geomys pinetis Rafinesque, 1817</taxonomicName>
+, 
+<materialsCitation pageId="12" pageNumber="261">in the region of the pines, Georgia, USA. Restricted by F. Harper in 1952 to “Screven County, Georgia.”</materialsCitation>
+</paragraph>
+<paragraph blockId="12.[1973,2567,279,705]" pageId="12" pageNumber="261">
+Subspecies goffi from the east coast of central Florida and fontanelus from the vicinity of Savannah, Georgia, both named by H. B. Sherman in 1944, are presumed extinct. P. D. Sudman and colleagues in 2006 suggested that populations of 
+<taxonomicName authorityName="Rafinesque" authorityYear="1817" box="[2406,2528,475,508]" class="Mammalia" family="Geomyidae" genus="Geomys" kingdom="Animalia" order="Rodentia" pageId="12" pageNumber="261" phylum="Chordata" rank="species" species="pinetis">G. pinetis</taxonomicName>
+of the Apalachicola River drainage (subspecies mobilensis) might be specifically distinct from populations east of the drainage. Six subspecies recognized.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="12" pageNumber="261" type="synonymic_list">
+<caption ID-DOI="http://doi.org/10.5281/zenodo.6603861" ID-Zenodo-Dep="6603861" httpUri="https://zenodo.org/record/6603861/files/figure.png" inLine="true" pageId="12" pageNumber="261" targetBox="[1358,1949,287,700]" targetPageId="12">
+<paragraph blockId="12.[1973,2567,279,705]" box="[1974,2374,672,705]" pageId="12" pageNumber="261">
+<emphasis bold="true" box="[1974,2374,672,705]" pageId="12" pageNumber="261">Subspecies and Distribution.</emphasis>
+</paragraph>
+<paragraph blockId="12.[1362,2571,717,2283]" box="[1364,2086,717,746]" pageId="12" pageNumber="261">
+<taxonomicName authority="Rafinesque, 1817" authorityName="Rafinesque" authorityYear="1817" box="[1364,1765,717,746]" class="Mammalia" family="Geomyidae" genus="Geomys" kingdom="Animalia" order="Rodentia" pageId="12" pageNumber="261" phylum="Chordata" rank="subSpecies" species="pinetis" subSpecies="pinetis">G.p.pinetisRafinesque,1817—C&amp;SGeorgia,USA.</taxonomicName>
+</paragraph>
+<paragraph blockId="12.[1362,2571,717,2283]" box="[1365,2013,761,786]" pageId="12" pageNumber="261">
+<taxonomicName authority="Bangs, 1898" authorityName="Bangs" authorityYear="1898" box="[1365,1731,761,786]" class="Mammalia" family="Geomyidae" genus="Geomys" kingdom="Animalia" order="Rodentia" pageId="12" pageNumber="261" phylum="Chordata" rank="subSpecies" species="pinetis" subSpecies="austrinus">G.p.austrinusBangs,1898—WCFlorida,USA.</taxonomicName>
+</paragraph>
+<paragraph blockId="12.[1362,2571,717,2283]" box="[1365,2260,791,824]" pageId="12" pageNumber="261">
+<taxonomicName authority="Bangs, 1898" authorityName="Bangs" authorityYear="1898" box="[1365,1704,791,824]" class="Mammalia" family="Geomyidae" genus="Geomys" kingdom="Animalia" order="Rodentia" pageId="12" pageNumber="261" phylum="Chordata" rank="subSpecies" species="pinetis" subSpecies="colonus">G.p.colonusBangs,1898—CamdenCountyinSEGeorgia,USA.</taxonomicName>
+</paragraph>
+<paragraph blockId="12.[1362,2571,717,2283]" box="[1365,2319,839,864]" pageId="12" pageNumber="261">
+<taxonomicName authority="Bangs, 1898" authorityName="Bangs" authorityYear="1898" box="[1365,1796,839,864]" class="Mammalia" family="Geomyidae" genus="Geomys" kingdom="Animalia" order="Rodentia" pageId="12" pageNumber="261" phylum="Chordata" rank="subSpecies" species="pinetis" subSpecies="cumberlandius">G.p.cumberlandiusBangs,1898—CumberlandIinSEGeorgia,USA.</taxonomicName>
+</paragraph>
+<paragraph blockId="12.[1362,2571,717,2283]" box="[1365,2464,870,903]" pageId="12" pageNumber="261">
+<taxonomicName authority="Audubon &amp; Bachman, 1853" authorityName="Audubon &amp; Bachman" authorityYear="1853" baseAuthorityName="Audubon &amp; Bachman" baseAuthorityYear="1853" box="[1365,1967,870,903]" class="Mammalia" family="Geomyidae" genus="Geomys" kingdom="Animalia" order="Rodentia" pageId="12" pageNumber="261" phylum="Chordata" rank="subSpecies" species="pinetis" subSpecies="floridanus">G.p.floridanusAudubon&amp;Bachman,1853—SWGeorgiaintoNFlorida,USA.</taxonomicName>
+</paragraph>
+<paragraph blockId="12.[1362,2571,717,2283]" box="[1365,2448,918,943]" pageId="12" pageNumber="261">
+<taxonomicName authority="Merriam, 1895" authorityName="Merriam" authorityYear="1895" box="[1365,1777,918,943]" class="Mammalia" family="Geomyidae" genus="Geomys" kingdom="Animalia" order="Rodentia" pageId="12" pageNumber="261" phylum="Chordata" rank="subSpecies" species="pinetis" subSpecies="mobilensis">G. p. mobilensis Merriam, 1895</taxonomicName>
+— C &amp; S Alabama into extreme W Florida, USA.
+</paragraph>
+</caption>
+</subSubSection>
+<subSubSection pageId="12" pageNumber="261" type="description">
+<paragraph blockId="12.[1362,2571,717,2283]" pageId="12" pageNumber="261">
+<emphasis bold="true" box="[1362,1612,948,981]" pageId="12" pageNumber="261">Descriptive notes.</emphasis>
+Head—body 130-240 mm, tail 55-120 mm; weight 135-210 g. Male South-eastern Pocket Gophers are usually ¢.10% larger than females. It has a fusiform body shape typical of all pocket gophers and possesses fur-lined cheek pouches that open external to the mouth. Pelage is reddish or grayish brown dorsally and lighter ventrally. Individuals with a white patch on throat or forehead have been reported. Anterior surface of each upper incisor has a large medial groove flanked by a smaller groove located along the inner margin of the tooth. Chromosomal complement has 2n = 42 and FN = 80.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="12" pageNumber="261" type="biology_ecology">
+<paragraph blockId="12.[1362,2571,717,2283]" pageId="12" pageNumber="261">
+<emphasis bold="true" box="[1363,1475,1264,1297]" pageId="12" pageNumber="261">Habitat.</emphasis>
+Sandy, well-drained soils in habitats dominated by longleaf pines (Pinus palustris), turkey oaks (Quercus laevis), or live oaks (Q. virginiana).
+</paragraph>
+</subSubSection>
+<subSubSection pageId="12" pageNumber="261" type="food_feeding">
+<paragraph blockId="12.[1362,2571,717,2283]" pageId="12" pageNumber="261">
+<emphasis bold="true" box="[1364,1638,1347,1376]" pageId="12" pageNumber="261">Food and Feeding.</emphasis>
+There is no specific information available for this species, but the South-eastern Pocket Gopher probably feeds on roots, tubers, stems, and leaves of most plants available within the vicinity ofits burrow system. It readily invades cultivated fields and is considered an agricultural pest wherever it occurs in contact with humans. As in all other pocket gophers, the burrow system is a series of shallow feeding tunnels radiating spoke-like from a deeper, central network that contains one or more nest chambers and several smaller chambers for storage of food or fecal pellets.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="12" pageNumber="261" type="breeding">
+<paragraph blockId="12.[1362,2571,717,2283]" pageId="12" pageNumber="261">
+<emphasis bold="true" box="[1365,1499,1658,1691]" pageId="12" pageNumber="261">Breeding.</emphasis>
+The South-eastern Pocket Gopher appears to breed throughout the year, with major peaks in February-March and June-August. Each female produces 1-2 litters/year, and litters have 1-3 young. Young are weaned in c.30 days and reach reproductive maturity in 4-6 months.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="12" pageNumber="261" type="activity">
+<paragraph blockId="12.[1362,2571,717,2283]" pageId="12" pageNumber="261">
+<emphasis bold="true" box="[1364,1606,1815,1848]" pageId="12" pageNumber="261">Activity patterns.</emphasis>
+There is no specific information available for this species, but the South-eastern Pocket Gopheris probably active at any hour of the day, with periods of peak activity around dawn and dusk. It does not hibernate and is active yearround.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="12" pageNumber="261" type="biology_ecology">
+<paragraph blockId="12.[1362,2571,717,2283]" pageId="12" pageNumber="261">
+<emphasis bold="true" box="[1366,2090,1977,2006]" pageId="12" pageNumber="261">Movements, Home range and Social organization.</emphasis>
+There is no specific information available for this species, but the South-eastern Pocket Gopher is likely solitary and aggressively territorial. Individuals probably leave their burrow systems only rarely, meaning that their home range is defined by size and extent of their burrow system.
+</paragraph>
+</subSubSection>
+<subSubSection box="[1367,2417,2175,2204]" pageId="12" pageNumber="261" type="conservation">
+<paragraph blockId="12.[1362,2571,717,2283]" box="[1367,2417,2175,2204]" pageId="12" pageNumber="261">
+<emphasis bold="true" box="[1367,1716,2175,2204]" pageId="12" pageNumber="261">Status and Conservation.</emphasis>
+Classified as Least Concern on The IUCN Red List.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="12" pageNumber="261" type="bibRefCitation_list">
+<paragraph blockId="12.[1362,2571,717,2283]" pageId="12" pageNumber="261">
+<emphasis bold="true" box="[1368,1520,2218,2243]" pageId="12" pageNumber="261">Bibliography.</emphasis>
+Chambers et al. (2009), Harper (1952), Linzey &amp; NatureServe (Hammerson) (2008p), Patton (2005b), Pembleton &amp; Williams (1978), Sherman (1940, 1944), Sudman et al. (2006), Williams, S.L. (1999c).
+</paragraph>
+</subSubSection>
+</treatment>
+</document>

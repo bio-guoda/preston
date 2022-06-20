@@ -204,5 +204,17 @@ public class PlaziTreatmentParserTest {
                 Is.is("No information."));
 
     }
+    @Test
+    public void processXML4() throws IOException, TreatmentParseException {
+        InputStream is = getClass().getResourceAsStream("0131878A0720FF8FFFAEF82F62E84EE9.xml");
+        JsonNode treatment = new PlaziTreatmentParser().parse(is);
+
+        assertThat(treatment.get("docId").asText(), Is.is("0131878A0720FF8FFFAEF82F62E84EE9"));
+
+        assertThat(treatment.get("distributionImageURL").asText(), Is.is("https://zenodo.org/record/6603861/files/figure.png"));
+        assertThat(treatment.get("subspeciesAndDistribution").asText(), Is.is("NE Australia endemic, in WC, C & E Queensland."));
+
+
+    }
 
 }
