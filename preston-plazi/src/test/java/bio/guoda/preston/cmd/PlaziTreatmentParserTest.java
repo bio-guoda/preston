@@ -212,7 +212,7 @@ public class PlaziTreatmentParserTest {
         assertThat(treatment.get("docId").asText(), Is.is("0131878A0720FF8FFFAEF82F62E84EE9"));
 
         assertThat(treatment.get("distributionImageURL").asText(), Is.is("https://zenodo.org/record/6603861/files/figure.png"));
-        assertThat(treatment.get("subspeciesAndDistribution").asText(), Is.is("NE Australia endemic, in WC, C & E Queensland."));
+        assertThat(treatment.get("subspeciesAndDistribution").asText(), Is.is("G.p.pinetisRafinesque,1817—C&SGeorgia,USA.G.p.austrinusBangs,1898—WCFlorida,USA.G.p.colonusBangs,1898—CamdenCountyinSEGeorgia,USA.G.p.cumberlandiusBangs,1898—CumberlandIinSEGeorgia,USA.G.p.floridanusAudubon&Bachman,1853—SWGeorgiaintoNFlorida,USA.G. p. mobilensis Merriam, 1895— C & S Alabama into extreme W Florida, USA."));
 
 
     }
