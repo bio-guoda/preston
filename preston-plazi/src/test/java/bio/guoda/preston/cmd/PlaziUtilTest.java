@@ -1,16 +1,8 @@
 package bio.guoda.preston.cmd;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.hamcrest.core.Is;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-import java.io.IOException;
-import java.io.InputStream;
-
-import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PlaziUtilTest {
