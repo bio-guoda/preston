@@ -245,9 +245,9 @@ The Ecological Metadata Language (EML) files contain citations, and your biodive
 
 ```console
 # first make a list of all the emls
-preston ls | grep application/eml | cut -f1 > emls.txt
+preston ls | grep application/eml | cut -d ' ' -f1 | tr -d '<>' > emls.txt
 # then 
-preston ls -l tsv | grep -f emls.tsv | grep "Version" | grep hash | cut -f3 | preston get | grep citation | sed 's/<[^>]*>//g' > citations.txt
+preston ls -l tsv | grep -f emls.txt | grep "Version" | grep hash | cut -f3 | preston get | grep citation | sed 's/<[^>]*>//g' > citations.txt
 head citations.txt
             HW Jackson C, Ochieng J, Musila S, Navarro R, Kanga E (2018): A Checklist of the Mammals of Arabuko-Sokoke Forest, Kenya, 2018. v1.0. A Rocha Kenya. Dataset/Checklist. http://ipt.museums.or.ke/ipt/resource?r=asfmammals&amp;v=1.0
             Adda M., Sanou L., Bori H., 2018. Specimens d&apos;herbier de la flore du Niger. Données d&apos;occurrence publiées dans le cadre du Prjet BID Régional. CNSF-Niger  					
