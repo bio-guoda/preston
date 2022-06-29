@@ -245,7 +245,7 @@ The Ecological Metadata Language (EML) files contain citations, and your biodive
 
 ```console
 # first make a list of all the emls
-preston ls | grep application/eml | cut -d ' ' -f1 | tr -d '<>' > emls.txt
+preston ls --log tsv | grep application/eml | cut -f1 > emls.txt
 # then 
 preston ls -l tsv | grep -f emls.txt | grep "Version" | grep hash | cut -f3 | preston get | grep citation | sed 's/<[^>]*>//g' > citations.txt
 head citations.txt
