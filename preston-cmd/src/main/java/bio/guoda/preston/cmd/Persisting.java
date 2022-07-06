@@ -99,6 +99,7 @@ public class Persisting extends PersistingLocal {
                         .flatMap(uri -> Stream.of(
                                 Pair.of(uri, new KeyTo3LevelPath(uri, getHashType())),
                                 Pair.of(uri, new KeyTo1LevelPath(uri, getHashType())),
+                                Pair.of(uri, new KeyTo1LevelPath(uri, getHashType())),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritagePath(uri)),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri)),
                                 Pair.of(uri, new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, getProgressListener())))

@@ -9,6 +9,7 @@ public enum HashType {
     private final String prefix;
     private final String algorithm;
     private final int hexLength;
+    private final Pattern hexPattern;
     private final Pattern iriPattern;
     private final String iriPatternString;
     private final int iriStringLength;
@@ -17,7 +18,9 @@ public enum HashType {
         this.prefix = prefix;
         this.algorithm = algorithm;
         this.hexLength = hexLength;
-        this.iriPatternString = prefix + "([a-fA-F0-9])" + "{" + hexLength +  "}";
+        String hexPatternString = "([a-fA-F0-9])" + "{" + hexLength +  "}";
+        this.hexPattern = Pattern.compile(hexPatternString);
+        iriPatternString = prefix + hexPatternString;
         this.iriPattern = Pattern.compile(iriPatternString);
         this.iriStringLength = iriStringLength;
     }
@@ -38,7 +41,11 @@ public enum HashType {
         return iriPattern;
     }
 
-    public String getIRIPatternString() {
+    public Pattern getHexPattern() {
+        return hexPattern;
+    }
+
+   public String getIRIPatternString() {
         return iriPatternString;
     }
 
