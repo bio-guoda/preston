@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>bio.guoda</groupId>
+        <artifactId>preston-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../preston-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>preston-serve</artifactId>
+    <name>Preston Serve</name>
+    <description>Serve biodiversity datasets via http endpoint</description>
+
+    <properties>
+        <jetty.version>9.4.43.v20210629</jetty.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>preston-cmd</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+    </dependencies>
+</project>

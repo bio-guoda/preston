@@ -28,6 +28,7 @@ import bio.guoda.preston.cmd.CmdVerify;
 import bio.guoda.preston.cmd.CmdVersion;
 import bio.guoda.preston.cmd.TypeConverterIRI;
 import bio.guoda.preston.dbase.CmdDBaseRecordStream;
+import bio.guoda.preston.server.CmdServe;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
 import picocli.codegen.docgen.manpage.ManPageGenerator;
@@ -60,6 +61,7 @@ import static java.lang.System.exit;
                 CmdDwcRecordStream.class,
                 CmdDBaseRecordStream.class,
                 CmdPlazi.class,
+                CmdServe.class,
                 CmdCite.class,
                 CmdInstallManual.class,
                 ManPageGenerator.class,

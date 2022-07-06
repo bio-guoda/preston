@@ -21,6 +21,7 @@
         <module>preston-get</module>
         <module>preston-track</module>
         <module>preston-cmd</module>
+        <module>preston-serve</module>
         <module>preston-cli</module>
         <module>preston-sketch</module>
         <module>preston-aws</module>
