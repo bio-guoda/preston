@@ -19,12 +19,16 @@ import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
+import static bio.guoda.preston.server.PropertyNames.*;
+
 public class ContentServlet extends HttpServlet {
 
     private CmdGet initCmdGet() {
         CmdGet cmdGet = new CmdGet();
-        cmdGet.setLocalDataDir(getInitParameter("preston.local.path"));
-        String remotePath = getInitParameter("preston.remote.path");
+        cmdGet.setLocalDataDir(getInitParameter(PRESTON_PROPERTY_LOCAL_PATH));
+        String remotePath = getInitParameter(PRESTON_PROPERTY_REMOTE_PATH);
+        String cacheEnabledValue = getInitParameter(PRESTON_PROPERTY_CACHE_ENABLED);
+        cmdGet.setDisableCache(StringUtils.equalsIgnoreCase(cacheEnabledValue, "false"));
 
         if (StringUtils.isNoneBlank(remotePath)) {
             String[] remotes = StringUtils.split(remotePath, ",");

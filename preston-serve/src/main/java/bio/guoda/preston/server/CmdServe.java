@@ -41,18 +41,6 @@ public class CmdServe extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        BlobStoreReadOnly blobStoreAppendOnly
-                = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
-        run(resolvingBlobStore(blobStoreAppendOnly));
-
-    }
-
-    public void run(BlobStoreReadOnly blobStoreReadOnly) {
-        StatementsListener listener = StatementLogFactory.createPrintingLogger(
-                getLogMode(),
-                NullPrintStream.NULL_PRINT_STREAM,
-                LogErrorHandlerExitOnError.EXIT_ON_ERROR);
-
         Server server = new Server();
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(port);
@@ -61,8 +49,9 @@ public class CmdServe extends LoggingPersisting implements Runnable {
         ServletHandler servletHandler = new ServletHandler();
         ServletHolder servletHolder = new ServletHolder(ContentServlet.class);
         Map<String, String> properties = new TreeMap<String, String>() {{
-            put("preston.local.path", getLocalDataDir());
-            put("preston.remote.path", StringUtils.join(getRemotes(), ","));
+            put(PropertyNames.PRESTON_PROPERTY_LOCAL_PATH, getLocalDataDir());
+            put(PropertyNames.PRESTON_PROPERTY_REMOTE_PATH, StringUtils.join(getRemotes(), ","));
+            put(PropertyNames.PRESTON_PROPERTY_CACHE_ENABLED, Boolean.toString(!getDisableCache()));
         }};
 
         servletHolder.setInitParameters(properties);
