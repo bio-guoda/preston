@@ -76,10 +76,6 @@ public class Persisting extends PersistingLocal {
         return getRemotes() != null && !getRemotes().isEmpty();
     }
 
-    public void setDisableCache(Boolean disableCache) {
-        this.disableCache = disableCache;
-    }
-
     public void setCacheEnabled(Boolean enableCache) {
         this.disableCache = !enableCache;
     }
