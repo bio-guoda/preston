@@ -80,6 +80,15 @@ public class Persisting extends PersistingLocal {
         this.disableCache = disableCache;
     }
 
+    public void setCacheEnabled(Boolean enableCache) {
+        this.disableCache = !enableCache;
+    }
+
+    public boolean isCacheEnabled() {
+        return !this.disableCache;
+    }
+
+
     @Override
     protected KeyValueStore getKeyValueStore(KeyValueStreamFactory kvStreamFactory) {
         KeyValueStore store;
@@ -112,14 +121,14 @@ public class Persisting extends PersistingLocal {
 
         KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
 
-        if (disableCache) {
-            store = new KeyValueStoreWithFallback(
-                    super.getKeyValueStore(kvStreamFactory),
-                    failover);
-        } else {
+        if (isCacheEnabled()) {
             store = new KeyValueStoreCopying(
                     failover,
                     super.getKeyValueStore(kvStreamFactory));
+        } else {
+            store = new KeyValueStoreWithFallback(
+                    super.getKeyValueStore(kvStreamFactory),
+                    failover);
         }
         return store;
     }
@@ -137,9 +146,9 @@ public class Persisting extends PersistingLocal {
 
     private Stream<KeyValueStoreReadOnly> tarGzRemotePathSupport() {
         return getRemotes().stream().map(uri ->
-                disableCache
-                        ? this.remoteWithTarGz(uri)
-                        : this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType()))));
+                isCacheEnabled()
+                        ? this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())))
+                        : this.remoteWithTarGz(uri));
     }
 
     private KeyValueStoreReadOnly withStoreAt(URI baseURI, KeyToPath keyToPath) {
@@ -213,10 +222,6 @@ public class Persisting extends PersistingLocal {
 
     public void setRemotes(List<URI> remotes) {
         this.remotes = remotes;
-    }
-
-    public Boolean getDisableCache() {
-        return disableCache;
     }
 
     public Boolean getDisableProgress() {

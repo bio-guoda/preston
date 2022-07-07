@@ -27,7 +27,7 @@ public class AWSEventHandler implements RequestStreamHandler {
         logger.log("Received request with body " + gson.toJson(requestData));
 
         CmdGet get = new CmdGet();
-        get.setDisableCache(true);
+        get.setCacheEnabled(false);
         get.setInputStream(IOUtils.toInputStream(requestData.id, StandardCharsets.UTF_8));
         get.setRemotes(Collections.singletonList(requestData.remote));
         get.setOutputStream(outputStream);

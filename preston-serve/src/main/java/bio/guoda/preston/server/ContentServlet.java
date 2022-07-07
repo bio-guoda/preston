@@ -28,7 +28,7 @@ public class ContentServlet extends HttpServlet {
         cmdGet.setLocalDataDir(getInitParameter(PRESTON_PROPERTY_LOCAL_PATH));
         String remotePath = getInitParameter(PRESTON_PROPERTY_REMOTE_PATH);
         String cacheEnabledValue = getInitParameter(PRESTON_PROPERTY_CACHE_ENABLED);
-        cmdGet.setDisableCache(StringUtils.equalsIgnoreCase(cacheEnabledValue, "false"));
+        cmdGet.setCacheEnabled(StringUtils.equalsIgnoreCase(cacheEnabledValue, "true"));
 
         if (StringUtils.isNoneBlank(remotePath)) {
             String[] remotes = StringUtils.split(remotePath, ",");
@@ -71,7 +71,6 @@ public class ContentServlet extends HttpServlet {
         } else {
             log("lookup [" + iri.getIRIString() + "]");
             CmdGet cmdGet = initCmdGet();
-            cmdGet.setDisableCache(true);
             cmdGet.setDisableProgress(true);
             cmdGet.setContentIdsOrAliases(Collections.singletonList(iri));
             cmdGet.setOutputStream(response.getOutputStream());

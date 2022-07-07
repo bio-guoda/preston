@@ -81,7 +81,7 @@ public class PersistingTest {
     @Test
     public void githubPlainFolder() throws IOException {
         Persisting persisting = new Persisting();
-        persisting.setDisableCache(true);
+        persisting.setCacheEnabled(false);
         persisting.setRemotes(Collections.singletonList(URI.create("https://raw.githubusercontent.com/bio-guoda/preston-amazon/master/data/")));
 
         KeyValueStore keyValueStore = persisting.getKeyValueStore(getAlwaysAccepting());
@@ -97,7 +97,7 @@ public class PersistingTest {
 
         Persisting persisting = new Persisting();
         persisting.setRemotes(Collections.singletonList(URI.create("https://raw.githubusercontent.com/bio-guoda/preston/346c2f16bdeff39b385ed86717015bf69f0301d4/src/test/resources/")));
-        persisting.setDisableCache(true);
+        persisting.setCacheEnabled(false);
 
         KeyValueStore keyValueStore = persisting.getKeyValueStore(getAlwaysAccepting());
         InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/a12dd6335e7803027da3007e26926c5c946fea9803a5eb07908d978998d933da"));
@@ -113,7 +113,7 @@ public class PersistingTest {
 
         Persisting persisting = new Persisting();
         persisting.setRemotes(Collections.singletonList(URI.create("https://softwareheritage.org")));
-        persisting.setDisableCache(true);
+        persisting.setCacheEnabled(false);
 
         KeyValueStore keyValueStore = persisting.getKeyValueStore(getAlwaysAccepting());
         InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/162a17cbd1da43ac4eaba36b936104b09967ac29bfda7294201df34659e1a656"));

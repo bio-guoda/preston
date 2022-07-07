@@ -51,7 +51,7 @@ public class CmdServe extends LoggingPersisting implements Runnable {
         Map<String, String> properties = new TreeMap<String, String>() {{
             put(PropertyNames.PRESTON_PROPERTY_LOCAL_PATH, getLocalDataDir());
             put(PropertyNames.PRESTON_PROPERTY_REMOTE_PATH, StringUtils.join(getRemotes(), ","));
-            put(PropertyNames.PRESTON_PROPERTY_CACHE_ENABLED, Boolean.toString(!getDisableCache()));
+            put(PropertyNames.PRESTON_PROPERTY_CACHE_ENABLED, Boolean.toString(isCacheEnabled()));
         }};
 
         servletHolder.setInitParameters(properties);
