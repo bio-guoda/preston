@@ -61,7 +61,7 @@ public class Persisting extends PersistingLocal {
     private Boolean disableCache = false;
 
     @CommandLine.Option(
-            names = {"--no-process"},
+            names = {"--no-progress", "--no-process"},
             description = DISABLE_PROGRESS_MONITOR
     )
     private Boolean disableProgress = false;
