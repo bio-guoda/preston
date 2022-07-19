@@ -48,7 +48,7 @@ Copy biodiversity dataset graph
 *--no-cache, --disable-cache*::
   Disable local content cache
 
-*--no-process*::
+*--no-process, --no-progress*::
   Disable progress monitor
 
 *-p*, *--target-hash-path-pattern*=_<pathPattern>_::

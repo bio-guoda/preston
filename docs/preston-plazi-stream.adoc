@@ -5,30 +5,30 @@
 :manmanual: Preston Manual
 :mansource: 
 :man-linkstyle: pass:[blue R < >]
-= preston-cite(1)
+= preston-plazi-stream(1)
 
 // end::picocli-generated-man-section-header[]
 
 // tag::picocli-generated-man-section-name[]
 == Name
 
-preston-cite - Cites datasets in dataset archive
+preston-plazi-stream - transforms plazi treatment xml into json stream 
 
 // end::picocli-generated-man-section-name[]
 
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston cite* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
-             [*--data-dir*=_<localDataDir>_] [*-l*=_<logMode>_]
-             [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
+*preston plazi-stream* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
+                     [*--data-dir*=_<localDataDir>_] [*-l*=_<logMode>_]
+                     [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
 
 // end::picocli-generated-man-section-synopsis[]
 
 // tag::picocli-generated-man-section-description[]
 == Description
 
-Cites datasets in dataset archive
+transforms plazi treatment xml into json stream 
 
 // end::picocli-generated-man-section-description[]
 

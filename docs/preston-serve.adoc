@@ -5,30 +5,30 @@
 :manmanual: Preston Manual
 :mansource: 
 :man-linkstyle: pass:[blue R < >]
-= preston-cite(1)
+= preston-serve(1)
 
 // end::picocli-generated-man-section-header[]
 
 // tag::picocli-generated-man-section-name[]
 == Name
 
-preston-cite - Cites datasets in dataset archive
+preston-serve - provide access to content via http endpoint
 
 // end::picocli-generated-man-section-name[]
 
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston cite* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
-             [*--data-dir*=_<localDataDir>_] [*-l*=_<logMode>_]
-             [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
+*preston serve* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
+              [*--data-dir*=_<localDataDir>_] [*-h*=_<host>_] [*-l*=_<logMode>_]
+              [*-p*=_<port>_] [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
 
 // end::picocli-generated-man-section-synopsis[]
 
 // tag::picocli-generated-man-section-description[]
 == Description
 
-Cites datasets in dataset archive
+provide access to content via http endpoint
 
 // end::picocli-generated-man-section-description[]
 
@@ -41,6 +41,9 @@ Cites datasets in dataset archive
 *--data-dir*=_<localDataDir>_::
   Location of local content cache
 
+*-h*, *--host*=_<host>_::
+  host to listen on
+
 *-l*, *--log*=_<logMode>_::
   Log format
 
@@ -49,6 +52,9 @@ Cites datasets in dataset archive
 
 *--no-process, --no-progress*::
   Disable progress monitor
+
+*-p*, *--port*=_<port>_::
+  port to listen on
 
 *--repos, --remote, --remotes, --include, --repositories*=_<remotes>_::
   Included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)

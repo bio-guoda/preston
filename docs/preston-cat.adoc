@@ -44,7 +44,7 @@ Get biodiversity data
 *--no-cache, --disable-cache*::
   Disable local content cache
 
-*--no-process*::
+*--no-process, --no-progress*::
   Disable progress monitor
 
 *--repos, --remote, --remotes, --include, --repositories*=_<remotes>_::

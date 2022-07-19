@@ -1,9 +1,9 @@
 // tag::picocli-generated-full-manpage[]
 // tag::picocli-generated-man-section-header[]
 :doctype: manpage
-:revnumber: 0.0.1-SNAPSHOT
+:revnumber: 0.4.0
 :manmanual: Preston Manual
-:mansource: 0.0.1-SNAPSHOT
+:mansource: 0.4.0
 :man-linkstyle: pass:[blue R < >]
 = preston(1)
 
@@ -59,8 +59,8 @@ xref:preston-cp.adoc[*cp*, *copyTo*, *export*]::
 xref:preston-clone.adoc[*clone*, *pull*]::
   Clone biodiversity dataset graph
 
-xref:preston-update.adoc[*update*, *track*]::
-  Update biodiversity dataset graph
+xref:preston-track.adoc[*track*, *update*]::
+  Tracks a biodiversity dataset graph
 
 xref:preston-append.adoc[*append*, *handle*, *process*, *add*]::
   Offline (re-)processing of tracked biodiversity dataset graph using stdin
@@ -86,8 +86,8 @@ xref:preston-union.adoc[*union*]::
 xref:preston-grep.adoc[*grep*, *match*, *findURLs*]::
   Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets
 
-xref:preston-test.adoc[*test*, *verify*, *check*, *validate*]::
-  Verifies completeness and integrity of the local biodiversity dataset graph
+xref:preston-test.adoc[*test*, *verify*, *check*, *validate*, *touch*]::
+  Verifies completeness and, optionally, the integrity, of a biodiversity dataset graph by touching (or visiting) all associated content.
 
 xref:preston-version.adoc[*version*]::
   Show version
@@ -106,6 +106,12 @@ xref:preston-dwc-stream.adoc[*dwc-stream*, *json-stream*, *dwc-json-stream*]::
 
 xref:preston-dbase-json-stream.adoc[*dbase-json-stream*, *dbase2json*, *dbase-stream*]::
   Extract records from DBase files (*.DBF) in line-json
+
+xref:preston-plazi-stream.adoc[*plazi-stream*]::
+  transforms plazi treatment xml into json stream 
+
+xref:preston-serve.adoc[*serve*, *s*, *server*]::
+  provide access to content via http endpoint
 
 xref:preston-cite.adoc[*cite*]::
   Cites datasets in dataset archive

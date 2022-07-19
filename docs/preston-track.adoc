@@ -5,30 +5,31 @@
 :manmanual: Preston Manual
 :mansource: 
 :man-linkstyle: pass:[blue R < >]
-= preston-cite(1)
+= preston-track(1)
 
 // end::picocli-generated-man-section-header[]
 
 // tag::picocli-generated-man-section-name[]
 == Name
 
-preston-cite - Cites datasets in dataset archive
+preston-track - Tracks a biodiversity dataset graph
 
 // end::picocli-generated-man-section-name[]
 
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston cite* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
-             [*--data-dir*=_<localDataDir>_] [*-l*=_<logMode>_]
-             [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
+*preston track* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
+              [*--data-dir*=_<localDataDir>_] [*-l*=_<logMode>_]
+              [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
+              [*-u*=_<seedUrls>_]... [_<IRIs>_...]
 
 // end::picocli-generated-man-section-synopsis[]
 
 // tag::picocli-generated-man-section-description[]
 == Description
 
-Cites datasets in dataset archive
+Tracks a biodiversity dataset graph
 
 // end::picocli-generated-man-section-description[]
 
@@ -56,9 +57,17 @@ Cites datasets in dataset archive
 *--tmp-dir*=_<localTmpDir>_::
   Location of local tmp dir
 
+*-u*, *--seed*=_<seedUrls>_::
+  Starting points for graph discovery. Only active when no content urls are provided.
+
 // end::picocli-generated-man-section-options[]
 
 // tag::picocli-generated-man-section-arguments[]
+== Arguments
+
+[_<IRIs>_...]::
+  [url1] [url2] ...
+
 // end::picocli-generated-man-section-arguments[]
 
 // tag::picocli-generated-man-section-commands[]

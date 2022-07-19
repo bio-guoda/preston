@@ -12,22 +12,23 @@
 // tag::picocli-generated-man-section-name[]
 == Name
 
-preston-test - Verifies completeness and integrity of the local biodiversity dataset graph
+preston-test - Verifies completeness and, optionally, the integrity, of a biodiversity dataset graph by touching (or visiting) all associated content.
 
 // end::picocli-generated-man-section-name[]
 
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston test* [*--skip-hash-verification*] [*-a*=_<hashType>_]
-             [*--data-dir*=_<localDataDir>_] [*--tmp-dir*=_<localTmpDir>_]
+*preston test* [*--no-cache*] [*--no-process*] [*--skip-hash-verification*]
+             [*-a*=_<hashType>_] [*--data-dir*=_<localDataDir>_]
+             [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
 
 // end::picocli-generated-man-section-synopsis[]
 
 // tag::picocli-generated-man-section-description[]
 == Description
 
-Verifies completeness and integrity of the local biodiversity dataset graph
+Verifies completeness and, optionally, the integrity, of a biodiversity dataset graph by touching (or visiting) all associated content.
 
 // end::picocli-generated-man-section-description[]
 
@@ -39,6 +40,15 @@ Verifies completeness and integrity of the local biodiversity dataset graph
 
 *--data-dir*=_<localDataDir>_::
   Location of local content cache
+
+*--no-cache, --disable-cache*::
+  Disable local content cache
+
+*--no-process, --no-progress*::
+  Disable progress monitor
+
+*--repos, --remote, --remotes, --include, --repositories*=_<remotes>_::
+  Included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)
 
 *--skip-hash-verification*::
   Do not verify hash, just check availability

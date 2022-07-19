@@ -54,7 +54,7 @@ Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates es
 *--no-line, --no-lines*::
   Don't report line numbers for matches
 
-*--no-process*::
+*--no-process, --no-progress*::
   Disable progress monitor
 
 *-o*, *--only-matching*::
