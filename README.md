@@ -615,6 +615,7 @@ Please use [maven](https://maven.apache.org) version 3.3+.
 * Run tests using `mvn test` (optional).
 * Run `mvn package -DskipTests` to build (standalone) jar
 * Copy `preston/target/preston-[version]-jar-with-dependencies.jar` to ```[some dir]/preston.jar```
+* Generate Asciidoc documentation using ```preston gen-manpage --outdir docs/``` or similar.
 
 ## Examples
 
