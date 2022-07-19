@@ -1,6 +1,7 @@
 package bio.guoda.preston;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.CoreMatchers;
@@ -69,6 +70,15 @@ public class ResourcesHTTPIT {
             StringWriter output = new StringWriter();
             IOUtils.copy(is, output, StandardCharsets.UTF_8);
             assertThat(output.getBuffer().toString(), CoreMatchers.containsString("objectLocationList"));
+        }
+    }
+
+    @Test
+    public void hashURINoRewrite() throws IOException {
+        try (InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://linker.bio/hash://sha256/edde5b2b45961e356f27b81a3aa51584de4761ad9fa678c4b9fa3230808ea356")))) {
+            CountingOutputStream outputStream = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM);
+            IOUtils.copy(is, outputStream);
+            assertThat(outputStream.getByteCount(), Is.is(233031L));
         }
     }
 

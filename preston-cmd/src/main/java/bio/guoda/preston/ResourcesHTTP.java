@@ -151,6 +151,7 @@ public class ResourcesHTTP {
         int soTimeoutMs = 30 * 1000;
         return RequestConfig
                 .custom()
+                .setNormalizeUri(false)
                 .setSocketTimeout(soTimeoutMs)
                 .setConnectTimeout(soTimeoutMs);
     }
