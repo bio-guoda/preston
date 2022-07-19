@@ -51,7 +51,7 @@ public class ContentServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
-        log("got [" + request.getRequestURI() + "]");
+        log("request [" + request.getRequestURI() + "]");
 
 
         String requestURI = RegExUtils
@@ -69,7 +69,7 @@ public class ContentServlet extends HttpServlet {
         if (iri == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            log("lookup [" + iri.getIRIString() + "]");
+            log("resolving [" + iri.getIRIString() + "]");
             CmdGet cmdGet = initCmdGet();
             cmdGet.setDisableProgress(true);
             cmdGet.setContentIdsOrAliases(Collections.singletonList(iri));
@@ -77,7 +77,7 @@ public class ContentServlet extends HttpServlet {
             try {
                 cmdGet.run();
                 response.setStatus(HttpServletResponse.SC_OK);
-                log("found [" + iri.getIRIString() + "]");
+                log("response [" + iri.getIRIString() + "]");
             } catch (Throwable th) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 log("not found [" + iri.getIRIString() + "]");

@@ -14,6 +14,7 @@ import bio.guoda.preston.store.KeyTo1LevelSoftwareHeritagePath;
 import bio.guoda.preston.store.KeyTo1LevelZenodoPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelTarGzPath;
+import bio.guoda.preston.store.KeyToHashURI;
 import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
@@ -102,8 +103,8 @@ public class Persisting extends PersistingLocal {
                 getRemotes()
                         .stream()
                         .flatMap(uri -> Stream.of(
+                                Pair.of(uri, new KeyToHashURI(uri, getHashType())),
                                 Pair.of(uri, new KeyTo3LevelPath(uri, getHashType())),
-                                Pair.of(uri, new KeyTo1LevelPath(uri, getHashType())),
                                 Pair.of(uri, new KeyTo1LevelPath(uri, getHashType())),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritagePath(uri)),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri)),
