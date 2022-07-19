@@ -23,6 +23,12 @@
             <groupId>org.gbif</groupId>
             <artifactId>dwca-io</artifactId>
             <version>2.11</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>de.undercouch</groupId>
