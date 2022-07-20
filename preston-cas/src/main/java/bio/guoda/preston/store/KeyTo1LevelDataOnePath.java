@@ -22,10 +22,6 @@ public class KeyTo1LevelDataOnePath implements KeyToPath {
     private final URI baseURI;
     private final Dereferencer<InputStream> deref;
 
-    public KeyTo1LevelDataOnePath(URI baseURI) {
-        this(baseURI, uri -> null);
-    }
-
     public KeyTo1LevelDataOnePath(URI baseURI, Dereferencer<InputStream> deref) {
         this.baseURI = detectPath(baseURI);
         this.deref = deref;
