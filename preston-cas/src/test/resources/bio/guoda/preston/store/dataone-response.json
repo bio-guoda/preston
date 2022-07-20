@@ -1,0 +1,72 @@
+{
+  "responseHeader": {
+    "status": 0,
+    "QTime": 2,
+    "params": {
+      "q": "checksum:e27c99a7f701dab97b7d09c467acf468",
+      "fl": "identifier,size,formatId,checksum,checksumAlgorithm,replicaMN,dataUrl",
+      "rows": "10",
+      "wt": "json"
+    }
+  },
+  "response": {
+    "numFound": 4,
+    "start": 0,
+    "docs": [
+      {
+        "identifier": "ess-dive-0462dff585f94f8-20180716T160600643874",
+        "formatId": "text/plain",
+        "size": 11036,
+        "checksum": "e27c99a7f701dab97b7d09c467acf468",
+        "checksumAlgorithm": "MD5",
+        "replicaMN": [
+          "urn:node:ESS_DIVE",
+          "urn:node:UIC",
+          "urn:node:KNB"
+        ],
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/ess-dive-0462dff585f94f8-20180716T160600643874"
+      },
+      {
+        "identifier": "ess-dive-642bb2e5bd48452-20180716T160320693400",
+        "formatId": "text/plain",
+        "size": 11036,
+        "checksum": "e27c99a7f701dab97b7d09c467acf468",
+        "checksumAlgorithm": "MD5",
+        "replicaMN": [
+          "urn:node:ESS_DIVE",
+          "urn:node:UIC",
+          "urn:node:KNB"
+        ],
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/ess-dive-642bb2e5bd48452-20180716T160320693400"
+      },
+      {
+        "identifier": "ess-dive-f8d52384ece0ba9-20180716T154049822990",
+        "formatId": "text/plain",
+        "size": 11036,
+        "checksum": "e27c99a7f701dab97b7d09c467acf468",
+        "checksumAlgorithm": "MD5",
+        "replicaMN": [
+          "urn:node:ESS_DIVE",
+          "urn:node:KNB",
+          "urn:node:UIC",
+          "urn:node:mnORC1"
+        ],
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/ess-dive-f8d52384ece0ba9-20180716T154049822990"
+      },
+      {
+        "identifier": "ess-dive-457358fdc81d3a5-20180726T203952542",
+        "formatId": "application/octet-stream",
+        "size": 11036,
+        "checksum": "e27c99a7f701dab97b7d09c467acf468",
+        "checksumAlgorithm": "MD5",
+        "replicaMN": [
+          "urn:node:KNB",
+          "urn:node:ESS_DIVE",
+          "urn:node:UIC",
+          "urn:node:mnORC1"
+        ],
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/ess-dive-457358fdc81d3a5-20180726T203952542"
+      }
+    ]
+  }
+}

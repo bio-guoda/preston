@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:objectLocationList xmlns:ns2="http://ns.dataone.org/service/types/v1">
+    <identifier>ess-dive-0462dff585f94f8-20180716T160600643874</identifier>
+    <objectLocation>
+        <nodeIdentifier>urn:node:mnORC1</nodeIdentifier>
+        <baseURL>https://mn-orc-1.dataone.org/knb/d1/mn</baseURL>
+        <version>v1</version>
+        <version>v2</version>
+        <url>https://mn-orc-1.dataone.org/knb/d1/mn/v2/object/ess-dive-0462dff585f94f8-20180716T160600643874</url>
+    </objectLocation>
+    <objectLocation>
+        <nodeIdentifier>urn:node:KNB</nodeIdentifier>
+        <baseURL>https://knb.ecoinformatics.org/knb/d1/mn</baseURL>
+        <version>v1</version>
+        <version>v2</version>
+        <url>https://knb.ecoinformatics.org/knb/d1/mn/v2/object/ess-dive-0462dff585f94f8-20180716T160600643874</url>
+    </objectLocation>
+    <objectLocation>
+        <nodeIdentifier>urn:node:ESS_DIVE</nodeIdentifier>
+        <baseURL>https://data.ess-dive.lbl.gov/catalog/d1/mn</baseURL>
+        <version>v1</version>
+        <version>v2</version>
+        <url>https://data.ess-dive.lbl.gov/catalog/d1/mn/v2/object/ess-dive-0462dff585f94f8-20180716T160600643874</url>
+    </objectLocation>
+    <objectLocation>
+        <nodeIdentifier>urn:node:UIC</nodeIdentifier>
+        <baseURL>https://dataone.lib.uic.edu/metacat/d1/mn</baseURL>
+        <version>v1</version>
+        <version>v2</version>
+        <url>https://dataone.lib.uic.edu/metacat/d1/mn/v2/object/ess-dive-0462dff585f94f8-20180716T160600643874</url>
+    </objectLocation>
+</ns2:objectLocationList>
