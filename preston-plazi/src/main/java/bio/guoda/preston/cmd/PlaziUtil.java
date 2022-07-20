@@ -26,16 +26,25 @@ import static bio.guoda.preston.process.XMLUtil.evaluateXPath;
 
 public class PlaziUtil {
 
-    public static final String PATTERN_SUB_DISTRIBUTION = "([.].*Distribution[ .]+)";
-    public static final String PATTERN_SUB_DESCRIPTIVE_NOTES = "([.].*Descriptive notes[ .]+)";
-    public static final String PATTERN_SUB_HABITAT = "([.].*Habitat[ .]+)";
-    public static final String PATTERN_SUB_MOVEMENTS = "([.].*Movements, Home range and Social organization[ .]+)";
-    public static final String PATTERN_SUB_CONSERVATION = "([.].*Conservation.*[ .]+)";
-    public static final Pattern PATTERN_BIBLIOGRAPHY = Pattern.compile("(.*)([.].*Bibliography[ .]+)(.*)");
-    public static final Pattern PATTERN_FOOD_AND_FEEDING = Pattern.compile("(.*)([.].*Food and Feeding[ .]+)(.*)([.].*Breeding[ .]+)(.*)");
+    public static final String PATTERN_SUB_DISTRIBUTION = "([.].*Distribution[ ]*[.])";
+    public static final String PATTERN_SUB_DESCRIPTIVE_NOTES = "([.].*Descriptive notes[ ]*[.])";
+    public static final String PATTERN_SUB_HABITAT = "([.].*Habitat[ ]*[.])";
+    public static final String PATTERN_SUB_MOVEMENTS = "([.].*Movements, Home range and Social organization[ ]*[.])";
+    public static final String PATTERN_SUB_CONSERVATION = "([.].*Status and Conservation[ ]*[.])";
+    private static final String PATTERN_SUB_BREEDING = "([.].*Breeding[ ]*[.])";
+    private static final String PATTERN_SUB_FOOD_AND_FEEDING = "([.].*Food and Feeding[ ]*[.])";
+    private static final String PATTERN_SUB_ACTIVITY_PATTERNS = "([.].*Activity patterns[ ]*[.])";
+    public static final String PATTERN_SUB_BIBLIOGRAPHY = "([.].*Bibliography[ ]*[.])";
+    public static final Pattern PATTERN_BIBLIOGRAPHY = Pattern.compile("(.*)" + PATTERN_SUB_BIBLIOGRAPHY + "(.*)");
+
+    public static final Pattern PATTERN_FOOD_AND_FEEDING = Pattern.compile("(.*)" + PATTERN_SUB_FOOD_AND_FEEDING + "(.*)" + PATTERN_SUB_BREEDING + "(.*)");
     public static final Pattern PATTERN_TAXONOMY = Pattern.compile("(.{1,20000})(Taxonomy[ .]+)(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)");
     public static final Pattern PATTERN_DISTRIBUTION = Pattern.compile("(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)");
     public static final Pattern PATTERN_DESCRIPTIVE_NOTES = Pattern.compile("(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)" + PATTERN_SUB_HABITAT + "(.*)");
+    public static final Pattern PATTERN_HABITAT = Pattern.compile("(.*)" + PATTERN_SUB_HABITAT + "(.*)" + PATTERN_SUB_FOOD_AND_FEEDING + "(.*)");
+    public static final Pattern PATTERN_BREEDING = Pattern.compile("(.*)" + PATTERN_SUB_BREEDING + "(.*)" + PATTERN_SUB_ACTIVITY_PATTERNS + "(.*)");
+    public static final Pattern PATTERN_ACTIVITY_PATTERNS = Pattern.compile("(.*)" + PATTERN_SUB_ACTIVITY_PATTERNS + "(.*)" + PATTERN_SUB_MOVEMENTS + "(.*)");
+    public static final Pattern PATTERN_STATUS_AND_CONSERVATION = Pattern.compile("(.*)" + PATTERN_SUB_CONSERVATION + "(.*)" + PATTERN_SUB_BIBLIOGRAPHY + "(.*)");
     public static final Pattern PATTERN_MOVEMENTS = Pattern.compile("(.*)" + PATTERN_SUB_MOVEMENTS + "(.*)" + PATTERN_SUB_CONSERVATION + "(.*)");
     public static final Pattern DETECT_TAB_AND_NEWLINE = Pattern.compile("[\t\n]+");
     public static final Pattern DETECT_WHITESPACE = Pattern.compile("[\\s]+");
@@ -89,13 +98,13 @@ public class PlaziUtil {
         handleDistribution(treatmentText, treatment, docu);
         handleBibliography(treatment, treatmentText);
         handleFoodAndFeeding(treatment, treatmentText);
-        handleBreeding(treatment, docu);
-        handleActivityPatterns(treatment, docu);
+        handleBreeding(treatment, treatmentText);
+        handleActivityPatterns(treatment, treatmentText);
         handleMovements(treatment, treatmentText);
-        handleStatusAndConservation(treatment, docu);
+        handleStatusAndConservation(treatment, treatmentText);
 
         handleDescriptiveNotes(treatment, treatmentText);
-        handleHabitat(treatment, docu);
+        handleHabitat(treatment, treatmentText);
     }
 
     static void handleMovements(ObjectNode treatment, String treatmentText) {
@@ -112,58 +121,43 @@ public class PlaziUtil {
         }
     }
 
-    private static void handleStatusAndConservation(ObjectNode treatment, Document docu) throws XPathExpressionException {
-        NodeList emphasisNodes2 = evaluateXPath(
-                docu, X_PATH_EMPHASIS
-        );
-        for (int i1 = 0; i1 < emphasisNodes2.getLength(); i1++) {
-            Node emphasisNode1 = emphasisNodes2.item(i1);
-            String textContent1 = replaceTabsNewlinesWithSpaces(emphasisNode1);
-            if (StringUtils.startsWith(textContent1, "Status")) {
-                Node expectedParagraphNode1 = emphasisNode1.getParentNode();
-                String statusAndConservation = replaceTabsNewlinesWithSpaces(expectedParagraphNode1);
-                treatment.put("statusAndConservation", StringUtils.trim(RegExUtils.replaceFirst(statusAndConservation, "Status and Conservation" + "[. ]+", "")));
-            }
+    private static void handleStatusAndConservation(ObjectNode treatment, String treatmentText) throws XPathExpressionException {
+        String statusAndConservation = extractSegment(treatmentText, PATTERN_STATUS_AND_CONSERVATION);
+        if (StringUtils.isNoneBlank(statusAndConservation)) {
+            treatment.put("statusAndConservation", statusAndConservation);
         }
     }
 
-    private static void handleHabitat(ObjectNode treatment, Document docu) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        parseAttemptOfEmphasisSection(
-                docu,
-                treatment,
-                "habitat",
-                "Habitat", 1
-        );
+    private static void handleHabitat(ObjectNode treatment, String treatmentText) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        String habitat = extractSegment(treatmentText, PATTERN_HABITAT);
+        if (StringUtils.isNoneBlank(habitat)) {
+            treatment.put("habitat", habitat);
+        }
+
+
     }
 
-    private static void handleActivityPatterns(ObjectNode treatment, Document docu) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        parseAttemptOfEmphasisSection(
-                docu,
-                treatment,
-                "activityPatterns",
-                "Activity patterns", 1
-        );
+    private static void handleActivityPatterns(ObjectNode treatment, String treatmentText) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        String breeding = extractSegment(treatmentText, PATTERN_ACTIVITY_PATTERNS);
+        if (StringUtils.isNoneBlank(breeding)) {
+            treatment.put("activityPatterns", breeding);
+        }
     }
 
-    private static void handleBreeding(ObjectNode treatment, Document docu) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        parseAttemptOfEmphasisSection(
-                docu,
-                treatment,
-                "breeding",
-                "Breeding", 1
-        );
+    private static void handleBreeding(ObjectNode treatment, String treatmentText) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        String breeding = extractSegment(treatmentText, PATTERN_BREEDING);
+        if (StringUtils.isNoneBlank(breeding)) {
+            treatment.put("breeding", breeding);
+        }
+
     }
 
     static void handleFoodAndFeeding(ObjectNode treatment, String treatmentText) throws XPathExpressionException {
-        String[] split = StringUtils.splitByWholeSeparator(treatmentText, "Food and Feeding");
-        if (split != null && split.length > 1) {
-            String foodAndFeeding = StringUtils.splitByWholeSeparator(split[1], "Breeding")[0];
-            treatment.put("foodAndFeeding",
-                    StringUtils.trim(
-                            StringUtils.replaceOnce
-                                    (foodAndFeeding, ".", "")
-                    ));
+        String foodAndFeeding = extractSegment(treatmentText, PATTERN_FOOD_AND_FEEDING);
+        if (StringUtils.isNoneBlank(foodAndFeeding)) {
+            treatment.put("foodAndFeeding", foodAndFeeding);
         }
+
     }
 
 
@@ -329,23 +323,6 @@ public class PlaziUtil {
         }
     }
 
-    private static void parseAttemptOfEmphasisSection(Document docu, ObjectNode treatment, String label, String sectionText, int depth) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        NodeList emphasisNodes = evaluateXPath(
-                docu, X_PATH_EMPHASIS
-        );
-        for (int i = 0; i < emphasisNodes.getLength(); i++) {
-            Node emphasisNode = emphasisNodes.item(i);
-            String textContent = emphasisNode.getTextContent();
-            if (StringUtils.startsWith(textContent, sectionText)) {
-                Node expectedParagraphNode = depth == 2
-                        ? emphasisNode.getParentNode().getParentNode()
-                        : emphasisNode.getParentNode();
-                String eatingText = replaceTabsNewlinesWithSpaces(expectedParagraphNode);
-                treatment.put(label, StringUtils.trim(RegExUtils.replaceFirst(eatingText, sectionText + "[. ]+", "")));
-            }
-        }
-    }
-
     private static String replaceTabsNewlinesWithSpaces(Node expectedParagraphNode) {
         String textContent = expectedParagraphNode.getTextContent();
         return replaceTabsNewlinesWithSpaces(textContent);
@@ -376,7 +353,7 @@ public class PlaziUtil {
 
     private static String extractSegment(String segmentCandidate, Pattern segmentPattern) {
         Matcher matcher = segmentPattern.matcher(segmentCandidate);
-        return matchSegmentAttempt(matcher);
+        return StringUtils.trim(matchSegmentAttempt(matcher));
     }
 
     private static String matchSegmentAttempt(Matcher matcher) {
