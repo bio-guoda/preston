@@ -548,7 +548,7 @@ On linux (and Mac) you can install Preston by running:
 
 
 ```console
-sudo sh -c '(curl -L https://github.com/bio-guoda/preston/releases/download/0.3.10/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
+sudo sh -c '(curl -L https://github.com/bio-guoda/preston/releases/download/0.4.2/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
 ```
 :warning: Note that this installs preston using sudo privileges and makes preston.jar executable. Please inspect the script before running it.
 
