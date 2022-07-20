@@ -155,8 +155,7 @@ public class PlaziUtil {
     }
 
     static void handleFoodAndFeeding(ObjectNode treatment, String treatmentText) throws XPathExpressionException {
-        String patchedTreatment = StringUtils.replace(treatmentText, "Food andFeeding", "Food and Feeding");
-        String[] split = StringUtils.splitByWholeSeparator(patchedTreatment, "Food and Feeding");
+        String[] split = StringUtils.splitByWholeSeparator(treatmentText, "Food and Feeding");
         if (split != null && split.length > 1) {
             String foodAndFeeding = StringUtils.splitByWholeSeparator(split[1], "Breeding")[0];
             treatment.put("foodAndFeeding",
@@ -298,16 +297,36 @@ public class PlaziUtil {
     }
 
     private static String extractTreatment(Document docu) throws XPathExpressionException {
-        NodeList emphasisNodes = evaluateXPath(
+
+        NodeList treatmentNodes = evaluateXPath(
                 docu, X_PATH_TREATMENT
         );
+
+        Node treatmentNode = treatmentNodes.getLength() > 0
+                ? treatmentNodes.item(0)
+                : null;
+
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < emphasisNodes.getLength(); i++) {
-            builder.append(emphasisNodes.item(i).getTextContent());
+        if (treatmentNode != null) {
+            appendTextsWithWhitespaces(treatmentNode, builder);
         }
+
         return StringUtils.trim(
                 replaceTabsNewlinesWithSpaces(builder.toString())
         );
+    }
+
+    private static void appendTextsWithWhitespaces(Node treatmentNode, StringBuilder builder) {
+        NodeList elems = treatmentNode.getChildNodes();
+        for (int j = 0; j < elems.getLength(); j++) {
+            Node child = elems.item(j);
+            if (StringUtils.isNoneBlank(child.getNodeValue())) {
+                builder.append(" ");
+                builder.append(child.getNodeValue());
+                builder.append(" ");
+            }
+            appendTextsWithWhitespaces(child, builder);
+        }
     }
 
     private static void parseAttemptOfEmphasisSection(Document docu, ObjectNode treatment, String label, String sectionText, int depth) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {

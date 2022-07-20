@@ -102,7 +102,7 @@ public class PlaziTreatmentParserTest {
         JsonNode treatment = getParser().parse(is);
 
         assertThat(treatment.get("docId").asText(), Is.is("038F4B5AFFA1FFD6A892FDF8B80ECA7D"));
-        assertThat(treatment.get("taxonomy").asText(), Is.is("Bathyergus damarensis Ogilby, 1838, Damaraland, Namibia.This species is monotypic."));
+        assertThat(treatment.get("taxonomy").asText(), Is.is("Bathyergus damarensis Ogilby, 1838 , Damaraland, Namibia. This species is monotypic."));
         assertThat(treatment.get("name").asText(), Is.is("Fukomys damarensis"));
 
 
@@ -136,7 +136,7 @@ public class PlaziTreatmentParserTest {
                 Is.is("Bathyergue de Damara @fr | Damara-Graumull @de | Ratatopo de Damara @es | Botswanan Mole-rat @en | Damara Mole Rat @en | Damaraland Blesmol @en"));
 
         assertThat(treatment.get("taxonomy").asText(),
-                Is.is("Bathyergus damarensis Ogilby, 1838, Damaraland, Namibia.This species is monotypic."));
+                Is.is("Bathyergus damarensis Ogilby, 1838 , Damaraland, Namibia. This species is monotypic."));
 
         assertThat(treatment.get("breeding").asText(),
                 Is.is("Breeding of the Damara Mole-rat is aseasonal. Gestation is 78-92 days;litter size averages three young (range 1-6), with up to three litters per year. Sex ratio is skewed toward males."));
@@ -224,9 +224,7 @@ public class PlaziTreatmentParserTest {
         assertThat(treatment.get("docId").asText(), Is.is("0131878A0720FF8FFFAEF82F62E84EE9"));
 
         assertThat(treatment.get("distributionImageURL").asText(), Is.is("https://zenodo.org/record/6603861/files/figure.png"));
-        assertThat(treatment.get("subspeciesAndDistribution").asText(), Is.is("G.p.pinetisRafinesque,1817—C&SGeorgia,USA.G.p.austrinusBangs,1898—WCFlorida,USA.G.p.colonusBangs,1898—CamdenCountyinSEGeorgia,USA.G.p.cumberlandiusBangs,1898—CumberlandIinSEGeorgia,USA.G.p.floridanusAudubon&Bachman,1853—SWGeorgiaintoNFlorida,USA.G. p. mobilensis Merriam, 1895— C & S Alabama into extreme W Florida, USA."));
-
-
+        assertThat(treatment.get("subspeciesAndDistribution").asText(), Is.is("G.p.pinetisRafinesque,1817—C&SGeorgia,USA. G.p.austrinusBangs,1898—WCFlorida,USA. G.p.colonusBangs,1898—CamdenCountyinSEGeorgia,USA. G.p.cumberlandiusBangs,1898—CumberlandIinSEGeorgia,USA. G.p.floridanusAudubon&Bachman,1853—SWGeorgiaintoNFlorida,USA. G. p. mobilensis Merriam, 1895 — C & S Alabama into extreme W Florida, USA."));
     }
 
 }
