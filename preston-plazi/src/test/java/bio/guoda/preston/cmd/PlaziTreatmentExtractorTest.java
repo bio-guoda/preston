@@ -216,7 +216,7 @@ public class PlaziTreatmentExtractorTest {
         assertThat(taxonNode.get("docId").asText(), is("03D587F2FFDB4C11F8EE3BD3FE17F84D"));
         assertThat(taxonNode.get("interpretedGenus").asText(), is("Peropteryx"));
         assertThat(taxonNode.get("interpretedSpecies").asText(), is("pallidoptera"));
-        assertThat(taxonNode.get("foodAndFeeding").asText(), is("pallidoptera"));
+        assertThat(taxonNode.get("foodAndFeeding").asText(), is("Pale-winged Dog-like Bats are insectivorous. They are attracted to mineral seeps (salt licks) perhaps to drink mineral rich waters."));
 
     }
 
