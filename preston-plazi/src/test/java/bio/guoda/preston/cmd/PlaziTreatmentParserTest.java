@@ -142,6 +142,18 @@ public class PlaziTreatmentParserTest {
                 Is.is("Breeding of the Damara Mole-rat is aseasonal. Gestation is 78-92 days;litter size averages three young (range 1-6), with up to three litters per year. Sex ratio is skewed toward males."));
 
     }
+    @Test
+    public void processXML5() throws IOException, TreatmentParseException {
+        InputStream is = getClass().getResourceAsStream("03D587F2FFDB4C11F8EE3BD3FE17F84D.xml");
+
+
+        JsonNode treatment = getParser().parse(is);
+
+        assertThat(treatment.get("docId").asText(), Is.is("03D587F2FFDB4C11F8EE3BD3FE17F84D"));
+
+        assertThat(treatment.get("foodAndFeeding").asText(),
+                Is.is("Pale-winged Dog-like Bats are insectivorous. They are attracted to mineral seeps (salt licks) perhaps to drink mineral rich waters."));
+    }
 
     @Test
     public void processXML3() throws IOException, TreatmentParseException {

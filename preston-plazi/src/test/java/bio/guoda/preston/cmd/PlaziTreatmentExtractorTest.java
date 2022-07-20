@@ -189,6 +189,37 @@ public class PlaziTreatmentExtractorTest {
 
     }
 
+    @Test
+    public void streamPeropteryxPallidopteraTreatmentFromXML() throws IOException {
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                URL resource = getClass().getResource("/bio/guoda/preston/cmd/03D587F2FFDB4C11F8EE3BD3FE17F84D.xml");
+                IRI iri = toIRI(resource.toExternalForm());
+
+                if (StringUtils.equals("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1", key.getIRIString())) {
+                    try {
+                        return new FileInputStream(new File(URI.create(iri.getIRIString())));
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return null;
+            }
+        };
+
+        JsonNode taxonNode = retrieveFirstJson(blobStore);
+
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(),
+                is("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("application/plazi+xml"));
+        assertThat(taxonNode.get("docId").asText(), is("03D587F2FFDB4C11F8EE3BD3FE17F84D"));
+        assertThat(taxonNode.get("interpretedGenus").asText(), is("Peropteryx"));
+        assertThat(taxonNode.get("interpretedSpecies").asText(), is("pallidoptera"));
+        assertThat(taxonNode.get("foodAndFeeding").asText(), is("pallidoptera"));
+
+    }
+
     private void assertTreatmentValues(JsonNode taxonNode) {
         assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("application/plazi+xml"));
         assertThat(taxonNode.get("docId").asText(), is("03D587F2FFC94C03F8F13AECFBD8F765"));

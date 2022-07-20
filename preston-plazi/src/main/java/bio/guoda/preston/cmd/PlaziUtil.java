@@ -32,6 +32,7 @@ public class PlaziUtil {
     public static final String PATTERN_SUB_MOVEMENTS = "([.].*Movements, Home range and Social organization[ .]+)";
     public static final String PATTERN_SUB_CONSERVATION = "([.].*Conservation.*[ .]+)";
     public static final Pattern PATTERN_BIBLIOGRAPHY = Pattern.compile("(.*)([.].*Bibliography[ .]+)(.*)");
+    public static final Pattern PATTERN_FOOD_AND_FEEDING = Pattern.compile("(.*)([.].*Food and Feeding[ .]+)(.*)([.].*Breeding[ .]+)(.*)");
     public static final Pattern PATTERN_TAXONOMY = Pattern.compile("(.{1,20000})(Taxonomy[ .]+)(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)");
     public static final Pattern PATTERN_DISTRIBUTION = Pattern.compile("(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)");
     public static final Pattern PATTERN_DESCRIPTIVE_NOTES = Pattern.compile("(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)" + PATTERN_SUB_HABITAT + "(.*)");
@@ -87,7 +88,7 @@ public class PlaziUtil {
         handleNomenclature(docu, treatment);
         handleDistribution(treatmentText, treatment, docu);
         handleBibliography(treatment, treatmentText);
-        handleFoodAndFeeding(treatment, docu);
+        handleFoodAndFeeding(treatment, treatmentText);
         handleBreeding(treatment, docu);
         handleActivityPatterns(treatment, docu);
         handleMovements(treatment, treatmentText);
@@ -153,14 +154,19 @@ public class PlaziUtil {
         );
     }
 
-    private static void handleFoodAndFeeding(ObjectNode treatment, Document docu) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        parseAttemptOfEmphasisSection(
-                docu,
-                treatment,
-                "foodAndFeeding",
-                "Food and Feeding", 2
-        );
+    static void handleFoodAndFeeding(ObjectNode treatment, String treatmentText) throws XPathExpressionException {
+        String patchedTreatment = StringUtils.replace(treatmentText, "Food andFeeding", "Food and Feeding");
+        String[] split = StringUtils.splitByWholeSeparator(patchedTreatment, "Food and Feeding");
+        if (split != null && split.length > 1) {
+            String foodAndFeeding = StringUtils.splitByWholeSeparator(split[1], "Breeding")[0];
+            treatment.put("foodAndFeeding",
+                    StringUtils.trim(
+                            StringUtils.replaceOnce
+                                    (foodAndFeeding, ".", "")
+                    ));
+        }
     }
+
 
     static void handleBibliography(ObjectNode treatment, String treatmentText) throws XPathExpressionException {
         String bibliographyString = extractSegment(treatmentText, PATTERN_BIBLIOGRAPHY);
@@ -299,7 +305,9 @@ public class PlaziUtil {
         for (int i = 0; i < emphasisNodes.getLength(); i++) {
             builder.append(emphasisNodes.item(i).getTextContent());
         }
-        return StringUtils.trim(replaceTabsNewlinesWithSpaces(builder.toString()));
+        return StringUtils.trim(
+                replaceTabsNewlinesWithSpaces(builder.toString())
+        );
     }
 
     private static void parseAttemptOfEmphasisSection(Document docu, ObjectNode treatment, String label, String sectionText, int depth) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {

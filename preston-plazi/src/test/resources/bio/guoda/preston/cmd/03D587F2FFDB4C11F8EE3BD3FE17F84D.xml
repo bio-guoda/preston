@@ -1,0 +1,217 @@
+<document ID-DOI="http://doi.org/10.5281/zenodo.3740269" ID-GBIF-Dataset="34e4a5a6-881c-4a1a-b64d-6868e12df7fb" ID-ISBN="978-84-16728-19-0" ID-Zenodo-Dep="3740269" approvalRequired="7" approvalRequired_for_taxonomicNames="2" approvalRequired_for_treatments="5" checkinTime="1586037971521" checkinUser="plazi" docAuthor="Bonaccorso, Frank" docDate="2019" docId="03D587F2FFDB4C11F8EE3BD3FE17F84D" docLanguage="en" docName="hbmw_9_Emballorunidae.pdf.imd" docOrigin="Handbook of the Mammals of the World – Volume 9 Bats, Lyny Edicions" docStyle="DocumentStyle{}" docTitle="Peropteryx pallidoptera" docType="treatment" docVersion="14" lastPageNumber="370" masterDocId="FFECFF8AFFCF4C04FFA53577FFF8FFE9" masterDocTitle="Family Emballonuridae (Sheath-tailed Bats)" masterLastPageNumber="373" masterPageNumber="350" pageNumber="369" updateTime="1652725477925" updateUser="tatiana">
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:titleInfo>
+<mods:title>Family Emballonuridae (Sheath-tailed Bats)</mods:title>
+</mods:titleInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Bonaccorso, Frank</mods:namePart>
+</mods:name>
+<mods:typeOfResource>text</mods:typeOfResource>
+<mods:relatedItem type="host">
+<mods:originInfo>
+<mods:dateIssued>2019</mods:dateIssued>
+<mods:dateOther type="pubDate">2019-10-31</mods:dateOther>
+<mods:publisher>Lyny Edicions</mods:publisher>
+</mods:originInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Editor</mods:roleTerm>
+</mods:role>
+<mods:namePart>Wilson, Don E.</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Editor</mods:roleTerm>
+</mods:role>
+<mods:namePart>Mittermeier, Russel A.</mods:namePart>
+</mods:name>
+<mods:titleInfo>
+<mods:title>Handbook of the Mammals of the World – Volume 9 Bats</mods:title>
+</mods:titleInfo>
+<mods:part>
+<mods:extent unit="page">
+<mods:start>350</mods:start>
+<mods:end>373</mods:end>
+</mods:extent>
+</mods:part>
+</mods:relatedItem>
+<mods:classification>book chapter</mods:classification>
+<mods:identifier type="DOI">http://doi.org/10.5281/zenodo.3740269</mods:identifier>
+<mods:identifier type="GBIF-Dataset">34e4a5a6-881c-4a1a-b64d-6868e12df7fb</mods:identifier>
+<mods:identifier type="ISBN">978-84-16728-19-0</mods:identifier>
+<mods:identifier type="Zenodo-Dep">3740269</mods:identifier>
+</mods:mods>
+<treatment ID-DOI="http://doi.org/10.5281/zenodo.3810789" ID-GBIF-Taxon="163435123" ID-Zenodo-Dep="3810789" LSID="urn:lsid:plazi:treatment:03D587F2FFDB4C11F8EE3BD3FE17F84D" httpUri="http://treatment.plazi.org/id/03D587F2FFDB4C11F8EE3BD3FE17F84D" lastPageId="21" lastPageNumber="370" pageId="20" pageNumber="369">
+<subSubSection box="[1867,2668,3748,3809]" pageId="20" pageNumber="369" type="vernacular_names">
+<paragraph blockId="20.[1867,3305,3748,3809]" box="[1867,2668,3748,3809]" pageId="20" pageNumber="369">
+<figureCitation box="[1867,1938,3748,3809]" captionStart="On" captionStartId="18.[158,200,4437,4464]" captionTargetBox="[151,3442,179,4670]" captionTargetPageId="17" captionText="On following pages: 40. Lesser Ghost Bat (Diclidurus scutatus); 41. Isabelline Ghost Bat (Diclidurus isabella); 42. Lesser Dog-like Bat (Peropteryx macrotis); 43. Greater Dog-like Bat (Peropteryx kappleri); 44. Trinidad Dog-like Bat (Peropteryx trinitatis); 45. White-winged Dog-like Bat (Peropteryx leucoptera); 46. Pale-winged Dog-like Bat (Peropteryx pallidoptera); 47. Thomas's Shaggy Bat (Centronycteris centrali); 48. Common Shaggy Bat (Centronycteris maximiliani); 49. Proboscis Bat (Rhynchonycteris naso); 50. Greater Sac-winged Bat (Saccopteryx bilineata}; 51. Lesser Sac-winged Bat (Saccopteryx leptura); 52. rosted Sac-winged Bat (Saccopteryx canescens); 53. Antioquian Sac-winged Bat (Saccopteryx antioquensis); 54. Amazonian Sac-winged Bat (Saccopteryx gymnura)." figureDoi="http://doi.org/10.5281/zenodo.3740275" httpUri="https://zenodo.org/record/3740275/files/figure.png" pageId="20" pageNumber="369">46</figureCitation>
+. 
+<emphasis bold="true" box="[1972,2668,3748,3809]" pageId="20" pageNumber="369">Pale-winged Dog-like Bat</emphasis>
+</paragraph>
+</subSubSection>
+<subSubSection box="[2732,3305,3748,3809]" pageId="20" pageNumber="369" type="nomenclature">
+<paragraph blockId="20.[1867,3305,3748,3809]" box="[2732,3305,3748,3809]" pageId="20" pageNumber="369">
+<taxonomicName authority="B. K. Lim et al, 2010" box="[2732,3305,3748,3809]" class="Mammalia" family="Emballonuridae" genus="Peropteryx" kingdom="Animalia" order="Chiroptera" pageId="20" pageNumber="369" phylum="Chordata" rank="species" species="pallidoptera">
+<emphasis box="[2732,3305,3748,3809]" italics="true" pageId="20" pageNumber="369">Peropteryx pallidoptera</emphasis>
+</taxonomicName>
+</paragraph>
+</subSubSection>
+<subSubSection box="[1867,3306,3823,3850]" pageId="20" pageNumber="369" type="vernacular_names">
+<paragraph blockId="20.[1867,3306,3823,3850]" box="[1867,3306,3823,3850]" pageId="20" pageNumber="369">
+French: Péroptère 
+<emphasis box="[2119,2204,3823,3850]" italics="true" pageId="20" pageNumber="369">à ailes</emphasis>
+claires / 
+<emphasis bold="true" box="[2325,2448,3826,3848]" pageId="20" pageNumber="369">German:</emphasis>
+Blassflügel-Hundskopffledermaus / 
+<emphasis bold="true" box="[2937,3060,3826,3848]" pageId="20" pageNumber="369">Spanish:</emphasis>
+<emphasis box="[3073,3306,3823,3850]" italics="true" pageId="20" pageNumber="369">Peróptero aliclaro</emphasis>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="20" pageNumber="369" type="reference_group">
+<paragraph blockId="20.[2683,3481,3925,4490]" pageId="20" pageNumber="369">
+<emphasis bold="true" box="[2684,2895,3925,3964]" pageId="20" pageNumber="369">
+<emphasis box="[2684,2887,3925,3964]" pageId="20" pageNumber="369">Taxonomy</emphasis>
+.
+</emphasis>
+<taxonomicName authority="B. K. Lim" authorityName="B. K. Lim" class="Mammalia" family="Emballonuridae" genus="Peropteryx" kingdom="Animalia" order="Chiroptera" pageId="20" pageNumber="369" phylum="Chordata" rank="species" species="pallidoptera">
+<emphasis box="[2929,3337,3925,3964]" italics="true" pageId="20" pageNumber="369">Peropteryx pallidoptera</emphasis>
+B. 
+<emphasis bold="true" box="[3441,3478,3925,3964]" pageId="20" pageNumber="369">K.</emphasis>
+Lim
+</taxonomicName>
+<emphasis box="[2776,2866,3977,4016]" italics="true" pageId="20" pageNumber="369">et al,</emphasis>
+2010,
+</paragraph>
+</subSubSection>
+<subSubSection pageId="20" pageNumber="369" type="materials_examined">
+<paragraph blockId="20.[2683,3481,3925,4490]" pageId="20" pageNumber="369">
+“ 
+<materialsCitation ID-GBIF-Occurrence="2595781789" country="Ecuador" latitude="-0.8" location="66 km S of Pompeya Sur" longLatPrecision="1308" longitude="-76.4" pageId="20" pageNumber="369" specimenCount="1" stateProvince="Orellana Province" typeStatus="type">
+<location LSID="urn:lsid:plazi:treatment:03D587F2FFDB4C11F8EE3BD3FE17F84D:8EA3603FFFDB4C10F4613AFEF261F059" box="[3012,3481,3977,4016]" country="Ecuador" latitude="-0.8" longLatPrecision="1308" longitude="-76.4" name="66 km S of Pompeya Sur" pageId="20" pageNumber="369" stateProvince="Orellana Province">
+<quantity box="[3012,3129,3977,4016]" metricMagnitude="4" metricUnit="m" metricValue="6.6" pageId="20" pageNumber="369" unit="km" value="66.0">66 km</quantity>
+S of Pompeya Sur
+</location>
+(
+<geoCoordinate box="[2702,2849,4028,4067]" degrees="00" direction="south" minutes="48" orientation="latitude" pageId="20" pageNumber="369" precision="925" value="-0.8">00°48’S</geoCoordinate>
+, 
+<geoCoordinate box="[2888,3055,4028,4067]" degrees="76" direction="west" minutes="24" orientation="longitude" pageId="20" pageNumber="369" precision="925" value="-76.4">76°24’W</geoCoordinate>
+), 
+<collectingRegion box="[3107,3471,4028,4067]" country="Ecuador" name="Orellana" pageId="20" pageNumber="369">Orellana Province</collectingRegion>
+, 
+<collectingCountry box="[2684,2847,4082,4121]" name="Ecuador" pageId="20" pageNumber="369">Ecuador</collectingCountry>
+.”
+</materialsCitation>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="20" pageNumber="369" type="discussion">
+<paragraph blockId="20.[2683,3481,3925,4490]" pageId="20" pageNumber="369">
+<taxonomicName box="[2684,3084,4135,4174]" class="Mammalia" family="Emballonuridae" genus="Peropteryx" kingdom="Animalia" order="Chiroptera" pageId="20" pageNumber="369" phylum="Chordata" rank="species" species="pallidoptera">
+<emphasis box="[2684,3084,4135,4174]" italics="true" pageId="20" pageNumber="369">Peropteryx pallidoptera</emphasis>
+</taxonomicName>
+is in the subgenus 
+<emphasis box="[2684,2866,4187,4226]" italics="true" pageId="20" pageNumber="369">
+<taxonomicName authorityName="W.Peters" authorityYear="1867" box="[2684,2861,4187,4226]" class="Mammalia" family="Emballonuridae" genus="Peropteryx" kingdom="Animalia" order="Chiroptera" pageId="20" pageNumber="369" phylum="Chordata" rank="genus">Peropteryx</taxonomicName>
+.
+</emphasis>
+Monotypic.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="20" pageNumber="369" type="distribution">
+<caption ID-DOI="http://doi.org/10.5281/zenodo.3747991" ID-Zenodo-Dep="3747991" httpUri="https://zenodo.org/record/3747991/files/figure.png" inLine="true" pageId="20" pageNumber="369" targetBox="[1862,2655,3921,4478]" targetPageId="20">
+<paragraph blockId="20.[2683,3481,3925,4490]" pageId="20" pageNumber="369">
+<emphasis bold="true" box="[2684,2921,4240,4279]" pageId="20" pageNumber="369">Distribution.</emphasis>
+Colombia (including the Llanos), E Ecuador, N Peru, and N Brazil.
+</paragraph>
+</caption>
+</subSubSection>
+<subSubSection lastPageId="21" lastPageNumber="370" pageId="20" pageNumber="369" type="description">
+<paragraph blockId="20.[2683,3481,3925,4490]" lastBlockId="21.[208,1837,376,1959]" lastPageId="21" lastPageNumber="370" pageId="20" pageNumber="369">
+Descriptive notes. 
+<emphasis box="[3132,3356,4346,4385]" italics="true" pageId="20" pageNumber="369">Head-body</emphasis>
+46- 53 mm, tail 11-14 mm, ear 14-4-17 mm, hindfoot 7-10 mm, forearm 39-43 mm; weight 4-1-6 
+<emphasis box="[2121,2147,4500,4539]" italics="true" pageId="20" pageNumber="369">g</emphasis>
+. The Pale-winged Dog-like Bat is medium-sized. Dorsal fur is 
+<emphasis box="[3336,3360,4500,4539]" italics="true" pageId="20" pageNumber="369">c</emphasis>
+.8 mm long and uniformly medium brown, with 
+<emphasis box="[2679,2818,4553,4592]" italics="true" pageId="20" pageNumber="369">slightly</emphasis>
+paler hair bases; venter is 
+<emphasis box="[3344,3480,4553,4592]" italics="true" pageId="20" pageNumber="369">slightly</emphasis>
+lighter. Ears are brown and close together on forehead, not connected 
+<emphasis bold="true" box="[3268,3314,4606,4645]" pageId="20" pageNumber="369">by</emphasis>
+band of skin. Uropatagium is brown. 
+<emphasis box="[780,885,376,415]" italics="true" pageId="21" pageNumber="370">Wing</emphasis>
+membrane is brown from body to elbow, but its distal part is translucent and tinged with brown. Arms and digits of wings are medium brown. Poorly developed 
+<emphasis box="[821,914,483,522]" italics="true" pageId="21" pageNumber="370">wing</emphasis>
+sac is present on leading edge of propatagium, with outward lateral opening. There appears to be no sexual dimorphism in skull size, but few data are available for males that overlap with larger number of measurements available for females. Rostrum and postorbital 
+<emphasis box="[1240,1421,643,682]" italics="true" pageId="21" pageNumber="370">processes</emphasis>
+are relatively narrow, but rostrum is not dorsally inflated. Shallow, 
+<emphasis box="[1124,1321,696,735]" italics="true" pageId="21" pageNumber="370">undivided</emphasis>
+basisphenoid pit has two small anterolateral pterygoid pits, and mesopterygoid extension protrudes 
+<emphasis box="[212,287,802,841]" italics="true" pageId="21" pageNumber="370">posteriorly</emphasis>
+into basisphenoid region. P1 is 
+<emphasis box="[898,970,802,841]" italics="true" pageId="21" pageNumber="370">tiny</emphasis>
+and peg-like.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="21" pageNumber="370" type="biology_ecology">
+<paragraph blockId="21.[208,1837,376,1959]" pageId="21" pageNumber="370">
+<emphasis box="[212,355,857,896]" pageId="21" pageNumber="370">Habitat</emphasis>
+. 
+<emphasis box="[389,553,857,896]" italics="true" pageId="21" pageNumber="370">Lowland</emphasis>
+rainforests including seasonally inundated varzea (white water flooded forests), upland forests, and grasslands of the Llanos at known elevations of 150-400 m. Elevational range of Pale-winged Dog-like Bat will likely increase with additional research.
+</paragraph>
+<paragraph blockId="21.[208,1837,376,1959]" pageId="21" pageNumber="370">
+<emphasis box="[211,560,1070,1109]" pageId="21" pageNumber="370">
+<emphasis bold="true" box="[211,394,1070,1109]" pageId="21" pageNumber="370">Food and</emphasis>
+Feeding
+</emphasis>
+. Pale-winged Dog-like Bats are insectivorous. They are attracted to mineral seeps (salt licks) perhaps to drink mineral rich waters.
+</paragraph>
+<paragraph blockId="21.[208,1837,376,1959]" pageId="21" pageNumber="370">
+<emphasis box="[211,386,1177,1216]" pageId="21" pageNumber="370">Breeding</emphasis>
+. One pregnant Pale-winged Dog-like Bat was reported in September in Peru, and others were lactating in October.
+</paragraph>
+<paragraph blockId="21.[208,1837,376,1959]" pageId="21" pageNumber="370">
+<emphasis bold="true" box="[209,532,1284,1323]" pageId="21" pageNumber="370">Activity patterns.</emphasis>
+Pale-winged Dog-like Bats are crepuscular and emerge at dusk to begin foraging activity. They roost in dim light of cave entrances, under fallen logs, in holes in the ground including one instance of roosting in an armadillo burrow, in undercut stream banks, and under large leaves including banana.
+</paragraph>
+<paragraph blockId="21.[208,1837,376,1959]" pageId="21" pageNumber="370">
+<emphasis bold="true" box="[211,1204,1498,1537]" pageId="21" pageNumber="370">Movements, Home range and Social organization.</emphasis>
+Limited observations of group size of Pale-winged Dog-like Bats suggests that they sometimes roost alone or in small groups of 2-5 individuals, often in proximity to other species of bats including Whitewinged Dog-like Bats 
+<emphasis box="[622,864,1657,1696]" italics="true" pageId="21" pageNumber="370">
+(
+<emphasis bold="true" box="[634,662,1657,1696]" italics="true" pageId="21" pageNumber="370">P</emphasis>
+. leucopterd)
+</emphasis>
+and Greater Sac-winged Bats 
+<emphasis box="[1437,1832,1657,1696]" italics="true" pageId="21" pageNumber="370">
+{
+<taxonomicName box="[1452,1814,1657,1696]" class="Mammalia" family="Emballonuridae" genus="Saccopteryx" kingdom="Animalia" order="Chiroptera" pageId="21" pageNumber="370" phylum="Chordata" rank="species" species="bilineatd">Saccopteryx bilineatd</taxonomicName>
+).
+</emphasis>
+</paragraph>
+<paragraph blockId="21.[208,1837,376,1959]" pageId="21" pageNumber="370">
+<emphasis bold="true" box="[212,687,1711,1750]" pageId="21" pageNumber="370">
+<emphasis box="[212,679,1711,1750]" pageId="21" pageNumber="370">Status and Conservation</emphasis>
+.
+</emphasis>
+Classified as Data Deficient on IUCN 
+<emphasis box="[1489,1641,1711,1750]" italics="true" pageId="21" pageNumber="370">Red List.</emphasis>
+The Palewinged Dog-like Bat is known from only a few locations, and information on natural history and population dynamics is scant.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="21" pageNumber="370" type="reference_group">
+<paragraph blockId="21.[208,1837,376,1959]" pageId="21" pageNumber="370">
+<emphasis bold="true" box="[213,421,1877,1904]" pageId="21" pageNumber="370">Bibliography.</emphasis>
+Castro eta/. (2012), Lim et al. (2010), McDonough 
+<emphasis box="[1167,1234,1877,1904]" italics="true" pageId="21" pageNumber="370">et al.</emphasis>
+(2010), Morales-Martinez (2013), 
+<emphasis box="[1726,1835,1877,1904]" italics="true" pageId="21" pageNumber="370">Suârez-</emphasis>
+Castro eta/. (2012).
+</paragraph>
+</subSubSection>
+</treatment>
+</document>
