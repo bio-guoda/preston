@@ -1,0 +1,160 @@
+<document ID-DOI="http://doi.org/10.5281/zenodo.6707142" ID-GBIF-Dataset="ab66b2b7-9544-4411-bf61-5bc3651d7bca" ID-ISBN="978-84-16728-04-6" ID-Zenodo-Dep="6707142" approvalRequired="3" approvalRequired_for_textStreams="3" checkinTime="1656002532852" checkinUser="carolina" docAuthor="Don E. Wilson, Russell A. Mittermeier &amp; Thomas E. Lacher, Jr" docDate="2017" docId="03F06D13FFB3207908991339090DFEA8" docLanguage="en" docName="hbmw_7_Cricetidae_0204.pdf.imf" docOrigin="Handbook of the Mammals of the World – Volume 7 Rodents II, Barcelona: Lynx Edicions" docTitle="Eothenomys melanogaster" docType="treatment" docVersion="13" lastPageNumber="309" masterDocId="FFC9156BFFAE20670D37145C0837FFDB" masterDocTitle="Cricetidae" masterLastPageNumber="535" masterPageNumber="204" pageNumber="308" updateTime="1656355996680" updateUser="ExternalLinkService">
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:titleInfo>
+<mods:title>Cricetidae</mods:title>
+</mods:titleInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Don E. Wilson</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Russell A. Mittermeier</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Thomas E. Lacher, Jr</mods:namePart>
+</mods:name>
+<mods:typeOfResource>text</mods:typeOfResource>
+<mods:relatedItem type="host">
+<mods:originInfo>
+<mods:dateIssued>2017</mods:dateIssued>
+<mods:dateOther type="pubDate">2017-11-30</mods:dateOther>
+<mods:publisher>Lynx Edicions</mods:publisher>
+<mods:place>
+<mods:placeTerm>Barcelona</mods:placeTerm>
+</mods:place>
+</mods:originInfo>
+<mods:titleInfo>
+<mods:title>Handbook of the Mammals of the World – Volume 7 Rodents II</mods:title>
+</mods:titleInfo>
+<mods:part>
+<mods:extent unit="page">
+<mods:start>204</mods:start>
+<mods:end>535</mods:end>
+</mods:extent>
+</mods:part>
+</mods:relatedItem>
+<mods:classification>book chapter</mods:classification>
+<mods:identifier type="DOI">http://doi.org/10.5281/zenodo.6707142</mods:identifier>
+<mods:identifier type="GBIF-Dataset">ab66b2b7-9544-4411-bf61-5bc3651d7bca</mods:identifier>
+<mods:identifier type="ISBN">978-84-16728-04-6</mods:identifier>
+<mods:identifier type="Zenodo-Dep">6707142</mods:identifier>
+</mods:mods>
+<treatment ID-DOI="http://doi.org/10.5281/zenodo.6762044" ID-GBIF-Taxon="196221546" ID-Zenodo-Dep="6762044" LSID="urn:lsid:plazi:treatment:03F06D13FFB3207908991339090DFEA8" httpUri="http://treatment.plazi.org/id/03F06D13FFB3207908991339090DFEA8" lastPageId="30" lastPageNumber="309" pageId="29" pageNumber="308">
+<subSubSection box="[1454,1511,1893,1939]" pageId="29" pageNumber="308" type="multiple">
+<paragraph blockId="29.[1452,2494,1893,2062]" box="[1454,1511,1893,1939]" pageId="29" pageNumber="308">
+<figureCitation box="[1454,1511,1893,1939]" captionStart="Plate 11: Cricetidae" captionStartId="18.[107,137,3099,3124]" captionTargetBox="[25,2753,22,3645]" captionTargetPageId="17" captionText="34. Nearctic Collared Lemming (Dicrostonyx groenlandicus), 35. Ungava Collared Lemming (Dicrostonyx hudsonius), 36. Nelson's Collared Lemming (Dicrostonyx nelsoni), 37. Ogilvie Mountains Collared Lemming (Dicrostonyx nunatakensis), 38. Richardson’s Collared Lemming (Ducrostonyx richardsoni), 39. Palearctic Collared Lemming (Dicrostonyx torquatus), 40. Unalaska Collared Lemming (Dicrostonyx unalascensis), 41. Gray Red-backed Vole (Craseomys rufocanus), 42. Hokkaido Red-backed Vole (Craseomys rex), 43. Korean Red-backed Vole (Craseomys regulus), 44. Shanxi Red-backed Vole (Craseomys shanseius), 45. Anderson’s Red-backed Vole (Craseomys andersoni), 46. Smith’s Red-backed Vole (Craseomys smith), 47. Western Red-backed Vole (Myodes californicus), 48. Southern Red-backed Vole (Myodes gapperi), 49. Bank Vole (Mpyodes glareolus), 50. Tian Shan Red-backed Vole (Myodes centralis), 51. Large-eared Vole (Myodes macrotis), 52. Northern Red-backed Vole (Myodes rutilus), 53. Silver Mountain Vole (Alticola argentatus), 54. White-tailed Mountain Vole (Alticola albicauda), 55. Kashmir Mountain Vole (Alticola montosus), 56. Royle’s Mountain Vole (Alticola roylei), 57. Strelzov’s Mountain Vole (Alticola strelzouvi), 58. Tuva Mountain Vole (Alticola tuvinicus), 59. Gobi Altai Mountain Vole (Alticola barakshin), 60. null (null), 60. null (null), 61. Mongolian Mountain Vole (Alticola semicanus), 61. Mongolian Mountain Vole (Alticola semicanus), 62. Stoliczka’s Mountain Vole (Alticola stoliczkanus), 62. Stoliczka’s Mountain Vole (Alticola stoliczkanus), 63. Lemming Mountain Vole (Aschizomys lemminus), 63. Lemming Mountain Vole (Aschizomys lemminus), 64. Gansu Red-backed Vole (Caryomys eva), 64. Gansu Red-backed Vole (Caryomys eva), 65. Kolan Red-backed Vole (Caryomys inez), 65. Kolan Red-backed Vole (Caryomys inez), 66. Pere David's Red-backed Vole (Eothenomys melanogaster), 66. Pere David’s Red-backed Vole (Eothenomys melanogaster), 67. Yunnan Red-backed Vole (Eothenomys miletus), 68. Sichuan Red-backed Vole (Eothenomys chinensis), 69. Southwest China Red-backed Vole (Eothenomys custos), 70. Black-eared Red-backed Vole (Eothenomys olitor), 71. Yulongxuen Red-backed Vole (FEothenomys proditor), 72. Ward’s Red-backed Vole (Eothenomys wardi), 73. Hinton’s Red-backed Vole (Eothenomys hintoni), 74. Tarquinius Red-backed Vole (Eothenomys tarquinius), 75. Burrowing Vole (Hyperacrius fertilis), 76. Murree Vole (Hyperacrius wynnei)" figureDoi="http://doi.org/10.5281/zenodo.6709261" httpUri="https://zenodo.org/record/6709261/files/figure.png" pageId="29" pageNumber="308">66.</figureCitation>
+</paragraph>
+</subSubSection>
+<subSubSection box="[1528,2145,1893,1939]" pageId="29" pageNumber="308" type="vernacular_names">
+<paragraph blockId="29.[1452,2494,1893,2062]" box="[1528,2145,1893,1939]" pageId="29" pageNumber="308">
+<vernacularName box="[1528,2145,1893,1939]" pageId="29" pageNumber="308">Pere David's Red-backed Vole</vernacularName>
+</paragraph>
+</subSubSection>
+<subSubSection box="[1452,1929,1941,1987]" pageId="29" pageNumber="308" type="nomenclature">
+<paragraph blockId="29.[1452,2494,1893,2062]" box="[1452,1929,1941,1987]" pageId="29" pageNumber="308">
+<taxonomicName baseAuthorityName="Milne-Edwards" baseAuthorityYear="1871" box="[1452,1929,1941,1987]" class="Mammalia" family="Cricetidae" genus="Eothenomys" kingdom="Animalia" order="Rodentia" pageId="29" pageNumber="308" phylum="Chordata" rank="species" species="melanogaster">
+<emphasis box="[1452,1929,1941,1987]" italics="true" pageId="29" pageNumber="308">Eothenomys melanogaster</emphasis>
+</taxonomicName>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="29" pageNumber="308" type="vernacular_names">
+<paragraph blockId="29.[1452,2494,1893,2062]" box="[1453,2494,2001,2022]" pageId="29" pageNumber="308">
+<emphasis bold="true" box="[1453,1529,2001,2022]" pageId="29" pageNumber="308">French:</emphasis>
+<vernacularName box="[1538,1783,2001,2022]" pageId="29" pageNumber="308">Campagnol a ventre noir</vernacularName>
+/ 
+<emphasis bold="true" box="[1803,1893,2001,2022]" pageId="29" pageNumber="308">German:</emphasis>
+<vernacularName box="[1903,2123,2001,2022]" pageId="29" pageNumber="308">Pére-David-Rotelmaus</vernacularName>
+/ 
+<emphasis bold="true" box="[2145,2236,2001,2022]" pageId="29" pageNumber="308">Spanish:</emphasis>
+<vernacularName box="[2242,2494,2001,2022]" pageId="29" pageNumber="308">Topillo rojo de Pere David</vernacularName>
+</paragraph>
+<paragraph blockId="29.[1452,2494,1893,2062]" box="[1453,2173,2041,2062]" pageId="29" pageNumber="308">
+<emphasis bold="true" box="[1453,1700,2041,2062]" pageId="29" pageNumber="308">Other common names:</emphasis>
+<vernacularName box="[1709,2173,2041,2062]" pageId="29" pageNumber="308">Melano-bellied Oriental Vole, Pere David's Vole</vernacularName>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="29" pageNumber="308" type="reference_group">
+<paragraph blockId="29.[2065,2657,2107,2534]" pageId="29" pageNumber="308">
+<emphasis bold="true" box="[2065,2220,2107,2140]" pageId="29" pageNumber="308">Taxonomy.</emphasis>
+<taxonomicName authorityName="Milne-Edwards" authorityYear="1872" class="Mammalia" family="Cricetidae" genus="Arvicola" kingdom="Animalia" order="Rodentia" pageId="29" pageNumber="308" phylum="Chordata" rank="species" species="melanogaster">Arvicola melanogaster MilneEdwards, 1872</taxonomicName>
+, 
+<materialsCitation ID-GBIF-Occurrence="3818814417" pageId="29" pageNumber="308">Moupin (= Baoxing), W Szechuan, China.</materialsCitation>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="29" pageNumber="308" type="discussion">
+<paragraph blockId="29.[2065,2657,2107,2534]" lastBlockId="29.[1451,2658,2540,3479]" pageId="29" pageNumber="308">
+<taxonomicName baseAuthorityName="Milne-Edwards" baseAuthorityYear="1871" box="[2065,2389,2225,2258]" class="Mammalia" family="Cricetidae" genus="Eothenomys" kingdom="Animalia" order="Rodentia" pageId="29" pageNumber="308" phylum="Chordata" rank="species" species="melanogaster">Eothenomys melanogaster</taxonomicName>
+is in the subgenus 
+<taxonomicName authorityName="Miller" authorityYear="1896" box="[2065,2213,2268,2297]" class="Mammalia" family="Cricetidae" genus="Eothenomys" kingdom="Animalia" order="Rodentia" pageId="29" pageNumber="308" phylum="Chordata" rank="genus">Eothenomys</taxonomicName>
+. It might consist of more than one species and is in need of a thorough revision. Additionally, 
+<taxonomicName baseAuthorityName="Milne-Edwards" baseAuthorityYear="1871" box="[2387,2594,2347,2376]" class="Mammalia" family="Cricetidae" genus="Eothenomys" kingdom="Animalia" order="Rodentia" pageId="29" pageNumber="308" phylum="Chordata" rank="species" species="melanogaster">E. melanogaster</taxonomicName>
+and 
+<taxonomicName authorityName="Thomas" authorityYear="1914" box="[2065,2195,2382,2415]" class="Mammalia" family="Cricetidae" genus="Eothenomys" kingdom="Animalia" order="Rodentia" pageId="29" pageNumber="308" phylum="Chordata" rank="species" species="miletus">E. miletus</taxonomicName>
+are still not unambiguously delimited. A number of subspecies have been recognized within 
+<taxonomicName baseAuthorityName="Milne-Edwards" baseAuthorityYear="1871" box="[2427,2591,2462,2495]" class="Mammalia" family="Cricetidae" genus="Eothenomys" kingdom="Animalia" order="Rodentia" pageId="29" pageNumber="308" phylum="Chordata" rank="species" species="melanogaster">melanogaster</taxonomicName>
+and 
+<taxonomicName authorityName="Thomas" authorityYear="1914" box="[2068,2157,2501,2534]" class="Mammalia" family="Cricetidae" genus="Eothenomys" kingdom="Animalia" order="Rodentia" pageId="29" pageNumber="308" phylum="Chordata" rank="species" species="miletus">miletus</taxonomicName>
+, but subspecific variation was never meticulously revised in any of them. Monotypic.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="29" pageNumber="308" type="multiple">
+<caption ID-DOI="http://doi.org/10.5281/zenodo.6760405" ID-Zenodo-Dep="6760405" httpUri="https://zenodo.org/record/6760405/files/figure.png" inLine="true" pageId="29" pageNumber="308" startId="29.[1453,1624,2580,2613]" targetBox="[1450,2041,2116,2530]" targetPageId="29">
+<paragraph blockId="29.[1451,2658,2540,3479]" pageId="29" pageNumber="308">
+<emphasis bold="true" box="[1453,1628,2580,2613]" pageId="29" pageNumber="308">Distribution.</emphasis>
+NE Myanmar, China (SE Gansu, S Ningxia, Sichuan, W Yunnan, S Shaanxi, Chongqing, Guizhou, W Hubei, N Guangdong, S Anhui, N Jiangxi, Zhejiang, and N Fujian), and 
+<taxonomicName box="[1739,1840,2658,2691]" class="Insecta" family="Sciaridae" genus="Taiwan" kingdom="Animalia" order="Diptera" pageId="29" pageNumber="308" phylum="Arthropoda" rank="genus">Taiwan</taxonomicName>
+. Reports from India and Thailand probably relate to the Yunnan Red-backed Vole (FE. 
+<taxonomicName authorityName="Thomas" authorityYear="1914" box="[1866,1960,2702,2731]" class="Mammalia" family="Cricetidae" genus="Eothenomys" kingdom="Animalia" order="Rodentia" pageId="29" pageNumber="308" phylum="Chordata" rank="species" species="miletus">miletus</taxonomicName>
+).
+</paragraph>
+</caption>
+</subSubSection>
+<subSubSection pageId="29" pageNumber="308" type="description">
+<paragraph blockId="29.[1451,2658,2540,3479]" pageId="29" pageNumber="308">
+<emphasis bold="true" box="[1453,1703,2737,2770]" pageId="29" pageNumber="308">Descriptive notes.</emphasis>
+Head-body 70-115 mm, tail 21-55 mm; weight 18-46-5 g. Body weight of Pere David's Red-backed Vole is highest in autumn and lowest in summer. It is medium-sized, and tail is short, 31-48% of head-body length. Ears are hidden in fur. Females have two pairs of inguinal mammary glands. Fur is velvety, uniformly black-brown above and slightly lighter below. Feet and sparsely haired tail are blackish brown. Skull is deep, with wide interorbital region, broad rostrum, and expanded zygomatic arches. Molars are hypsodont and rootless, with thick enamel, very little cement, and rounded outer angles. Alternating dental fields are widely confluent, and M? is simple, usually having only two inner salient angles.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="29" pageNumber="308" type="biology_ecology">
+<paragraph blockId="29.[1451,2658,2540,3479]" pageId="29" pageNumber="308">
+<emphasis bold="true" box="[1453,1564,3091,3124]" pageId="29" pageNumber="308">Habitat.</emphasis>
+Mountainous forests and meadows with subtropical monsoon climate at elevations of 600-3000 m, abundant only above 1000 m. Pere David’s Red-backed Vole is catholic and occupies any site that provides sufficient cover.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="29" pageNumber="308" type="food_feeding">
+<paragraph blockId="29.[1451,2658,2540,3479]" pageId="29" pageNumber="308">
+<emphasis bold="true" box="[1453,1716,3209,3242]" pageId="29" pageNumber="308">Food and Feeding.</emphasis>
+Pere David's Red-backed Vole feeds on leaves and stems in spring and summer and fruits in autumn and winter.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="29" pageNumber="308" type="breeding">
+<paragraph blockId="29.[1451,2658,2540,3479]" pageId="29" pageNumber="308">
+<emphasis bold="true" box="[1453,1588,3288,3321]" pageId="29" pageNumber="308">Breeding.</emphasis>
+Breeding season of Pere David's Red-backed Vole is restricted to February-March and September—October.
+</paragraph>
+</subSubSection>
+<subSubSection box="[1452,1925,3371,3400]" pageId="29" pageNumber="308" type="activity">
+<paragraph blockId="29.[1451,2658,2540,3479]" box="[1452,1925,3371,3400]" pageId="29" pageNumber="308">
+<emphasis bold="true" box="[1452,1687,3371,3400]" pageId="29" pageNumber="308">Activity patterns.</emphasis>
+No information.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="29" pageNumber="308" type="biology_ecology">
+<paragraph blockId="29.[1451,2658,2540,3479]" pageId="29" pageNumber="308">
+<emphasis bold="true" box="[1453,2169,3411,3440]" pageId="29" pageNumber="308">Movements, Home range and Social organization.</emphasis>
+Average home range of Pere David’s Red-backed Vole is 417 m* for males and 469 m? for females. Home ranges over-
+</paragraph>
+</subSubSection>
+<subSubSection pageId="30" pageNumber="307" type="bibRefCitation_list">
+<paragraph blockId="30.[118,1322,307,371]" pageId="30" pageNumber="309">Bibliography. Bannikov (1954), Clark et al. (2006), Flint et al. (1965), Hou Lanxin et al. (1995), Ognev (1950), Rossolimo (1989).</paragraph>
+</subSubSection>
+</treatment>
+</document>

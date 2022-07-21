@@ -234,4 +234,14 @@ public class PlaziTreatmentParserTest {
         assertThat(treatment.get("subspeciesAndDistribution").asText(), Is.is("G.p.pinetisRafinesque,1817—C&SGeorgia,USA. G.p.austrinusBangs,1898—WCFlorida,USA. G.p.colonusBangs,1898—CamdenCountyinSEGeorgia,USA. G.p.cumberlandiusBangs,1898—CumberlandIinSEGeorgia,USA. G.p.floridanusAudubon&Bachman,1853—SWGeorgiaintoNFlorida,USA. G. p. mobilensis Merriam, 1895 — C & S Alabama into extreme W Florida, USA."));
     }
 
+    @Test
+    public void processXML6() throws IOException, TreatmentParseException {
+        InputStream is = getClass().getResourceAsStream("03F06D13FFB3207908991339090DFEA8.xml");
+        JsonNode treatment = new PlaziTreatmentParser().parse(is);
+
+        assertThat(treatment.get("docId").asText(), Is.is("03F06D13FFB3207908991339090DFEA8"));
+
+        assertNull(treatment.get("statusAndConservation"));
+    }
+
 }
