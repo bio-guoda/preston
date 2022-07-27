@@ -34,7 +34,7 @@ public class PlaziUtil {
     private static final String PATTERN_SUB_BREEDING = "([.].*Breeding[ ]*[.])";
     private static final String PATTERN_SUB_FOOD_AND_FEEDING = "([.].*Food and Feeding[ ]*[.])";
     private static final String PATTERN_SUB_ACTIVITY_PATTERNS = "([.].*Activity patterns[ ]*[.])";
-    public static final String PATTERN_SUB_BIBLIOGRAPHY = "([.].*Bibliography[ ]*[.])";
+    public static final String PATTERN_SUB_BIBLIOGRAPHY = "([.].*Bibliography[. ]+)";
     public static final Pattern PATTERN_BIBLIOGRAPHY = Pattern.compile("(.*)" + PATTERN_SUB_BIBLIOGRAPHY + "(.*)");
 
     public static final Pattern PATTERN_FOOD_AND_FEEDING = Pattern.compile("(.*)" + PATTERN_SUB_FOOD_AND_FEEDING + "(.*)" + PATTERN_SUB_BREEDING + "(.*)");

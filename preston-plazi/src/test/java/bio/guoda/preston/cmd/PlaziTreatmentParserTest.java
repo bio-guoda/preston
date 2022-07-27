@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -9,8 +10,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.core.IsNot.not;
 
 public class PlaziTreatmentParserTest {
 
@@ -242,6 +246,16 @@ public class PlaziTreatmentParserTest {
         assertThat(treatment.get("docId").asText(), Is.is("03F06D13FFB3207908991339090DFEA8"));
 
         assertNull(treatment.get("statusAndConservation"));
+    }
+
+    @Test
+    public void processXML7() throws IOException, TreatmentParseException {
+        InputStream is = getClass().getResourceAsStream("0383245F222097788B1EF4BAFCBDF99E.xml");
+        JsonNode treatment = new PlaziTreatmentParser().parse(is);
+
+        assertThat(treatment.get("docId").asText(), Is.is("0383245F222097788B1EF4BAFCBDF99E"));
+
+        assertThat(treatment.get("bibliography").textValue(), Is.is("Benda & Va o (2009) | Benda eta 2012) | Dobson (1871 a) | Harrison (1955) | Hıll (1982a) | Kock å Felten (1980) | Yerbury BıThomas (1895) | Zdårská (2013)"));
     }
 
 }
