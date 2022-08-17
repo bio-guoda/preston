@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -141,6 +142,7 @@ public class DwcRecordExtractorTest {
         assertThat(jsonObjects.length, is(0));
     }
 
+    @Ignore
     @Test
     public void streamEncyclopediaOfLife() throws IOException {
 
