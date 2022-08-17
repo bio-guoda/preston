@@ -158,7 +158,9 @@ class MetaXMLSaxHandler2 extends SimpleSaxHandler {
             }
         } else if (localName.equalsIgnoreCase("location")) {
             // a file location
-            af.addLocation(content);
+            if (af != null) {
+                af.addLocation(content);
+            }
         }
 
     }

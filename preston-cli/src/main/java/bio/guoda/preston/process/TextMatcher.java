@@ -111,7 +111,7 @@ public class TextMatcher extends ProcessorReadOnly {
         }
 
         @Override
-        public boolean shouldKeepReading() {
+        public boolean shouldKeepProcessing() {
             return processorState.shouldKeepProcessing() && (maxNumMatchesPerContent == 0 || numMatches < maxNumMatchesPerContent);
         }
 

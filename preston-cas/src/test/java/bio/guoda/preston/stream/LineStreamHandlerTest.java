@@ -54,7 +54,7 @@ public class LineStreamHandlerTest {
             }
 
             @Override
-            public boolean shouldKeepReading() {
+            public boolean shouldKeepProcessing() {
                 return true;
             }
         };

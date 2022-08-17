@@ -70,8 +70,8 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
     }
 
     @Override
-    public boolean shouldKeepReading() {
-        return contentStreamHandler.shouldKeepReading();
+    public boolean shouldKeepProcessing() {
+        return contentStreamHandler.shouldKeepProcessing();
     }
 
 

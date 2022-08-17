@@ -45,7 +45,7 @@ public class LineStreamHandler implements ContentStreamHandler {
     private void extractLines(IRI version, InputStream in, Charset charset) throws ContentStreamException, IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in, charset));
 
-        for (int lineNumber = 1; contentStreamHandler.shouldKeepReading(); ++lineNumber) {
+        for (int lineNumber = 1; contentStreamHandler.shouldKeepProcessing(); ++lineNumber) {
             String string = reader.readLine();
             if (string == null) {
                 break;
@@ -63,8 +63,8 @@ public class LineStreamHandler implements ContentStreamHandler {
     }
 
     @Override
-    public boolean shouldKeepReading() {
-        return contentStreamHandler.shouldKeepReading();
+    public boolean shouldKeepProcessing() {
+        return contentStreamHandler.shouldKeepProcessing();
     }
 
 }

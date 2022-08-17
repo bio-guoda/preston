@@ -48,7 +48,7 @@ public class ArchiveStreamHandler implements ContentStreamHandler {
 
     private void handleArchiveEntries(IRI version, ArchiveInputStream in, String archiveFormat) throws ContentStreamException, IOException {
         ArchiveEntry entry;
-        while (shouldKeepReading() && (entry = in.getNextEntry()) != null) {
+        while (shouldKeepProcessing() && (entry = in.getNextEntry()) != null) {
             if (in.canReadEntryData(entry)) {
                 IRI entryIri;
                 try {
@@ -68,8 +68,8 @@ public class ArchiveStreamHandler implements ContentStreamHandler {
     }
 
     @Override
-    public boolean shouldKeepReading() {
-        return contentStreamHandler.shouldKeepReading();
+    public boolean shouldKeepProcessing() {
+        return contentStreamHandler.shouldKeepProcessing();
     }
 
 }

@@ -57,7 +57,7 @@ public class DwCArchiveStreamHandlerTest {
             }
 
             @Override
-            public boolean shouldKeepReading() {
+            public boolean shouldKeepProcessing() {
                 return false;
             }
         }, new Dereferencer<InputStream>() {

@@ -141,4 +141,72 @@ public class DwcRecordExtractorTest {
         assertThat(jsonObjects.length, is(0));
     }
 
+    @Test
+    public void streamEncyclopediaOfLife() throws IOException {
+
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                URL resource = getClass().getResource("/bio/guoda/preston/dunnetal2015.zip");
+                IRI iri = toIRI(resource.toExternalForm());
+
+                if (StringUtils.equals("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1", key.getIRIString())) {
+                    try {
+                        return new FileInputStream(new File(URI.create(iri.getIRIString())));
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return null;
+            }
+        };
+
+        Quad statement = toStatement(
+                toIRI("blip"),
+                HAS_VERSION,
+                toIRI("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1")
+        );
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        DwcRecordExtractor dwcRecordExtractor = new DwcRecordExtractor(
+                new ProcessorStateAlwaysContinue(),
+                blobStore,
+                byteArrayOutputStream
+        );
+
+        dwcRecordExtractor.on(statement);
+
+        String actual = IOUtils.toString(
+                byteArrayOutputStream.toByteArray(),
+                StandardCharsets.UTF_8.name()
+        );
+
+        String[] jsonObjects = StringUtils.split(actual, "\n");
+        assertThat(jsonObjects.length, is(15));
+
+        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:zip:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/taxa.txt!/L2"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("http://rs.tdwg.org/dwc/terms/Taxon"));
+        assertThat(taxonNode.get("http://rs.tdwg.org/dwc/text/id").asText(), is("D51D87C0FFC4C76F4B9C5298FC31DFDF.taxon"));
+        assertThat(taxonNode.get("http://rs.tdwg.org/dwc/terms/scientificName").asText(), is("Calyptraeotheres Campos 1990"));
+
+        for (String jsonString : jsonObjects) {
+            JsonNode documentNode = new ObjectMapper().readTree(jsonString);
+            if (StringUtils.equals(
+                    documentNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(),
+                    "http://rs.tdwg.org/dwc/terms/Taxon")
+            ) {
+                assertThat(documentNode.get("http://rs.tdwg.org/dwc/text/id").asText(), not(isEmptyString()));
+                assertNull(documentNode.get("http://rs.tdwg.org/dwc/text/coreid"));
+            } else {
+                assertThat(documentNode.get("http://rs.tdwg.org/dwc/text/coreid").asText(), not(isEmptyString()));
+                assertNull(documentNode.get("http://rs.tdwg.org/dwc/text/id"));
+            }
+
+        }
+
+    }
+
+
 }

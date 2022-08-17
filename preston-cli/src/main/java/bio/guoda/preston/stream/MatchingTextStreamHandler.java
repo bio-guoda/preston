@@ -77,8 +77,8 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
     }
 
     @Override
-    public boolean shouldKeepReading() {
-        return contentStreamHandler.shouldKeepReading();
+    public boolean shouldKeepProcessing() {
+        return contentStreamHandler.shouldKeepProcessing();
     }
 
     private void findAndEmitTextMatches(IRI version, InputStream is, Charset charset) throws IOException {
@@ -105,7 +105,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         int offset = 0;
         int numBytesToReuse = 0;
         int numBytesScannedInLastIteration = 0;
-        while (contentStreamHandler.shouldKeepReading()) {
+        while (contentStreamHandler.shouldKeepProcessing()) {
             int numBytesToScan = numBytesToReuse;
 
             // Copy text from the end of the buffer to the beginning in case
@@ -149,7 +149,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
         Matcher matcher = pattern.matcher(charBuffer);
         CharBufferByteReader charBufferByteReader = new CharBufferByteReader(byteBuffer, charBuffer, charset);
 
-        while (contentStreamHandler.shouldKeepReading() && matcher.find()) {
+        while (contentStreamHandler.shouldKeepProcessing() && matcher.find()) {
             int bytePosMatchStartsAt = charBufferByteReader.advance(matcher.start());
             if (bytePosMatchStartsAt >= BUFFER_SIZE - MAX_MATCH_SIZE_IN_BYTES) {
                 setBufferPosition(byteBuffer, bytePosMatchStartsAt);

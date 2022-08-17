@@ -92,7 +92,7 @@ public class CitationGenerator extends ProcessorReadOnly {
         }
 
         @Override
-        public boolean shouldKeepReading() {
+        public boolean shouldKeepProcessing() {
             return cmd.shouldKeepProcessing();
         }
 

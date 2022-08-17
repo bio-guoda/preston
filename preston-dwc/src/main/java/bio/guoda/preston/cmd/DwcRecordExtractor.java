@@ -104,7 +104,7 @@ public class DwcRecordExtractor extends ProcessorReadOnly {
         }
 
         @Override
-        public boolean shouldKeepReading() {
+        public boolean shouldKeepProcessing() {
             return processorState.shouldKeepProcessing();
         }
 

@@ -71,7 +71,7 @@ public class MatchingTextStreamHandlerTest {
             }
 
             @Override
-            public boolean shouldKeepReading() {
+            public boolean shouldKeepProcessing() {
                 return true;
             }
         };

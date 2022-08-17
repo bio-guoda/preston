@@ -1,6 +1,7 @@
 package org.gbif.dwc;
 
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.ProcessorStateReadOnly;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
@@ -28,7 +29,6 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -52,7 +52,7 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
         String iriString = version.getIRIString();
         if (StringUtils.endsWith(iriString, "/" + META_XML)) {
             try {
-                handleAssumedDwCArchive(is, iriString, outputStream, dereferencer);
+                handleAssumedDwCArchive(is, iriString, outputStream, dereferencer, this);
                 return true;
             } catch (IOException | SAXException e) {
                 throw new ContentStreamException("failed to handle assumed DwC resource [" + iriString + "]", e);
@@ -64,7 +64,9 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
     protected static void handleAssumedDwCArchive(InputStream is,
                                                   String iriString,
                                                   OutputStream outputStream,
-                                                  Dereferencer<InputStream> dereferencer) throws SAXException, IOException, ContentStreamException {
+                                                  Dereferencer<InputStream> dereferencer,
+                                                  ProcessorStateReadOnly processorState)
+            throws SAXException, IOException, ContentStreamException {
         Archive starRecords = DwcMetaFiles2.fromMetaDescriptor(is);
         ArchiveFile core = starRecords.getCore();
 
@@ -72,7 +74,7 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
                 outputStream,
                 dereferencer,
                 getLocation(iriString, core),
-                "http://rs.tdwg.org/dwc/text/id"
+                "http://rs.tdwg.org/dwc/text/id", processorState
         );
 
         Set<ArchiveFile> extensions = starRecords.getExtensions();
@@ -81,7 +83,8 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
                     outputStream,
                     dereferencer,
                     getLocation(iriString, extension),
-                    "http://rs.tdwg.org/dwc/text/coreid"
+                    "http://rs.tdwg.org/dwc/text/coreid",
+                    processorState
             );
         }
 
@@ -90,12 +93,13 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
     private static void streamRecords(OutputStream outputStream,
                                       Dereferencer<InputStream> dereferencer,
                                       Pair<IRI, ArchiveFile> resourceIRIs,
-                                      String idIRI) throws ContentStreamException {
+                                      String idIRI,
+                                      ProcessorStateReadOnly processorState) throws ContentStreamException {
         ArchiveFile file = resourceIRIs.getRight();
         try {
             TabularDataFileReader<List<String>> tabularFileReader = createReader(file, resourceIRIs.getLeft(), dereferencer);
             ClosableIterator<Record> iterator = createRecordIterator(file, tabularFileReader);
-            while (iterator.hasNext()) {
+            while (iterator.hasNext() && processorState.shouldKeepProcessing()) {
                 streamAsJson(resourceIRIs, tabularFileReader, iterator.next(), outputStream, idIRI);
             }
         } catch (Throwable ex) {
@@ -128,8 +132,8 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
     }
 
     @Override
-    public boolean shouldKeepReading() {
-        return contentStreamHandler.shouldKeepReading();
+    public boolean shouldKeepProcessing() {
+        return contentStreamHandler.shouldKeepProcessing();
     }
 
 

@@ -75,8 +75,8 @@ public class PlaziTreatmentStreamHandler implements ContentStreamHandler {
 
 
     @Override
-    public boolean shouldKeepReading() {
-        return contentStreamHandler.shouldKeepReading();
+    public boolean shouldKeepProcessing() {
+        return contentStreamHandler.shouldKeepProcessing();
     }
 
 

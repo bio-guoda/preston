@@ -52,7 +52,7 @@ public class ContentStreamHandlerImpl implements ContentStreamHandler {
     }
 
     @Override
-    public boolean shouldKeepReading() {
+    public boolean shouldKeepProcessing() {
         return true;
     }
 

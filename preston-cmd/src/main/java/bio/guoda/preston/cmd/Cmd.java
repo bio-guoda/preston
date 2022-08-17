@@ -3,7 +3,9 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.process.CmdUtil;
 import bio.guoda.preston.process.LogErrorHandler;
 import bio.guoda.preston.process.ProcessorState;
+import org.apache.commons.io.output.ProxyOutputStream;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -12,7 +14,16 @@ public class Cmd implements ProcessorState {
 
     private AtomicBoolean shouldKeepProcessing = new AtomicBoolean(true);
 
-    private OutputStream outputStream = System.out;
+    private OutputStream outputStream = new ProxyOutputStream(System.out) {
+        @Override
+        protected void afterWrite(int n) throws IOException {
+            if (System.out.checkError()) {
+                stopProcessing();
+            }
+        }
+
+
+    };
 
     private InputStream inputStream = System.in;
 

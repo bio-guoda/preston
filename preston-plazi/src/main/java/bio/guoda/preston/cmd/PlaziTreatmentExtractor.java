@@ -103,7 +103,7 @@ public class PlaziTreatmentExtractor extends ProcessorReadOnly {
         }
 
         @Override
-        public boolean shouldKeepReading() {
+        public boolean shouldKeepProcessing() {
             return processorState.shouldKeepProcessing();
         }
 
