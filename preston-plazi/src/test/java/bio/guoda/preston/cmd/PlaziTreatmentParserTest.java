@@ -2,7 +2,6 @@ package bio.guoda.preston.cmd;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -10,11 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.core.IsNot.not;
 
 public class PlaziTreatmentParserTest {
 
@@ -256,6 +252,37 @@ public class PlaziTreatmentParserTest {
         assertThat(treatment.get("docId").asText(), Is.is("0383245F222097788B1EF4BAFCBDF99E"));
 
         assertThat(treatment.get("bibliography").textValue(), Is.is("Benda & Va o (2009) | Benda eta 2012) | Dobson (1871 a) | Harrison (1955) | Hıll (1982a) | Kock å Felten (1980) | Yerbury BıThomas (1895) | Zdårská (2013)"));
+    }
+
+
+    @Test
+    public void processXML8() throws IOException, TreatmentParseException {
+        InputStream is = getClass().getResourceAsStream("03AD87FAFF91F67F896D3090F9CEF648.xml");
+        JsonNode treatment = new PlaziTreatmentParser().parse(is);
+
+        assertThat(treatment.get("docId").asText(), Is.is("03AD87FAFF91F67F896D3090F9CEF648"));
+
+        assertThat(treatment.get("bibliography").textValue(), Is.is("Aimeida et al. (2014) | Andersen (1912b) | Aziz et al. (2017) | Bonaccorso (1998) | Corbet & Hill (1992) | Flannery (1995a) | Francis, Rosell-Ambal, Bonaccorso et al. (2008) | Heaney et al. (2016) | Ingle & Heaney (1992) | Jones & Kunz (2000) | Koopman (1979) | Metrione et al. (2008) | Rickart, Heaney & Rosenfeld (1989) | Simmons (2005) | Thomas (1915b)"));
+    }
+
+    @Test
+    public void processXML9() throws IOException, TreatmentParseException {
+        InputStream is = getClass().getResourceAsStream("194287C9FFBABA16B486F2CFB08FF240.xml");
+        JsonNode treatment = new PlaziTreatmentParser().parse(is);
+
+        assertThat(treatment.get("docId").asText(), Is.is("194287C9FFBABA16B486F2CFB08FF240"));
+
+        assertThat(treatment.get("bibliography").textValue(), Is.is("Burnett eta! (2001) | Dolan & Caner (1979) | Eger (2008) | Eısenberg (1989) | Gardner eta/ (1970) | Koopman (19823. 1993) | Laval (1977) | Lava B« Fitch (1977) | López-González (( 9981:) | Lopez-Gonzalez G« Presley (2001) | Loureıro. Gregonn à Penn: (Z018) | Mora (2016) | Simmons (2005) | Tamsrtt åıvaldıvıeso (1966) | Ttmm à Laval (1998) | Valdlvleso (1964) | Wıllıg at ll (2000)"));
+    }
+
+    @Test
+    public void processXML10() throws IOException, TreatmentParseException {
+        InputStream is = getClass().getResourceAsStream("4C3D87E8FFBE6A01FA8B933A1835B7FC.xml");
+        JsonNode treatment = new PlaziTreatmentParser().parse(is);
+
+        assertThat(treatment.get("docId").asText(), Is.is("4C3D87E8FFBE6A01FA8B933A1835B7FC"));
+
+        assertThat(treatment.get("bibliography").textValue(), Is.is("Bates, Francis & Csorba (2008) | Boitani et al. (2006) | Corbet & Hill (1992) | Francis (2008a) | Heller & Volleth (1984, 1989) | Hill (1972, 1983) | Hill & Francis (1984) | Hill & Harrison (1987) | Kingston , Francis et al. (2003) | Kingston , Lim & Zubaid (2006) | Lim et al. (2017) | Medway (1983) | Mohd-Hanif et a/.(2015) | Simmons (2005)"));
     }
 
 }

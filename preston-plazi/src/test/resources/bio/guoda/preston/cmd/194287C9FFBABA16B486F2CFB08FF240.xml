@@ -1,0 +1,209 @@
+<document ID-DOI="http://doi.org/10.5281/zenodo.6418279" ID-GBIF-Dataset="bc3766a8-d834-42d8-9b39-0612d00293ca" ID-ISBN="978-84-16728-19-0" ID-Zenodo-Dep="6418279" approvalRequired="2" approvalRequired_for_textStreams="2" checkinTime="1600873888554" checkinUser="plazi" docAuthor="Don E. Wilson &amp; Russell A. Mittermeier" docDate="2019" docId="194287C9FFBABA16B486F2CFB08FF240" docLanguage="en" docName="hbmw_9_Molossidae_598.pdf.imf" docOrigin="Handbook of the Mammals of the World – Volume 9 Bats, Barcelona: Lynx Edicions" docTitle="Molossus currentium Thomas 1901" docType="treatment" docVersion="12" lastPageNumber="625" masterDocId="E57BFFB1FFBCBA10B412F760B226FFCE" masterDocTitle="Molossidae" masterLastPageNumber="672" masterPageNumber="598" pageNumber="625" updateTime="1656335379779" updateUser="tatiana">
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:titleInfo>
+<mods:title>Molossidae</mods:title>
+</mods:titleInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Don E. Wilson</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Russell A. Mittermeier</mods:namePart>
+</mods:name>
+<mods:typeOfResource>text</mods:typeOfResource>
+<mods:relatedItem type="host">
+<mods:originInfo>
+<mods:dateIssued>2019</mods:dateIssued>
+<mods:dateOther type="pubDate">2019-10-31</mods:dateOther>
+<mods:publisher>Lynx Edicions</mods:publisher>
+<mods:place>
+<mods:placeTerm>Barcelona</mods:placeTerm>
+</mods:place>
+</mods:originInfo>
+<mods:titleInfo>
+<mods:title>Handbook of the Mammals of the World – Volume 9 Bats</mods:title>
+</mods:titleInfo>
+<mods:part>
+<mods:extent unit="page">
+<mods:start>598</mods:start>
+<mods:end>672</mods:end>
+</mods:extent>
+</mods:part>
+</mods:relatedItem>
+<mods:classification>book chapter</mods:classification>
+<mods:identifier type="DOI">http://doi.org/10.5281/zenodo.6418279</mods:identifier>
+<mods:identifier type="GBIF-Dataset">bc3766a8-d834-42d8-9b39-0612d00293ca</mods:identifier>
+<mods:identifier type="ISBN">978-84-16728-19-0</mods:identifier>
+<mods:identifier type="Zenodo-Dep">6418279</mods:identifier>
+</mods:mods>
+<treatment ID-DOI="http://doi.org/10.5281/zenodo.6577225" ID-GBIF-Taxon="195583577" ID-Zenodo-Dep="6577225" LSID="urn:lsid:plazi:treatment:194287C9FFBABA16B486F2CFB08FF240" httpUri="http://treatment.plazi.org/id/194287C9FFBABA16B486F2CFB08FF240" lastPageNumber="625" pageId="6" pageNumber="625">
+<heading box="[148,1036,1455,1497]" pageId="6" pageNumber="625">
+<subSubSection box="[148,202,1455,1497]" pageId="6" pageNumber="625" type="multiple">
+<paragraph box="[148,202,1455,1497]" pageId="6" pageNumber="625">
+<figureCitation box="[148,202,1455,1497]" captionStart="Plate 46: Molossidae" captionStartId="2.[150,180,3328,3353]" captionTargetBox="[11,2775,18,3659]" captionTargetPageId="1" captionText="1. Blunt-eared Bat (Tomopeas ravus), 2. Lesser Naked Bat (Chewromeles parvidens), 3. Greater Naked Bat (Chewromeles torquatus), 4. Peters’s Little Mastff Bat (Mormopterus jugularis), 5. Reunion Little Masuft Bat (Mormopterus francoismoutoui), 6. Mauritian Little Mastiff Bat (Mormopterus acetabulosus), 7. Sumatran Little Mastift Bat (Mormopterus doriae), 8. Least Little Mastiff Bat (Mormopterus minutus), 9. Kalinowski’s Little Mastiff Bat (Mormopterus kalinowskii), 10. Incan Little Masuft Bat (Mormopterus phrudus), 11. Alvarez’s Mastff Bat (Molossus alvarez), 12. Aztec Mastff Bat (Molossus aztecus), 13. Coiban Mastuff Bat (Molossus cotbensis)" figureDoi="http://doi.org/10.5281/zenodo.6567832" httpUri="https://zenodo.org/record/6567832/files/figure.png" pageId="6" pageNumber="625">14.</figureCitation>
+</paragraph>
+</subSubSection>
+<subSubSection box="[219,594,1455,1497]" pageId="6" pageNumber="625" type="vernacular_names">
+<paragraph box="[219,594,1455,1497]" pageId="6" pageNumber="625">
+<vernacularName box="[219,594,1455,1497]" pageId="6" pageNumber="625">Bonda Mastiff Bat</vernacularName>
+</paragraph>
+</subSubSection>
+<subSubSection box="[662,1036,1455,1497]" pageId="6" pageNumber="625" type="nomenclature">
+<paragraph box="[662,1036,1455,1497]" pageId="6" pageNumber="625">
+<taxonomicName authorityName="Thomas" authorityYear="1901" box="[662,1036,1455,1497]" class="Mammalia" family="Molossidae" genus="Molossus" kingdom="Animalia" order="Chiroptera" pageId="6" pageNumber="625" phylum="Chordata" rank="species" species="currentium">
+<emphasis box="[662,1036,1455,1497]" italics="true" pageId="6" pageNumber="625">Molossus currentium</emphasis>
+</taxonomicName>
+</paragraph>
+</subSubSection>
+</heading>
+<subSubSection pageId="6" pageNumber="625" type="vernacular_names">
+<paragraph blockId="6.[143,1069,1516,1577]" box="[143,1069,1516,1539]" pageId="6" pageNumber="625">
+<emphasis bold="true" box="[143,208,1516,1535]" pageId="6" pageNumber="625">Fund</emphasis>
+: Mousse de Banda 
+<emphasis bold="true" box="[436,522,1516,1535]" pageId="6" pageNumber="625">Gımıııı</emphasis>
+Bonda-Samtﬂedermaus 
+<emphasis bold="true" box="[792,878,1516,1539]" pageId="6" pageNumber="625">Spanish</emphasis>
+Moloso de Bonds
+</paragraph>
+<paragraph blockId="6.[143,1069,1516,1577]" box="[143,866,1555,1577]" pageId="6" pageNumber="625">Other common namas Thomass Free-ta ed Bat. Thomass Mast If Bat</paragraph>
+</subSubSection>
+<subSubSection pageId="6" pageNumber="625" type="reference_group">
+<paragraph blockId="6.[754,1349,1629,2057]" pageId="6" pageNumber="625">
+<emphasis bold="true" box="[755,903,1629,1662]" pageId="6" pageNumber="625">Thxonomy</emphasis>
+. 
+<taxonomicName authority="Thomas, 1901" authorityName="Thomas" authorityYear="1901" class="Mammalia" family="Molossidae" genus="Molossus" kingdom="Animalia" order="Chiroptera" pageId="6" pageNumber="625" phylum="Chordata" rank="subSpecies" species="obscuras" subSpecies="cunmtium">Molossus obscuras cunmtíum Thomas, 1901</taxonomicName>
+,
+</paragraph>
+</subSubSection>
+<subSubSection pageId="6" pageNumber="625" type="materials_examined">
+<paragraph blockId="6.[754,1349,1629,2057]" pageId="6" pageNumber="625">
+<materialsCitation ID-GBIF-Occurrence="3780789344" pageId="6" pageNumber="625">
+“Goya, Conientcsƒ' 
+<collectingCountry name="Argentina" pageId="6" pageNumber="625">Argentina</collectingCountry>
+.
+</materialsCitation>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="6" pageNumber="625" type="discussion">
+<paragraph blockId="6.[754,1349,1629,2057]" pageId="6" pageNumber="625">Molassus bondae was recently synonymized under M. cımmtium due to morphological similarities. Monotypic.</paragraph>
+</subSubSection>
+<subSubSection pageId="6" pageNumber="625" type="distribution">
+<caption ID-DOI="http://doi.org/10.5281/zenodo.6418300" ID-Zenodo-Dep="6418300" httpUri="https://zenodo.org/record/6418300/files/figure.png" inLine="true" pageId="6" pageNumber="625" startId="6.[756,925,1866,1890]" targetBox="[142,733,1633,2048]" targetPageId="6">
+<paragraph blockId="6.[754,1349,1629,2057]" pageId="6" pageNumber="625">
+<emphasis bold="true" box="[756,925,1866,1890]" pageId="6" pageNumber="625">Distribution</emphasis>
+. Disjunct in E 
+<collectingCountry box="[1198,1339,1866,1891]" name="Honduras" pageId="6" pageNumber="625">Honduras</collectingCountry>
+, 
+<collectingCountry box="[756,899,1906,1938]" name="Nicaragua" pageId="6" pageNumber="625">Nicaragua</collectingCountry>
+, 
+<collectingCountry box="[925,1080,1906,1930]" name="Costa Rica" pageId="6" pageNumber="625">Costa Rica</collectingCountry>
+, 
+<collectingCountry box="[1106,1219,1906,1930]" name="Panama" pageId="6" pageNumber="625">Panama</collectingCountry>
+, 
+<collectingCountry name="Colombia" pageId="6" pageNumber="625">Colombia</collectingCountry>
+, NW 
+<collectingCountry box="[888,1033,1945,1969]" name="Venezuela" pageId="6" pageNumber="625">Venezuela</collectingCountry>
+, and 
+<collectingCountry box="[1124,1244,1945,1970]" name="Ecuador" pageId="6" pageNumber="625">Ecuador</collectingCountry>
+that is separate from CW 
+<collectingCountry box="[1038,1117,1984,2009]" name="Brazil" pageId="6" pageNumber="625">Brazil</collectingCountry>
+, N 
+<collectingCountry box="[1180,1305,1985,2017]" name="Paraguay" pageId="6" pageNumber="625">Paraguay</collectingCountry>
+, E 
+<collectingCountry box="[754,897,2024,2057]" name="Argentina" pageId="6" pageNumber="625">Argentina</collectingCountry>
+, and 
+<collectingCountry box="[987,1109,2024,2057]" name="Uruguay" pageId="6" pageNumber="625">Uruguay</collectingCountry>
+; is potentially present in E 
+<collectingCountry box="[324,418,2064,2087]" name="Bolivia" pageId="6" pageNumber="625">Bolivia</collectingCountry>
+.
+</paragraph>
+</caption>
+</subSubSection>
+<subSubSection pageId="6" pageNumber="625" type="description">
+<paragraph pageId="6" pageNumber="625">
+<emphasis bold="true" box="[143,391,2102,2135]" pageId="6" pageNumber="625">Descriptive notes</emphasis>
+. Head—body 
+<quantity box="[588,740,2102,2127]" metricMagnitude="-2" metricUnit="m" metricValue="7.3" metricValueMax="8.0" metricValueMin="6.6" pageId="6" pageNumber="625" unit="mm" value="73.0" valueMax="80.0" valueMin="66.0">66-80 mm</quantity>
+, tail 
+<quantity box="[819,970,2103,2127]" metricMagnitude="-2" metricUnit="m" metricValue="3.9" metricValueMax="4.4" metricValueMin="3.4" pageId="6" pageNumber="625" unit="mm" value="39.0" valueMax="44.0" valueMin="34.0">34-44 mm</quantity>
+, ear 
+<quantity box="[1053,1201,2103,2127]" metricMagnitude="-2" metricUnit="m" metricValue="1.45" metricValueMax="1.6" metricValueMin="1.3" pageId="6" pageNumber="625" unit="mm" value="14.5" valueMax="16.0" valueMin="13.0">13-16 mm</quantity>
+, hindfoot 
+<quantity box="[143,278,2142,2166]" metricMagnitude="-2" metricUnit="m" metricValue="1.1" metricValueMax="1.3" metricValueMin="0.9" pageId="6" pageNumber="625" unit="mm" value="11.0" valueMax="13.0" valueMin="9.0">9-13 mm</quantity>
+, foreann 
+<quantity box="[429,580,2142,2166]" metricMagnitude="-2" metricUnit="m" metricValue="4.05" metricValueMax="4.3" metricValueMin="3.8" pageId="6" pageNumber="625" unit="mm" value="40.5" valueMax="43.0" valueMin="38.0">38-43 mm</quantity>
+; weight 
+<quantity box="[711,821,2142,2175]" metricMagnitude="-2" metricUnit="kg" metricValue="1.55" metricValueMax="2.1" metricValueMin="1.0" pageId="6" pageNumber="625" unit="g" value="15.5" valueMax="21.0" valueMin="10.0">10-21 g</quantity>
+. The Bonda Mastiff Bat medium-sized and smaller than the Sinaloan Mastiff Bat (M. sinaloa) and Alvarez's Mastiff Bat (M. alvafw) but larger than Pallas’s Mastiff Bat (
+<taxonomicName authorityName="Pallas" authorityYear="1766" box="[855,1015,2221,2250]" class="Mammalia" family="Molossidae" genus="Molossus" kingdom="Animalia" order="Chiroptera" pageId="6" pageNumber="625" phylum="Chordata" rank="species" species="molossus">M. molossus</taxonomicName>
+) and the Aztec Mastiﬁ Bat (M. aztecas). The Bonda Mastiff Bat has dark to medium brown dorsal hair, with narrow pale band at base that covers one-quarter to one-half the hair length. Reddish orange dorsal pelage also occurs in some populations. Dorsal fur is 2- 
+<quantity box="[1151,1263,2340,2364]" metricMagnitude="-3" metricUnit="m" metricValue="3.5" metricValueMax="5.0" metricValueMin="2.0" pageId="6" pageNumber="625" unit="mm" value="3.5" valueMax="5.0" valueMin="2.0">2 - 5 mm</quantity>
+long. Venter is slightly paler than dorsurn. Membranes, face, muzzle, and ears are of similar color as fur. Ears are rounded and arise from same point on forehead. Tragus is small, and antitragus is constricted at its base. Upper lip and snout are smooth and lack any medial ridge. Skull has globose braincase, quadrangular occipital region, and infraorbital foramen opening laterally in frontal view. Basioccipital pits are moderately deep. I* spatulated or slightly elongated, with parallel or convergent tips. Chromosomal complement has 2n = 48 and FN = 66.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="6" pageNumber="625" type="biology_ecology">
+<paragraph pageId="6" pageNumber="625">
+<emphasis bold="true" box="[142,248,2655,2679]" pageId="6" pageNumber="625">Habitat</emphasis>
+. Savannas, palm forests, seasonally wet and ﬂooded forests, subtropical moist lowlands, tropical rainforests, and pastures from lowlands to elevations of 
+<quantity box="[1205,1307,2695,2719]" metricMagnitude="3" metricUnit="m" metricValue="1.06" pageId="6" pageNumber="625" unit="m" value="1060.0">1060 m</quantity>
+in Central America and below 
+<quantity box="[537,623,2734,2758]" metricMagnitude="2" metricUnit="m" metricValue="6.0" pageId="6" pageNumber="625" unit="m" value="600.0">600 m</quantity>
+in South America.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="6" pageNumber="625" type="food_feeding">
+<paragraph pageId="6" pageNumber="625">
+<emphasis bold="true" box="[142,409,2773,2806]" pageId="6" pageNumber="625">Food and Feeding</emphasis>
+. The Bonda Mastiff Bat is an aerial insecüvore that mostly eat: moths but aim beetle: and other insets.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="6" pageNumber="625" type="activity">
+<paragraph pageId="6" pageNumber="625">
+<emphasis bold="true" box="[142,271,2852,2885]" pageId="6" pageNumber="625">Breeding</emphasis>
+. The Bonda Mastiff Bat usually gives birth to one young, and polyestry has been reported in 
+<collectingCountry box="[390,536,2891,2915]" name="Costa Rica" pageId="6" pageNumber="625">Costa Rica</collectingCountry>
+, with pregnant females caught injanuary-Augtrst. In 
+<collectingCountry name="Nicaragua" pageId="6" pageNumber="625">Nicaragua</collectingCountry>
+, pregnant females were caught in july.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="6" pageNumber="625" type="activity">
+<paragraph pageId="6" pageNumber="625">
+<emphasis bold="true" box="[141,377,2970,3003]" pageId="6" pageNumber="625">Activity patterns.</emphasis>
+Bonda Mastiff Bats roost in caves, hollow tree trunks, cracks in rocks and buildings, and thatch roofs.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="6" pageNumber="625" type="biology_ecology">
+<paragraph lastBlockId="6.[145,256,3207,3236]" pageId="6" pageNumber="625">
+<emphasis bold="true" box="[142,867,3049,3082]" pageId="6" pageNumber="625">Movements, Home range and Soda! organization</emphasis>
+. Colonies of Bonda Mastiff Bats were found roosting with 
+<collectingCountry box="[512,654,3089,3121]" name="Argentina" pageId="6" pageNumber="625">Argentine</collectingCountry>
+Serotines (Eptesiaısfıııinalis), long-tongued bats (Ghmophagu spp.), Sinaloan Mastiff Bats, Common Black Myotis (
+<taxonomicName box="[1109,1330,3129,3161]" class="Mammalia" family="Vespertilionidae" genus="Myotis" kingdom="Animalia" order="Chiroptera" pageId="6" pageNumber="625" phylum="Chordata" rank="species" species="nigricans">Myotis nigricans</taxonomicName>
+), Lesser Bulldog Bats (Nocliltb albiventnk), and Blaclt-winged Little Yellow Bats (Rhogmsa tumida).
+</paragraph>
+</subSubSection>
+<subSubSection pageId="6" pageNumber="625" type="conservation">
+<paragraph pageId="6" pageNumber="625">
+<emphasis bold="true" box="[142,483,3246,3271]" pageId="6" pageNumber="625">Status and Conservation</emphasis>
+. Classiﬁed as Least Concern on The IUCNRød List. The Bonda Mastiff Bat is found in protected areas in 
+<collectingCountry box="[725,852,3286,3319]" name="Paraguay" pageId="6" pageNumber="625">Paraguay</collectingCountry>
+and 
+<collectingCountry box="[921,1064,3287,3319]" name="Argentina" pageId="6" pageNumber="625">Argentina</collectingCountry>
+.
+</paragraph>
+</subSubSection>
+<paragraph blockId="6.[1411,2626,2458,3478]" box="[1418,2007,3304,3320]" pageId="6" pageNumber="625">..„,.... „,..„ ..., w.w,......, ...a ..-....,,......</paragraph>
+<subSubSection pageId="6" pageNumber="625" type="bibRefCitation_list">
+<paragraph pageId="6" pageNumber="625">
+<emphasis bold="true" box="[142,291,3330,3354]" pageId="6" pageNumber="625">Bibliography</emphasis>
+Burnett eta! (2001) Dolan &amp; Caner (1979). Eger (2008) Eısenberg (1989), Gardner eta/ (1970). Koopman (19823. 1993). Laval (1977), Lava B« Fitch (1977), López-González (( 9981:), Lopez-Gonzalez G« Presley (2001), Loureıro. Gregonn à Penn: (Z018) Mora (2016), Simmons (2005). Tamsrtt åıvaldıvıeso (1966). Ttmm à Laval (1998). Valdlvleso (1964). Wıllıg at ll (2000)
+</paragraph>
+</subSubSection>
+</treatment>
+</document>

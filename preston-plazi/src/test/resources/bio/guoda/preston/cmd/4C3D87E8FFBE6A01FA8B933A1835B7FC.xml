@@ -1,0 +1,205 @@
+<document ID-DOI="http://doi.org/10.5281/zenodo.6397752" ID-GBIF-Dataset="45351c32-25dd-422c-bdb2-00e73deb4943" ID-ISBN="978-84-16728-19-0" ID-Zenodo-Dep="6397752" approvalRequired="37" approvalRequired_for_taxonomicNames="8" approvalRequired_for_treatments="29" checkinTime="1648655544658" checkinUser="conny" docAuthor="Don E. Wilson &amp; Russell A. Mittermeier" docDate="2019" docId="4C3D87E8FFBE6A01FA8B933A1835B7FC" docLanguage="en" docName="hbmw_9_Vespertilionidae_716.pdf.imf" docOrigin="Handbook of the Mammals of the World – Volume 9 Bats, Barcelona: Lynx Edicions" docTitle="Arelulus societatis Hill 1972" docType="treatment" docVersion="11" lastPageNumber="827" masterDocId="B004FF90FFFB6A44FFFC96591E00BB32" masterDocTitle="Vespertilionidae" masterLastPageNumber="981" masterPageNumber="716" pageNumber="827" updateTime="1658462844935" updateUser="felipe">
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:titleInfo>
+<mods:title>Vespertilionidae</mods:title>
+</mods:titleInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Don E. Wilson</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Russell A. Mittermeier</mods:namePart>
+</mods:name>
+<mods:typeOfResource>text</mods:typeOfResource>
+<mods:relatedItem type="host">
+<mods:originInfo>
+<mods:dateIssued>2019</mods:dateIssued>
+<mods:dateOther type="pubDate">2019-10-31</mods:dateOther>
+<mods:publisher>Lynx Edicions</mods:publisher>
+<mods:place>
+<mods:placeTerm>Barcelona</mods:placeTerm>
+</mods:place>
+</mods:originInfo>
+<mods:titleInfo>
+<mods:title>Handbook of the Mammals of the World – Volume 9 Bats</mods:title>
+</mods:titleInfo>
+<mods:part>
+<mods:extent unit="page">
+<mods:start>716</mods:start>
+<mods:end>981</mods:end>
+</mods:extent>
+</mods:part>
+</mods:relatedItem>
+<mods:classification>book chapter</mods:classification>
+<mods:identifier type="DOI">http://doi.org/10.5281/zenodo.6397752</mods:identifier>
+<mods:identifier type="GBIF-Dataset">45351c32-25dd-422c-bdb2-00e73deb4943</mods:identifier>
+<mods:identifier type="ISBN">978-84-16728-19-0</mods:identifier>
+<mods:identifier type="Zenodo-Dep">6397752</mods:identifier>
+</mods:mods>
+<treatment ID-DOI="http://doi.org/10.5281/zenodo.6578482" ID-GBIF-Taxon="195627990" ID-Zenodo-Dep="6578482" LSID="urn:lsid:plazi:treatment:4C3D87E8FFBE6A01FA8B933A1835B7FC" httpUri="http://treatment.plazi.org/id/4C3D87E8FFBE6A01FA8B933A1835B7FC" lastPageNumber="827" pageId="69" pageNumber="827">
+<subSubSection box="[1399,1479,1379,1425]" pageId="69" pageNumber="827" type="multiple">
+<paragraph blockId="69.[1395,2325,1379,1505]" box="[1399,1479,1379,1425]" pageId="69" pageNumber="827">
+<heading box="[1399,1479,1379,1425]" pageId="69" pageNumber="827">
+<figureCitation box="[1399,1479,1379,1425]" captionStart="Plate 60: Vespe" captionStartId="61.[119,149,3300,3325]" captionTargetBox="[12,2753,18,3658]" captionTargetPageId="60" captionText="118. Cape Serotine (Neoromicia capensis), 119. Malagasy Serotine (Neoromicia matroka), 120. Isalo Serotine (Neoromicia malagasyensis), 121. Roberts’s Serotine (Neoromicia robertsi), 122. Stanley’s Serotine (Neoromicia stanleyi), 123. Zulu Serotine (Neoromicia zuluensis), 124. Tiny Serotine (Neoromicia guineensis), 125. Somali Serotine (Neoromicia somalica), 126. Banana Serotine (Neoromicia nanus), 127. Rendall’s Serotine (Neoromicia rendalli), 128. Dark-brown Serotine (Neoromicia brunnea), 129. Rosevear’s Serotine (Neoromicia roseveari), 130. Isabelline Serotine (Neoromicia isabella), 131. Grandidier’s Serotine (Neoromicia grandidieri), 132. White-winged Serotine (Neoromicia tenuipinnis), 133. Heller’s Serotine (Neoromicia helios), 134. De Winton’s LLong-eared Bat (Laephotis wintoni), 135. Angolan Long-eared Bat (Laephotis angolensis), 136. Botswanan Long-eared Bat (Laephotis botswanae), 137. Namib Long-eared Bat (Laephotis namibensis), 138. Sind Bat (Rhyneptesicus nasutus), 139. Collared Sprite (Thainycteris aureocollaris), 140. Necklace Sprite (Thainycleris torquatus), 141. Bronze Sprite (Arielulus circumdatus), 142. Social Sprite (Arelulus societatis), 143. Coppery Sprite (Arielulus cuprosus)" figureDoi="http://doi.org/10.5281/zenodo.6398519" httpUri="https://zenodo.org/record/6398519/files/figure.png" pageId="69" pageNumber="827">142.</figureCitation>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection box="[1497,1754,1379,1425]" pageId="69" pageNumber="827" type="vernacular_names">
+<paragraph blockId="69.[1395,2325,1379,1505]" box="[1497,1754,1379,1425]" pageId="69" pageNumber="827">
+<heading box="[1497,1754,1379,1425]" pageId="69" pageNumber="827">
+<vernacularName box="[1497,1754,1379,1425]" pageId="69" pageNumber="827">Social Sprite</vernacularName>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection box="[1824,2155,1379,1425]" pageId="69" pageNumber="827" type="nomenclature">
+<paragraph blockId="69.[1395,2325,1379,1505]" box="[1824,2155,1379,1425]" pageId="69" pageNumber="827">
+<heading box="[1824,2155,1379,1425]" pageId="69" pageNumber="827">
+<taxonomicName authority="Hill, 1972" authorityName="Hill" authorityYear="1972" box="[1824,2155,1379,1425]" class="Mammalia" family="Vespertilionidae" genus="Arelulus" kingdom="Animalia" order="Chiroptera" pageId="69" pageNumber="827" phylum="Chordata" rank="species" species="societatis">
+<emphasis box="[1824,2155,1379,1425]" italics="true" pageId="69" pageNumber="827">Arelulus societatis</emphasis>
+</taxonomicName>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="69" pageNumber="827" type="vernacular_names">
+<paragraph blockId="69.[1395,2325,1379,1505]" box="[1396,2325,1443,1464]" pageId="69" pageNumber="827">
+<heading box="[1396,2325,1443,1464]" pageId="69" pageNumber="827">
+<emphasis bold="true" box="[1396,1472,1443,1464]" pageId="69" pageNumber="827">French:</emphasis>
+<vernacularName box="[1481,1696,1443,1464]" pageId="69" pageNumber="827">Farfadet des sociétés</vernacularName>
+/ 
+<emphasis bold="true" box="[1717,1807,1443,1464]" pageId="69" pageNumber="827">German:</emphasis>
+<vernacularName box="[1816,2056,1443,1464]" pageId="69" pageNumber="827">Soziale Elfenfledermaus</vernacularName>
+/ 
+<emphasis bold="true" box="[2077,2168,1443,1464]" pageId="69" pageNumber="827">Spanish:</emphasis>
+<vernacularName box="[2176,2325,1443,1464]" pageId="69" pageNumber="827">Arielulus social</vernacularName>
+</heading>
+</paragraph>
+<paragraph blockId="69.[1395,2325,1379,1505]" box="[1396,2073,1483,1504]" pageId="69" pageNumber="827">
+<heading box="[1396,2073,1483,1504]" pageId="69" pageNumber="827">
+<emphasis bold="true" box="[1396,1643,1483,1504]" pageId="69" pageNumber="827">Other common names:</emphasis>
+<vernacularName box="[1653,1897,1483,1504]" pageId="69" pageNumber="827">Benom-gilded Pipistrelle</vernacularName>
+, 
+<vernacularName box="[1911,2073,1483,1504]" pageId="69" pageNumber="827">Social Pipistrelle</vernacularName>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection box="[2008,2599,1553,1582]" pageId="69" pageNumber="827" type="reference_group">
+<paragraph blockId="69.[2008,2601,1553,1976]" box="[2008,2599,1553,1582]" pageId="69" pageNumber="827">
+<emphasis bold="true" box="[2008,2164,1553,1582]" pageId="69" pageNumber="827">Taxonomy.</emphasis>
+<taxonomicName authority="Hill, 1972" authorityName="Hill" authorityYear="1972" box="[2179,2594,1553,1582]" class="Mammalia" family="Vespertilionidae" genus="Pipistrellus" kingdom="Animalia" order="Chiroptera" pageId="69" pageNumber="827" phylum="Chordata" rank="species" species="societatis">Pipistrellus societatis Hill, 1972</taxonomicName>
+,
+</paragraph>
+</subSubSection>
+<subSubSection pageId="69" pageNumber="827" type="materials_examined">
+<paragraph blockId="69.[2008,2601,1553,1976]" pageId="69" pageNumber="827">
+<materialsCitation ID-GBIF-Occurrence="3864656305" latitude="3.85" longitude="11.0" pageId="69" pageNumber="827">
+<collectingCountry box="[2009,2128,1588,1621]" name="Malaysia" pageId="69" pageNumber="827">Malaysia</collectingCountry>
+, “Base Camp, Gunong Benom, 
+<collectingRegion box="[2009,2116,1627,1660]" country="Malaysia" name="Pahang" pageId="69" pageNumber="827">Pahang</collectingRegion>
+, Malaya [= 
+<collectingCountry box="[2329,2455,1627,1660]" name="Malaysia" pageId="69" pageNumber="827">Malaysia</collectingCountry>
+], 
+<geoCoordinate box="[2496,2593,1627,1660]" degrees="3" direction="north" minutes="51" orientation="latitude" pageId="69" pageNumber="827" precision="925" value="3.85">3°51'N</geoCoordinate>
+, 
+<geoCoordinate box="[2011,2136,1667,1700]" degrees="102" direction="east" minutes="11" orientation="longitude" pageId="69" pageNumber="827" precision="55555" value="11.0">102°11'E</geoCoordinate>
+, 
+<quantity box="[2153,2238,1667,1700]" metricMagnitude="2" metricUnit="m" metricValue="2.4384" pageId="69" pageNumber="827" unit="ft" value="800.0">800 ft.</quantity>
+[= 
+<quantity box="[2289,2379,1667,1700]" metricMagnitude="2" metricUnit="m" metricValue="2.44" pageId="69" pageNumber="827" unit="m" value="244.0">244 m</quantity>
+].”
+</materialsCitation>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="69" pageNumber="827" type="discussion">
+<paragraph blockId="69.[2008,2601,1553,1976]" pageId="69" pageNumber="827">
+Previously considered merely a lowland form of 
+<taxonomicName authorityName="Temminck" authorityYear="1840" box="[2137,2339,1746,1779]" class="Mammalia" family="Vespertilionidae" genus="Vespertilio" kingdom="Animalia" order="Chiroptera" pageId="69" pageNumber="827" phylum="Chordata" rank="species" species="circumdatus">A. circumdatus</taxonomicName>
+, but this opinion was rejected on the basis of morphological characteristics. Monotypic.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="69" pageNumber="827" type="distribution">
+<caption ID-DOI="http://doi.org/10.5281/zenodo.6398071" ID-Zenodo-Dep="6398071" httpUri="https://zenodo.org/record/6398071/files/figure.png" inLine="true" pageId="69" pageNumber="827" targetBox="[1394,1985,1559,1974]" targetPageId="69">
+<paragraph blockId="69.[2008,2601,1553,1976]" lastBlockId="69.[1397,2604,1983,3278]" pageId="69" pageNumber="827">
+<emphasis bold="true" box="[2009,2181,1864,1897]" pageId="69" pageNumber="827">Distribution</emphasis>
+Known only from Peninsular 
+<collectingCountry box="[2009,2129,1903,1936]" name="Malaysia" pageId="69" pageNumber="827">Malaysia</collectingCountry>
+, including 
+<collectingRegion box="[2302,2426,1903,1936]" country="Malaysia" name="Selangor" pageId="69" pageNumber="827">Selangor</collectingRegion>
+(Ulu Gombak) and 
+<collectingRegion box="[2158,2263,1943,1976]" country="Malaysia" name="Pahang" pageId="69" pageNumber="827">Pahang</collectingRegion>
+(Sungai Tekam Forest Reserve, Gunung Benom, and Krau Wildlife Reserve) provinces. Also listed from Fraser’s Hill Forest Reserve, 
+<collectingRegion box="[1795,1902,2026,2055]" country="Malaysia" name="Pahang" pageId="69" pageNumber="827">Pahang</collectingRegion>
+; but this record needs verification.
+</paragraph>
+</caption>
+</subSubSection>
+<subSubSection pageId="69" pageNumber="827" type="description">
+<paragraph blockId="69.[1397,2604,1983,3278]" pageId="69" pageNumber="827">
+<emphasis bold="true" box="[1397,1651,2061,2094]" pageId="69" pageNumber="827">Descriptive notes.</emphasis>
+Head-body 41-44 mm, tail 33-37 mm, ear 8-5-9 mm, forearm 36-6—40-6 mm; weight 4-3-8-5 g. The Social Sprite closely resembles the Bronze Sprite (
+<taxonomicName authorityName="Temminck" authorityYear="1840" box="[1410,1611,2140,2173]" class="Mammalia" family="Vespertilionidae" genus="Vespertilio" kingdom="Animalia" order="Chiroptera" pageId="69" pageNumber="827" phylum="Chordata" rank="species" species="circumdatus">A. circumdatus</taxonomicName>
+), but with smaller forearms, post-palatal extension, tooth row, and rostrum. Dorsal pelage is blackish brown with orange or bronze tipping (hairs basally brown, blackish brown for most of length, and tipped orange or bronze); crown pelage is orange-tipped but with a small area of straw-color; underparts are dark brown, tipped grayish white. Ears are large and bluntly rounded, with posteriorly directed basal lobe; tragus is large, and ears have yellowish-white rims, as in congeners. Wings are uniformly black. Baculum is Y-shaped with paired basal lobes and short shaft. Skull is short and wide, with rounded, rather globular braincase, inflated and elevated in frontal region; interorbital region wide; supraorbital region crests only faintly defined, terminating in small tubercles; rostrum is shorter, and narrower than in the Bronze Sprite, with more inflated braincase. Dentition is similar to that of the Bronze Sprite, less massive, with M® reduced, and posterior cusp virtually absent. Condylo-basal lengths are 13-9-14-8 mm; maxillary tooth row lengths are 5-2-5-6 mm. Chromosomal complement has 2n= 50 and FN= 48.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="69" pageNumber="827" type="biology_ecology">
+<paragraph blockId="69.[1397,2604,1983,3278]" pageId="69" pageNumber="827">
+<emphasis bold="true" box="[1398,1510,2693,2726]" pageId="69" pageNumber="827">Habitat.</emphasis>
+Recorded in primary lowland and hill forests, and secondary forests. The type specimen was found near a stream at 
+<quantity box="[1927,2015,2732,2765]" metricMagnitude="2" metricUnit="m" metricValue="2.66" pageId="69" pageNumber="827" unit="m" value="266.0">266 m</quantity>
+.
+</paragraph>
+</subSubSection>
+<subSubSection box="[1398,1899,2776,2805]" pageId="69" pageNumber="827" type="food_feeding">
+<paragraph blockId="69.[1397,2604,1983,3278]" box="[1398,1899,2776,2805]" pageId="69" pageNumber="827">
+<emphasis bold="true" box="[1398,1660,2776,2805]" pageId="69" pageNumber="827">Food and Feeding.</emphasis>
+No information.
+</paragraph>
+</subSubSection>
+<subSubSection box="[1399,1772,2812,2845]" pageId="69" pageNumber="827" type="breeding">
+<paragraph blockId="69.[1397,2604,1983,3278]" box="[1399,1772,2812,2845]" pageId="69" pageNumber="827">
+<emphasis bold="true" box="[1399,1533,2812,2845]" pageId="69" pageNumber="827">Breeding.</emphasis>
+No information.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="69" pageNumber="827" type="activity">
+<paragraph blockId="69.[1397,2604,1983,3278]" pageId="69" pageNumber="827">
+<emphasis bold="true" box="[1397,1630,2851,2884]" pageId="69" pageNumber="827">Activity patterns.</emphasis>
+Nocturnal. It was mist-netted above small ford on a tributary of the Gombak 
+<collectingRegion box="[1527,1597,2899,2924]" country="Nigeria" name="Rivers" pageId="69" pageNumber="827">River</collectingRegion>
+. In 
+<collectingRegion box="[1650,1770,2899,2924]" country="Malaysia" name="Selangor" pageId="69" pageNumber="827">Selangor</collectingRegion>
+, found roosting in a tree-trunk hole beside a forest stream.
+</paragraph>
+</subSubSection>
+<subSubSection box="[1399,2339,2929,2962]" pageId="69" pageNumber="827" type="biology_ecology">
+<paragraph blockId="69.[1397,2604,1983,3278]" box="[1399,2339,2929,2962]" pageId="69" pageNumber="827">
+<emphasis bold="true" box="[1399,2100,2929,2962]" pageId="69" pageNumber="827">Movements, Home range and Social organization.</emphasis>
+No information.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="69" pageNumber="827" type="conservation">
+<paragraph blockId="69.[1397,2604,1983,3278]" pageId="69" pageNumber="827">
+<emphasis bold="true" box="[1399,1757,2969,3002]" pageId="69" pageNumber="827">Status and Conservation.</emphasis>
+Classified as Vulnerable on The IUCN Red List because its extent of occurrence is less than 
+<quantity box="[1893,2043,3012,3041]" metricMagnitude="4" metricUnit="m" metricValue="2.0" pageId="69" pageNumber="827" unit="km" value="20.0">20,000 km</quantity>
+?, its range is fragmented across forest patches, and there is continuing decline in the extent and quality of its habitat due to rapid deforestation. It occurs in Krau Wildlife Reserve.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="69" pageNumber="827" type="bibRefCitation_list">
+<paragraph blockId="69.[1397,2604,1983,3278]" pageId="69" pageNumber="827">
+<emphasis bold="true" box="[1400,1556,3135,3160]" pageId="69" pageNumber="827">Bibliography.</emphasis>
+Bates, Francis &amp; Csorba (2008), Boitani et al. (2006), Corbet &amp; Hill (1992), Francis (2008a), Heller &amp; Volleth (1984, 1989), Hill (1972, 1983), Hill &amp; Francis (1984), Hill &amp; Harrison (1987), 
+<collectingRegion box="[2415,2512,3174,3199]" country="Jamaica" name="Kingston" pageId="69" pageNumber="827">Kingston</collectingRegion>
+, Francis et al. (2003), 
+<collectingRegion box="[1559,1656,3214,3239]" country="Jamaica" name="Kingston" pageId="69" pageNumber="827">Kingston</collectingRegion>
+, Lim &amp; Zubaid (2006), Lim et al. (2017), 
+<collectingRegion box="[2136,2230,3214,3239]" country="United Kingdom" name="Medway" pageId="69" pageNumber="827">Medway</collectingRegion>
+(1983), Mohd-Hanif et a/.(2015), Simmons (2005).
+</paragraph>
+</subSubSection>
+</treatment>
+</document>

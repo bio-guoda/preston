@@ -1,0 +1,292 @@
+<document ID-DOI="http://doi.org/10.5281/zenodo.6448815" ID-ISBN="978-84-16728-19-0" ID-Zenodo-Dep="6448815" approvalRequired="58" approvalRequired_for_document="1" approvalRequired_for_originalDoi="1" approvalRequired_for_taxonomicNames="39" approvalRequired_for_treatments="17" checkinTime="1635825784914" checkinUser="conny" docAuthor="Don E. Wilson &amp; Russell A. Mittermeier" docDate="2019" docId="03AD87FAFF91F67F896D3090F9CEF648" docLanguage="en" docName="hbmw_9_Pteropodidae_16.pdf.imf" docOrigin="Handbook of the Mammals of the World – Volume 9 Bats, Barcelona: Lynx Edicions" docTitle="Pleropus hypomelanus Temminck 1853" docType="treatment" docVersion="2" lastPageNumber="143" masterDocId="FF94FF82FFC4F62A891E341CFFA5FF9B" masterDocTitle="Pteropodidae" masterLastPageNumber="162" masterPageNumber="16" pageNumber="143" updateTime="1656943967923" updateUser="diego">
+    <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+        <mods:titleInfo>
+            <mods:title>Pteropodidae</mods:title>
+        </mods:titleInfo>
+        <mods:name type="personal">
+            <mods:role>
+                <mods:roleTerm>Author</mods:roleTerm>
+            </mods:role>
+            <mods:namePart>Don E. Wilson</mods:namePart>
+        </mods:name>
+        <mods:name type="personal">
+            <mods:role>
+                <mods:roleTerm>Author</mods:roleTerm>
+            </mods:role>
+            <mods:namePart>Russell A. Mittermeier</mods:namePart>
+        </mods:name>
+        <mods:typeOfResource>text</mods:typeOfResource>
+        <mods:relatedItem type="host">
+            <mods:originInfo>
+                <mods:dateIssued>2019</mods:dateIssued>
+                <mods:dateOther type="pubDate">2019-10-31</mods:dateOther>
+                <mods:publisher>Lynx Edicions</mods:publisher>
+                <mods:place>
+                    <mods:placeTerm>Barcelona</mods:placeTerm>
+                </mods:place>
+            </mods:originInfo>
+            <mods:titleInfo>
+                <mods:title>Handbook of the Mammals of the World – Volume 9 Bats</mods:title>
+            </mods:titleInfo>
+            <mods:part>
+                <mods:extent unit="page">
+                    <mods:start>16</mods:start>
+                    <mods:end>162</mods:end>
+                </mods:extent>
+            </mods:part>
+        </mods:relatedItem>
+        <mods:classification>book chapter</mods:classification>
+        <mods:identifier type="DOI">http://doi.org/10.5281/zenodo.6448815</mods:identifier>
+        <mods:identifier type="ISBN">978-84-16728-19-0</mods:identifier>
+        <mods:identifier type="Zenodo-Dep">6448815</mods:identifier>
+    </mods:mods>
+    <treatment LSID="urn:lsid:plazi:treatment:03AD87FAFF91F67F896D3090F9CEF648" httpUri="http://treatment.plazi.org/id/03AD87FAFF91F67F896D3090F9CEF648" lastPageNumber="143" pageId="85" pageNumber="143">
+        <subSubSection box="[115,195,1164,1210]" pageId="85" pageNumber="143" type="multiple">
+            <paragraph blockId="85.[110,1040,1164,1294]" box="[115,195,1164,1210]" pageId="85" pageNumber="143">
+                <heading box="[115,195,1164,1210]" pageId="85" pageNumber="143">
+                    <figureCitation box="[115,195,1164,1210]" captionStart="Plate 9: Pteropodidae" captionStartId="83.[119,148,3362,3387]" captionTargetBox="[11,2744,18,3661]" captionTargetPageId="82" captionText="144. Ornate Flying Fox (Pleropus ornatus), 145. Seram Flying Fox (Pteropus ocularis), 146. Great Flying Fox (Pteropus neohibernicus), 147. Wallacean Gray Flying Fox (Pleropus griseus), 148. Admiralty Flying Fox (Pteropus admiralitatum), 149. Philippine Gray Flying Fox (Pteropus speciosus), 150. Island Flying Fox (Pleropus hypomelanus), 151. Black-eared Flying Fox (Pteropus melanotus), 152. Black Flying Fox (Pleropus alecto), 153. Spectacled Flying Fox (Pteropus conspicillatus), 154. Geelvink Bay Flying Fox (Pteropus pohlei), 155. Marianas Flying Fox (Pteropus mariannus), 156. Palau Flying Fox (Pteropus pelewensis), 157. Pacific Flying Fox (Pteropus tonganus), 158. Kosrae Flying Fox (Pteropus ualanus), 159. Nicobar Flying Fox (Pteropus faunulus), 160. Ontong Java Flying Fox (Pteropus howensis)" figureDoi="http://doi.org/10.5281/zenodo.6448891" httpUri="https://zenodo.org/record/6448891/files/figure.png" pageId="85" pageNumber="143">150.</figureCitation>
+                </heading>
+            </paragraph>
+        </subSubSection>
+        <subSubSection box="[212,569,1164,1210]" pageId="85" pageNumber="143" type="vernacular_names">
+            <paragraph blockId="85.[110,1040,1164,1294]" box="[212,569,1164,1210]" pageId="85" pageNumber="143">
+                <heading box="[212,569,1164,1210]" pageId="85" pageNumber="143">
+                    <vernacularName box="[212,569,1164,1210]" pageId="85" pageNumber="143">Island Flying Fox</vernacularName>
+                </heading>
+            </paragraph>
+        </subSubSection>
+        <subSubSection box="[636,1035,1164,1210]" pageId="85" pageNumber="143" type="nomenclature">
+            <paragraph blockId="85.[110,1040,1164,1294]" box="[636,1035,1164,1210]" pageId="85" pageNumber="143">
+                <heading box="[636,1035,1164,1210]" pageId="85" pageNumber="143">
+                    <taxonomicName authorityName="Temminck" authorityYear="1853" box="[636,1035,1164,1210]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="species" species="hypomelanus">
+                        <emphasis box="[636,1035,1164,1210]" italics="true" pageId="85" pageNumber="143">Pleropus hypomelanus</emphasis>
+                    </taxonomicName>
+                </heading>
+            </paragraph>
+        </subSubSection>
+        <subSubSection pageId="85" pageNumber="143" type="vernacular_names">
+            <paragraph blockId="85.[110,1040,1164,1294]" box="[112,1029,1229,1250]" pageId="85" pageNumber="143">
+                <heading box="[112,1029,1229,1250]" pageId="85" pageNumber="143">
+                    <emphasis bold="true" box="[112,188,1229,1250]" pageId="85" pageNumber="143">French:</emphasis>
+                    <vernacularName box="[198,427,1229,1250]" pageId="85" pageNumber="143">Roussette hypomélane</vernacularName>
+                    /
+                    <emphasis bold="true" box="[448,538,1229,1250]" pageId="85" pageNumber="143">German:</emphasis>
+                    <vernacularName box="[549,682,1229,1250]" pageId="85" pageNumber="143">Inselflughund</vernacularName>
+                    /
+                    <emphasis bold="true" box="[704,795,1229,1250]" pageId="85" pageNumber="143">Spanish:</emphasis>
+                    <vernacularName box="[804,1029,1229,1250]" pageId="85" pageNumber="143">Zorro volador pequeno</vernacularName>
+                </heading>
+            </paragraph>
+            <paragraph blockId="85.[110,1040,1164,1294]" box="[112,1038,1268,1289]" pageId="85" pageNumber="143">
+                <heading box="[112,1038,1268,1289]" pageId="85" pageNumber="143">
+                    <emphasis bold="true" box="[112,359,1268,1289]" pageId="85" pageNumber="143">Other common names:</emphasis>
+                    <vernacularName box="[368,531,1268,1289]" pageId="85" pageNumber="143">Small Flying Fox</vernacularName>
+                    ,
+                    <vernacularName box="[542,1038,1268,1289]" pageId="85" pageNumber="143">Variable Flying Fox; Mearns's Flying Fox (mearnsi)</vernacularName>
+                </heading>
+            </paragraph>
+        </subSubSection>
+        <subSubSection pageId="85" pageNumber="143" type="reference_group">
+            <paragraph blockId="85.[724,1318,1339,1763]" pageId="85" pageNumber="143">
+                <emphasis bold="true" box="[724,879,1339,1368]" pageId="85" pageNumber="143">Taxonomy.</emphasis>
+                <taxonomicName authority="Temminck, 1853" authorityName="Temminck" authorityYear="1853" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="species" species="hypomelanus">Pleropus hypomelanus Temminck, 1853</taxonomicName>
+                ,
+                <materialsCitation pageId="85" pageNumber="143">
+                    “1.’ile de
+                    <collectingCountry box="[1048,1156,1379,1408]" name="Indonesia" pageId="85" pageNumber="143">Ternate</collectingCountry>
+                    [=
+                    <collectingCountry name="Ternate Island" pageId="85" pageNumber="143">Ternate Island</collectingCountry>
+                    ],”
+                    <collectingCountry box="[855,988,1422,1447]" name="Indonesia" pageId="85" pageNumber="143">Moluccas</collectingCountry>
+                    ,
+                    <collectingCountry box="[1004,1145,1422,1447]" name="Indonesia" pageId="85" pageNumber="143">Indonesia</collectingCountry>
+                    .
+                </materialsCitation>
+            </paragraph>
+        </subSubSection>
+        <subSubSection pageId="85" pageNumber="143" type="discussion">
+            <paragraph blockId="85.[724,1318,1339,1763]" pageId="85" pageNumber="143">
+                <taxonomicName authorityName="Brisson" authorityYear="1762" box="[725,1010,1453,1486]" class="Mammalia" family="Pteropodidae" genus="Pteropus" kingdom="Animalia" order="Chiroptera" pageId="85" pageNumber="143" phylum="Chordata" rank="genus">Pteropus hypomelanus</taxonomicName>
+                is in the
+                <taxonomicName box="[1126,1212,1453,1486]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="species" species="griseus">griseus</taxonomicName>
+                species group. Subspecies are in need of revision. Subspecies vulcanius by O. Thomas in 1915 is synonymized with luteus; subspecies satyrus, previously assigned to
+                <taxonomicName authorityName="Blyth" authorityYear="1863" class="Dothideomycetes" family="Pteropodidae" genus="Pteropus" kingdom="Fungi" order="Chiroptera" pageId="85" pageNumber="143" phylum="Ascomycota" rank="species" species="melanotus">P. melanotus</taxonomicName>
+                , 1s In needed of clarification. Sixteen subspecies recognized.
+            </paragraph>
+        </subSubSection>
+        <subSubSection pageId="85" pageNumber="143" type="synonymic_list">
+            <caption ID-DOI="http://doi.org/10.5281/zenodo.6448899" ID-Zenodo-Dep="6448899" httpUri="https://zenodo.org/record/6448899/files/figure.png" inLine="true" pageId="85" pageNumber="143" startId="85.[112,129,1769,1802]" targetBox="[109,701,1349,1764]" targetPageId="85">
+                <paragraph blockId="85.[724,1318,1339,1763]" lastBlockId="85.[109,1318,1769,3461]" pageId="85" pageNumber="143">
+                    Subspecies and Distribution
+                    <taxonomicName authority="Temminck, 1853" authorityName="Temminck" authorityYear="1853" box="[112,583,1769,1802]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="hypomelanus">
+                        <taxonomicName authority="Temminck, 1853" authorityName="Temminck" authorityYear="1853" box="[112,567,1813,1842]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="hypomelanus">
+                            <taxonomicName authority="Temminck, 1853" authorityName="Temminck" authorityYear="1853" box="[111,507,1848,1881]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="hypomelanus">P.h.hypomelanusTemminck,1853—NMoluccas(HalmaheraandTernate)P.h.annectensK.Andersen,1908—SNatunaIs(Serasan)P.h.cagayanusMearns,1905—P.h.</taxonomicName>
+                        </taxonomicName>
+                    </taxonomicName>
+                </paragraph>
+                <paragraph blockId="85.[724,1318,1339,1763]" box="[1121,1125,1730,1763]" pageId="85" pageNumber="143">.</paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" box="[1161,1165,1769,1802]" pageId="85" pageNumber="143">.</paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" box="[910,914,1813,1842]" pageId="85" pageNumber="143">.</paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" pageId="85" pageNumber="143">
+                    <taxonomicName authority="K. Andersen, 1908" authorityName="K. Andersen" authorityYear="1908" box="[111,518,1892,1921]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="canus">
+                        <taxonomicName authority="K. Andersen, 1908" authorityName="K. Andersen" authorityYear="1908" box="[111,508,1935,1960]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="canus">P.h.canusK.Andersen,1908—NNatunaIsP.h.condorensisPeters,1869—ConDaoIs(Vietnam),andothersmallislandsintheGulfofThailand(CambodiaandThailand).</taxonomicName>
+                    </taxonomicName>
+                </paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" box="[723,727,1892,1921]" pageId="85" pageNumber="143">.</paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" pageId="85" pageNumber="143">
+                    <taxonomicName authority="G. S. Miller, 1906" authorityName="G. S. Miller" authorityYear="1906" box="[112,532,2006,2039]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="enganus">
+                        <taxonomicName authority="G. S. Miller, 1906" authorityName="G. S. Miller" authorityYear="1906" box="[111,439,2054,2079]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="enganus">
+                            <taxonomicName authority="G. S. Miller, 1906" authorityName="G. S. Miller" authorityYear="1906" box="[111,585,2085,2118]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="enganus">P.h.enganusG.S.Miller,1906—MentawaiIsP.h.fretensisKloss,1916—JarakIintheStraitsofMalaccaP.h.gemanorumG.S.Miller,1903—MerguiArchipelagoinSMyanmar(SouthTwinI),WcoastofSThailandIs(KoSurin,Similan,Satun),andWcoastofPeninsularMalaysiaIs(Langkawi).</taxonomicName>
+                        </taxonomicName>
+                    </taxonomicName>
+                </paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" box="[734,738,2006,2039]" pageId="85" pageNumber="143">.</paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" box="[913,917,2054,2079]" pageId="85" pageNumber="143">.</paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" pageId="85" pageNumber="143">
+                    <taxonomicName authority="G. S. Miller, 1900" authorityName="G. S. Miller" authorityYear="1900" box="[111,513,2212,2237]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="lepidus">P.h.lepidusG.S.Miller,1900—TiomanandAurIs,offECoastofPeninsularMalaysia,andTambelanArchipelago,oftSWBorneo.</taxonomicName>
+                </paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" pageId="85" pageNumber="143">
+                    <taxonomicName authority="K. Andersen, 1908" authorityName="K. Andersen" authorityYear="1908" box="[111,536,2291,2316]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="luteus">P.h.luteusK.Andersen,1908—afewrecordsonmainlandNEPapuaNewGuineabutspeciallyonislandsoffN&amp;Ecoasts,alsoinAdmiraltyIs,BismarckArchipelago,Solomons(RussellIs),TrobriandandWoodlarkIs,D’EntrecasteuxIs,andLouisiadeArchipelago.</taxonomicName>
+                </paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" box="[111,1026,2448,2473]" pageId="85" pageNumber="143">
+                    <taxonomicName authority="Heude, 1896" authorityName="Heude" authorityYear="1896" box="[111,532,2448,2473]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="macassaricus">P.h.macassaricusHeude,1896—Sulawesi,Sangihe,andTalaudIs.</taxonomicName>
+                </paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" box="[111,693,2488,2513]" pageId="85" pageNumber="143">
+                    <taxonomicName authority="G. M. Allen, 1936" authorityName="G. M. Allen" authorityYear="1936" box="[111,500,2488,2513]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="maris">P.h.marisG.M.Allen,1936—MaldivesIs.</taxonomicName>
+                </paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" box="[111,1076,2523,2552]" pageId="85" pageNumber="143">
+                    <taxonomicName authority=": K. Andersen, 1909" authorityName=": K. Andersen" authorityYear="1909" box="[111,558,2523,2552]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="robinson">P.h.robinson:K.Andersen,1909—RumbiaIintheStraitsofMalacca.</taxonomicName>
+                </paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" pageId="85" pageNumber="143">
+                    <taxonomicName authority="K. Andersen, 1908" authorityName="K. Andersen" authorityYear="1908" box="[111,531,2563,2592]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="satyrus">
+                        <taxonomicName authority="K. Andersen, 1908" authorityName="K. Andersen" authorityYear="1908" box="[111,511,2606,2631]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="satyrus">P.h.satyrusK.Andersen,1908—AndamanIs(Narcondam)P.h.sitmalurusThomas,1923—TapahIandothersatelliteislandsnearSimeulueI,offNWSumatra.</taxonomicName>
+                    </taxonomicName>
+                </paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" box="[943,947,2563,2592]" pageId="85" pageNumber="143">.</paragraph>
+                <paragraph blockId="85.[109,1318,1769,3461]" box="[111,1208,2681,2710]" pageId="85" pageNumber="143">
+                    <taxonomicName authority="Peters, 1869" authorityName="Peters" authorityYear="1869" box="[111,439,2681,2710]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="subSpecies" species="hypomelanus" subSpecies="tomesii">P. h. tomesii Peters, 1869</taxonomicName>
+                    —
+                    <collectingRegion box="[474,579,2681,2710]" country="Malaysia" name="Labuan" pageId="85" pageNumber="143">Labuan</collectingRegion>
+                    I and other offshore islands off NW Borneo.
+                </paragraph>
+            </caption>
+        </subSubSection>
+        <subSubSection pageId="85" pageNumber="143" type="description">
+            <paragraph blockId="85.[109,1318,1769,3461]" pageId="85" pageNumber="143">
+                <emphasis bold="true" box="[110,363,2721,2750]" pageId="85" pageNumber="143">Descriptive notes.</emphasis>
+                Head-body
+                <quantity box="[558,740,2721,2750]" metricMagnitude="-1" metricUnit="m" metricValue="2.0949999999999998" metricValueMax="2.25" metricValueMin="1.94" pageId="85" pageNumber="143" unit="mm" value="209.5" valueMax="225.0" valueMin="194.0">194-225 mm</quantity>
+                (tailless), ear
+                <quantity box="[956,1108,2721,2750]" metricMagnitude="-2" metricUnit="m" metricValue="2.55" metricValueMax="2.7" metricValueMin="2.4" pageId="85" pageNumber="143" unit="mm" value="25.5" valueMax="27.0" valueMin="24.0">24-27 mm</quantity>
+                , hindfoot
+                <quantity metricMagnitude="-2" metricUnit="m" metricValue="6.0" metricValueMax="6.8" metricValueMin="5.2" pageId="85" pageNumber="143" unit="mm" value="60.0" valueMax="68.0" valueMin="52.0">52- 68 mm</quantity>
+                , forearm
+                <quantity box="[356,537,2756,2789]" metricMagnitude="-1" metricUnit="m" metricValue="1.35" metricValueMax="1.45" metricValueMin="1.25" pageId="85" pageNumber="143" unit="mm" value="135.0" valueMax="145.0" valueMin="125.0">125-145 mm</quantity>
+                ; weight
+                <quantity box="[659,803,2756,2789]" metricMagnitude="-1" metricUnit="kg" metricValue="3.6" metricValueMax="4.2" metricValueMin="3.0" pageId="85" pageNumber="143" unit="g" value="360.0" valueMax="420.0" valueMin="300.0">300-420 g</quantity>
+                . Wingspans are
+                <quantity box="[1040,1256,2756,2789]" metricMagnitude="0" metricUnit="m" metricValue="1.1" metricValueMax="1.2" metricValueMin="1.0" pageId="85" pageNumber="143" unit="mm" value="1100.0" valueMax="1200.0" valueMin="1000.0">1000-1200 mm</quantity>
+                , depending on subspecies. Greatest lengths of skulls are
+                <quantity box="[859,1005,2796,2829]" metricMagnitude="-2" metricUnit="m" metricValue="6.4" metricValueMax="6.9" metricValueMin="5.9" pageId="85" pageNumber="143" unit="mm" value="64.0" valueMax="69.0" valueMin="59.0">59-69 mm</quantity>
+                and tibias
+                <quantity box="[1160,1309,2796,2829]" metricMagnitude="-2" metricUnit="m" metricValue="5.9" metricValueMax="6.2" metricValueMin="5.6" pageId="85" pageNumber="143" unit="mm" value="59.0" valueMax="62.0" valueMin="56.0">56-62 mm</quantity>
+                . The Island Flying Fox is highly variable, with robust skull and laterally compressed rostrum. Forearm length and body mass vary among subspecies and geographical regions, but subspecific variations is primarily in color. Ears are somewhat broad and rounded. Fur is short and adpressed on back and humerus, with some longer hairs in middle of back. Tibia is naked. Base offur is dark brown. Wing membranes are brown and attach near spine. Subspecies in eastern end ofits distribution (
+                <taxonomicName authorityName="Temminck" authorityYear="1853" box="[896,1063,3032,3065]" class="Magnoliopsida" family="Moraceae" genus="Pleropus" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="species" species="hypomelanus">hypomelanus</taxonomicName>
+                , luteus, and macassaricus) have dark brown backs and pale to ocherous bellies; luteus is considerably paler brown on front and back of body, with reddish brown on fore neck and sides of neck and brown head. Western subspecies have varieties of darker fur, some with sprinklings of grayish flecks and other variation in color, such as chestnut, cinnamon, or golden ocherous. Subspecies in the South
+                <collectingCountry box="[603,688,3230,3263]" name="China" pageId="85" pageNumber="143">China</collectingCountry>
+                Sea area are slightly larger in average size of teeth, and subspecies enganus is significantly smaller in size overall and wholly dark in color. Subspecies geminorum is wholly dark, with two color morphs: one almost without bright colors and the other with grizzled extension of gray and black sprinkling on head, flanks, and sides of chest and belly; this morph might also occur in western and central subspecies. Skull has well-developed postorbital processes, and temporal ridges
+            </paragraph>
+            <paragraph blockId="85.[1382,2599,269,2517]" pageId="85" pageNumber="143">
+                joined to
+                <taxonomicName box="[1521,1695,269,302]" form="sagittal" pageId="85" pageNumber="143" rank="form">form sagittal</taxonomicName>
+                crest. Orbit is rather large. Coronoid is moderate and somewhat sloping. Canines are distinctly recurved, with narrow but distinct cingulum around entire base. Incisors are arranged in semicircle, with gap away from canines. P' is reduced and minute, lost in many adults. Chromosomal complement has 2n = 38 and FN = 72.
+                <subSubSection pageId="85" pageNumber="143" type="biology_ecology">
+                    <emphasis bold="true" box="[1388,1500,428,461]" pageId="85" pageNumber="143">Habitat.</emphasis>
+                    Secondary and mangrove forests (few records in primary forests) from sea level up to elevations of ¢.
+                    <quantity box="[1753,1847,467,500]" metricMagnitude="2" metricUnit="m" metricValue="9.0" pageId="85" pageNumber="143" unit="m" value="900.0">900 m</quantity>
+                    . The Island Flying Fox occurs on species-poor, small islands and primarily roosts on small offshore islands.
+                </subSubSection>
+            </paragraph>
+        </subSubSection>
+        <subSubSection pageId="85" pageNumber="143" type="food_feeding">
+            <paragraph blockId="85.[1382,2599,269,2517]" pageId="85" pageNumber="143">
+                <emphasis bold="true" box="[1388,1656,554,579]" pageId="85" pageNumber="143">Food and Feeding.</emphasis>
+                Diet of the Island Flying Fox includes fruits, flowers, and nectar from natural and agroforestry habitats. Various
+                <taxonomicName box="[2092,2269,585,618]" pageId="85" pageNumber="143">Ficus species</taxonomicName>
+                (
+                <taxonomicName box="[2298,2438,585,618]" class="Magnoliopsida" family="Moraceae" kingdom="Plantae" order="Rosales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="family">Moraceae</taxonomicName>
+                ) make up significant parts ofits diet throughout its distribution. It also feeds on cultivated species. It uses flowers of
+                <taxonomicName box="[1716,1783,669,698]" class="Magnoliopsida" family="Malvaceae" genus="Ceiba" kingdom="Plantae" order="Malvales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="genus">Ceiba</taxonomicName>
+                and
+                <taxonomicName box="[1859,1934,669,698]" class="Magnoliopsida" family="Malvaceae" genus="Durio" kingdom="Plantae" order="Malvales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="genus">Durio</taxonomicName>
+                (both
+                <taxonomicName box="[2037,2188,669,698]" class="Magnoliopsida" family="Malvaceae" kingdom="Plantae" order="Malvales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="family">Malvaceae</taxonomicName>
+                );
+                <taxonomicName box="[2219,2287,669,698]" class="Liliopsida" family="Arecaceae" genus="Cocos" kingdom="Plantae" order="Arecales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="genus">Cocos</taxonomicName>
+                (
+                <taxonomicName box="[2310,2461,669,698]" class="Liliopsida" family="Arecaceae" kingdom="Plantae" order="Arecales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="family">Arecaceae</taxonomicName>
+                );
+                <taxonomicName box="[2489,2596,669,698]" class="Magnoliopsida" family="Sapotaceae" genus="Pouteria" kingdom="Plantae" order="Ericales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="genus">Pouteria</taxonomicName>
+                (
+                <taxonomicName box="[1402,1567,704,737]" class="Magnoliopsida" family="Sapotaceae" kingdom="Plantae" order="Ericales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="family">Sapotaceae</taxonomicName>
+                ); and
+                <taxonomicName box="[1659,1799,704,737]" class="Magnoliopsida" family="Myrtaceae" genus="Eucalyptus" kingdom="Plantae" order="Myrtales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="genus">Eucalyptus</taxonomicName>
+                (
+                <taxonomicName box="[1822,1974,704,737]" class="Magnoliopsida" family="Myrtaceae" kingdom="Plantae" order="Myrtales" pageId="85" pageNumber="143" phylum="Tracheophyta" rank="family">Myrtaceae</taxonomicName>
+                ). It mostly feeds alone for an average of 21 seconds/flower, but individuals occasionally feed together on the same tree. When finished with a flower, an individual moved to the next flower by flying or crawling on the same branch; minimal flower damage was recorded. Individuals forage continuously throughout the night, frequently vocalizing and wing flapping, which generally decrease after 23:00 h.
+            </paragraph>
+        </subSubSection>
+        <subSubSection pageId="85" pageNumber="143" type="breeding">
+            <paragraph blockId="85.[1382,2599,269,2517]" pageId="85" pageNumber="143">
+                <emphasis bold="true" box="[1388,1523,940,973]" pageId="85" pageNumber="143">Breeding.</emphasis>
+                Male and female Island Flying Foxes are reproductively mature at one year of age. Females typically give birth to one young once a year. Birthing peaks vary across the distribution. In the
+                <collectingCountry box="[1721,1881,1019,1052]" name="Philippines" pageId="85" pageNumber="143">Philippines</collectingCountry>
+                , females are pregnant around April and give birth in April-May. Young remain dependent on mothers for at least three months. On islands offshore of
+                <collectingCountry box="[1629,1897,1098,1131]" name="Papua New Guinea" pageId="85" pageNumber="143">Papua New Guinea</collectingCountry>
+                , females were lactating in August, and young were observed in May—August. In captivity at Lubee Bat Conservancy (Gainesville, Florida), individuals originally wild caught in
+                <collectingCountry box="[1918,2057,1177,1210]" name="Indonesia" pageId="85" pageNumber="143">Indonesia</collectingCountry>
+                in 1990 give birth year-round; males began aggressive reproductive behavior around October. Lactation lasts ¢.100 days.
+            </paragraph>
+        </subSubSection>
+        <subSubSection pageId="85" pageNumber="143" type="activity">
+            <paragraph blockId="85.[1382,2599,269,2517]" pageId="85" pageNumber="143">
+                <emphasis bold="true" box="[1386,1625,1256,1289]" pageId="85" pageNumber="143">Activity patterns.</emphasis>
+                Island Flying Foxes are nocturnal and leave roosts around dusk to forage. In
+                <collectingCountry box="[1537,1656,1296,1329]" name="Malaysia" pageId="85" pageNumber="143">Malaysia</collectingCountry>
+                , individuals arrive at durian trees prior (at ¢.19:20 h) to other bat species. Individuals return to day roosts before dawn. The Island Flying Fox has lowerthan-expected basal metabolic rate.
+            </paragraph>
+        </subSubSection>
+        <subSubSection pageId="85" pageNumber="143" type="biology_ecology">
+            <paragraph blockId="85.[1382,2599,269,2517]" pageId="85" pageNumber="143">
+                <emphasis bold="true" box="[1388,2101,1414,1447]" pageId="85" pageNumber="143">Movements, Home range and Social organization.</emphasis>
+                The Island Flying Fox can fly
+                <quantity metricMagnitude="4" metricUnit="m" metricValue="4.0" metricValueMax="5.0" metricValueMin="3.0" pageId="85" pageNumber="143" unit="km" value="40.0" valueMax="50.0" valueMin="30.0">30- 50 km</quantity>
+                /night to forage and will skim within troughs of waves to reduce wind resistance when flying long distances. In
+                <collectingCountry box="[1823,2095,1493,1526]" name="Papua New Guinea" pageId="85" pageNumber="143">Papua New Guinea</collectingCountry>
+                , it commutes from its day roost on small offshore islands to other small islands to forage but rarely to the mainland unless strong winds make flying seaward difficult. It is gregarious and roosts colonially (up to 5000 individuals) in tall trees with low levels of disturbance but forms smaller colonies throughout much ofits distribution. Colonies are of mixed sexes, including females with dependent young. At day roosts, they rest and wing-flap, and occasionally engage in territorial interactions. In the
+                <collectingCountry box="[1860,2020,1730,1763]" name="Philippines" pageId="85" pageNumber="143">Philippines</collectingCountry>
+                , the Island Flying Fox roosts with other flying fox species; in
+                <collectingCountry box="[1676,1815,1770,1803]" name="Indonesia" pageId="85" pageNumber="143">Indonesia</collectingCountry>
+                and
+                <collectingCountry box="[1885,2004,1770,1803]" name="Malaysia" pageId="85" pageNumber="143">Malaysia</collectingCountry>
+                , most are single-species colonies. In Milne Bay islands, it sometimes roosts with the Spectacled Flying Fox (
+                <taxonomicName authorityName="Gould" authorityYear="1850" box="[2286,2497,1809,1842]" class="Dothideomycetes" family="Pteropodidae" genus="Pteropus" kingdom="Fungi" order="Chiroptera" pageId="85" pageNumber="143" phylum="Ascomycota" rank="species" species="conspicillatus">P. conspicillatus</taxonomicName>
+                ).
+            </paragraph>
+        </subSubSection>
+        <subSubSection pageId="85" pageNumber="143" type="conservation">
+            <paragraph blockId="85.[1382,2599,269,2517]" pageId="85" pageNumber="143">
+                <emphasis bold="true" box="[1388,1731,1849,1882]" pageId="85" pageNumber="143">Status and Conservation.</emphasis>
+                CITES Appendix II. Classified as Least Concern on The IUCN Red List. Rate of decline throughout the distribution of the Island Flying Fox due to overhunting and ongoing habitat degradation from human activity and climate change is so far less than 30%. Continued rise in global sea level will result in loss of essential roosting habitat and might result in reclassification as Vulnerable. It is much more rare than in the past due to overhunting and habitat loss. Individuals are normally sold locally, making detection ofillegal killing difficult. Hunters use various methods from guns to nets and fishhooks hanging from lines. There are some resident populations in human-dominant landscapes (orchards and coastal resorts) that has led to conflict and persecution, sometimes resulting in hunting of bats or attempts to expel a colony from the site. Hunting of flying foxes in the
+                <collectingCountry box="[1926,2081,2244,2277]" name="Philippines" pageId="85" pageNumber="143">Philippines</collectingCountry>
+                is illegal, except by a few indigenous groups, but hunting is unregulated and therefore continues even today; fruit bat buyers prefer larger species but often buy the relatively small Island Flying Fox.
+            </paragraph>
+        </subSubSection>
+        <subSubSection pageId="85" pageNumber="143" type="bibRefCitation_list">
+            <paragraph blockId="85.[1382,2599,269,2517]" pageId="85" pageNumber="143">
+                <emphasis bold="true" box="[1388,1538,2371,2396]" pageId="85" pageNumber="143">Bibliography.</emphasis>
+                Aimeida et al. (2014), Andersen (1912b), Aziz et al. (2017), Bonaccorso (1998), Corbet &amp; Hill (1992), Flannery (1995a), Francis, Rosell-Ambal, Bonaccorso et al. (2008), Heaney et al. (2016), Ingle &amp; Heaney (1992), Jones &amp; Kunz (2000), Koopman (1979), Metrione et al. (2008), Rickart, Heaney &amp; Rosenfeld (1989), Simmons (2005), Thomas (1915b).
+            </paragraph>
+        </subSubSection>
+    </treatment>
+</document>

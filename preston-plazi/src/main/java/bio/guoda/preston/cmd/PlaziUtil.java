@@ -27,6 +27,8 @@ import static bio.guoda.preston.process.XMLUtil.evaluateXPath;
 public class PlaziUtil {
 
     public static final String PATTERN_SUB_DISTRIBUTION = "([.].*Distribution[ ]*[.])";
+    public static final String PATTERN_SUB_DISTRIBUTION_ALT = "([ ]Subspecies and Distribution[ ])";
+    public static final String PATTERN_SUB_DISTRIBUTION_ALT_2 = "([ ]Distribution[ ])";
     public static final String PATTERN_SUB_DESCRIPTIVE_NOTES = "([.].*Descriptive notes[ ]*[.])";
     public static final String PATTERN_SUB_HABITAT = "([.].*Habitat[ ]*[.])";
     public static final String PATTERN_SUB_MOVEMENTS = "([.].*Movements, Home range and Social organization[ ]*[.])";
@@ -38,8 +40,12 @@ public class PlaziUtil {
     public static final Pattern PATTERN_BIBLIOGRAPHY = Pattern.compile("(.*)" + PATTERN_SUB_BIBLIOGRAPHY + "(.*)");
 
     public static final Pattern PATTERN_FOOD_AND_FEEDING = Pattern.compile("(.*)" + PATTERN_SUB_FOOD_AND_FEEDING + "(.*)" + PATTERN_SUB_BREEDING + "(.*)");
-    public static final Pattern PATTERN_TAXONOMY = Pattern.compile("(.{1,20000})(Taxonomy[ .]+)(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)");
+    public static final Pattern PATTERN_TAXONOMY = Pattern.compile("(.{1,20000})(T[ha]xonomy[ .]+)(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)");
     public static final Pattern PATTERN_DISTRIBUTION = Pattern.compile("(.*)" + PATTERN_SUB_DISTRIBUTION + "(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)");
+    public static final Pattern PATTERN_TAXONOMY_ALT = Pattern.compile("(.{1,20000})(T[ha]xonomy[ .]+)(.*)" + PATTERN_SUB_DISTRIBUTION_ALT + "(.*)");
+    public static final Pattern PATTERN_TAXONOMY_ALT_2 = Pattern.compile("(.{1,20000})(T[ha]xonomy[ .]+)(.*)" + PATTERN_SUB_DISTRIBUTION_ALT_2 + "(.*)");
+    public static final Pattern PATTERN_DISTRIBUTION_ALT = Pattern.compile("(.*)" + PATTERN_SUB_DISTRIBUTION_ALT + "(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)");
+    public static final Pattern PATTERN_DISTRIBUTION_ALT_2 = Pattern.compile("(.*)" + PATTERN_SUB_DISTRIBUTION_ALT_2 + "(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)");
     public static final Pattern PATTERN_DESCRIPTIVE_NOTES = Pattern.compile("(.*)" + PATTERN_SUB_DESCRIPTIVE_NOTES + "(.*)" + PATTERN_SUB_HABITAT + "(.*)");
     public static final Pattern PATTERN_HABITAT = Pattern.compile("(.*)" + PATTERN_SUB_HABITAT + "(.*)" + PATTERN_SUB_FOOD_AND_FEEDING + "(.*)");
     public static final Pattern PATTERN_BREEDING = Pattern.compile("(.*)" + PATTERN_SUB_BREEDING + "(.*)" + PATTERN_SUB_ACTIVITY_PATTERNS + "(.*)");
@@ -336,7 +342,15 @@ public class PlaziUtil {
     }
 
     public static String extractTaxonomySegment(String treatmentText) {
-        return extractSegment(treatmentText, PATTERN_TAXONOMY);
+        String taxonomy = extractSegment(treatmentText, PATTERN_TAXONOMY);
+
+        if (StringUtils.isBlank(taxonomy)) {
+            taxonomy = extractSegment(treatmentText, PATTERN_TAXONOMY_ALT);
+        }
+
+        return StringUtils.isBlank(taxonomy)
+                ? extractSegment(treatmentText, PATTERN_TAXONOMY_ALT_2)
+                : taxonomy;
     }
 
     public static String extractDescriptiveNoteSegment(String treatmentText) {
@@ -348,7 +362,14 @@ public class PlaziUtil {
     }
 
     public static String extractDistributionSegment(String treatmentText) {
-        return extractSegment(treatmentText, PATTERN_DISTRIBUTION);
+        String distribution = extractSegment(treatmentText, PATTERN_DISTRIBUTION);
+
+        if (StringUtils.isBlank(distribution)) {
+            distribution = extractSegment(treatmentText, PATTERN_DISTRIBUTION_ALT);
+        }
+        return StringUtils.isBlank(distribution)
+                ? extractSegment(treatmentText, PATTERN_DISTRIBUTION_ALT_2)
+                : distribution;
     }
 
     private static String extractSegment(String segmentCandidate, Pattern segmentPattern) {
