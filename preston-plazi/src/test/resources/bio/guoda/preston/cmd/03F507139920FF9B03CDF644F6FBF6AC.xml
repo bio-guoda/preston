@@ -1,0 +1,190 @@
+<document ID-DOI="http://doi.org/10.5281/zenodo.6512484" ID-GBIF-Dataset="67b52095-db4b-43f8-a661-4aced0511111" ID-ISBN="978-84-96553-77-4" ID-Zenodo-Dep="6512484" checkinTime="1651524980884" checkinUser="conny" docAuthor="Don E. Wilson &amp; Russell A. Mittermeier" docDate="2011" docId="03F507139920FF9B03CDF644F6FBF6AC" docLanguage="en" docName="hbmw_2_Bovidae_0444.pdf.imf" docOrigin="Handbook of the Mammals of the World – Volume 2 Hoofed Mammals, Barcelona: Lynx Edicions" docTitle="Capra walie Ruppell 1835" docType="treatment" docVersion="12" lastPageNumber="678" masterDocId="FFCC7F6B994BFFF00316FF82FFEDFF81" masterDocTitle="Bovidae" masterLastPageNumber="779" masterPageNumber="444" pageNumber="678" updateTime="1656434374514" updateUser="carolina">
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:titleInfo>
+<mods:title>Bovidae</mods:title>
+</mods:titleInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Don E. Wilson</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Russell A. Mittermeier</mods:namePart>
+</mods:name>
+<mods:typeOfResource>text</mods:typeOfResource>
+<mods:relatedItem type="host">
+<mods:originInfo>
+<mods:dateIssued>2011</mods:dateIssued>
+<mods:dateOther type="pubDate">2011-08-31</mods:dateOther>
+<mods:publisher>Lynx Edicions</mods:publisher>
+<mods:place>
+<mods:placeTerm>Barcelona</mods:placeTerm>
+</mods:place>
+</mods:originInfo>
+<mods:titleInfo>
+<mods:title>Handbook of the Mammals of the World – Volume 2 Hoofed Mammals</mods:title>
+</mods:titleInfo>
+<mods:part>
+<mods:extent unit="page">
+<mods:start>444</mods:start>
+<mods:end>779</mods:end>
+</mods:extent>
+</mods:part>
+</mods:relatedItem>
+<mods:classification>book chapter</mods:classification>
+<mods:identifier type="DOI">http://doi.org/10.5281/zenodo.6512484</mods:identifier>
+<mods:identifier type="GBIF-Dataset">67b52095-db4b-43f8-a661-4aced0511111</mods:identifier>
+<mods:identifier type="ISBN">978-84-96553-77-4</mods:identifier>
+<mods:identifier type="Zenodo-Dep">6512484</mods:identifier>
+</mods:mods>
+<treatment ID-DOI="http://doi.org/10.5281/zenodo.6636944" ID-GBIF-Taxon="195659286" ID-Zenodo-Dep="6636944" LSID="urn:lsid:plazi:treatment:03F507139920FF9B03CDF644F6FBF6AC" httpUri="http://treatment.plazi.org/id/03F507139920FF9B03CDF644F6FBF6AC" lastPageNumber="678" pageId="107" pageNumber="678">
+<subSubSection box="[219,299,2502,2548]" pageId="107" pageNumber="678" type="multiple">
+<paragraph blockId="107.[214,1120,2502,2629]" box="[219,299,2502,2548]" pageId="107" pageNumber="678">
+<heading box="[219,299,2502,2548]" pageId="107" pageNumber="678">
+<figureCitation box="[219,299,2502,2548]" captionStart="Plate 45: Bovidae" captionStartId="104.[93,123,3393,3414]" captionTargetBox="[12,2758,13,3635]" captionTargetPageId="103" captionText="178. Wild Goat (Capra aegagrus), 179. Markhor (Capra falconeri), 180. Iberian Ibex (Capra pyrenaica), 181. Nubian Ibex (Capra nubiana), 182. Walia Ibex (Capra wale), 183. Alpine Ibex (Capra ibex), 184. Siberian Ibex (Capra sibirica), 185. Kuban Tur (Capra caucasica), 186. Daghestan Tur (Capra cylindricornis)" figureDoi="http://doi.org/10.5281/zenodo.6512955" httpUri="https://zenodo.org/record/6512955/files/figure.png" pageId="107" pageNumber="678">182.</figureCitation>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection box="[313,534,2502,2548]" pageId="107" pageNumber="678" type="vernacular_names">
+<paragraph blockId="107.[214,1120,2502,2629]" box="[313,534,2502,2548]" pageId="107" pageNumber="678">
+<heading box="[313,534,2502,2548]" pageId="107" pageNumber="678">
+<vernacularName box="[313,534,2502,2548]" pageId="107" pageNumber="678">Walia Ibex</vernacularName>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection box="[589,813,2502,2548]" pageId="107" pageNumber="678" type="nomenclature">
+<paragraph blockId="107.[214,1120,2502,2629]" box="[589,813,2502,2548]" pageId="107" pageNumber="678">
+<heading box="[589,813,2502,2548]" pageId="107" pageNumber="678">
+<taxonomicName authority="Ruppell, 1835" authorityName="Ruppell" authorityYear="1835" box="[589,813,2502,2548]" class="Mammalia" family="Bovidae" genus="Capra" kingdom="Animalia" order="Artiodactyla" pageId="107" pageNumber="678" phylum="Chordata" rank="species" species="walie">
+<emphasis box="[589,813,2502,2548]" italics="true" pageId="107" pageNumber="678">Capra walie</emphasis>
+</taxonomicName>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="107" pageNumber="678" type="vernacular_names">
+<paragraph blockId="107.[214,1120,2502,2629]" box="[216,1120,2566,2587]" pageId="107" pageNumber="678">
+<heading box="[216,1120,2566,2587]" pageId="107" pageNumber="678">
+<emphasis bold="true" box="[216,293,2566,2587]" pageId="107" pageNumber="678">French:</emphasis>
+<vernacularName box="[302,525,2566,2587]" pageId="107" pageNumber="678">Bouguetin d’Abyssinie</vernacularName>
+/ 
+<emphasis bold="true" box="[546,637,2566,2587]" pageId="107" pageNumber="678">German:</emphasis>
+<vernacularName box="[646,847,2566,2587]" pageId="107" pageNumber="678">Athiopien-Steinbock</vernacularName>
+/ 
+<emphasis bold="true" box="[868,958,2566,2587]" pageId="107" pageNumber="678">Spanish:</emphasis>
+<vernacularName box="[969,1120,2566,2587]" pageId="107" pageNumber="678">
+ibice de 
+<collectingCountry box="[1055,1120,2566,2587]" name="Ethiopia" pageId="107" pageNumber="678">Etiopia</collectingCountry>
+</vernacularName>
+</heading>
+</paragraph>
+<paragraph blockId="107.[214,1120,2502,2629]" box="[215,782,2605,2626]" pageId="107" pageNumber="678">
+<heading box="[215,782,2605,2626]" pageId="107" pageNumber="678">
+<emphasis bold="true" box="[215,462,2605,2626]" pageId="107" pageNumber="678">Other common names:</emphasis>
+<vernacularName box="[470,628,2605,2626]" pageId="107" pageNumber="678">Abyssinian Ibex</vernacularName>
+, 
+<vernacularName box="[642,782,2605,2626]" pageId="107" pageNumber="678">Ethiopian Ibex</vernacularName>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="107" pageNumber="678" type="reference_group">
+<paragraph blockId="107.[831,1416,2671,3097]" pageId="107" pageNumber="678">
+<emphasis bold="true" box="[831,982,2671,2704]" pageId="107" pageNumber="678">Taxonomy</emphasis>
+: 
+<taxonomicName authority="Ruppell, 1835" authorityName="Ruppell" authorityYear="1835" box="[1014,1409,2671,2704]" class="Mammalia" family="Bovidae" genus="Capra" kingdom="Animalia" order="Artiodactyla" pageId="107" pageNumber="678" phylum="Chordata" rank="species" species="walie">Capra walie Ruppell, 1835</taxonomicName>
+, 
+<materialsCitation ID-GBIF-Occurrence="3785198498" box="[832,957,2708,2741]" pageId="107" pageNumber="678">
+<collectingCountry box="[832,953,2708,2741]" name="Ethiopia" pageId="107" pageNumber="678">Ethiopia</collectingCountry>
+.
+</materialsCitation>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="107" pageNumber="678" type="discussion">
+<paragraph blockId="107.[831,1416,2671,3097]" pageId="107" pageNumber="678">
+Sometimes classified as a subspecies of 
+<taxonomicName class="Mammalia" family="Bovidae" genus="Capra" kingdom="Animalia" order="Artiodactyla" pageId="107" pageNumber="722" phylum="Chordata" rank="species" species="nubiana">C. nubiana</taxonomicName>
+. Molecular genetic data indicate that 
+<taxonomicName box="[904,1010,2828,2861]" class="Mammalia" family="Bovidae" genus="Capra" kingdom="Animalia" order="Artiodactyla" pageId="107" pageNumber="678" phylum="Chordata" rank="species" species="walie">C. walie</taxonomicName>
+and 
+<taxonomicName box="[1093,1243,2828,2861]" class="Mammalia" family="Bovidae" genus="Capra" kingdom="Animalia" order="Artiodactyla" pageId="107" pageNumber="678" phylum="Chordata" rank="species" species="nubiana">C. nubiana</taxonomicName>
+have had a long-term disjunct distribution and form a monophyletic clade separate from an ancestral central Asian ibex. Genetic data and its unique ecological adaptations indicate that 
+<taxonomicName box="[1001,1107,3025,3058]" class="Mammalia" family="Bovidae" genus="Capra" kingdom="Animalia" order="Artiodactyla" pageId="107" pageNumber="678" phylum="Chordata" rank="species" species="walie">C. walie</taxonomicName>
+is a separate species. Monotypic.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="107" pageNumber="678" type="distribution">
+<caption ID-DOI="http://doi.org/10.5281/zenodo.6512718" ID-Zenodo-Dep="6512718" httpUri="https://zenodo.org/record/6512718/files/figure.png" inLine="true" pageId="107" pageNumber="678" targetBox="[214,807,2680,3096]" targetPageId="107">
+<paragraph blockId="107.[216,1416,3103,3450]" pageId="107" pageNumber="678">
+<emphasis bold="true" box="[216,392,3103,3136]" pageId="107" pageNumber="678">Distribution.</emphasis>
+N 
+<collectingCountry box="[446,567,3103,3136]" name="Ethiopia" pageId="107" pageNumber="678">Ethiopia</collectingCountry>
+, principally in the Simien Mountains National Park along 
+<quantity box="[217,301,3144,3177]" metricMagnitude="4" metricUnit="m" metricValue="2.5" pageId="107" pageNumber="678" unit="km" value="25.0">25 km</quantity>
+of the N escarpment.
+</paragraph>
+</caption>
+</subSubSection>
+<subSubSection pageId="107" pageNumber="678" type="description">
+<paragraph blockId="107.[216,1416,3103,3450]" lastBlockId="107.[1484,2691,271,2352]" pageId="107" pageNumber="678">
+<emphasis bold="true" box="[216,464,3186,3215]" pageId="107" pageNumber="678">Descriptive notes.</emphasis>
+Head-body 175-196 cm (males), tail 22.5-25 cm (males), shoulder height ¢.75-110 cm (males) and ¢.65-100 cm (females); weight 100-125 kg (males). Horn length 89-114 cm (males), basal horn circumference 25-30. 
+<quantity box="[1137,1204,3264,3293]" metricMagnitude="-2" metricUnit="m" metricValue="5.0" pageId="107" pageNumber="678" unit="cm" value="5.0">5 cm</quantity>
+(males), about 
+<quantity box="[220,299,3299,3332]" metricMagnitude="-1" metricUnit="m" metricValue="1.3" pageId="107" pageNumber="678" unit="cm" value="13.0">13 cm</quantity>
+(females). The horns, which are flattened laterally, diverge slightly and grow upward in a scimitarshaped curve. The relatively flat surfaces of the horns of males have transverse knobs. General body color is chestnut-brown. 
+<collectingRegion box="[1001,1071,3382,3411]" country="Myanmar" name="Chin" pageId="107" pageNumber="678">Chin</collectingRegion>
+, throat, underside of the body, and inner surfaces of the legs are whitish, with a black stripe extending down the front of each limb. White bands above the knees and hooves cut across the black stripe of the front and hindlegs. Males seven years and older have a prominent dark beard, and dark chest and flank stripes that connect with the dark upper front legs and dark upper front surface of the hindlegs. Females and young males lack beards. Males have a black mid-dorsal stripe that extends to the tail. The whitish rump patch is small, confined to the anal area, and mostly covered by the relatively long tail. Males rarely live more than eleven years.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="107" pageNumber="678" type="biology_ecology">
+<paragraph blockId="107.[1484,2691,271,2352]" pageId="107" pageNumber="678">
+<emphasis bold="true" box="[1485,1596,546,579]" pageId="107" pageNumber="678">Habitat.</emphasis>
+Occur at an average elevation of 
+<quantity box="[2063,2163,546,579]" metricMagnitude="3" metricUnit="m" metricValue="3.3899999999999997" pageId="107" pageNumber="678" unit="m" value="3390.0">3390 m</quantity>
+(range: 2500-4200 m) in areas oftall vegetation, including forested areas and tall shrub habitats, but also tall grass meadows and savannas. Have a strong proclivity for using shrubby, savanna, and forested habitats. Their habitats are particularly characterized by heterogeneous slopes including escarpments, deep canyons, gorges, cliffs, and other rocky habitats in steep, rough terrain. Thirty percent of sightings of Walia Ibexes were on 30-40° slopes and 64% on slopes greater than 45°. Females are associated with steeper terrain than males.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="107" pageNumber="678" type="food_feeding">
+<paragraph blockId="107.[1484,2691,271,2352]" pageId="107" pageNumber="678">
+<emphasis bold="true" box="[1485,1752,821,854]" pageId="107" pageNumber="678">Food and Feeding.</emphasis>
+Grasses may comprise 11% of diet, but browse is the diet component. Detailed studies of seasonal preferences have not been conducted. Walia ibexes feed on slopes or terraces near steep, rugged terrain.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="107" pageNumber="678" type="breeding">
+<paragraph blockId="107.[1484,2691,271,2352]" pageId="107" pageNumber="678">
+<emphasis bold="true" box="[1485,1620,939,972]" pageId="107" pageNumber="678">Breeding.</emphasis>
+Mating occurs throughout the year, with a peak in March—May. A relatively large number of animals are in mixed groupsatthis period, indicating a peak in sexual activity. Also at this period, 30% of adult males older than four years of age are in rut, and the greatest numbers of adult females are followed by rutting males. Dominant older males, at least seven years old, probably do most of the mating. Males mate with a single female at a time and do not form harems. There is a birth peak in September— October, toward the end of the rainy season. The gestation period is about 165-175 days. Twins are probably rare.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="107" pageNumber="678" type="activity">
+<paragraph blockId="107.[1484,2691,271,2352]" pageId="107" pageNumber="678">
+<emphasis bold="true" box="[1484,1721,1254,1287]" pageId="107" pageNumber="678">Activity patterns.</emphasis>
+Walia Ibexes are usually active on east-facing slopes, which receive more rain than west-facing slopes. Resting animals prefer ridges that overlook large areas of terrain and afford security. Groups concentrate on areas oftaller, dense plant cover, with a higher utilization of shrubby, savanna, and forested habitats.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="107" pageNumber="678" type="biology_ecology">
+<paragraph blockId="107.[1484,2691,271,2352]" pageId="107" pageNumber="678">
+<emphasis bold="true" box="[1486,2201,1411,1444]" pageId="107" pageNumber="678">Movements, Home range and Social organization.</emphasis>
+Walia Ibexes usually do not have seasonal movements. Males probably have larger home ranges than females, but detailed studies have not been conducted. Males and females are not completely segregated at any time of the year, probably because there are females in estrus throughout the year. Forty percent of 
+<taxonomicName box="[1852,1911,1569,1602]" class="Aves" family="Phasianidae" genus="Spanish" kingdom="Animalia" order="Galliformes" pageId="107" pageNumber="678" phylum="Chordata" rank="species" species="ibex">ibex</taxonomicName>
+herds contained males and females of all ages; 84% of the animals were in mixed herds, indicating that males join female herds during all seasons. Males at the age of two to three years join older male herds.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="107" pageNumber="678" type="conservation">
+<paragraph blockId="107.[1484,2691,271,2352]" pageId="107" pageNumber="678">
+<emphasis bold="true" box="[1487,1838,1686,1719]" pageId="107" pageNumber="678">Status and Conservation.</emphasis>
+Classified as Endangered on The IUCN Red List. Population currently numbers about 
+<quantity box="[1858,1946,1734,1759]" metricMagnitude="1" metricUnit="m" metricValue="1.143" pageId="107" pageNumber="678" unit="in" value="450.0">450 in</quantity>
+the Simien Mountains National Park, 
+<collectingCountry box="[2512,2633,1734,1759]" name="Ethiopia" pageId="107" pageNumber="678">Ethiopia</collectingCountry>
+, an increase from 
+<quantity box="[1688,1771,1769,1798]" metricMagnitude="0" metricUnit="m" metricValue="7.62" pageId="107" pageNumber="678" unit="in" value="300.0">300 in</quantity>
+the 1980s. Small numbers occur outside the park. Because excessive numbers of livestock are causing habitat degradation and disturbance to native wildlife, livestock should be removed from the national park. The increasing human population in scattered settlements within and outside the park and ensuing agricultural development in steep terrain are further degrading habitats through soil erosion. Cutting of trees and shrubs for firewood and human-induced forest fires add to the continuing habitat degradation and destruction. Development of a buffer area surrounding the park and connectivity corridors for ibexes within and outside the park are urgently needed. The creation of strictly managed game ranching enterprises outside the park, including sport hunting, could promote incentive-driven, community-based conservation initiatives, encourage the protection of ibexes outside park boundaries and make it possible to establish populations in other areas.
+</paragraph>
+<paragraph blockId="107.[1484,2691,271,2352]" pageId="107" pageNumber="678">Bibliography: Dunbar (1978), Ellerman &amp; Morrison-Scott (1966), Festa-Bianchet (2009), Gebremedhin &amp; Grubb (2008), Gebremedhin et al. (2009), Grubb (2005), Hillman et al. (1997), Maydon (1925, 1932), Nievergelt (1974, 1981, 1990), Nievergelt et al. (1981), Rothschild (1902), Valdez (1985).</paragraph>
+</subSubSection>
+</treatment>
+</document>

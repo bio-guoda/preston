@@ -285,4 +285,14 @@ public class PlaziTreatmentParserTest {
         assertThat(treatment.get("bibliography").textValue(), Is.is("Bates, Francis & Csorba (2008) | Boitani et al. (2006) | Corbet & Hill (1992) | Francis (2008a) | Heller & Volleth (1984, 1989) | Hill (1972, 1983) | Hill & Francis (1984) | Hill & Harrison (1987) | Kingston , Francis et al. (2003) | Kingston , Lim & Zubaid (2006) | Lim et al. (2017) | Medway (1983) | Mohd-Hanif et a/.(2015) | Simmons (2005)"));
     }
 
+    @Test
+    public void processXML11() throws IOException, TreatmentParseException {
+            InputStream is = getClass().getResourceAsStream("03F507139920FF9B03CDF644F6FBF6AC.xml");
+        JsonNode treatment = new PlaziTreatmentParser().parse(is);
+
+        assertThat(treatment.get("docId").asText(), Is.is("03F507139920FF9B03CDF644F6FBF6AC"));
+
+        assertThat(treatment.get("bibliography").textValue(), Is.is("Dunbar (1978) | Ellerman & Morrison-Scott (1966) | Festa-Bianchet (2009) | Gebremedhin & Grubb (2008) | Gebremedhin et al. (2009) | Grubb (2005) | Hillman et al. (1997) | Maydon (1925, 1932) | Nievergelt (1974, 1981, 1990) | Nievergelt et al. (1981) | Rothschild (1902) | Valdez (1985)"));
+    }
+
 }
