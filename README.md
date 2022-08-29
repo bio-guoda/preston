@@ -702,6 +702,9 @@ A list of publications using Preston or exploring the idea of using content-base
 
 MJ Elliott, JH Poelen, JAB Fortes (2020). Toward Reliable Biodiversity Dataset References. Ecological Informatics. https://doi.org/10.1016/j.ecoinf.2020.101132
 
+### In Prep
+
+Elliott, M. J., Poelen, J. H., & Fortes, J. (2022, August 29). Signed Citations: Making Persistent and Verifiable Citations of Digital Scientific Content. https://doi.org/10.31222/osf.io/wycjn
 
 ### Other Conference Presentations / Papers
 
@@ -720,6 +723,8 @@ Elliott, M. J., Poelen, J. H., Fortes, J. A. B. (2020). Reliable Dataset Identif
 Boettiger, C (2020). Content-based Identifiers for Iterative Forecasts: A Proposal. Data One Webinars. Accessible at https://www.dataone.org/webinars/iterative-forecasts/ .
 
 ### Data publications
+
+Poelen, Jorrit H., & Groom, Quentin. (2022). Preserved Specimen Records with Still Images Registered Across Biodiversity Data Networks in Period 2019-2022 hash://sha256/da7450941e7179c973a2fe1127718541bca6ccafe0e4e2bfb7f7ca9dbb7adb86 (0.0.1) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7032574
 
 J.H. Poelen. A biodiversity dataset graph: Biodiversity Heritage Library (BHL) hash://sha256/34ccd7cf7f4a1ea35ac6ae26a458bb603b2f6ee8ad36e1a58aa0261105d630b1, https://archive.org/details/preston-bhl (2019)
 
