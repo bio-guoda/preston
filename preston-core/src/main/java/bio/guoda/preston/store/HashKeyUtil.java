@@ -32,14 +32,15 @@ public class HashKeyUtil {
     }
 
     public static boolean isValidHashKey(IRI hashKey) {
-        String iriString = hashKey.getIRIString();
+        HashType type = hashTypeFor(hashKey);
+        return isValidHashKey(hashKey, type);
+    }
 
-        HashType type = hashTypeFor(iriString);
-
+    public static boolean isValidHashKey(IRI hashKey, HashType type) {
         return type != null
                 && type
                 .getIRIPattern()
-                .matcher(iriString)
+                .matcher(hashKey.getIRIString())
                 .matches();
     }
 
