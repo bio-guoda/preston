@@ -30,12 +30,6 @@ public class HexaStoreImpl implements HexaStore {
         // write-once, read-many
         IRI key = queryKeyCalculator.calculateKeyFor(queryKey);
         String strValue = value instanceof IRI ? ((IRI) value).getIRIString() : value.toString();
-
-        if (StringUtils.isBlank(strValue)
-                || !HashKeyUtil.isValidHashKey(RefNodeFactory.toIRI(strValue), HashKeyUtil.hashTypeFor(key))) {
-            throw new IOException("cannot store " + (StringUtils.isBlank(strValue) ? "empty value" : "malformed value [" + strValue + "]"));
-        }
-
         if (StringUtils.isNotBlank(strValue)) {
             keyValueStore.put(key, IOUtils.toInputStream(strValue, StandardCharsets.UTF_8));
         }
@@ -48,16 +42,10 @@ public class HexaStoreImpl implements HexaStore {
 
     @Override
     public IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException {
-        IRI keyIRI = queryKeyCalculator.calculateKeyFor(queryKey);
-        IRI valueIRI = null;
-        try (InputStream inputStream = keyValueStore.get(keyIRI)) {
-            if (inputStream != null) {
-                valueIRI = RefNodeFactory.toIRI(URI.create(IOUtils.toString(inputStream, StandardCharsets.UTF_8)));
-            }
+        try(InputStream inputStream = keyValueStore.get(queryKeyCalculator.calculateKeyFor(queryKey))) {
+            return inputStream == null
+                    ? null
+                    : RefNodeFactory.toIRI(URI.create(IOUtils.toString(inputStream, StandardCharsets.UTF_8)));
         }
-        if (valueIRI == null || !HashKeyUtil.isValidHashKey(valueIRI, HashKeyUtil.hashTypeFor(keyIRI))) {
-            throw new IOException("found " + (valueIRI == null ? "empty" : "malformed query result [" + valueIRI.getIRIString() + "]"));
-        }
-        return valueIRI;
     }
 }
