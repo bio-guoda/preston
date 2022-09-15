@@ -12,7 +12,9 @@ import bio.guoda.preston.cmd.CmdCopyTo;
 import bio.guoda.preston.cmd.CmdDwcRecordStream;
 import bio.guoda.preston.cmd.CmdGrep;
 import bio.guoda.preston.cmd.CmdHash;
+import bio.guoda.preston.cmd.CmdHead;
 import bio.guoda.preston.cmd.CmdInstallManual;
+import bio.guoda.preston.cmd.CmdGenerateQRCode;
 import bio.guoda.preston.cmd.CmdPlazi;
 import bio.guoda.preston.cmd.CmdSeeds;
 import bio.guoda.preston.cmd.CmdSketchCreate;
@@ -63,6 +65,8 @@ import static java.lang.System.exit;
                 CmdPlazi.class,
                 CmdServe.class,
                 CmdCite.class,
+                CmdGenerateQRCode.class,
+                CmdHead.class,
                 CmdInstallManual.class,
                 ManPageGenerator.class,
                 CommandLine.HelpCommand.class

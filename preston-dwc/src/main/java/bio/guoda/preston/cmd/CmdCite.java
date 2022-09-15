@@ -13,11 +13,9 @@ import picocli.CommandLine;
 
 @CommandLine.Command(
         name = "cite",
-        description = CmdCite.CITES_DATASETS_IN_DATASET_ARCHIVE
+        description = "Cites datasets in dataset archive"
 )
 public class CmdCite extends LoggingPersisting implements Runnable {
-
-    public static final String CITES_DATASETS_IN_DATASET_ARCHIVE = "Cites datasets in dataset archive";
 
     @Override
     public void run() {
