@@ -8,11 +8,12 @@ import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
-import bio.guoda.preston.store.KeyValueStoreWithFallback;
+import bio.guoda.preston.store.KeyValueStoreWithReadFallback;
 import bio.guoda.preston.store.KeyValueStreamFactory;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.TracerOfDescendants;
 import bio.guoda.preston.store.TracerOfOrigins;
+import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
 import org.apache.commons.io.FileUtils;
 import picocli.CommandLine;
 
@@ -66,12 +67,12 @@ public class PersistingLocal extends Cmd {
     protected KeyValueStore getKeyValueStore(KeyValueStreamFactory keyValueStreamFactory) {
         KeyValueStore primary = new KeyValueStoreLocalFileSystem(getTmpDir(), getKeyToPathLocal(), keyValueStreamFactory);
         KeyValueStoreReadOnly fallback = new KeyValueStoreLocalFileSystem(getTmpDir(), new KeyTo5LevelPath(getDefaultDataDir().toURI(), getHashType()), keyValueStreamFactory);
-        return new KeyValueStoreWithFallback(primary, fallback);
+        return new KeyValueStoreWithReadFallback(primary, fallback);
     }
 
     protected ProvenanceTracer getTracerOfDescendants() {
         KeyValueStore keyValueStore = getKeyValueStore(
-                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(getHashType())
+                new ValidatingKeyValueStreamHashTypeIRIFactory(getHashType())
         );
 
         return getTracerOfDescendants(keyValueStore);

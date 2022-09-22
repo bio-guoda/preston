@@ -26,8 +26,11 @@ public class KeyValueStoreCopying implements KeyValueStore {
 
     @Override
     public InputStream get(IRI key) throws IOException {
-        InputStream is = targetKeyValueStore.get(key);
-        if (is == null) {
+        InputStream is;
+
+        try {
+            is = targetKeyValueStore.get(key);
+        } catch (IOException ex) {
             is = sourceKeyValueStore.get(key);
             if (is != null) {
                 targetKeyValueStore.put(key, is);

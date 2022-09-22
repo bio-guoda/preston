@@ -35,9 +35,11 @@ public class AliasDereferencer implements BlobStoreReadOnly {
             attemptToFindInnerAlias(firstAliasHash, iri);
         }
 
-        return firstAliasHash.get() == null
-                ? null :
-                dereferenceAliasedHash(iri, firstAliasHash);
+        if (firstAliasHash.get() == null) {
+            throw new DereferenceException("failed to dereference [" + iri.getIRIString() + "]");
+        }
+
+        return dereferenceAliasedHash(iri, firstAliasHash);
     }
 
     private void attemptToFindInnerAlias(AtomicReference<IRI> firstAliasHash, IRI iri) {

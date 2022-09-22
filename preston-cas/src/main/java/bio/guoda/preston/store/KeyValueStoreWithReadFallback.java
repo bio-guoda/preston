@@ -5,11 +5,11 @@ import org.apache.commons.rdf.api.IRI;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class KeyValueStoreWithFallback implements KeyValueStore {
+public class KeyValueStoreWithReadFallback implements KeyValueStore {
     private final KeyValueStore primary;
     private final KeyValueStoreReadOnly readOnlyFallback;
 
-    public KeyValueStoreWithFallback(KeyValueStore primary, KeyValueStoreReadOnly readOnlyFallback) {
+    public KeyValueStoreWithReadFallback(KeyValueStore primary, KeyValueStoreReadOnly readOnlyFallback) {
         this.primary = primary;
         this.readOnlyFallback = readOnlyFallback;
     }
@@ -26,10 +26,18 @@ public class KeyValueStoreWithFallback implements KeyValueStore {
 
     @Override
     public InputStream get(IRI key) throws IOException {
-        InputStream is = primary.get(key);
-        if (is == null) {
+        InputStream is;
+
+        try {
+            is = primary.get(key);
+        } catch (IOException e) {
             is = readOnlyFallback.get(key);
         }
+
+        if (is == null) {
+            throw new IOException("no results found for [" + key.getIRIString() + "]");
+        }
+
         return is;
     }
 }
