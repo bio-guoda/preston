@@ -4,7 +4,7 @@ import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.ProvenanceTracer;
-import bio.guoda.preston.store.ValidatingValidatingKeyValueStreamContentAddressedFactory;
+import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -38,7 +38,7 @@ public class CmdOrigins extends LoggingPersisting implements Runnable {
     @Override
     public void run() {
         KeyValueStore keyValueStore = getKeyValueStore(
-                new ValidatingValidatingKeyValueStreamContentAddressedFactory(getHashType())
+                new ValidatingKeyValueStreamContentAddressedFactory(getHashType())
         );
 
         StatementsListener logger = createPrintingLogger(

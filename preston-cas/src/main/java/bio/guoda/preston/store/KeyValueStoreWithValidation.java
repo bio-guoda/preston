@@ -17,13 +17,13 @@ public class KeyValueStoreWithValidation implements KeyValueStore {
     private final ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory;
     private final KeyValueStore verified;
     private final KeyValueStore staging;
-    private final KeyValueStore backing;
+    private final KeyValueStoreReadOnly backing;
 
     public KeyValueStoreWithValidation(
             ValidatingKeyValueStreamFactory validatingKeyValueStreamFactoryValues,
             KeyValueStore staging,
             KeyValueStore verified,
-            KeyValueStore backing
+            KeyValueStoreReadOnly backing
     ) {
         this.validatingKeyValueStreamFactory = validatingKeyValueStreamFactoryValues;
         this.staging = staging;
@@ -43,7 +43,7 @@ public class KeyValueStoreWithValidation implements KeyValueStore {
         validate(key, keyValueStream);
     }
 
-    void validate(IRI key, ValidatingKeyValueStream keyValueStream) throws IOException {
+    private void validate(IRI key, ValidatingKeyValueStream keyValueStream) throws IOException {
         if (keyValueStream.acceptValueStreamForKey(key)) {
             verified.put(key, staging.get(key));
         } else {

@@ -5,11 +5,11 @@ import org.apache.commons.rdf.api.IRI;
 
 import java.io.InputStream;
 
-public class ValidatingValidatingKeyValueStreamContentAddressedFactory implements ValidatingKeyValueStreamFactory {
+public class ValidatingKeyValueStreamContentAddressedFactory implements ValidatingKeyValueStreamFactory {
 
     private final HashType type;
 
-    public ValidatingValidatingKeyValueStreamContentAddressedFactory(HashType type) {
+    public ValidatingKeyValueStreamContentAddressedFactory(HashType type) {
         this.type = type;
     }
     @Override

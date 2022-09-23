@@ -33,7 +33,11 @@ public class KeyValueStoreWithValidationTest {
         try {
             keyStore.put(RefNodeFactory.toIRI("foo:bar"), IOUtils.toInputStream("hello", StandardCharsets.UTF_8));
         } catch (IOException ex) {
-            assertThat(ex.getMessage(), Is.is("invalid results received for query [foo:bar] because [invalid key length: expected results for query [foo:bar] to be [78] long, but got [5, and because invalid key pattern: expected results for query key [foo:bar] to match pattern [hash://sha256/([a-fA-F0-9]){64}]]"));
+            assertThat(ex.getMessage(), Is.is(
+                    "invalid results received for query [foo:bar] because [invalid key length: expected results for query [foo:bar] to be [78] long, but got result with length [5] instead" +
+                            ", and because " +
+                            "invalid key pattern: expected results for query key [foo:bar] to match pattern [hash://sha256/([a-fA-F0-9]){64}]]")
+            );
             throw ex;
         }
     }
@@ -85,7 +89,11 @@ public class KeyValueStoreWithValidationTest {
         try {
             keyStore.get(validKey);
         } catch (IOException ex) {
-            assertThat(ex.getMessage(), Is.is("invalid results received for query [hash://sha256/00e3261a6e0d79c329445acd540fb2b07187a0dcf6017065c8814010283ac67f] because [invalid key length: expected results for query [hash://sha256/00e3261a6e0d79c329445acd540fb2b07187a0dcf6017065c8814010283ac67f] to be [78] long, but got [5, and because invalid key pattern: expected results for query key [hash://sha256/00e3261a6e0d79c329445acd540fb2b07187a0dcf6017065c8814010283ac67f] to match pattern [hash://sha256/([a-fA-F0-9]){64}]]"));
+            assertThat(ex.getMessage(), Is.is(
+                    "invalid results received for query [hash://sha256/00e3261a6e0d79c329445acd540fb2b07187a0dcf6017065c8814010283ac67f] because [invalid key length: expected results for query [hash://sha256/00e3261a6e0d79c329445acd540fb2b07187a0dcf6017065c8814010283ac67f] to be [78] long, but got result with length [5] instead" +
+                            ", and because" +
+                            " invalid key pattern: expected results for query key [hash://sha256/00e3261a6e0d79c329445acd540fb2b07187a0dcf6017065c8814010283ac67f] to match pattern [hash://sha256/([a-fA-F0-9]){64}]]")
+            );
             throw ex;
         }
     }

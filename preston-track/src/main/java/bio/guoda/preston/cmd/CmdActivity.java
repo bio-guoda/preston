@@ -16,7 +16,7 @@ import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.TracerOfDescendants;
-import bio.guoda.preston.store.ValidatingValidatingKeyValueStreamContentAddressedFactory;
+import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.VersionUtil;
 import bio.guoda.preston.util.MostRecentVersionListener;
 import org.apache.commons.io.FileUtils;
@@ -64,7 +64,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     @Override
     public void run() {
         KeyValueStore blobKeyValueStore = getKeyValueStore(
-                new ValidatingValidatingKeyValueStreamContentAddressedFactory(getHashType())
+                new ValidatingKeyValueStreamContentAddressedFactory(getHashType())
         );
 
         BlobStore blobStore = new BlobStoreAppendOnly(blobKeyValueStore, true, getHashType());

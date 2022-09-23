@@ -10,7 +10,7 @@ import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.process.StatementIRIProcessor;
-import bio.guoda.preston.store.ValidatingValidatingKeyValueStreamContentAddressedFactory;
+import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.VersionedRDFChainEmitter;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -89,7 +89,7 @@ public final class ReplayUtil {
         ProcessorState state = persisting;
         ProvenanceTracer provenanceTracer = persisting.getTracerOfDescendants();
         BlobStoreReadOnly blobstoreReadOnly = new BlobStoreAppendOnly(
-                persisting.getKeyValueStore(new ValidatingValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())),
+                persisting.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())),
                 true,
                 persisting.getHashType()
         );

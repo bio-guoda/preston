@@ -34,7 +34,7 @@ public class ValidatingKeyValueStreamHashTypeIRI extends ValidatingKeyValueStrea
         byte[] bytes = baos.toByteArray();
         String hashString = new String(bytes, StandardCharsets.UTF_8);
         if (bytes.length != type.getIriStringLength()) {
-            violations.add("invalid key length: expected results for query [" + key.getIRIString() + "] to be [" + type.getIriStringLength() + "] long, but got [" + bytes.length);
+            violations.add("invalid key length: expected results for query [" + key.getIRIString() + "] to be [" + type.getIriStringLength() + "] long, but got result with length [" + bytes.length +"] instead");
         }
         if (!type.getIRIPattern().matcher(hashString).matches()) {
             violations.add("invalid key pattern: expected results for query key [" + key.getIRIString() + "] to match pattern [" + type.getIRIPatternString() + "]");

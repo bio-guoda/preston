@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.DerefProgressListener;
+import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.store.AliasDereferencer;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
@@ -18,14 +19,14 @@ import bio.guoda.preston.store.KeyTo3LevelTarGzPath;
 import bio.guoda.preston.store.KeyToHashURI;
 import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.KeyValueStoreCopying;
+import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreStickyFailover;
 import bio.guoda.preston.store.KeyValueStoreWithDereferencing;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
+import bio.guoda.preston.store.KeyValueStoreWithValidation;
 import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
-import bio.guoda.preston.ResourcesHTTP;
-import bio.guoda.preston.store.ValidatingValidatingKeyValueStreamContentAddressedFactory;
+import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -121,14 +122,33 @@ public class Persisting extends PersistingLocal {
         KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
 
         if (isCacheEnabled()) {
-            store = new KeyValueStoreCopying(
-                    failover,
-                    super.getKeyValueStore(kvStreamFactory));
+            store = createKeyStoreWithValidatedCache(kvStreamFactory, failover);
         } else {
             store = new KeyValueStoreWithFallback(
                     super.getKeyValueStore(kvStreamFactory),
-                    failover);
+                    failover
+            );
         }
+        return store;
+    }
+
+    private KeyValueStore createKeyStoreWithValidatedCache(ValidatingKeyValueStreamFactory kvStreamFactory, KeyValueStoreStickyFailover failover) {
+        KeyValueStore store;
+        File stagingDir = new File(getTmpDir(), "staging");
+
+        KeyValueStoreLocalFileSystem staging = new KeyValueStoreLocalFileSystem(
+                getTmpDir(),
+                new KeyTo3LevelPath(stagingDir.toURI(), getHashType()),
+                kvStreamFactory
+        );
+        KeyValueStore validated = super.getKeyValueStore(kvStreamFactory);
+
+        store = new KeyValueStoreWithValidation(
+                kvStreamFactory,
+                staging,
+                validated,
+                failover
+        );
         return store;
     }
 
@@ -146,7 +166,7 @@ public class Persisting extends PersistingLocal {
     private Stream<KeyValueStoreReadOnly> tarGzRemotePathSupport() {
         return getRemotes().stream().map(uri ->
                 isCacheEnabled()
-                        ? this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new ValidatingValidatingKeyValueStreamContentAddressedFactory(getHashType())))
+                        ? this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(getHashType())))
                         : this.remoteWithTarGz(uri));
     }
 

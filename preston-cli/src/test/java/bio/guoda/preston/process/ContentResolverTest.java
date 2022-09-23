@@ -11,7 +11,7 @@ import bio.guoda.preston.store.DereferencerContentAddressed;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.TestUtilForProcessor;
-import bio.guoda.preston.store.ValidatingValidatingKeyValueStreamContentAddressedFactory;
+import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
@@ -50,7 +50,7 @@ public class ContentResolverTest {
         tempDir = Files.createTempDirectory(Paths.get("target/"), "caching");
         datasetDir = Files.createTempDirectory(Paths.get("target/"), "datasets");
         HashType type = HashType.sha256;
-        ValidatingValidatingKeyValueStreamContentAddressedFactory keyValueStreamFactory = new ValidatingValidatingKeyValueStreamContentAddressedFactory(type);
+        ValidatingKeyValueStreamContentAddressedFactory keyValueStreamFactory = new ValidatingKeyValueStreamContentAddressedFactory(type);
         KeyValueStoreLocalFileSystem persistence = new KeyValueStoreLocalFileSystem(tempDir.toFile(), new KeyTo3LevelPath(datasetDir.toFile().toURI(), HashType.sha256), keyValueStreamFactory);
         this.blobStore = new BlobStoreAppendOnly(persistence, true, type);
     }
