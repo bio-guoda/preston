@@ -26,7 +26,7 @@ import static org.junit.Assert.assertNull;
 
 public class KeyValueStoreLocalFileSystemTest {
 
-    public static final IRI SOME_HASH
+    private static final IRI SOME_HASH
             = RefNodeFactory.toIRI("hash://sha256/1234567890123456789012345678901234567890123456789012345678901234");
 
     private Path path;
@@ -74,7 +74,7 @@ public class KeyValueStoreLocalFileSystemTest {
     }
 
     private static KeyValueStreamFactory getAlwaysAccepting() {
-        return (key, is) -> new ValidatingKeyValueStream() {
+        return (key, is) -> new ValidatingKeyValueStreamWithViolations() {
             @Override
             public InputStream getValueStream() {
                 return is;
@@ -112,7 +112,7 @@ public class KeyValueStoreLocalFileSystemTest {
     @Test
     public void writeStreamWithKeyGenerator() throws IOException {
 
-        KeyValueStreamFactory keyValueStreamFactory = (key, is) -> new ValidatingKeyValueStream() {
+        KeyValueStreamFactory keyValueStreamFactory = (key, is) -> new ValidatingKeyValueStreamWithViolations() {
             @Override
             public InputStream getValueStream() {
                 throw new RuntimeException("kaboom!");
