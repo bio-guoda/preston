@@ -88,7 +88,7 @@ public class KeyValueStoreLocalFileSystemTest {
         try {
             filePersistence.put(someValueKey, IOUtils.toInputStream("some other value", StandardCharsets.UTF_8));
         } catch (IOException e) {
-            assertThat(e.getMessage(), is("failed to retrieve content with content id [hash://sha256/ab3d07f3169ccbd0ed6c4b45de21519f9f938c72d24124998aab949ce83bb51b]"));
+            assertThat(e.getMessage(), is("received invalid results for query [hash://sha256/ab3d07f3169ccbd0ed6c4b45de21519f9f938c72d24124998aab949ce83bb51b according to [bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressed]."));
             assertThat(TestUtil.toUTF8(filePersistence.get(someValueKey)), is(not("some other value")));
             throw e;
         }

@@ -61,7 +61,10 @@ public class KeyValueStoreCopyingTest {
             @Override
             public InputStream get(IRI key) throws IOException {
                 String value = cache.get(key.getIRIString());
-                return StringUtils.isBlank(value) ? null : IOUtils.toInputStream(value, StandardCharsets.UTF_8);
+                if (StringUtils.isBlank(value)) {
+                    throw new IOException("can't find value for key [" + key.getIRIString() + "]");
+                }
+                return IOUtils.toInputStream(value, StandardCharsets.UTF_8);
             }
         });
 
