@@ -19,7 +19,8 @@ import java.util.List;
 @CommandLine.Command(
         name = "diff",
         aliases = {"intersect"},
-        description = "Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets"
+        description = "Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets",
+        hidden = true
 )
 public class CmdSketchDiff extends LoggingPersisting implements Runnable {
 

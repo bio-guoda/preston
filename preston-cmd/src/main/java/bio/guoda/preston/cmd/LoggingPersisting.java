@@ -9,7 +9,7 @@ public class LoggingPersisting extends Persisting {
 
     @CommandLine.Option(
             names = {"-l", "--log"},
-            description = "Log format"
+            description = "Log format. Supported values: ${COMPLETION-CANDIDATES}."
     )
     private LogTypes logMode = LogTypes.nquads;
 

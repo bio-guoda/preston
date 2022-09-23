@@ -18,7 +18,8 @@ import java.io.IOException;
 @CommandLine.Command(
         name = "sketch",
         aliases = {"bloom"},
-        description = CmdSketchCreate.CREATES_SKETCHES_E_G_BLOOM_FILTERS_OR_THETA_SKETCHES_FROM_MATCHED_CONTENT_FOR_ESTIMATING_CONTENT_OVERLAP
+        description = CmdSketchCreate.CREATES_SKETCHES_E_G_BLOOM_FILTERS_OR_THETA_SKETCHES_FROM_MATCHED_CONTENT_FOR_ESTIMATING_CONTENT_OVERLAP,
+        hidden = true
 )
 
 public class CmdSketchCreate extends LoggingPersisting implements Runnable {

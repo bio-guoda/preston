@@ -40,7 +40,7 @@ public class PersistingLocal extends Cmd {
 
     @CommandLine.Option(
             names = {"--hash-algorithm", "--algo", "-a"},
-            description = "Hash algorithm used to generate primary content identifiers"
+            description = "Hash algorithm used to generate primary content identifiers. Supported values: ${COMPLETION-CANDIDATES}."
     )
     private HashType hashType = HashType.sha256;
     private KeyToPath keyToPathLocal = null;
