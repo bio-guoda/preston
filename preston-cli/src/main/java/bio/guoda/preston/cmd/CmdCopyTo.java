@@ -39,13 +39,13 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     @CommandLine.Option(
             names = {"-t", "--type"},
-            description = "Archive type"
+            description = "Archive type. Supported values: ${COMPLETION-CANDIDATES}."
     )
     private ArchiveType archiveType = ArchiveType.data_prov_provindex;
 
     @CommandLine.Option(
             names = {"-p", "--target-hash-path-pattern"},
-            description = "Hash path pattern of content to be copied"
+            description = "Hash path pattern of content to be copied. Supported values: ${COMPLETION-CANDIDATES}."
     )
 
     private HashPathPattern pathPattern = HashPathPattern.directoryDepth2;
