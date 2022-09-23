@@ -18,7 +18,7 @@ public class KeyValueStoreWithValidationTest {
 
     @Test(expected = IOException.class)
     public void putInvalid() throws IOException {
-        KeyValueStore staging = TestUtil.getTestPersistence();
+        KeyValueStoreWithRemove staging = TestUtil.getTestPersistence();
         KeyValueStore verified = TestUtil.getTestPersistence();
         KeyValueStore backing = TestUtil.getTestPersistence();
 
@@ -45,7 +45,7 @@ public class KeyValueStoreWithValidationTest {
 
     @Test
     public void putValid() throws IOException {
-        KeyValueStore staging = TestUtil.getTestPersistence();
+        KeyValueStoreWithRemove staging = TestUtil.getTestPersistence();
         KeyValueStore verified = TestUtil.getTestPersistence();
         KeyValueStore backing = TestUtil.getTestPersistence();
 
@@ -56,6 +56,8 @@ public class KeyValueStoreWithValidationTest {
                 backing);
 
         IRI validKey = RefNodeFactory.toIRI("hash://sha256/00e3261a6e0d79c329445acd540fb2b07187a0dcf6017065c8814010283ac67f");
+        assertNull(staging.get(validKey));
+
         IRI validResult = RefNodeFactory.toIRI("hash://sha256/98ea6e4f216f2fb4b69fff9b3a44842c38686ca685f3f55dc48c5d3fb1107be4");
         keyStore.put(
                 validKey,
@@ -63,13 +65,14 @@ public class KeyValueStoreWithValidationTest {
         );
 
         InputStream inputStream = verified.get(validKey);
-
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is(validResult.getIRIString()));
+
+        assertNull(staging.get(validKey));
     }
 
     @Test(expected = IOException.class)
     public void getInvalid() throws IOException {
-        KeyValueStore staging = TestUtil.getTestPersistence();
+        KeyValueStoreWithRemove staging = TestUtil.getTestPersistence();
         KeyValueStore verified = TestUtil.getTestPersistence();
         KeyValueStore backing = TestUtil.getTestPersistence();
 
@@ -100,7 +103,7 @@ public class KeyValueStoreWithValidationTest {
 
     @Test
     public void getValid() throws IOException {
-        KeyValueStore staging = TestUtil.getTestPersistence();
+        KeyValueStoreWithRemove staging = TestUtil.getTestPersistence();
         KeyValueStore verified = TestUtil.getTestPersistence();
         KeyValueStore backing = TestUtil.getTestPersistence();
 
@@ -118,14 +121,16 @@ public class KeyValueStoreWithValidationTest {
                 IOUtils.toInputStream(validResult.getIRIString(), StandardCharsets.UTF_8)
         );
 
+        assertNull(staging.get(validKey));
         InputStream inputStream = keyStore.get(validKey);
-
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is(validResult.getIRIString()));
+
+        assertNull(staging.get(validKey));
     }
 
     @Test
     public void getUnknownKey() throws IOException {
-        KeyValueStore staging = TestUtil.getTestPersistence();
+        KeyValueStoreWithRemove staging = TestUtil.getTestPersistence();
         KeyValueStore verified = TestUtil.getTestPersistence();
         KeyValueStore backing = TestUtil.getTestPersistence();
 

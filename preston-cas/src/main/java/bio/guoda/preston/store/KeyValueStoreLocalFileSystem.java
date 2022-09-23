@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.net.URI;
 
 
-public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemReadOnly implements KeyValueStore {
+public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemReadOnly implements KeyValueStoreWithRemove {
 
     private final File tmpDir;
 
@@ -79,8 +79,7 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
         if (!tmpDestFile.exists()) {
             throw new IOException("cannot store a file that does not exist");
         }
-        URI filePathAfterCopy = getPathForKey(key);
-        File destFile = getDataFile(filePathAfterCopy);
+        File destFile = getDestFileForKey(key);
         if (!destFile.exists()) {
             FileUtils.forceMkdirParent(destFile);
             FileUtils.moveFile(tmpDestFile, destFile);
@@ -91,4 +90,16 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
         return validatingKeyValueStreamFactory;
     }
 
+    @Override
+    public void remove(IRI key) throws IOException {
+        File destFile = getDestFileForKey(key);
+        if (destFile.exists()) {
+            FileUtils.delete(destFile);
+        }
+    }
+
+    private File getDestFileForKey(IRI key) {
+        URI filePathAfterCopy = getPathForKey(key);
+        return getDataFile(filePathAfterCopy);
+    }
 }

@@ -8,44 +8,48 @@ import java.io.InputStream;
 
 /**
  * retrieves and validates query results
- * and puts only validated results into verified blobstore
+ * and puts only validated results into validated blobstore
  */
 
 public class KeyValueStoreWithValidation implements KeyValueStore {
 
 
     private final ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory;
-    private final KeyValueStore verified;
-    private final KeyValueStore staging;
+    private final KeyValueStore validated;
+    private final KeyValueStoreWithRemove staging;
     private final KeyValueStoreReadOnly backing;
 
     public KeyValueStoreWithValidation(
             ValidatingKeyValueStreamFactory validatingKeyValueStreamFactoryValues,
-            KeyValueStore staging,
-            KeyValueStore verified,
+            KeyValueStoreWithRemove staging,
+            KeyValueStore validated,
             KeyValueStoreReadOnly backing
     ) {
         this.validatingKeyValueStreamFactory = validatingKeyValueStreamFactoryValues;
         this.staging = staging;
-        this.verified = verified;
+        this.validated = validated;
         this.backing = backing;
     }
 
     @Override
     public IRI put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
-        throw new IOException("not implemented");
+        return validated.put(keyGeneratingStream, is);
     }
 
     @Override
     public void put(IRI key, InputStream is) throws IOException {
-        ValidatingKeyValueStream keyValueStream = validatingKeyValueStreamFactory.forKeyValueStream(key, is);
-        staging.put(key, keyValueStream.getValueStream());
-        validate(key, keyValueStream);
+        try {
+            ValidatingKeyValueStream keyValueStream = validatingKeyValueStreamFactory.forKeyValueStream(key, is);
+            staging.put(key, keyValueStream.getValueStream());
+            validate(key, keyValueStream);
+        } finally {
+            staging.remove(key);
+        }
     }
 
     private void validate(IRI key, ValidatingKeyValueStream keyValueStream) throws IOException {
         if (keyValueStream.acceptValueStreamForKey(key)) {
-            verified.put(key, staging.get(key));
+            validated.put(key, staging.get(key));
         } else {
             throw new IOException("invalid results received for query [" + key.getIRIString() + "] because [" + StringUtils.join(keyValueStream.getViolations(), ", and because ") + "]");
         }
@@ -56,10 +60,14 @@ public class KeyValueStoreWithValidation implements KeyValueStore {
         InputStream inputStreamUnverified = backing.get(key);
         InputStream inputStreamVerified = null;
         if (inputStreamUnverified != null) {
-            ValidatingKeyValueStream keyValueStream = validatingKeyValueStreamFactory.forKeyValueStream(key, inputStreamUnverified);
-            staging.put(key, keyValueStream.getValueStream());
-            validate(key, keyValueStream);
-            inputStreamVerified = verified.get(key);
+            try {
+                ValidatingKeyValueStream keyValueStream = validatingKeyValueStreamFactory.forKeyValueStream(key, inputStreamUnverified);
+                staging.put(key, keyValueStream.getValueStream());
+                validate(key, keyValueStream);
+                inputStreamVerified = validated.get(key);
+            } finally {
+                staging.remove(key);
+            }
         }
         return inputStreamVerified;
     }

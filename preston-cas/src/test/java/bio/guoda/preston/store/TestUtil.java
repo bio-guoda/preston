@@ -5,17 +5,49 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class TestUtil {
     public static String toUTF8(InputStream content) throws IOException {
         return content == null ? null : IOUtils.toString(content, StandardCharsets.UTF_8);
     }
 
-    public static KeyValueStore getTestPersistence() {
-        return BlobStoreAppendOnlyTest.getTestPersistence();
+    public static KeyValueStoreWithRemove getTestPersistence() {
+        return new KeyValueStoreWithRemove() {
+            private final Map<String, String> lookup = new TreeMap<>();
+
+            @Override
+            public IRI put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                IRI key = keyGeneratingStream.generateKeyWhileStreaming(is, os);
+                ByteArrayInputStream bais = new ByteArrayInputStream(os.toByteArray());
+                put(key, bais);
+                return key;
+            }
+
+            @Override
+            public void put(IRI key, InputStream is) throws IOException {
+                lookup.putIfAbsent(key.getIRIString(), toUTF8(is));
+            }
+
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                String input = lookup.get(key.getIRIString());
+                return input == null ? null : IOUtils.toInputStream(input, StandardCharsets.UTF_8);
+            }
+
+            @Override
+            public void remove(IRI key) throws IOException {
+                lookup.remove(key.getIRIString());
+            }
+
+        };
     }
 
     public static BlobStoreReadOnly getTestBlobStore(HashType type) {

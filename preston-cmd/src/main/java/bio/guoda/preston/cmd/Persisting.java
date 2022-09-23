@@ -41,6 +41,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -134,11 +135,11 @@ public class Persisting extends PersistingLocal {
 
     private KeyValueStore createKeyStoreWithValidatedCache(ValidatingKeyValueStreamFactory kvStreamFactory, KeyValueStoreStickyFailover failover) {
         KeyValueStore store;
-        File stagingDir = new File(getTmpDir(), "staging");
+        File stagingDir = getTmpDir();
 
         KeyValueStoreLocalFileSystem staging = new KeyValueStoreLocalFileSystem(
                 getTmpDir(),
-                new KeyTo3LevelPath(stagingDir.toURI(), getHashType()),
+                new KeyTo1LevelPath(stagingDir.toURI(), getHashType()),
                 kvStreamFactory
         );
         KeyValueStore validated = super.getKeyValueStore(kvStreamFactory);

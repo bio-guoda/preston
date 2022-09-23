@@ -166,7 +166,7 @@ $ curl --silent https://deeplinker.bio/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51f
 c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55  -
 ```
 
-The simplified hexastore is intended as a pragmatic way to discover a history of provenance logs. The integrity of this history can be verified because every successive provenance log version references the preceding one using a statement like:
+The simplified hexastore is intended as a pragmatic way to discover a history of provenance logs. The integrity of this history can be validated because every successive provenance log version references the preceding one using a statement like:
 
 ```
 <hash://sha256/c253a5311a20c2fc082bf9bac87a1ec5eb6e4e51ff936e7be20c29c8e77dee55> <http://www.w3.org/ns/prov#usedBy> <4e540f45-d7a1-40d6-a2b8-f623f1c1d566> .

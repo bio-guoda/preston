@@ -6,7 +6,6 @@ import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
