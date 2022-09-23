@@ -7,7 +7,7 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.TextMatcher;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.ValidatingValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
@@ -46,7 +46,7 @@ public class CmdGrep extends LoggingPersisting implements Runnable {
     @Override
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
-                = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
+                = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         run(resolvingBlobStore(blobStoreAppendOnly));
 
     }

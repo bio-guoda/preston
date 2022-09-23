@@ -6,7 +6,7 @@ import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.ValidatingValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +37,7 @@ public class CmdGet extends Persisting implements Runnable {
 
     @Override
     public void run() {
-        BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
+        BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         run(blobStore);
     }
 

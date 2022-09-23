@@ -5,7 +5,7 @@ import bio.guoda.preston.HashGeneratorFactory;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.ValidatingValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
 
@@ -51,7 +51,7 @@ public class CmdVerify extends Persisting implements Runnable {
                 = new HashGeneratorFactory().create(getHashType());
 
         final BlobStore blobStore
-                = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
+                = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
 
         Map<String, VerificationState> verifiedMap = new TreeMap<>();
 

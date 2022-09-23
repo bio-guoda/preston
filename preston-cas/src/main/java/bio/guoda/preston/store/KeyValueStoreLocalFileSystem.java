@@ -1,6 +1,5 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.HashType;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.rdf.api.IRI;
 
@@ -15,12 +14,12 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
 
     private final File tmpDir;
 
-    private final KeyValueStreamFactory keyValueStreamFactory;
+    private final ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory;
 
-    public KeyValueStoreLocalFileSystem(File tmpDir, KeyToPath keyToPath, KeyValueStreamFactory keyValueStreamFactory) {
+    public KeyValueStoreLocalFileSystem(File tmpDir, KeyToPath keyToPath, ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory) {
         super(keyToPath);
         this.tmpDir = tmpDir;
-        this.keyValueStreamFactory = keyValueStreamFactory;
+        this.validatingKeyValueStreamFactory = validatingKeyValueStreamFactory;
     }
 
     @Override
@@ -32,7 +31,7 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
                 tmpDestFile.deleteOnExit();
                 File destFile = null;
                 try {
-                    ValidatingKeyValueStream validating = getKeyValueStreamFactory().forKeyValueStream(key, is);
+                    ValidatingKeyValueStream validating = getValidatingKeyValueStreamFactory().forKeyValueStream(key, is);
                     FileUtils.copyToFile(validating.getValueStream(), tmpDestFile);
 
                     if (validating.acceptValueStreamForKey(key)) {
@@ -88,35 +87,8 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
         }
     }
 
-    private KeyValueStreamFactory getKeyValueStreamFactory() {
-        return keyValueStreamFactory;
-    }
-
-    public static class ValidatingKeyValueStreamContentAddressedFactory implements KeyValueStreamFactory {
-
-        private final HashType type;
-
-        public ValidatingKeyValueStreamContentAddressedFactory(HashType type) {
-            this.type = type;
-        }
-        @Override
-        public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
-            return new ValidatingKeyValueStreamContentAddressed(is, type);
-        }
-    }
-
-    public static class KeyValueStreamFactoryValues implements KeyValueStreamFactory {
-
-        private final HashType type;
-
-        public KeyValueStreamFactoryValues(HashType type) {
-            this.type = type;
-        }
-
-        @Override
-        public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
-            return new ValidatingKeyValueStreamHashTypeIRI(is, type);
-        }
+    private ValidatingKeyValueStreamFactory getValidatingKeyValueStreamFactory() {
+        return validatingKeyValueStreamFactory;
     }
 
 }

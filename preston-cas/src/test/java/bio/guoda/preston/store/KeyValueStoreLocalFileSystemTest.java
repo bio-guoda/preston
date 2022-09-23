@@ -63,7 +63,7 @@ public class KeyValueStoreLocalFileSystemTest {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
                 new File(path.toFile(), "tmp"),
                 new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI(), type),
-                new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(type));
+                new ValidatingValidatingKeyValueStreamContentAddressedFactory(type));
 
         IRI someValueKey = RefNodeFactory.toIRI("hash://sha256/ab3d07f3169ccbd0ed6c4b45de21519f9f938c72d24124998aab949ce83bb51b");
         assertNull(filePersistence.get(someValueKey));
@@ -73,7 +73,7 @@ public class KeyValueStoreLocalFileSystemTest {
 
     }
 
-    private static KeyValueStreamFactory getAlwaysAccepting() {
+    private static ValidatingKeyValueStreamFactory getAlwaysAccepting() {
         return (key, is) -> new ValidatingKeyValueStreamWithViolations() {
             @Override
             public InputStream getValueStream() {
@@ -93,7 +93,7 @@ public class KeyValueStoreLocalFileSystemTest {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
                 new File(path.toFile(), "tmp"),
                 new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI(), type),
-                new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(type));
+                new ValidatingValidatingKeyValueStreamContentAddressedFactory(type));
         IRI somethingIRI = RefNodeFactory.toIRI("something");
         filePersistence.get(somethingIRI);
     }
@@ -104,7 +104,7 @@ public class KeyValueStoreLocalFileSystemTest {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
                 new File(path.toFile(), "tmp"),
                 new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI(), type),
-                new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(type));
+                new ValidatingValidatingKeyValueStreamContentAddressedFactory(type));
         IRI somethingIRI = RefNodeFactory.toIRI("something");
         filePersistence.put(somethingIRI, IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
     }
@@ -112,7 +112,7 @@ public class KeyValueStoreLocalFileSystemTest {
     @Test
     public void writeStreamWithKeyGenerator() throws IOException {
 
-        KeyValueStreamFactory keyValueStreamFactory = (key, is) -> new ValidatingKeyValueStreamWithViolations() {
+        ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory = (key, is) -> new ValidatingKeyValueStreamWithViolations() {
             @Override
             public InputStream getValueStream() {
                 throw new RuntimeException("kaboom!");
@@ -128,7 +128,7 @@ public class KeyValueStoreLocalFileSystemTest {
                 new KeyValueStoreLocalFileSystem(
                         new File(path.toFile(), "tmp"),
                         new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI(), HashType.sha256),
-                        keyValueStreamFactory);
+                        validatingKeyValueStreamFactory);
 
         assertThat(filePersistence1.get(SOME_HASH), is(nullValue()));
         final InputStream someContentStream = IOUtils.toInputStream("some content", StandardCharsets.UTF_8);

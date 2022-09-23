@@ -24,7 +24,7 @@ public class KeyValueStoreWithValidationTest {
 
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
-                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(HashType.sha256),
+                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256),
                 staging,
                 verified,
                 backing
@@ -46,7 +46,7 @@ public class KeyValueStoreWithValidationTest {
         KeyValueStore backing = TestUtil.getTestPersistence();
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
-                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(HashType.sha256),
+                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256),
                 staging,
                 verified,
                 backing);
@@ -70,7 +70,7 @@ public class KeyValueStoreWithValidationTest {
         KeyValueStore backing = TestUtil.getTestPersistence();
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
-                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(HashType.sha256),
+                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256),
                 staging,
                 verified,
                 backing);
@@ -97,7 +97,7 @@ public class KeyValueStoreWithValidationTest {
         KeyValueStore backing = TestUtil.getTestPersistence();
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
-                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(HashType.sha256),
+                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256),
                 staging,
                 verified,
                 backing);
@@ -122,7 +122,7 @@ public class KeyValueStoreWithValidationTest {
         KeyValueStore backing = TestUtil.getTestPersistence();
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
-                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(HashType.sha256),
+                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256),
                 staging,
                 verified,
                 backing);

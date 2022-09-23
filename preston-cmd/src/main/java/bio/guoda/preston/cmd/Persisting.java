@@ -19,13 +19,13 @@ import bio.guoda.preston.store.KeyToHashURI;
 import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreStickyFailover;
 import bio.guoda.preston.store.KeyValueStoreWithDereferencing;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
-import bio.guoda.preston.store.KeyValueStreamFactory;
+import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
 import bio.guoda.preston.ResourcesHTTP;
+import bio.guoda.preston.store.ValidatingValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -88,7 +88,7 @@ public class Persisting extends PersistingLocal {
 
 
     @Override
-    protected KeyValueStore getKeyValueStore(KeyValueStreamFactory kvStreamFactory) {
+    protected KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory kvStreamFactory) {
         KeyValueStore store;
         if (hasRemotes()) {
             store = withRemoteSupport(kvStreamFactory);
@@ -98,7 +98,7 @@ public class Persisting extends PersistingLocal {
         return store;
     }
 
-    private KeyValueStore withRemoteSupport(KeyValueStreamFactory kvStreamFactory) {
+    private KeyValueStore withRemoteSupport(ValidatingKeyValueStreamFactory kvStreamFactory) {
         KeyValueStore store;
         Stream<Pair<URI, KeyToPath>> keyToPathStream =
                 getRemotes()
@@ -146,7 +146,7 @@ public class Persisting extends PersistingLocal {
     private Stream<KeyValueStoreReadOnly> tarGzRemotePathSupport() {
         return getRemotes().stream().map(uri ->
                 isCacheEnabled()
-                        ? this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())))
+                        ? this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new ValidatingValidatingKeyValueStreamContentAddressedFactory(getHashType())))
                         : this.remoteWithTarGz(uri));
     }
 

@@ -1,7 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
+import bio.guoda.preston.store.ValidatingValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.jena.ext.com.google.common.collect.Streams;
 import picocli.CommandLine;
 
@@ -33,8 +33,7 @@ public class CmdClone extends LoggingPersisting implements Runnable {
     @Override
     public void run() {
         KeyValueStore keyValueStore = getKeyValueStore(
-                new KeyValueStoreLocalFileSystem
-                        .ValidatingKeyValueStreamContentAddressedFactory(getHashType())
+                new ValidatingValidatingKeyValueStreamContentAddressedFactory(getHashType())
         );
 
         CloneUtil.clone(

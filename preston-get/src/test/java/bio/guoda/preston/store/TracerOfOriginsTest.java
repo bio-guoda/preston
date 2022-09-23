@@ -232,7 +232,7 @@ public class TracerOfOriginsTest {
 
         return new KeyValueStoreLocalFileSystem(tmpDir.getRoot(),
                 new KeyTo3LevelPath(dataDir.toURI(), HashType.sha256),
-                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(HashType.sha256));
+                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256));
     }
 
     @Test

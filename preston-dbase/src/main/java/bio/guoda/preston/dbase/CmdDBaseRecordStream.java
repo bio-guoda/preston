@@ -1,17 +1,12 @@
 package bio.guoda.preston.dbase;
 
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.cmd.LogErrorHandlerExitOnError;
 import bio.guoda.preston.cmd.LoggingPersisting;
 import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
-import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.VersionUtil;
-import org.apache.commons.io.output.NullPrintStream;
+import bio.guoda.preston.store.ValidatingValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -29,7 +24,7 @@ public class CmdDBaseRecordStream extends LoggingPersisting implements Runnable 
     @Override
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
-                = new BlobStoreAppendOnly(getKeyValueStore(new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
+                = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
         run(resolvingBlobStore(blobStoreAppendOnly));
 
     }

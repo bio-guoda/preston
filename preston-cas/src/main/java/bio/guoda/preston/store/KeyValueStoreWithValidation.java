@@ -14,18 +14,18 @@ import java.io.InputStream;
 public class KeyValueStoreWithValidation implements KeyValueStore {
 
 
-    private final KeyValueStreamFactory keyValueStreamFactory;
+    private final ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory;
     private final KeyValueStore verified;
     private final KeyValueStore staging;
     private final KeyValueStore backing;
 
     public KeyValueStoreWithValidation(
-            KeyValueStreamFactory keyValueStreamFactoryValues,
+            ValidatingKeyValueStreamFactory validatingKeyValueStreamFactoryValues,
             KeyValueStore staging,
             KeyValueStore verified,
             KeyValueStore backing
     ) {
-        this.keyValueStreamFactory = keyValueStreamFactoryValues;
+        this.validatingKeyValueStreamFactory = validatingKeyValueStreamFactoryValues;
         this.staging = staging;
         this.verified = verified;
         this.backing = backing;
@@ -38,7 +38,7 @@ public class KeyValueStoreWithValidation implements KeyValueStore {
 
     @Override
     public void put(IRI key, InputStream is) throws IOException {
-        ValidatingKeyValueStream keyValueStream = keyValueStreamFactory.forKeyValueStream(key, is);
+        ValidatingKeyValueStream keyValueStream = validatingKeyValueStreamFactory.forKeyValueStream(key, is);
         staging.put(key, keyValueStream.getValueStream());
         validate(key, keyValueStream);
     }
@@ -56,7 +56,7 @@ public class KeyValueStoreWithValidation implements KeyValueStore {
         InputStream inputStreamUnverified = backing.get(key);
         InputStream inputStreamVerified = null;
         if (inputStreamUnverified != null) {
-            ValidatingKeyValueStream keyValueStream = keyValueStreamFactory.forKeyValueStream(key, inputStreamUnverified);
+            ValidatingKeyValueStream keyValueStream = validatingKeyValueStreamFactory.forKeyValueStream(key, inputStreamUnverified);
             staging.put(key, keyValueStream.getValueStream());
             validate(key, keyValueStream);
             inputStreamVerified = verified.get(key);

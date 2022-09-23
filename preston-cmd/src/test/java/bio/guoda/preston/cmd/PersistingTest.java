@@ -1,10 +1,8 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.cmd.Persisting;
 import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.KeyValueStreamFactory;
-import bio.guoda.preston.store.ValidatingKeyValueStream;
+import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamWithViolations;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -125,7 +123,7 @@ public class PersistingTest {
 
     }
 
-    private static KeyValueStreamFactory getAlwaysAccepting() {
+    private static ValidatingKeyValueStreamFactory getAlwaysAccepting() {
         return (key, is) -> new ValidatingKeyValueStreamWithViolations() {
             @Override
             public InputStream getValueStream() {
