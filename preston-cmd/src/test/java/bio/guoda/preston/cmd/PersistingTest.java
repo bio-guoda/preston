@@ -5,6 +5,7 @@ import bio.guoda.preston.cmd.Persisting;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStreamFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStream;
+import bio.guoda.preston.store.ValidatingKeyValueStreamWithViolations;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.StringStartsWith;
@@ -125,7 +126,7 @@ public class PersistingTest {
     }
 
     private static KeyValueStreamFactory getAlwaysAccepting() {
-        return (key, is) -> new ValidatingKeyValueStream() {
+        return (key, is) -> new ValidatingKeyValueStreamWithViolations() {
             @Override
             public InputStream getValueStream() {
                 return is;
