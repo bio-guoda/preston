@@ -9,7 +9,7 @@ import org.apache.commons.rdf.api.IRI;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 
-public class ValidatingKeyValueStreamContentAddressed implements ValidatingKeyValueStream {
+public class ValidatingKeyValueStreamContentAddressed extends ValidatingKeyValueStreamWithViolations {
 
     private final MessageDigestCalculatingInputStream value;
     private final HashType type;

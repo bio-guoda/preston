@@ -8,8 +8,10 @@ import org.apache.commons.rdf.api.IRI;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ValidatingKeyValueStreamHashTypeIRI implements ValidatingKeyValueStream {
+public class ValidatingKeyValueStreamHashTypeIRI extends ValidatingKeyValueStreamWithViolations {
 
     private final ByteArrayOutputStream baos;
     private final InputStream value;
@@ -31,7 +33,14 @@ public class ValidatingKeyValueStreamHashTypeIRI implements ValidatingKeyValueSt
     public boolean acceptValueStreamForKey(IRI key) {
         byte[] bytes = baos.toByteArray();
         String hashString = new String(bytes, StandardCharsets.UTF_8);
-        return bytes.length == type.getIriStringLength()
-                && type.getIRIPattern().matcher(hashString).matches();
+        if (bytes.length != type.getIriStringLength()) {
+            violations.add("invalid key length: expected results for query [" + key.getIRIString() + "] to be [" + type.getIriStringLength() + "] long, but got [" + bytes.length);
+        }
+        if (!type.getIRIPattern().matcher(hashString).matches()) {
+            violations.add("invalid key pattern: expected results for query key [" + key.getIRIString() + "] to match pattern [" + type.getIRIPatternString() + "]");
+        }
+
+        return getViolations().size() == 0;
     }
+
 }
