@@ -18,7 +18,6 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.fail;
 
 public class HexaStoreImplTest {
 
@@ -49,120 +48,19 @@ public class HexaStoreImplTest {
             }
         }, HashType.sha256);
 
-        Pair<RDFTerm, RDFTerm> queryKey = Pair.of(
-                RefNodeFactory.toIRI("bla"),
-                RefNodeFactory.toIRI("boo")
-        );
-
-        String someSha256HashIRI = "hash://sha256/ab3d07f3169ccbd0ed6c4b45de21519f9f938c72d24124998aab949ce83bb51b";
-        hexastore.put(queryKey, RefNodeFactory.toIRI(someSha256HashIRI));
-
-        IRI iriFound = hexastore.get(queryKey);
-
-        assertThat(iriFound.getIRIString(), is(someSha256HashIRI));
-
-    }
-
-    @Test(expected = IOException.class)
-    public void getNonExistingKey() throws IOException {
-        HexaStore hexastore = new HexaStoreImpl(new KeyValueStore() {
-
-            Map<String, String> keyMap = new HashMap<>();
-
-            @Override
-            public IRI put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
-                return null;
-            }
-
-            @Override
-            public void put(IRI key, InputStream is) throws IOException {
-                String s = IOUtils.toString(is, StandardCharsets.UTF_8);
-                if (StringUtils.isBlank(s)) {
-                    throw new IOException("no empty expected here");
-                }
-                keyMap.put(key.getIRIString(), s);
-            }
-
-            @Override
-            public InputStream get(IRI key) throws IOException {
-                String s = keyMap.get(key.getIRIString());
-                return StringUtils.isBlank(s) ? null : IOUtils.toInputStream(s, StandardCharsets.UTF_8);
-            }
-        }, HashType.sha256);
-
-        Pair<RDFTerm, RDFTerm> queryKey = Pair.of(
-                RefNodeFactory.toIRI("bla"),
-                RefNodeFactory.toIRI("boo")
-        );
-
-        hexastore.get(queryKey);
-
-    }
-
-    @Test(expected = IOException.class)
-    public void getKeyForFailingStore() throws IOException {
-        HexaStore hexastore = new HexaStoreImpl(new KeyValueStore() {
-
-            Map<String, String> keyMap = new HashMap<>();
-
-            @Override
-            public IRI put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
-                return null;
-            }
-
-            @Override
-            public void put(IRI key, InputStream is) throws IOException {
-                String s = IOUtils.toString(is, StandardCharsets.UTF_8);
-                if (StringUtils.isBlank(s)) {
-                    throw new IOException("no empty expected here");
-                }
-                keyMap.put(key.getIRIString(), s);
-            }
-
-            @Override
-            public InputStream get(IRI key) throws IOException {
-                throw new IOException("kaboom!");
-            }
-        }, HashType.sha256);
-
-        Pair<RDFTerm, RDFTerm> queryKey = Pair.of(
-                RefNodeFactory.toIRI("bla"),
-                RefNodeFactory.toIRI("boo")
-        );
+        Pair<RDFTerm, RDFTerm> queryKey = Pair.of(RefNodeFactory.toIRI("bla"), RefNodeFactory.toIRI("boo"));
+        hexastore.put(queryKey, RefNodeFactory.toIRI(""));
 
         IRI iri1 = hexastore.get(queryKey);
 
         assertThat(iri1, is(nullValue()));
 
-        hexastore.get(queryKey);
-    }
+        hexastore.put(queryKey, RefNodeFactory.toIRI("foo"));
 
-    @Test(expected = IOException.class)
-    public void putInvalidKey() throws IOException {
-        HexaStore hexastore = new HexaStoreImpl(new KeyValueStore() {
+        iri1 = hexastore.get(queryKey);
 
-            @Override
-            public IRI put(KeyGeneratingStream keyGeneratingStream, InputStream is) throws IOException {
-                return null;
-            }
+        assertThat(iri1.getIRIString(), is("foo"));
 
-            @Override
-            public void put(IRI key, InputStream is) throws IOException {
-                //
-            }
-
-            @Override
-            public InputStream get(IRI key) throws IOException {
-                fail();
-                throw new IOException("boom!");
-            }
-        }, HashType.sha256);
-
-        Pair<RDFTerm, RDFTerm> queryKey = Pair.of(
-                RefNodeFactory.toIRI("bla"),
-                RefNodeFactory.toIRI("boo")
-        );
-        hexastore.put(queryKey, RefNodeFactory.toIRI(""));
     }
 
 }

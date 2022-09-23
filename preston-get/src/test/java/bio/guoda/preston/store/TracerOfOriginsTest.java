@@ -124,7 +124,7 @@ public class TracerOfOriginsTest {
 
         List<String> notFound = new ArrayList<>();
 
-        KeyValueStoreReadOnly store = new KeyValueStoreWithReadFallback(graphB, new KeyValueStoreReadOnly() {
+        KeyValueStoreReadOnly store = new KeyValueStoreWithFallback(graphB, new KeyValueStoreReadOnly() {
             @Override
             public InputStream get(IRI uri) throws IOException {
                 notFound.add(uri.getIRIString());
@@ -180,8 +180,8 @@ public class TracerOfOriginsTest {
                 return null;
             }
         };
-        KeyValueStore store = new KeyValueStoreWithReadFallback(graphB, graphA);
-        KeyValueStoreReadOnly storeWithRemote = new KeyValueStoreWithReadFallback(store, notFoundCounter);
+        KeyValueStore store = new KeyValueStoreWithFallback(graphB, graphA);
+        KeyValueStoreReadOnly storeWithRemote = new KeyValueStoreWithFallback(store, notFoundCounter);
 
         List<Quad> versionStatements = new ArrayList<>();
         new TracerOfOrigins(storeWithRemote, new ProcessorStateAlwaysContinue())
@@ -232,7 +232,7 @@ public class TracerOfOriginsTest {
 
         return new KeyValueStoreLocalFileSystem(tmpDir.getRoot(),
                 new KeyTo3LevelPath(dataDir.toURI(), HashType.sha256),
-                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256));
+                new KeyValueStoreLocalFileSystem.KeyValueStreamFactoryValues(HashType.sha256));
     }
 
     @Test

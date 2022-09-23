@@ -38,7 +38,7 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
                     if (validating.acceptValueStreamForKey(key)) {
                         put(key, tmpDestFile);
                     } else {
-                        throw new IOException("received invalid results for query [" + key.getIRIString() + " according to [" + validating.getClass().getName() + "].");
+                        FileUtils.deleteQuietly(tmpDestFile);
                     }
                 } catch (IOException ex) {
                     FileUtils.deleteQuietly(tmpDestFile);
@@ -102,6 +102,20 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
         @Override
         public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
             return new ValidatingKeyValueStreamContentAddressed(is, type);
+        }
+    }
+
+    public static class KeyValueStreamFactoryValues implements KeyValueStreamFactory {
+
+        private final HashType type;
+
+        public KeyValueStreamFactoryValues(HashType type) {
+            this.type = type;
+        }
+
+        @Override
+        public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
+            return new ValidatingKeyValueStreamHashTypeIRI(is, type);
         }
     }
 

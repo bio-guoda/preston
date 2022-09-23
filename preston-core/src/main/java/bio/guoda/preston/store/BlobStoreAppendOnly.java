@@ -29,10 +29,7 @@ public class BlobStoreAppendOnly implements BlobStore {
 
     @Override
     public InputStream get(IRI key) throws IOException {
-        if (key == null) {
-            throw new IllegalArgumentException("no key specified");
-        }
-        return keyValueStore.get(key);
+        return key == null ? null : keyValueStore.get(key);
     }
 
 }

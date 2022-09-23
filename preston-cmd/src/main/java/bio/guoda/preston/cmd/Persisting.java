@@ -23,7 +23,7 @@ import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreStickyFailover;
 import bio.guoda.preston.store.KeyValueStoreWithDereferencing;
-import bio.guoda.preston.store.KeyValueStoreWithReadFallback;
+import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.KeyValueStreamFactory;
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.stream.ContentStreamUtil;
@@ -125,7 +125,7 @@ public class Persisting extends PersistingLocal {
                     failover,
                     super.getKeyValueStore(kvStreamFactory));
         } else {
-            store = new KeyValueStoreWithReadFallback(
+            store = new KeyValueStoreWithFallback(
                     super.getKeyValueStore(kvStreamFactory),
                     failover);
         }

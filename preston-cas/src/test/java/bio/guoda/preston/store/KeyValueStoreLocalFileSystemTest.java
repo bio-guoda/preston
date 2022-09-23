@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -72,26 +71,6 @@ public class KeyValueStoreLocalFileSystemTest {
 
         assertThat(TestUtil.toUTF8(filePersistence.get(someValueKey)), is("some value"));
 
-    }
-
-    @Test(expected = IOException.class)
-    public void writeMismatch() throws IOException {
-        HashType type = HashType.sha256;
-        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
-                new File(path.toFile(), "tmp"),
-                new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI(), type),
-                new KeyValueStoreLocalFileSystem.ValidatingKeyValueStreamContentAddressedFactory(type));
-
-        IRI someValueKey = RefNodeFactory.toIRI("hash://sha256/ab3d07f3169ccbd0ed6c4b45de21519f9f938c72d24124998aab949ce83bb51b");
-        assertNull(filePersistence.get(someValueKey));
-
-        try {
-            filePersistence.put(someValueKey, IOUtils.toInputStream("some other value", StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            assertThat(e.getMessage(), is("failed to retrieve content with content id [hash://sha256/ab3d07f3169ccbd0ed6c4b45de21519f9f938c72d24124998aab949ce83bb51b]"));
-            assertThat(TestUtil.toUTF8(filePersistence.get(someValueKey)), is(not("some other value")));
-            throw e;
-        }
     }
 
     private static KeyValueStreamFactory getAlwaysAccepting() {

@@ -5,6 +5,7 @@ import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RDFValueUtil;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
@@ -18,63 +19,33 @@ public class HexaStoreImpl implements HexaStore {
 
     private final QueryKeyCalculator queryKeyCalculator;
     private final KeyValueStore keyValueStore;
-    private final HashType type;
 
     public HexaStoreImpl(KeyValueStore keyValueStore, HashType type) {
         this.keyValueStore = keyValueStore;
         this.queryKeyCalculator = new QueryKeyCalculatorBackwardCompatible(type);
-        this.type = type;
     }
 
     @Override
     public void put(Pair<RDFTerm, RDFTerm> queryKey, RDFTerm value) throws IOException {
         // write-once, read-many
         IRI key = queryKeyCalculator.calculateKeyFor(queryKey);
-        String strValue = value instanceof IRI
-                ? ((IRI) value).getIRIString()
-                : value.toString();
-
-        if (!type.equals(HashKeyUtil.hashTypeFor(strValue))) {
-            throw new IOException("failed to write query result IRI: expected hash iri matching [" + type.getIRIPatternString() + "], but found [" + strValue + "] instead.");
+        String strValue = value instanceof IRI ? ((IRI) value).getIRIString() : value.toString();
+        if (StringUtils.isNotBlank(strValue)) {
+            keyValueStore.put(key, IOUtils.toInputStream(strValue, StandardCharsets.UTF_8));
         }
-
-        keyValueStore.put(key, IOUtils.toInputStream(strValue, StandardCharsets.UTF_8));
     }
 
 
-    static IRI calculateHashFor(RDFTerm term, HashType type) {
+    protected static IRI calculateHashFor(RDFTerm term, HashType type) {
         return Hasher.calcHashIRI(RDFValueUtil.getValueFor(term), type);
     }
 
     @Override
     public IRI get(Pair<RDFTerm, RDFTerm> queryKey) throws IOException {
-        IRI keyCalculated = queryKeyCalculator.calculateKeyFor(queryKey);
-        try (InputStream inputStream = keyValueStore.get(keyCalculated)) {
-            return getSupportedHashIRIOrThrow(keyCalculated, inputStream);
+        try(InputStream inputStream = keyValueStore.get(queryKeyCalculator.calculateKeyFor(queryKey))) {
+            return inputStream == null
+                    ? null
+                    : RefNodeFactory.toIRI(URI.create(IOUtils.toString(inputStream, StandardCharsets.UTF_8)));
         }
-
-    }
-
-    private IRI getSupportedHashIRIOrThrow(IRI keyCalculated, InputStream inputStream) throws IOException {
-        IRI iri;
-        if (inputStream == null) {
-            throw new IOException("failed to retrieve results for query key [" + keyCalculated.getIRIString() + "]: no data provided");
-        } else {
-            ValidatingKeyValueStream validatingKeyValueStream = new ValidatingKeyValueStreamHashTypeIRIFactory(type).forKeyValueStream(keyCalculated, inputStream);
-            InputStream valueStream = validatingKeyValueStream.getValueStream();
-            IRI iriFound = RefNodeFactory.toIRI(URI.create(IOUtils.toString(valueStream, StandardCharsets.UTF_8)));
-            iri = validatingKeyValueStream.acceptValueStreamForKey(iriFound)
-                    ? iriFound
-                    : null;
-            if (iri == null) {
-                if (iriFound == null) {
-                    throw new IOException("failed to retrieve results for query key [" + keyCalculated.getIRIString() + "]: no results found");
-                } else {
-                    throw new IOException("failed to retrieve results for query key [" + keyCalculated.getIRIString() + "]: invalid result key [" + iriFound.getIRIString() + "]");
-                }
-            }
-        }
-
-        return iri;
     }
 }

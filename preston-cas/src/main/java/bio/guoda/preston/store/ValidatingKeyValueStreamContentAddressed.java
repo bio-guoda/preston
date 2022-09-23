@@ -29,10 +29,10 @@ public class ValidatingKeyValueStreamContentAddressed implements ValidatingKeyVa
     }
 
     @Override
-    public boolean acceptValueStreamForKey(IRI keyExpected) {
-        IRI keyActual = Hasher.toHashIRI(value.getMessageDigest(), type);
-        return keyActual != null
-                && keyExpected != null
-                && StringUtils.equals(keyExpected.getIRIString(), keyActual.getIRIString());
+    public boolean acceptValueStreamForKey(IRI key) {
+        IRI iri = Hasher.toHashIRI(value.getMessageDigest(), type);
+        return iri != null
+                && key != null
+                && StringUtils.equals(key.getIRIString(), iri.getIRIString());
     }
 }
