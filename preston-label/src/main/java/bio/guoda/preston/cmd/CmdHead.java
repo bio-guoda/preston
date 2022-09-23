@@ -34,7 +34,7 @@ public class CmdHead extends LoggingPersisting implements Runnable {
         }
 
         if (mostRecentLog.get() == null) {
-            throw new RuntimeException("Cannot generate QRCode: no provenance logs found.");
+            throw new RuntimeException("Cannot find most recent version: no provenance logs found.");
         }
 
         try {
