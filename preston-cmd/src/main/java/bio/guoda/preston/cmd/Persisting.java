@@ -19,6 +19,7 @@ import bio.guoda.preston.store.KeyTo3LevelTarGzPath;
 import bio.guoda.preston.store.KeyToHashURI;
 import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreStickyFailover;
@@ -41,7 +42,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -120,11 +120,14 @@ public class Persisting extends PersistingLocal {
                         ? includeTarGzSupport(keyToPathStream)
                         : defaultRemotePathSupport(keyToPathStream).collect(Collectors.toList());
 
-        KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
 
         if (isCacheEnabled()) {
-            store = createKeyStoreWithValidatedCache(kvStreamFactory, failover);
+            store = new KeyValueStoreCopying(
+                    createStickyFailoverWithValidatedCache(kvStreamFactory, keyValueStoreRemotes),
+                    super.getKeyValueStore(kvStreamFactory)
+            );
         } else {
+            KeyValueStoreStickyFailover failover = new KeyValueStoreStickyFailover(keyValueStoreRemotes);
             store = new KeyValueStoreWithFallback(
                     super.getKeyValueStore(kvStreamFactory),
                     failover
@@ -133,24 +136,33 @@ public class Persisting extends PersistingLocal {
         return store;
     }
 
-    private KeyValueStore createKeyStoreWithValidatedCache(ValidatingKeyValueStreamFactory kvStreamFactory, KeyValueStoreStickyFailover failover) {
-        KeyValueStore store;
+    private KeyValueStoreStickyFailover createStickyFailoverWithValidatedCache(
+            ValidatingKeyValueStreamFactory kvStreamFactory,
+            List<KeyValueStoreReadOnly> remotes
+    ) {
         File stagingDir = getTmpDir();
 
-        KeyValueStoreLocalFileSystem staging = new KeyValueStoreLocalFileSystem(
-                getTmpDir(),
-                new KeyTo1LevelPath(stagingDir.toURI(), getHashType()),
-                kvStreamFactory
-        );
-        KeyValueStore validated = super.getKeyValueStore(kvStreamFactory);
+        List<KeyValueStoreReadOnly> validatedRemotes = remotes
+                .stream()
+                .map(remote -> {
+                    KeyValueStoreLocalFileSystem staging = new KeyValueStoreLocalFileSystem(
+                            getTmpDir(),
+                            new KeyTo1LevelPath(stagingDir.toURI(), getHashType()),
+                            kvStreamFactory
+                    );
+                    KeyValueStore validated = super.getKeyValueStore(kvStreamFactory);
 
-        store = new KeyValueStoreWithValidation(
-                kvStreamFactory,
-                staging,
-                validated,
-                failover
-        );
-        return store;
+                    return new KeyValueStoreWithValidation(
+                            kvStreamFactory,
+                            staging,
+                            validated,
+                            remote
+                    );
+                })
+                .collect(Collectors.toList());
+
+
+        return new KeyValueStoreStickyFailover(validatedRemotes);
     }
 
     private Stream<KeyValueStoreReadOnly> defaultRemotePathSupport(Stream<Pair<URI, KeyToPath>> keyToPathStream) {
