@@ -724,6 +724,8 @@ Boettiger, C (2020). Content-based Identifiers for Iterative Forecasts: A Propos
 
 ### Data publications
 
+Big Bee Community, Poelen, Jorrit H., & Seltmann, Katja. (2022). Xylocopa sonorina - UCSB-IZC00012194 - Bee Library - 73e389aa-5886-4c48-8778-ba8932d1bd7e hash://sha256/96bfde1efa599e0e8e61de18b14d61dd308737f684950e4079c04e9bc0f33958 hash://md5/4940f68c84cffa4412f7ffb98bb255bd (0.0.3) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7114665
+
 Poelen, Jorrit H., & Groom, Quentin. (2022). Preserved Specimen Records with Still Images Registered Across Biodiversity Data Networks in Period 2019-2022 hash://sha256/da7450941e7179c973a2fe1127718541bca6ccafe0e4e2bfb7f7ca9dbb7adb86 (0.0.1) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7032574
 
 J.H. Poelen. A biodiversity dataset graph: Biodiversity Heritage Library (BHL) hash://sha256/34ccd7cf7f4a1ea35ac6ae26a458bb603b2f6ee8ad36e1a58aa0261105d630b1, https://archive.org/details/preston-bhl (2019)
