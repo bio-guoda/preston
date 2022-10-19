@@ -38,8 +38,9 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
                     BlankNodeOrIRI version = RefNodeFactory.getVersion(statement);
                     try {
                         readXLSX((IRI) version);
-                    } catch (IOException e) {
                         readXLS((IRI) version);
+                    } catch (IOException e) {
+                        // ignore
                     }
                 }
 
