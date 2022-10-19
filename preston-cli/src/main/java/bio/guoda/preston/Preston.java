@@ -10,19 +10,19 @@ import bio.guoda.preston.cmd.CmdCite;
 import bio.guoda.preston.cmd.CmdClone;
 import bio.guoda.preston.cmd.CmdCopyTo;
 import bio.guoda.preston.cmd.CmdDwcRecordStream;
+import bio.guoda.preston.cmd.CmdGenerateQRCode;
+import bio.guoda.preston.cmd.CmdGet;
 import bio.guoda.preston.cmd.CmdGrep;
 import bio.guoda.preston.cmd.CmdHash;
 import bio.guoda.preston.cmd.CmdHead;
-import bio.guoda.preston.cmd.CmdInstallManual;
-import bio.guoda.preston.cmd.CmdGenerateQRCode;
-import bio.guoda.preston.cmd.CmdPlazi;
-import bio.guoda.preston.cmd.CmdSeeds;
-import bio.guoda.preston.cmd.CmdSketchCreate;
-import bio.guoda.preston.cmd.CmdGet;
 import bio.guoda.preston.cmd.CmdHistory;
+import bio.guoda.preston.cmd.CmdInstallManual;
 import bio.guoda.preston.cmd.CmdList;
 import bio.guoda.preston.cmd.CmdMerge;
 import bio.guoda.preston.cmd.CmdOrigins;
+import bio.guoda.preston.cmd.CmdPlazi;
+import bio.guoda.preston.cmd.CmdSeeds;
+import bio.guoda.preston.cmd.CmdSketchCreate;
 import bio.guoda.preston.cmd.CmdSketchDiff;
 import bio.guoda.preston.cmd.CmdSketchUnion;
 import bio.guoda.preston.cmd.CmdUpdate;
@@ -30,6 +30,7 @@ import bio.guoda.preston.cmd.CmdVerify;
 import bio.guoda.preston.cmd.CmdVersion;
 import bio.guoda.preston.cmd.TypeConverterIRI;
 import bio.guoda.preston.dbase.CmdDBaseRecordStream;
+import bio.guoda.preston.excel.CmdExcelRecordStream;
 import bio.guoda.preston.server.CmdServe;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
@@ -62,6 +63,7 @@ import static java.lang.System.exit;
                 CmdAlias.class,
                 CmdDwcRecordStream.class,
                 CmdDBaseRecordStream.class,
+                CmdExcelRecordStream.class,
                 CmdPlazi.class,
                 CmdServe.class,
                 CmdCite.class,
