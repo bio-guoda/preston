@@ -2,7 +2,10 @@ package bio.guoda.preston.excel;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.Is;
 import org.junit.Test;
@@ -39,7 +42,13 @@ public class XLSXHandlerTest {
 
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
+
+        JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[1]);
+
+        assertThat(jsonNode.get("TAXON LEVEL").asText(), Is.is("FAMILY"));
+
         assertThat(actual, Is.is(expected));
+
     }
 
 
