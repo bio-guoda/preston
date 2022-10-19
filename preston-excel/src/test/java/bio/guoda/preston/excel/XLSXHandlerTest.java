@@ -2,9 +2,9 @@ package bio.guoda.preston.excel;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
+import bio.guoda.preston.store.TestUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.Is;
@@ -37,8 +37,7 @@ public class XLSXHandlerTest {
 
         XLSXHandler.asJsonStream(out, resourceIRI, contentStore);
 
-        String expected = IOUtils.toString(
-                getClass().getResourceAsStream("msw3-03.xlsx.json"), StandardCharsets.UTF_8);
+        String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "msw3-03.xlsx.json");
 
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 

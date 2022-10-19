@@ -58,6 +58,10 @@ public class TestUtil {
 
     public static String removeCarriageReturn(InputStream is) throws IOException {
         String s = IOUtils.toString(is, StandardCharsets.UTF_8);
+        return removeCarriageReturn(s);
+    }
+
+    public static String removeCarriageReturn(String s) {
         return StringUtils.replace(s, "\r\n", "\n");
     }
 
