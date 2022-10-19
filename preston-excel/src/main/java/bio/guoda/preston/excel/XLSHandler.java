@@ -70,7 +70,7 @@ public class XLSHandler {
         }
     }
 
-    static String getCellValue(Cell c) {
+    private static String getCellValue(Cell c) {
         String value = "";
         if (c != null) {
             switch (c.getCellType()) {
@@ -80,6 +80,9 @@ public class XLSHandler {
                 case STRING:
                     value = c.getStringCellValue();
                     break;
+                case NUMERIC:
+                    value = Double.toString(c.getNumericCellValue());
+                    break;
                 default:
                     break;
             }
@@ -87,7 +90,7 @@ public class XLSHandler {
         return value;
     }
 
-    static void setMetaData(IRI resourceIRI, String mimeType, Sheet sheet, Row r, ObjectNode objectNode) throws IOException {
+    private static void setMetaData(IRI resourceIRI, String mimeType, Sheet sheet, Row r, ObjectNode objectNode) throws IOException {
         String prefix = APPLICATION_VND_MS_EXCEL.equals(mimeType)
                 ? "line:xls:"
                 : "line:xlsx:";
@@ -99,7 +102,8 @@ public class XLSHandler {
             throw new IOException("failed to create resource location", e);
         }
 
-        URI resourceAddress = URI.create(prefix + resourceIRI.getIRIString() + "!/" + sheetName + "!/L" + r.getRowNum());
+        int rowNumberWithOffsetOne = r.getRowNum() + 1;
+        URI resourceAddress = URI.create(prefix + resourceIRI.getIRIString() + "!/" + sheetName + "!/L" + rowNumberWithOffsetOne);
         TextNode resourceAddressIRI = TextNode.valueOf(RefNodeFactory.toIRI(resourceAddress).getIRIString());
         objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", resourceAddressIRI);
         objectNode.set("http://purl.org/dc/elements/1.1/format", TextNode.valueOf(mimeType));
