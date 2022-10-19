@@ -35,9 +35,10 @@ public class XLSXHandlerTest {
         XLSXHandler.asJsonStream(out, resourceIRI, contentStore);
 
         String expected = IOUtils.toString(
-                getClass().getResourceAsStream("msw3-03.json"), StandardCharsets.UTF_8);
+                getClass().getResourceAsStream("msw3-03.xlsx.json"), StandardCharsets.UTF_8);
 
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
+
         assertThat(actual, Is.is(expected));
     }
 
