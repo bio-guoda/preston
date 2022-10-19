@@ -11,6 +11,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.NotOLE2FileException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -20,10 +21,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 
 public class XLSHandler {
 
@@ -39,13 +37,14 @@ public class XLSHandler {
     }
 
     public static void asJsonStream(OutputStream out, IRI resourceIRI, Workbook workbook, String mimeType) throws IOException {
+        final DataFormatter formatter = new DataFormatter();
         for (Sheet sheet : workbook) {
             HashMap<Integer,String> header = new HashMap<>();
             boolean isFirstRow = true;
             for (Row r : sheet) {
                 if (isFirstRow) {
                     for (Cell c : r) {
-                        String value = getCellValue(c);
+                        String value = getCellValue(formatter, c);
                         int column = c.getColumnIndex();
                         header.put(column, StringUtils.isBlank(value) ? ("column" + column) : value);
                     }
@@ -58,7 +57,7 @@ public class XLSHandler {
                     for (Cell c : r) {
                         int columnNumber = c.getColumnIndex();
                         String fieldName = columnNumber < header.size() ? header.get(columnNumber) : ("column" + columnNumber);
-                        objectNode.put(fieldName, getCellValue(c));
+                        objectNode.put(fieldName, getCellValue(formatter, c));
                     }
 
                     if (objectNode.size() > 0) {
@@ -70,22 +69,11 @@ public class XLSHandler {
         }
     }
 
-    private static String getCellValue(Cell c) {
+    private static String getCellValue(DataFormatter formatter, Cell c) {
         String value = "";
+
         if (c != null) {
-            switch (c.getCellType()) {
-                case BOOLEAN:
-                    value = c.getBooleanCellValue() ? "true" : "false";
-                    break;
-                case STRING:
-                    value = c.getStringCellValue();
-                    break;
-                case NUMERIC:
-                    value = Double.toString(c.getNumericCellValue());
-                    break;
-                default:
-                    break;
-            }
+            value = formatter.formatCellValue(c);
         }
         return value;
     }

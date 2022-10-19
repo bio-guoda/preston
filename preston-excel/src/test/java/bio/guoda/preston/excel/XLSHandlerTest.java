@@ -37,15 +37,12 @@ public class XLSHandlerTest {
 
 
         XLSHandler.asJsonStream(out, resourceIRI, contentStore);
-
         String expected = TestUtil.removeCarriageReturn(XLSHandlerTest.class, "msw3-03.xls.json");
-
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
         JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[1]);
 
         assertThat(jsonNode.get("TAXON LEVEL").asText(), Is.is("FAMILY"));
-
         assertThat(actual, Is.is(expected));
     }
 
