@@ -20,9 +20,7 @@ import java.util.regex.Pattern;
 )
 public class CmdGrep extends LoggingPersisting implements Runnable {
 
-    public static final String REGULAR_EXPRESSION = "regular expression";
-
-    @CommandLine.Parameters(description = REGULAR_EXPRESSION)
+    @CommandLine.Parameters(description = "regular expression (e.g., \"Homo sapien.*\")")
     private String regex = TextMatcher.URL_PATTERN.pattern();
 
     @CommandLine.Option(
