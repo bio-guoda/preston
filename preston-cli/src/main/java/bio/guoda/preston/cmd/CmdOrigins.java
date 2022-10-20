@@ -37,9 +37,6 @@ public class CmdOrigins extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        KeyValueStore keyValueStore = getKeyValueStore(
-                new ValidatingKeyValueStreamContentAddressedFactory(getHashType())
-        );
 
         StatementsListener logger = createPrintingLogger(
                 getLogMode(),
@@ -49,7 +46,7 @@ public class CmdOrigins extends LoggingPersisting implements Runnable {
 
         AtomicBoolean foundHistory = new AtomicBoolean(false);
         try {
-            ProvenanceTracer tracer = getTracerOfOrigins(keyValueStore);
+            ProvenanceTracer tracer = getTracerOfOrigins();
 
             if (provenanceAnchors.isEmpty()) {
                 handleStdIn(logger, foundHistory, tracer);

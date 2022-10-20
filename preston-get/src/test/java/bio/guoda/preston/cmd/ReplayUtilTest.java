@@ -2,8 +2,6 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.cmd.ReplayUtil;
-import bio.guoda.preston.cmd.VersionRetriever;
 import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStore;
@@ -23,6 +21,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
+import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ReplayUtilTest {
@@ -36,11 +35,7 @@ public class ReplayUtilTest {
         StatementLoggerNQuads logger = new StatementLoggerNQuads(
                 new PrintStream(out, true)
         );
-        ReplayUtil.attemptReplay(
-                getBlobStore(),
-                new TracerOfDescendants(getStatementStore(), new ProcessorStateAlwaysContinue()),
-                new VersionRetriever(getBlobStore()),
-                logger);
+        ReplayUtil.attemptReplay(getBlobStore(), BIODIVERSITY_DATASET_GRAPH, new TracerOfDescendants(getStatementStore(), new ProcessorStateAlwaysContinue()), new VersionRetriever(getBlobStore()), logger);
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), Is.is(
                 "<urn:example:some> <urn:example:other> <urn:example:thing> .\n" +

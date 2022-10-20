@@ -26,8 +26,8 @@ import bio.guoda.preston.store.KeyValueStoreStickyFailover;
 import bio.guoda.preston.store.KeyValueStoreWithDereferencing;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.KeyValueStoreWithValidation;
-import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
+import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
 import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 
 public class Persisting extends PersistingLocal {
 
@@ -71,6 +73,16 @@ public class Persisting extends PersistingLocal {
     private Boolean disableProgress = false;
 
     private boolean supportTarGzDiscovery = true;
+
+    @CommandLine.Option(
+            names = {"--provenanceRoot", "-r"},
+            description = "specify the provenance root of the command. By default, any available data graph will be traversed up to it's most recent additions. If the provenance root is set, only specified provenance signature and their origins are included in the scope."
+    )
+    private final IRI provenanceRoot = BIODIVERSITY_DATASET_GRAPH;
+
+    public IRI getProvenanceRoot() {
+        return this.provenanceRoot;
+    }
 
     protected List<URI> getRemotes() {
         return remotes;
@@ -247,7 +259,8 @@ public class Persisting extends PersistingLocal {
     protected BlobStoreReadOnly resolvingBlobStore(Dereferencer<InputStream> blobStore) {
         return new AliasDereferencer(
                 new ContentHashDereferencer(blobStore),
-                this
+                this,
+                this.getTracerOfDescendants()
         );
     }
 

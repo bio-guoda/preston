@@ -35,12 +35,6 @@ public final class ReplayUtil {
 
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
-                              ProvenanceTracer provenanceTracer,
-                              StatementsListener... listeners) {
-        attemptReplay(provenanceLogStore, BIODIVERSITY_DATASET_GRAPH, provenanceTracer, listeners);
-    }
-
-    static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
                               final IRI provRoot,
                               ProvenanceTracer provenanceTracer,
                               StatementsListener... listeners) {
@@ -86,15 +80,17 @@ public final class ReplayUtil {
     }
 
     public static void replay(StatementsListener listener, Persisting persisting) {
-        ProcessorState state = persisting;
-        ProvenanceTracer provenanceTracer = persisting.getTracerOfDescendants();
+        replay(listener, persisting, persisting.getTracerOfDescendants());
+    }
+
+    public static void replay(StatementsListener listener, Persisting persisting, ProvenanceTracer provenanceTracer) {
         BlobStoreReadOnly blobstoreReadOnly = new BlobStoreAppendOnly(
                 persisting.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())),
                 true,
                 persisting.getHashType()
         );
 
-        attemptReplay(listener, state, provenanceTracer, blobstoreReadOnly);
+        attemptReplay(listener, persisting, provenanceTracer, blobstoreReadOnly);
     }
 
     static void attemptReplay(StatementsListener listener,

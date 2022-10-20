@@ -70,7 +70,7 @@ public class PersistingLocal extends Cmd {
         return new KeyValueStoreWithFallback(primary, fallback);
     }
 
-    protected ProvenanceTracer getTracerOfDescendants() {
+    public ProvenanceTracer getTracerOfDescendants() {
         KeyValueStore keyValueStore = getKeyValueStore(
                 new ValidatingKeyValueStreamHashTypeIRIFactory(getHashType())
         );
@@ -87,7 +87,11 @@ public class PersistingLocal extends Cmd {
         return new TracerOfDescendants(hexastore, this);
     }
 
-    protected ProvenanceTracer getTracerOfOrigins(KeyValueStore keyValueStore) {
+    protected ProvenanceTracer getTracerOfOrigins() {
+        KeyValueStore keyValueStore = getKeyValueStore(
+                new ValidatingKeyValueStreamHashTypeIRIFactory(getHashType())
+        );
+
         return new TracerOfOrigins(keyValueStore, this);
     }
 

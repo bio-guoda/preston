@@ -16,12 +16,14 @@ import java.util.function.Predicate;
 
 public class AliasDereferencer implements BlobStoreReadOnly {
 
-    private final Persisting persisting;
     private final Dereferencer<InputStream> proxy;
+    private final Persisting persisting;
+    private final ProvenanceTracer provenanceTracer;
 
-    public AliasDereferencer(Dereferencer<InputStream> proxy, Persisting persisting) {
+    public AliasDereferencer(Dereferencer<InputStream> proxy, Persisting persisting, ProvenanceTracer tracer) {
         this.persisting = persisting;
         this.proxy = proxy;
+        this.provenanceTracer = tracer;
     }
 
     @Override
@@ -56,18 +58,23 @@ public class AliasDereferencer implements BlobStoreReadOnly {
         }
     }
 
-    private void attemptToFindAlias(AtomicReference<IRI> firstAliasHash, Predicate<Quad> selector, final ProcessorState processorState) {
-        AliasUtil.findSelectedAlias(new StatementsListenerAdapter() {
-                                        @Override
-                                        public void on(Quad statement) {
-                                            if (statement.getObject() instanceof IRI) {
-                                                firstAliasHash.set((IRI) statement.getObject());
-                                                processorState.stopProcessing();
-                                            }
-                                        }
-                                    },
+    private void attemptToFindAlias(AtomicReference<IRI> firstAliasHash,
+                                    Predicate<Quad> selector,
+                                    final ProcessorState processorState
+    ) {
+        AliasUtil.findSelectedAlias(
+                new StatementsListenerAdapter() {
+                    @Override
+                    public void on(Quad statement) {
+                        if (statement.getObject() instanceof IRI) {
+                            firstAliasHash.set((IRI) statement.getObject());
+                            processorState.stopProcessing();
+                        }
+                    }
+                },
                 selector,
-                persisting);
+                persisting,
+                provenanceTracer);
     }
 
     private InputStream dereferenceAliasedHash(IRI iri, AtomicReference<IRI> firstAliasHash) throws DereferenceException {

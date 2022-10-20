@@ -17,10 +17,4 @@ public class LoggingPersisting extends Persisting {
         return logMode;
     }
 
-    private final IRI provenanceRoot = BIODIVERSITY_DATASET_GRAPH;
-
-    public IRI getProvenanceRoot() {
-        return this.provenanceRoot;
-    }
-
 }

@@ -26,7 +26,7 @@ public class CloneUtil {
     public static void clone(KeyValueStore blobKeyValueStore,
                              KeyValueStore provenanceLogKeyValueStore,
                              HashType type,
-                             ProvenanceTracer provenanceTracer) {
+                             ProvenanceTracer provenanceTracer, IRI provenanceRoot) {
 
         final BlobStoreReadOnly blobStore
                 = new BlobStoreAppendOnly(blobKeyValueStore, true, type);
@@ -35,9 +35,7 @@ public class CloneUtil {
                 = new BlobStoreAppendOnly(provenanceLogKeyValueStore, true, type);
 
         StatementsListener statementListener = blobToucher(blobStore);
-        attemptReplay(provenanceLogStore,
-                provenanceTracer,
-                statementListener);
+        attemptReplay(provenanceLogStore, provenanceRoot, provenanceTracer, statementListener);
     }
 
     private static StatementsListener blobToucher(final BlobStoreReadOnly blobStore) {

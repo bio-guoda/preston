@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 import static bio.guoda.preston.cmd.ReplayUtil.attemptReplay;
 
 
@@ -102,6 +103,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
         final CmdContext ctx = new CmdContext(
                 this,
+                getProvenanceRoot(),
                 listener,
                 JekyllUtil.createPrestonStartTimeListener(lastCrawlTime::set)
         );
@@ -129,7 +131,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         CloneUtil.clone(copyingKeyValueStore,
                 copyingKeyValueStore,
                 getHashType(),
-                provenanceTracer);
+                provenanceTracer, BIODIVERSITY_DATASET_GRAPH);
     }
 
     private KeyToPath getKeyToPath(File target) {
@@ -146,7 +148,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
                 new NullKeyValueStore(),
                 getKeyValueStore(new ValidatingKeyValueStreamHashTypeIRIFactory(getHashType())),
                 getHashType(),
-                provenanceTracer
+                provenanceTracer, BIODIVERSITY_DATASET_GRAPH
         );
     }
 
@@ -166,7 +168,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
                 new NullKeyValueStore(),
                 copyingKeyValueStoreProv,
                 getHashType(),
-                provenanceTracer
+                provenanceTracer, BIODIVERSITY_DATASET_GRAPH
         );
     }
 
@@ -181,7 +183,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
                 copyingKeyValueStoreBlob,
                 getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(getHashType())),
                 getHashType(),
-                provenanceTracer);
+                provenanceTracer, BIODIVERSITY_DATASET_GRAPH);
     }
 
     private static class NullKeyValueStore implements KeyValueStore {
