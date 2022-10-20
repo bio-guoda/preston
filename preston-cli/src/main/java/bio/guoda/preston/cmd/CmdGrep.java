@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 @CommandLine.Command(
         name = "grep",
         aliases = {"match", "findURLs"},
-        description = "Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets"
+        description = "Uses regular expression to find matching content in biodiversity dataset graph"
 )
 public class CmdGrep extends LoggingPersisting implements Runnable {
 
