@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 @CommandLine.Command(
         name = "grep",
         aliases = {"match", "findURLs"},
-        description = "Uses regular expression to find matching content in biodiversity dataset graph"
+        description = "Uses regular expression (e.g., \"Homo sapie.*\") to find matching content in biodiversity dataset graph"
 )
 public class CmdGrep extends LoggingPersisting implements Runnable {
 
