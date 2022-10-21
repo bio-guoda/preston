@@ -41,9 +41,13 @@ public class XLSXHandlerTest {
 
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
-        JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[1]);
+        JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[0]);
 
         assertThat(jsonNode.get("TAXON LEVEL").asText(), Is.is("ORDER"));
+
+        jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[1]);
+
+        assertThat(jsonNode.get("TAXON LEVEL").asText(), Is.is("FAMILY"));
 
         assertThat(actual, Is.is(expected));
 
