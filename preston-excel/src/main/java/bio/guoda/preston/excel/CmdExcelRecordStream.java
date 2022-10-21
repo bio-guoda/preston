@@ -1,6 +1,7 @@
 package bio.guoda.preston.excel;
 
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.cmd.LogTypes;
 import bio.guoda.preston.cmd.LoggingPersisting;
 import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
@@ -21,6 +22,20 @@ import java.io.IOException;
 )
 public class CmdExcelRecordStream extends LoggingPersisting implements Runnable {
 
+    @CommandLine.Option(
+            names = {"--headerless"},
+            description = "use column numbers as column names"
+    )
+    private Boolean headerless = false;
+
+    @CommandLine.Option(
+            names = {"--skip-lines"},
+            description = "skip specified number of lines before processing the xlsx worksheet"
+    )
+    private Integer skipLines = 0;
+
+
+
     @Override
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
@@ -37,8 +52,8 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
                 if (RefNodeFactory.hasVersionAvailable(statement)) {
                     BlankNodeOrIRI version = RefNodeFactory.getVersion(statement);
                     try {
-                        readXLSX((IRI) version);
-                        readXLS((IRI) version);
+                        readXLSX((IRI) version, skipLines, headerless);
+                        readXLS((IRI) version, skipLines, headerless);
                     } catch (IOException e) {
                         // ignore
                     }
@@ -46,22 +61,26 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
 
             }
 
-            void readXLS(IRI version) {
+            void readXLS(IRI version, Integer skipLines, Boolean headerless) {
                 try {
                     XLSHandler.asJsonStream(
                             getOutputStream(),
                             version,
-                            blobStoreReadOnly);
+                            blobStoreReadOnly,
+                            skipLines,
+                            headerless);
                 } catch (IOException e) {
                     // ignore
                 }
             }
 
-            void readXLSX(IRI version) throws IOException {
+            void readXLSX(IRI version, Integer skipLines, Boolean headerless) throws IOException {
                 XLSXHandler.asJsonStream(
                         getOutputStream(),
                         version,
-                        blobStoreReadOnly);
+                        blobStoreReadOnly,
+                        skipLines,
+                        headerless);
             }
         };
 

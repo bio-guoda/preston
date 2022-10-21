@@ -28,28 +28,34 @@ public class XLSHandler {
 
     public static final String APPLICATION_VND_MS_EXCEL = "application/vnd.ms-excel";
 
-    public static void asJsonStream(OutputStream out, IRI resourceIRI, KeyValueStoreReadOnly contentStore) throws IOException {
+    public static void asJsonStream(OutputStream out, IRI resourceIRI, KeyValueStoreReadOnly contentStore, Integer skipLines, Boolean headerless) throws IOException {
         try (HSSFWorkbook workbook = new HSSFWorkbook(contentStore.get(resourceIRI))) {
-            asJsonStream(out, resourceIRI, workbook, APPLICATION_VND_MS_EXCEL);
+            asJsonStream(out, resourceIRI, workbook, APPLICATION_VND_MS_EXCEL, skipLines, headerless);
         } catch (RuntimeException | NotOLE2FileException ex) {
             // ignore runtime exception to implement opportunistic handling
         }
     }
 
-    public static void asJsonStream(OutputStream out, IRI resourceIRI, Workbook workbook, String mimeType) throws IOException {
+    public static void asJsonStream(OutputStream out, IRI resourceIRI, Workbook workbook, String mimeType, Integer skipLines, Boolean headerless) throws IOException {
         final DataFormatter formatter = new DataFormatter();
         for (Sheet sheet : workbook) {
             HashMap<Integer,String> header = new HashMap<>();
-            boolean isFirstRow = true;
+            int rowNumber = 0;
             for (Row r : sheet) {
-                if (isFirstRow) {
+                if (rowNumber == skipLines || headerless) {
                     for (Cell c : r) {
-                        String value = getCellValue(formatter, c);
                         int column = c.getColumnIndex();
-                        header.put(column, StringUtils.isBlank(value) ? ("column" + column) : value);
+                        if (headerless) {
+                            header.put(column, Integer.toString(column + 1));
+                        } else {
+                            String value = getCellValue(formatter, c);
+                            header.put(column, StringUtils.isBlank(value) ? ("column" + column) : value);
+                        }
                     }
-                    isFirstRow = false;
-                } else {
+                }
+
+                if (isDataRowWithoutHeader(skipLines, headerless, rowNumber)
+                        || isDataRowWithHeader(skipLines, headerless, rowNumber)) {
                     ObjectMapper obj = new ObjectMapper();
                     ObjectNode objectNode = obj.createObjectNode();
                     setMetaData(resourceIRI, mimeType, sheet, r, objectNode);
@@ -65,8 +71,17 @@ public class XLSHandler {
                         IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), out);
                     }
                 }
+                rowNumber++;
             }
         }
+    }
+
+    static boolean isDataRowWithHeader(Integer skipLines, Boolean headerless, int rowNumber) {
+        return !headerless && rowNumber > skipLines;
+    }
+
+    static boolean isDataRowWithoutHeader(Integer skipLines, Boolean headerless, int rowNumber) {
+        return headerless && rowNumber >= skipLines;
     }
 
     private static String getCellValue(DataFormatter formatter, Cell c) {

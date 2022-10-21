@@ -1,9 +1,6 @@
 package bio.guoda.preston.cmd;
 
-import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
-
-import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 
 public class LoggingPersisting extends Persisting {
 

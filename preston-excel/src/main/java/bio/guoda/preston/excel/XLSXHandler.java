@@ -12,11 +12,17 @@ import java.io.OutputStream;
 public class XLSXHandler {
 
 
-    public static void asJsonStream(OutputStream out, IRI resourceIRI, KeyValueStoreReadOnly contentStore) throws IOException {
+    public static void asJsonStream(OutputStream out, IRI resourceIRI, KeyValueStoreReadOnly contentStore, Integer skipLines, Boolean headerless) throws IOException {
         try (Workbook workbook = StreamingReader
                 .builder()
                 .open(contentStore.get(resourceIRI))) {
-            XLSHandler.asJsonStream(out, resourceIRI, workbook, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            XLSHandler.asJsonStream(
+                    out,
+                    resourceIRI,
+                    workbook,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    skipLines,
+                    headerless);
         } catch (NotOfficeXmlFileException ex) {
             // ignore runtime exception to implement opportunistic handling
         }

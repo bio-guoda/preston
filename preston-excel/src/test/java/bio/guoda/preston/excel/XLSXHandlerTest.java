@@ -35,16 +35,72 @@ public class XLSXHandlerTest {
             }
         };
 
-        XLSXHandler.asJsonStream(out, resourceIRI, contentStore);
+        XLSXHandler.asJsonStream(out, resourceIRI, contentStore, 0, false);
 
         String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "msw3-03.xlsx.json");
 
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
-
         JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[1]);
 
-        assertThat(jsonNode.get("TAXON LEVEL").asText(), Is.is("FAMILY"));
+        assertThat(jsonNode.get("TAXON LEVEL").asText(), Is.is("ORDER"));
+
+        assertThat(actual, Is.is(expected));
+
+    }
+    @Test
+    public void dumpTableHeaderless() throws IOException {
+        // use this count to fetch all field information
+        // if required
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IRI resourceIRI = RefNodeFactory.toIRI("some:iri");
+
+        KeyValueStoreReadOnly contentStore = new KeyValueStoreReadOnly() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                return getClass().getResourceAsStream("msw3-03.xlsx");
+            }
+        };
+
+        XLSXHandler.asJsonStream(out, resourceIRI, contentStore, 0, true);
+
+        String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "msw3-03.xlsx.headerless.json");
+
+        String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
+
+        JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[0]);
+
+        assertThat(jsonNode.get("1").asText(), Is.is("ORDER"));
+
+        assertThat(actual, Is.is(expected));
+
+    }
+
+    @Test
+    public void dumpTableHeaderlessSkip() throws IOException {
+        // use this count to fetch all field information
+        // if required
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IRI resourceIRI = RefNodeFactory.toIRI("some:iri");
+
+        KeyValueStoreReadOnly contentStore = new KeyValueStoreReadOnly() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                return getClass().getResourceAsStream("msw3-03.xlsx");
+            }
+        };
+
+        XLSXHandler.asJsonStream(out, resourceIRI, contentStore, 1, true);
+
+        String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "msw3-03.xlsx.headerless.skip.json");
+
+        String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
+
+        JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[0]);
+
+        assertThat(jsonNode.get("1").asText(), Is.is("MONOTREMATA"));
 
         assertThat(actual, Is.is(expected));
 
@@ -69,8 +125,7 @@ public class XLSXHandlerTest {
             }
         };
 
-
-        asJsonStream(out, resourceIRI, contentStore);
+        asJsonStream(out, resourceIRI, contentStore, 0, false);
 
         assertThat(out.size(), Is.is(0));
     }
@@ -89,7 +144,7 @@ public class XLSXHandlerTest {
         };
 
 
-        asJsonStream(out, resourceIRI, contentStore);
+        asJsonStream(out, resourceIRI, contentStore, 0, false);
     }
 
 
