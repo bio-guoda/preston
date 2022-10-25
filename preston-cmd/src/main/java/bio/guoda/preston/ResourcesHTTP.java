@@ -136,11 +136,14 @@ public class ResourcesHTTP {
 
             return HttpClientBuilder
                     .create()
-                    .setSSLHostnameVerifier(new NoopHostnameVerifier()) // see https://github.com/bio-guoda/preston/issues/25
+                    // see https://github.com/bio-guoda/preston/issues/25
+                    .setSSLHostnameVerifier(new NoopHostnameVerifier())
                     .setSSLContext(build)
                     .setRetryHandler(new DefaultHttpRequestRetryHandler(3, true))
                     .setUserAgent("globalbioticinteractions/" + Version.getVersionString() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)")
                     .setDefaultRequestConfig(config)
+                    // for loading proxy config see https://github.com/globalbioticinteractions/nomer/issues/121
+                    .useSystemProperties()
                     .build();
         } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
             throw new IllegalStateException("unexpected ssl exception", e);
