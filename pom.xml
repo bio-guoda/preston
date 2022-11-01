@@ -27,6 +27,7 @@
         <module>preston-sketch</module>
         <module>preston-aws</module>
         <module>preston-label</module>
+        <module>preston-search</module>
     </modules>
 
     <build>
