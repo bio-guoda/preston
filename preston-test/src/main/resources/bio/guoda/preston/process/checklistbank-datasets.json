@@ -1,0 +1,1467 @@
+{
+  "offset": 0,
+  "limit": 10,
+  "total": 43688,
+  "result": [
+    {
+      "created": "2019-11-20T11:07:46.123046",
+      "createdBy": 102,
+      "modified": "2022-10-20T14:02:37.134806",
+      "modifiedBy": 102,
+      "key": 3,
+      "type": "taxonomic",
+      "origin": "managed",
+      "attempt": 106,
+      "imported": "2022-10-21T04:16:17.964509",
+      "size": 4710190,
+      "doi": "10.48580/ds5",
+      "title": "Catalogue of Life Checklist",
+      "alias": "COL",
+      "description": "The Catalogue of Life is an assembly of expert-based global species checklists with the aim to build a comprehensive catalogue of all known species of organisms on Earth. Continuous progress is made towards completion, but for now, it probably includes just over 80% of the world's known species. The Catalogue of Life estimates 2.3M extant species on the planet recognised by taxonomists at present time. This means that for many groups it continues to be deficient, and users may notice that many species are still missing from the Catalogue.\n\n### What's new in October 2022 edition?\n\n#### 77 checklists updated:\n\n* 3i Auchenorrhyncha\n* ITIS (infraorder Caridea as a global checklist in full now)\n* Gelechiidae\n* Global Lepidoptera Index\n* Pterophoroidea\n* Scarabs\n* SF Aphid\n* SF Chrysididae\n* SF Coleorrhyncha \n* SF Orthoptera\n* StaphBase (with fixed extinct taxa now)\n* ThripsWiki\n* WoRMS, 65 checklists\n\n#### Other changes:\n* StaphBase and CarabCat re-synced",
+      "version": "working draft",
+      "issn": "2405-8858",
+      "contact": {
+        "city": "Leiden",
+        "country": "NL",
+        "email": "support@sp2000.org",
+        "name": "COL Secretariat",
+        "address": "Leiden, Netherlands",
+        "organisation": "COL Secretariat"
+      },
+      "creator": [
+        {
+          "orcid": "0000-0001-6197-9951",
+          "given": "Olaf",
+          "family": "Bánki",
+          "city": "Leiden",
+          "country": "NL",
+          "note": "COL Executive Secretary",
+          "orcidAsUrl": "https://orcid.org/0000-0001-6197-9951",
+          "name": "Bánki O.",
+          "address": "Leiden, Netherlands",
+          "organisation": "Naturalis Biodiversity Center"
+        },
+        {
+          "orcid": "0000-0003-2137-2690",
+          "given": "Yury",
+          "family": "Roskov",
+          "city": "Champaign",
+          "state": "IL",
+          "country": "US",
+          "note": "COL Executive Editor",
+          "orcidAsUrl": "https://orcid.org/0000-0003-2137-2690",
+          "name": "Roskov Y.",
+          "address": "Champaign, IL, United States of America",
+          "organisation": "Illinois Natural History Survey"
+        },
+        {
+          "orcid": "0000-0001-7757-1889",
+          "given": "Markus",
+          "family": "Döring",
+          "rorid": "05fjyn938",
+          "city": "Berlin",
+          "country": "DE",
+          "note": "COL Lead Developer",
+          "orcidAsUrl": "https://orcid.org/0000-0001-7757-1889",
+          "name": "Döring M.",
+          "address": "Berlin, Germany",
+          "organisation": "GBIF"
+        },
+        {
+          "orcid": "0000-0002-9770-2345",
+          "given": "Geoff",
+          "family": "Ower",
+          "city": "Champaign",
+          "state": "IL",
+          "country": "US",
+          "note": "COL Data Manager",
+          "orcidAsUrl": "https://orcid.org/0000-0002-9770-2345",
+          "name": "Ower G.",
+          "address": "Champaign, IL, United States of America",
+          "organisation": "Illinois Natural History Survey"
+        },
+        {
+          "orcid": "0000-0002-8160-7941",
+          "given": "Leen",
+          "family": "Vandepitte",
+          "city": "Oostende",
+          "country": "BE",
+          "note": "Global Team Chair",
+          "orcidAsUrl": "https://orcid.org/0000-0002-8160-7941",
+          "name": "Vandepitte L.",
+          "address": "Oostende, Belgium",
+          "organisation": "Vlaams Instituut voor de Zee (VLIZ)"
+        },
+        {
+          "orcid": "0000-0001-6492-4016",
+          "given": "Donald",
+          "family": "Hobern",
+          "city": "Canberra",
+          "country": "AU",
+          "note": "Taxonomy Group Chair",
+          "orcidAsUrl": "https://orcid.org/0000-0001-6492-4016",
+          "name": "Hobern D.",
+          "address": "Canberra, Australia",
+          "organisation": "Species 2000 Australia"
+        },
+        {
+          "orcid": "0000-0003-1289-0840",
+          "given": "David",
+          "family": "Remsen",
+          "city": "Woods Hole",
+          "country": "US",
+          "note": "Information Systems Group Chair",
+          "orcidAsUrl": "https://orcid.org/0000-0003-1289-0840",
+          "name": "Remsen D.",
+          "address": "Woods Hole, United States of America",
+          "organisation": "Marine Biological Laboratory"
+        },
+        {
+          "orcid": "0000-0003-4536-7650",
+          "given": "Peter",
+          "family": "Schalk",
+          "city": "Leiden",
+          "country": "NL",
+          "note": "Board of Directors Chair",
+          "orcidAsUrl": "https://orcid.org/0000-0003-4536-7650",
+          "name": "Schalk P.",
+          "address": "Leiden, Netherlands",
+          "organisation": "Naturalis Biodiversity Center"
+        },
+        {
+          "orcid": "0000-0001-9985-9250",
+          "given": "R. Edward",
+          "family": "DeWalt",
+          "city": "Champaign",
+          "state": "IL",
+          "country": "US",
+          "note": "Board of Directors",
+          "orcidAsUrl": "https://orcid.org/0000-0001-9985-9250",
+          "name": "DeWalt R. E.",
+          "address": "Champaign, IL, United States of America",
+          "organisation": "Illinois Natural History Survey"
+        },
+        {
+          "orcid": "0000-0001-9112-5340",
+          "given": "Ma",
+          "family": "Keping",
+          "city": "Beijing",
+          "country": "CN",
+          "note": "Board of Directors",
+          "orcidAsUrl": "https://orcid.org/0000-0001-9112-5340",
+          "name": "Keping M.",
+          "address": "Beijing, China",
+          "organisation": "Chinese Academy of Sciences"
+        },
+        {
+          "orcid": "0000-0002-5788-9010",
+          "given": "Joe",
+          "family": "Miller",
+          "city": "Copenhagen",
+          "country": "DK",
+          "note": "COL+ Partnership",
+          "orcidAsUrl": "https://orcid.org/0000-0002-5788-9010",
+          "name": "Miller J.",
+          "address": "Copenhagen, Denmark",
+          "organisation": "GBIF"
+        },
+        {
+          "orcid": "0000-0003-1038-3028",
+          "given": "Thomas",
+          "family": "Orrell",
+          "city": "Washington, D.C.",
+          "country": "US",
+          "note": "COL Partnership",
+          "orcidAsUrl": "https://orcid.org/0000-0003-1038-3028",
+          "name": "Orrell T.",
+          "address": "Washington, D.C., United States of America",
+          "organisation": "Smithsonian Institution"
+        }
+      ],
+      "publisher": {
+        "city": "Leiden",
+        "country": "NL",
+        "name": "Catalogue of Life",
+        "address": "Leiden, Netherlands",
+        "organisation": "Catalogue of Life"
+      },
+      "contributor": [
+        {
+          "orcid": "0000-0003-4994-0653",
+          "given": "Nicolas",
+          "family": "Bailly",
+          "department": "Beaty Biodiversity Museum",
+          "city": "Vancouver",
+          "country": "CA",
+          "note": "Global Team, Taxonomy Group",
+          "orcidAsUrl": "https://orcid.org/0000-0003-4994-0653",
+          "name": "Bailly N.",
+          "address": "Vancouver, Canada",
+          "organisation": "University of British Columbia"
+        },
+        {
+          "orcid": "0000-0001-9277-2478",
+          "given": "Thierry",
+          "family": "Bourgoin",
+          "city": "Paris",
+          "country": "FR",
+          "note": "Board of Directors",
+          "orcidAsUrl": "https://orcid.org/0000-0001-9277-2478",
+          "name": "Bourgoin T.",
+          "address": "Paris, France",
+          "organisation": "Museum National d'Histoire Naturelle"
+        },
+        {
+          "orcid": "0000-0002-8840-2121",
+          "given": "Maria Marta",
+          "family": "Cigliano",
+          "department": "Museo de La Plata",
+          "city": "Buenos Aires",
+          "country": "AR",
+          "note": "Global Team, Taxonomy Group",
+          "orcidAsUrl": "https://orcid.org/0000-0002-8840-2121",
+          "name": "Cigliano M. M.",
+          "address": "Buenos Aires, Argentina",
+          "organisation": "Universidad Nacional de La Plata"
+        },
+        {
+          "orcid": "0000-0003-2362-0328",
+          "given": "Mark John",
+          "family": "Costello",
+          "city": "Auckland",
+          "country": "NZ",
+          "note": "Taxonomy Group",
+          "orcidAsUrl": "https://orcid.org/0000-0003-2362-0328",
+          "name": "Costello M. J.",
+          "address": "Auckland, New Zealand",
+          "organisation": "University of Auckland"
+        },
+        {
+          "orcid": "0000-0002-2168-9471",
+          "given": "Wim",
+          "family": "Decock",
+          "city": "Oostende",
+          "country": "BE",
+          "note": "WoRMS liaison",
+          "orcidAsUrl": "https://orcid.org/0000-0002-2168-9471",
+          "name": "Decock W.",
+          "address": "Oostende, Belgium",
+          "organisation": "Vlaams Instituut voor de Zee (VLIZ)"
+        },
+        {
+          "orcid": "0000-0001-5737-8803",
+          "given": "Anne",
+          "family": "Fuchs",
+          "city": "Canberra",
+          "country": "AU",
+          "note": "Global Team",
+          "orcidAsUrl": "https://orcid.org/0000-0001-5737-8803",
+          "name": "Fuchs A.",
+          "address": "Canberra, Australia",
+          "organisation": "Australian National Botanic Gardens"
+        },
+        {
+          "orcid": "0000-0002-0724-7060",
+          "given": "Stephen",
+          "family": "Garnett",
+          "city": "Darwin",
+          "country": "AU",
+          "note": "Global Team",
+          "orcidAsUrl": "https://orcid.org/0000-0002-0724-7060",
+          "name": "Garnett S.",
+          "address": "Darwin, Australia",
+          "organisation": "Charles Darwin University"
+        },
+        {
+          "given": "Alex",
+          "family": "Gray",
+          "country": "GB",
+          "note": "Board of Directors",
+          "name": "Gray A.",
+          "address": "United Kingdom",
+          "organisation": "Species 2000 Scotland"
+        },
+        {
+          "given": "Francisco",
+          "family": "Hernandez",
+          "city": "Oostende",
+          "country": "BE",
+          "note": "Board of Directors",
+          "name": "Hernandez F.",
+          "address": "Oostende, Belgium",
+          "organisation": "Vlaams Instituut voor de Zee (VLIZ)"
+        },
+        {
+          "orcid": "0000-0001-5360-5677",
+          "given": "Tsuyoshi",
+          "family": "Hosoya",
+          "department": "Department of Botany",
+          "city": "Tokyo",
+          "country": "JP",
+          "note": "Global Team",
+          "orcidAsUrl": "https://orcid.org/0000-0001-5360-5677",
+          "name": "Hosoya T.",
+          "address": "Tokyo, Japan",
+          "organisation": "National Museum of Nature and Science"
+        },
+        {
+          "orcid": "0000-0001-5206-3415",
+          "given": "Chantal",
+          "family": "Huijbers",
+          "city": "Leiden",
+          "country": "NL",
+          "note": "Secretariat",
+          "orcidAsUrl": "https://orcid.org/0000-0001-5206-3415",
+          "name": "Huijbers C.",
+          "address": "Leiden, Netherlands",
+          "organisation": "Naturalis Biodiversity Center"
+        },
+        {
+          "orcid": "0000-0002-1703-5723",
+          "given": "Ji",
+          "family": "Li-Qiang",
+          "department": "Key Laboratory of Animal Ecology and Conservation Biology",
+          "city": "Beijing",
+          "country": "CN",
+          "note": "Global Team",
+          "orcidAsUrl": "https://orcid.org/0000-0002-1703-5723",
+          "name": "Li-Qiang J.",
+          "address": "Beijing, China",
+          "organisation": "Chinese Academy of Sciences"
+        },
+        {
+          "orcid": "0000-0001-9907-4779",
+          "given": "Jeyaraney",
+          "family": "Kathirithamby",
+          "department": "Department of Zoology",
+          "country": "GB",
+          "note": "Taxonomy Group",
+          "orcidAsUrl": "https://orcid.org/0000-0001-9907-4779",
+          "name": "Kathirithamby J.",
+          "address": "United Kingdom",
+          "organisation": "University of oxford"
+        },
+        {
+          "orcid": "0000-0002-7987-0679",
+          "given": "David",
+          "family": "Nicolson",
+          "city": "Washington, D.C.",
+          "country": "US",
+          "note": "Global Team, Taxonomy Group",
+          "orcidAsUrl": "https://orcid.org/0000-0002-7987-0679",
+          "name": "Nicolson D.",
+          "address": "Washington, D.C., United States of America",
+          "organisation": "US Geological Survey / Smithsonian Institution"
+        },
+        {
+          "orcid": "0000-0001-6609-0609",
+          "given": "Thomas",
+          "family": "Pape",
+          "department": "Natural History Museum of Denmark",
+          "city": "Copenhagen",
+          "country": "DK",
+          "note": "Global Team, Taxonomy Group",
+          "orcidAsUrl": "https://orcid.org/0000-0001-6609-0609",
+          "name": "Pape T.",
+          "address": "Copenhagen, Denmark",
+          "organisation": "University of Copenhagen"
+        },
+        {
+          "orcid": "0000-0003-0768-1286",
+          "given": "Richard",
+          "family": "Pyle",
+          "city": "Honolulu",
+          "state": "Hawaii",
+          "country": "US",
+          "note": "Global Team, Taxonomy Group",
+          "orcidAsUrl": "https://orcid.org/0000-0003-0768-1286",
+          "name": "Pyle R.",
+          "address": "Honolulu, Hawaii, United States of America",
+          "organisation": "Bernice Pauahi Bishop Museum"
+        },
+        {
+          "given": "Lauren",
+          "family": "Raz",
+          "city": "Bogotá",
+          "country": "CO",
+          "note": "Global Team, Taxonomy Group",
+          "name": "Raz L.",
+          "address": "Bogotá, Colombia",
+          "organisation": "National University of Colombia"
+        },
+        {
+          "orcid": "0000-0003-1887-5211",
+          "given": "Tony",
+          "family": "Rees",
+          "note": "Taxonomy Group",
+          "orcidAsUrl": "https://orcid.org/0000-0003-1887-5211",
+          "name": "Rees T."
+        },
+        {
+          "orcid": "0000-0001-6215-3617",
+          "given": "Tim",
+          "family": "Robertson",
+          "city": "Copenhagen",
+          "country": "DK",
+          "note": "Information Systems Group",
+          "orcidAsUrl": "https://orcid.org/0000-0001-6215-3617",
+          "name": "Robertson T.",
+          "address": "Copenhagen, Denmark",
+          "organisation": "GBIF"
+        },
+        {
+          "given": "Michael",
+          "family": "Ruggiero",
+          "city": "Washington, D.C.",
+          "country": "US",
+          "note": "Taxonomy Group",
+          "name": "Ruggiero M.",
+          "address": "Washington, D.C., United States of America",
+          "organisation": "Smithsonian Institution"
+        },
+        {
+          "orcid": "0000-0003-1691-239X",
+          "given": "Thomas",
+          "family": "Stjernegaard Jeppesen",
+          "rorid": "05fjyn938",
+          "city": "Copenhagen",
+          "country": "DK",
+          "note": "Secretariat",
+          "orcidAsUrl": "https://orcid.org/0000-0003-1691-239X",
+          "name": "Stjernegaard Jeppesen T.",
+          "address": "Copenhagen, Denmark",
+          "organisation": "GBIF"
+        },
+        {
+          "given": "Jacek",
+          "family": "Swedo",
+          "country": "PL",
+          "note": "Global Team, Taxonomy Group",
+          "name": "Swedo J.",
+          "address": "Poland",
+          "organisation": "University of Gdansk"
+        },
+        {
+          "given": "Bart",
+          "family": "Vanhoorne",
+          "city": "Oostende",
+          "country": "BE",
+          "note": "Information Systems Group",
+          "name": "Vanhoorne B.",
+          "address": "Oostende, Belgium",
+          "organisation": "Vlaams Instituut voor de Zee (VLIZ)"
+        },
+        {
+          "orcid": "0000-0002-7775-5300",
+          "given": "Nina",
+          "family": "Wambiji",
+          "city": "Mombasa",
+          "country": "KE",
+          "note": "Global Team",
+          "orcidAsUrl": "https://orcid.org/0000-0002-7775-5300",
+          "name": "Wambiji N.",
+          "address": "Mombasa, Kenya",
+          "organisation": "Kenya Marine and Fisheries Research Institute"
+        },
+        {
+          "given": "Haylee",
+          "family": "Weaver",
+          "department": "Department of the Environment",
+          "city": "Canberra",
+          "country": "AU",
+          "note": "Global Team",
+          "name": "Weaver H.",
+          "address": "Canberra, Australia",
+          "organisation": "Australian Government"
+        },
+        {
+          "given": "Mathew",
+          "family": "Yoder",
+          "city": "Champaign",
+          "state": "IL",
+          "country": "US",
+          "note": "TaxonWorks liaison",
+          "name": "Yoder M.",
+          "address": "Champaign, IL, United States of America",
+          "organisation": "Illinois Natural History Survey"
+        }
+      ],
+      "geographicScope": "Global",
+      "taxonomicScope": "Biota",
+      "confidence": 4,
+      "completeness": 80,
+      "license": "other",
+      "url": "https://data.catalogueoflife.org/dataset/3",
+      "label": "Catalogue of Life Checklist (working draft)",
+      "citation": "<div class=\"csl-entry\">B&aacute;nki, O., Roskov, Y., D&ouml;ring, M., Ower, G., Vandepitte, L., Hobern, D., Remsen, D., Schalk, P., DeWalt, R. E., Keping, M., Miller, J., &amp; Orrell, T. (n.d.). <span style=\"font-style: italic\">Catalogue of Life Checklist</span> (working draft). Catalogue of Life. https://doi.org/10.48580/ds5</div>",
+      "private": false
+    },
+    {
+      "created": "2019-11-20T11:07:46.255777",
+      "createdBy": 101,
+      "modified": "2022-06-02T13:03:32.886934",
+      "modifiedBy": 10,
+      "key": 1000,
+      "type": "taxonomic",
+      "origin": "external",
+      "attempt": 15,
+      "imported": "2022-06-02T13:03:33.114578",
+      "size": 2844,
+      "title": "Catalogue of Life Hierarchy",
+      "alias": "COLH",
+      "description": "We present a consensus classification of life to embrace the more than 1.6 million species \nalready provided by more than 3,000 taxonomists’ expert opinions \nin a unified and coherent, hierarchically ranked system known as the Catalogue of Life (CoL).",
+      "issued": "2019-05-06",
+      "version": "1.4",
+      "contact": {
+        "orcid": "0000-0001-7757-1889",
+        "given": "Markus",
+        "family": "Döring",
+        "email": "mdoering@gbif.org",
+        "orcidAsUrl": "https://orcid.org/0000-0001-7757-1889",
+        "name": "Döring M."
+      },
+      "creator": [
+        {
+          "given": "Michael A.",
+          "family": "Ruggiero",
+          "name": "Ruggiero M. A."
+        },
+        {
+          "given": "Dennis P.",
+          "family": "Gordon",
+          "name": "Gordon D. P."
+        },
+        {
+          "given": "Thomas M.",
+          "family": "Orrell",
+          "name": "Orrell T. M.",
+          "organisation": "ITIS"
+        },
+        {
+          "orcid": "0000-0003-4994-0653",
+          "given": "Nicolas",
+          "family": "Bailly",
+          "orcidAsUrl": "https://orcid.org/0000-0003-4994-0653",
+          "name": "Bailly N."
+        },
+        {
+          "given": "Thierry",
+          "family": "Bourgoin",
+          "name": "Bourgoin T."
+        },
+        {
+          "given": "Richard C.",
+          "family": "Brusca",
+          "name": "Brusca R. C."
+        },
+        {
+          "given": "Thomas",
+          "family": "Cavalier-Smith",
+          "name": "Cavalier-Smith T."
+        },
+        {
+          "given": "Michael D.",
+          "family": "Guiry",
+          "name": "Guiry M. D."
+        },
+        {
+          "given": "Paul M.",
+          "family": "Kirk",
+          "name": "Kirk P. M."
+        }
+      ],
+      "geographicScope": "global",
+      "taxonomicScope": "Biota",
+      "license": "cc by",
+      "source": [
+        {
+          "id": "plos",
+          "type": "article-journal",
+          "author": [
+            {
+              "family": "Ruggiero",
+              "given": "Michael A."
+            },
+            {
+              "family": "Gordon",
+              "given": "Dennis P."
+            },
+            {
+              "family": "Orrell",
+              "given": "Thomas M."
+            },
+            {
+              "family": "Bailly",
+              "given": "Nicolas"
+            },
+            {
+              "family": "Bourgoin",
+              "given": "Thierry"
+            },
+            {
+              "family": "Brusca",
+              "given": "Richard C."
+            },
+            {
+              "family": "Cavalier-Smith",
+              "given": "Thomas"
+            },
+            {
+              "family": "Guiry",
+              "given": "Michael D."
+            },
+            {
+              "family": "Kirk",
+              "given": "Paul M."
+            }
+          ],
+          "editor": [
+            {
+              "family": "Thuesen",
+              "given": "Erik V."
+            }
+          ],
+          "title": "A Higher Level Classification of All Living Organisms",
+          "issued": {
+            "raw": "2015-04-29",
+            "date-parts": [
+              [
+                2015,
+                4,
+                29
+              ]
+            ]
+          },
+          "volume": "10",
+          "issue": "4",
+          "publisher": "Public Library of Science (PLoS)",
+          "citation": "<div class=\"csl-entry\">Ruggiero, M. A., Gordon, D. P., Orrell, T. M., Bailly, N., Bourgoin, T., Brusca, R. C., Cavalier-Smith, T., Guiry, M. D., &amp; Kirk, P. M. (2015). <span style=\"font-style: italic\">A Higher Level Classification of All Living Organisms</span>. <span style=\"font-style: italic\">10</span>(4). https://doi.org/10.1371/journal.pone.0119248</div>",
+          "DOI": "10.1371/journal.pone.0119248",
+          "collection-title": "PLOS ONE",
+          "URL": "http://dx.plos.org/10.1371/journal.pone.0119248"
+        }
+      ],
+      "label": "Catalogue of Life Hierarchy (1.4)",
+      "citation": "<div class=\"csl-entry\">Ruggiero, M. A., Gordon, D. P., Orrell, T. M., Bailly, N., Bourgoin, T., Brusca, R. C., Cavalier-Smith, T., Guiry, M. D., &amp; Kirk, P. M. (2019). <span style=\"font-style: italic\">Catalogue of Life Hierarchy</span> (1.4).</div>",
+      "private": false
+    },
+    {
+      "created": "2019-11-20T11:07:46.255777",
+      "createdBy": 101,
+      "modified": "2021-06-29T13:33:26.630351",
+      "modifiedBy": 101,
+      "key": 1005,
+      "type": "taxonomic",
+      "origin": "external",
+      "attempt": 12,
+      "imported": "2021-05-25T21:43:20.439502",
+      "size": 23438,
+      "title": "Catalogue of Craneflies of the World",
+      "alias": "CCW",
+      "description": "The Catalogue of the Craneflies of the World (CCW) covers all genera, subgenera, species, subspecies, and synonyms of the World Tipuloidea (Insecta – Diptera – Nematocera – families Pediciidae, Limoniidae, Cylindrotomidae, Tipulidae). It also includes up to date information on the distribution of the species and subspecies, specified by countries and, for the larger countries, states, provinces and islands. The website’s list of references has over 7.400 titles, about 4.300 of which available as easy downloadable pdf.",
+      "issued": "2021-05-07",
+      "version": "May 2021",
+      "contact": {
+        "given": "P",
+        "family": "Oosterbroek",
+        "name": "Oosterbroek P"
+      },
+      "creator": [
+        {
+          "given": "P.",
+          "family": "Oosterbroek",
+          "name": "Oosterbroek P."
+        }
+      ],
+      "contributor": [
+        {
+          "city": "Leiden",
+          "country": "NL",
+          "name": "Naturalis Biodiversity Center",
+          "address": "Leiden, Netherlands",
+          "organisation": "Naturalis Biodiversity Center"
+        }
+      ],
+      "geographicScope": "Global",
+      "taxonomicScope": "Craneflies",
+      "confidence": 5,
+      "completeness": 100,
+      "license": "cc0",
+      "url": "https://ccw.naturalis.nl/",
+      "logo": "https://github.com/Sp2000/colplus-repo/raw/master/logos/CCW.png",
+      "label": "Catalogue of Craneflies of the World (May 2021)",
+      "citation": "<div class=\"csl-entry\">Oosterbroek, P. (2021). <span style=\"font-style: italic\">Catalogue of Craneflies of the World</span> (May 2021). https://ccw.naturalis.nl/</div>",
+      "private": false
+    },
+    {
+      "created": "2019-11-20T11:07:46.255777",
+      "createdBy": 0,
+      "modified": "2022-05-31T08:00:43.555032",
+      "modifiedBy": 10,
+      "key": 1006,
+      "type": "taxonomic",
+      "origin": "external",
+      "attempt": 16,
+      "imported": "2022-05-31T08:00:43.672218",
+      "size": 941,
+      "title": "Computer Aided Identification of Phlebotomine sandflies of Americas",
+      "alias": "CIPA",
+      "description": "CIPA includes information on 418 neotropical sandfly (Phlebotominae) species. These blood-sucking insects are important as vectors transmitting human and animal diseases, e.g. leishmaniasis, bartonellosis, arboviruses. In addition to the data contributed to the Catalogue of Life, CIPA also provides an interactive key and data on the ecology and epidemiology of the group. CIPA is an international project involving experts from 9 countries and was supported by the Program for Science & Technology Cooperation, Office of the Science Advisor, USA; Agency for International Development, and the Scientific & Technical Cooperation, Ministry of Foreign Affairs, France.",
+      "issued": "2011-03-16",
+      "version": "3, Mar 2011",
+      "contact": {
+        "name": "R Vignes-Lebbe & C Gallut",
+        "organisation": "R Vignes-Lebbe & C Gallut"
+      },
+      "creator": [
+        {
+          "name": "Vignes-Lebbe R. & Gallut C.",
+          "organisation": "Vignes-Lebbe R. & Gallut C."
+        }
+      ],
+      "contributor": [
+        {
+          "name": "Université Pierre et Marie Curie",
+          "organisation": "Université Pierre et Marie Curie"
+        },
+        {
+          "family": "Paris",
+          "name": "Paris"
+        },
+        {
+          "family": "France",
+          "name": "France"
+        }
+      ],
+      "taxonomicScope": "Phlebotomine sandflies",
+      "confidence": 3,
+      "completeness": 50,
+      "url": "http://cipa.snv.jussieu.fr",
+      "label": "Computer Aided Identification of Phlebotomine sandflies of Americas (3, Mar 2011)",
+      "citation": "<div class=\"csl-entry\">Vignes-Lebbe R. &amp; Gallut C. (2011). <span style=\"font-style: italic\">Computer Aided Identification of Phlebotomine sandflies of Americas</span> (3, Mar 2011). http://cipa.snv.jussieu.fr</div>",
+      "private": false
+    },
+    {
+      "created": "2019-11-20T11:07:46.255777",
+      "createdBy": 102,
+      "modified": "2022-08-22T15:50:10.016686",
+      "modifiedBy": 103,
+      "key": 1008,
+      "type": "taxonomic",
+      "origin": "external",
+      "attempt": 17,
+      "imported": "2022-08-22T15:50:13.650585",
+      "size": 34652,
+      "title": "The Reptile Database",
+      "alias": "ReptileDB",
+      "description": "The Reptile Database is a taxonomic database that provides basic information about all living reptile species, such as turtles, snakes, lizards, and crocodiles, as well as tuataras and amphisbaenians, but does not include dinosaurs.",
+      "issued": "2021-11-15",
+      "version": "2021-11",
+      "contact": {
+        "given": "Peter",
+        "family": "Uetz",
+        "name": "Uetz P."
+      },
+      "creator": [
+        {
+          "orcid": "0000-0001-6194-4927",
+          "given": "Peter",
+          "family": "Uetz",
+          "city": "Richmond",
+          "state": "VA",
+          "country": "US",
+          "orcidAsUrl": "https://orcid.org/0000-0001-6194-4927",
+          "name": "Uetz P.",
+          "address": "Richmond, VA, United States of America",
+          "organisation": "Virginia Commonwealth University"
+        },
+        {
+          "given": "Jirí",
+          "family": "Hošek",
+          "name": "Hošek J."
+        }
+      ],
+      "geographicScope": "Global",
+      "taxonomicScope": "Reptiles",
+      "confidence": 4,
+      "completeness": 99,
+      "license": "cc by",
+      "url": "http://www.reptile-database.org",
+      "logo": "https://github.com/Sp2000/colplus-repo/raw/master/logos/ReptileDB.png",
+      "label": "The Reptile Database (2021-11)",
+      "citation": "<div class=\"csl-entry\">Uetz, P., &amp; Ho&scaron;ek, J. (2021). <span style=\"font-style: italic\">The Reptile Database</span> (Version 2021-11). http://www.reptile-database.org</div>",
+      "private": false
+    },
+    {
+      "created": "2019-11-20T11:07:46.255777",
+      "createdBy": 102,
+      "modified": "2022-05-31T08:01:50.352141",
+      "modifiedBy": 10,
+      "key": 1009,
+      "type": "taxonomic",
+      "origin": "external",
+      "attempt": 16,
+      "imported": "2022-05-31T08:01:50.419911",
+      "size": 103,
+      "title": "World Biodiversity Database (Euphausiacea)",
+      "alias": "ETI WBD (Euphausiacea)",
+      "description": "ETI is a non-governmental organization in operational relation with UNESCO, dedicated to improving on a global scale the quantity, quality and accessibility of taxonomic information. The ‘Euphausiids of the World Ocean’ database covers all 86 species of the order Euphausiacea (krill) in the oceans, and was produced at the Scripps Institution of Oceanography. It is part of ETI’s World Biodiversity Database. The full database is published on CD-ROM (ISBN 3-540-14673-3), and includes a fully illustrated multiple-entry key, a picture key, interactive distribution maps, and a special database treating larval development for most species.",
+      "issued": "2002-11-27",
+      "version": "2.1, Nov 2002",
+      "contact": {
+        "name": "E Brinton, MD Ohman, AW Townsend, MD Knight & AL Bridgeman",
+        "organisation": "E Brinton, MD Ohman, AW Townsend, MD Knight & AL Bridgeman"
+      },
+      "creator": [
+        {
+          "given": "E.",
+          "family": "Brinton",
+          "name": "Brinton E."
+        },
+        {
+          "given": "M.D.",
+          "family": "Ohman",
+          "name": "Ohman M.D."
+        },
+        {
+          "given": "A.W.",
+          "family": "Townsend",
+          "name": "Townsend A.W."
+        },
+        {
+          "name": "Knight M.D. & Bridgeman A.L.",
+          "organisation": "Knight M.D. & Bridgeman A.L."
+        }
+      ],
+      "contributor": [
+        {
+          "name": "ETI BioInformatics",
+          "organisation": "ETI BioInformatics"
+        },
+        {
+          "family": "Amsterdam",
+          "name": "Amsterdam"
+        },
+        {
+          "given": "The",
+          "family": "Netherlands",
+          "name": "Netherlands T."
+        }
+      ],
+      "taxonomicScope": "Krill",
+      "license": "other",
+      "url": "http://www.eti.uva.nl/database/wbd.html",
+      "label": "World Biodiversity Database (Euphausiacea) (2.1, Nov 2002)",
+      "citation": "<div class=\"csl-entry\">Brinton, E., Ohman, M. D., Townsend, A. W., &amp; Knight M.D. &amp; Bridgeman A.L. (2002). <span style=\"font-style: italic\">World Biodiversity Database (Euphausiacea)</span> (2.1, Nov 2002). http://www.eti.uva.nl/database/wbd.html</div>",
+      "private": false
+    },
+    {
+      "created": "2019-11-20T11:07:46.255777",
+      "createdBy": 101,
+      "modified": "2021-07-27T09:37:22.19319",
+      "modifiedBy": 101,
+      "key": 1010,
+      "type": "taxonomic",
+      "origin": "external",
+      "attempt": 8,
+      "imported": "2020-07-03T02:26:28.017189",
+      "size": 102523,
+      "title": "FishBase",
+      "alias": "FishBase",
+      "description": "FishBase is a global information system with extensive information on all species and subspecies of fish. In addition to the data contributed to the Catalogue of Life, the original FishBase database also includes descriptive, biological, ecological, physiological and conservation data and more, and onward links to information in many other databases. Data entry and maintenance is done mainly at the FishBase Information and Research Group, Inc. (FIN) in the Philippines since the 1st January 2011 in collaboration with many colleagues and institutions around the world. The team was previously hosted in WorldFish since the start in 1990 (formerly ICLARM then called WorldFish Center between 2001-2013, and now WorldFish since 2013). FishBase is supported by a Consortium of nine institutions around the world that acts as the Scientific Committee for FIN. FishBase is funded mainly by the European Commission, and by several other donors. FishBase uses data and information from the Catalog of Fishes (CofF) developed by W.N. Eschmeyer at the California Academy of Science. In particular, FishBase uses CofF as the most complete and up-to-date fish nomenclator, and as a taxonomic authority list in a collaborative work of synchronization of the two databases.",
+      "issued": "2018-02-15",
+      "version": "Feb 2018",
+      "contact": {
+        "given": "Nicolas",
+        "family": "Bailly",
+        "email": "bailly@zoology.ubc.ca",
+        "name": "Bailly N."
+      },
+      "editor": [
+        {
+          "given": "Rainer",
+          "family": "Froese",
+          "city": "Kiel",
+          "country": "DE",
+          "name": "Froese R.",
+          "address": "Kiel, Germany",
+          "organisation": "Helmholtz Center for Ocean Research"
+        },
+        {
+          "given": "Daniel",
+          "family": "Pauly",
+          "department": "Fisheries Centre",
+          "city": "Vancouver",
+          "country": "CA",
+          "name": "Pauly D.",
+          "address": "Vancouver, Canada",
+          "organisation": "University of British Columbia"
+        }
+      ],
+      "contributor": [
+        {
+          "name": "Quantitative Aquatics (Q-quatics)",
+          "organisation": "Quantitative Aquatics (Q-quatics)"
+        },
+        {
+          "name": "WorldFish",
+          "organisation": "WorldFish"
+        },
+        {
+          "name": "Food and Agriculture Organization of the United Nations (FAO)",
+          "organisation": "Food and Agriculture Organization of the United Nations (FAO)"
+        },
+        {
+          "name": "Muséum national d'histoire naturelle (MNHN)",
+          "organisation": "Muséum national d'histoire naturelle (MNHN)"
+        },
+        {
+          "name": "Royal Museum for Central Africa (RMCA)",
+          "organisation": "Royal Museum for Central Africa (RMCA)"
+        },
+        {
+          "name": "Swedish Museum of Natural History (NRM)",
+          "organisation": "Swedish Museum of Natural History (NRM)"
+        },
+        {
+          "name": "Aristotle University of Thessaloniki (AUTH)",
+          "organisation": "Aristotle University of Thessaloniki (AUTH)"
+        },
+        {
+          "name": "Chinese Academy of Fisheries Science (CAFS)",
+          "organisation": "Chinese Academy of Fisheries Science (CAFS)"
+        }
+      ],
+      "geographicScope": "Global",
+      "taxonomicScope": "Fishes",
+      "confidence": 4,
+      "completeness": 99,
+      "license": "cc by",
+      "url": "http://www.fishbase.org",
+      "logo": "https://github.com/Sp2000/colplus-repo/raw/master/logos/FishBase.png",
+      "label": "FishBase (Feb 2018)",
+      "citation": "<div class=\"csl-entry\">Froese, R., &amp; Pauly, D. (2018). <span style=\"font-style: italic\">FishBase</span> (Feb 2018). http://www.fishbase.org</div>",
+      "private": false
+    },
+    {
+      "created": "2019-11-20T11:07:46.255777",
+      "createdBy": 101,
+      "modified": "2022-08-29T08:33:12.540007",
+      "modifiedBy": 101,
+      "key": 1011,
+      "type": "taxonomic",
+      "origin": "external",
+      "attempt": 17,
+      "imported": "2022-04-22T09:49:23.666304",
+      "size": 21785,
+      "title": "Fulgoromorpha Lists On the Web",
+      "alias": "FLOW",
+      "description": "FLOW is an on-line database that aims to provide an easy-access synthesis of available biological published primary data on planthoppers (Hemiptera, Fulgoromorpha), a group of major economic importance. It includes information on names, taxa (including fossils), and their classification but also on type depositories, bibliography, distribution and associated biological information such as host-plants. FLOW provides a dynamic link to MNHN Hemiptera specimen collection (particularly type specimens), GBIF occurrences, and provides photos when already available. Dynamic syntheses are also provided for all suprageneric taxa.",
+      "issued": "2020-06-01",
+      "version": "8",
+      "contact": {
+        "given": "Thierry",
+        "family": "Bourgoin",
+        "city": "Paris",
+        "country": "FR",
+        "name": "Bourgoin T.",
+        "address": "Paris, France",
+        "organisation": "Muséum National d'Histoire Naturelle"
+      },
+      "creator": [
+        {
+          "given": "T.",
+          "family": "Bourgoin",
+          "city": "Paris",
+          "country": "FR",
+          "name": "Bourgoin T.",
+          "address": "Paris, France",
+          "organisation": "Muséum National d'Histoire Naturelle"
+        }
+      ],
+      "geographicScope": "Global",
+      "taxonomicScope": "Planthoppers",
+      "confidence": 4,
+      "completeness": 95,
+      "license": "cc by",
+      "url": "http://hemiptera-databases.org/flow/",
+      "logo": "https://github.com/Sp2000/colplus-repo/raw/master/logos/FLOW.png",
+      "label": "Fulgoromorpha Lists On the Web (8)",
+      "citation": "<div class=\"csl-entry\">Bourgoin, T. (2020). <span style=\"font-style: italic\">Fulgoromorpha Lists On the Web</span> (Version 8). http://hemiptera-databases.org/flow/</div>",
+      "private": false
+    },
+    {
+      "created": "2019-11-20T11:07:46.255777",
+      "createdBy": 102,
+      "modified": "2022-05-31T08:00:44.573289",
+      "modifiedBy": 10,
+      "key": 1012,
+      "type": "taxonomic",
+      "origin": "external",
+      "attempt": 18,
+      "imported": "2022-05-31T08:00:44.651958",
+      "size": 580,
+      "title": "Phylogeny and taxonomy of Glomeromycota (arbuscular mycorrhizal (AM) and related fungi)",
+      "alias": "Glomeromycota",
+      "description": "The Glomeromycota are mycorrhiza forming fungi. Mycorrhiza (literally fungus-root) are mutualistic association of fungi with plant roots and the vast majority of plant species (probably >95%) are associated with mycorrhizal fungi; strictly speaking, plants do not have roots, they have mycorrhiza. The most widely distributed mycorrhizal 'type', both through the plant kingdom (formed by about 80% of all vascular plants) and geographically, is an endomycorrhiza formed by the Glomeromycota and called arbuscular mycorrhiza (AM). In this, hyphae colonize plant cells and produce finely branched structures (the arbuscules). This symbiosis feeds most land plants, the arbuscules facilitating nutrient exchange and water uptake and, by carbohydrate transport to the soil, also represent a relevant terrestrial carbon sink.",
+      "issued": "2017-10-27",
+      "version": "Oct 2017",
+      "contact": {
+        "given": "A",
+        "family": "Schüßler",
+        "note": "custodian",
+        "name": "Schüßler A"
+      },
+      "creator": [
+        {
+          "given": "A.",
+          "family": "Schüßler",
+          "name": "Schüßler A."
+        }
+      ],
+      "contributor": [
+        {
+          "name": "Department of Biology",
+          "organisation": "Department of Biology"
+        },
+        {
+          "given": "Technische",
+          "family": "Universität Darmstadt",
+          "name": "Universität Darmstadt T."
+        },
+        {
+          "family": "Germany",
+          "name": "Germany"
+        }
+      ],
+      "taxonomicScope": "Glomeromycota",
+      "license": "other",
+      "url": "http://www.AMF-phylogeny.com",
+      "label": "Phylogeny and taxonomy of Glomeromycota (arbuscular mycorrhizal (AM) and related fungi) (Oct 2017)",
+      "citation": "<div class=\"csl-entry\">Sch&uuml;&szlig;ler, A. (2017). <span style=\"font-style: italic\">Phylogeny and taxonomy of Glomeromycota (arbuscular mycorrhizal (AM) and related fungi)</span> (Oct 2017). http://www.AMF-phylogeny.com</div>",
+      "private": false
+    },
+    {
+      "created": "2019-11-20T11:07:46.255777",
+      "createdBy": 101,
+      "modified": "2022-02-21T08:49:57.662305",
+      "modifiedBy": 101,
+      "key": 1014,
+      "type": "taxonomic",
+      "origin": "external",
+      "attempt": 17,
+      "imported": "2022-02-12T15:32:40.615384",
+      "gbifKey": "e01b0cbb-a10a-420c-b5f3-a3b20cc266ad",
+      "gbifPublisherKey": "9fd9422d-0e85-4264-a025-6061e034dd0c",
+      "size": 11871,
+      "title": "ICTV Master Species List (MSL)",
+      "alias": "ICTV",
+      "description": "This new release contains taxonomic changes approved by the ICTV Executive Committee in October, 2020 and ratified by the ICTV Membership in March, 2021. \nOfficial taxonomy proposals documenting these and all other taxonomic changes approved by the ICTV since the publication of the ICTV 8th Report \ncan be found at https://ictv.global/Official_ICTV_Proposals.htm.\n\nA notable change approved this year is the adoption of a uniform binomial format for naming of virus species. \nPreviously, virologists have not been required to follow the convention of species naming that has been established in other fields of biology, \nwhereby the species name consists of the genus name separated by a space from a species epithet that identifies the species within that genus. \nOver the last several decades, the case for a standardized nomenclature for virus species has been acknowledged by the ICTV and by many other virologists, \nbut a uniform format of the species names had not been adopted (see references for an incomplete but relatively representative account of the opinion spectrum).\nThe case for a binomial nomenclature was presented by the ICTV Executive Committee in 2018 and 2020, \nand the advantages and disadvantages of different naming formats within the binomial framework were discussed. \nThe EC then invited comments on this position from the virology community. \nComments from ICTV SGs were also solicited and received by the EC SCs. \nDebates of the merits of various forms of binomial nomenclature took place in social media and in journal publications. \nTaking these discussions and comments into account, ICTV ratified the adoption of a standardized binomial system, \nwhich may follow either Latinized or free form formats. \nThe ICTV SGs are now charged with conversion of all existing virus species names to the new binomial form; t\nhe process has started already and is expected to be completed in time to be considered by an EC meeting planned for 2023. \nIt is worth emphasizing that this system concerns only the names of virus species but does not affect the names of viruses.\n\nAnother general proposal was the abolition of the requirement for a type species—a designated nomenclatural type for each genus. \nThe ICTV noted that the requirement for type species in virus taxonomy was largely historical. \nMost importantly, the ICVCN defines virus species as follows: \n“A species is a monophyletic group of viruses whose properties can be distinguished from those of other species by multiple criteria\", \nsuggesting that the emphasis on “defining” a genus has been shifting from the properties of any particular member to the closeness of molecular \nand ecological relationships between all genus members. \nThe ICTV concluded that the concept of a type species no longer serves a clear and useful purpose in virology and voted to abolish it.\n\nOne more proposal has clarified the remit of the ICTV. \nIn addition to viruses, ICTV has been classifying viroids and virus satellites, though none of these mobile genetic elements, \nincluding viruses themselves, have been operationally defined, leaving the limits of the ICTV scope unclear. \nThis has been clarified now by giving operational definitions of viruses sensu stricto, viriforms, viroids, and satellites. \nThese entities together constitute the virosphere and are within the remit of the ICTV responsibilities for their classification, taxonomy and nomenclature. \nThe historical name of the organization—the International Committee on Taxonomy of Viruses—remains unchanged.",
+      "issued": "2021-05-18",
+      "version": "2020.v1",
+      "contact": {
+        "email": "info@ictvonline.org",
+        "name": "International Committee on Taxonomy of Viruses (ICTV)",
+        "organisation": "International Committee on Taxonomy of Viruses (ICTV)"
+      },
+      "creator": [
+        {
+          "name": "International Committee on Taxonomy of Viruses (ICTV)",
+          "organisation": "International Committee on Taxonomy of Viruses (ICTV)"
+        },
+        {
+          "orcid": "0000-0003-1851-642X",
+          "given": "Peter J.",
+          "family": "Walker",
+          "orcidAsUrl": "https://orcid.org/0000-0003-1851-642X",
+          "name": "Walker P. J."
+        },
+        {
+          "orcid": "0000-0002-8702-7868",
+          "given": "Stuart G.",
+          "family": "Siddell",
+          "orcidAsUrl": "https://orcid.org/0000-0002-8702-7868",
+          "name": "Siddell S. G."
+        },
+        {
+          "orcid": "0000-0002-4748-4925",
+          "given": "Elliot J.",
+          "family": "Lefkowitz",
+          "orcidAsUrl": "https://orcid.org/0000-0002-4748-4925",
+          "name": "Lefkowitz E. J."
+        },
+        {
+          "orcid": "0000-0002-6809-9225",
+          "given": "Arcady R.",
+          "family": "Mushegian",
+          "orcidAsUrl": "https://orcid.org/0000-0002-6809-9225",
+          "name": "Mushegian A. R."
+        },
+        {
+          "orcid": "0000-0003-4826-5406",
+          "given": "Evelien M.",
+          "family": "Adriaenssens",
+          "orcidAsUrl": "https://orcid.org/0000-0003-4826-5406",
+          "name": "Adriaenssens E. M."
+        },
+        {
+          "orcid": "0000-0002-8203-5244",
+          "given": "Poliane",
+          "family": "Alfenas-Zerbini",
+          "orcidAsUrl": "https://orcid.org/0000-0002-8203-5244",
+          "name": "Alfenas-Zerbini P."
+        },
+        {
+          "orcid": "0000-0002-4991-9128",
+          "given": "Andrew J.",
+          "family": "Davison",
+          "orcidAsUrl": "https://orcid.org/0000-0002-4991-9128",
+          "name": "Davison A. J."
+        },
+        {
+          "orcid": "0000-0002-2200-5828",
+          "given": "Donald M.",
+          "family": "Dempsey",
+          "orcidAsUrl": "https://orcid.org/0000-0002-2200-5828",
+          "name": "Dempsey D. M."
+        },
+        {
+          "orcid": "0000-0003-2329-7890",
+          "given": "Bas E.",
+          "family": "Dutilh",
+          "orcidAsUrl": "https://orcid.org/0000-0003-2329-7890",
+          "name": "Dutilh B. E."
+        },
+        {
+          "orcid": "0000-0001-6468-6943",
+          "given": "María Laura",
+          "family": "García",
+          "orcidAsUrl": "https://orcid.org/0000-0001-6468-6943",
+          "name": "García M. L."
+        },
+        {
+          "orcid": "0000-0002-1410-6469",
+          "given": "Balázs",
+          "family": "Harrach",
+          "orcidAsUrl": "https://orcid.org/0000-0002-1410-6469",
+          "name": "Harrach B."
+        },
+        {
+          "orcid": "0000-0002-8348-3874",
+          "given": "Robert L.",
+          "family": "Harrison",
+          "orcidAsUrl": "https://orcid.org/0000-0002-8348-3874",
+          "name": "Harrison R. L."
+        },
+        {
+          "orcid": "0000-0001-6986-4630",
+          "given": "R. Curtis",
+          "family": "Hendrickson",
+          "orcidAsUrl": "https://orcid.org/0000-0001-6986-4630",
+          "name": "Hendrickson R. C."
+        },
+        {
+          "orcid": "0000-0002-3799-6011",
+          "given": "Sandra",
+          "family": "Junglen",
+          "orcidAsUrl": "https://orcid.org/0000-0002-3799-6011",
+          "name": "Junglen S."
+        },
+        {
+          "orcid": "0000-0002-6696-1344",
+          "given": "Nick J.",
+          "family": "Knowles",
+          "orcidAsUrl": "https://orcid.org/0000-0002-6696-1344",
+          "name": "Knowles N. J."
+        },
+        {
+          "orcid": "0000-0001-5486-0098",
+          "given": "Mart",
+          "family": "Krupovic",
+          "orcidAsUrl": "https://orcid.org/0000-0001-5486-0098",
+          "name": "Krupovic M."
+        },
+        {
+          "orcid": "0000-0002-7800-6045",
+          "given": "Jens H.",
+          "family": "Kuhn",
+          "orcidAsUrl": "https://orcid.org/0000-0002-7800-6045",
+          "name": "Kuhn J. H."
+        },
+        {
+          "orcid": "0000-0002-7571-3529",
+          "given": "Amy J.",
+          "family": "Lambert",
+          "orcidAsUrl": "https://orcid.org/0000-0002-7571-3529",
+          "name": "Lambert A. J."
+        },
+        {
+          "orcid": "0000-0003-0679-5193",
+          "given": "Małgorzata",
+          "family": "Łobocka",
+          "orcidAsUrl": "https://orcid.org/0000-0003-0679-5193",
+          "name": "Łobocka M."
+        },
+        {
+          "orcid": "0000-0002-9703-9328",
+          "given": "Max L.",
+          "family": "Nibert",
+          "orcidAsUrl": "https://orcid.org/0000-0002-9703-9328",
+          "name": "Nibert M. L."
+        },
+        {
+          "orcid": "0000-0003-3047-8294",
+          "given": "Hanna M.",
+          "family": "Oksanen",
+          "orcidAsUrl": "https://orcid.org/0000-0003-3047-8294",
+          "name": "Oksanen H. M."
+        },
+        {
+          "orcid": "0000-0002-3389-4325",
+          "given": "Richard J.",
+          "family": "Orton",
+          "orcidAsUrl": "https://orcid.org/0000-0002-3389-4325",
+          "name": "Orton R. J."
+        },
+        {
+          "orcid": "0000-0001-6338-0221",
+          "given": "David L.",
+          "family": "Robertson",
+          "orcidAsUrl": "https://orcid.org/0000-0001-6338-0221",
+          "name": "Robertson D. L."
+        },
+        {
+          "orcid": "0000-0002-2073-2415",
+          "given": "Luisa",
+          "family": "Rubino",
+          "orcidAsUrl": "https://orcid.org/0000-0002-2073-2415",
+          "name": "Rubino L."
+        },
+        {
+          "orcid": "0000-0002-2995-2633",
+          "given": "Sead",
+          "family": "Sabanadzovic",
+          "orcidAsUrl": "https://orcid.org/0000-0002-2995-2633",
+          "name": "Sabanadzovic S."
+        },
+        {
+          "orcid": "0000-0002-7964-4700",
+          "given": "Peter",
+          "family": "Simmonds",
+          "orcidAsUrl": "https://orcid.org/0000-0002-7964-4700",
+          "name": "Simmonds P."
+        },
+        {
+          "orcid": "0000-0002-2876-5318",
+          "given": "Donald B.",
+          "family": "Smith",
+          "orcidAsUrl": "https://orcid.org/0000-0002-2876-5318",
+          "name": "Smith D. B."
+        },
+        {
+          "orcid": "0000-0003-0097-9856",
+          "given": "Nobuhiro",
+          "family": "Suzuki",
+          "orcidAsUrl": "https://orcid.org/0000-0003-0097-9856",
+          "name": "Suzuki N."
+        },
+        {
+          "orcid": "0000-0002-2985-0733",
+          "given": "Koenraad",
+          "family": "Van Dooerslaer",
+          "orcidAsUrl": "https://orcid.org/0000-0002-2985-0733",
+          "name": "Van Dooerslaer K."
+        },
+        {
+          "orcid": "0000-0002-6594-2766",
+          "given": "Anne-Mieke",
+          "family": "Vandamme",
+          "orcidAsUrl": "https://orcid.org/0000-0002-6594-2766",
+          "name": "Vandamme A.-M."
+        },
+        {
+          "orcid": "0000-0003-4111-2415",
+          "given": "Arvind",
+          "family": "Varsani",
+          "orcidAsUrl": "https://orcid.org/0000-0003-4111-2415",
+          "name": "Varsani A."
+        },
+        {
+          "orcid": "0000-0001-8617-0200",
+          "given": "Francisco Murilo",
+          "family": "Zerbini",
+          "orcidAsUrl": "https://orcid.org/0000-0001-8617-0200",
+          "name": "Zerbini F. M."
+        }
+      ],
+      "geographicScope": "global",
+      "taxonomicScope": "Viruses",
+      "confidence": 5,
+      "completeness": 100,
+      "license": "cc by",
+      "url": "https://talk.ictvonline.org/taxonomy/w/ictv-taxonomy",
+      "logo": "https://raw.githubusercontent.com/mdoering/checklist_builder/master/src/main/resources/ictv/ictv-logo.png",
+      "source": [
+        {
+          "id": "10.1007/s00705-021-05156-1",
+          "type": "article-journal",
+          "author": [
+            {
+              "family": "Walker",
+              "given": "Peter J."
+            },
+            {
+              "family": "Siddell",
+              "given": "Stuart G."
+            },
+            {
+              "family": "Lefkowitz",
+              "given": "Elliot J."
+            },
+            {
+              "family": "Mushegian",
+              "given": "Arcady R."
+            },
+            {
+              "family": "Adriaenssens",
+              "given": "Evelien M."
+            },
+            {
+              "family": "Alfenas-Zerbini",
+              "given": "Poliane"
+            },
+            {
+              "family": "Davison",
+              "given": "Andrew J."
+            },
+            {
+              "family": "Dempsey",
+              "given": "Donald M."
+            },
+            {
+              "family": "Dutilh",
+              "given": "Bas E."
+            },
+            {
+              "family": "García",
+              "given": "María Laura"
+            },
+            {
+              "family": "Harrach",
+              "given": "Balázs"
+            },
+            {
+              "family": "Harrison",
+              "given": "Robert L."
+            },
+            {
+              "family": "Hendrickson",
+              "given": "R. Curtis"
+            },
+            {
+              "family": "Junglen",
+              "given": "Sandra"
+            },
+            {
+              "family": "Knowles",
+              "given": "Nick J."
+            },
+            {
+              "family": "Krupovic",
+              "given": "Mart"
+            },
+            {
+              "family": "Kuhn",
+              "given": "Jens H."
+            },
+            {
+              "family": "Lambert",
+              "given": "Amy J."
+            },
+            {
+              "family": "Łobocka",
+              "given": "Małgorzata"
+            },
+            {
+              "family": "Nibert",
+              "given": "Max L."
+            },
+            {
+              "family": "Oksanen",
+              "given": "Hanna M."
+            },
+            {
+              "family": "Orton",
+              "given": "Richard J."
+            },
+            {
+              "family": "Robertson",
+              "given": "David L."
+            },
+            {
+              "family": "Rubino",
+              "given": "Luisa"
+            },
+            {
+              "family": "Sabanadzovic",
+              "given": "Sead"
+            },
+            {
+              "family": "Simmonds",
+              "given": "Peter"
+            },
+            {
+              "family": "Smith",
+              "given": "Donald B."
+            },
+            {
+              "family": "Suzuki",
+              "given": "Nobuhiro"
+            },
+            {
+              "family": "Van Dooerslaer",
+              "given": "Koenraad"
+            },
+            {
+              "family": "Vandamme",
+              "given": "Anne-Mieke"
+            },
+            {
+              "family": "Varsani",
+              "given": "Arvind"
+            },
+            {
+              "family": "Zerbini",
+              "given": "Francisco Murilo"
+            }
+          ],
+          "title": "Changes to virus taxonomy and to the International Code of Virus Classification and Nomenclature ratified by the International Committee on Taxonomy of Viruses (2021)",
+          "issued": {
+            "raw": "2021-07-06",
+            "date-parts": [
+              [
+                2021,
+                7,
+                6
+              ]
+            ]
+          },
+          "volume": "166",
+          "issue": "9",
+          "page": "2633-2648",
+          "publisher": "Springer Science and Business Media LLC",
+          "citation": "<div class=\"csl-entry\">Walker, P. J., Siddell, S. G., Lefkowitz, E. J., Mushegian, A. R., Adriaenssens, E. M., Alfenas-Zerbini, P., Davison, A. J., Dempsey, D. M., Dutilh, B. E., Garc&iacute;a, M. L., Harrach, B., Harrison, R. L., Hendrickson, R. C., Junglen, S., Knowles, N. J., Krupovic, M., Kuhn, J. H., Lambert, A. J., Łobocka, M., et al. (2021). Changes to virus taxonomy and to the International Code of Virus Classification and Nomenclature ratified by the International Committee on Taxonomy of Viruses (2021). <span style=\"font-style: italic\">Archives of Virology</span>, <span style=\"font-style: italic\">166</span>(9), 2633&ndash;2648. https://doi.org/10.1007/s00705-021-05156-1</div>",
+          "DOI": "10.1007/s00705-021-05156-1",
+          "container-title": "Archives of Virology",
+          "ISSN": "0304-8608",
+          "URL": "http://dx.doi.org/10.1007/s00705-021-05156-1"
+        }
+      ],
+      "label": "ICTV Master Species List (MSL) (2020.v1)",
+      "citation": "<div class=\"csl-entry\">International Committee on Taxonomy of Viruses (ICTV), Walker, P. J., Siddell, S. G., Lefkowitz, E. J., Mushegian, A. R., Adriaenssens, E. M., Alfenas-Zerbini, P., Davison, A. J., Dempsey, D. M., Dutilh, B. E., Garc&iacute;a, M. L., Harrach, B., Harrison, R. L., Hendrickson, R. C., Junglen, S., Knowles, N. J., Krupovic, M., Kuhn, J. H., Lambert, A. J., et al. (2021). <span style=\"font-style: italic\">ICTV Master Species List (MSL)</span> (2020.v1). https://talk.ictvonline.org/taxonomy/w/ictv-taxonomy</div>",
+      "private": false
+    }
+  ],
+  "last": false,
+  "empty": false
+}

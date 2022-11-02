@@ -4,6 +4,7 @@ import bio.guoda.preston.Seeds;
 import bio.guoda.preston.process.RegistryReaderALA;
 import bio.guoda.preston.process.RegistryReaderBHL;
 import bio.guoda.preston.process.RegistryReaderBioCASE;
+import bio.guoda.preston.process.RegistryReaderChecklistBank;
 import bio.guoda.preston.process.RegistryReaderDOI;
 import bio.guoda.preston.process.RegistryReaderDataONE;
 import bio.guoda.preston.process.RegistryReaderGBIF;
@@ -68,6 +69,7 @@ public class CmdUpdate extends CmdTrack {
     protected Stream<StatementsListener> createProcessors(BlobStoreReadOnly blobStore, StatementsListener queueAsListener) {
         return Stream.of(
                 new RegistryReaderIDigBio(blobStore, queueAsListener),
+                new RegistryReaderChecklistBank(blobStore, queueAsListener),
                 new RegistryReaderGBIF(blobStore, queueAsListener),
                 new RegistryReaderBioCASE(blobStore, queueAsListener),
                 new RegistryReaderDataONE(blobStore, queueAsListener),

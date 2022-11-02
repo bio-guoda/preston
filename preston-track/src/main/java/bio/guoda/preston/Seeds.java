@@ -9,6 +9,7 @@ public final class Seeds {
 
     public final static IRI DATA_ONE = RefNodeFactory.toIRI("https://dataone.org");
     public final static IRI GBIF = RefNodeFactory.toIRI("https://gbif.org");
+    public final static IRI CHECKLIST_BANK = RefNodeFactory.toIRI("https://checklistbank.org");
     public final static IRI BHL = RefNodeFactory.toIRI("https://biodiversitylibrary.org");
     public final static IRI ALA = RefNodeFactory.toIRI("https://ala.org.au");
     public final static IRI IDIGBIO = RefNodeFactory.toIRI("https://idigbio.org");
