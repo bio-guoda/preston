@@ -88,7 +88,7 @@ public class RegistryReaderChecklistBankTest {
 
         registryReader.on(firstPage);
 
-        assertThat(nodes.size(), is(13166));
+        assertThat(nodes.size(), is(13168));
         assertThat(nodes.get(2), hasTriple(toStatement(toIRI("https://api.checklistbank.org/dataset/3"), SEE_ALSO, toIRI("https://doi.org/10.48580/ds5"))));
 
         Quad lastPage = nodes.get(nodes.size() - 1);
@@ -115,7 +115,7 @@ public class RegistryReaderChecklistBankTest {
                 getClass().getResourceAsStream(CHECKLIST_BANK_DATASETS_JSON),
                 toIRI("http://example.org/"));
 
-        assertThat(refNodes.size(), is(13165));
+        assertThat(refNodes.size(), is(13167));
 
         Quad refNode = refNodes.get(0);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <https://api.checklistbank.org/dataset/3> ."));
