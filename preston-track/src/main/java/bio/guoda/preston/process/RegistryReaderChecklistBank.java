@@ -70,7 +70,8 @@ public class RegistryReaderChecklistBank extends ProcessorReadOnly {
             }, CHECKLIST_BANK_REGISTRY);
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
-                && getVersionSource(statement).toString().contains(CHECKLIST_BANK_API_DATASET_PART)) {
+                && getVersionSource(statement).toString().contains(CHECKLIST_BANK_API_DATASET_PART)
+                && !getVersionSource(statement).toString().endsWith(".zip")) {
             handleDataset(statement);
         }
     }
