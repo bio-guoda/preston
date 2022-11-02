@@ -189,12 +189,6 @@ public class RegistryReaderChecklistBank extends ProcessorReadOnly {
             emitter.emit(toStatement(datasetIRI, HAD_MEMBER, datasetArchiveCandidate));
             emitter.emit(toStatement(datasetArchiveCandidate, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_ZIP)));
             emitter.emit(toStatement(datasetArchiveCandidate, HAS_VERSION, toBlank()));
-
-            emitter.emit(toStatement(datasetIRI, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
-            emitter.emit(toStatement(
-                    datasetIRI,
-                    HAS_VERSION,
-                    toBlank()));
         }
     }
 
