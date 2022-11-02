@@ -88,7 +88,7 @@ public class RegistryReaderChecklistBankTest {
 
         registryReader.on(firstPage);
 
-        assertThat(nodes.size(), is(13168));
+        assertThat(nodes.size(), is(13148));
         assertThat(nodes.get(2), hasTriple(toStatement(toIRI("https://api.checklistbank.org/dataset/3"), SEE_ALSO, toIRI("https://doi.org/10.48580/ds5"))));
 
         Quad lastPage = nodes.get(nodes.size() - 1);
@@ -115,7 +115,7 @@ public class RegistryReaderChecklistBankTest {
                 getClass().getResourceAsStream(CHECKLIST_BANK_DATASETS_JSON),
                 toIRI("http://example.org/"));
 
-        assertThat(refNodes.size(), is(13167));
+        assertThat(refNodes.size(), is(13147));
 
         Quad refNode = refNodes.get(0);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <https://api.checklistbank.org/dataset/3> ."));
@@ -133,18 +133,15 @@ public class RegistryReaderChecklistBankTest {
         assertThat(refNode.toString(), startsWith("<https://api.checklistbank.org/dataset/3/archive.zip> <http://purl.org/pav/hasVersion> "));
 
         refNode = refNodes.get(5);
-        assertThat(refNode.toString(), is("<https://api.checklistbank.org/dataset/3> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
-
-        refNode = refNodes.get(6);
-        assertThat(refNode.toString(), startsWith("<https://api.checklistbank.org/dataset/3> <http://purl.org/pav/hasVersion> "));
-
-        refNode = refNodes.get(7);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <https://api.checklistbank.org/dataset/1000> ."));
 
-        refNode = refNodes.get(9);
+        refNode = refNodes.get(6);
+        assertThat(refNode.toString(), is("<https://api.checklistbank.org/dataset/1000> <http://www.w3.org/ns/prov#hadMember> <https://api.checklistbank.org/dataset/1000/archive.zip> ."));
+
+        refNode = refNodes.get(7);
         assertThat(refNode.toString(), is("<https://api.checklistbank.org/dataset/1000/archive.zip> <http://purl.org/dc/elements/1.1/format> \"application/zip\" ."));
 
-        refNode = refNodes.get(10);
+        refNode = refNodes.get(8);
         assertThat(refNode.toString(), startsWith("<https://api.checklistbank.org/dataset/1000/archive.zip> <http://purl.org/pav/hasVersion> "));
 
         Quad lastRefNode = refNodes.get(refNodes.size() - 2);
