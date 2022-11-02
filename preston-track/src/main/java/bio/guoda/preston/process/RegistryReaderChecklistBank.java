@@ -10,6 +10,8 @@ import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.globalbioticinteractions.doi.DOI;
+import org.globalbioticinteractions.doi.MalformedDOIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +43,7 @@ public class RegistryReaderChecklistBank extends ProcessorReadOnly {
 
     public static final String CHECKLIST_BANK_API_DATASET_PART = "//api.checklistbank.org/dataset";
     public static final String CHECKLIST_BANK_DATASET_REGISTRY_STRING = "https:" + CHECKLIST_BANK_API_DATASET_PART;
-    private final Logger LOG = LoggerFactory.getLogger(RegistryReaderChecklistBank.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RegistryReaderChecklistBank.class);
     public static final IRI CHECKLIST_BANK_REGISTRY = toIRI(CHECKLIST_BANK_DATASET_REGISTRY_STRING);
 
     public RegistryReaderChecklistBank(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
@@ -71,12 +73,12 @@ public class RegistryReaderChecklistBank extends ProcessorReadOnly {
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(CHECKLIST_BANK_API_DATASET_PART)
-                && !getVersionSource(statement).toString().endsWith(".zip")) {
+                && !getVersionSource(statement).getIRIString().endsWith(".zip")) {
             handleDataset(statement);
         }
     }
 
-    public void handleDataset(Quad statement) {
+    private void handleDataset(Quad statement) {
         List<Quad> nodes = new ArrayList<>();
         try {
             IRI currentPage = (IRI) getVersion(statement);
@@ -163,8 +165,13 @@ public class RegistryReaderChecklistBank extends ProcessorReadOnly {
             IRI datasetIRI = toIRI(datasetIRIString);
             emitter.emit(toStatement(currentPage, HAD_MEMBER, datasetIRI));
             if (result.has("doi")) {
-                String doi = result.get("doi").asText();
-                emitter.emit(toStatement(datasetIRI, SEE_ALSO, toIRI("https://doi.org/" + doi)));
+                String doiString = result.get("doi").asText();
+                try {
+                    DOI doi = DOI.create(doiString);
+                    emitter.emit(toStatement(datasetIRI, SEE_ALSO, toIRI(doi.toURI())));
+                } catch (MalformedDOIException e) {
+                    LOG.warn("found possibly malformed doi [" + doiString + "]", e);
+                }
             }
             IRI datasetArchiveCandidate = toIRI(datasetIRIString + "/archive.zip");
             emitter.emit(toStatement(datasetIRI, HAD_MEMBER, datasetArchiveCandidate));
