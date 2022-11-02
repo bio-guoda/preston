@@ -301,9 +301,13 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
             if (result.has("endpoints")) {
                 handleEndpoints(emitter, result, datasetUUID);
             } else {
-                emitter.emit(toStatement(toIRI(GBIF_DATASET_REGISTRY_STRING + "/" + uuid), HAS_VERSION, toBlank()));
+                emitter.emit(toStatement(GBIFDatasetIRI(uuid), HAS_VERSION, toBlank()));
             }
         }
+    }
+
+    public static IRI GBIFDatasetIRI(String datasetUUID) {
+        return toIRI(GBIF_DATASET_REGISTRY_STRING + "/" + datasetUUID);
     }
 
     public static void handleMedia(StatementsEmitter emitter, JsonNode result, IRI occurrenceUUID) {

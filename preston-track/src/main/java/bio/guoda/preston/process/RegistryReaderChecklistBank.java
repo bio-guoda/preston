@@ -2,6 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -30,6 +31,7 @@ import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.ORGANIZATION;
 import static bio.guoda.preston.RefNodeConstants.SEE_ALSO;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
 import static bio.guoda.preston.RefNodeFactory.getVersion;
 import static bio.guoda.preston.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
@@ -173,6 +175,16 @@ public class RegistryReaderChecklistBank extends ProcessorReadOnly {
                     LOG.warn("found possibly malformed doi [" + doiString + "]", e);
                 }
             }
+
+            if (result.has("gbifKey")) {
+                String gbifDatasetString = result.get("gbifKey").asText();
+                if (StringUtils.isNotBlank(gbifDatasetString)) {
+                    IRI gbifDatasetIRI = RegistryReaderGBIF.GBIFDatasetIRI(gbifDatasetString);
+                    emitter.emit(toStatement(datasetIRI, WAS_DERIVED_FROM, gbifDatasetIRI));
+                    emitter.emit(toStatement(gbifDatasetIRI, HAS_VERSION, RefNodeFactory.toBlank()));
+                }
+            }
+
             IRI datasetArchiveCandidate = toIRI(datasetIRIString + "/archive.zip");
             emitter.emit(toStatement(datasetIRI, HAD_MEMBER, datasetArchiveCandidate));
             emitter.emit(toStatement(datasetArchiveCandidate, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_ZIP)));
