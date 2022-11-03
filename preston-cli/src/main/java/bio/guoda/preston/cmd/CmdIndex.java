@@ -14,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Literal;
 import org.apache.commons.rdf.api.Quad;
+import picocli.CommandLine;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +30,10 @@ import static bio.guoda.preston.RefNodeConstants.*;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
+@CommandLine.Command(
+        name = "index",
+        description = "Indexes biodiversity dataset graphs"
+)
 public class CmdIndex extends CmdAppend {
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {

@@ -57,6 +57,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>preston-search</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>preston-sketch</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -89,6 +94,12 @@
             <artifactId>zip4j</artifactId>
             <version>2.10.0</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>bio.guoda</groupId>
+            <artifactId>preston-search</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>

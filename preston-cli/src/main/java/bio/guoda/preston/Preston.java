@@ -16,6 +16,7 @@ import bio.guoda.preston.cmd.CmdGrep;
 import bio.guoda.preston.cmd.CmdHash;
 import bio.guoda.preston.cmd.CmdHead;
 import bio.guoda.preston.cmd.CmdHistory;
+import bio.guoda.preston.cmd.CmdIndex;
 import bio.guoda.preston.cmd.CmdInstallManual;
 import bio.guoda.preston.cmd.CmdList;
 import bio.guoda.preston.cmd.CmdMerge;
@@ -52,6 +53,7 @@ import static java.lang.System.exit;
                 CmdHistory.class,
                 CmdOrigins.class,
                 CmdMerge.class,
+                CmdIndex.class,
                 CmdSketchCreate.class,
                 CmdSketchDiff.class,
                 CmdSketchUnion.class,
