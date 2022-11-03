@@ -39,11 +39,13 @@ public class RDFReaderTest {
                 new TestBlobStore(),
                 TestUtilForProcessor.testListener(nodes),
                 qualifiedGeneration,
-                new StatementsEmitterAdapter() {
+                (origin) -> new StatementsEmitterAdapter() {
                     @Override
                     public void emit(Quad statement) {
+                        // ignore
                     }
-                }
+                },
+                new ProcessorStateAlwaysContinue()
         );
 
         quads.forEach(indexer::on);

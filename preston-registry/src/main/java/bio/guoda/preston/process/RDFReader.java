@@ -10,18 +10,21 @@ import org.apache.commons.rdf.api.Quad;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class RDFReader extends StatementProcessor {
 
     private final IRI qualifiedGeneration;
     private final BlobStore blobStore;
-    private final StatementsEmitter quadProcessor;
+    private final Function<IRI, StatementsEmitter> processorSupplier;
+    private final ProcessorState context;
 
-    public RDFReader(BlobStore blobStore, StatementsListener listener, IRI qualifiedGeneration, StatementsEmitter quadProcessor) {
+    public RDFReader(BlobStore blobStore, StatementsListener listener, IRI qualifiedGeneration, Function<IRI, StatementsEmitter> processorSupplier, ProcessorState context) {
         super(listener);
         this.qualifiedGeneration = qualifiedGeneration;
         this.blobStore = blobStore;
-        this.quadProcessor = quadProcessor;
+        this.processorSupplier = processorSupplier;
+        this.context = context;
     }
 
     @Override
@@ -38,14 +41,14 @@ public class RDFReader extends StatementProcessor {
         ));
 
         try {
-            processRDF(blobStore.get(version));
+            processRDF(processorSupplier.apply(version), blobStore.get(version));
         } catch (IOException e) {
             throw new RuntimeException("Failed to dereference " + version, e);
         }
     }
 
-    private void processRDF(InputStream inputStream) {
-        new EmittingStreamRDF(quadProcessor).parseAndEmit(inputStream);
+    private void processRDF(StatementsEmitter quadProcessor, InputStream inputStream) {
+        new EmittingStreamRDF(quadProcessor, context).parseAndEmit(inputStream);
     }
 
     private Optional<IRI> getLatestVersion(Quad statement) {
