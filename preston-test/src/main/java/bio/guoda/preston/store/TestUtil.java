@@ -4,12 +4,16 @@ import bio.guoda.preston.HashType;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -46,6 +50,13 @@ public class TestUtil {
                 }
             }
         };
+    }
+
+    public static Directory getTestIndexStore() throws IOException {
+        TemporaryFolder tmp = new TemporaryFolder();
+        tmp.create();
+        String tmpPath = tmp.getRoot().getPath();
+        return FSDirectory.open(Paths.get(tmpPath));
     }
 
     public static InputStream filterLineFeedFromTextInputStream(InputStream is) throws IOException {

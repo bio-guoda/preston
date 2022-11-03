@@ -1,5 +1,6 @@
 package bio.guoda.preston.index;
 
+import bio.guoda.preston.store.TestUtil;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
@@ -24,7 +25,7 @@ public class SimilarityTLSHTest {
         Document doc = new Document();
         doc.add(new TextField(key, tlsh, Field.Store.YES));
 
-        SearchIndex index = new SearchIndexImpl(SearchIndexTest.createIndexStore(), TokenizerTLSHTest.getAnalyzer());
+        SearchIndex index = new SearchIndexImpl(TestUtil.getTestIndexStore(), TokenizerTLSHTest.getAnalyzer());
         index.put(doc);
 
         TopFieldDocs hits = index.find(key, tlsh, 2);
@@ -48,7 +49,7 @@ public class SimilarityTLSHTest {
         Document docNotSimilar = new Document();
         docNotSimilar.add(new TextField(key, tlshNotSimilar, Field.Store.YES));
 
-        SearchIndex index = new SearchIndexImpl(SearchIndexTest.createIndexStore(), TokenizerTLSHTest.getAnalyzer());
+        SearchIndex index = new SearchIndexImpl(TestUtil.getTestIndexStore(), TokenizerTLSHTest.getAnalyzer());
         index.put(docNotSimilar);
         index.put(docSimilar);
 
