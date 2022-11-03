@@ -28,7 +28,6 @@
         <module>preston-aws</module>
         <module>preston-label</module>
         <module>preston-search</module>
-        <module>preston-registry</module>
     </modules>
 
     <build>

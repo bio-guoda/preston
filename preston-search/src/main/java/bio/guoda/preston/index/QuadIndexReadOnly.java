@@ -8,9 +8,7 @@ import org.apache.commons.rdf.api.RDFTerm;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-public interface QuadIndex {
-    void put(Quad quad, IRI origin);
-
+public interface QuadIndexReadOnly {
     Stream<Quad> findQuadsWithSubject(BlankNodeOrIRI subject, int maxHits) throws IOException;
 
     Stream<Quad> findQuadsWithPredicate(IRI predicate, int maxHits) throws IOException;
