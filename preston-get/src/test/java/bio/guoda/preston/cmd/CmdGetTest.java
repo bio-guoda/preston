@@ -53,24 +53,26 @@ public class CmdGetTest {
         assertThat(out.toString(), is("some bits and bytes"));
     }
 
-    @Test(expected = IOException.class)
+    @Test
     public void getSomethingSpecific() throws URISyntaxException, IOException {
         // reproduces https://github.com/bio-guoda/preston/issues/200
         URL resource = getClass().getResource("/bio/guoda/preston/store/issue-200-data/52/51/52513781cd5668b6c570120ebc576c075c40db09786a0788e501d1b34e17c402");
 
         URI uri = new File(resource.toURI()).getParentFile().getParentFile().getParentFile().toURI();
-        System.out.println(uri.toString());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
 
         CmdGet cmdGet = new CmdGet();
 
 
         cmdGet.setRemotes(Collections.singletonList(uri));
-        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("line:zip:hash://sha256/52513781cd5668b6c570120ebc576c075c40db09786a0788e501d1b34e17c402!/name.tsv!/L1")));
+        cmdGet.setContentIdsOrAliases(Collections.singletonList(toIRI("line:zip:hash://sha256/52513781cd5668b6c570120ebc576c075c40db09786a0788e501d1b34e17c402!/name.tsv!/L1")));
 
         BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(cmdGet.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(HashType.sha256)), true, HashType.sha256);
 
 
         cmdGet.run(blobStore, cmdGet.getContentIdsOrAliases());
+        assertThat(out.toString(), is("07070776-e643-47bf-afab-22da04e3fd9c\tLasioglossum (Chilalictus) nefrens Walker, 1995\tWalker\tspecies\t\tLasioglossum\tChilalictus\tnefrens\t\tICZN\testablished\t\t1995\t"));
 
     }
 

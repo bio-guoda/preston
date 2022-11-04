@@ -29,8 +29,10 @@ public class ArchiveStreamHandler implements ContentStreamHandler {
     public boolean handle(IRI version, InputStream is) throws ContentStreamException {
         Pair<ArchiveInputStream, String> archiveStreamAndFormat = getArchiveStreamAndFormat(is);
         if (archiveStreamAndFormat != null) {
-            handleArchiveEntries(version, archiveStreamAndFormat.getLeft(), archiveStreamAndFormat.getRight());
-            return true;
+            if (!ArchiveStreamFactory.CPIO.equals(archiveStreamAndFormat.getRight())) {
+                handleArchiveEntries(version, archiveStreamAndFormat.getLeft(), archiveStreamAndFormat.getRight());
+                return true;
+            }
         }
         return false;
     }

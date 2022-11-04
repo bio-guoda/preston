@@ -12,7 +12,6 @@ import static org.hamcrest.Matchers.is;
 
 public class ArchiveStreamHandlerTest {
 
-
     @Test
     public void textDetectedAsCPIO() throws ArchiveException {
         // https://github.com/bio-guoda/preston/issues/200
