@@ -6,6 +6,8 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +16,8 @@ import java.net.URISyntaxException;
 import static bio.guoda.preston.stream.ContentStreamHandlerImpl.wrapIRI;
 
 public class ArchiveStreamHandler implements ContentStreamHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ArchiveStreamHandler.class);
 
     private ContentStreamHandler contentStreamHandler;
 
@@ -25,11 +29,7 @@ public class ArchiveStreamHandler implements ContentStreamHandler {
     public boolean handle(IRI version, InputStream is) throws ContentStreamException {
         Pair<ArchiveInputStream, String> archiveStreamAndFormat = getArchiveStreamAndFormat(is);
         if (archiveStreamAndFormat != null) {
-            try {
-                handleArchiveEntries(version, archiveStreamAndFormat.getLeft(), archiveStreamAndFormat.getRight());
-            } catch (IOException e) {
-                throw new ContentStreamException("failed to read [" + version + "]", e);
-            }
+            handleArchiveEntries(version, archiveStreamAndFormat.getLeft(), archiveStreamAndFormat.getRight());
             return true;
         }
         return false;
@@ -46,7 +46,7 @@ public class ArchiveStreamHandler implements ContentStreamHandler {
         }
     }
 
-    private void handleArchiveEntries(IRI version, ArchiveInputStream in, String archiveFormat) throws ContentStreamException, IOException {
+    private void handleArchiveEntries(IRI version, ArchiveInputStream in, String archiveFormat) throws ContentStreamException {
         ArchiveEntry entry = null;
         try {
             while (shouldKeepProcessing() && (entry = in.getNextEntry()) != null) {
@@ -64,7 +64,9 @@ public class ArchiveStreamHandler implements ContentStreamHandler {
             }
         } catch (Throwable th) {
             String entryDescription = entry == null ? "some entry" : ("entry [" + entry.getName() + "]");
-            throw new ContentStreamException("failed to process " + entryDescription + " in [" + version.getIRIString() + "]", th);
+            String msg = "failed to process " + entryDescription + " in [" + version.getIRIString() + "]";
+            LOG.warn(msg, th);
+            throw new ContentStreamException(msg, th);
         }
     }
 
