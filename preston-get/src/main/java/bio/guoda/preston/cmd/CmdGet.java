@@ -42,30 +42,30 @@ public class CmdGet extends Persisting implements Runnable {
     }
 
     public void run(BlobStoreReadOnly blobStore) {
-        run(blobStore, contentIdsOrAliases);
-    }
-
-    void run(BlobStoreReadOnly blobStore, List<IRI> contentIdsOrAliases) {
         try {
-            if (contentIdsOrAliases.isEmpty()) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(getInputStream()));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    Quad quad = RDFUtil.asQuad(line);
-                    if (quad == null) {
-                        IRI queryIRI = toIRI(StringUtils.trim(line));
-                        quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, queryIRI);
-                    }
-                    handleContentQuery(blobStore, quad);
-                }
-            } else {
-                for (IRI s : contentIdsOrAliases) {
-                    handleContentQuery(blobStore, s);
-                }
-            }
+            run(blobStore, contentIdsOrAliases);
         } catch (Throwable th) {
             th.printStackTrace(System.err);
             throw new RuntimeException(th);
+        }
+    }
+
+    protected void run(BlobStoreReadOnly blobStore, List<IRI> contentIdsOrAliases) throws IOException {
+        if (contentIdsOrAliases.isEmpty()) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Quad quad = RDFUtil.asQuad(line);
+                if (quad == null) {
+                    IRI queryIRI = toIRI(StringUtils.trim(line));
+                    quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, queryIRI);
+                }
+                handleContentQuery(blobStore, quad);
+            }
+        } else {
+            for (IRI s : contentIdsOrAliases) {
+                handleContentQuery(blobStore, s);
+            }
         }
     }
 
