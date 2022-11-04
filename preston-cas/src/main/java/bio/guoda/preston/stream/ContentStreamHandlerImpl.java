@@ -27,6 +27,9 @@ public class ContentStreamHandlerImpl implements ContentStreamHandler {
 
     @Override
     public boolean handle(IRI version, InputStream in) throws ContentStreamException {
+        if (in == null) {
+            throw new ContentStreamException("no content for [" + version.getIRIString() + "]");
+        }
         InputStream markableInputStream = ContentStreamUtil.getMarkSupportedInputStream(in);
 
         boolean handled;
