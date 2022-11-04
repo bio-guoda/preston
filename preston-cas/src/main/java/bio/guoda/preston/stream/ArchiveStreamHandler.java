@@ -47,19 +47,24 @@ public class ArchiveStreamHandler implements ContentStreamHandler {
     }
 
     private void handleArchiveEntries(IRI version, ArchiveInputStream in, String archiveFormat) throws ContentStreamException, IOException {
-        ArchiveEntry entry;
-        while (shouldKeepProcessing() && (entry = in.getNextEntry()) != null) {
-            if (in.canReadEntryData(entry)) {
-                IRI entryIri;
-                try {
-                    entryIri = wrapIRI(archiveFormat, version, entry.getName());
-                } catch (URISyntaxException e) {
-                    throw new ContentStreamException("failed to create content URI", e);
-                }
-                if (shouldReadArchiveEntry(entryIri)) {
-                    contentStreamHandler.handle(entryIri, in);
+        ArchiveEntry entry = null;
+        try {
+            while (shouldKeepProcessing() && (entry = in.getNextEntry()) != null) {
+                if (in.canReadEntryData(entry)) {
+                    IRI entryIri;
+                    try {
+                        entryIri = wrapIRI(archiveFormat, version, entry.getName());
+                    } catch (URISyntaxException e) {
+                        throw new ContentStreamException("failed to create content URI related to entry [" + entry.getName() + "] in [" + version.getIRIString() + "]", e);
+                    }
+                    if (shouldReadArchiveEntry(entryIri)) {
+                        contentStreamHandler.handle(entryIri, in);
+                    }
                 }
             }
+        } catch (Throwable th) {
+            String entryDescription = entry == null ? "some entry" : ("entry [" + entry.getName() + "]");
+            throw new ContentStreamException("failed to process " + entryDescription + " in [" + version.getIRIString() + "]", th);
         }
     }
 
