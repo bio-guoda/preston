@@ -761,6 +761,8 @@ https://github.com/cboettig/contentid
 
 ### Related Forum Posts / Tweets
 
+https://discourse.gbif.org/t/darwin-core-half-million-update/3652/10
+
 https://discourse.gbif.org/t/gbif-exports-as-public-datasets-in-cloud-environments/1835/5
 
 https://discourse.gbif.org/t/version-control-of-a-dataset/2633/4
