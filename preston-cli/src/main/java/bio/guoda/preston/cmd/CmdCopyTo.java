@@ -68,7 +68,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
             }
             File tmp = getTmpDir();
 
-            ProvenanceTracer tracerOfDescendants = getProvenanceTracer(getCopyingKeyValueStore(target, tmp));
+            ProvenanceTracer tracerOfDescendants = getTracerOfDescendants(getCopyingKeyValueStore(target, tmp));
 
             if (ArchiveType.data_prov_provindex.equals(getArchiveType())) {
                 copyAll(target, tmp, tracerOfDescendants);

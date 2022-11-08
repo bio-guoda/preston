@@ -247,10 +247,14 @@ public class Persisting extends PersistingLocal {
     }
 
     protected BlobStoreReadOnly resolvingBlobStore(Dereferencer<InputStream> blobStore) {
+        return resolvingBlobStore(blobStore, this);
+    }
+
+    public static BlobStoreReadOnly resolvingBlobStore(Dereferencer<InputStream> blobStore, Persisting persisting) {
         return new AliasDereferencer(
                 new ContentHashDereferencer(blobStore),
-                this,
-                this.getProvenanceTracer()
+                persisting,
+                persisting.getProvenanceTracer()
         );
     }
 

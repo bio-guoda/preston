@@ -19,7 +19,7 @@ import java.util.List;
 
 @CommandLine.Command(
         name = "hash",
-        description = "Offline (re-)processing of tracked biodiversity dataset graph using stdin"
+        description = "generate content id from stdin"
 )
 public class CmdHash extends Cmd implements Runnable {
 

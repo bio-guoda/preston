@@ -1,14 +1,11 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
-import bio.guoda.preston.store.VersionUtil;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -16,7 +13,6 @@ import picocli.CommandLine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,37 +56,12 @@ public class CmdGet extends Persisting implements Runnable {
                     IRI queryIRI = toIRI(StringUtils.trim(line));
                     quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, queryIRI);
                 }
-                handleContentQuery(blobStore, quad);
+                ContentQueryUtil.handleContentQuery(blobStore, quad, this);
             }
         } else {
-            for (IRI s : contentIdsOrAliases) {
-                handleContentQuery(blobStore, s);
+            for (IRI contentIdOrAlias : contentIdsOrAliases) {
+                ContentQueryUtil.handleContentQuery(blobStore, contentIdOrAlias, this);
             }
-        }
-    }
-
-    private void handleContentQuery(BlobStoreReadOnly blobStore, Quad quad) throws IOException {
-        IRI version = VersionUtil.mostRecentVersionForStatement(quad);
-        if (version != null) {
-            handleContentQuery(blobStore, version);
-        }
-    }
-
-    private void handleContentQuery(BlobStoreReadOnly blobStore, IRI queryIRI) throws IOException {
-
-        BlobStoreReadOnly query = resolvingBlobStore(blobStore);
-
-        try {
-            InputStream contentStream = query.get(
-                    new IRIFixingProcessor()
-                            .process(queryIRI)
-            );
-            if (contentStream == null) {
-                throw new IOException("[" + queryIRI.getIRIString() + "] not found.");
-            }
-            IOUtils.copyLarge(contentStream, getOutputStream());
-        } catch (IOException e) {
-            throw new IOException("problem retrieving [" + queryIRI.getIRIString() + "]", e);
         }
     }
 

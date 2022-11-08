@@ -84,13 +84,17 @@ public final class ReplayUtil {
     }
 
     public static void replay(StatementsListener listener, Persisting persisting, ProvenanceTracer provenanceTracer) {
-        BlobStoreReadOnly blobstoreReadOnly = new BlobStoreAppendOnly(
-                persisting.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())),
-                true,
-                persisting.getHashType()
-        );
+        BlobStoreReadOnly blobstoreReadOnly = getBlobStore(persisting);
 
         attemptReplay(listener, persisting, provenanceTracer, blobstoreReadOnly);
+    }
+
+    public static BlobStoreReadOnly getBlobStore(Persisting persisting) {
+        return new BlobStoreAppendOnly(
+                    persisting.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())),
+                    true,
+                    persisting.getHashType()
+            );
     }
 
     static void attemptReplay(StatementsListener listener,

@@ -10,11 +10,12 @@ import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
-import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
-import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.TracerOfDescendants;
 import bio.guoda.preston.store.TracerOfOrigins;
+import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
+import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
+import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
@@ -25,10 +26,6 @@ import java.io.IOException;
 import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 
 public class PersistingLocal extends Cmd {
-
-    public static final String LOCATION_OF_LOCAL_CONTENT_CACHE = "Location of local content cache";
-    public static final String LOCATION_OF_LOCAL_TMP_DIR = "Location of local tmp dir";
-    public static final String HASH_ALGORITHM_USED_TO_GENERATE_PRIMARY_CONTENT_IDENTIFIERS = "Hash algorithm used to generate primary content identifiers";
 
     @CommandLine.Option(
             names = {"--data-dir"},
@@ -63,9 +60,6 @@ public class PersistingLocal extends Cmd {
         this.provenanceAnchor = provenanceAnchor;
     }
 
-
-
-
     File getDefaultDataDir() {
         return getDataDir(getLocalDataDir());
     }
@@ -90,20 +84,25 @@ public class PersistingLocal extends Cmd {
         return new KeyValueStoreWithFallback(primary, fallback);
     }
 
+
     public ProvenanceTracer getProvenanceTracer() {
+        return isAnchored()
+                ? getTracerOfOrigins()
+                : getTracerOfDescendants();
+    }
+
+    public boolean isAnchored() {
+        return !RefNodeConstants.BIODIVERSITY_DATASET_GRAPH.equals(getProvenanceAnchor());
+    }
+
+    private ProvenanceTracer getTracerOfDescendants() {
         KeyValueStore keyValueStore = getKeyValueStore(
                 new ValidatingKeyValueStreamHashTypeIRIFactory(getHashType())
         );
-        return getProvenanceTracer(keyValueStore);
+        return getTracerOfDescendants(keyValueStore);
     }
 
-    public ProvenanceTracer getProvenanceTracer(KeyValueStore keyValueStore) {
-        return RefNodeConstants.BIODIVERSITY_DATASET_GRAPH.equals(getProvenanceAnchor())
-                ? getTracerOfDescendants(keyValueStore)
-                : getTracerOfOrigins(keyValueStore);
-    }
-
-    private ProvenanceTracer getTracerOfDescendants(KeyValueStore keyValueStore) {
+    protected ProvenanceTracer getTracerOfDescendants(KeyValueStore keyValueStore) {
         HexaStoreImpl hexastore = new HexaStoreImpl(
                 keyValueStore,
                 getHashType()
@@ -112,7 +111,10 @@ public class PersistingLocal extends Cmd {
         return new TracerOfDescendants(hexastore, this);
     }
 
-    private ProvenanceTracer getTracerOfOrigins(KeyValueStore keyValueStore) {
+    private ProvenanceTracer getTracerOfOrigins() {
+        KeyValueStore keyValueStore = getKeyValueStore(
+                new ValidatingKeyValueStreamContentAddressedFactory(getHashType())
+        );
         return new TracerOfOrigins(keyValueStore, this);
     }
 

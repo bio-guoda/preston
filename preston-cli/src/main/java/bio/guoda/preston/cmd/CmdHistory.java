@@ -21,9 +21,6 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        // do not attempt to dig tiny provenance log history files out of tar.gz balls
-        setSupportTarGzDiscovery(false);
-
         StatementsListener logger = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
                 getOutputStream(),
