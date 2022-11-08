@@ -75,13 +75,13 @@ public class Persisting extends PersistingLocal {
     private boolean supportTarGzDiscovery = true;
 
     @CommandLine.Option(
-            names = {"--provenanceRoot", "-r"},
-            description = "specify the provenance root of the command. By default, any available data graph will be traversed up to it's most recent additions. If the provenance root is set, only specified provenance signature and their origins are included in the scope."
+            names = {"--provenanceRoot", "--provenanceAnchor", "--anchor", "-r"},
+            description = "specify the provenance root/anchor of the command. By default, any available data graph will be traversed up to it's most recent additions. If the provenance root is set, only specified provenance signature and their origins are included in the scope."
     )
-    private final IRI provenanceRoot = BIODIVERSITY_DATASET_GRAPH;
+    private final IRI provenanceAnchor = BIODIVERSITY_DATASET_GRAPH;
 
-    public IRI getProvenanceRoot() {
-        return this.provenanceRoot;
+    public IRI getProvenanceAnchor() {
+        return this.provenanceAnchor;
     }
 
     protected List<URI> getRemotes() {

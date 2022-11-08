@@ -34,7 +34,7 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
         try {
             getTracerOfDescendants()
                     .trace(
-                            getProvenanceRoot(),
+                            getProvenanceAnchor(),
                             statement -> {
                                 foundHistory.set(true);
                                 logger.on(statement);

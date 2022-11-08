@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
-
 @CommandLine.Command(
         name = "clone",
         aliases = {"pull"},
@@ -43,7 +41,7 @@ public class CmdClone extends LoggingPersisting implements Runnable {
                 keyValueStore,
                 getHashType(),
                 getTracerOfDescendants(),
-                getProvenanceRoot()
+                getProvenanceAnchor()
         );
     }
 

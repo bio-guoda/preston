@@ -96,7 +96,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                         private void addProvenanceRoots() throws IOException {
                             ProvenanceTracer provenanceTracer = new TracerOfDescendants(provIndex, CmdActivity.this);
                             MostRecentVersionListener listener = new MostRecentVersionListener();
-                            provenanceTracer.trace(getProvenanceRoot(), listener);
+                            provenanceTracer.trace(getProvenanceAnchor(), listener);
                             IRI mostRecentVersion = listener.getMostRecent();
                             if (mostRecentVersion != null) {
                                 add(Collections.singletonList(toStatement(ctx.getActivity(), mostRecentVersion, USED_BY, ctx.getActivity())));
@@ -283,7 +283,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                     IRI newVersion = blobStore.put(is);
                     RefNodeFactory.nowDateTimeLiteral();
 
-                    IRI previousVersion = VersionUtil.findMostRecentVersion(getProvenanceRoot(), hexastore);
+                    IRI previousVersion = VersionUtil.findMostRecentVersion(getProvenanceAnchor(), hexastore);
                     if (previousVersion == null) {
                         hexastore.put(RefNodeConstants.PROVENANCE_ROOT_QUERY, newVersion);
                     } else {

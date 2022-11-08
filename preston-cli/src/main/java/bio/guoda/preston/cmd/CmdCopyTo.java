@@ -103,7 +103,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
         final CmdContext ctx = new CmdContext(
                 this,
-                getProvenanceRoot(),
+                getProvenanceAnchor(),
                 listener,
                 JekyllUtil.createPrestonStartTimeListener(lastCrawlTime::set)
         );
@@ -117,7 +117,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         JekyllUtil.writePrestonConfigFile(
                 target,
                 lastCrawlTime,
-                getProvenanceRoot(),
+                getProvenanceAnchor(),
                 provenanceTracer
         );
     }

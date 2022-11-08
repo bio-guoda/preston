@@ -21,7 +21,7 @@ public class CmdHead extends LoggingPersisting implements Runnable {
         try {
             getTracerOfDescendants()
                     .trace(
-                            getProvenanceRoot(),
+                            getProvenanceAnchor(),
                             statement -> {
                                 IRI iri = VersionUtil.mostRecentVersionForStatement(statement);
                                 if (iri != null) {
