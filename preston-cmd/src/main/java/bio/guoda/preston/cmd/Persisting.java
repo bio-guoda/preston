@@ -78,10 +78,14 @@ public class Persisting extends PersistingLocal {
             names = {"--provenanceRoot", "--provenanceAnchor", "--anchor", "-r"},
             description = "specify the provenance root/anchor of the command. By default, any available data graph will be traversed up to it's most recent additions. If the provenance root is set, only specified provenance signature and their origins are included in the scope."
     )
-    private final IRI provenanceAnchor = BIODIVERSITY_DATASET_GRAPH;
+    private IRI provenanceAnchor = BIODIVERSITY_DATASET_GRAPH;
 
     public IRI getProvenanceAnchor() {
         return this.provenanceAnchor;
+    }
+
+    public void setProvenanceArchor(IRI provenanceAnchor) {
+        this.provenanceAnchor = provenanceAnchor;
     }
 
     protected List<URI> getRemotes() {
