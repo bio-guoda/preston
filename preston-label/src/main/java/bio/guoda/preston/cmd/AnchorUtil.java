@@ -13,12 +13,12 @@ public class AnchorUtil {
         if (persisting.isAnchored()) {
             mostRecentLog.set(persisting.getProvenanceAnchor());
         } else {
-            resolveAnchor(mostRecentLog, persisting);
+            resolveHead(mostRecentLog, persisting);
         }
         return mostRecentLog;
     }
 
-    public static void  resolveAnchor(AtomicReference<IRI> mostRecentLog, Persisting persisting) {
+    private static void resolveHead(AtomicReference<IRI> mostRecentLog, Persisting persisting) {
         try {
             persisting.getProvenanceTracer()
                     .trace(
