@@ -80,7 +80,7 @@ public final class ReplayUtil {
     }
 
     public static void replay(StatementsListener listener, Persisting persisting) {
-        replay(listener, persisting, persisting.getTracerOfDescendants());
+        replay(listener, persisting, persisting.getProvenanceTracer());
     }
 
     public static void replay(StatementsListener listener, Persisting persisting, ProvenanceTracer provenanceTracer) {

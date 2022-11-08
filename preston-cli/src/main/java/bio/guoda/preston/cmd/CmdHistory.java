@@ -12,7 +12,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @CommandLine.Command(
         name = "history",
-        description = "Show history of biodiversity dataset graph"
+        aliases = {"origin", "origins", "prov", "provenance"},
+        description = "Show history/origins/provenance of biodiversity dataset graph"
 )
 public class CmdHistory extends LoggingPersisting implements Runnable {
 
@@ -32,7 +33,7 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
 
         AtomicBoolean foundHistory = new AtomicBoolean(false);
         try {
-            getTracerOfDescendants()
+            getProvenanceTracer()
                     .trace(
                             getProvenanceAnchor(),
                             statement -> {

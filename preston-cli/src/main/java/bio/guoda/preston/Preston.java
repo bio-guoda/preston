@@ -19,7 +19,6 @@ import bio.guoda.preston.cmd.CmdHistory;
 import bio.guoda.preston.cmd.CmdInstallManual;
 import bio.guoda.preston.cmd.CmdList;
 import bio.guoda.preston.cmd.CmdMerge;
-import bio.guoda.preston.cmd.CmdOrigins;
 import bio.guoda.preston.cmd.CmdPlazi;
 import bio.guoda.preston.cmd.CmdSeeds;
 import bio.guoda.preston.cmd.CmdSketchCreate;
@@ -50,7 +49,6 @@ import static java.lang.System.exit;
                 CmdUpdate.class,
                 CmdAppend.class,
                 CmdHistory.class,
-                CmdOrigins.class,
                 CmdMerge.class,
                 CmdSketchCreate.class,
                 CmdSketchDiff.class,

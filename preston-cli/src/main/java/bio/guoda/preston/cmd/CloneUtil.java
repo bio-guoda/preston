@@ -26,7 +26,8 @@ public class CloneUtil {
     public static void clone(KeyValueStore blobKeyValueStore,
                              KeyValueStore provenanceLogKeyValueStore,
                              HashType type,
-                             ProvenanceTracer provenanceTracer, IRI provenanceRoot) {
+                             ProvenanceTracer provenanceTracer,
+                             IRI provenanceRoot) {
 
         final BlobStoreReadOnly blobStore
                 = new BlobStoreAppendOnly(blobKeyValueStore, true, type);

@@ -40,7 +40,7 @@ public class CmdClone extends LoggingPersisting implements Runnable {
                 keyValueStore,
                 keyValueStore,
                 getHashType(),
-                getTracerOfDescendants(),
+                getProvenanceTracer(),
                 getProvenanceAnchor()
         );
     }

@@ -19,7 +19,7 @@ public class CmdHead extends LoggingPersisting implements Runnable {
     public void run() {
         AtomicReference<IRI> mostRecentLog = new AtomicReference<>();
         try {
-            getTracerOfDescendants()
+            getProvenanceTracer()
                     .trace(
                             getProvenanceAnchor(),
                             statement -> {
