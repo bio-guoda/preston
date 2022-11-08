@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeFactory;
+import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,7 +28,9 @@ public class CmdListTest {
     public void listOrigins() throws URISyntaxException, IOException {
         CmdList cmd = new CmdList();
 
-        URL queryIndex = getClass().getResource("history/datacontent/82/4d/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b");
+        String provLog1 = "history/datacontent/82/4d/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b";
+        String provLog2 = "history/datacontent/10/b4/10b4f8ce7ed4faf6f3616cf12743ecc810bfe4db8cadf81f861d891b37c4ec29";
+        URL queryIndex = getClass().getResource(provLog1);
         assertNotNull(queryIndex);
 
         File dataDir = new File(queryIndex.toURI()).getParentFile().getParentFile().getParentFile();
@@ -44,9 +47,15 @@ public class CmdListTest {
 
         cmd.run();
 
-        assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is(
-                "<hash://sha256/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/10b4f8ce7ed4faf6f3616cf12743ecc810bfe4db8cadf81f861d891b37c4ec29> .\n" +
-                        "<urn:uuid:0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/pav/hasVersion> <hash://sha256/10b4f8ce7ed4faf6f3616cf12743ecc810bfe4db8cadf81f861d891b37c4ec29> .\n"));
+        ByteArrayOutputStream expected = new ByteArrayOutputStream();
+
+        IOUtils.copy(getClass().getResourceAsStream(provLog1), expected);
+        IOUtils.copy(getClass().getResourceAsStream(provLog2), expected);
+        
+        String actualString = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+        String expectedString = new String(expected.toByteArray(), StandardCharsets.UTF_8);
+
+        assertThat(actualString, Is.is(expectedString));
 
     }
 
