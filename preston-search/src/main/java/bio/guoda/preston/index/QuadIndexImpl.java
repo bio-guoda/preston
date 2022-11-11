@@ -31,7 +31,7 @@ public class QuadIndexImpl implements QuadIndex {
     private static final String ORIGIN = "origin";
 
     private final SearchIndex index;
-    private Directory indexStore;
+    private final Directory indexStore;
 
     public QuadIndexImpl(File indexDir, Analyzer analyzer, Similarity similarity) throws IOException {
         indexStore = FSDirectory.open(indexDir.toPath());

@@ -24,9 +24,9 @@ public class SimilarityIndexTikaTLSH implements Closeable {
 
     private static final String FIELD_SHA256 = "sha256";
     private static final String FIELD_TIKA_TLSH = "tika-tlsh";
-    private final Directory indexStore;
 
-    private SearchIndex index;
+    private final Directory indexStore;
+    private final SearchIndex index;
 
     @Override
     public void close() throws IOException {
