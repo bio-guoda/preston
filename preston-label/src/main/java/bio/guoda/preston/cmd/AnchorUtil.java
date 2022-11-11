@@ -7,15 +7,15 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AnchorUtil {
-    public static AtomicReference<IRI> findHeadOrAnchor(Persisting persisting) {
-        AtomicReference<IRI> mostRecentLog = new AtomicReference<>();
+    public static AtomicReference<IRI> findHead(Persisting persisting) {
+        AtomicReference<IRI> head = new AtomicReference<>();
 
         if (persisting.isAnchored()) {
-            mostRecentLog.set(persisting.getProvenanceAnchor());
+            head.set(persisting.getProvenanceAnchor());
         } else {
-            resolveHead(mostRecentLog, persisting);
+            resolveHead(head, persisting);
         }
-        return mostRecentLog;
+        return head;
     }
 
     private static void resolveHead(AtomicReference<IRI> head, Persisting persisting) {

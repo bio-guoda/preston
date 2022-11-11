@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.store.VersionUtil;
 import com.google.zxing.WriterException;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
@@ -17,7 +16,7 @@ public class CmdGenerateQRCode extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        AtomicReference<IRI> mostRecentLog = AnchorUtil.findHeadOrAnchor(this);
+        AtomicReference<IRI> mostRecentLog = AnchorUtil.findHead(this);
 
         if (mostRecentLog.get() == null) {
             throw new RuntimeException("Cannot generate QRCode: no provenance logs found.");

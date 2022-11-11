@@ -16,7 +16,7 @@ public class CmdHead extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        AtomicReference<IRI> mostRecentLog = AnchorUtil.findHeadOrAnchor(this);
+        AtomicReference<IRI> mostRecentLog = AnchorUtil.findHead(this);
 
         try {
             IOUtils.write(mostRecentLog.get().getIRIString(), getOutputStream(), StandardCharsets.UTF_8);
