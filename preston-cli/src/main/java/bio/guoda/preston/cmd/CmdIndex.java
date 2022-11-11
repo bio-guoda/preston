@@ -96,7 +96,7 @@ public class CmdIndex extends CmdAppend {
 
     private void packageIndex(IRI generation, ActivityContext ctx, BlobStore blobStore, File indexDir, StatementsEmitter emitter) {
         try {
-            IRI indexVersion = ArchiveUtil.copyDirectoryToBlobstore(blobStore, indexDir);
+            IRI indexVersion = ArchiveUtil.copyDirectoryToBlobstoreAsTarGz(blobStore, indexDir);
             Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
 
             ActivityUtil.emitAsNewActivity(
