@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.rdf.api.IRI;
 
@@ -19,10 +20,16 @@ public class AnchorUtil {
     }
 
     private static void resolveHead(AtomicReference<IRI> head, Persisting persisting) {
+        ProvenanceTracer provenanceTracer = persisting.getProvenanceTracer();
+        IRI provenanceAnchor = persisting.getProvenanceAnchor();
+        findHead(head, provenanceTracer, provenanceAnchor);
+    }
+
+    public static void findHead(AtomicReference<IRI> head, ProvenanceTracer provenanceTracer, IRI provenanceAnchor) {
         try {
-            persisting.getProvenanceTracer()
+            provenanceTracer
                     .trace(
-                            persisting.getProvenanceAnchor(),
+                            provenanceAnchor,
                             statement -> {
                                 IRI iri = VersionUtil.mostRecentVersionForStatement(statement);
                                 if (iri != null) {

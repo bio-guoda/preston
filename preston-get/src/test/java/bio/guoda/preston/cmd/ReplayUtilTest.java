@@ -2,11 +2,14 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.HexaStore;
-import bio.guoda.preston.store.TracerOfDescendants;
+import bio.guoda.preston.store.ProvenanceTracer;
+import bio.guoda.preston.store.ProvenanceTracerByIndex;
+import bio.guoda.preston.store.ProvenanceTracerImpl;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -22,11 +25,12 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
 import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
+import static bio.guoda.preston.RefNodeConstants.USED_BY;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ReplayUtilTest {
 
-    private static final IRI TEST_KEY_IRI = RefNodeFactory.toIRI("test:key");
+    private static final IRI TEST_KEY_IRI = RefNodeFactory.toIRI("hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03");
     private static final IRI TEST_KEY_NEWER_IRI = RefNodeFactory.toIRI("test:key-new");
 
     @Test
@@ -35,14 +39,18 @@ public class ReplayUtilTest {
         StatementLoggerNQuads logger = new StatementLoggerNQuads(
                 new PrintStream(out, true)
         );
-        ReplayUtil.attemptReplay(getBlobStore(), BIODIVERSITY_DATASET_GRAPH, new TracerOfDescendants(getStatementStore(), new ProcessorStateAlwaysContinue()), new VersionRetriever(getBlobStore()), logger);
+        ReplayUtil.attemptReplay(
+                getBlobStore(),
+                BIODIVERSITY_DATASET_GRAPH,
+                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())),
+                new VersionRetriever(getBlobStore()), logger);
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), Is.is(
-                "<urn:example:some> <urn:example:other> <urn:example:thing> .\n" +
-                        "<urn:example:some> <urn:example:newer> <urn:example:thing> .\n"));
+                "<hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03> <http://www.w3.org/ns/prov#usedBy> <foo:bar> .\n" +
+                        "<urn:example:some> <urn:example:newer> <urn:example:thing> .\n" +
+                        "<urn:example:some> <urn:example:other> <urn:example:thing> .\n"));
     }
 
-    @Ignore(value = "re-enable after implementing prov root selection")
     @Test
     public void replayNonDefaultProvenanceRoot() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -50,17 +58,16 @@ public class ReplayUtilTest {
         ReplayUtil.attemptReplay(
                 getBlobStore(),
                 TEST_KEY_IRI,
-                new TracerOfDescendants(getStatementStore(), new ProcessorStateAlwaysContinue()),
+                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())),
                 new VersionRetriever(getBlobStore()),
                 logger);
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), Is.is(
-                "<urn:example:some> <urn:example:other> <urn:example:thing> .\n" +
-                        "<urn:example:some> <urn:example:newer> <urn:example:thing> .\n"));
-
+                "<hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03> <http://www.w3.org/ns/prov#usedBy> <foo:bar> .\n" +
+                        "<urn:example:some> <urn:example:newer> <urn:example:thing> .\n" +
+                        "<urn:example:some> <urn:example:other> <urn:example:thing> .\n"));
     }
 
-    @Ignore(value = "re-enable after implementing prov root selection")
     @Test
     public void replayNonDefaultProvenanceRootHead() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -68,13 +75,15 @@ public class ReplayUtilTest {
         ReplayUtil.attemptReplay(
                 getBlobStore(),
                 TEST_KEY_NEWER_IRI,
-                new TracerOfDescendants(getStatementStore(), new ProcessorStateAlwaysContinue()),
+                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())),
                 new VersionRetriever(getBlobStore()),
                 logger
         );
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), Is.is(
-                "<urn:example:some> <urn:example:newer> <urn:example:thing> .\n"));
+                "<hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03> <http://www.w3.org/ns/prov#usedBy> <foo:bar> .\n" +
+                        "<urn:example:some> <urn:example:newer> <urn:example:thing> .\n" +
+                        "<urn:example:some> <urn:example:other> <urn:example:thing> .\n"));
 
     }
 
@@ -85,7 +94,12 @@ public class ReplayUtilTest {
         ReplayUtil.attemptReplay(
                 getBlobStore(),
                 RefNodeFactory.toIRI("non-existing"),
-                new TracerOfDescendants(getStatementStore(), new ProcessorStateAlwaysContinue()),
+                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracer() {
+                    @Override
+                    public void trace(IRI provenanceAnchor, StatementListener listener) throws IOException {
+
+                    }
+                }),
                 new VersionRetriever(getBlobStore()),
                 logger
         );
@@ -129,7 +143,9 @@ public class ReplayUtilTest {
                 if (key.equals(TEST_KEY_IRI)) {
                     return IOUtils.toInputStream("<urn:example:some> <urn:example:other> <urn:example:thing> .", StandardCharsets.UTF_8);
                 } else if (key.equals(TEST_KEY_NEWER_IRI)) {
-                    return IOUtils.toInputStream("<urn:example:some> <urn:example:newer> <urn:example:thing> .", StandardCharsets.UTF_8);
+                    return IOUtils.toInputStream(
+                            RefNodeFactory.toStatement(TEST_KEY_IRI, USED_BY, RefNodeFactory.toIRI("foo:bar"))
+                                    + "\n<urn:example:some> <urn:example:newer> <urn:example:thing> .", StandardCharsets.UTF_8);
                 } else {
                     throw new IOException("no value for [" + key.getIRIString() + "] found.");
                 }

@@ -11,8 +11,8 @@ import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.ProvenanceTracer;
-import bio.guoda.preston.store.TracerOfDescendants;
-import bio.guoda.preston.store.TracerOfOrigins;
+import bio.guoda.preston.store.ProvenanceTracerByIndex;
+import bio.guoda.preston.store.ProvenanceTracerImpl;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
@@ -108,14 +108,14 @@ public class PersistingLocal extends Cmd {
                 getHashType()
         );
 
-        return new TracerOfDescendants(hexastore, this);
+        return new ProvenanceTracerByIndex(hexastore, getTracerOfOrigins());
     }
 
     private ProvenanceTracer getTracerOfOrigins() {
         KeyValueStore keyValueStore = getKeyValueStore(
                 new ValidatingKeyValueStreamContentAddressedFactory(getHashType())
         );
-        return new TracerOfOrigins(keyValueStore, this);
+        return new ProvenanceTracerImpl(keyValueStore, this);
     }
 
 

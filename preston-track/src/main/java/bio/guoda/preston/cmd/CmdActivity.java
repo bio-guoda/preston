@@ -13,9 +13,10 @@ import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.HexaStore;
 import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.ProvenanceTracerImpl;
 import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
 import bio.guoda.preston.store.ProvenanceTracer;
-import bio.guoda.preston.store.TracerOfDescendants;
+import bio.guoda.preston.store.ProvenanceTracerByIndex;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.VersionUtil;
 import bio.guoda.preston.util.MostRecentVersionListener;
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.AGENT;
@@ -94,12 +96,9 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                         }
 
                         private void addProvenanceRoots() throws IOException {
-                            ProvenanceTracer provenanceTracer = new TracerOfDescendants(provIndex, CmdActivity.this);
-                            MostRecentVersionListener listener = new MostRecentVersionListener();
-                            provenanceTracer.trace(getProvenanceAnchor(), listener);
-                            IRI mostRecentVersion = listener.getMostRecent();
-                            if (mostRecentVersion != null) {
-                                add(Collections.singletonList(toStatement(ctx.getActivity(), mostRecentVersion, USED_BY, ctx.getActivity())));
+                            AtomicReference<IRI> head = AnchorUtil.findHead(CmdActivity.this);
+                            if (head.get() != null) {
+                                add(Collections.singletonList(toStatement(ctx.getActivity(), head.get(), USED_BY, ctx.getActivity())));
                             }
                         }
                     };

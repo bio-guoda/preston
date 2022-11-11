@@ -5,6 +5,7 @@ import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.process.StatementListener;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -13,14 +14,15 @@ import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertNotNull;
+import static bio.guoda.preston.RefNodeConstants.USED_BY;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItems;
 
-public class TracerOfDescendantsTest {
+public class ProvenanceTracerByIndexTest {
 
     @Test
     public void comesAfter() throws IOException {
@@ -32,7 +34,16 @@ public class TracerOfDescendantsTest {
             }
         };
 
-        ProvenanceTracer tracer = new TracerOfDescendants(hexastore, new ProcessorStateAlwaysContinue());
+        ProvenanceTracer tracer = new ProvenanceTracerByIndex(hexastore, new ProvenanceTracerImpl(new KeyValueStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                InputStream is = null;
+                if (uri.getIRIString().equals("some:iri")) {
+                    is = IOUtils.toInputStream("<foo:bar> <foo:bar> <foo:bar> .", StandardCharsets.UTF_8);
+                }
+                return is;
+            }
+        }, new ProcessorStateAlwaysContinue()));
 
         List<IRI> iris = new ArrayList<>();
 
@@ -70,7 +81,20 @@ public class TracerOfDescendantsTest {
 
         };
 
-        ProvenanceTracer tracer = new TracerOfDescendants(hexastore, new ProcessorStateAlwaysContinue());
+        ProvenanceTracer tracer = new ProvenanceTracerByIndex(hexastore, new ProvenanceTracerImpl(new KeyValueStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                InputStream is = null;
+                if (uri.getIRIString().equals("some:iri")) {
+                    is = IOUtils.toInputStream("<foo:bar> <foo:bar> <foo:bar> .", StandardCharsets.UTF_8);
+                } else if (uri.getIRIString().equals(getOlder())) {
+                    is = IOUtils.toInputStream("<foo:bar> <foo:bar> <foo:bar> .", StandardCharsets.UTF_8);
+                } else if (uri.getIRIString().equals(getNewer())) {
+                    is = IOUtils.toInputStream(RefNodeFactory.toStatement(RefNodeFactory.toIRI(getOlder()), USED_BY, RefNodeFactory.toIRI("foo:bar")) + "\n", StandardCharsets.UTF_8);
+                }
+                return is;
+            }
+        }, new ProcessorStateAlwaysContinue()));
 
         List<IRI> iris = new ArrayList<>();
 
@@ -86,8 +110,9 @@ public class TracerOfDescendantsTest {
             }
         });
 
-        assertThat(iris.size(), Is.is(1));
+        assertThat(iris.size(), Is.is(2));
         assertThat(iris.get(0), Is.is(RefNodeFactory.toIRI(getNewer())));
+        assertThat(iris.get(1), Is.is(RefNodeFactory.toIRI(getOlder())));
     }
 
     private IRI getVersion(Pair<RDFTerm, RDFTerm> queryKey) {

@@ -18,13 +18,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
-public class TracerOfOrigins implements ProvenanceTracer {
+public class ProvenanceTracerImpl implements ProvenanceTracer {
 
     private final KeyValueStoreReadOnly blobStore;
 
     private final ProcessorState cmd;
 
-    public TracerOfOrigins(KeyValueStoreReadOnly blobStore, ProcessorState cmd) {
+    public ProvenanceTracerImpl(KeyValueStoreReadOnly blobStore, ProcessorState cmd) {
         this.blobStore = blobStore;
         this.cmd = cmd;
 

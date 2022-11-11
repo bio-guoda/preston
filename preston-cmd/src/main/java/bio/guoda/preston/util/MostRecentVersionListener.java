@@ -11,7 +11,11 @@ public class MostRecentVersionListener implements StatementListener {
     private final AtomicReference<IRI> mostRecent;
 
     public MostRecentVersionListener() {
-        this.mostRecent = new AtomicReference<>();
+        this(new AtomicReference<>());
+    }
+
+    public MostRecentVersionListener(AtomicReference<IRI> mostRecent) {
+        this.mostRecent = mostRecent;
     }
 
     @Override
