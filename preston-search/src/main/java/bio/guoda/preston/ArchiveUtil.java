@@ -52,13 +52,19 @@ public class ArchiveUtil {
         try (Stream<Path> walk = Files.walk(dirPath)) {
             walk.forEach(filePath -> {
                 try {
-                    File file = filePath.toFile();
-                    ArchiveEntry entry = archiveOut.createArchiveEntry(file, filePath.relativize(dirPath).toString());
-                    archiveOut.putArchiveEntry(entry);
-                    if (file.isFile()) {
-                        IOUtils.copy(filePath.toUri().toURL(), archiveOut);
+                    if (!filePath.equals(dirPath)) {
+                        File file = filePath.toFile();
+                        Path destinationInArchive = dirPath.relativize(filePath);
+
+                        ArchiveEntry entry = archiveOut.createArchiveEntry(file, destinationInArchive.toString());
+                        archiveOut.putArchiveEntry(entry);
+
+                        if (file.isFile()) {
+                            IOUtils.copy(filePath.toUri().toURL(), archiveOut);
+                        }
+
+                        archiveOut.closeArchiveEntry();
                     }
-                    archiveOut.closeArchiveEntry();
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to copy file to archive", e);
                 }
