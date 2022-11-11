@@ -18,7 +18,7 @@ public class AnchorUtil {
         return mostRecentLog;
     }
 
-    private static void resolveHead(AtomicReference<IRI> mostRecentLog, Persisting persisting) {
+    private static void resolveHead(AtomicReference<IRI> head, Persisting persisting) {
         try {
             persisting.getProvenanceTracer()
                     .trace(
@@ -26,7 +26,7 @@ public class AnchorUtil {
                             statement -> {
                                 IRI iri = VersionUtil.mostRecentVersionForStatement(statement);
                                 if (iri != null) {
-                                    mostRecentLog.set(iri);
+                                    head.set(iri);
                                 }
                             }
                     );
@@ -34,7 +34,7 @@ public class AnchorUtil {
             throw new RuntimeException("Failed to get version history.", e);
         }
 
-        if (mostRecentLog.get() == null) {
+        if (head.get() == null) {
             throw new RuntimeException("Cannot find most recent version: no provenance logs found.");
         }
     }
