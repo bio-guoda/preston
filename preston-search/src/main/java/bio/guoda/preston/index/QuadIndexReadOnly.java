@@ -5,10 +5,11 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-public interface QuadIndexReadOnly {
+public interface QuadIndexReadOnly extends Closeable {
     Stream<Quad> findQuadsWithSubject(BlankNodeOrIRI subject, int maxHits) throws IOException;
 
     Stream<Quad> findQuadsWithPredicate(IRI predicate, int maxHits) throws IOException;

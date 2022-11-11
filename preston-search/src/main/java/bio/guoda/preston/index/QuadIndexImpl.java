@@ -16,14 +16,13 @@ import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class QuadIndexImpl implements QuadIndex, Closeable {
+public class QuadIndexImpl implements QuadIndex {
 
     private static final String SUBJECT = "subject";
     private static final String PREDICATE = "predicate";
@@ -32,9 +31,10 @@ public class QuadIndexImpl implements QuadIndex, Closeable {
     private static final String ORIGIN = "origin";
 
     private final SearchIndex index;
+    private Directory indexStore;
 
     public QuadIndexImpl(File indexDir, Analyzer analyzer, Similarity similarity) throws IOException {
-        Directory indexStore = FSDirectory.open(indexDir.toPath());
+        indexStore = FSDirectory.open(indexDir.toPath());
         index = new SearchIndexImpl(indexStore, analyzer, similarity);
     }
 
@@ -107,5 +107,6 @@ public class QuadIndexImpl implements QuadIndex, Closeable {
     @Override
     public void close() throws IOException {
         index.close();
+        indexStore.close();
     }
 }

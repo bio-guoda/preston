@@ -20,33 +20,42 @@ public class QuadIndexImplTest {
 
     @SuppressWarnings("resource")
     @Test
-    public void retrieveQuads() throws IOException {
-        QuadIndex index = new QuadIndexImpl(createTempFolder());
+    public void retrieveQuad() throws IOException {
+        try (QuadIndex index = new QuadIndexImpl(createTempFolder())) {
+            Quad quad = RefNodeFactory.toStatement(
+                    toIRI("https://example.com"),
+                    RefNodeConstants.HAS_VERSION,
+                    toIRI("hash://sha256/blah"));
 
-        Quad quad = RefNodeFactory.toStatement(
-                toIRI("https://example.com"),
-                RefNodeConstants.HAS_VERSION,
-                toIRI("hash://sha256/blah"));
+            index.put(quad, toIRI("hash://sha256/bloop"));
 
-        index.put(quad, toIRI("hash://sha256/bloop"));
+            List<Quad> hits;
+            hits = index.findQuadsWithSubject(toIRI("https://example.com"), 2).collect(Collectors.toList());
+            assertThat(hits.size(), is(1));
+            assertThat(hits.get(0), equalTo(quad));
 
-        List<Quad> hits;
-        hits = index.findQuadsWithSubject(toIRI("https://example.com"), 2).collect(Collectors.toList());
-        assertThat(hits.size(), is(1));
-        assertThat(hits.get(0), equalTo(quad));
+            hits = index.findQuadsWithPredicate(RefNodeConstants.HAS_VERSION, 2).collect(Collectors.toList());
+            assertThat(hits.size(), is(1));
+            assertThat(hits.get(0), equalTo(quad));
 
-        hits = index.findQuadsWithPredicate(RefNodeConstants.HAS_VERSION, 2).collect(Collectors.toList());
-        assertThat(hits.size(), is(1));
-        assertThat(hits.get(0), equalTo(quad));
+            hits = index.findQuadsWithObject(toIRI("hash://sha256/blah"), 2).collect(Collectors.toList());
+            assertThat(hits.size(), is(1));
+            assertThat(hits.get(0), equalTo(quad));
 
-        hits = index.findQuadsWithObject(toIRI("hash://sha256/blah"), 2).collect(Collectors.toList());
-        assertThat(hits.size(), is(1));
-        assertThat(hits.get(0), equalTo(quad));
-
-        hits = index.findQuadsWithGraphName(toIRI("the:graph"), 2).collect(Collectors.toList());
-        assertThat(hits.size(), is(0));
+            hits = index.findQuadsWithGraphName(toIRI("the:graph"), 2).collect(Collectors.toList());
+            assertThat(hits.size(), is(0));
+        }
     }
 
+    @SuppressWarnings("resource")
+    @Test
+    public void noHits() throws IOException {
+        QuadIndex index = new QuadIndexImpl(createTempFolder());
+
+        List<Quad> hits = index.findQuadsWithSubject(toIRI("https://example.com"), 2).collect(Collectors.toList());
+
+        assertThat(hits.size(), is(0));
+    }
     private static File createTempFolder() throws IOException {
         TemporaryFolder tmp = new TemporaryFolder();
         tmp.create();

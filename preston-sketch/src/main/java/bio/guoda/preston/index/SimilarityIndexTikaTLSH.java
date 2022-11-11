@@ -24,12 +24,14 @@ public class SimilarityIndexTikaTLSH implements Closeable {
 
     private static final String FIELD_SHA256 = "sha256";
     private static final String FIELD_TIKA_TLSH = "tika-tlsh";
+    private final Directory indexStore;
 
     private SearchIndex index;
 
     @Override
     public void close() throws IOException {
         index.close();
+        indexStore.close();
     }
 
     public static class ScoredHit {
@@ -55,7 +57,7 @@ public class SimilarityIndexTikaTLSH implements Closeable {
         };
 
         try {
-            Directory indexStore = FSDirectory.open(indexDir.toPath());
+            indexStore = FSDirectory.open(indexDir.toPath());
             index = new SearchIndexImpl(indexStore, analyzer, new TLSHSimilarity());
         } catch (IOException e) {
             throw new RuntimeException("Failed create an on-disk search index.", e);
