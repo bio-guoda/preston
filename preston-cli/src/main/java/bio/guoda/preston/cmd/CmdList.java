@@ -57,7 +57,7 @@ public class CmdList extends LoggingPersisting implements Runnable {
         }
 
         if (!foundHistory.get()) {
-            LOG.warn("No history found. Suggest to update first.");
+            LOG.warn("No provenance found related to [" + getProvenanceAnchor().getIRIString() + "]");
         }
     }
 
