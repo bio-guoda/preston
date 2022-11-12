@@ -19,6 +19,16 @@ public class AnchorUtil {
         return head;
     }
 
+    public static AtomicReference<IRI> findHeadOrThrow(Persisting persisting) {
+        AtomicReference<IRI> head = findHead(persisting);
+
+        if (head.get() == null) {
+            throw new RuntimeException("Cannot find most recent version: no provenance logs found.");
+        }
+
+        return head;
+    }
+
     private static void resolveHead(AtomicReference<IRI> head, Persisting persisting) {
         ProvenanceTracer provenanceTracer = persisting.getProvenanceTracer();
         IRI provenanceAnchor = persisting.getProvenanceAnchor();
@@ -39,10 +49,6 @@ public class AnchorUtil {
                     );
         } catch (IOException e) {
             throw new RuntimeException("Failed to get version history.", e);
-        }
-
-        if (head.get() == null) {
-            throw new RuntimeException("Cannot find most recent version: no provenance logs found.");
         }
     }
 }

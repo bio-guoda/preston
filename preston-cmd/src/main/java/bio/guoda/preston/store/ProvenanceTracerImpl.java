@@ -38,7 +38,9 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
 
         final Queue<IRI> statementQueue =
                 new ConcurrentLinkedQueue<IRI>() {{
-                    add(provenanceAnchor);
+                    if (HashKeyUtil.isValidHashKey(provenanceAnchor)) {
+                        add(provenanceAnchor);
+                    }
                 }};
 
 
