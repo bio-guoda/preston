@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -39,7 +38,7 @@ public class ResourcesHTTP {
 
     public static InputStream asInputStreamOfflineOnly(IRI dataIRI) throws IOException {
         InputStream is = null;
-        URI uri = Paths.get(dataIRI.getIRIString()).toUri();
+        URI uri = URI.create(dataIRI.getIRIString());
         if (StringUtils.equals("file", uri.getScheme())
                 && new File(uri).exists()) {
             is = uri.toURL().openStream();

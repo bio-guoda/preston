@@ -84,7 +84,7 @@ public class CmdHistoryTest {
         return toURI(dataDir);
     }
 
-    private URI toURI(File dataDir) {
+    private URI toURI(File dataDir) throws URISyntaxException {
         return Paths.get(dataDir.toURI()).toUri();
     }
 
