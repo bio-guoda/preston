@@ -2,7 +2,6 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.util.URIUtil;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,11 +10,9 @@ import org.junit.rules.TemporaryFolder;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 
