@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -84,7 +85,7 @@ public class CmdHistoryTest {
     }
 
     private URI toURI(File dataDir) throws URISyntaxException {
-        return new URI("file", dataDir.getAbsolutePath(), null);
+        return Paths.get(dataDir.toURI()).toUri();
     }
 
 

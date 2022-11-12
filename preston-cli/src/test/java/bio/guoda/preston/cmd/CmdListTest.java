@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.jetty.util.URIUtil;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,6 +15,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,7 +40,8 @@ public class CmdListTest {
 
         assertThat(dataDir.getName(), Is.is("datacontent"));
 
-        cmd.setRemotes(Collections.singletonList(new URI("file", dataDir.getAbsolutePath(), null)));
+
+        cmd.setRemotes(Collections.singletonList(Paths.get(dataDir.toURI()).toUri()));
 
         cmd.setLocalDataDir(folder.newFolder("data").getAbsolutePath());
         cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b"));
