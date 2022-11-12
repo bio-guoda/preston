@@ -37,7 +37,7 @@ public class CmdListTest {
 
         assertThat(dataDir.getName(), Is.is("datacontent"));
 
-        cmd.setRemotes(Collections.singletonList(URI.create("file://" + dataDir.getAbsolutePath())));
+        cmd.setRemotes(Collections.singletonList(dataDir.toURI()));
 
         cmd.setLocalDataDir(folder.newFolder("data").getAbsolutePath());
         cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b"));
