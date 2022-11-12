@@ -69,7 +69,7 @@ public class CmdHistoryTest {
 
         assertThat(dataDir.getName(), Is.is("dataindex"));
 
-        return URI.create("file://" + dataDir.getAbsolutePath());
+        return dataDir.toURI();
     }
 
     private URI getContentOnly() throws URISyntaxException {
@@ -80,7 +80,7 @@ public class CmdHistoryTest {
 
         assertThat(dataDir.getName(), Is.is("datacontent"));
 
-        return URI.create("file://" + dataDir.getAbsolutePath());
+        return dataDir.toURI();
     }
 
 
