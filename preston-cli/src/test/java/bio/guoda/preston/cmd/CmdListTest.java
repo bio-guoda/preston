@@ -45,6 +45,7 @@ public class CmdListTest {
 
         cmd.setLocalDataDir(folder.newFolder("data").getAbsolutePath());
         cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b"));
+        cmd.setCacheEnabled(false);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmd.setOutputStream(outputStream);

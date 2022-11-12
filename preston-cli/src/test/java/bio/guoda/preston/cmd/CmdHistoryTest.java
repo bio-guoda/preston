@@ -31,6 +31,7 @@ public class CmdHistoryTest {
 
         URI indexAndDataRemote = getContentOnly();
         cmd.setRemotes(Collections.singletonList(indexAndDataRemote));
+        cmd.setCacheEnabled(false);
 
         cmd.setLocalDataDir(folder.newFolder("data").getAbsolutePath());
         cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b"));
@@ -48,14 +49,16 @@ public class CmdHistoryTest {
 
     @Test
     public void traceDescendants() throws IOException, URISyntaxException {
-        CmdHistory cmdHistory = new CmdHistory();
-        cmdHistory.setRemotes(Arrays.asList(getIndexAndContentRemote(), getContentOnly()));
-        cmdHistory.setLocalDataDir(folder.newFolder("data").getAbsolutePath());
+        CmdHistory cmd = new CmdHistory();
+        cmd.setRemotes(Arrays.asList(getIndexAndContentRemote(), getContentOnly()));
+        cmd.setLocalDataDir(folder.newFolder("data").getAbsolutePath());
+        cmd.setCacheEnabled(false);
+
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        cmdHistory.setOutputStream(outputStream);
+        cmd.setOutputStream(outputStream);
 
-        cmdHistory.run();
+        cmd.run();
 
         assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is(
                 "<hash://sha256/688a0a1bebf9266b310df9c121fea4c6977b10cf473705af0bdd154f8bc0aa34> <http://www.w3.org/ns/prov#wasDerivedFrom> <hash://sha256/4a433c2a09146e4df5e860a26cf3ecd0d484ec372674b192b3963350e928d697> .\n" +
