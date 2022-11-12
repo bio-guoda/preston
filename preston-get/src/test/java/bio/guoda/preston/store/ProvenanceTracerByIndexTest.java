@@ -38,7 +38,7 @@ public class ProvenanceTracerByIndexTest {
             @Override
             public InputStream get(IRI uri) throws IOException {
                 InputStream is = null;
-                if (uri.getIRIString().equals("some:iri")) {
+                if (uri.getIRIString().equals(getFirst())) {
                     is = IOUtils.toInputStream("<foo:bar> <foo:bar> <foo:bar> .", StandardCharsets.UTF_8);
                 }
                 return is;
@@ -58,7 +58,7 @@ public class ProvenanceTracerByIndexTest {
         });
 
         assertThat(iris.size(), Is.is(1));
-        assertThat(iris.get(0), Is.is(RefNodeFactory.toIRI("some:iri")));
+        assertThat(iris.get(0), Is.is(RefNodeFactory.toIRI(getFirst())));
     }
 
     @Test
@@ -119,9 +119,13 @@ public class ProvenanceTracerByIndexTest {
         IRI iri = null;
         if (RefNodeConstants.BIODIVERSITY_DATASET_GRAPH.equals(queryKey.getKey())
                 && RefNodeConstants.HAS_VERSION.equals(queryKey.getValue())) {
-            iri = RefNodeFactory.toIRI("some:iri");
+            iri = RefNodeFactory.toIRI(getFirst());
         }
         return iri;
+    }
+
+    private String getFirst() {
+        return "hash://sha256/fff51620a22110d6ebb73809df89c6321e79b4483dd2eb84ea77948505561463";
     }
 
     private String getOlder() {

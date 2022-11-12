@@ -31,7 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ReplayUtilTest {
 
     private static final IRI TEST_KEY_IRI = RefNodeFactory.toIRI("hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03");
-    private static final IRI TEST_KEY_NEWER_IRI = RefNodeFactory.toIRI("test:key-new");
+    private static final IRI TEST_KEY_NEWER_IRI = RefNodeFactory.toIRI("hash://sha256/aaa1b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03");
 
     @Test
     public void replay() {
