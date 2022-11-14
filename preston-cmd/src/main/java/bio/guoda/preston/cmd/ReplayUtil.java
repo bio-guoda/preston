@@ -24,7 +24,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toBlank;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
@@ -79,17 +78,20 @@ public final class ReplayUtil {
         }
     }
 
-    public static void replay(StatementsListener listener, Persisting persisting) {
+    public static void replay(StatementsListener listener,
+                              Persisting persisting) {
         replay(listener, persisting, persisting.getProvenanceTracer());
     }
 
-    public static void replay(StatementsListener listener, Persisting persisting, ProvenanceTracer provenanceTracer) {
+    static void replay(StatementsListener listener,
+                       Persisting persisting,
+                       ProvenanceTracer provenanceTracer) {
         BlobStoreReadOnly blobstoreReadOnly = getBlobStore(persisting);
 
-        attemptReplay(listener, persisting, provenanceTracer, blobstoreReadOnly);
+        attemptReplay(listener, persisting, provenanceTracer, blobstoreReadOnly, persisting.getProvenanceAnchor());
     }
 
-    public static BlobStoreReadOnly getBlobStore(Persisting persisting) {
+    static BlobStoreReadOnly getBlobStore(Persisting persisting) {
         return new BlobStoreAppendOnly(
                     persisting.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())),
                     true,
@@ -100,13 +102,14 @@ public final class ReplayUtil {
     static void attemptReplay(StatementsListener listener,
                               ProcessorState state,
                               ProvenanceTracer provenanceTracer,
-                              BlobStoreReadOnly blobstoreReadOnly) {
+                              BlobStoreReadOnly blobstoreReadOnly,
+                              IRI provAnchor) {
         StatementIRIProcessor processor = new StatementIRIProcessor(listener);
         processor.setIriProcessor(new IRIFixingProcessor());
 
         attemptReplay(
                 blobstoreReadOnly,
-                new CmdContext(state, processor),
+                new CmdContext(state, provAnchor, processor),
                 provenanceTracer
         );
     }
