@@ -32,10 +32,10 @@ public class AnchorUtil {
     private static void resolveHead(AtomicReference<IRI> head, Persisting persisting) {
         ProvenanceTracer provenanceTracer = persisting.getProvenanceTracer();
         IRI provenanceAnchor = persisting.getProvenanceAnchor();
-        findHead(head, provenanceTracer, provenanceAnchor);
+        findHead(head, provenanceTracer, provenanceAnchor, persisting);
     }
 
-    public static void findHead(AtomicReference<IRI> head, ProvenanceTracer provenanceTracer, IRI provenanceAnchor) {
+    private static void findHead(AtomicReference<IRI> head, ProvenanceTracer provenanceTracer, IRI provenanceAnchor, Persisting persisting) {
         try {
             provenanceTracer
                     .trace(
@@ -44,6 +44,7 @@ public class AnchorUtil {
                                 IRI iri = VersionUtil.mostRecentVersionForStatement(statement);
                                 if (iri != null) {
                                     head.set(iri);
+                                    persisting.stopProcessing();
                                 }
                             }
                     );
