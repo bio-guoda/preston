@@ -39,7 +39,7 @@ public class CompressedStreamHandler implements ContentStreamHandler {
             String compressionFormat = CompressorStreamFactory.detect(in);
             // do not close this stream; it would also close the "in" stream
             CompressorInputStream compressedInputStream = new CompressorStreamFactory()
-                    .createCompressorInputStream(in);
+                    .createCompressorInputStream(compressionFormat, in, true);
             return Pair.of(compressedInputStream, compressionFormat);
         } catch (CompressorException e) {
             return null;
