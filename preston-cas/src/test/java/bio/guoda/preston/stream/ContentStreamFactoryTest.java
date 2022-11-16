@@ -67,6 +67,32 @@ public class ContentStreamFactoryTest {
     }
 
     @Test
+    public void contentStreamForGZIPEmbeddedContent() throws IOException {
+        ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("gz:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/something.txt"));
+        InputStream inputStream = factory.create(getClass().getResourceAsStream("foo.txt.gz"));
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("bar"));
+    }
+
+    @Test
+    public void contentStreamForGZIPEmbeddedContentManyLines() throws IOException {
+        ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("gz:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/something.txt"));
+        InputStream inputStream = factory.create(getClass().getResourceAsStream("foo2.txt.gz"));
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("bar\nbar2\nbar3"));
+    }
+
+    @Test
+    public void contentStreamForGZIPEmbeddedConcatContentManyLines() throws IOException {
+        ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("gz:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/something.txt"));
+        InputStream inputStream = factory.create(getClass().getResourceAsStream("foo4.txt.gz"));
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is(
+                "bar\n" +
+                "bar2\n" +
+                "bar3bar\n" +
+                "bar2\n" +
+                "bar3"));
+    }
+
+    @Test
     public void contentStreamForDoubleEmbeddedContent() throws IOException {
         ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("zip:zip:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/level2.zip!/level2.txt"));
         InputStream inputStream = factory.create(getZipArchiveStream());
