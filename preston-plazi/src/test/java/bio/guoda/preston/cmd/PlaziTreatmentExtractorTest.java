@@ -24,6 +24,7 @@ import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 
 public class PlaziTreatmentExtractorTest {
@@ -186,6 +187,37 @@ public class PlaziTreatmentExtractorTest {
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(),
                 is("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
         assertTreatmentValues(taxonNode);
+
+    }
+
+    @Test
+    public void streamSingleMSWTreatmentFromXML() throws IOException {
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                URL resource = getClass().getResource("/bio/guoda/preston/cmd/0021FE787113F56516F6F69DFBCC22DC.xml");
+                IRI iri = toIRI(resource.toExternalForm());
+
+                if (StringUtils.equals("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1", key.getIRIString())) {
+                    try {
+                        return new FileInputStream(new File(URI.create(iri.getIRIString())));
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return null;
+            }
+        };
+
+        JsonNode taxonNode = retrieveFirstJson(blobStore);
+
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(),
+                is("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("application/plazi+xml"));
+        assertThat(taxonNode.get("docId").asText(), is("0021FE787113F56516F6F69DFBCC22DC"));
+        assertThat(taxonNode.get("verbatimText").asText(), is("Subfamily Zenkerellinae Matschie, 1898 . Sitzb. Ges. Naturi. Fr. Berlin, 4:26 . SYNONYMS: Idiurinae Miller and Gidley, 1918 ."));
+        assertThat(taxonNode.get("interpretedGenus"), is(nullValue()));
+        assertThat(taxonNode.get("interpretedSpecies"), is(nullValue()));
 
     }
 

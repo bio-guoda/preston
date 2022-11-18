@@ -1,0 +1,66 @@
+<document ID-ISBN="1-56098-217-9" approvalRequired="3" approvalRequired_for_document="2" approvalRequired_for_originalDoi="1" checkinTime="1667534033858" checkinUser="GgServerImporter" docAuthor="Fritz Dieterlen" docDate="1993" docId="0021FE787113F56516F6F69DFBCC22DC" docLanguage="en" docName="MammalSpeciesofTheWorld.1993.Anomaluridae.757-758.pdf.imd" docOrigin="Mammal Species of the World (2 nd Edition), Washington and London: Smithsonian Institution Press" docTitle="Zenkerellinae Matschie 1898" docType="treatment" docVersion="1" lastPageNumber="757" masterDocId="FC1886007113F5651623FFEDFFE52B18" masterDocTitle="Family Anomaluridae" masterLastPageNumber="758" masterPageNumber="757" pageNumber="757" updateTime="1667534104073" updateUser="GgServerImporter">
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:titleInfo>
+<mods:title>Family Anomaluridae</mods:title>
+</mods:titleInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Fritz Dieterlen</mods:namePart>
+</mods:name>
+<mods:typeOfResource>text</mods:typeOfResource>
+<mods:relatedItem type="host">
+<mods:originInfo>
+<mods:dateIssued>1993</mods:dateIssued>
+<mods:publisher>Smithsonian Institution Press</mods:publisher>
+<mods:place>
+<mods:placeTerm>Washington and London</mods:placeTerm>
+</mods:place>
+</mods:originInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Editor</mods:roleTerm>
+</mods:role>
+<mods:namePart>Don E. Wilson</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Editor</mods:roleTerm>
+</mods:role>
+<mods:namePart>DeeAnn M. Reeder</mods:namePart>
+</mods:name>
+<mods:titleInfo>
+<mods:title>Mammal Species of the World (2 nd Edition)</mods:title>
+</mods:titleInfo>
+<mods:part>
+<mods:extent unit="page">
+<mods:start>757</mods:start>
+<mods:end>758</mods:end>
+</mods:extent>
+</mods:part>
+</mods:relatedItem>
+<mods:classification>book chapter</mods:classification>
+<mods:identifier type="ISBN">1-56098-217-9</mods:identifier>
+</mods:mods>
+<treatment LSID="urn:lsid:plazi:treatment:0021FE787113F56516F6F69DFBCC22DC" httpUri="http://treatment.plazi.org/id/0021FE787113F56516F6F69DFBCC22DC" lastPageNumber="757" pageId="0" pageNumber="757">
+<subSubSection box="[213,1504,2416,2458]" pageId="0" pageNumber="757" type="nomenclature">
+<paragraph blockId="0.[213,1504,2416,2500]" box="[213,1504,2416,2458]" pageId="0" pageNumber="757">
+Subfamily 
+<treatmentCitation author="Matschie" authority="Matschie, 1898" authorityName="Matschie" authorityYear="1898" box="[407,1496,2416,2458]" class="Mammalia" family="Anomaluridae" journal="Sitzb. Ges. Naturi. Fr. Berlin" kingdom="Animalia" order="Rodentia" page="26" pageId="0" pageNumber="757" phylum="Chordata" rank="subFamily" subFamily="Zenkerellinae" title="Zenkerellinae" volume="4" year="1898">
+<taxonomicName authority="Matschie, 1898" authorityName="Matschie" authorityYear="1898" box="[407,914,2416,2458]" class="Mammalia" family="Anomaluridae" kingdom="Animalia" order="Rodentia" pageId="0" pageNumber="757" phylum="Chordata" rank="subFamily" subFamily="Zenkerellinae">Zenkerellinae Matschie, 1898</taxonomicName>
+. 
+<bibCitation author="Matschie" box="[930,1496,2416,2458]" journal="Sitzb. Ges. Naturi. Fr. Berlin" pageId="0" pageNumber="757" pagination="26" title="Zenkerellinae" volume="4" year="1898">Sitzb. Ges. Naturi. Fr. Berlin, 4:26</bibCitation>
+</treatmentCitation>
+.
+</paragraph>
+</subSubSection>
+<subSubSection box="[295,1065,2462,2500]" pageId="0" pageNumber="757" type="synonym_list">
+<paragraph blockId="0.[213,1504,2416,2500]" box="[295,1065,2462,2500]" pageId="0" pageNumber="757">
+SYNONYMS: Idiurinae 
+<bibRefCitation author="Miller, G. S., Jr. &amp; J. W. Gidley" box="[651,1055,2462,2500]" pageId="0" pageNumber="757" refId="ref242298" refString="Miller, G. S., Jr., and J. W. Gidley. 1918. Synopsis of the supergeneric groups of rodents. Journal of the Washington Academy of Sciences, 8: 431 - 448." year="1918">Miller and Gidley, 1918</bibRefCitation>
+.
+</paragraph>
+</subSubSection>
+</treatment>
+</document>
