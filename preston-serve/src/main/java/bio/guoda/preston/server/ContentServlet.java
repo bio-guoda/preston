@@ -69,20 +69,24 @@ public class ContentServlet extends HttpServlet {
         if (iri == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            log("resolving [" + iri.getIRIString() + "]");
-            CmdGet cmdGet = initCmdGet();
-            cmdGet.setDisableProgress(true);
-            cmdGet.setContentIdsOrAliases(Collections.singletonList(iri));
-            cmdGet.setOutputStream(response.getOutputStream());
-            try {
-                cmdGet.run();
-                response.setStatus(HttpServletResponse.SC_OK);
-                log("response [" + iri.getIRIString() + "]");
-            } catch (Throwable th) {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                log("not found [" + iri.getIRIString() + "]");
-                throw th;
-            }
+            handleIri(response, iri);
+        }
+    }
+
+    protected void handleIri(HttpServletResponse response, IRI iri) throws IOException {
+        log("resolving [" + iri.getIRIString() + "]");
+        CmdGet cmdGet = initCmdGet();
+        cmdGet.setDisableProgress(true);
+        cmdGet.setContentIdsOrAliases(Collections.singletonList(iri));
+        cmdGet.setOutputStream(response.getOutputStream());
+        try {
+            cmdGet.run();
+            response.setStatus(HttpServletResponse.SC_OK);
+            log("response [" + iri.getIRIString() + "]");
+        } catch (Throwable th) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            log("not found [" + iri.getIRIString() + "]");
+            throw th;
         }
     }
 

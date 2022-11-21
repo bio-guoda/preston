@@ -9,6 +9,7 @@ import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import picocli.CommandLine;
 
+import javax.servlet.Servlet;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -31,6 +32,11 @@ public class CmdServe extends LoggingPersisting implements Runnable {
     )
     String host = "localhost";
 
+    @CommandLine.Option(
+            names = {"-m", "--mode"},
+            description = "mode of operation. Supported values: ${COMPLETION-CANDIDATES}.\""
+    )
+    ServerModes mode = ServerModes.content;
 
     @Override
     public void run() {
@@ -40,11 +46,12 @@ public class CmdServe extends LoggingPersisting implements Runnable {
         connector.setHost(host);
         server.setConnectors(new Connector[] {connector});
         ServletHandler servletHandler = new ServletHandler();
-        ServletHolder servletHolder = new ServletHolder(ContentServlet.class);
+        ServletHolder servletHolder = new ServletHolder(getServletClass());
         Map<String, String> properties = new TreeMap<String, String>() {{
             put(PropertyNames.PRESTON_PROPERTY_LOCAL_PATH, getLocalDataDir());
             put(PropertyNames.PRESTON_PROPERTY_REMOTE_PATH, StringUtils.join(getRemotes(), ","));
             put(PropertyNames.PRESTON_PROPERTY_CACHE_ENABLED, Boolean.toString(isCacheEnabled()));
+            put(PropertyNames.PRESTON_PROPERTY_TMP_PATH, getLocalTmpDir());
         }};
 
         servletHolder.setInitParameters(properties);
@@ -56,6 +63,16 @@ public class CmdServe extends LoggingPersisting implements Runnable {
             server.join();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private Class<? extends Servlet> getServletClass() {
+        switch (mode) {
+            case registry:
+                return RegistryServlet.class;
+            default:
+            case content:
+                return ContentServlet.class;
         }
     }
 
