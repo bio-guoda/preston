@@ -59,6 +59,8 @@ public class CmdIndexTest {
         assertThat(strings.get(14), startsWith(generation + " <http://www.w3.org/ns/prov#used> <hash://sha256/blabla>"));
         assertThat(strings.get(15), startsWith(generation + " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity>"));
         assertThat(strings.get(16), startsWith(generation + " <http://www.w3.org/ns/prov#wasInformedBy>"));
+
+        // Don't check the hash of the packaged index; Lucene index construction is not deterministic
         assertThat(strings.get(17), containsString(" <http://www.w3.org/ns/prov#wasGeneratedBy> " + generation));
         assertThat(strings.get(18), containsString("<http://www.w3.org/ns/prov#qualifiedGeneration> " + generation));
         assertThat(strings.get(19), startsWith(generation + " <http://www.w3.org/ns/prov#generatedAtTime>"));
