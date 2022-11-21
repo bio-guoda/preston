@@ -47,7 +47,9 @@ public class CmdIndex extends CmdAppend {
                       StatementsListener[] listeners) {
 
         IRI generation = toIRI(UUID.randomUUID());
-        File indexDir = getTmpDir().toPath().resolve(generation.getIRIString()).toFile();
+        File indexDir = getTmpDir().toPath().resolve(
+                generation.getIRIString().replaceFirst(URN_UUID_PREFIX, "")
+        ).toFile();
 
         StatementsListenerEmitterAdapter queueAsListenerEmitter = new StatementsListenerEmitterAdapter() {
             @Override
