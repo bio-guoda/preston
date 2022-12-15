@@ -52,7 +52,7 @@ public class ArchiveStreamHandler implements ContentStreamHandler {
         ArchiveEntry entry = null;
         try {
             while (shouldKeepProcessing() && (entry = in.getNextEntry()) != null) {
-                if (in.canReadEntryData(entry)) {
+                if (!entry.isDirectory() && in.canReadEntryData(entry)) {
                     IRI entryIri;
                     try {
                         entryIri = wrapIRI(archiveFormat, version, entry.getName());
