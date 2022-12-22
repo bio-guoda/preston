@@ -7,13 +7,11 @@ import java.io.InputStream;
 
 public class ValidatingKeyValueStreamContentAddressedFactory implements ValidatingKeyValueStreamFactory {
 
-    private final HashType type;
-
-    public ValidatingKeyValueStreamContentAddressedFactory(HashType type) {
-        this.type = type;
+    public ValidatingKeyValueStreamContentAddressedFactory() {
     }
     @Override
     public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
+        HashType type = HashKeyUtil.getHashTypeOrThrow(key);
         return new ValidatingKeyValueStreamContentAddressed(is, type);
     }
 }

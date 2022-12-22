@@ -7,14 +7,9 @@ import java.io.InputStream;
 
 public class ValidatingKeyValueStreamHashTypeIRIFactory implements ValidatingKeyValueStreamFactory {
 
-    private final HashType type;
-
-    public ValidatingKeyValueStreamHashTypeIRIFactory(HashType type) {
-        this.type = type;
-    }
-
     @Override
     public ValidatingKeyValueStream forKeyValueStream(IRI key, InputStream is) {
+        HashType type = HashKeyUtil.getHashTypeOrThrow(key);
         return new ValidatingKeyValueStreamHashTypeIRI(is, type);
     }
 }

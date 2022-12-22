@@ -26,7 +26,7 @@ public class CmdSketchDiff extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        BlobStoreAppendOnly blobStoreAppendOnly = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
+        BlobStoreAppendOnly blobStoreAppendOnly = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), true, getHashType());
         run(blobStoreAppendOnly);
     }
 

@@ -1,7 +1,6 @@
 
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
@@ -232,7 +231,7 @@ public class ProvenanceTracerImplTest {
 
         return new KeyValueStoreLocalFileSystem(tmpDir.getRoot(),
                 new KeyTo3LevelPath(dataDir.toURI()),
-                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256));
+                new ValidatingKeyValueStreamHashTypeIRIFactory());
     }
 
     @Test

@@ -93,7 +93,7 @@ public final class ReplayUtil {
 
     static BlobStoreReadOnly getBlobStore(Persisting persisting) {
         return new BlobStoreAppendOnly(
-                    persisting.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(persisting.getHashType())),
+                    persisting.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()),
                     true,
                     persisting.getHashType()
             );

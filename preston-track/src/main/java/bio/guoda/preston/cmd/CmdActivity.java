@@ -13,13 +13,9 @@ import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.HexaStore;
 import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.ProvenanceTracerImpl;
 import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
-import bio.guoda.preston.store.ProvenanceTracer;
-import bio.guoda.preston.store.ProvenanceTracerByIndex;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.VersionUtil;
-import bio.guoda.preston.util.MostRecentVersionListener;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -66,13 +62,13 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     @Override
     public void run() {
         KeyValueStore blobKeyValueStore = getKeyValueStore(
-                new ValidatingKeyValueStreamContentAddressedFactory(getHashType())
+                new ValidatingKeyValueStreamContentAddressedFactory()
         );
 
         BlobStore blobStore = new BlobStoreAppendOnly(blobKeyValueStore, true, getHashType());
 
         KeyValueStore provenanceIndex = getKeyValueStore(
-                new ValidatingKeyValueStreamHashTypeIRIFactory(getHashType())
+                new ValidatingKeyValueStreamHashTypeIRIFactory()
         );
 
         run(blobStore, new HexaStoreImpl(provenanceIndex, getHashType()));

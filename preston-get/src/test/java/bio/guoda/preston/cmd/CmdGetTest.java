@@ -9,7 +9,6 @@ import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,7 +19,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
@@ -68,7 +66,7 @@ public class CmdGetTest {
         cmdGet.setRemotes(Collections.singletonList(uri));
         cmdGet.setContentIdsOrAliases(Collections.singletonList(toIRI("line:zip:hash://sha256/52513781cd5668b6c570120ebc576c075c40db09786a0788e501d1b34e17c402!/name.tsv!/L1")));
 
-        BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(cmdGet.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(HashType.sha256)), true, HashType.sha256);
+        BlobStoreReadOnly blobStore = new BlobStoreAppendOnly(cmdGet.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), true, HashType.sha256);
 
 
         cmdGet.run(blobStore, cmdGet.getContentIdsOrAliases());

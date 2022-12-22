@@ -33,7 +33,7 @@ public class CmdClone extends LoggingPersisting implements Runnable {
     @Override
     public void run() {
         KeyValueStore keyValueStore = getKeyValueStore(
-                new ValidatingKeyValueStreamContentAddressedFactory(getHashType())
+                new ValidatingKeyValueStreamContentAddressedFactory()
         );
 
         CloneUtil.clone(

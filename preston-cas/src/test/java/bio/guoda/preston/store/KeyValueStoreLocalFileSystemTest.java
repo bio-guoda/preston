@@ -63,7 +63,7 @@ public class KeyValueStoreLocalFileSystemTest {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
                 new File(path.toFile(), "tmp"),
                 new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()),
-                new ValidatingKeyValueStreamContentAddressedFactory(type));
+                new ValidatingKeyValueStreamContentAddressedFactory());
 
         IRI someValueKey = RefNodeFactory.toIRI("hash://sha256/ab3d07f3169ccbd0ed6c4b45de21519f9f938c72d24124998aab949ce83bb51b");
         assertNull(filePersistence.get(someValueKey));
@@ -93,7 +93,7 @@ public class KeyValueStoreLocalFileSystemTest {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
                 new File(path.toFile(), "tmp"),
                 new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()),
-                new ValidatingKeyValueStreamContentAddressedFactory(type));
+                new ValidatingKeyValueStreamContentAddressedFactory());
         IRI somethingIRI = RefNodeFactory.toIRI("something");
         filePersistence.get(somethingIRI);
     }
@@ -104,7 +104,7 @@ public class KeyValueStoreLocalFileSystemTest {
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
                 new File(path.toFile(), "tmp"),
                 new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()),
-                new ValidatingKeyValueStreamContentAddressedFactory(type));
+                new ValidatingKeyValueStreamContentAddressedFactory());
         IRI somethingIRI = RefNodeFactory.toIRI("something");
         filePersistence.put(somethingIRI, IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
     }

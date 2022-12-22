@@ -1,7 +1,6 @@
 package bio.guoda.preston.excel;
 
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.cmd.LogTypes;
 import bio.guoda.preston.cmd.LoggingPersisting;
 import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
@@ -39,7 +38,7 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
     @Override
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
-                = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
+                = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), true, getHashType());
         run(resolvingBlobStore(blobStoreAppendOnly));
 
     }

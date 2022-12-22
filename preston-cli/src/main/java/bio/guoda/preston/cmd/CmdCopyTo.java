@@ -87,7 +87,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     private void generateJekyllSiteContent(File target, ProvenanceTracer provenanceTracer) {
         final BlobStoreAppendOnly provenanceLogStore
-                = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(getHashType())),
+                = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()),
                 true,
                 getHashType()
         );
@@ -124,9 +124,9 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     private void copyAll(File target, File tmp, ProvenanceTracer provenanceTracer) {
         KeyValueStore copyingKeyValueStore = new KeyValueStoreCopying(
-                getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(getHashType())),
+                getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()),
                 new KeyValueStoreLocalFileSystem(tmp, getKeyToPath(target),
-                        new ValidatingKeyValueStreamContentAddressedFactory(getHashType())));
+                        new ValidatingKeyValueStreamContentAddressedFactory()));
 
         CloneUtil.clone(copyingKeyValueStore,
                 copyingKeyValueStore,
@@ -146,7 +146,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
         CloneUtil.clone(
                 new NullKeyValueStore(),
-                getKeyValueStore(new ValidatingKeyValueStreamHashTypeIRIFactory(getHashType())),
+                getKeyValueStore(new ValidatingKeyValueStreamHashTypeIRIFactory()),
                 getHashType(),
                 provenanceTracer, BIODIVERSITY_DATASET_GRAPH
         );
@@ -154,15 +154,15 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     private KeyValueStore getCopyingKeyValueStore(File target, File tmp) {
         return new KeyValueStoreCopying(
-                getKeyValueStore(new ValidatingKeyValueStreamHashTypeIRIFactory(getHashType())),
+                getKeyValueStore(new ValidatingKeyValueStreamHashTypeIRIFactory()),
                 new KeyValueStoreLocalFileSystem(tmp, getKeyToPath(target),
-                        new ValidatingKeyValueStreamHashTypeIRIFactory(getHashType())));
+                        new ValidatingKeyValueStreamHashTypeIRIFactory()));
     }
 
     private void copyProvLogsOnly(File target, File tmp, ProvenanceTracer provenanceTracer) {
         KeyValueStore copyingKeyValueStoreProv = new KeyValueStoreCopying(
-                getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(getHashType())),
-                new KeyValueStoreLocalFileSystem(tmp, getKeyToPath(target), new ValidatingKeyValueStreamContentAddressedFactory(getHashType())));
+                getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()),
+                new KeyValueStoreLocalFileSystem(tmp, getKeyToPath(target), new ValidatingKeyValueStreamContentAddressedFactory()));
 
         CloneUtil.clone(
                 new NullKeyValueStore(),
@@ -174,14 +174,14 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     private void copyDataOnly(File target, File tmp, ProvenanceTracer provenanceTracer) {
         KeyValueStore copyingKeyValueStoreBlob = new KeyValueStoreCopying(
-                getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(getHashType())),
+                getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()),
                 new KeyValueStoreLocalFileSystem(tmp,
                         getKeyToPath(target),
-                        new ValidatingKeyValueStreamContentAddressedFactory(getHashType())));
+                        new ValidatingKeyValueStreamContentAddressedFactory()));
 
         CloneUtil.clone(
                 copyingKeyValueStoreBlob,
-                getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(getHashType())),
+                getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()),
                 getHashType(),
                 provenanceTracer, BIODIVERSITY_DATASET_GRAPH);
     }

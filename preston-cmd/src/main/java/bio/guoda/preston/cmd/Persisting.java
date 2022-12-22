@@ -179,7 +179,7 @@ public class Persisting extends PersistingLocal {
     private Stream<KeyValueStoreReadOnly> tarGzRemotePathSupport() {
         return getRemotes().stream().map(uri ->
                 isCacheEnabled()
-                        ? this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(getHashType())))
+                        ? this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()))
                         : this.remoteWithTarGz(uri));
     }
 

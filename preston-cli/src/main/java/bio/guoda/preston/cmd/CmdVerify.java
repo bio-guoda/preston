@@ -51,7 +51,7 @@ public class CmdVerify extends Persisting implements Runnable {
                 = new HashGeneratorFactory().create(getHashType());
 
         final BlobStore blobStore
-                = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory(getHashType())), true, getHashType());
+                = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), true, getHashType());
 
         Map<String, VerificationState> verifiedMap = new TreeMap<>();
 

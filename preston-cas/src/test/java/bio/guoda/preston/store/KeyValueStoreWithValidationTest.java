@@ -1,6 +1,5 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -24,7 +23,7 @@ public class KeyValueStoreWithValidationTest {
 
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
-                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256),
+                new ValidatingKeyValueStreamHashTypeIRIFactory(),
                 staging,
                 verified,
                 backing
@@ -50,7 +49,7 @@ public class KeyValueStoreWithValidationTest {
         KeyValueStore backing = TestUtil.getTestPersistence();
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
-                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256),
+                new ValidatingKeyValueStreamHashTypeIRIFactory(),
                 staging,
                 verified,
                 backing);
@@ -77,7 +76,7 @@ public class KeyValueStoreWithValidationTest {
         KeyValueStore backing = TestUtil.getTestPersistence();
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
-                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256),
+                new ValidatingKeyValueStreamHashTypeIRIFactory(),
                 staging,
                 verified,
                 backing);
@@ -108,7 +107,7 @@ public class KeyValueStoreWithValidationTest {
         KeyValueStore backing = TestUtil.getTestPersistence();
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
-                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256),
+                new ValidatingKeyValueStreamHashTypeIRIFactory(),
                 staging,
                 verified,
                 backing);
@@ -135,7 +134,7 @@ public class KeyValueStoreWithValidationTest {
         KeyValueStore backing = TestUtil.getTestPersistence();
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
-                new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256),
+                new ValidatingKeyValueStreamHashTypeIRIFactory(),
                 staging,
                 verified,
                 backing);

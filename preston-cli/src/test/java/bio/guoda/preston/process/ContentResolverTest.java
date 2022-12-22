@@ -50,7 +50,7 @@ public class ContentResolverTest {
         tempDir = Files.createTempDirectory(Paths.get("target/"), "caching");
         datasetDir = Files.createTempDirectory(Paths.get("target/"), "datasets");
         HashType type = HashType.sha256;
-        ValidatingKeyValueStreamContentAddressedFactory keyValueStreamFactory = new ValidatingKeyValueStreamContentAddressedFactory(type);
+        ValidatingKeyValueStreamContentAddressedFactory keyValueStreamFactory = new ValidatingKeyValueStreamContentAddressedFactory();
         KeyValueStoreLocalFileSystem persistence = new KeyValueStoreLocalFileSystem(tempDir.toFile(), new KeyTo3LevelPath(datasetDir.toFile().toURI()), keyValueStreamFactory);
         this.blobStore = new BlobStoreAppendOnly(persistence, true, type);
     }

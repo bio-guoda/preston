@@ -97,7 +97,7 @@ public class PersistingLocal extends Cmd {
 
     private ProvenanceTracer getTracerOfDescendants() {
         KeyValueStore keyValueStore = getKeyValueStore(
-                new ValidatingKeyValueStreamHashTypeIRIFactory(getHashType())
+                new ValidatingKeyValueStreamHashTypeIRIFactory()
         );
         return getTracerOfDescendants(keyValueStore);
     }
@@ -113,7 +113,7 @@ public class PersistingLocal extends Cmd {
 
     private ProvenanceTracer getTracerOfOrigins() {
         KeyValueStore keyValueStore = getKeyValueStore(
-                new ValidatingKeyValueStreamContentAddressedFactory(getHashType())
+                new ValidatingKeyValueStreamContentAddressedFactory()
         );
         return new ProvenanceTracerImpl(keyValueStore, this);
     }
