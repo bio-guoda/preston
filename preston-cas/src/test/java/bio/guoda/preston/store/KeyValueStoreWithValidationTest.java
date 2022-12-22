@@ -32,10 +32,7 @@ public class KeyValueStoreWithValidationTest {
         try {
             keyStore.put(RefNodeFactory.toIRI("foo:bar"), IOUtils.toInputStream("hello", StandardCharsets.UTF_8));
         } catch (IOException ex) {
-            assertThat(ex.getMessage(), Is.is(
-                    "invalid results received for query [foo:bar] because [invalid key length: expected results for query [foo:bar] to be [78] long, but got result with length [5] instead" +
-                            ", and because " +
-                            "invalid key pattern: expected results for query key [foo:bar] to match pattern [hash://sha256/([a-fA-F0-9]){64}]]")
+            assertThat(ex.getMessage(), Is.is("found unsupported or invalid hash key [<foo:bar>]")
             );
             throw ex;
         }

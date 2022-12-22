@@ -5,6 +5,7 @@ import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -128,6 +129,14 @@ public class HashKeyUtil {
         HashType hashTypeProvided = hashTypeFor(key);
         if (hashTypeProvided == null) {
             throw new IllegalArgumentException("found unsupported or invalid hash key [" + key + "]");
+        }
+        return hashTypeProvided;
+    }
+
+    public static HashType getHashTypeOrThrowIOException(IRI key) throws IOException {
+        HashType hashTypeProvided = hashTypeFor(key);
+        if (hashTypeProvided == null) {
+            throw new IOException("found unsupported or invalid hash key [" + key + "]");
         }
         return hashTypeProvided;
     }
