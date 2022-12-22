@@ -28,6 +28,13 @@ public class HashKeyUtilTest {
     }
 
     @Test
+    public void invalidHashURIUUID() {
+        String hashURIString = "urn:uuid:0659a54f-b713-4f86-a917-5be166a14110";
+        assertFalse(HashKeyUtil
+                .isValidHashKey(RefNodeFactory.toIRI(hashURIString)));
+    }
+
+    @Test
     public void invalidHashURI2() {
         String hashURIString = "foo:bar:e0c131ebf6ad2dce";
         assertFalse(HashKeyUtil

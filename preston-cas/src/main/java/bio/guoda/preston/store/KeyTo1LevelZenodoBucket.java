@@ -19,14 +19,15 @@ public class KeyTo1LevelZenodoBucket implements KeyToPath {
     @Override
     public URI toPath(IRI key) {
         URI path = null;
-        if (HashType.md5.equals(HashKeyUtil.hashTypeFor(key))) {
+        HashType type = HashKeyUtil.hashTypeFor(key);
+        if (HashType.md5.equals(type)) {
             URI fileURI = proxied.toPath(key);
             if (fileURI != null) {
                 String bucketEndpoint = parseZenodoBucketEndpoint(fileURI);
                 lastZenodoBucket.set(URI.create(bucketEndpoint));
             }
             path = fileURI;
-        } else {
+        } else if (type != null) {
             URI baseURI = lastZenodoBucket.get();
             if (baseURI != null) {
                 path = new KeyTo1LevelPath(baseURI)
@@ -48,7 +49,8 @@ public class KeyTo1LevelZenodoBucket implements KeyToPath {
 
     @Override
     public boolean supports(IRI key) {
-        return HashKeyUtil.isValidHashKey(key);
+        return  HashType.md5.equals(HashKeyUtil.hashTypeFor(key))
+                || (HashKeyUtil.isValidHashKey(key) && lastZenodoBucket.get() != null);
     }
 
 

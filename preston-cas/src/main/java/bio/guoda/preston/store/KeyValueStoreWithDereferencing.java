@@ -5,6 +5,7 @@ import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
 
 public class KeyValueStoreWithDereferencing implements KeyValueStoreReadOnly {
@@ -19,9 +20,13 @@ public class KeyValueStoreWithDereferencing implements KeyValueStoreReadOnly {
 
     @Override
     public InputStream get(IRI key) throws IOException {
-        return keyToPath.supports(key)
-                ? dereferencer.get(RefNodeFactory.toIRI(keyToPath.toPath(key)))
-                : null;
+        InputStream is = null;
+
+        if (keyToPath.supports(key)) {
+            URI uri = keyToPath.toPath(key);
+            is = uri == null ? null : dereferencer.get(RefNodeFactory.toIRI(uri));
+        }
+        return is;
     }
 
 

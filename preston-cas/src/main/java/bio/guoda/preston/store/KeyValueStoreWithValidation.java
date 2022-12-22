@@ -13,7 +13,6 @@ import java.io.InputStream;
 
 public class KeyValueStoreWithValidation implements KeyValueStore {
 
-
     private final ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory;
     private final KeyValueStore validated;
     private final KeyValueStoreWithRemove staging;
