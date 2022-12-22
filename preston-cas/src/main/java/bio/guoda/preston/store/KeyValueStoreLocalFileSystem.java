@@ -16,7 +16,11 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
 
     private final ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory;
 
-    public KeyValueStoreLocalFileSystem(File tmpDir, KeyToPath keyToPath, ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory) {
+    public KeyValueStoreLocalFileSystem(
+            File tmpDir,
+            KeyToPath keyToPath,
+            ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory
+    ) {
         super(keyToPath);
         this.tmpDir = tmpDir;
         this.validatingKeyValueStreamFactory = validatingKeyValueStreamFactory;
@@ -49,7 +53,6 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
             value.close();
         }
     }
-
 
 
     /**

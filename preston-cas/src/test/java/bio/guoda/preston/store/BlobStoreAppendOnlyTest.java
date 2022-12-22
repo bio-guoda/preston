@@ -31,7 +31,11 @@ public class BlobStoreAppendOnlyTest {
     }
 
     private void assertClosingStream(boolean expectedClosingStream) throws IOException {
-        BlobStore blobStore = new BlobStoreAppendOnly(TestUtil.getTestPersistence(), expectedClosingStream, HashType.sha256);
+        BlobStore blobStore = new BlobStoreAppendOnly(
+                TestUtil.getTestPersistence(),
+                expectedClosingStream,
+                HashType.sha256
+        );
         AtomicBoolean wasClosed = new AtomicBoolean(false);
         InputStream testing123 = IOUtils.toInputStream("testing123", StandardCharsets.UTF_8);
 

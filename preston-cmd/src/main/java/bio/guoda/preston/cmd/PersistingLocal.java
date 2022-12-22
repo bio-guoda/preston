@@ -80,7 +80,7 @@ public class PersistingLocal extends Cmd {
 
     protected KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory) {
         KeyValueStore primary = new KeyValueStoreLocalFileSystem(getTmpDir(), getKeyToPathLocal(), validatingKeyValueStreamFactory);
-        KeyValueStoreReadOnly fallback = new KeyValueStoreLocalFileSystem(getTmpDir(), new KeyTo5LevelPath(getDefaultDataDir().toURI(), getHashType()), validatingKeyValueStreamFactory);
+        KeyValueStoreReadOnly fallback = new KeyValueStoreLocalFileSystem(getTmpDir(), new KeyTo5LevelPath(getDefaultDataDir().toURI()), validatingKeyValueStreamFactory);
         return new KeyValueStoreWithFallback(primary, fallback);
     }
 
@@ -130,7 +130,7 @@ public class PersistingLocal extends Cmd {
 
     private void initIfNeeded() {
         if (keyToPathLocal == null) {
-            keyToPathLocal = new KeyTo3LevelPath(getDefaultDataDir().toURI(), getHashType());
+            keyToPathLocal = new KeyTo3LevelPath(getDefaultDataDir().toURI());
         }
     }
 

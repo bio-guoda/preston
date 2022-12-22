@@ -8,17 +8,15 @@ import java.net.URI;
 public class KeyTo1LevelPath extends KeyToPathAcceptsAnyValid {
 
     private final URI baseURI;
-    private HashType type;
 
 
-    public KeyTo1LevelPath(URI baseURI, HashType type) {
+    public KeyTo1LevelPath(URI baseURI) {
         this.baseURI = baseURI;
-        this.type = type;
     }
 
     @Override
     public URI toPath(IRI key) {
-        HashKeyUtil.validateHashKey(key);
+        HashType type = HashKeyUtil.getHashTypeOrThrow(key);
         int offset = type.getPrefix().length();
         String suffix = key.getIRIString().substring(offset);
         return HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);

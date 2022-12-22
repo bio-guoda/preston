@@ -136,9 +136,9 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     private KeyToPath getKeyToPath(File target) {
         if (HashPathPattern.directoryDepth0.equals(pathPattern)) {
-            return new KeyTo1LevelPath(target.toURI(), getHashType());
+            return new KeyTo1LevelPath(target.toURI());
         } else {
-            return new KeyTo3LevelPath(target.toURI(), getHashType());
+            return new KeyTo3LevelPath(target.toURI());
         }
     }
 

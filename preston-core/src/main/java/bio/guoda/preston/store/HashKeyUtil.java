@@ -123,4 +123,12 @@ public class HashKeyUtil {
             return contentHash;
         }
     }
+
+    public static HashType getHashTypeOrThrow(IRI key) {
+        HashType hashTypeProvided = hashTypeFor(key);
+        if (hashTypeProvided == null) {
+            throw new IllegalArgumentException("found unsupported or invalid hash key [" + key + "]");
+        }
+        return hashTypeProvided;
+    }
 }

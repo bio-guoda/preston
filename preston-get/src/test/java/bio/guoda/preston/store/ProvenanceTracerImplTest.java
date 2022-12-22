@@ -231,7 +231,7 @@ public class ProvenanceTracerImplTest {
         File dataDir = file.getParentFile().getParentFile().getParentFile();
 
         return new KeyValueStoreLocalFileSystem(tmpDir.getRoot(),
-                new KeyTo3LevelPath(dataDir.toURI(), HashType.sha256),
+                new KeyTo3LevelPath(dataDir.toURI()),
                 new ValidatingKeyValueStreamHashTypeIRIFactory(HashType.sha256));
     }
 

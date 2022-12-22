@@ -45,8 +45,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
-
 public class Persisting extends PersistingLocal {
 
     private static final String REMOTES = "Included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)";
@@ -108,9 +106,9 @@ public class Persisting extends PersistingLocal {
                 getRemotes()
                         .stream()
                         .flatMap(uri -> Stream.of(
-                                Pair.of(uri, new KeyToHashURI(uri, getHashType())),
-                                Pair.of(uri, new KeyTo3LevelPath(uri, getHashType())),
-                                Pair.of(uri, new KeyTo1LevelPath(uri, getHashType())),
+                                Pair.of(uri, new KeyToHashURI(uri)),
+                                Pair.of(uri, new KeyTo3LevelPath(uri)),
+                                Pair.of(uri, new KeyTo1LevelPath(uri)),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritagePath(uri)),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri)),
                                 Pair.of(uri, new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, getProgressListener()))),
@@ -149,7 +147,7 @@ public class Persisting extends PersistingLocal {
                 .map(remote -> {
                     KeyValueStoreLocalFileSystem staging = new KeyValueStoreLocalFileSystem(
                             getTmpDir(),
-                            new KeyTo1LevelPath(stagingDir.toURI(), getHashType()),
+                            new KeyTo1LevelPath(stagingDir.toURI()),
                             kvStreamFactory
                     );
                     KeyValueStore validated = super.getKeyValueStore(kvStreamFactory);

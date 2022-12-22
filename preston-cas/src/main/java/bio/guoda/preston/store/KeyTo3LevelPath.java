@@ -10,16 +10,15 @@ import java.util.Arrays;
 public class KeyTo3LevelPath extends KeyToPathAcceptsAnyValid {
 
     private final URI baseURI;
-    private final HashType type;
 
-    public KeyTo3LevelPath(URI baseURI, HashType type) {
+    public KeyTo3LevelPath(URI baseURI) {
         this.baseURI = baseURI;
-        this.type = type;
     }
 
     @Override
     public URI toPath(IRI key) {
-        HashKeyUtil.validateHashKey(key);
+
+        HashType type = HashKeyUtil.getHashTypeOrThrow(key);
 
         String keyStr = key.getIRIString();
         int offset = type.getPrefix().length();
