@@ -10,17 +10,12 @@ import org.apache.commons.rdf.api.IRI;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Arrays;
 
 public class KeyTo1LevelZenodoPath implements KeyToPath {
 
     public static final String ZENODO_API_PREFIX = "https://zenodo.org/api/records/?q=_files.checksum:";
     private final URI baseURI;
     private final Dereferencer<InputStream> deref;
-
-    public KeyTo1LevelZenodoPath(URI baseURI) {
-        this(baseURI, uri -> null);
-    }
 
     public KeyTo1LevelZenodoPath(URI baseURI, Dereferencer<InputStream> deref) {
         this.baseURI = detectPath(baseURI);

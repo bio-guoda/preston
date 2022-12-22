@@ -2,9 +2,8 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.process.IRIProcessor;
-import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.StatementProcessor;
+import bio.guoda.preston.util.UUIDUtil;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -17,14 +16,12 @@ import java.util.regex.Pattern;
 public class StatementIRIProcessor extends StatementProcessor {
 
 
-    public static final Pattern UUID_PATTERN = Pattern.compile("^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$");
-
     // URI validation regex as specified by RFC 3986: Appendix B.
     // altered to make scheme mandatory
     public static final Pattern VALID_URI_ORIG = Pattern.compile("^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?");
     public static final Pattern ABSOLUTE_URI_PATTERN = Pattern.compile("^(([^:/?#]+):)(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?");
     public static final Predicate<String> IS_ABSOLUTE_URI = ABSOLUTE_URI_PATTERN.asPredicate();
-    public static final Predicate<String> IS_UUID = UUID_PATTERN.asPredicate();
+    public static final Predicate<String> IS_UUID = UUIDUtil.UUID_PATTERN.asPredicate();
 
     public IRIProcessor iriProcessor = new IRIFixingProcessor();
 
