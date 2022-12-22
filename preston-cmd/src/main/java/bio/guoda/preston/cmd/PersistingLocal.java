@@ -24,17 +24,20 @@ import java.io.File;
 import java.io.IOException;
 
 import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
+import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH_UUID_STRING;
 
 public class PersistingLocal extends Cmd {
 
     @CommandLine.Option(
             names = {"--data-dir"},
+            defaultValue = "data",
             description = "Location of local content cache"
     )
     private String localDataDir = "data";
 
     @CommandLine.Option(
             names = {"--tmp-dir"},
+            defaultValue = "tmp",
             description = "Location of local tmp dir"
     )
     private String localTmpDir = "tmp";
@@ -48,6 +51,7 @@ public class PersistingLocal extends Cmd {
 
     @CommandLine.Option(
             names = {"--provenanceRoot", "--provenanceAnchor", "--anchor", "-r"},
+            defaultValue = "urn:uuid:" + BIODIVERSITY_DATASET_GRAPH_UUID_STRING,
             description = "specify the provenance root/anchor of the command. By default, any available data graph will be traversed up to it's most recent additions. If the provenance root is set, only specified provenance signature and their origins are included in the scope."
     )
     private IRI provenanceAnchor = BIODIVERSITY_DATASET_GRAPH;

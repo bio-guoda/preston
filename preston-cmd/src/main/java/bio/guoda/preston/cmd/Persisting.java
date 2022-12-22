@@ -60,6 +60,7 @@ public class Persisting extends PersistingLocal {
 
     @CommandLine.Option(
             names = {"--no-cache", "--disable-cache"},
+            defaultValue = "false",
             description = DISABLE_LOCAL_CONTENT_CACHE
     )
     private Boolean disableCache = false;
