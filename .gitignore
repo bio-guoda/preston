@@ -10,4 +10,5 @@ datasets/*
 pom.xml.versionsBackup
 data
 *.jar
+*.deb
 */tmp/*
