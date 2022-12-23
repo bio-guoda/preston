@@ -24,7 +24,7 @@ Note that a debian package (Debian, Ubuntu, etc) is also available for use with 
 ```console
 sudo apt update
 sudo apt upgrade
-curl https://github.com/bio-guoda/preston/releases/download/0.5.2/preston.deb > preston.deb
+curl -L https://github.com/bio-guoda/preston/releases/download/0.5.2/preston.deb > preston.deb
 sudo apt install ./preston.deb
 ```
 
