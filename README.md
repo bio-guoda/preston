@@ -574,10 +574,6 @@ If you'd like to run Preston inside a docker container so that you don't have to
 ### running periodically
 If you'd like to run Preston as a service to periodically update, you can use a systemd service combined with a systemd timer, or perhaps using a [Jenkins](https://jenkins.io) job. Both have advantages. The following example focuses on systemd. 
 
-Assuming that you have some standalone installation of preston running, you might be inspired by the following examples [preston.service](https://raw.githubusercontent.com/bio-guoda/preston/main/src/main/deb/lib/systemd/system/preston.service) and [preston.timer](https://raw.githubusercontent.com/bio-guoda/preston/main/src/main/deb/lib/systemd/system/preston.timer). The .service file defined how to run the update, while the .timer file defines how to run that update.
-
-To use, copy [preston.service](./src/main/deb/lib/systemd/system/preston.service) and [preston.timer](./src/main/deb/lib/systemd/system/preston.timer) into ```/etc/systemd/system/``` on your debian/ubuntu server. 
-
 Example of ```preston.service``` : 
 ```
 [Unit]
