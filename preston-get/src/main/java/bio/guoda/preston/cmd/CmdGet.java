@@ -22,13 +22,11 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 @CommandLine.Command(
         name = "cat",
         aliases = {"get"},
-        description = CmdGet.GET_BIODIVERSITY_DATA
+        description = "Get biodiversity data"
 )
 public class CmdGet extends Persisting implements Runnable {
 
-    public static final String CONTENT_ID = "Content ids or known aliases (e.g., [hash://sha256/8ed311...])";
-    public static final String GET_BIODIVERSITY_DATA = "Get biodiversity data";
-    @CommandLine.Parameters(description = CONTENT_ID)
+    @CommandLine.Parameters(description = "Content ids or known aliases (e.g., [hash://sha256/8ed311...])")
     private List<IRI> contentIdsOrAliases = new ArrayList<>();
 
     @Override

@@ -54,6 +54,7 @@ public class Persisting extends PersistingLocal {
 
     @CommandLine.Option(
             names = {"--remote", "--remotes", "--include", "--repos", "--repositories"},
+            split = ",",
             description = REMOTES
     )
 
@@ -74,11 +75,11 @@ public class Persisting extends PersistingLocal {
 
     private boolean supportTarGzDiscovery = true;
 
-    protected List<URI> getRemotes() {
+    public List<URI> getRemotes() {
         return remotes;
     }
 
-    protected boolean hasRemotes() {
+    public boolean hasRemotes() {
         return getRemotes() != null && !getRemotes().isEmpty();
     }
 
@@ -262,6 +263,7 @@ public class Persisting extends PersistingLocal {
     public void setRemotes(List<URI> remotes) {
         this.remotes = remotes;
     }
+
 
     public Boolean getDisableProgress() {
         return disableProgress;

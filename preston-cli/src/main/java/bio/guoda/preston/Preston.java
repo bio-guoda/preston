@@ -27,6 +27,7 @@ import bio.guoda.preston.cmd.CmdSketchUnion;
 import bio.guoda.preston.cmd.CmdUpdate;
 import bio.guoda.preston.cmd.CmdVerify;
 import bio.guoda.preston.cmd.CmdVersion;
+import bio.guoda.preston.cmd.Persisting;
 import bio.guoda.preston.cmd.TypeConverterIRI;
 import bio.guoda.preston.dbase.CmdDBaseRecordStream;
 import bio.guoda.preston.excel.CmdExcelRecordStream;
@@ -34,6 +35,9 @@ import bio.guoda.preston.server.CmdServe;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
 import picocli.codegen.docgen.manpage.ManPageGenerator;
+
+import java.net.URI;
+import java.util.List;
 
 import static java.lang.System.exit;
 
@@ -84,9 +88,14 @@ public class Preston {
     }
 
     public static int run(String[] args) {
+        CommandLine commandLine = getCommandLine();
+        return commandLine.execute(args);
+    }
+
+    public static CommandLine getCommandLine() {
         CommandLine commandLine = new CommandLine(new Preston());
         commandLine.registerConverter(IRI.class, new TypeConverterIRI());
-        return commandLine.execute(args);
+        return commandLine;
     }
 
 }

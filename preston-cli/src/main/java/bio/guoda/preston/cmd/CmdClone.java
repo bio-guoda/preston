@@ -22,7 +22,7 @@ public class CmdClone extends LoggingPersisting implements Runnable {
     private List<URI> remotes;
 
     @Override
-    protected List<URI> getRemotes() {
+    public List<URI> getRemotes() {
         Stream<URI> remotesOrEmpty = remotes == null ? Stream.empty() : remotes.stream();
         Stream<URI> additionalRemotesOrEmpty = super.getRemotes() == null ? Stream.empty() : super.getRemotes().stream();
         return Streams
