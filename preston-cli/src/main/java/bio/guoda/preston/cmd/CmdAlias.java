@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 @CommandLine.Command(
         name = "alias",
         aliases = "aliases",
-        description = "Search for (friendly) aliases, or names, for content hashes"
+        description = "Define new (friendly) aliases, or names, for content hashes, or, when no definition is provided, list related aliases instead.\n"
 )
 public class CmdAlias extends CmdAppend implements Runnable {
 
