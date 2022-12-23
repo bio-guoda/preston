@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>preston</artifactId>
-    <name>Preston Command Line Interface (CLI)</name>
+    <name>Preston</name>
     <description>a biodiversity dataset tracker</description>
 
     <properties>
@@ -195,56 +195,111 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.vafer</groupId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <includeScope>compile</includeScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>jdeb</artifactId>
-                <version>1.6</version>
-                <configuration>
-                    <deb>${project.build.directory}/${project.artifactId}.deb</deb>
-                    <controlDir>${project.basedir}/src/main/deb/control/</controlDir>
-                    <timestamped>true</timestamped>
-                    <dataSet>
-                        <data>
-                            <src>${project.build.directory}/${project.artifactId}.jar</src>
-                            <type>file</type>
-                            <mapper>
-                                <type>perm</type>
-                                <prefix>/opt/${project.artifactId}/</prefix>
-                                <user>root</user>
-                                <group>root</group>
-                                <filemode>755</filemode>
-                            </mapper>
-                        </data>
-                        <data>
-                            <type>link</type>
-                            <symlink>true</symlink>
-                            <linkName>/usr/local/bin/${project.artifactId}</linkName>
-                            <linkTarget>/opt/${project.artifactId}/${project.artifactId}.jar</linkTarget>
-                        </data>
-                        <data>
-                            <src>${project.basedir}/src/main/deb/etc/systemd/system/</src>
-                            <type>directory</type>
-                            <mapper>
-                                <type>perm</type>
-                                <prefix>/etc/systemd/system/</prefix>
-                                <filemode>755</filemode>
-                                <user>root</user>
-                                <group>root</group>
-                            </mapper>
-                        </data>
-                        <data>
-                            <type>template</type>
-                            <paths>
-                                <path>var/log/${project.artifactId}</path>
-                                <path>var/lib/${project.artifactId}</path>
-                            </paths>
-                            <mapper>
-                                <type>perm</type>
-                                <user>preston</user>
-                                <group>preston</group>
-                            </mapper>
-                        </data>
-                    </dataSet>
-                </configuration>
+                <groupId>org.vafer</groupId>
+                <version>1.10</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jdeb</goal>
+                        </goals>
+                        <configuration>
+                            <verbose>true</verbose>
+                            <controlDir>${basedir}/src/deb/control</controlDir>
+                            <dataSet>
+
+                                <data>
+                                    <src>${project.build.directory}/${project.build.finalName}.jar</src>
+                                    <type>file</type>
+                                    <mapper>
+                                        <type>perm</type>
+                                        <prefix>/usr/share/${project.artifactId}/lib</prefix>
+                                        <filemode>644</filemode>
+                                        <user>${project.artifactId}</user>
+                                        <group>${project.artifactId}</group>
+                                    </mapper>
+                                </data>
+
+                                <data>
+                                    <src>${project.basedir}/src/deb/bin/${project.artifactId}</src>
+                                    <type>file</type>
+                                    <mapper>
+                                        <type>perm</type>
+                                        <prefix>/usr/share/${project.artifactId}/bin</prefix>
+                                        <filemode>755</filemode>
+                                        <user>${project.artifactId}</user>
+                                        <group>${project.artifactId}</group>
+                                    </mapper>
+                                </data>
+
+                                <data>
+                                    <src>${project.build.directory}/lib</src>
+                                    <type>directory</type>
+                                    <mapper>
+                                        <type>perm</type>
+                                        <prefix>/usr/share/${project.artifactId}/lib</prefix>
+                                        <filemode>644</filemode>
+                                        <user>${project.artifactId}</user>
+                                        <group>${project.artifactId}</group>
+                                    </mapper>
+                                </data>
+
+                                <data>
+                                    <src>${generated.docs.dir}/manpage</src>
+                                    <type>directory</type>
+                                    <mapper>
+                                        <type>perm</type>
+                                        <prefix>/usr/local/share/man/man1/</prefix>
+                                        <filemode>644</filemode>
+                                        <user>${project.artifactId}</user>
+                                        <group>${project.artifactId}</group>
+                                    </mapper>
+                                </data>
+
+                                <data>
+                                    <type>template</type>
+                                    <paths>
+                                        <path>etc/${project.artifactId}</path>
+                                        <path>var/lib/${project.artifactId}</path>
+                                        <path>var/log/${project.artifactId}</path>
+                                        <path>var/run/${project.artifactId}</path>
+                                    </paths>
+                                    <mapper>
+                                        <type>perm</type>
+                                        <filemode>750</filemode>
+                                        <user>${project.artifactId}</user>
+                                        <group>${project.artifactId}</group>
+                                    </mapper>
+                                </data>
+                                <data>
+                                    <type>link</type>
+                                    <symlink>true</symlink>
+                                    <linkName>/usr/local/bin/${project.artifactId}</linkName>
+                                    <linkTarget>/usr/share/${project.artifactId}/bin/${project.artifactId}</linkTarget>
+                                </data>
+                            </dataSet>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

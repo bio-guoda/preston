@@ -1,0 +1,9 @@
+Package: [[name]]
+Version: [[version]]
+Section: misc
+Priority: low
+Architecture: all
+Description: [[description]]
+Maintainer: jhpoelen+preston@jhpoelen.nl | mielliott@ufl.edu
+Website: https://github.com/bio-guoda/preston
+Depends: openjdk-8-jdk-headless | openjdk-11-jdk-headless
