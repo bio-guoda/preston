@@ -1,0 +1,122 @@
+<document ID-DOI="http://doi.org/10.5281/zenodo.7353060" ID-GBIF-Dataset="54c9783b-6624-4034-96d9-d09afe43b319" ID-ISBN="1-56098-217-9" ID-Zenodo-Dep="7353060" approvalRequired="4" approvalRequired_for_document="2" approvalRequired_for_matCits="1" approvalRequired_for_originalDoi="1" checkinTime="1667534087130" checkinUser="GgServerImporter" docAuthor="Karl F. Koopman" docDate="1993" docId="C30587A9A562FF93FF2F350F875ED55F" docLanguage="en" docName="MammalSpeciesofTheWorld.1993.Chiroptera.137-241.pdf.imd" docOrigin="Mammal Species of the World (2 nd Edition), Washington and London: Smithsonian Institution Press" docTitle="Barbastella leucomelas" docType="treatment" docVersion="6" lastPageNumber="199" masterDocId="3F3CFFD1A55CFFADFFDC34768324D72D" masterDocTitle="Order Chiroptera" masterLastPageNumber="241" masterPageNumber="137" pageNumber="199" updateTime="1673356398203" updateUser="valdenar">
+<mods:mods id="ABBF34D6582D6908F3D6F2A7714A4777" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1" xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:titleInfo id="C5F9D4C87DE28E4E14C107A076F9FAB7" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:title id="035FF3A8A371248F3A8083ED8A6A28A5" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Order Chiroptera</mods:title>
+</mods:titleInfo>
+<mods:name id="FFCC46B4C1DB64984F38156699AAA27C" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" type="personal" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:role id="639A415AF0B32E4A40ECF177A004D57E" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:roleTerm id="EA15E3356727669C64B2FE854307927B" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Author</mods:roleTerm>
+</mods:role>
+<mods:namePart id="AAE3A18C8E0100A1446E9DD83B5B6B21" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Karl F. Koopman</mods:namePart>
+</mods:name>
+<mods:typeOfResource id="C14A1DFF5097E111768BFFE35CF51986" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">text</mods:typeOfResource>
+<mods:relatedItem id="1F822E42DFD58803C69EA2DB2B86A6EB" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" type="host" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:originInfo id="3778930B87F670C744DAD9EDE93E0E9B" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:dateIssued id="25AF9E8B0E8E6410C9B50189F743EA63" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">1993</mods:dateIssued>
+<mods:publisher id="362DF51D4BEF8CF01A47539030684E12" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Smithsonian Institution Press</mods:publisher>
+<mods:place id="EE98850E5812FD3D211C2457A01557ED" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:placeTerm id="43E8CC96B094726E9E9AAFD7985F2414" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Washington and London</mods:placeTerm>
+</mods:place>
+</mods:originInfo>
+<mods:name id="456A8775326E98084B348474B3BFC140" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" type="personal" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:role id="51ECE7BC9F6CB921A4FA0730BFF97D53" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:roleTerm id="DF428FC4AC98CEA38953833EE90C60A3" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Editor</mods:roleTerm>
+</mods:role>
+<mods:namePart id="F7969D5A441B1C3A4AE2B54ABC4AF704" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Don E. Wilson</mods:namePart>
+</mods:name>
+<mods:name id="D31A388FBA401A2F2AEDC8DAC4EF95E8" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" type="personal" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:role id="601E42CE32A33E92FCC64CAA94CD2724" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:roleTerm id="1EA1F51457B7547240FDB8F004F42031" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Editor</mods:roleTerm>
+</mods:role>
+<mods:namePart id="6FCD7672D42D74093575C0D15B5FB5F7" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">DeeAnn M. Reeder</mods:namePart>
+</mods:name>
+<mods:titleInfo id="5D0FB63AB2E65B172E95CE8BCC0C8D76" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:title id="E5A91F71E774D8E00D26B8117D1421D8" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Mammal Species of the World (2 nd Edition)</mods:title>
+</mods:titleInfo>
+<mods:part id="14EF0D77C6603D6ECBACF01DCEA0D8CF" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:extent id="7E9743F721B64023ED3B360228D5463D" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" unit="page" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<mods:start id="41CE0E9213809DB20F1B0CA9FB087084" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">137</mods:start>
+<mods:end id="5EE916D03D43C20BFDBD0F9EE8E2FF0F" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">241</mods:end>
+</mods:extent>
+</mods:part>
+</mods:relatedItem>
+<mods:classification id="FEF2715368A02ED274D0930B5B461CDE" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">book chapter</mods:classification>
+<mods:identifier id="476ADD5E029FF36C2183D9FECC158138" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" type="DOI" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">http://doi.org/10.5281/zenodo.7353060</mods:identifier>
+<mods:identifier id="77F6B410E06377C09533946B2D2480BE" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" type="GBIF-Dataset" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">54c9783b-6624-4034-96d9-d09afe43b319</mods:identifier>
+<mods:identifier id="5AD78F0219310F27961A44BABC0B4183" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" type="ISBN" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">1-56098-217-9</mods:identifier>
+<mods:identifier id="8462401F87144541A2C3A2D26D992CF8" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" type="Zenodo-Dep" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">7353060</mods:identifier>
+</mods:mods>
+<treatment id="C30587A9A562FF93FF2F350F875ED55F" ID-DOI="http://doi.org/10.5281/zenodo.7290613" ID-GBIF-Taxon="205129198" ID-Zenodo-Dep="7290613" LSID="urn:lsid:plazi:treatment:C30587A9A562FF93FF2F350F875ED55F" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" httpUri="http://treatment.plazi.org/id/C30587A9A562FF93FF2F350F875ED55F" lastPageNumber="199" pageId="62" pageNumber="199" updateTime="1669766621369" updateUser="ExternalLinkService" updateVersion="5">
+<updateHistory>
+<treatment id="C30587A9A562FF93FF2F350F875ED55F" ID-DOI="http://doi.org/10.5281/zenodo.7290613" ID-Zenodo-Dep="7290613" LSID="urn:lsid:plazi:treatment:C30587A9A562FF93FF2F350F875ED55F" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" httpUri="http://treatment.plazi.org/id/C30587A9A562FF93FF2F350F875ED55F" lastPageNumber="199" pageId="62" pageNumber="199" updateTime="1667575957619" updateUser="ExternalLinkService" updateVersion="2"/>
+<treatment id="C30587A9A562FF93FF2F350F875ED55F" LSID="urn:lsid:plazi:treatment:C30587A9A562FF93FF2F350F875ED55F" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" httpUri="http://treatment.plazi.org/id/C30587A9A562FF93FF2F350F875ED55F" lastPageNumber="199" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1"/>
+</updateHistory>
+<subSubSection id="03B66534A562FF93FF2F350F815CD6E6" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" pageId="62" pageNumber="199" type="nomenclature" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<paragraph id="4B1336BFA562FF93FF2F350F815CD6E6" blockId="62.[243,1799,377,626]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<treatmentCitation id="CA0D10AEA562FF93FF2F350F814AD6E6" author="Cretzschmar" authority="(Cretzschmar, 1826)" baseAuthorityName="Cretzschmar" baseAuthorityYear="1826" class="Mammalia" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" family="Vespertilionidae" genus="Barbastello" kingdom="Animalia" order="Chiroptera" page="73" pageId="62" pageNumber="199" phylum="Chordata" rank="species" species="leucomelas" title="Barbastello leucomelas" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1" volumeTitle="In Ruppell, Atlas Reise Nordl. Afr., Zool. Saugeth." year="1826">
+<taxonomicName id="8CAC4D3CA562FF93FF2F350F80EFD68D" ID-CoL="KM7L" ID-ENA="187009" authority="(Cretzschmar, 1826)" baseAuthorityName="Cretzschmar" baseAuthorityYear="1826" box="[243,971,377,416]" class="Mammalia" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" family="Vespertilionidae" genus="Barbastella" kingdom="Animalia" order="Chiroptera" pageId="62" pageNumber="199" phylum="Chordata" rank="species" species="leucomelas" updateTime="1673356398203" updateUser="valdenar" updateVersion="6">
+<updateHistory>
+<taxonomicName id="8CAC4D3CA562FF93FF2F350F80EFD68D" authority="(Cretzschmar, 1826)" baseAuthorityName="Cretzschmar" baseAuthorityYear="1826" box="[243,971,377,416]" class="Mammalia" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" family="Vespertilionidae" genus="Barbastello" kingdom="Animalia" order="Chiroptera" pageId="62" pageNumber="199" phylum="Chordata" rank="species" species="leucomelas" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1"/>
+</updateHistory>
+<emphasis id="79D8EAADA562FF93FF2F350F817AD68D" box="[243,606,377,416]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" italics="true" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Barbastella leucomelas</emphasis>
+(Cretzschmar, 1826)
+</taxonomicName>
+. 
+<bibCitation id="9E863ED3A562FF93FC03350F814AD6E6" author="Cretzschmar" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" pageId="62" pageNumber="199" pagination="73" title="Barbastello leucomelas" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1" volumeTitle="In Ruppell, Atlas Reise Nordl. Afr., Zool. Saugeth." year="1826">
+<emphasis id="79D8EAADA562FF93FC03350F8724D68D" box="[991,1024,377,416]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" italics="true" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">In</emphasis>
+Ruppell, Atlas Reise Nordl. Afr., Zool. Säugeth., p. 73
+</bibCitation>
+</treatmentCitation>
+.
+</paragraph>
+</subSubSection>
+<subSubSection id="03B66534A562FF93FEC035B881CED6D9" box="[284,746,462,500]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" pageId="62" pageNumber="199" type="materials_examined" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<paragraph id="4B1336BFA562FF93FEC035B881CED6D9" blockId="62.[243,1799,377,626]" box="[284,746,462,500]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+TYPE LOCALITY: 
+<materialsCitation id="FBC43CE2A562FF93FDCF35B881C1D6D9" ID-GBIF-Occurrence="3970371098" box="[531,741,462,500]" country="Egypt" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" pageId="62" pageNumber="199" stateProvince="Shamal Sina'" updateTime="1669766621369" updateUser="ExternalLinkService" updateVersion="5">
+<updateHistory>
+<materialsCitation id="FBC43CE2A562FF93FDCF35B881C1D6D9" box="[531,741,462,500]" country="Egypt" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" pageId="62" pageNumber="199" stateProvince="Shamal Sina'" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1"/>
+</updateHistory>
+<collectingCountry id="33BB762FA562FF93FDCF35B8815DD6D9" box="[531,633,462,500]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" name="Egypt" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Egypt</collectingCountry>
+, 
+<collectingRegion id="8968F85DA562FF93FD5035B881C1D6D9" box="[652,741,462,500]" country="Egypt" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" name="Shamal Sina'" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Sinai</collectingRegion>
+</materialsCitation>
+.
+</paragraph>
+</subSubSection>
+<subSubSection id="03B66534A562FF93FEC1358086C2D565" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" pageId="62" pageNumber="199" type="distribution" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<paragraph id="4B1336BFA562FF93FEC1358086C2D565" blockId="62.[243,1799,377,626]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+DISTRIBUTION: Caucasus to The Pamirs, N 
+<collectingCountry id="33BB762FA562FF93FC0035808701D530" box="[988,1061,502,541]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" name="Iran" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Iran</collectingCountry>
+, 
+<collectingCountry id="33BB762FA562FF93FBE4358087DDD530" box="[1080,1273,502,541]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" name="Afghanistan" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Afganistan</collectingCountry>
+, 
+<collectingCountry id="33BB762FA562FF93FAD73580864DD530" box="[1291,1385,502,541]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" name="India" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">India</collectingCountry>
+, and W 
+<collectingCountry id="33BB762FA562FF93FA2435808546D530" box="[1528,1634,502,541]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" name="China" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">China</collectingCountry>
+; Honshu, 
+<collectingRegion id="8968F85DA562FF93FEAE3657813ED565" box="[370,538,545,584]" country="Japan" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" name="Hokkaido" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Hokkaido</collectingRegion>
+(
+<collectingCountry id="33BB762FA562FF93FDEF365781BED565" box="[563,666,545,584]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" name="Japan" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Japan</collectingCountry>
+); 
+<collectingRegion id="8968F85DA562FF93FD663657802BD565" box="[698,783,545,584]" country="Egypt" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" name="Shamal Sina'" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Sinai</collectingRegion>
+(
+<collectingCountry id="33BB762FA562FF93FCF5365780B6D565" box="[809,914,545,584]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" name="Egypt" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Egypt</collectingCountry>
+); N 
+<collectingCountry id="33BB762FA562FF93FC073657874BD565" box="[987,1135,545,584]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" name="Ethiopia" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">Ethiopia</collectingCountry>
+; perhaps Indo-China.
+</paragraph>
+</subSubSection>
+<subSubSection id="03B66534A562FF93FEC1363D875ED55F" box="[285,1146,587,626]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" pageId="62" pageNumber="199" type="synonym_list" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<paragraph id="4B1336BFA562FF93FEC1363D875ED55F" blockId="62.[243,1799,377,626]" box="[285,1146,587,626]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+SYNONYMS: 
+<emphasis id="79D8EAADA562FF93FE09363D875ED55F" box="[469,1146,587,626]" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" italics="true" pageId="62" pageNumber="199" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">
+<taxonomicName id="8CAC4D3CA562FF93FE09363D814ED55F" authorityName="Bianchi" authorityYear="1917" baseAuthorityName="Thomas" baseAuthorityYear="1891" box="[469,618,587,626]" class="Mammalia" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" family="Vespertilionidae" genus="Barbastello" kingdom="Animalia" order="Chiroptera" pageId="62" pageNumber="199" phylum="Chordata" rank="species" species="blanfordi" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">blanfordi</taxonomicName>
+, caspica, 
+<taxonomicName id="8CAC4D3CA562FF93FCDA363D80CFD55F" authorityName="Hodgson" authorityYear="1855" baseAuthorityName="Hodgson" baseAuthorityYear="1855" box="[774,1003,587,626]" class="Mammalia" createTime="1667534087130" createUser="GgServerImporter" createVersion="1" family="Vespertilionidae" genus="Barbastello" kingdom="Animalia" order="Chiroptera" pageId="62" pageNumber="199" phylum="Chordata" rank="species" species="darjelingensis" updateTime="1667534087130" updateUser="GgServerImporter" updateVersion="1">darjelingensis</taxonomicName>
+, walteri.
+</emphasis>
+</paragraph>
+</subSubSection>
+</treatment>
+</document>

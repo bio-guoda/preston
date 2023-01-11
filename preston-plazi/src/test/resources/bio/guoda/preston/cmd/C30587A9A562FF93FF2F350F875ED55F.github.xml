@@ -1,0 +1,112 @@
+<document ID-DOI="http://doi.org/10.5281/zenodo.7353060" ID-GBIF-Dataset="54c9783b-6624-4034-96d9-d09afe43b319" ID-ISBN="1-56098-217-9" ID-Zenodo-Dep="7353060" approvalRequired="4" approvalRequired_for_document="2" approvalRequired_for_matCits="1" approvalRequired_for_originalDoi="1" checkinTime="1667534087130" checkinUser="GgServerImporter" docAuthor="Karl F. Koopman" docDate="1993" docId="C30587A9A562FF93FF2F350F875ED55F" docLanguage="en" docName="MammalSpeciesofTheWorld.1993.Chiroptera.137-241.pdf.imd" docOrigin="Mammal Species of the World (2 nd Edition), Washington and London: Smithsonian Institution Press" docTitle="Barbastella leucomelas" docType="treatment" docVersion="6" lastPageNumber="199" masterDocId="3F3CFFD1A55CFFADFFDC34768324D72D" masterDocTitle="Order Chiroptera" masterLastPageNumber="241" masterPageNumber="137" pageNumber="199" updateTime="1673356398203" updateUser="valdenar">
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:titleInfo>
+<mods:title>Order Chiroptera</mods:title>
+</mods:titleInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Karl F. Koopman</mods:namePart>
+</mods:name>
+<mods:typeOfResource>text</mods:typeOfResource>
+<mods:relatedItem type="host">
+<mods:originInfo>
+<mods:dateIssued>1993</mods:dateIssued>
+<mods:publisher>Smithsonian Institution Press</mods:publisher>
+<mods:place>
+<mods:placeTerm>Washington and London</mods:placeTerm>
+</mods:place>
+</mods:originInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Editor</mods:roleTerm>
+</mods:role>
+<mods:namePart>Don E. Wilson</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Editor</mods:roleTerm>
+</mods:role>
+<mods:namePart>DeeAnn M. Reeder</mods:namePart>
+</mods:name>
+<mods:titleInfo>
+<mods:title>Mammal Species of the World (2 nd Edition)</mods:title>
+</mods:titleInfo>
+<mods:part>
+<mods:extent unit="page">
+<mods:start>137</mods:start>
+<mods:end>241</mods:end>
+</mods:extent>
+</mods:part>
+</mods:relatedItem>
+<mods:classification>book chapter</mods:classification>
+<mods:identifier type="DOI">http://doi.org/10.5281/zenodo.7353060</mods:identifier>
+<mods:identifier type="GBIF-Dataset">54c9783b-6624-4034-96d9-d09afe43b319</mods:identifier>
+<mods:identifier type="ISBN">1-56098-217-9</mods:identifier>
+<mods:identifier type="Zenodo-Dep">7353060</mods:identifier>
+</mods:mods>
+<treatment ID-DOI="http://doi.org/10.5281/zenodo.7290613" ID-GBIF-Taxon="205129198" ID-Zenodo-Dep="7290613" LSID="urn:lsid:plazi:treatment:C30587A9A562FF93FF2F350F875ED55F" httpUri="http://treatment.plazi.org/id/C30587A9A562FF93FF2F350F875ED55F" lastPageNumber="199" pageId="62" pageNumber="199">
+<subSubSection pageId="62" pageNumber="199" type="nomenclature">
+<paragraph blockId="62.[243,1799,377,626]" pageId="62" pageNumber="199">
+<treatmentCitation author="Cretzschmar" authority="(Cretzschmar, 1826)" baseAuthorityName="Cretzschmar" baseAuthorityYear="1826" class="Mammalia" family="Vespertilionidae" genus="Barbastello" kingdom="Animalia" order="Chiroptera" page="73" pageId="62" pageNumber="199" phylum="Chordata" rank="species" species="leucomelas" title="Barbastello leucomelas" volumeTitle="In Ruppell, Atlas Reise Nordl. Afr., Zool. Saugeth." year="1826">
+<taxonomicName ID-CoL="KM7L" ID-ENA="187009" authority="(Cretzschmar, 1826)" baseAuthorityName="Cretzschmar" baseAuthorityYear="1826" box="[243,971,377,416]" class="Mammalia" family="Vespertilionidae" genus="Barbastella" kingdom="Animalia" order="Chiroptera" pageId="62" pageNumber="199" phylum="Chordata" rank="species" species="leucomelas">
+<emphasis box="[243,606,377,416]" italics="true" pageId="62" pageNumber="199">Barbastella leucomelas</emphasis>
+(Cretzschmar, 1826)
+</taxonomicName>
+. 
+<bibCitation author="Cretzschmar" pageId="62" pageNumber="199" pagination="73" title="Barbastello leucomelas" volumeTitle="In Ruppell, Atlas Reise Nordl. Afr., Zool. Saugeth." year="1826">
+<emphasis box="[991,1024,377,416]" italics="true" pageId="62" pageNumber="199">In</emphasis>
+Ruppell, Atlas Reise Nordl. Afr., Zool. Säugeth., p. 73
+</bibCitation>
+</treatmentCitation>
+.
+</paragraph>
+</subSubSection>
+<subSubSection box="[284,746,462,500]" pageId="62" pageNumber="199" type="materials_examined">
+<paragraph blockId="62.[243,1799,377,626]" box="[284,746,462,500]" pageId="62" pageNumber="199">
+TYPE LOCALITY: 
+<materialsCitation ID-GBIF-Occurrence="3970371098" box="[531,741,462,500]" country="Egypt" pageId="62" pageNumber="199" stateProvince="Shamal Sina'">
+<collectingCountry box="[531,633,462,500]" name="Egypt" pageId="62" pageNumber="199">Egypt</collectingCountry>
+, 
+<collectingRegion box="[652,741,462,500]" country="Egypt" name="Shamal Sina'" pageId="62" pageNumber="199">Sinai</collectingRegion>
+</materialsCitation>
+.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="62" pageNumber="199" type="distribution">
+<paragraph blockId="62.[243,1799,377,626]" pageId="62" pageNumber="199">
+DISTRIBUTION: Caucasus to The Pamirs, N 
+<collectingCountry box="[988,1061,502,541]" name="Iran" pageId="62" pageNumber="199">Iran</collectingCountry>
+, 
+<collectingCountry box="[1080,1273,502,541]" name="Afghanistan" pageId="62" pageNumber="199">Afganistan</collectingCountry>
+, 
+<collectingCountry box="[1291,1385,502,541]" name="India" pageId="62" pageNumber="199">India</collectingCountry>
+, and W 
+<collectingCountry box="[1528,1634,502,541]" name="China" pageId="62" pageNumber="199">China</collectingCountry>
+; Honshu, 
+<collectingRegion box="[370,538,545,584]" country="Japan" name="Hokkaido" pageId="62" pageNumber="199">Hokkaido</collectingRegion>
+(
+<collectingCountry box="[563,666,545,584]" name="Japan" pageId="62" pageNumber="199">Japan</collectingCountry>
+); 
+<collectingRegion box="[698,783,545,584]" country="Egypt" name="Shamal Sina'" pageId="62" pageNumber="199">Sinai</collectingRegion>
+(
+<collectingCountry box="[809,914,545,584]" name="Egypt" pageId="62" pageNumber="199">Egypt</collectingCountry>
+); N 
+<collectingCountry box="[987,1135,545,584]" name="Ethiopia" pageId="62" pageNumber="199">Ethiopia</collectingCountry>
+; perhaps Indo-China.
+</paragraph>
+</subSubSection>
+<subSubSection box="[285,1146,587,626]" pageId="62" pageNumber="199" type="synonym_list">
+<paragraph blockId="62.[243,1799,377,626]" box="[285,1146,587,626]" pageId="62" pageNumber="199">
+SYNONYMS: 
+<emphasis box="[469,1146,587,626]" italics="true" pageId="62" pageNumber="199">
+<taxonomicName authorityName="Bianchi" authorityYear="1917" baseAuthorityName="Thomas" baseAuthorityYear="1891" box="[469,618,587,626]" class="Mammalia" family="Vespertilionidae" genus="Barbastello" kingdom="Animalia" order="Chiroptera" pageId="62" pageNumber="199" phylum="Chordata" rank="species" species="blanfordi">blanfordi</taxonomicName>
+, caspica, 
+<taxonomicName authorityName="Hodgson" authorityYear="1855" baseAuthorityName="Hodgson" baseAuthorityYear="1855" box="[774,1003,587,626]" class="Mammalia" family="Vespertilionidae" genus="Barbastello" kingdom="Animalia" order="Chiroptera" pageId="62" pageNumber="199" phylum="Chordata" rank="species" species="darjelingensis">darjelingensis</taxonomicName>
+, walteri.
+</emphasis>
+</paragraph>
+</subSubSection>
+</treatment>
+</document>

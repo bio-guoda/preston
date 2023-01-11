@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.XMLUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.RegExUtils;
@@ -94,6 +95,17 @@ public class PlaziUtil {
             if (treatment.has("taxonomy")) {
                 handleRemainingTreatment(treatment, docu, treatmentText);
             }
+
+            NodeList taxonomicName = evaluateXPath(docu, compilePathExpression("//treatmentCitation/taxonomicName"));
+            for (int i=0; i < taxonomicName.getLength(); i++) {
+                Node taxonName = taxonomicName.item(i);
+                Node taxonNameId = taxonName.getAttributes().getNamedItem("id");
+                if (taxonNameId != null) {
+                    treatment.put("taxonomicNameId", taxonNameId.getTextContent());
+                    break;
+                }
+            }
+
         }
         return treatment;
     }
