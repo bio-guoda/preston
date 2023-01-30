@@ -151,7 +151,7 @@ public class ResourcesHTTP {
     }
 
     private static RequestConfig.Builder defaultConfig() {
-        int soTimeoutMs = 30 * 1000;
+        int soTimeoutMs = 300 * 1000; // 5 minutes
         return RequestConfig
                 .custom()
                 .setNormalizeUri(false)
