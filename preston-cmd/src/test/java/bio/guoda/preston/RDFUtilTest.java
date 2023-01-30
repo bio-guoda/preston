@@ -1,9 +1,7 @@
-package bio.guoda.preston.rdf;
+package bio.guoda.preston;
 
-import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.rdf.EmittingStreamRDF;
+import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
-import bio.guoda.preston.rdf.RDFUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.jena.riot.RiotException;

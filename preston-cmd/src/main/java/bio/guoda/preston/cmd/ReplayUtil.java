@@ -11,7 +11,7 @@ import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.process.StatementIRIProcessor;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
-import bio.guoda.preston.rdf.VersionedRDFChainEmitter;
+import bio.guoda.preston.store.VersionedRDFChainEmitter;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;

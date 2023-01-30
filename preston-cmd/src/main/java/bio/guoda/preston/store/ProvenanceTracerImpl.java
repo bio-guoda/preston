@@ -1,11 +1,10 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.rdf.EmittingStreamRDF;
+import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
-import bio.guoda.preston.rdf.ErrorHandlerNOOPFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.jena.riot.RiotException;
 

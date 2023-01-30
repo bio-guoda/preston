@@ -1,7 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.rdf.EmittingStreamRDF;
+import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.ProcessorReadOnly;
 import bio.guoda.preston.process.SketchIntersectBloomFilter;
 import bio.guoda.preston.process.SketchIntersectTheta;

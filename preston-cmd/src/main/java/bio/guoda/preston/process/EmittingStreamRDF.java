@@ -1,5 +1,6 @@
-package bio.guoda.preston.rdf;
+package bio.guoda.preston.process;
 
+import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.process.StatementsEmitter;
@@ -8,6 +9,7 @@ import org.apache.commons.rdf.jena.JenaRDF;
 import org.apache.commons.rdf.simple.SimpleRDF;
 import org.apache.jena.atlas.iterator.IteratorResourceClosing;
 import org.apache.jena.riot.system.ErrorHandler;
+import org.apache.jena.riot.system.ErrorHandlerFactory;
 import org.apache.jena.sparql.core.Quad;
 
 import java.io.InputStream;
@@ -30,7 +32,7 @@ public class EmittingStreamRDF {
 
     public EmittingStreamRDF(StatementsEmitter emitter,
                              ProcessorState processorState,
-                             ErrorHandlerFactory factory) {
+                             bio.guoda.preston.store.ErrorHandlerFactory factory) {
         this.emitter = emitter;
         this.context = processorState;
         this.errorHandler = factory.createErrorHandler();
@@ -55,4 +57,11 @@ public class EmittingStreamRDF {
         emitter.emit(copyOfTriple);
     }
 
+    private static class ErrorHandlerLoggingFactory implements bio.guoda.preston.store.ErrorHandlerFactory {
+
+        @Override
+        public ErrorHandler createErrorHandler() {
+            return ErrorHandlerFactory.errorHandlerStd;
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.rdf.EmittingStreamRDF;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.Quad;

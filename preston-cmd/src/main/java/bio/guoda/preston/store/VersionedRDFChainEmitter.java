@@ -1,11 +1,10 @@
-package bio.guoda.preston.rdf;
+package bio.guoda.preston.store;
 
+import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.ProcessorReadOnly;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;

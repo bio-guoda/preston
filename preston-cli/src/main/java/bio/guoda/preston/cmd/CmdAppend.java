@@ -1,6 +1,6 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.rdf.EmittingStreamRDF;
+import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;

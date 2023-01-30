@@ -1,4 +1,4 @@
-package bio.guoda.preston.rdf;
+package bio.guoda.preston.store;
 
 import org.apache.jena.riot.system.ErrorHandler;
 

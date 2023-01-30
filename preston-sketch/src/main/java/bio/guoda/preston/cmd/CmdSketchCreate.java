@@ -1,7 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.rdf.EmittingStreamRDF;
+import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.SketchBuilder;
 import bio.guoda.preston.process.SketchBuilderBloomFilter;
 import bio.guoda.preston.process.SketchBuilderTheta;

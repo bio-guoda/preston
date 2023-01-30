@@ -1,4 +1,4 @@
-package bio.guoda.preston.rdf;
+package bio.guoda.preston;
 
 import bio.guoda.preston.RDFValueUtil;
 import org.apache.commons.io.IOUtils;
@@ -59,7 +59,7 @@ public class RDFUtil {
         return RiotParsers.createIteratorNQuads(inputStream, null, profile);
     }
 
-    private static Iterator<Quad> asQuads(InputStream inputStream) {
+    public static Iterator<Quad> asQuads(InputStream inputStream) {
         return asQuads(inputStream, ErrorHandlerFactory.errorHandlerStd);
     }
 
