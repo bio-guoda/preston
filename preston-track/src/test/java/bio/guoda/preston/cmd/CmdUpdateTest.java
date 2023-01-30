@@ -1,6 +1,6 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.RDFUtil;
+import bio.guoda.preston.rdf.RDFUtil;
 import bio.guoda.preston.RefNodeConstants;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RegExUtils;

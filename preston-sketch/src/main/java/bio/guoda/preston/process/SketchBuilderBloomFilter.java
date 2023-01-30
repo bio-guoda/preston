@@ -1,6 +1,6 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.RDFUtil;
+import bio.guoda.preston.rdf.RDFUtil;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStore;
 import com.google.common.hash.BloomFilter;

@@ -2,7 +2,7 @@ package bio.guoda.preston.dbase;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.cmd.LoggingPersisting;
-import bio.guoda.preston.process.EmittingStreamRDF;
+import bio.guoda.preston.rdf.EmittingStreamRDF;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
