@@ -7,7 +7,6 @@ import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.jena.riot.RiotException;
-import org.apache.jena.riot.system.ErrorHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,8 +54,11 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
                         discoveredStatements
                 );
                 try {
-                    new EmittingStreamRDF(emitter, cmd, new ErrorHandlerNOOP())
-                            .parseAndEmit(inputStream);
+                    new EmittingStreamRDF(
+                            emitter,
+                            cmd,
+                            new ErrorHandlerNOOPFactory()
+                    ).parseAndEmit(inputStream);
 
                     if (discoveredStatements.size() == 0) {
                         listener.on(
@@ -82,20 +84,4 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
         return blobStore;
     }
 
-    private static class ErrorHandlerNOOP implements ErrorHandler {
-        @Override
-        public void warning(String message, long line, long col) {
-            // ignore
-        }
-
-        @Override
-        public void error(String message, long line, long col) {
-            // ignore
-        }
-
-        @Override
-        public void fatal(String message, long line, long col) {
-            // ignore
-        }
-    }
 }

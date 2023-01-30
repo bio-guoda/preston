@@ -27,15 +27,15 @@ public class EmittingStreamRDF {
     }
 
     public EmittingStreamRDF(StatementsEmitter emitter, ProcessorState processorState) {
-        this(emitter, processorState, ErrorHandlerFactory.errorHandlerStd);
+        this(emitter, processorState, new ErrorHandlerLoggingFactory());
     }
 
     public EmittingStreamRDF(StatementsEmitter emitter,
                              ProcessorState processorState,
-                             ErrorHandler errorHandler) {
+                             bio.guoda.preston.store.ErrorHandlerFactory factory) {
         this.emitter = emitter;
         this.context = processorState;
-        this.errorHandler = errorHandler;
+        this.errorHandler = factory.createErrorHandler();
     }
 
     public void parseAndEmit(InputStream inputStream) {
@@ -57,4 +57,11 @@ public class EmittingStreamRDF {
         emitter.emit(copyOfTriple);
     }
 
+    private static class ErrorHandlerLoggingFactory implements bio.guoda.preston.store.ErrorHandlerFactory {
+
+        @Override
+        public ErrorHandler createErrorHandler() {
+            return ErrorHandlerFactory.errorHandlerStd;
+        }
+    }
 }
