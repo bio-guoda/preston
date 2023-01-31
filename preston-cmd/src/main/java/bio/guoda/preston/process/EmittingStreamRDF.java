@@ -8,16 +8,19 @@ import org.apache.commons.rdf.api.RDF;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.apache.commons.rdf.jena.JenaRDF;
 import org.apache.commons.rdf.simple.SimpleRDF;
-import org.apache.jena.riot.system.ErrorHandler;
-import org.apache.jena.riot.system.ErrorHandlerFactory;
-import org.semanticweb.yars.nx.BNode;
-import org.semanticweb.yars.nx.Literal;
-import org.semanticweb.yars.nx.Node;
-import org.semanticweb.yars.nx.Resource;
-import org.semanticweb.yars.nx.parser.NxParser;
+import org.apache.tika.sax.StoppingEarlyException;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.rio.ParseErrorListener;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.RDFParser;
+import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.nquads.NQuadsParserFactory;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 public class EmittingStreamRDF {
     private final RDF rdf = new JenaRDF();
@@ -36,26 +39,57 @@ public class EmittingStreamRDF {
     }
 
     public void parseAndEmit(InputStream inputStream) {
-        NxParser nxp = new NxParser();
-        nxp.parse(inputStream, StandardCharsets.UTF_8);
-        while (context.shouldKeepProcessing() && nxp.hasNext()) {
-            Node[] statement = nxp.next();
-            if (statement.length > 2) {
+        RDFParser rdfParser = new NQuadsParserFactory().getParser();
+        rdfParser.setRDFHandler(new RDFHandler() {
+            @Override
+            public void startRDF() throws RDFHandlerException {
+
+            }
+
+            @Override
+            public void endRDF() throws RDFHandlerException {
+
+            }
+
+            @Override
+            public void handleNamespace(String s, String s1) throws RDFHandlerException {
+
+            }
+
+            @Override
+            public void handleStatement(Statement statement) throws RDFHandlerException {
+                if (!context.shouldKeepProcessing()) {
+                    throw new StopProcessingException();
+                }
                 copyOnEmit(asQuad(statement));
             }
+
+            @Override
+            public void handleComment(String s) throws RDFHandlerException {
+
+            }
+        });
+        try {
+            rdfParser.setStopAtFirstError(false);
+            rdfParser.parse(inputStream);
+        } catch (IOException e) {
+            // optimistic parsing
+        } catch (StopProcessingException e) {
+            // handler signalling that parsing should stop
         }
+
     }
 
-    private Quad asQuad(Node[] statement) {
-        BlankNodeOrIRI subj = parseSubj(statement[0]);
+    private Quad asQuad(Statement statement) {
+        BlankNodeOrIRI subj = parseSubj(statement.getSubject());
 
-        IRI predicate = RefNodeFactory.toIRI(statement[1].getLabel());
+        IRI predicate = RefNodeFactory.toIRI(statement.getPredicate().stringValue());
 
-        RDFTerm obj = parseObj(statement[2]);
+        RDFTerm obj = parseObj(statement.getObject());
 
         IRI graph = null;
-        if (statement.length > 3) {
-            graph = RefNodeFactory.toIRI(statement[3].getLabel());
+        if (statement.getContext() != null) {
+            graph = RefNodeFactory.toIRI(statement.getContext().stringValue());
         }
 
         return RefNodeFactory.toStatement(
@@ -66,32 +100,34 @@ public class EmittingStreamRDF {
         );
     }
 
-    private BlankNodeOrIRI parseSubj(Node node1) {
-        Node node = node1;
+
+    private BlankNodeOrIRI parseSubj(org.eclipse.rdf4j.model.Resource node1) {
         BlankNodeOrIRI subj;
-        if (node instanceof BNode) {
-            subj = RefNodeFactory.toBlank(node.getLabel());
+        if (node1.isBNode()) {
+            subj = RefNodeFactory.toBlank(node1.stringValue());
         } else {
-            subj = RefNodeFactory.toIRI(node.getLabel());
+            subj = RefNodeFactory.toIRI(node1.stringValue());
         }
         return subj;
     }
 
-    private RDFTerm parseObj(Node objNode1) {
-        Node objNode = objNode1;
+    private RDFTerm parseObj(Value objNode1) {
         RDFTerm obj;
-        if (objNode instanceof Literal) {
-            Resource datatype = ((Literal) objNode).getDatatype();
-            if (datatype == null) {
-                obj = RefNodeFactory.toLiteral(objNode.getLabel());
+        if (objNode1.isLiteral()) {
+            org.eclipse.rdf4j.model.Literal literal = (org.eclipse.rdf4j.model.Literal) objNode1;
+            org.eclipse.rdf4j.model.IRI datatype = literal.getDatatype();
+            if (literal.getLanguage().isPresent()) {
+                obj = RefNodeFactory.toLiteral(literal.getLabel(), literal.getLanguage().get());
+            } else if (datatype == null) {
+                obj = RefNodeFactory.toLiteral(literal.getLabel());
             } else {
-                IRI dataType = RefNodeFactory.toIRI(datatype.getLabel());
-                obj = RefNodeFactory.toLiteral(objNode.getLabel(), dataType);
+                IRI dataType = RefNodeFactory.toIRI(literal.getDatatype().stringValue());
+                obj = RefNodeFactory.toLiteral(literal.getLabel(), dataType);
             }
-        } else if (objNode instanceof BNode) {
-            obj = RefNodeFactory.toBlank(objNode.getLabel());
+        } else if (objNode1.isBNode()) {
+            obj = RefNodeFactory.toBlank(objNode1.stringValue());
         } else {
-            obj = RefNodeFactory.toIRI(objNode.getLabel());
+            obj = RefNodeFactory.toIRI(objNode1.stringValue());
         }
         return obj;
     }
@@ -106,11 +142,4 @@ public class EmittingStreamRDF {
         emitter.emit(copyOfTriple);
     }
 
-    private static class ErrorHandlerLoggingFactory implements bio.guoda.preston.store.ErrorHandlerFactory {
-
-        @Override
-        public ErrorHandler createErrorHandler() {
-            return ErrorHandlerFactory.errorHandlerStd;
-        }
-    }
 }

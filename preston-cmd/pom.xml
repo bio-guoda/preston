@@ -44,9 +44,9 @@
             <version>${picocli.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.semanticweb.yars</groupId>
-            <artifactId>nxparser-parsers</artifactId>
-            <version>2.3.4</version>
+            <groupId>org.eclipse.rdf4j</groupId>
+            <artifactId>rdf4j-rio-nquads</artifactId>
+            <version>3.7.7</version>
         </dependency>
          <dependency>
             <groupId>${project.groupId}</groupId>

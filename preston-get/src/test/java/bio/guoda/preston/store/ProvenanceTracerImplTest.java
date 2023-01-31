@@ -263,7 +263,9 @@ public class ProvenanceTracerImplTest {
         assertThat(requested.size(), Is.is(1));
         assertThat(requested, hasItems("hash://sha256/306ebe483d15970210add6552225835116f79ed78e66b08b170b2e761722f89d"));
 
-        assertThat(versionStatements.size(), Is.is(0));
+        assertThat(versionStatements.size(), Is.is(1));
+
+        assertThat(versionStatements.get(0).toString(), Is.is("<urn:uuid:0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/pav/hasVersion> <hash://sha256/306ebe483d15970210add6552225835116f79ed78e66b08b170b2e761722f89d> ."));
     }
 
 
