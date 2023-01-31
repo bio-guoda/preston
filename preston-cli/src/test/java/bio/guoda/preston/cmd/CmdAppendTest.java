@@ -118,7 +118,7 @@ public class CmdAppendTest {
 
         assertThat(provenanceLog, not(containsString(" _:")));
 
-        List<Quad> quads = RDFUtil.asQuadStream(IOUtils.toInputStream(provenanceLog, StandardCharsets.UTF_8)).collect(Collectors.toList());
+        List<Quad> quads = RDFUtil.parseQuads(IOUtils.toInputStream(provenanceLog, StandardCharsets.UTF_8));
 
         List<String> graphNamesIgnoreDefault = quads.stream()
                 .filter(x -> x.getGraphName().isPresent())

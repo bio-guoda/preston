@@ -6,7 +6,6 @@ import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.jena.riot.RiotException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,25 +52,21 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
                         listener,
                         discoveredStatements
                 );
-                try {
-                    new EmittingStreamRDF(
-                            emitter,
-                            cmd
-                    ).parseAndEmit(inputStream);
+                new EmittingStreamRDF(
+                        emitter,
+                        cmd
+                ).parseAndEmit(inputStream);
 
-                    if (discoveredStatements.size() == 0) {
-                        listener.on(
-                                toStatement(
-                                        RefNodeConstants.BIODIVERSITY_DATASET_GRAPH,
-                                        RefNodeConstants.HAS_VERSION,
-                                        someOrigin)
-                        );
-                    }
-                    statementQueue.addAll(discoveredStatements);
-
-                } catch (RiotException ex) {
-                    // ignore opportunistic failure to parse possible provenance logs
+                if (discoveredStatements.size() == 0) {
+                    listener.on(
+                            toStatement(
+                                    RefNodeConstants.BIODIVERSITY_DATASET_GRAPH,
+                                    RefNodeConstants.HAS_VERSION,
+                                    someOrigin)
+                    );
                 }
+                statementQueue.addAll(discoveredStatements);
+
             }
 
         }

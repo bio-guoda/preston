@@ -1,7 +1,6 @@
 package bio.guoda.preston.stream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.jena.ext.com.google.common.base.Charsets;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -9,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.LongStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 public class SelectedLinesReaderTest {
 
-    public static final Charset CHARSET = Charsets.UTF_8;
+    public static final Charset CHARSET = StandardCharsets.UTF_8;
 
     @Test
     public void readContiguous() throws IOException {

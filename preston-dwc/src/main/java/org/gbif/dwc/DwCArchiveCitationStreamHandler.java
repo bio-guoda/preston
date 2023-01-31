@@ -64,7 +64,7 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
                 return true;
             }
         } catch (IOException | SAXException | ParserConfigurationException e) {
-            throw new ContentStreamException("failed to parse [" + iriString + "]", e);
+            throw new ContentStreamException("failed to parseQuads [" + iriString + "]", e);
         }
         return false;
     }

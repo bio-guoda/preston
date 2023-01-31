@@ -24,8 +24,6 @@
         <module>preston-cmd</module>
         <module>preston-serve</module>
         <module>preston-cli</module>
-        <module>preston-sketch</module>
-        <module>preston-aws</module>
         <module>preston-label</module>
     </modules>
 

@@ -69,7 +69,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
             try {
                 findAndEmitTextMatches(version, is, charset);
             } catch (IOException e) {
-                throw new ContentStreamException("failed to parse text", e);
+                throw new ContentStreamException("failed to parseQuads text", e);
             }
             return true;
         }

@@ -5,7 +5,6 @@ import bio.guoda.preston.RefNodeConstants;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.apache.jena.atlas.lib.CollectionUtils;
 
 import java.util.Collections;
 import java.util.Map;

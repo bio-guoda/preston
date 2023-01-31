@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.jena.shared.JenaException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,8 +40,6 @@ public class VersionedRDFChainEmitter extends ProcessorReadOnly {
                 }
             } catch (IOException e) {
                 LOG.warn("failed to read archive [" + version + "]", e);
-            } catch (JenaException ex) {
-                throw new RuntimeException("failed to read archive [" + version + "]", ex);
             }
         }
     }

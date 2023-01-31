@@ -4,7 +4,6 @@ import bio.guoda.preston.process.EmittingStreamRDF;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.jena.riot.RiotException;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -18,19 +17,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RDFUtilTest {
 
-
-    @Test
-    public void asQuadStream() {
-        Stream<Quad> quadStream = RDFUtil.asQuadStream(IOUtils.toInputStream("<urn:example:subj> <urn:example:verb> <urn:example:obj> <urn:example:graph> .", StandardCharsets.UTF_8));
-        List<Quad> collect = quadStream.collect(Collectors.toList());
-        assertThat(collect.size(), is(1));
-        Quad quad = collect.get(0);
-        assertThat(quad.getObject().toString(), is("<urn:example:obj>"));
-        assertThat(quad.getPredicate().toString(), is("<urn:example:verb>"));
-        assertThat(quad.getSubject().toString(), is("<urn:example:subj>"));
-        assertThat(quad.getGraphName().isPresent(), is(true));
-        assertThat(quad.getGraphName().get().toString(), is("<urn:example:graph>"));
-    }
 
     @Test
     public void valueForDate() {

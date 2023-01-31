@@ -149,7 +149,7 @@ public class RegistryReaderSPARQLTest {
                     results.add(execute);
                 } catch (QueryParseException | URISyntaxException ex) {
                     ex.printStackTrace();
-                    fail("failed to parse: " + queryWithPrefixes);
+                    fail("failed to parseQuads: " + queryWithPrefixes);
 
                 }
             }

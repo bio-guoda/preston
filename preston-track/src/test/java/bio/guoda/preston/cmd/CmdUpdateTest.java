@@ -21,8 +21,8 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 
 public class CmdUpdateTest {
 
@@ -48,11 +48,11 @@ public class CmdUpdateTest {
 
         assertThat(provenanceLog, not(containsString(" _:")));
 
-        List<Quad> quads = RDFUtil.asQuadStream(IOUtils.toInputStream(provenanceLog, StandardCharsets.UTF_8)).collect(Collectors.toList());
+        List<Quad> quads = RDFUtil.parseQuads(IOUtils.toInputStream(provenanceLog, StandardCharsets.UTF_8));
 
         List<String> graphNamesIgnoreDefault = quads.stream()
                 .filter(x -> x.getGraphName().isPresent())
-                .map(x -> ((IRI)x.getGraphName().get()).getIRIString())
+                .map(x -> ((IRI) x.getGraphName().get()).getIRIString())
                 .filter(x -> !StringUtils.equals(x, "urn:x-arq:DefaultGraphNode")).collect(Collectors.toList());
 
         assertThat(graphNamesIgnoreDefault.size(), is(quads.size()));
