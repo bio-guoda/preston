@@ -42,8 +42,14 @@
             <groupId>org.eclipse.rdf4j</groupId>
             <artifactId>rdf4j-rio-nquads</artifactId>
             <version>3.7.7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>preston-test</artifactId>
             <version>${project.version}</version>
