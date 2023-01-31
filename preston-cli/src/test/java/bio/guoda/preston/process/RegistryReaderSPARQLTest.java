@@ -6,9 +6,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.QueryParseException;
 import org.hamcrest.core.Is;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
-import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -44,28 +40,6 @@ public class RegistryReaderSPARQLTest {
     @Test
     public void resultContainsValid() throws URISyntaxException, IOException {
         assertResultContains(getQueryWithPrefixes());
-    }
-
-    @Test
-    public void detectValidSPARQL() throws IOException {
-        String queryWithPrefixes = getQueryWithPrefixes();
-        assertTrue(isSPARQLQuery(queryWithPrefixes));
-    }
-
-    private boolean isSPARQLQuery(String queryWithPrefixes) {
-        Query query = QueryFactory.create(queryWithPrefixes);
-        return query != null;
-    }
-
-    @Ignore("Scholia queries in https://github.com/bio-guoda/preston/issues/137 do not include prefixes")
-    @Test
-    public void detectActualSPARQL() throws IOException {
-        assertTrue(isSPARQLQuery(getQuery()));
-    }
-
-    @Test(expected = QueryParseException.class)
-    public void invalidQuery() throws IOException {
-        isSPARQLQuery("mickey mouse");
     }
 
     @Test
@@ -147,7 +121,7 @@ public class RegistryReaderSPARQLTest {
                 try {
                     String execute = execute(queryWithPrefixes);
                     results.add(execute);
-                } catch (QueryParseException | URISyntaxException ex) {
+                } catch (URISyntaxException ex) {
                     ex.printStackTrace();
                     fail("failed to parseQuads: " + queryWithPrefixes);
 

@@ -16,7 +16,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <slf4j.version>1.7.30</slf4j.version>
         <commons-rdf.version>0.5.0</commons-rdf.version>
-        <jena.version>3.17.0</jena.version>
         <tika.version>2.1.0</tika.version>
         <commons-codec.version>1.15</commons-codec.version>
         <commons-compress.version>1.22</commons-compress.version>
