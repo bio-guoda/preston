@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -39,13 +40,14 @@ public class RDFUtilTest {
         assertThat(valueFor, is("2020-09-12T05:54:48.034Z"));
     }
 
-    @Test(expected = RiotException.class)
-    public void invalidRDF() {
+    @Test
+    public void ignoreInvalidRDF() {
         String nquad = "this ain't no RDF";
 
         EmittingStreamRDF rdfStream = new EmittingStreamRDF(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
+                fail("no statement is expected");
             }
         });
 
