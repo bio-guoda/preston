@@ -56,8 +56,7 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
                 try {
                     new EmittingStreamRDF(
                             emitter,
-                            cmd,
-                            new ErrorHandlerNOOPFactory()
+                            cmd
                     ).parseAndEmit(inputStream);
 
                     if (discoveredStatements.size() == 0) {

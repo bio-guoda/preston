@@ -96,7 +96,6 @@ public class EmittingStreamRDFTest {
 
     }
 
-    @Ignore
     @Test
     public void emitQuadsSkipMalformed() {
         // for some reason line 114 of hash://sha256/18b51a180c63929d5e3a50dbb72295579c2645546d22ae3fdcd5e2095c43d199
@@ -127,7 +126,7 @@ public class EmittingStreamRDFTest {
             }
         }).parseAndEmit(getClass().getResourceAsStream("/bio/guoda/preston/store/issue-214-data-example/18/b5/18b51a180c63929d5e3a50dbb72295579c2645546d22ae3fdcd5e2095c43d199"));
 
-        assertThat(quads.size(), Is.is(1));
+        assertThat(quads.size(), Is.is(712));
     }
 
     @Test
