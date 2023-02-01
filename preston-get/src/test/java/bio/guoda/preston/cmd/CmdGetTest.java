@@ -89,7 +89,7 @@ public class CmdGetTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
 
-        String statement = RefNodeFactory.toStatement(toIRI("blah"), RefNodeConstants.HAS_VERSION, toIRI(aContentHash)).toString();
+        String statement = RefNodeFactory.toStatement(toIRI("foo:bar"), RefNodeConstants.HAS_VERSION, toIRI(aContentHash)).toString();
         System.setIn(IOUtils.toInputStream(statement, StandardCharsets.UTF_8));
 
         CmdGet cmdGet = new CmdGet();
@@ -114,7 +114,7 @@ public class CmdGetTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
 
-        String statement = RefNodeFactory.toStatement(toIRI(aContentHash), RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("blah")).toString();
+        String statement = RefNodeFactory.toStatement(toIRI(aContentHash), RefNodeConstants.HAS_PREVIOUS_VERSION, toIRI("foo:bar")).toString();
         System.setIn(IOUtils.toInputStream(statement, StandardCharsets.UTF_8));
 
         CmdGet cmdGet = new CmdGet();
@@ -136,7 +136,7 @@ public class CmdGetTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
 
-        System.setIn(IOUtils.toInputStream("<blah> <blah> <blah> .", StandardCharsets.UTF_8));
+        System.setIn(IOUtils.toInputStream("<foo:bar> <foo:bar> <foo:bar> .", StandardCharsets.UTF_8));
 
         CmdGet cmdGet = new CmdGet();
         cmdGet.run(blobStoreNull, Collections.emptyList());
