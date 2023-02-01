@@ -21,13 +21,9 @@ import bio.guoda.preston.cmd.CmdList;
 import bio.guoda.preston.cmd.CmdMerge;
 import bio.guoda.preston.cmd.CmdPlazi;
 import bio.guoda.preston.cmd.CmdSeeds;
-import bio.guoda.preston.cmd.CmdSketchCreate;
-import bio.guoda.preston.cmd.CmdSketchDiff;
-import bio.guoda.preston.cmd.CmdSketchUnion;
 import bio.guoda.preston.cmd.CmdUpdate;
 import bio.guoda.preston.cmd.CmdVerify;
 import bio.guoda.preston.cmd.CmdVersion;
-import bio.guoda.preston.cmd.Persisting;
 import bio.guoda.preston.cmd.TypeConverterIRI;
 import bio.guoda.preston.dbase.CmdDBaseRecordStream;
 import bio.guoda.preston.excel.CmdExcelRecordStream;
@@ -35,9 +31,6 @@ import bio.guoda.preston.server.CmdServe;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
 import picocli.codegen.docgen.manpage.ManPageGenerator;
-
-import java.net.URI;
-import java.util.List;
 
 import static java.lang.System.exit;
 
@@ -54,9 +47,6 @@ import static java.lang.System.exit;
                 CmdAppend.class,
                 CmdHistory.class,
                 CmdMerge.class,
-                CmdSketchCreate.class,
-                CmdSketchDiff.class,
-                CmdSketchUnion.class,
                 CmdGrep.class,
                 CmdVerify.class,
                 CmdVersion.class,
