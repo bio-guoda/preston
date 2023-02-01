@@ -34,7 +34,7 @@ public class CmdGrepTest {
 
         CmdGrep cmdGrep = new CmdGrep();
 
-        Quad quad = toStatement(toIRI("something"), HAS_VERSION, aContentHash);
+        Quad quad = toStatement(toIRI("foo:bar"), HAS_VERSION, aContentHash);
         cmdGrep.setInputStream(new ByteArrayInputStream(quad.toString().getBytes()));
 
         cmdGrep.run(blobStoreNull);
@@ -55,7 +55,7 @@ public class CmdGrepTest {
 
         CmdGrep cmdGrep = new CmdGrep();
 
-        Quad quad = toStatement(toIRI("something"), HAS_VERSION, aContentHash);
+        Quad quad = toStatement(toIRI("foo:bar"), HAS_VERSION, aContentHash);
         cmdGrep.setInputStream(new ByteArrayInputStream(quad.toString().getBytes()));
 
         cmdGrep.run(blobStoreNull);
