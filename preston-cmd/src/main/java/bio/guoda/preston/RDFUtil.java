@@ -9,9 +9,12 @@ import org.apache.commons.rdf.api.RDFTerm;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 import org.eclipse.rdf4j.rio.nquads.NQuadsParserFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +24,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class RDFUtil {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RDFUtil.class);
 
     public static String getValueFor(RDFTerm entity) {
         return RDFValueUtil.getValueFor(entity);
@@ -43,15 +48,24 @@ public class RDFUtil {
 
 
     public static void parseQuads(InputStream inputStream, AbstractRDFHandler handler) {
+        parseQuads(inputStream, handler, throwable -> {
+            // blissfully optimistic parsing by default: just log the events
+            if (throwable instanceof StopProcessingException) {
+                LOG.info("asked to stop processing", throwable);
+            } else {
+                LOG.warn("unexpected issue on processing rdf", throwable);
+            }
+        });
+    }
+
+    public static void parseQuads(InputStream inputStream, AbstractRDFHandler handler, ExceptionConsumer exceptionConsumer) {
         RDFParser rdfParser = new NQuadsParserFactory().getParser();
         rdfParser.setRDFHandler(handler);
         try {
             rdfParser.setStopAtFirstError(false);
             rdfParser.parse(inputStream);
-        } catch (IOException e) {
-            // optimistic parsing
-        } catch (StopProcessingException e) {
-            // handler signalling that parsing should stop
+        } catch (IOException | RDFParseException | RDFHandlerException | StopProcessingException e) {
+            exceptionConsumer.accept(e);
         }
     }
 
