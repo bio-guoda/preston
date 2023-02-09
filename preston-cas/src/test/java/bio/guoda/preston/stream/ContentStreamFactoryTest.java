@@ -26,16 +26,24 @@ public class ContentStreamFactoryTest {
     @Test
     public void matchingGZipPrefix() throws IOException {
 
-        assertTrue(ContentStreamFactory.hasMatchingGZipPrefix(
+        assertTrue(ContentStreamFactory.hasSupportedCompressionPrefix(
                 RefNodeFactory.toIRI("gz:something"),
                 RefNodeFactory.toIRI("gz:something!/something"))
         );
     }
 
     @Test
+    public void matchingBZip2Prefix() throws IOException {
+        assertTrue(ContentStreamFactory.hasSupportedCompressionPrefix(
+                RefNodeFactory.toIRI("bzip2:something"),
+                RefNodeFactory.toIRI("bzip2:something!/something"))
+        );
+    }
+
+    @Test
     public void notMatchingGZipPrefix() throws IOException {
 
-        assertFalse(ContentStreamFactory.hasMatchingGZipPrefix(
+        assertFalse(ContentStreamFactory.hasSupportedCompressionPrefix(
                 RefNodeFactory.toIRI("gz:else"),
                 RefNodeFactory.toIRI("gz:something!/something"))
         );
@@ -64,6 +72,15 @@ public class ContentStreamFactoryTest {
         ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("cut:zip:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/level1.txt!/b1-5"));
         InputStream inputStream = factory.create(getZipArchiveStream());
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("https"));
+    }
+
+    @Test
+    public void contentStreamForBZIP2EmbeddedContent() throws IOException {
+        ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("bzip2:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/something.txt"));
+        InputStream resourceAsStream = getClass().getResourceAsStream("foo.txt.bz2");
+        assertNotNull(resourceAsStream);
+        InputStream inputStream = factory.create(resourceAsStream);
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("bar"));
     }
 
     @Test

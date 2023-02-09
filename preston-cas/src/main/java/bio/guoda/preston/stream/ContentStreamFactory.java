@@ -17,7 +17,9 @@ import java.util.regex.Pattern;
 import java.util.stream.LongStream;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
-import static bio.guoda.preston.stream.ContentStreamUtil.*;
+import static bio.guoda.preston.stream.ContentStreamUtil.cutBytes;
+import static bio.guoda.preston.stream.ContentStreamUtil.getMarkSupportedInputStream;
+import static bio.guoda.preston.stream.ContentStreamUtil.getMarkSupportedReader;
 
 public class ContentStreamFactory implements InputStreamFactory {
     public static final String URI_PREFIX_CUT = "cut";
@@ -25,7 +27,12 @@ public class ContentStreamFactory implements InputStreamFactory {
     private final IRI targetIri;
     private final IRI contentReference;
 
-    public static boolean hasMatchingGZipPrefix(IRI iri, IRI targetIri) {
+    public static boolean hasSupportedCompressionPrefix(IRI iri, IRI targetIri) {
+        return hasMatchingPrefix(iri, targetIri, "gz:")
+                || hasMatchingPrefix(iri, targetIri, "bzip2:");
+    }
+
+    public static boolean hasMatchingPrefix(IRI iri, IRI targetIri, String prefix) {
         boolean prefixMatches = false;
         String iriString = iri.getIRIString();
         String targetIriString = targetIri.getIRIString();
@@ -33,8 +40,8 @@ public class ContentStreamFactory implements InputStreamFactory {
         // turn gz:[something]!/bla.txt  (syntax used by Apache's Virtual Filesystem https://commons.apache.org/proper/commons-vfs/)
         // into gz:[something]
         //
-        if (StringUtils.startsWith(targetIriString, "gz:")
-                && StringUtils.startsWith(iriString, "gz:")
+        if (StringUtils.startsWith(targetIriString, prefix)
+                && StringUtils.startsWith(iriString, prefix)
                 && StringUtils.length(targetIriString) > StringUtils.length(iriString)) {
             prefixMatches = StringUtils.startsWith(targetIriString.substring(iriString.length()), "!/");
         }
@@ -90,7 +97,7 @@ public class ContentStreamFactory implements InputStreamFactory {
                     .matcher(targetIri.getIRIString());
 
             if (iri.getIRIString().equals(targetIri.getIRIString())
-                    || hasMatchingGZipPrefix(iri, targetIri)) {
+                    || hasSupportedCompressionPrefix(iri, targetIri)) {
                 contentStream = in;
                 stopReading();
                 return true;
@@ -106,6 +113,7 @@ public class ContentStreamFactory implements InputStreamFactory {
 
             return handler.handle(iri, in);
         }
+
 
         private InputStream createInputStreamForSelectedLines(IRI iri, InputStream in) throws ContentStreamException {
             InputStream markableIn = getMarkSupportedInputStream(in);

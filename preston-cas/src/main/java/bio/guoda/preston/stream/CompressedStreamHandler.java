@@ -50,6 +50,8 @@ public class CompressedStreamHandler implements ContentStreamHandler {
 
     protected void parseAsCompressed(IRI version, InputStream in, String compressionFormat) throws ContentStreamException {
         try {
+
+
             contentStreamHandler.handle(wrapIRI(compressionFormat, version), in);
         } catch (URISyntaxException e) {
             throw new ContentStreamException("failed to create content URI", e);
