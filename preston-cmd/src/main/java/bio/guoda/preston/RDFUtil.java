@@ -49,10 +49,8 @@ public class RDFUtil {
 
     public static void parseQuads(InputStream inputStream, AbstractRDFHandler handler) {
         parseQuads(inputStream, handler, throwable -> {
-            // blissfully optimistic parsing by default: just log the events
-            if (throwable instanceof StopProcessingException) {
-                LOG.info("asked to stop processing", throwable);
-            } else {
+            // blissfully optimistic parsing by default by ignoring StopProcessing Exception
+            if (!(throwable instanceof StopProcessingException)) {
                 LOG.warn("unexpected issue on processing rdf", throwable);
             }
         });

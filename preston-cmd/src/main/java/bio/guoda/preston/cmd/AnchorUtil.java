@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.process.StopProcessingException;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.rdf.api.IRI;
@@ -50,6 +51,10 @@ public class AnchorUtil {
                     );
         } catch (IOException e) {
             throw new RuntimeException("Failed to get version history.", e);
+        } catch (StopProcessingException e) {
+            if (persisting.shouldKeepProcessing()) {
+                throw new RuntimeException("got unexpected stop processing exception.", e);
+            }
         }
     }
 }
