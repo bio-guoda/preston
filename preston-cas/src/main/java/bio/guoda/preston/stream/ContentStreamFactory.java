@@ -6,10 +6,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
+import org.imgscalr.Scalr;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -24,6 +32,7 @@ import static bio.guoda.preston.stream.ContentStreamUtil.getMarkSupportedReader;
 public class ContentStreamFactory implements InputStreamFactory {
     public static final String URI_PREFIX_CUT = "cut";
     public static final String URI_PREFIX_LINE = "line";
+    private static final String URI_PREFIX_THUMBNAIL = "thumbnail";
     private final IRI targetIri;
     private final IRI contentReference;
 
@@ -108,6 +117,9 @@ public class ContentStreamFactory implements InputStreamFactory {
                 } else if (nextOperatorMatcher.group(1).equals(URI_PREFIX_LINE) && lineQueryIsComplex(iri)) {
                     handle(toIRI(nextOperatorMatcher.group()), createInputStreamForSelectedLines(iri, in));
                     return true;
+                } else if (nextOperatorMatcher.group(1).equals(URI_PREFIX_THUMBNAIL)) {
+                    handle(toIRI(nextOperatorMatcher.group()), createThumbnailForImageStream(iri, in));
+                    return true;
                 }
             }
 
@@ -123,10 +135,26 @@ public class ContentStreamFactory implements InputStreamFactory {
             } catch (IOException e) {
                 throw new ContentStreamException("failed to detect charset", e);
             }
-            
+
             SelectedLinesReader lineReader = new SelectedLinesReader(getLineNumberStream(iri).iterator(),
                     getMarkSupportedReader(new InputStreamReader(markableIn, charset)));
             return new ReaderInputStream(lineReader, charset);
+        }
+
+        private InputStream createThumbnailForImageStream(IRI iri, InputStream in) throws ContentStreamException {
+            try {
+                BufferedImage srcImage = ImageIO.read(in);
+                if (srcImage == null) {
+                    throw new ContentStreamException("image cannot be read from [" + iri + "]");
+                }
+                BufferedImage scaledImage = Scalr.resize(srcImage, 256);
+                try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                    ImageIO.write(scaledImage, "jpg", outputStream);
+                    return new ByteArrayInputStream(outputStream.toByteArray());
+                }
+            } catch (IOException e) {
+                throw new ContentStreamException("failed to create thumbnail from [" + iri + "]");
+            }
         }
 
         private LongStream getLineNumberStream(IRI iri) {

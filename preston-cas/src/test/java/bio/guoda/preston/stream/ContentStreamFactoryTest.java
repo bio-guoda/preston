@@ -5,6 +5,9 @@ import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -170,6 +173,32 @@ public class ContentStreamFactoryTest {
         IOUtils.copyLarge(inputStream, out);
 
         assertThat(out.toString("UTF-8"), Is.is("Barbastello leucomelas"));
+    }
+
+
+    @Test
+    public void createThumbnailFromImage() throws IOException {
+        ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("thumbnail:hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f"));
+        InputStream inputStream = factory.create(getClass().getResourceAsStream("BRIT67501.jpg"));
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IOUtils.copyLarge(inputStream, out);
+
+        BufferedImage actualThumbnail = ImageIO.read(new ByteArrayInputStream(out.toByteArray()));
+
+        assertNotNull(actualThumbnail);
+
+        assertThat(actualThumbnail.getHeight(), Is.is(256));
+        assertThat(actualThumbnail.getWidth(), Is.is(171));
+    }
+
+    @Test
+    public void createThumbnailFromNonImage() throws IOException {
+        ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("thumbnail:hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f"));
+        InputStream inputStream = factory.create(getClass().getResourceAsStream("treatments-xml-issue205.zip"));
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IOUtils.copyLarge(inputStream, out);
     }
 
 }
