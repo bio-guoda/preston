@@ -20,6 +20,7 @@ import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 import static bio.guoda.preston.server.PropertyNames.*;
+import static bio.guoda.preston.store.HashKeyUtil.isLikelyCompositeHashURI;
 
 public class ContentServlet extends HttpServlet {
 
@@ -57,19 +58,14 @@ public class ContentServlet extends HttpServlet {
         String requestURI = RegExUtils
                 .replaceFirst(request.getRequestURI(), "^/", "");
 
-        IRI iri = null;
 
-        IRI hashKey = RefNodeFactory.toIRI(requestURI);
-        if (HashKeyUtil.isValidHashKey(hashKey)) {
-            iri = HashKeyUtil.extractContentHash(hashKey);
-        } else {
-            iri = attemptToGuessHashURIFromHexPattern(requestURI, iri);
-        }
+        IRI requestIRI = RefNodeFactory.toIRI(requestURI);
 
-        if (iri == null) {
+        if (!isLikelyCompositeHashURI(requestIRI)) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            log("resolving [" + iri.getIRIString() + "]");
+            IRI iri = requestIRI;
+            log("attempting to resolve [" + iri.getIRIString() + "]");
             CmdGet cmdGet = initCmdGet();
             cmdGet.setDisableProgress(true);
             cmdGet.setContentIdsOrAliases(Collections.singletonList(iri));
@@ -83,6 +79,7 @@ public class ContentServlet extends HttpServlet {
                 log("not found [" + iri.getIRIString() + "]");
                 throw th;
             }
+
         }
     }
 
