@@ -547,6 +547,8 @@ where ```echo -e "https://example.org/bigdata1\nhttps://example.org/bigdata2"```
 On completion, each Preston process adds it's provenance log to the end of the preston archive version history. So, after each track process has completed, you'll find two extra versions added to the biodiversity graph using ```preston history```.
 
 
+#### Server Mode
+
 ## Prerequisites
 
 Preston needs Java 8+.

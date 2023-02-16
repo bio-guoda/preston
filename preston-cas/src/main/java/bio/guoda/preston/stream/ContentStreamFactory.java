@@ -143,6 +143,9 @@ public class ContentStreamFactory implements InputStreamFactory {
 
         private InputStream createThumbnailForImageStream(IRI iri, InputStream in) throws ContentStreamException {
             try {
+                if (in == null) {
+                    throw new ContentStreamException("no content provided for [" + iri + "]");
+                }
                 BufferedImage srcImage = ImageIO.read(in);
                 if (srcImage == null) {
                     throw new ContentStreamException("image cannot be read from [" + iri + "]");
