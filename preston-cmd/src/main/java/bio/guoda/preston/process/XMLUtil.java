@@ -45,7 +45,7 @@ public class XMLUtil {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
-        return builder.parse(new CloseShieldInputStream(resourceAsStream));
+        return builder.parse(CloseShieldInputStream.wrap(resourceAsStream));
     }
 
     public static NodeList evaluateXPath(Document doc, String expression) throws XPathExpressionException {

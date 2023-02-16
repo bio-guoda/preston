@@ -192,13 +192,18 @@ public class ContentStreamFactoryTest {
         assertThat(actualThumbnail.getWidth(), Is.is(171));
     }
 
-    @Test
+    @Test(expected = IOException.class)
     public void createThumbnailFromNonImage() throws IOException {
         ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("thumbnail:hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f"));
-        InputStream inputStream = factory.create(getClass().getResourceAsStream("treatments-xml-issue205.zip"));
+        try {
+            InputStream inputStream = factory.create(getClass().getResourceAsStream("treatments-xml-issue205.zip"));
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            IOUtils.copyLarge(inputStream, out);
+        } catch (IOException ex) {
+            assertThat(ex.getMessage(), Is.is("failed to create inputstream for [hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f]"));
+            throw ex;
+        }
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtils.copyLarge(inputStream, out);
     }
 
 }

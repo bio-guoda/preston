@@ -77,7 +77,7 @@ public class ContentStreamFactory implements InputStreamFactory {
         try {
             streamRequest.handle(contentReference, is);
         } catch (ContentStreamException e) {
-            throw new IOException("failed to create inputstream", e);
+            throw new IOException("failed to create inputstream for [" + contentReference.getIRIString() + "]", e);
         }
         return streamRequest.getContentStream();
     }
