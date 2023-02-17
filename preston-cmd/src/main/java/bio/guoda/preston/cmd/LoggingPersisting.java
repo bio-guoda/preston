@@ -14,4 +14,8 @@ public class LoggingPersisting extends Persisting {
         return logMode;
     }
 
+    protected void setLogMode(LogTypes logMode) {
+        this.logMode = logMode;
+    }
+
 }

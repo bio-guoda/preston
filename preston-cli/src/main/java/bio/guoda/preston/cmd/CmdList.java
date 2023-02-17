@@ -47,7 +47,7 @@ public class CmdList extends LoggingPersisting implements Runnable {
                                             statement,
                                             this);
                                 } catch (IOException e) {
-                                    LOG.warn("falied to resolve content related to [" + statement.toString() + "]");
+                                    LOG.warn("failed to resolve content related to [" + statement.toString() + "]");
                                     handler.handleError();
                                 }
                             }

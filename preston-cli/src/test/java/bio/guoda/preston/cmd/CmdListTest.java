@@ -3,6 +3,7 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.Is;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -17,6 +18,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertNotNull;
 
 public class CmdListTest {
@@ -58,6 +60,46 @@ public class CmdListTest {
         String expectedString = new String(expected.toByteArray(), StandardCharsets.UTF_8);
 
         assertThat(actualString, Is.is(expectedString));
+
+    }
+
+    @Ignore("see https://github.com/bio-guoda/preston/issues/220")
+    @Test
+    public void listOriginsAsTSV() throws URISyntaxException, IOException {
+        CmdList cmd = new CmdList();
+
+        String rdfProvLog1 = "history/datacontent/82/4d/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b";
+        String rdfProvLog2 = "history/datacontent/10/b4/10b4f8ce7ed4faf6f3616cf12743ecc810bfe4db8cadf81f861d891b37c4ec29";
+        URL queryIndex = getClass().getResource(rdfProvLog1);
+        assertNotNull(queryIndex);
+
+        File dataDir = new File(queryIndex.toURI()).getParentFile().getParentFile().getParentFile();
+
+        assertThat(dataDir.getName(), Is.is("datacontent"));
+
+
+        cmd.setRemotes(Collections.singletonList(Paths.get(dataDir.toURI()).toUri()));
+
+        cmd.setLocalDataDir(folder.newFolder("data").getAbsolutePath());
+        cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b"));
+        cmd.setCacheEnabled(false);
+        cmd.setLogMode(LogTypes.tsv);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmd.setOutputStream(outputStream);
+
+        cmd.run();
+
+        ByteArrayOutputStream expected = new ByteArrayOutputStream();
+
+        IOUtils.copy(getClass().getResourceAsStream(rdfProvLog1), expected);
+        IOUtils.copy(getClass().getResourceAsStream(rdfProvLog2), expected);
+
+        String actualTSVString = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+        String expectedRDFString = new String(expected.toByteArray(), StandardCharsets.UTF_8);
+
+        assertThat(actualTSVString, Is.is(not(expectedRDFString)));
+        assertThat(actualTSVString, Is.is("bla"));
 
     }
 

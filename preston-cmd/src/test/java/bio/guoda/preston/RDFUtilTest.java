@@ -8,9 +8,11 @@ import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -38,6 +40,24 @@ public class RDFUtilTest {
         });
 
         rdfStream.parseAndEmit(IOUtils.toInputStream(nquad, StandardCharsets.UTF_8));
+    }
+
+
+    @Test
+    public void parseRDF() {
+
+        AtomicBoolean statementFound = new AtomicBoolean(false);
+
+        EmittingStreamRDF rdfStream = new EmittingStreamRDF(new StatementsEmitterAdapter() {
+            @Override
+            public void emit(Quad statement) {
+                statementFound.set(true);
+            }
+        });
+
+        rdfStream.parseAndEmit(getClass().getResourceAsStream("prov.nq"));
+
+        assertTrue(statementFound.get());
     }
 
 }
