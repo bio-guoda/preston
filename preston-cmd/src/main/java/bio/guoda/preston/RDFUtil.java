@@ -12,6 +12,8 @@ import org.eclipse.rdf4j.rio.RDFHandlerException;
 import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
+import org.eclipse.rdf4j.rio.helpers.BasicParserSettings;
+import org.eclipse.rdf4j.rio.helpers.NTriplesParserSettings;
 import org.eclipse.rdf4j.rio.nquads.NQuadsParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,12 +58,22 @@ public class RDFUtil {
         });
     }
 
-    public static void parseQuads(InputStream inputStream, AbstractRDFHandler handler, ExceptionConsumer exceptionConsumer) {
+    public static void parseQuads(InputStream inputStream,
+                                  AbstractRDFHandler handler,
+                                  ExceptionConsumer exceptionConsumer) {
         RDFParser rdfParser = new NQuadsParserFactory().getParser();
         rdfParser.setRDFHandler(handler);
         try {
-            rdfParser.setStopAtFirstError(false);
-            rdfParser.setVerifyData(false);
+            // try to be as lenient as possible
+            rdfParser.getParserConfig()
+                    .addNonFatalError(NTriplesParserSettings.FAIL_ON_INVALID_LINES)
+                    .addNonFatalError(BasicParserSettings.FAIL_ON_UNKNOWN_DATATYPES)
+                    .addNonFatalError(BasicParserSettings.FAIL_ON_UNKNOWN_LANGUAGES)
+                    .set(BasicParserSettings.VERIFY_DATATYPE_VALUES, false)
+                    .set(BasicParserSettings.VERIFY_LANGUAGE_TAGS, false)
+                    .set(BasicParserSettings.VERIFY_URI_SYNTAX, false)
+                    .set(BasicParserSettings.VERIFY_RELATIVE_URIS, false);
+
             rdfParser.parse(inputStream);
         } catch (IOException | RDFParseException | RDFHandlerException | StopProcessingException e) {
             exceptionConsumer.accept(e);
