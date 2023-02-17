@@ -1,7 +1,8 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.process.EmittingStreamOfVersions;
+import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
+import bio.guoda.preston.process.EmittingStreamOfUsedByVersions;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
@@ -52,7 +53,7 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
                         listener,
                         discoveredStatements
                 );
-                new EmittingStreamOfVersions(
+                new EmittingStreamOfUsedByVersions(
                         emitter,
                         cmd
                 ).parseAndEmit(inputStream);

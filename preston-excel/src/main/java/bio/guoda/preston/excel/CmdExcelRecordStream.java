@@ -2,7 +2,7 @@ package bio.guoda.preston.excel;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.cmd.LoggingPersisting;
-import bio.guoda.preston.process.EmittingStreamOfVersions;
+import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
@@ -83,7 +83,7 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
             }
         };
 
-        new EmittingStreamOfVersions(emitter, this)
+        new EmittingStreamOfAnyVersions(emitter, this)
                 .parseAndEmit(getInputStream());
 
     }

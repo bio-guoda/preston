@@ -1,6 +1,6 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.process.EmittingStreamOfVersions;
+import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.Quad;
@@ -30,7 +30,7 @@ public class RDFUtilTest {
     public void ignoreInvalidRDF() {
         String nquad = "this ain't no RDF";
 
-        EmittingStreamOfVersions rdfStream = new EmittingStreamOfVersions(new StatementsEmitterAdapter() {
+        EmittingStreamOfAnyVersions rdfStream = new EmittingStreamOfAnyVersions(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 fail("no statement is expected");
@@ -46,7 +46,7 @@ public class RDFUtilTest {
 
         AtomicBoolean statementFound = new AtomicBoolean(false);
 
-        EmittingStreamOfVersions rdfStream = new EmittingStreamOfVersions(new StatementsEmitterAdapter() {
+        EmittingStreamOfAnyVersions rdfStream = new EmittingStreamOfAnyVersions(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 statementFound.set(true);
@@ -56,15 +56,6 @@ public class RDFUtilTest {
         rdfStream.parseAndEmit(getClass().getResourceAsStream("prov.nq"));
 
         assertTrue(statementFound.get());
-    }
-
-    @Test
-    public void parseAsQuad() {
-
-        Quad quad = RDFUtil.asQuad("<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> <d2c8a96a-89c8-4dd6-ba37-06809d4ff9ae> .");
-
-        assertNotNull(quad);
-        assertThat(quad.getSubject().toString(), is("https://preston.guoda.bio"));
     }
 
 }

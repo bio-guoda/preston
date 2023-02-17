@@ -1,6 +1,5 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.Quad;
@@ -14,12 +13,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class EmittingStreamOfVersionsTest {
+public class EmittingStreamOfAnyVersionsTest {
 
     @Test
     public void emitQuad() {
         List<Quad> quads = new ArrayList<>();
-        new EmittingStreamOfVersions(new StatementsEmitterAdapter() {
+        new EmittingStreamOfAnyVersions(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 quads.add(statement);
@@ -39,7 +38,7 @@ public class EmittingStreamOfVersionsTest {
 
         String nquad = "<https://example.org> <http://purl.org/pav/hasVersion> _:ae63fa95-362c-38b5-b74f-203f8d7f92b3 .";
 
-        new EmittingStreamOfVersions(new StatementsEmitterAdapter() {
+        new EmittingStreamOfAnyVersions(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 quads.add(statement);
@@ -53,7 +52,7 @@ public class EmittingStreamOfVersionsTest {
     @Test
     public void emitQuadURIWithUUID() {
         List<Quad> quads = new ArrayList<>();
-        new EmittingStreamOfVersions(new StatementsEmitterAdapter() {
+        new EmittingStreamOfAnyVersions(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 quads.add(statement);
@@ -71,7 +70,7 @@ public class EmittingStreamOfVersionsTest {
         AtomicInteger counter = new AtomicInteger(0);
         List<Quad> quads = new ArrayList<>();
         String line0 = "<foo:bar> <http://www.w3.org/ns/prov#usedBy> <foo:bar> .";
-        new EmittingStreamOfVersions(new StatementsEmitterAdapter() {
+        new EmittingStreamOfAnyVersions(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 quads.add(statement);
@@ -107,7 +106,7 @@ public class EmittingStreamOfVersionsTest {
         // 001/XMLSchema#dateTime> <urn:uuid:8ae298b0-bf2a-4ce4-aa44-b41b0a0d0f6a> .
         //
         List<Quad> quads = new ArrayList<>();
-        new EmittingStreamOfVersions(new StatementsEmitterAdapter() {
+        new EmittingStreamOfAnyVersions(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 quads.add(statement);
@@ -130,7 +129,7 @@ public class EmittingStreamOfVersionsTest {
     @Test
     public void emitQuadNeverStart() {
         List<Quad> quads = new ArrayList<>();
-        new EmittingStreamOfVersions(new StatementsEmitterAdapter() {
+        new EmittingStreamOfAnyVersions(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 quads.add(statement);

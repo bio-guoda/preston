@@ -8,3 +8,4 @@
 <urn:uuid:2c1946b9-0871-42fb-8eef-580b16d17294> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Entity> .
 <urn:uuid:2c1946b9-0871-42fb-8eef-580b16d17294> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Collection> .
 <urn:uuid:2c1946b9-0871-42fb-8eef-580b16d17294> <http://purl.org/dc/terms/description> "A collection of biodiversity graphs."@en .
+<foo:bar> <http://purl.org/pav/hasVersion> <foo:bar> .

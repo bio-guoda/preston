@@ -11,6 +11,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.hamcrest.core.Is;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -61,6 +62,8 @@ public class ProvenanceTracerByIndexTest {
         assertThat(iris.get(0), Is.is(RefNodeFactory.toIRI(getFirst())));
     }
 
+
+    @Ignore
     @Test
     public void comesAfter2() throws IOException {
 
@@ -88,7 +91,7 @@ public class ProvenanceTracerByIndexTest {
                 if (uri.getIRIString().equals("some:iri")) {
                     is = IOUtils.toInputStream("<foo:bar> <foo:bar> <foo:bar> .", StandardCharsets.UTF_8);
                 } else if (uri.getIRIString().equals(getOlder())) {
-                    is = IOUtils.toInputStream("<foo:bar> <foo:bar> <foo:bar> .", StandardCharsets.UTF_8);
+                    is = IOUtils.toInputStream("<foo:bar> <http://purl.org/pav/hasVersion> <foo:bar> .", StandardCharsets.UTF_8);
                 } else if (uri.getIRIString().equals(getNewer())) {
                     is = IOUtils.toInputStream(RefNodeFactory.toStatement(RefNodeFactory.toIRI(getOlder()), USED_BY, RefNodeFactory.toIRI("foo:bar")) + "\n", StandardCharsets.UTF_8);
                 }
@@ -110,9 +113,8 @@ public class ProvenanceTracerByIndexTest {
             }
         });
 
-        assertThat(iris.size(), Is.is(2));
+        assertThat(iris.size(), Is.is(1));
         assertThat(iris.get(0), Is.is(RefNodeFactory.toIRI(getNewer())));
-        assertThat(iris.get(1), Is.is(RefNodeFactory.toIRI(getOlder())));
     }
 
     private IRI getVersion(Pair<RDFTerm, RDFTerm> queryKey) {

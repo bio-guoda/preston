@@ -1,6 +1,6 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.process.EmittingStreamOfVersions;
+import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.ProcessorReadOnly;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementsEmitter;
@@ -49,7 +49,7 @@ public class VersionedRDFChainEmitter extends ProcessorReadOnly {
     }
 
     public void parseAndEmit(InputStream inputStream, final StatementsEmitter emitter) {
-        new EmittingStreamOfVersions(emitter, getState())
+        new EmittingStreamOfAnyVersions(emitter, getState())
                 .parseAndEmit(inputStream);
     }
 

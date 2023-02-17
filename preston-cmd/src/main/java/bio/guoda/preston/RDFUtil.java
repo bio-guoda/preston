@@ -1,7 +1,6 @@
 package bio.guoda.preston;
 
 import bio.guoda.preston.process.StopProcessingException;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -21,10 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class RDFUtil {
 
@@ -33,22 +30,6 @@ public class RDFUtil {
     public static String getValueFor(RDFTerm entity) {
         return RDFValueUtil.getValueFor(entity);
     }
-
-    public static org.apache.commons.rdf.api.Quad asQuad(String string) {
-        InputStream inputStream = IOUtils.toInputStream(string, StandardCharsets.UTF_8);
-        final AtomicReference<org.apache.commons.rdf.api.Quad> quad = new AtomicReference<>();
-        parseQuads(inputStream, new AbstractRDFHandler() {
-            @Override
-            public void handleStatement(Statement st) throws RDFHandlerException {
-                if (quad.get() != null) {
-                    throw new StopProcessingException();
-                }
-                quad.set(asQuad(st));
-            }
-        });
-        return quad.get();
-    }
-
 
     public static void parseQuads(InputStream inputStream, AbstractRDFHandler handler) {
         parseQuads(inputStream, handler, throwable -> {

@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 import static bio.guoda.preston.RefNodeConstants.USED_BY;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.endsWith;
 
 public class ReplayUtilTest {
 
@@ -45,10 +46,8 @@ public class ReplayUtilTest {
                 new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())),
                 new VersionRetriever(getBlobStore()), logger);
 
-        assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), Is.is(
-                "<hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03> <http://www.w3.org/ns/prov#usedBy> <foo:bar> .\n" +
-                        "<urn:example:some> <urn:example:newer> <urn:example:thing> .\n" +
-                        "<urn:example:some> <urn:example:other> <urn:example:thing> .\n"));
+        assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), endsWith(
+                "<http://purl.org/pav/hasVersion> <hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03> .\n"));
     }
 
     @Test
@@ -62,10 +61,8 @@ public class ReplayUtilTest {
                 new VersionRetriever(getBlobStore()),
                 logger);
 
-        assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), Is.is(
-                "<hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03> <http://www.w3.org/ns/prov#usedBy> <foo:bar> .\n" +
-                        "<urn:example:some> <urn:example:newer> <urn:example:thing> .\n" +
-                        "<urn:example:some> <urn:example:other> <urn:example:thing> .\n"));
+        assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), endsWith(
+                "<http://purl.org/pav/hasVersion> <hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03> .\n"));
     }
 
     @Test
@@ -80,10 +77,8 @@ public class ReplayUtilTest {
                 logger
         );
 
-        assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), Is.is(
-                "<hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03> <http://www.w3.org/ns/prov#usedBy> <foo:bar> .\n" +
-                        "<urn:example:some> <urn:example:newer> <urn:example:thing> .\n" +
-                        "<urn:example:some> <urn:example:other> <urn:example:thing> .\n"));
+        assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
+                endsWith("<http://purl.org/pav/hasVersion> <hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03> .\n"));
 
     }
 

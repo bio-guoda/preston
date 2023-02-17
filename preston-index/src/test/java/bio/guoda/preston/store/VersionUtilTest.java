@@ -14,6 +14,7 @@ import java.io.IOException;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 
@@ -155,6 +156,22 @@ public class VersionUtilTest {
         IRI iri = VersionUtil.mostRecentVersion(someStatement);
         assertNotNull(iri);
         assertThat(iri.getIRIString(), is(getNewer()));
+
+    }
+
+    @Test
+    public void mostRecentVersion() {
+        IRI iri = VersionUtil.mostRecentVersion("<foo:bar> <http://purl.org/pav/hasVersion> <foo:bar:1> .");
+        assertThat(iri, is(notNullValue()));
+        assertThat(iri.getIRIString(), is("foo:bar:1"));
+    }
+
+
+    @Test
+    public void mostRecentVersionWithNamespace() {
+        IRI iri = VersionUtil.mostRecentVersion("<foo:bar> <http://purl.org/pav/hasVersion> <foo:bar:1> <ns:name> .");
+        assertThat(iri, is(notNullValue()));
+        assertThat(iri.getIRIString(), is("foo:bar:1"));
 
     }
 

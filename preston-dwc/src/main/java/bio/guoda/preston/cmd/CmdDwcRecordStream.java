@@ -1,7 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.process.EmittingStreamOfVersions;
+import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
@@ -48,7 +48,7 @@ public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
             }
         };
 
-        new EmittingStreamOfVersions(emitter, this)
+        new EmittingStreamOfAnyVersions(emitter, this)
                 .parseAndEmit(getInputStream());
 
     }

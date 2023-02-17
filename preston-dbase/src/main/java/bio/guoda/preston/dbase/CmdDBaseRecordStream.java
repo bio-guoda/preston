@@ -2,7 +2,7 @@ package bio.guoda.preston.dbase;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.cmd.LoggingPersisting;
-import bio.guoda.preston.process.EmittingStreamOfVersions;
+import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
@@ -49,7 +49,7 @@ public class CmdDBaseRecordStream extends LoggingPersisting implements Runnable 
             }
         };
 
-        new EmittingStreamOfVersions(emitter, this)
+        new EmittingStreamOfAnyVersions(emitter, this)
                 .parseAndEmit(getInputStream());
 
     }
