@@ -98,8 +98,6 @@ public class CmdListTest {
         String actualTSVString = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
         String expectedTSVString = new String(expected.toByteArray(), StandardCharsets.UTF_8);
 
-        IOUtils.write(actualTSVString, new FileOutputStream("/tmp/actualbla.tsv"), StandardCharsets.UTF_8);
-
         assertThat(actualTSVString, Is.is(expectedTSVString));
 
     }
