@@ -58,11 +58,11 @@ public class CmdGet extends Persisting implements Runnable {
                     IRI queryIRI = toIRI(StringUtils.trim(line));
                     quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, queryIRI);
                 }
-                ContentQueryUtil.handleContentQuery(blobStore, quad, this);
+                ContentQueryUtil.copyMostRecentContent(blobStore, quad, this);
             }
         } else {
             for (IRI contentIdOrAlias : contentIdsOrAliases) {
-                ContentQueryUtil.handleContentQuery(blobStore, contentIdOrAlias, this);
+                ContentQueryUtil.copyContent(blobStore, contentIdOrAlias, this);
             }
         }
     }

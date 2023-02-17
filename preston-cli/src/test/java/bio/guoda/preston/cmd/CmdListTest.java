@@ -10,6 +10,7 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -63,14 +64,13 @@ public class CmdListTest {
 
     }
 
-    @Ignore("see https://github.com/bio-guoda/preston/issues/220")
     @Test
     public void listOriginsAsTSV() throws URISyntaxException, IOException {
         CmdList cmd = new CmdList();
 
-        String rdfProvLog1 = "history/datacontent/82/4d/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b";
-        String rdfProvLog2 = "history/datacontent/10/b4/10b4f8ce7ed4faf6f3616cf12743ecc810bfe4db8cadf81f861d891b37c4ec29";
-        URL queryIndex = getClass().getResource(rdfProvLog1);
+        String tsvProvLog1 = "history/datacontent/82/4d/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b.tsv";
+        String tsvProvLog2 = "history/datacontent/10/b4/10b4f8ce7ed4faf6f3616cf12743ecc810bfe4db8cadf81f861d891b37c4ec29.tsv";
+        URL queryIndex = getClass().getResource(tsvProvLog1);
         assertNotNull(queryIndex);
 
         File dataDir = new File(queryIndex.toURI()).getParentFile().getParentFile().getParentFile();
@@ -92,14 +92,15 @@ public class CmdListTest {
 
         ByteArrayOutputStream expected = new ByteArrayOutputStream();
 
-        IOUtils.copy(getClass().getResourceAsStream(rdfProvLog1), expected);
-        IOUtils.copy(getClass().getResourceAsStream(rdfProvLog2), expected);
+        IOUtils.copy(getClass().getResourceAsStream(tsvProvLog1), expected);
+        IOUtils.copy(getClass().getResourceAsStream(tsvProvLog2), expected);
 
         String actualTSVString = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
-        String expectedRDFString = new String(expected.toByteArray(), StandardCharsets.UTF_8);
+        String expectedTSVString = new String(expected.toByteArray(), StandardCharsets.UTF_8);
 
-        assertThat(actualTSVString, Is.is(not(expectedRDFString)));
-        assertThat(actualTSVString, Is.is("bla"));
+        IOUtils.write(actualTSVString, new FileOutputStream("/tmp/actualbla.tsv"), StandardCharsets.UTF_8);
+
+        assertThat(actualTSVString, Is.is(expectedTSVString));
 
     }
 

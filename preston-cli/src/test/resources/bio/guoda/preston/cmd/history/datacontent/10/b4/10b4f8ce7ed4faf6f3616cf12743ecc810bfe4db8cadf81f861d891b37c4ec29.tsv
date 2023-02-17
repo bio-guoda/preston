@@ -1,0 +1,19 @@
+https://preston.guoda.bio	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://www.w3.org/ns/prov#SoftwareAgent	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f
+https://preston.guoda.bio	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://www.w3.org/ns/prov#Agent	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f
+https://preston.guoda.bio	http://purl.org/dc/terms/description	Preston is a software program that finds, archives and provides access to biodiversity datasets.	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f
+urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://www.w3.org/ns/prov#Activity	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f
+urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f	http://purl.org/dc/terms/description	A crawl event that discovers biodiversity archives.	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f
+urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f	http://www.w3.org/ns/prov#startedAtTime	2022-11-08T17:52:57.580Z	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f
+urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f	http://www.w3.org/ns/prov#wasStartedBy	https://preston.guoda.bio	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f
+https://doi.org/10.5281/zenodo.1410543	http://www.w3.org/ns/prov#usedBy	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f
+https://doi.org/10.5281/zenodo.1410543	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://purl.org/dc/dcmitype/Software	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f
+https://doi.org/10.5281/zenodo.1410543	http://purl.org/dc/terms/bibliographicCitation	Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2021. Preston: a biodiversity dataset tracker (Version 0.0.1-SNAPSHOT) [Software]. Zenodo. http://doi.org/10.5281/zenodo.1410543	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f
+urn:uuid:0659a54f-b713-4f86-a917-5be166a14110	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://www.w3.org/ns/prov#Entity	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f
+urn:uuid:0659a54f-b713-4f86-a917-5be166a14110	http://purl.org/dc/terms/description	A biodiversity dataset graph archive.	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f
+hash://sha256/eb3962e0168048b6f40c80fb6503edd80a60978d9215f0883aaca9505df740fc	http://www.w3.org/ns/prov#wasGeneratedBy	urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742	urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742
+hash://sha256/eb3962e0168048b6f40c80fb6503edd80a60978d9215f0883aaca9505df740fc	http://www.w3.org/ns/prov#qualifiedGeneration	urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742	urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742
+urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742	http://www.w3.org/ns/prov#generatedAtTime	2022-11-08T17:52:57.785Z	urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742
+urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	http://www.w3.org/ns/prov#Generation	urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742
+urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742	http://www.w3.org/ns/prov#wasInformedBy	urn:uuid:d9cffe9c-466d-445f-89da-4adb3c71569f	urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742
+urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742	http://www.w3.org/ns/prov#used	file:///home/jorrit/proj/ebbe/preston/preston-cli/src/test/resources/bio/guoda/preston/cmd/history/whatsup.txt	urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742
+file:///home/jorrit/proj/ebbe/preston/preston-cli/src/test/resources/bio/guoda/preston/cmd/history/whatsup.txt	http://purl.org/pav/hasVersion	hash://sha256/eb3962e0168048b6f40c80fb6503edd80a60978d9215f0883aaca9505df740fc	urn:uuid:1e4f6572-b8d2-4151-94b9-d7f9ea71d742
