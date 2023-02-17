@@ -1,11 +1,11 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
+import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -53,14 +53,14 @@ public class CmdGet extends Persisting implements Runnable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println("attempting to read line as quad [" + line + "]");
-                Quad quad = RDFUtil.asQuad(line);
-                if (quad == null) {
-                    System.out.println("attempting to read line as IRI [" + line + "]");
-                    IRI queryIRI = toIRI(StringUtils.trim(line));
-                    quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, queryIRI);
+                IRI iri = VersionUtil.mostRecentVersion(line);
+                if (iri == null && VersionUtil.maybeNotQuad(line)) {
+                    iri = toIRI(StringUtils.trim(line));
                 }
-                ContentQueryUtil.copyMostRecentContent(blobStore, quad, this);
+                if (iri != null) {
+                    Quad quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, iri);
+                    ContentQueryUtil.copyMostRecentContent(blobStore, quad, this);
+                }
             }
         } else {
             for (IRI contentIdOrAlias : contentIdsOrAliases) {

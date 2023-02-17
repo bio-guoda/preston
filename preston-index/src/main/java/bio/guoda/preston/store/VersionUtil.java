@@ -22,8 +22,8 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class VersionUtil {
 
-    private static final Pattern PATTERN_SUBJECT_NEWER = Pattern.compile("<(?<subj>.*)> (" + HAS_PREVIOUS_VERSION.toString() + "|" + WAS_DERIVED_FROM.toString() + "|" + USED_BY + ")(.*) [.]$");
-    private static final Pattern PATTERN_OBJECT_NEWER = Pattern.compile(".* (" + HAS_VERSION.toString() + ") (<(?<obj>.*)>) [.]$");
+    private static final Pattern PATTERN_SUBJECT_NEWER = Pattern.compile("<(?<subj>.*)> (" + HAS_PREVIOUS_VERSION.toString() + "|" + WAS_DERIVED_FROM.toString() + "|" + USED_BY + ") (.*) [.]$");
+    private static final Pattern PATTERN_OBJECT_NEWER = Pattern.compile(".* (" + HAS_VERSION.toString() + ") (<(?<obj>.*)>) (.*) [.]$");
 
     public static IRI findMostRecentVersion(IRI provenanceRoot, HexaStore hexastore) throws IOException {
         return findMostRecentVersion(provenanceRoot, hexastore, null);
@@ -108,5 +108,9 @@ public class VersionUtil {
         return StringUtils.isNotBlank(newerVersionString) ?
                 RefNodeFactory.toIRI(newerVersionString)
                 : null;
+    }
+
+    public static boolean maybeNotQuad(String line) {
+        return !StringUtils.endsWith(line, " .");
     }
 }

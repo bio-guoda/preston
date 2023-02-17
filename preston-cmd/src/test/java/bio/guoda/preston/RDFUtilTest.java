@@ -1,16 +1,13 @@
 package bio.guoda.preston;
 
-import bio.guoda.preston.process.EmittingStreamRDF;
+import bio.guoda.preston.process.EmittingStreamOfVersions;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
@@ -33,7 +30,7 @@ public class RDFUtilTest {
     public void ignoreInvalidRDF() {
         String nquad = "this ain't no RDF";
 
-        EmittingStreamRDF rdfStream = new EmittingStreamRDF(new StatementsEmitterAdapter() {
+        EmittingStreamOfVersions rdfStream = new EmittingStreamOfVersions(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 fail("no statement is expected");
@@ -49,7 +46,7 @@ public class RDFUtilTest {
 
         AtomicBoolean statementFound = new AtomicBoolean(false);
 
-        EmittingStreamRDF rdfStream = new EmittingStreamRDF(new StatementsEmitterAdapter() {
+        EmittingStreamOfVersions rdfStream = new EmittingStreamOfVersions(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 statementFound.set(true);

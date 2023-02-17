@@ -3,6 +3,7 @@ package bio.guoda.preston.store;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.util.UUIDUtil;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -143,6 +144,7 @@ public class VersionUtilTest {
     @Test
     public void newerVersionStatementDerivedFrom() {
         Quad provenanceStatement = RefNodeFactory.toStatement(
+                toIRI("foo:bar"),
                 toIRI(getNewer()),
                 RefNodeConstants.WAS_DERIVED_FROM,
                 toIRI(getOlder())
@@ -159,6 +161,7 @@ public class VersionUtilTest {
     @Test
     public void newerVersionStatementHasVersion() {
         Quad provenanceStatement = RefNodeFactory.toStatement(
+                toIRI("foo:bar"),
                 toIRI(getOlder()),
                 RefNodeConstants.HAS_VERSION,
                 toIRI(getNewer())

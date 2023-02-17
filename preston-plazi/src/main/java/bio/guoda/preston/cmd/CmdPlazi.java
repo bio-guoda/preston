@@ -1,7 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.process.EmittingStreamRDF;
+import bio.guoda.preston.process.EmittingStreamOfVersions;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
@@ -45,7 +45,7 @@ public class CmdPlazi extends LoggingPersisting implements Runnable {
             }
         };
 
-        new EmittingStreamRDF(emitter, this)
+        new EmittingStreamOfVersions(emitter, this)
                 .parseAndEmit(getInputStream());
 
     }
