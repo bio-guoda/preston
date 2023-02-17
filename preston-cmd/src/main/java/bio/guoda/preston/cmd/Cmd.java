@@ -41,6 +41,7 @@ public class Cmd implements ProcessorState {
 
     @Override
     public void stopProcessing() {
+        System.out.println("stop processing");
         shouldKeepProcessing.set(false);
     }
 

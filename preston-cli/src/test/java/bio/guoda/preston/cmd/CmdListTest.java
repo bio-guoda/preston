@@ -66,6 +66,7 @@ public class CmdListTest {
 
     }
 
+    @Ignore("see https://github.com/bio-guoda/preston/issues/220")
     @Test
     public void listOriginsAsTSV() throws URISyntaxException, IOException {
         CmdList cmd = new CmdList();

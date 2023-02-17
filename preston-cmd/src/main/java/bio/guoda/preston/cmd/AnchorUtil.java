@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StopProcessingException;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.VersionUtil;
@@ -9,34 +10,21 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AnchorUtil {
+
     public static AtomicReference<IRI> findHead(Persisting persisting) {
         AtomicReference<IRI> head = new AtomicReference<>();
 
         if (persisting.isAnchored()) {
             head.set(persisting.getProvenanceAnchor());
         } else {
-            resolveHead(head, persisting);
+            findHead(persisting, head);
         }
         return head;
     }
 
-    public static AtomicReference<IRI> findHeadOrThrow(Persisting persisting) {
-        AtomicReference<IRI> head = findHead(persisting);
-
-        if (head.get() == null) {
-            throw new RuntimeException("Cannot find most recent version: no provenance logs found.");
-        }
-
-        return head;
-    }
-
-    private static void resolveHead(AtomicReference<IRI> head, Persisting persisting) {
+    private static void findHead(Persisting persisting, AtomicReference<IRI> head) {
         ProvenanceTracer provenanceTracer = persisting.getProvenanceTracer();
         IRI provenanceAnchor = persisting.getProvenanceAnchor();
-        findHead(head, provenanceTracer, provenanceAnchor, persisting);
-    }
-
-    private static void findHead(AtomicReference<IRI> head, ProvenanceTracer provenanceTracer, IRI provenanceAnchor, Persisting persisting) {
         try {
             provenanceTracer
                     .trace(
@@ -52,9 +40,20 @@ public class AnchorUtil {
         } catch (IOException e) {
             throw new RuntimeException("Failed to get version history.", e);
         } catch (StopProcessingException e) {
-            if (persisting.shouldKeepProcessing()) {
+            if (((ProcessorState) persisting).shouldKeepProcessing()) {
                 throw new RuntimeException("got unexpected stop processing exception.", e);
             }
         }
     }
+
+    public static AtomicReference<IRI> findHeadOrThrow(Persisting persisting) {
+        AtomicReference<IRI> head = findHead(persisting);
+
+        if (head.get() == null) {
+            throw new RuntimeException("Cannot find most recent version: no provenance logs found.");
+        }
+
+        return head;
+    }
+
 }
