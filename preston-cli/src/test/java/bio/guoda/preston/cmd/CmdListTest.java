@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.Is;
 import org.junit.Ignore;
@@ -56,11 +57,12 @@ public class CmdListTest {
 
         IOUtils.copy(getClass().getResourceAsStream(provLog1), expected);
         IOUtils.copy(getClass().getResourceAsStream(provLog2), expected);
-        
+
+
         String actualString = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
         String expectedString = new String(expected.toByteArray(), StandardCharsets.UTF_8);
 
-        assertThat(actualString, Is.is(expectedString));
+        assertThat(TestUtil.removeCarriageReturn(actualString), Is.is(TestUtil.removeCarriageReturn(expectedString)));
 
     }
 
@@ -98,7 +100,7 @@ public class CmdListTest {
         String actualTSVString = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
         String expectedTSVString = new String(expected.toByteArray(), StandardCharsets.UTF_8);
 
-        assertThat(actualTSVString, Is.is(expectedTSVString));
+        assertThat(TestUtil.removeCarriageReturn(actualTSVString), Is.is(TestUtil.removeCarriageReturn(expectedTSVString)));
 
     }
 

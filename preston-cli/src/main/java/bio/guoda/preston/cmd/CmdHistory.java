@@ -21,12 +21,11 @@ public class CmdHistory extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        StatementsListener logger = StatementLogFactory.createPrintingLogger(
+        final StatementsListener logger = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
                 getOutputStream(),
                 this
         );
-
 
         AtomicBoolean foundHistory = new AtomicBoolean(false);
         try {
