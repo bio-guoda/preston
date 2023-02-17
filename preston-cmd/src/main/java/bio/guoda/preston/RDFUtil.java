@@ -61,6 +61,7 @@ public class RDFUtil {
         rdfParser.setRDFHandler(handler);
         try {
             rdfParser.setStopAtFirstError(false);
+            rdfParser.setVerifyData(false);
             rdfParser.parse(inputStream);
         } catch (IOException | RDFParseException | RDFHandlerException | StopProcessingException e) {
             exceptionConsumer.accept(e);
