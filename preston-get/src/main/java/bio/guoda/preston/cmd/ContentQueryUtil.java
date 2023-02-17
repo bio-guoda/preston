@@ -13,14 +13,14 @@ import java.io.InputStream;
 public class ContentQueryUtil {
 
     static void copyMostRecentContent(BlobStoreReadOnly blobStore, Quad quad, Persisting persisting) throws IOException {
-        IRI version = VersionUtil.mostRecentVersionForStatement(quad);
+        IRI version = VersionUtil.mostRecentVersion(quad);
         if (version != null) {
             copyContent(blobStore, version, persisting);
         }
     }
 
     static InputStream getMostRecentContent(BlobStoreReadOnly blobStore, Quad quad, Persisting persisting) throws IOException {
-        IRI version = VersionUtil.mostRecentVersionForStatement(quad);
+        IRI version = VersionUtil.mostRecentVersion(quad);
         if (version == null) {
             throw new IOException("no content found associated to [" + quad.toString() + "]");
         }

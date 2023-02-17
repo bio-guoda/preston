@@ -2,6 +2,7 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementListener;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -10,6 +11,8 @@ import org.apache.commons.rdf.api.RDFTerm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
@@ -18,6 +21,9 @@ import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class VersionUtil {
+
+    private static final Pattern PATTERN_SUBJECT_NEWER = Pattern.compile("<(?<subj>.*)> (" + HAS_PREVIOUS_VERSION.toString() + "|" + WAS_DERIVED_FROM.toString() + "|" + USED_BY + ")(.*) [.]$");
+    private static final Pattern PATTERN_OBJECT_NEWER = Pattern.compile(".* (" + HAS_VERSION.toString() + ") (<(?<obj>.*)>) [.]$");
 
     public static IRI findMostRecentVersion(IRI provenanceRoot, HexaStore hexastore) throws IOException {
         return findMostRecentVersion(provenanceRoot, hexastore, null);
@@ -69,7 +75,7 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    public static IRI mostRecentVersionForStatement(Quad statement) {
+    public static IRI mostRecentVersion(Quad statement) {
         IRI mostRecentVersion = null;
         RDFTerm mostRecentTerm = null;
         if (statement.getPredicate().equals(HAS_PREVIOUS_VERSION)
@@ -87,5 +93,20 @@ public class VersionUtil {
             }
         }
         return mostRecentVersion;
+    }
+
+    public static IRI mostRecentVersion(String someStatement) {
+        String newerVersionString;
+        final Matcher matcherSubject = PATTERN_SUBJECT_NEWER.matcher(someStatement);
+        if (matcherSubject.matches()) {
+            newerVersionString = matcherSubject.group("subj");
+        } else {
+            final Matcher matcherObject = PATTERN_OBJECT_NEWER.matcher(someStatement);
+            newerVersionString = matcherObject.matches() ? matcherObject.group("obj") : null;
+        }
+
+        return StringUtils.isNotBlank(newerVersionString) ?
+                RefNodeFactory.toIRI(newerVersionString)
+                : null;
     }
 }

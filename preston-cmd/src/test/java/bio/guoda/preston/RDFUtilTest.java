@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.is;
@@ -58,6 +59,15 @@ public class RDFUtilTest {
         rdfStream.parseAndEmit(getClass().getResourceAsStream("prov.nq"));
 
         assertTrue(statementFound.get());
+    }
+
+    @Test
+    public void parseAsQuad() {
+
+        Quad quad = RDFUtil.asQuad("<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> <d2c8a96a-89c8-4dd6-ba37-06809d4ff9ae> .");
+
+        assertNotNull(quad);
+        assertThat(quad.getSubject().toString(), is("https://preston.guoda.bio"));
     }
 
 }

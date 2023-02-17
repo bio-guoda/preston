@@ -44,7 +44,7 @@ public class HashVerifier extends StatementsListenerAdapter {
 
     @Override
     public void on(Quad statement) {
-        final IRI iri = VersionUtil.mostRecentVersionForStatement(statement);
+        final IRI iri = VersionUtil.mostRecentVersion(statement);
         if (iri != null && !verifiedMap.containsKey(iri.getIRIString())) {
             VerificationState state = VerificationState.MISSING;
             if (HashKeyUtil.isValidHashKey(iri)) {

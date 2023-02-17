@@ -50,7 +50,7 @@ public class ProvenanceTracerByIndexTest {
         tracer.trace(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, new StatementListener() {
             @Override
             public void on(Quad statement) {
-                IRI version = VersionUtil.mostRecentVersionForStatement(statement);
+                IRI version = VersionUtil.mostRecentVersion(statement);
                 if (version != null) {
                     iris.add(version);
                 }
@@ -103,7 +103,7 @@ public class ProvenanceTracerByIndexTest {
         tracer.trace(someCurrent, new StatementListener() {
             @Override
             public void on(Quad statement) {
-                IRI version = VersionUtil.mostRecentVersionForStatement(statement);
+                IRI version = VersionUtil.mostRecentVersion(statement);
                 if (version != null) {
                     iris.add(version);
                 }

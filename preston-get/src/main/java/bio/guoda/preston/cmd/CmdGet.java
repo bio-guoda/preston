@@ -53,8 +53,10 @@ public class CmdGet extends Persisting implements Runnable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
+                System.out.println("attempting to read line as quad [" + line + "]");
                 Quad quad = RDFUtil.asQuad(line);
                 if (quad == null) {
+                    System.out.println("attempting to read line as IRI [" + line + "]");
                     IRI queryIRI = toIRI(StringUtils.trim(line));
                     quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, queryIRI);
                 }

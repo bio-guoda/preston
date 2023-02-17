@@ -30,7 +30,7 @@ public class AnchorUtil {
                     .trace(
                             provenanceAnchor,
                             statement -> {
-                                IRI iri = VersionUtil.mostRecentVersionForStatement(statement);
+                                IRI iri = VersionUtil.mostRecentVersion(statement);
                                 if (iri != null) {
                                     head.set(iri);
                                     persisting.stopProcessing();

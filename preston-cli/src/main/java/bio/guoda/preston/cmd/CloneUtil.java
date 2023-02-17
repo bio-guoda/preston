@@ -44,7 +44,7 @@ public class CloneUtil {
         return new StatementsListenerAdapter() {
             @Override
             public void on(Quad statement) {
-                IRI mostRecent = VersionUtil.mostRecentVersionForStatement(statement);
+                IRI mostRecent = VersionUtil.mostRecentVersion(statement);
                 if (mostRecent != null && HashKeyUtil.isValidHashKey(mostRecent)) {
                     try (InputStream is = blobStore.get(mostRecent)) {
                     } catch (IOException e) {

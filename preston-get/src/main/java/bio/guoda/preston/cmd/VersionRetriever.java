@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.VersionUtil;
@@ -23,7 +22,7 @@ public class VersionRetriever extends StatementsListenerAdapter {
 
     @Override
     public void on(Quad statement) {
-        IRI mostRecentVersion = VersionUtil.mostRecentVersionForStatement(statement);
+        IRI mostRecentVersion = VersionUtil.mostRecentVersion(statement);
         if (mostRecentVersion != null) {
             touchMostRecentVersion(mostRecentVersion);
         }

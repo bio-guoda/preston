@@ -8,12 +8,16 @@ import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.rio.ParseErrorListener;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
 import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 import org.eclipse.rdf4j.rio.helpers.BasicParserSettings;
+import org.eclipse.rdf4j.rio.helpers.BooleanRioSetting;
 import org.eclipse.rdf4j.rio.helpers.NTriplesParserSettings;
+import org.eclipse.rdf4j.rio.helpers.ParseErrorLogger;
+import org.eclipse.rdf4j.rio.helpers.RioSettingImpl;
 import org.eclipse.rdf4j.rio.nquads.NQuadsParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +67,7 @@ public class RDFUtil {
                                   ExceptionConsumer exceptionConsumer) {
         RDFParser rdfParser = new NQuadsParserFactory().getParser();
         rdfParser.setRDFHandler(handler);
+        rdfParser.setParseErrorListener(new ParseErrorLogger());
         try {
             // try to be as lenient as possible
             rdfParser.getParserConfig()

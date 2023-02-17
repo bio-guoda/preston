@@ -27,7 +27,7 @@ public class VersionedRDFChainEmitter extends ProcessorReadOnly {
 
     @Override
     public void on(Quad statement) {
-        IRI version = VersionUtil.mostRecentVersionForStatement(statement);
+        IRI version = VersionUtil.mostRecentVersion(statement);
         emitProvenanceLogVersion(version);
     }
 

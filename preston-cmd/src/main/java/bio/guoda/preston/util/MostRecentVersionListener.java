@@ -20,7 +20,7 @@ public class MostRecentVersionListener implements StatementListener {
 
     @Override
     public void on(Quad statement) {
-        IRI mostRecentCandidate = VersionUtil.mostRecentVersionForStatement(statement);
+        IRI mostRecentCandidate = VersionUtil.mostRecentVersion(statement);
         if (mostRecentCandidate != null) {
             mostRecent.set(mostRecentCandidate);
         }

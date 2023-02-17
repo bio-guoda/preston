@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
@@ -101,11 +102,76 @@ public class VersionUtilTest {
                 toIRI(getOlder())
         );
 
-        IRI iri = VersionUtil.mostRecentVersionForStatement(provenanceStatement);
+        IRI iri = VersionUtil.mostRecentVersion(provenanceStatement);
 
         assertThat(iri.getIRIString(), is(getNewer()));
 
     }
+
+    @Test
+    public void newerVersionStatementHasPreviousVersion() {
+        Quad provenanceStatement = RefNodeFactory.toStatement(
+                toIRI(getNewer()),
+                RefNodeConstants.HAS_PREVIOUS_VERSION,
+                toIRI(getOlder())
+        );
+
+        String someStatement = provenanceStatement.toString();
+
+        IRI iri = VersionUtil.mostRecentVersion(someStatement);
+        assertNotNull(iri);
+        assertThat(iri.getIRIString(), is(getNewer()));
+
+    }
+
+    @Test
+    public void newerVersionStatementUsedBy() {
+        Quad provenanceStatement = RefNodeFactory.toStatement(
+                toIRI(getNewer()),
+                RefNodeConstants.USED_BY,
+                toIRI(getOlder())
+        );
+
+        String someStatement = provenanceStatement.toString();
+
+        IRI iri = VersionUtil.mostRecentVersion(someStatement);
+        assertNotNull(iri);
+        assertThat(iri.getIRIString(), is(getNewer()));
+
+    }
+
+    @Test
+    public void newerVersionStatementDerivedFrom() {
+        Quad provenanceStatement = RefNodeFactory.toStatement(
+                toIRI(getNewer()),
+                RefNodeConstants.WAS_DERIVED_FROM,
+                toIRI(getOlder())
+        );
+
+        String someStatement = provenanceStatement.toString();
+
+        IRI iri = VersionUtil.mostRecentVersion(someStatement);
+        assertNotNull(iri);
+        assertThat(iri.getIRIString(), is(getNewer()));
+
+    }
+
+    @Test
+    public void newerVersionStatementHasVersion() {
+        Quad provenanceStatement = RefNodeFactory.toStatement(
+                toIRI(getOlder()),
+                RefNodeConstants.HAS_VERSION,
+                toIRI(getNewer())
+        );
+
+        String someStatement = provenanceStatement.toString();
+
+        IRI iri = VersionUtil.mostRecentVersion(someStatement);
+        assertNotNull(iri);
+        assertThat(iri.getIRIString(), is(getNewer()));
+
+    }
+
 
     @Test
     public void mostRecentForVersionStatement2() {
@@ -115,7 +181,7 @@ public class VersionUtilTest {
                 toIRI(getNewer())
         );
 
-        IRI iri = VersionUtil.mostRecentVersionForStatement(provenanceStatement);
+        IRI iri = VersionUtil.mostRecentVersion(provenanceStatement);
 
         assertThat(iri.getIRIString(), is(getNewer()));
 
@@ -129,7 +195,7 @@ public class VersionUtilTest {
                 toIRI(getOlder())
         );
 
-        IRI iri = VersionUtil.mostRecentVersionForStatement(provenanceStatement);
+        IRI iri = VersionUtil.mostRecentVersion(provenanceStatement);
 
         assertThat(iri.getIRIString(), is(getNewer()));
 
