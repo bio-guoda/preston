@@ -3,8 +3,11 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.util.UUIDUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
@@ -15,10 +18,12 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -50,6 +55,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     }};
 
     public static final String GBIF_API_DATASET_PART = "//api.gbif.org/v1/dataset";
+    public static final String GBIF_DATASET_INDEX_STRING = "https://api.gbif.org/v1/dataset/search/export";
     public static final String GBIF_API_OCCURRENCE_DOWNLOAD_PART = "//api.gbif.org/v1/occurrence/download";
     public static final String GBIF_OCCURRENCE_PART_PATH = "api.gbif.org/v1/occurrence";
     public static final String GBIF_OCCURRENCE_PART = "//" + GBIF_OCCURRENCE_PART_PATH;
@@ -58,6 +64,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     public static final String GBIF_OCCURRENCE_STRING = "https:" + GBIF_OCCURRENCE_PART;
     private final Logger LOG = LoggerFactory.getLogger(RegistryReaderGBIF.class);
     public static final IRI GBIF_REGISTRY = toIRI(GBIF_DATASET_REGISTRY_STRING);
+    public static final IRI GBIF_DATASET_INDEX = toIRI(GBIF_DATASET_INDEX_STRING);
 
     public static final Pattern OCCURRENCE_RECORD_URL_PATTERN = Pattern.compile("<http[s]{0,1}://" + GBIF_OCCURRENCE_PART_PATH + "/(([0-9]+)|(search.*))>");
 
@@ -76,9 +83,12 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
             List<Quad> nodes = new ArrayList<>();
             Stream.of(
                     toStatement(Seeds.GBIF, IS_A, ORGANIZATION),
-                    toStatement(RegistryReaderGBIF.GBIF_REGISTRY,
+                    toStatement(RegistryReaderGBIF.GBIF_DATASET_INDEX,
                             DESCRIPTION,
-                            toEnglishLiteral("Provides a registry of Darwin Core archives, and EML descriptors."))
+                            toEnglishLiteral("Provides an index of Datasets indexed by GBIF.")),
+                    toStatement(RegistryReaderGBIF.GBIF_DATASET_INDEX,
+                            SEE_ALSO,
+                            RegistryReaderGBIF.GBIF_REGISTRY)
             ).forEach(nodes::add);
 
             emitPageRequest(new StatementsEmitterAdapter() {
@@ -86,8 +96,11 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 public void emit(Quad statement) {
                     nodes.add(statement);
                 }
-            }, GBIF_REGISTRY);
+            }, GBIF_DATASET_INDEX, MimeTypes.MIME_TYPE_TSV);
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+        } else if (hasVersionAvailable(statement)
+                && getVersionSource(statement).toString().contains(GBIF_DATASET_INDEX_STRING)) {
+            handleDatasetIndex(statement);
         } else if (hasVersionAvailable(statement)
                 && getVersionSource(statement).toString().contains(GBIF_API_DATASET_PART)) {
             handleDataset(statement);
@@ -166,6 +179,25 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
     }
 
+    public void handleDatasetIndex(Quad statement) {
+        List<Quad> nodes = new ArrayList<>();
+        try {
+            IRI currentPage = (IRI) getVersion(statement);
+            InputStream is = get(currentPage);
+            if (is != null) {
+                parseDatasetIndex(new StatementsEmitterAdapter() {
+                    @Override
+                    public void emit(Quad statement) {
+                        nodes.add(statement);
+                    }
+                }, is, getVersionSource(statement));
+            }
+        } catch (IOException e) {
+            LOG.warn("failed to handle [" + statement.toString() + "]", e);
+        }
+        ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+    }
+
     static void emitNextPage(int offset, int limit, StatementsEmitter emitter, String versionSourceURI) {
         String nextPageURL = versionSourceURI;
         nextPageURL = RegExUtils.replacePattern(nextPageURL, "limit=[0-9]*", "limit=" + limit);
@@ -175,13 +207,13 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         nextPageURL = StringUtils.contains(nextPageURL, "limit") ? nextPageURL : nextPageURL + "&limit=" + limit;
         nextPageURL = StringUtils.replace(nextPageURL, "?&", "?");
         IRI nextPage = toIRI(nextPageURL);
-        emitPageRequest(emitter, nextPage);
+        emitPageRequest(emitter, nextPage, MimeTypes.MIME_TYPE_JSON);
     }
 
-    private static void emitPageRequest(StatementsEmitter emitter, IRI nextPage) {
+    private static void emitPageRequest(StatementsEmitter emitter, IRI nextPage, String mimeType) {
         Stream.of(
                 toStatement(nextPage, CREATED_BY, Seeds.GBIF),
-                toStatement(nextPage, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
+                toStatement(nextPage, HAS_FORMAT, toContentType(mimeType)),
                 toStatement(nextPage, HAS_VERSION, toBlank()))
                 .forEach(emitter::emit);
     }
@@ -222,6 +254,25 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         }
 
         emitNextPageIfNeeded(emitter, versionSource, jsonNode);
+    }
+
+    static void parseDatasetIndex(StatementsEmitter emitter, InputStream in, IRI versionSource) throws IOException {
+
+        LineIterator lineIterator = IOUtils.lineIterator(in, StandardCharsets.UTF_8);
+
+        while (lineIterator.hasNext()) {
+            String line = lineIterator.next();
+            String[] dataForLine = StringUtils.split(line, "\t");
+            if (dataForLine != null && dataForLine.length > 0) {
+                String uuidCandidate = dataForLine[0];
+                Matcher matcher = UUIDUtil.UUID_PATTERN.matcher(uuidCandidate);
+                if (matcher.matches()) {
+                    IRI datasetRecordPage = toIRI(GBIF_DATASET_REGISTRY_STRING + "/" + uuidCandidate);
+                    emitter.emit(toStatement(versionSource, HAD_MEMBER, datasetRecordPage));
+                    emitPageRequest(emitter, datasetRecordPage, MimeTypes.MIME_TYPE_JSON);
+                }
+            }
+        }
     }
 
     private static void emitNextPageIfNeeded(StatementsEmitter emitter, IRI versionSource, JsonNode jsonNode) {

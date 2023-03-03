@@ -40,6 +40,7 @@ import static org.junit.Assert.assertTrue;
 public class RegistryReaderGBIFTest {
 
     public static final String GBIFDATASETS_JSON = "gbifdatasets.json";
+    public static final String GBIFDATASETS_TSV = "gbifdatasets.tsv";
     public static final String GBIF_OCCURRENCES_JSON = "gbif-occurrences.json";
     public static final String GBIF_INDIVIDUAL_OCCURRENCE_JSON = "gbif-individual-occurrence.json";
 
@@ -48,9 +49,10 @@ public class RegistryReaderGBIFTest {
         ArrayList<Quad> nodes = new ArrayList<>();
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
         registryReaderGBIF.on(toStatement(Seeds.GBIF, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
-        assertThat(new HashSet<>(nodes).size(), is(6));
-        assertThat(nodes.size(), is(6));
-        assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://api.gbif.org/v1/dataset"));
+        assertThat(new HashSet<>(nodes).size(), is(7));
+        assertThat(nodes.size(), is(7));
+
+        assertThat(getVersionSource(nodes.get(6)).getIRIString(), is("https://api.gbif.org/v1/dataset/search/export"));
     }
 
     @Test
@@ -345,6 +347,48 @@ public class RegistryReaderGBIFTest {
 
         lastRefNode = refNodes.get(refNodes.size() - 1);
         assertThat(lastRefNode.toString(), startsWith("<http://example.org/?offset=40638&limit=2> <http://purl.org/pav/hasVersion> "));
+
+    }
+    @Test
+    public void parseDatasetIndex() throws IOException {
+
+        final List<Quad> refNodes = new ArrayList<>();
+
+        IRI testNode = createTestNode();
+
+        RegistryReaderGBIF.parseDatasetIndex(
+                TestUtilForProcessor.testEmitter(refNodes),
+                getClass().getResourceAsStream(GBIFDATASETS_TSV),
+                toIRI("http://example.org/"));
+
+        assertThat(refNodes.size(), is(36));
+
+        Quad refNode = refNodes.get(0);
+        assertThat(refNode.toString(), is("<http://example.org/> <http://www.w3.org/ns/prov#hadMember> <https://api.gbif.org/v1/dataset/4fa7b334-ce0d-4e88-aaae-2e0c138d049e> ."));
+
+        refNode = refNodes.get(1);
+        assertThat(refNode.toString(), is("<https://api.gbif.org/v1/dataset/4fa7b334-ce0d-4e88-aaae-2e0c138d049e> <http://purl.org/pav/createdBy> <https://gbif.org> ."));
+
+        refNode = refNodes.get(2);
+        assertThat(refNode.toString(), is("<https://api.gbif.org/v1/dataset/4fa7b334-ce0d-4e88-aaae-2e0c138d049e> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
+
+        refNode = refNodes.get(3);
+        assertThat(refNode.toString(), startsWith("<https://api.gbif.org/v1/dataset/4fa7b334-ce0d-4e88-aaae-2e0c138d049e> <http://purl.org/pav/hasVersion> _:"));
+
+        refNode = refNodes.get(4);
+        assertThat(refNode.toString(), is("<http://example.org/> <http://www.w3.org/ns/prov#hadMember> <https://api.gbif.org/v1/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c> ."));
+
+        refNode = refNodes.get(5);
+        assertThat(refNode.toString(), is("<https://api.gbif.org/v1/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c> <http://purl.org/pav/createdBy> <https://gbif.org> ."));
+
+        refNode = refNodes.get(6);
+        assertThat(refNode.toString(), is("<https://api.gbif.org/v1/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
+
+        refNode = refNodes.get(7);
+        assertThat(refNode.toString(), startsWith("<https://api.gbif.org/v1/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c> <http://purl.org/pav/hasVersion> _:"));
+
+        Quad lastRefNode = refNodes.get(refNodes.size() - 1);
+        assertThat(lastRefNode.toString(), startsWith("<https://api.gbif.org/v1/dataset/bae5856f-da10-4333-90a0-5a2135361b30> <http://purl.org/pav/hasVersion> _:"));
 
     }
 
