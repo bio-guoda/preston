@@ -764,6 +764,10 @@ https://github.com/cboettig/contentid
 
 ### Related Forum Posts / Tweets
 
+https://github.com/beehind/beehind.github.io/issues/5
+
+https://discourse.gbif.org/t/type-specimen-castype1652-found-in-via-filtered-query-https-doi-org-10-15468-dl-xf6ahb-but-not-in-open-access-gbif-data-product-https-doi-org-10-15468-dl-pk3trq/3884
+
 https://discourse.gbif.org/t/finding-a-gbif-occurrence-from-a-specimen-code/3852/6
 
 https://discourse.gbif.org/t/darwin-core-half-million-update/3652/10
