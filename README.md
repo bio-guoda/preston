@@ -15,7 +15,7 @@ MJ Elliott, JH Poelen, JAB Fortes (2020). Toward Reliable Biodiversity Dataset R
 To install [a preston release](../../releases) on your linux/mac: 
 
 ```console
-sudo sh -c '(curl -L https://github.com/bio-guoda/preston/releases/download/0.5.4/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
+sudo sh -c '(curl -L https://github.com/bio-guoda/preston/releases/download/0.5.5/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
 ```
 :warning: Note that this installs preston using sudo privileges and makes preston.jar executable. Please inspect the script before running it. Also see [install](#install).
 
@@ -24,7 +24,7 @@ Note that a debian package (Debian, Ubuntu, etc) is also available for use with 
 ```console
 sudo apt update
 sudo apt upgrade
-curl -L https://github.com/bio-guoda/preston/releases/download/0.5.4/preston.deb > preston.deb
+curl -L https://github.com/bio-guoda/preston/releases/download/0.5.5/preston.deb > preston.deb
 sudo apt install ./preston.deb
 ```
 
