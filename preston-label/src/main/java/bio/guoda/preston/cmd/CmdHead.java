@@ -16,7 +16,7 @@ public class CmdHead extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        AtomicReference<IRI> mostRecentLog = AnchorUtil.findHead(this);
+        AtomicReference<IRI> mostRecentLog = AnchorUtil.findHead(this, true);
 
         if (mostRecentLog.get() == null) {
             throw new RuntimeException("failed to print most recent provenance log version/hash");

@@ -92,7 +92,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                         }
 
                         private void addProvenanceRoots() throws IOException {
-                            AtomicReference<IRI> head = AnchorUtil.findHead(CmdActivity.this);
+                            AtomicReference<IRI> head = AnchorUtil.findHead(CmdActivity.this, false);
                             if (head.get() != null) {
                                 add(Collections.singletonList(toStatement(ctx.getActivity(), head.get(), USED_BY, ctx.getActivity())));
                             }
