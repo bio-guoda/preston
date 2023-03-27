@@ -32,7 +32,7 @@ public class ProvenanceTracerImplTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void cameBefore() throws IOException {
-        new ProvenanceTracerImpl(null, null)
+        new ProvenanceTracerImpl(null)
                 .trace(null, null);
     }
 
@@ -51,7 +51,7 @@ public class ProvenanceTracerImplTest {
         };
 
         List<Quad> versionStatements = new ArrayList<>();
-        new ProvenanceTracerImpl(blobStore, new ProcessorStateAlwaysContinue())
+        new ProvenanceTracerImpl(blobStore)
                 .trace(RefNodeFactory.toIRI("hash://sha256/8d1cbbfdbc366b4f2cf47dec44c9e20d7059e771037c3ff389dc44710280b66d"),
                         new StatementListener() {
                             @Override
@@ -93,7 +93,7 @@ public class ProvenanceTracerImplTest {
         };
 
         List<Quad> versionStatements = new ArrayList<>();
-        new ProvenanceTracerImpl(blobStore, new ProcessorStateAlwaysContinue())
+        new ProvenanceTracerImpl(blobStore)
                 .trace(RefNodeFactory.toIRI("hash://sha256/f663ab51cd63cce9598fd5b5782aa7638726347a6e8295f967b981fcf9481ad8"),
                         new StatementListener() {
                             @Override
@@ -132,7 +132,7 @@ public class ProvenanceTracerImplTest {
         });
 
         List<Quad> versionStatements = new ArrayList<>();
-        new ProvenanceTracerImpl(store, new ProcessorStateAlwaysContinue())
+        new ProvenanceTracerImpl(store)
                 .trace(RefNodeFactory.toIRI("hash://sha256/0cfebefb2c2de0de893ab11071dcbaac2b75c217a566a1f3739577b9b12265e8"),
                         new StatementListener() {
                             @Override
@@ -183,7 +183,7 @@ public class ProvenanceTracerImplTest {
         KeyValueStoreReadOnly storeWithRemote = new KeyValueStoreWithFallback(store, notFoundCounter);
 
         List<Quad> versionStatements = new ArrayList<>();
-        new ProvenanceTracerImpl(storeWithRemote, new ProcessorStateAlwaysContinue())
+        new ProvenanceTracerImpl(storeWithRemote)
                 .trace(RefNodeFactory.toIRI("hash://sha256/0cfebefb2c2de0de893ab11071dcbaac2b75c217a566a1f3739577b9b12265e8"),
                         new StatementListener() {
                             @Override
@@ -251,7 +251,7 @@ public class ProvenanceTracerImplTest {
         };
 
         List<Quad> versionStatements = new ArrayList<>();
-        new ProvenanceTracerImpl(blobStore, new ProcessorStateAlwaysContinue())
+        new ProvenanceTracerImpl(blobStore)
                 .trace(RefNodeFactory.toIRI("hash://sha256/306ebe483d15970210add6552225835116f79ed78e66b08b170b2e761722f89d"),
                         new StatementListener() {
                             @Override

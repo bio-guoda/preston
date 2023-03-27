@@ -47,7 +47,7 @@ public class ReplayUtilTest {
         ReplayUtil.attemptReplay(
                 getBlobStore(),
                 BIODIVERSITY_DATASET_GRAPH,
-                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())), new EmittingStreamFactory() {
+                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore())), new EmittingStreamFactory() {
                     @Override
                     public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
                         return new EmittingStreamOfAnyVersions(emitter, context);
@@ -66,7 +66,7 @@ public class ReplayUtilTest {
         ReplayUtil.attemptReplay(
                 getBlobStore(),
                 TEST_KEY_IRI,
-                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())), new EmittingStreamFactory() {
+                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore())), new EmittingStreamFactory() {
                     @Override
                     public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
                         return new EmittingStreamOfAnyVersions(emitter, context);
@@ -86,7 +86,7 @@ public class ReplayUtilTest {
         ReplayUtil.attemptReplay(
                 getBlobStore(),
                 TEST_KEY_NEWER_IRI,
-                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())), new EmittingStreamFactory() {
+                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore())), new EmittingStreamFactory() {
                     @Override
                     public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
                         return new EmittingStreamOfAnyVersions(emitter, context);

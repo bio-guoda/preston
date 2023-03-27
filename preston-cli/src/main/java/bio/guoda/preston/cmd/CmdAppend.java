@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.process.EmittingStreamOfAnyQuad;
 import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
@@ -55,7 +56,7 @@ public class CmdAppend extends CmdActivity {
                 handleQueuedMessages(statementQueue, listeners);
             }
         };
-        new EmittingStreamOfAnyVersions(emitter, this)
+        new EmittingStreamOfAnyQuad(emitter, this)
                 .parseAndEmit(getInputStream());
 
     }
