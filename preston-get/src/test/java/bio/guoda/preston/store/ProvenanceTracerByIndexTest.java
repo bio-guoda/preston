@@ -44,7 +44,7 @@ public class ProvenanceTracerByIndexTest {
                 }
                 return is;
             }
-        }));
+        }, new ProcessorStateAlwaysContinue()));
 
         List<IRI> iris = new ArrayList<>();
 
@@ -97,7 +97,7 @@ public class ProvenanceTracerByIndexTest {
                 }
                 return is;
             }
-        }));
+        }, new ProcessorStateAlwaysContinue()));
 
         List<IRI> iris = new ArrayList<>();
 

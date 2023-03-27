@@ -9,12 +9,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.hamcrest.core.Is;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -28,12 +25,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 
 public class CmdAppendTest {
-
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
 
     @Test
     public void doProcessNothing() throws IOException {
@@ -153,37 +146,6 @@ public class CmdAppendTest {
         assertThat(numInformedActivities, is(numActivities - 1));
     }
 
-
-    @Test
-    public void append() {
-        String absolutePath = folder.getRoot().getAbsolutePath();
-        verifyAppend(absolutePath);
-    }
-
-    @Test
-    public void appendTwice() {
-        String absolutePath = folder.getRoot().getAbsolutePath();
-        verifyAppend(absolutePath);
-        verifyAppend(absolutePath);
-    }
-
-    public void verifyAppend(String absolutePath) {
-        CmdAppend cmd = new CmdAppend();
-        cmd.setLocalDataDir(absolutePath);
-
-        String nquadToBeAppended = "<foo:bar> <some:iri> <foo:bar> .";
-        cmd.setInputStream(IOUtils.toInputStream(nquadToBeAppended, StandardCharsets.UTF_8));
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        cmd.setOutputStream(outputStream);
-
-        cmd.run();
-
-        String[] lines = StringUtils.split(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), "\n");
-
-        assertThat(lines.length, is(greaterThan(0)));
-        assertThat(lines[lines.length - 1], is(nquadToBeAppended));
-    }
 
 
 }

@@ -119,7 +119,7 @@ public class PersistingLocal extends Cmd {
         KeyValueStore keyValueStore = getKeyValueStore(
                 new ValidatingKeyValueStreamContentAddressedFactory()
         );
-        return new ProvenanceTracerImpl(keyValueStore);
+        return new ProvenanceTracerImpl(keyValueStore, this);
     }
 
 

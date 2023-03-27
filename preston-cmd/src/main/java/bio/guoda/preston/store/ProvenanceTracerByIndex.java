@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.cmd.AnchorUtil;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.util.MostRecentVersionListener;
 import org.apache.commons.rdf.api.IRI;
@@ -7,15 +8,19 @@ import org.apache.commons.rdf.api.IRI;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static bio.guoda.preston.RefNodeFactory.toStatement;
+
 public class ProvenanceTracerByIndex implements ProvenanceTracer {
 
     private final HexaStoreReadOnly index;
 
     private final ProvenanceTracer tracer;
 
+
     public ProvenanceTracerByIndex(HexaStoreReadOnly index, ProvenanceTracer tracer) {
         this.index = index;
         this.tracer = tracer;
+
     }
 
     @Override

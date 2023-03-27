@@ -1,6 +1,7 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.EmittingStreamOfUsedByVersions;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementListener;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
@@ -21,22 +21,11 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
 
     private final KeyValueStoreReadOnly blobStore;
 
-    private final ProcessorState state;
+    private final ProcessorState cmd;
 
-    public ProvenanceTracerImpl(KeyValueStoreReadOnly blobStore) {
+    public ProvenanceTracerImpl(KeyValueStoreReadOnly blobStore, ProcessorState cmd) {
         this.blobStore = blobStore;
-        this.state = new ProcessorState() {
-            private final AtomicBoolean keepProcessing = new AtomicBoolean(true);
-            @Override
-            public boolean shouldKeepProcessing() {
-                return keepProcessing.get();
-            }
-
-            @Override
-            public void stopProcessing() {
-                keepProcessing.set(false);
-            }
-        };
+        this.cmd = cmd;
 
     }
 
@@ -54,7 +43,7 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
                 }};
 
 
-        while (state.shouldKeepProcessing() && !statementQueue.isEmpty()) {
+        while (cmd.shouldKeepProcessing() && !statementQueue.isEmpty()) {
             IRI someOrigin = statementQueue.poll();
             InputStream inputStream = getBlobStore().get(someOrigin);
             if (inputStream != null) {
@@ -66,7 +55,7 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
                 );
                 new EmittingStreamOfUsedByVersions(
                         emitter,
-                        state
+                        cmd
                 ).parseAndEmit(inputStream);
 
                 if (discoveredStatements.size() == 0) {

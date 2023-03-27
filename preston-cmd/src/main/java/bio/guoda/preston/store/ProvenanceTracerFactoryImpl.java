@@ -21,7 +21,7 @@ public class ProvenanceTracerFactoryImpl implements ProvenanceTracerFactory {
 
     @Override
     public ProvenanceTracer create(List<IRI> provenanceAnchors) {
-        ProvenanceTracer tracer = new ProvenanceTracerImpl(blobstore);
+        ProvenanceTracer tracer = new ProvenanceTracerImpl(blobstore, cmd);
         if (provenanceAnchors == null || provenanceAnchors.isEmpty()) {
             tracer = new ProvenanceTracerByIndex(hexastore, tracer);
         }
