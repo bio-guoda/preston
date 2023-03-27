@@ -1,5 +1,10 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.process.EmittingStreamFactory;
+import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
+import bio.guoda.preston.process.ParsingEmitter;
+import bio.guoda.preston.process.ProcessorState;
+import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.KeyGeneratingStream;
@@ -111,7 +116,12 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         attemptReplay(
                 provenanceLogStore,
                 ctx,
-                provenanceTracer
+                provenanceTracer, new EmittingStreamFactory() {
+                    @Override
+                    public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
+                        return new EmittingStreamOfAnyVersions(emitter, context);
+                    }
+                }
         );
 
         JekyllUtil.writePrestonConfigFile(

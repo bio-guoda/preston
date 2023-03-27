@@ -2,6 +2,11 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.HashGenerator;
 import bio.guoda.preston.HashGeneratorFactory;
+import bio.guoda.preston.process.EmittingStreamFactory;
+import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
+import bio.guoda.preston.process.ParsingEmitter;
+import bio.guoda.preston.process.ProcessorState;
+import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
@@ -63,7 +68,12 @@ public class CmdVerify extends Persisting implements Runnable {
         );
         CmdContext ctx = new CmdContext(this, getProvenanceAnchor(), statementListener);
 
-        attemptReplay(blobStore, ctx, getProvenanceTracer());
+        attemptReplay(blobStore, ctx, getProvenanceTracer(), new EmittingStreamFactory() {
+            @Override
+            public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
+                return new EmittingStreamOfAnyVersions(emitter, context);
+            }
+        });
     }
 
 

@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.process.EmittingStreamFactory;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.process.StatementsListener;
@@ -36,13 +37,19 @@ public final class ReplayUtil {
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
                               final IRI provRoot,
                               ProvenanceTracer provenanceTracer,
+                              EmittingStreamFactory emitterFactory,
                               StatementsListener... listeners) {
-        attemptReplay(provenanceLogStore, new CmdContext(new ProcessorStateAlwaysContinue(), provRoot, listeners), provenanceTracer);
+        attemptReplay(
+                provenanceLogStore,
+                new CmdContext(new ProcessorStateAlwaysContinue(), provRoot, listeners),
+                provenanceTracer, emitterFactory
+        );
     }
 
     static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
                               final CmdContext ctx,
-                              ProvenanceTracer provenanceTracer) {
+                              ProvenanceTracer provenanceTracer,
+                              EmittingStreamFactory emitterFactory) {
 
         final Queue<Quad> statementQueue =
                 new ConcurrentLinkedQueue<Quad>() {{
@@ -62,6 +69,7 @@ public final class ReplayUtil {
         VersionedRDFChainEmitter provenanceLogEmitter = new VersionedRDFChainEmitter(
                 provenanceLogStore,
                 ctx.getState(),
+                emitterFactory,
                 statementListeners.toArray(new StatementsListener[0])
         );
 
@@ -79,38 +87,46 @@ public final class ReplayUtil {
     }
 
     public static void replay(StatementsListener listener,
-                              Persisting persisting) {
-        replay(listener, persisting, persisting.getProvenanceTracer());
+                              Persisting persisting,
+                              EmittingStreamFactory emitterFactory) {
+        replay(listener, persisting, persisting.getProvenanceTracer(), emitterFactory);
     }
 
     static void replay(StatementsListener listener,
                        Persisting persisting,
-                       ProvenanceTracer provenanceTracer) {
+                       ProvenanceTracer provenanceTracer,
+                       EmittingStreamFactory emitterFactory) {
         BlobStoreReadOnly blobstoreReadOnly = getBlobStore(persisting);
 
-        attemptReplay(listener, persisting, provenanceTracer, blobstoreReadOnly, persisting.getProvenanceAnchor());
+        attemptReplay(listener,
+                persisting,
+                provenanceTracer,
+                blobstoreReadOnly,
+                persisting.getProvenanceAnchor(),
+                emitterFactory);
     }
 
     static BlobStoreReadOnly getBlobStore(Persisting persisting) {
         return new BlobStoreAppendOnly(
-                    persisting.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()),
-                    true,
-                    persisting.getHashType()
-            );
+                persisting.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()),
+                true,
+                persisting.getHashType()
+        );
     }
 
     static void attemptReplay(StatementsListener listener,
                               ProcessorState state,
                               ProvenanceTracer provenanceTracer,
                               BlobStoreReadOnly blobstoreReadOnly,
-                              IRI provAnchor) {
+                              IRI provAnchor,
+                              EmittingStreamFactory emitterFactory) {
         StatementIRIProcessor processor = new StatementIRIProcessor(listener);
         processor.setIriProcessor(new IRIFixingProcessor());
 
         attemptReplay(
                 blobstoreReadOnly,
                 new CmdContext(state, provAnchor, processor),
-                provenanceTracer
+                provenanceTracer, emitterFactory
         );
     }
 

@@ -1,6 +1,11 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.HashType;
+import bio.guoda.preston.process.EmittingStreamFactory;
+import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
+import bio.guoda.preston.process.ParsingEmitter;
+import bio.guoda.preston.process.ProcessorState;
+import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
@@ -36,7 +41,12 @@ public class CloneUtil {
                 = new BlobStoreAppendOnly(provenanceLogKeyValueStore, true, type);
 
         StatementsListener statementListener = blobToucher(blobStore);
-        attemptReplay(provenanceLogStore, provenanceRoot, provenanceTracer, statementListener);
+        attemptReplay(provenanceLogStore, provenanceRoot, provenanceTracer, new EmittingStreamFactory() {
+            @Override
+            public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
+                return new EmittingStreamOfAnyVersions(emitter, context);
+            }
+        }, statementListener);
     }
 
     private static StatementsListener blobToucher(final BlobStoreReadOnly blobStore) {

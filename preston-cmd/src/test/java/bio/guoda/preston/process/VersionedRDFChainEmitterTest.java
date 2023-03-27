@@ -5,20 +5,16 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.TestUtilForProcessor;
 import bio.guoda.preston.store.VersionedRDFChainEmitter;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class VersionedRDFChainEmitterTest {
@@ -30,7 +26,7 @@ public class VersionedRDFChainEmitterTest {
     public void replayArchive() {
         List<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = createBlobStore();
-        VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, TestUtilForProcessor.testListener(nodes));
+        VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, getEmitterFactory(), TestUtilForProcessor.testListener(nodes));
         reader.on(RefNodeFactory
                 .toStatement(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, RefNodeConstants.HAS_VERSION, SOME));
 
@@ -38,6 +34,15 @@ public class VersionedRDFChainEmitterTest {
 
         assertThat(nodes.get(0).getObject(),
                 Is.is(RefNodeFactory.toIRI("foo:bar")));
+    }
+
+    public EmittingStreamFactory getEmitterFactory() {
+        return new EmittingStreamFactory() {
+            @Override
+            public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
+                return new EmittingStreamOfAnyVersions(emitter, context);
+            }
+        };
     }
 
     private BlobStoreReadOnly createBlobStore() {
@@ -59,7 +64,7 @@ public class VersionedRDFChainEmitterTest {
     public void replayArchiveMultipleVersions() {
         List<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = createBlobStore();
-        VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, TestUtilForProcessor.testListener(nodes));
+        VersionedRDFChainEmitter reader = new VersionedRDFChainEmitter(blobStore, getEmitterFactory(), TestUtilForProcessor.testListener(nodes));
         reader.on(RefNodeFactory
                 .toStatement(RefNodeConstants.BIODIVERSITY_DATASET_GRAPH, RefNodeConstants.HAS_VERSION, RefNodeFactory.toIRI("http://some")));
         reader.on(RefNodeFactory

@@ -2,6 +2,11 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.EmittingStreamFactory;
+import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
+import bio.guoda.preston.process.ParsingEmitter;
+import bio.guoda.preston.process.ProcessorState;
+import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementListener;
 import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
@@ -15,7 +20,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.RDFTerm;
 import org.hamcrest.core.Is;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -43,7 +47,12 @@ public class ReplayUtilTest {
         ReplayUtil.attemptReplay(
                 getBlobStore(),
                 BIODIVERSITY_DATASET_GRAPH,
-                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())),
+                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())), new EmittingStreamFactory() {
+                    @Override
+                    public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
+                        return new EmittingStreamOfAnyVersions(emitter, context);
+                    }
+                },
                 new VersionRetriever(getBlobStore()), logger);
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8), endsWith(
@@ -57,7 +66,12 @@ public class ReplayUtilTest {
         ReplayUtil.attemptReplay(
                 getBlobStore(),
                 TEST_KEY_IRI,
-                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())),
+                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())), new EmittingStreamFactory() {
+                    @Override
+                    public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
+                        return new EmittingStreamOfAnyVersions(emitter, context);
+                    }
+                },
                 new VersionRetriever(getBlobStore()),
                 logger);
 
@@ -72,7 +86,12 @@ public class ReplayUtilTest {
         ReplayUtil.attemptReplay(
                 getBlobStore(),
                 TEST_KEY_NEWER_IRI,
-                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())),
+                new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracerImpl(getBlobStore(), new ProcessorStateAlwaysContinue())), new EmittingStreamFactory() {
+                    @Override
+                    public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
+                        return new EmittingStreamOfAnyVersions(emitter, context);
+                    }
+                },
                 new VersionRetriever(getBlobStore()),
                 logger
         );
@@ -94,7 +113,12 @@ public class ReplayUtilTest {
                     public void trace(IRI provenanceAnchor, StatementListener listener) throws IOException {
 
                     }
-                }),
+                }), new EmittingStreamFactory() {
+                    @Override
+                    public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
+                        return new EmittingStreamOfAnyVersions(emitter, context);
+                    }
+                },
                 new VersionRetriever(getBlobStore()),
                 logger
         );
