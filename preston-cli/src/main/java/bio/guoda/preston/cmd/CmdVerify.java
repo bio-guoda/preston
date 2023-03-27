@@ -68,7 +68,11 @@ public class CmdVerify extends Persisting implements Runnable {
         );
         CmdContext ctx = new CmdContext(this, getProvenanceAnchor(), statementListener);
 
-        attemptReplay(blobStore, ctx, getProvenanceTracer(), new EmittingStreamFactory() {
+        attemptReplay(
+                blobStore,
+                ctx,
+                getProvenanceTracer(),
+                new EmittingStreamFactory() {
             @Override
             public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
                 return new EmittingStreamOfAnyVersions(emitter, context);

@@ -1,21 +1,29 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementsListenerAdapter;
-import bio.guoda.preston.store.BlobStoreAppendOnly;
-import bio.guoda.preston.store.HexaStoreImpl;
-import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.TestUtil;
+import org.apache.commons.io.output.NullOutputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.hamcrest.core.Is;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static junit.framework.TestCase.fail;
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CmdAliasTest {
+
+    @Rule
+    public TemporaryFolder tmpFolder = new TemporaryFolder();
+
 
     @Test(expected = IllegalArgumentException.class)
     public void invalidAlias() {
@@ -29,7 +37,6 @@ public class CmdAliasTest {
                 fail("should not work");
             }
         });
-
     }
 
     @Test
@@ -44,7 +51,6 @@ public class CmdAliasTest {
                 fail("should not work");
             }
         });
-
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -59,22 +65,27 @@ public class CmdAliasTest {
                 fail("should not work");
             }
         });
-
     }
 
     @Test
     public void showTrackedAlias() {
-
-        KeyValueStore testPersistence = TestUtil.getTestPersistence();
-        final HexaStoreImpl provIndex = new HexaStoreImpl(testPersistence, HashType.sha256);
-        BlobStoreAppendOnly blobStore = new BlobStoreAppendOnly(testPersistence, true, HashType.sha256);
-
+        String dataDir = tmpFolder.getRoot().getAbsolutePath();
         CmdTrack track = new CmdTrack();
+        track.setOutputStream(NullOutputStream.NULL_OUTPUT_STREAM);
+        track.setLocalDataDir(dataDir);
         track.setIRIs(Arrays.asList(RefNodeFactory.toIRI("https://example.org")));
-        track.run(blobStore, provIndex);
+        track.run();
 
         CmdAlias cmdAlias = new CmdAlias();
-        cmdAlias.run(blobStore, provIndex);
+        cmdAlias.setLocalDataDir(dataDir);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmdAlias.setOutputStream(outputStream);
+        cmdAlias.run();
+
+        String output = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+        String[] lines = StringUtils.split(output, "\n");
+        assertThat(lines.length, Is.is(1));
+        assertThat(lines[0], startsWith("<https://example.org> <http://purl.org/pav/hasVersion> <hash://sha256/"));
 
     }
 

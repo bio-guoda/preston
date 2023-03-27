@@ -18,11 +18,11 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 
 public class EmittingStreamOfAnyQuad extends EmittingStreamAbstract {
 
-    public EmittingStreamOfAnyQuad(StatementsEmitter emitter) {
+    public EmittingStreamOfAnyQuad(StatementEmitter emitter) {
         super(emitter);
     }
 
-    public EmittingStreamOfAnyQuad(StatementsEmitter emitter, ProcessorState processorState) {
+    public EmittingStreamOfAnyQuad(StatementEmitter emitter, ProcessorState processorState) {
         super(emitter, processorState);
     }
 

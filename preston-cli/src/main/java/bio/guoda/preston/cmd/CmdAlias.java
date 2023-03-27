@@ -77,7 +77,6 @@ public class CmdAlias extends CmdAppend implements Runnable {
     private Predicate<Quad> selectorForParams(List<IRI> params) {
         Predicate<Quad> selector = quad -> RefNodeConstants.HAS_VERSION.equals(quad.getPredicate());
 
-
         if (params.size() > 0) {
             final IRI origIRI = this.params.get(0);
             final IRI fixedIRI = new IRIFixingProcessor()
@@ -98,14 +97,16 @@ public class CmdAlias extends CmdAppend implements Runnable {
 
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
-        statementQueue.add(Collections
-                .singletonList(RefNodeFactory.toStatement(
-                        ctx.getActivity(),
-                        new IRIFixingProcessor()
-                                .process(params.get(0)),
-                        RefNodeConstants.HAS_VERSION,
-                        params.get(1)))
-        );
+        if (params != null && params.size() > 1) {
+            statementQueue.add(Collections
+                    .singletonList(RefNodeFactory.toStatement(
+                            ctx.getActivity(),
+                            new IRIFixingProcessor()
+                                    .process(params.get(0)),
+                            RefNodeConstants.HAS_VERSION,
+                            params.get(1)))
+            );
+        }
     }
 
     @Override
