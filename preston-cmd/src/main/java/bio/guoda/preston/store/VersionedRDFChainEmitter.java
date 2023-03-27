@@ -1,9 +1,11 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.process.EmittingStreamFactory;
 import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
+import bio.guoda.preston.process.ParsingEmitter;
 import bio.guoda.preston.process.ProcessorReadOnly;
 import bio.guoda.preston.process.ProcessorState;
-import bio.guoda.preston.process.StatementsEmitter;
+import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementsListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,12 @@ import java.io.InputStream;
 public class VersionedRDFChainEmitter extends ProcessorReadOnly {
 
     private static final Logger LOG = LoggerFactory.getLogger(VersionedRDFChainEmitter.class);
+    private final EmittingStreamFactory emitterFactory = new EmittingStreamFactory() {
+        @Override
+        public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
+            return new EmittingStreamOfAnyVersions(emitter, context);
+        }
+    };
 
     public VersionedRDFChainEmitter(BlobStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
@@ -36,7 +44,7 @@ public class VersionedRDFChainEmitter extends ProcessorReadOnly {
             try {
                 InputStream inputStream = get(version);
                 if (inputStream != null) {
-                    parseAndEmit(inputStream, this);
+                    parseAndEmit(inputStream);
                 }
             } catch (IOException e) {
                 LOG.warn("failed to read archive [" + version + "]", e);
@@ -45,11 +53,8 @@ public class VersionedRDFChainEmitter extends ProcessorReadOnly {
     }
 
     public void parseAndEmit(InputStream inputStream) {
-        parseAndEmit(inputStream, this);
-    }
-
-    public void parseAndEmit(InputStream inputStream, final StatementsEmitter emitter) {
-        new EmittingStreamOfAnyVersions(emitter, getState())
+        emitterFactory
+                .createEmitter(VersionedRDFChainEmitter.this, getState())
                 .parseAndEmit(inputStream);
     }
 

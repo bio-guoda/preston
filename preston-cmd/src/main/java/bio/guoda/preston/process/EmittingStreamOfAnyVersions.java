@@ -20,7 +20,7 @@ public class EmittingStreamOfAnyVersions extends EmittingStreamAbstract {
         super(emitter);
     }
 
-    public EmittingStreamOfAnyVersions(StatementsEmitter emitter, ProcessorState processorState) {
+    public EmittingStreamOfAnyVersions(StatementEmitter emitter, ProcessorState processorState) {
         super(emitter, processorState);
     }
 

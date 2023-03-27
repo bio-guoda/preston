@@ -66,4 +66,8 @@ public class CmdTrack extends CmdActivity {
         return IRIs;
     }
 
+    public void setIRIs(List<IRI> IRIs) {
+        this.IRIs = IRIs;
+    }
+
 }

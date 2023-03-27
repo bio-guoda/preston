@@ -2,6 +2,6 @@ package bio.guoda.preston.process;
 
 import java.io.InputStream;
 
-public interface EmittingStream {
+public interface ParsingEmitter {
     void parseAndEmit(InputStream inputStream);
 }

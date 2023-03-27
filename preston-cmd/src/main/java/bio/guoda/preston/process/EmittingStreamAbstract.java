@@ -4,17 +4,17 @@ import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDF;
 import org.apache.commons.rdf.simple.SimpleRDF;
 
-public abstract class EmittingStreamAbstract implements EmittingStream {
+public abstract class EmittingStreamAbstract implements ParsingEmitter {
 
     private final RDF rdfSimple = new SimpleRDF();
-    private final StatementsEmitter emitter;
+    private final StatementEmitter emitter;
     private final ProcessorState context;
 
-    public EmittingStreamAbstract(StatementsEmitter emitter) {
+    public EmittingStreamAbstract(StatementEmitter emitter) {
         this(emitter, new ProcessorStateAlwaysContinue());
     }
 
-    public EmittingStreamAbstract(StatementsEmitter emitter,
+    public EmittingStreamAbstract(StatementEmitter emitter,
                                   ProcessorState processorState) {
         this.emitter = emitter;
         this.context = processorState;
