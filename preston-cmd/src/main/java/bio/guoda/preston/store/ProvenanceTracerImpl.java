@@ -79,4 +79,13 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
         return blobStore;
     }
 
+    @Override
+    public void stopProcessing() {
+        cmd.stopProcessing();
+    }
+
+    @Override
+    public boolean shouldKeepProcessing() {
+        return cmd.shouldKeepProcessing();
+    }
 }

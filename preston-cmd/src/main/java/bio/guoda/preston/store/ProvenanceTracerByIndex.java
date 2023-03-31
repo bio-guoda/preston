@@ -36,4 +36,13 @@ public class ProvenanceTracerByIndex implements ProvenanceTracer {
         return index;
     }
 
+    @Override
+    public void stopProcessing() {
+        tracer.stopProcessing();
+    }
+
+    @Override
+    public boolean shouldKeepProcessing() {
+        return tracer.shouldKeepProcessing();
+    }
 }

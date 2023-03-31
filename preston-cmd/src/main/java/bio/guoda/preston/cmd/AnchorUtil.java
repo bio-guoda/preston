@@ -34,7 +34,9 @@ public class AnchorUtil {
                                 IRI iri = VersionUtil.mostRecentVersion(statement);
                                 if (iri != null) {
                                     head.set(iri);
-                                    persisting.stopProcessing();
+                                    if (stopProcessingOnFindingHead) {
+                                        persisting.stopProcessing();
+                                    }
                                 }
                             }
                     );

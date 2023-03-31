@@ -110,6 +110,16 @@ public class ReplayUtilTest {
                 RefNodeFactory.toIRI("non-existing"),
                 new ProvenanceTracerByIndex(getStatementStore(), new ProvenanceTracer() {
                     @Override
+                    public boolean shouldKeepProcessing() {
+                        return false;
+                    }
+
+                    @Override
+                    public void stopProcessing() {
+
+                    }
+
+                    @Override
                     public void trace(IRI provenanceAnchor, StatementListener listener) throws IOException {
 
                     }
