@@ -157,6 +157,8 @@ public class CmdAppendTest {
     public void append() {
         String absolutePath = folder.getRoot().getAbsolutePath();
         verifyAppend(absolutePath);
+        assertDepth(absolutePath, 1);
+
     }
 
     @Test
@@ -164,6 +166,27 @@ public class CmdAppendTest {
         String absolutePath = folder.getRoot().getAbsolutePath();
         verifyAppend(absolutePath);
         verifyAppend(absolutePath);
+        assertDepth(absolutePath, 2);
+    }
+
+    @Test
+    public void appendThreeTimes() {
+        String absolutePath = folder.getRoot().getAbsolutePath();
+        verifyAppend(absolutePath);
+        verifyAppend(absolutePath);
+        verifyAppend(absolutePath);
+        assertDepth(absolutePath, 3);
+
+    }
+
+    public void assertDepth(String absolutePath, int expectedHistoryDepth) {
+        CmdHistory history = new CmdHistory();
+        history.setLocalDataDir(absolutePath);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        history.setOutputStream(outputStream);
+        history.run();
+        String[] lines = StringUtils.split(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), "\n");
+        assertThat(lines.length, is(expectedHistoryDepth));
     }
 
     public void verifyAppend(String absolutePath) {
