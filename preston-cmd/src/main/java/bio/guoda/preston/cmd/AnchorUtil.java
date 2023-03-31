@@ -24,7 +24,7 @@ public class AnchorUtil {
     }
 
     private static void findHead(Persisting persisting, AtomicReference<IRI> head, boolean stopProcessingOnFindingHead) {
-        ProvenanceTracer provenanceTracer = persisting.getProvenanceTracer();
+        final ProvenanceTracer provenanceTracer = persisting.getProvenanceTracer();
         IRI provenanceAnchor = persisting.getProvenanceAnchor();
         try {
             provenanceTracer
@@ -35,7 +35,7 @@ public class AnchorUtil {
                                 if (iri != null) {
                                     head.set(iri);
                                     if (stopProcessingOnFindingHead) {
-                                        persisting.stopProcessing();
+                                        provenanceTracer.stopProcessing();
                                     }
                                 }
                             }
