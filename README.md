@@ -15,7 +15,7 @@ MJ Elliott, JH Poelen, JAB Fortes (2020). Toward Reliable Biodiversity Dataset R
 To install [a preston release](../../releases) on your linux/mac: 
 
 ```console
-sudo sh -c '(curl -L https://github.com/bio-guoda/preston/releases/download/0.5.5/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
+sudo sh -c '(curl -L https://github.com/bio-guoda/preston/releases/download/0.5.6/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
 ```
 :warning: Note that this installs preston using sudo privileges and makes preston.jar executable. Please inspect the script before running it. Also see [install](#install).
 
@@ -24,7 +24,7 @@ Note that a debian package (Debian, Ubuntu, etc) is also available for use with 
 ```console
 sudo apt update
 sudo apt upgrade
-curl -L https://github.com/bio-guoda/preston/releases/download/0.5.5/preston.deb > preston.deb
+curl -L https://github.com/bio-guoda/preston/releases/download/0.5.6/preston.deb > preston.deb
 sudo apt install ./preston.deb
 ```
 
@@ -743,7 +743,7 @@ J.H. Poelen. A biodiversity dataset graph: DataONE. hash://sha256/2b5c445f0b7b91
 
 J.H. Poelen. A biodiversity dataset graph: GBIF, iDigBio, BioCASe. hash://sha256/8aacce08462b87a345d271081783bdd999663ef90099212c8831db399fc0831b, https://doi.org/10.5281/zenodo.3852671 (2020)
 
-[![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/jhpoelen/bats/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/jhpoelen/bats) A biodiversity dataset graph: [https://jhpoelen.nl/bats](https://jhpoelen.nl/bats). 2021. [hash://sha256/5150f699411c4433b0a6c111f8e6ec7fbae2c336ab237f3638bbdc9d0b2dda0d](https://jhpoelen.nl/bats/data/51/50/5150f699411c4433b0a6c111f8e6ec7fbae2c336ab237f3638bbdc9d0b2dda0d) 
+[![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/jhpoelen/bats/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/jhpoelen/bats) A biodiversity dataset graph: [https://jhpoelen.nl/bats](https://jhpoelen.nl/bats). 2021. [hash://sha256/5150f699411c4433b0a6c111f8e6ec7fbae2c336ab237f3638bbdc9d0b2dda0d](https://jhpoelen.nl/bats/data/51/50.5.60f699411c4433b0a6c111f8e6ec7fbae2c336ab237f3638bbdc9d0b2dda0d) 
 
 [![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/jhpoelen/rats/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/jhpoelen/rats) A biodiversity dataset graph: [https://jhpoelen.nl/rats](https://jhpoelen.nl/rats). 2021. [hash://sha256/812da92d28f6abbd8b26be507168877ede7dfd78f7cc5b79b417316cf64ff78c](https://jhpoelen.nl/rats/data/81/2d/812da92d28f6abbd8b26be507168877ede7dfd78f7cc5b79b417316cf64ff78c) 
 
