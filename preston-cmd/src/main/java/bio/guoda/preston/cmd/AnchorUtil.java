@@ -17,6 +17,7 @@ public class AnchorUtil {
         if (persisting.isAnchored()) {
             head.set(persisting.getProvenanceAnchor());
         } else {
+
             findHead(persisting, head, stopProcessingOnFindingHead);
         }
         return head;
@@ -33,9 +34,7 @@ public class AnchorUtil {
                                 IRI iri = VersionUtil.mostRecentVersion(statement);
                                 if (iri != null) {
                                     head.set(iri);
-                                    if (stopProcessingOnFindingHead) {
-                                        persisting.stopProcessing();
-                                    }
+                                    persisting.stopProcessing();
                                 }
                             }
                     );
