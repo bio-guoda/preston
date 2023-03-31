@@ -16,7 +16,7 @@ public class CmdGenerateQRCode extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        AtomicReference<IRI> mostRecentLog = AnchorUtil.findHead(this, true);
+        AtomicReference<IRI> mostRecentLog = AnchorUtil.findHead(this);
 
         if (mostRecentLog.get() == null) {
             throw new RuntimeException("Cannot generate QRCode: no provenance logs found.");

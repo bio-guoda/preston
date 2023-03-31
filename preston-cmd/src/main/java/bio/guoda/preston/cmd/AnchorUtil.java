@@ -11,19 +11,18 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class AnchorUtil {
 
-    public static AtomicReference<IRI> findHead(Persisting persisting, boolean stopProcessingOnFindingHead) {
+    public static AtomicReference<IRI> findHead(Persisting persisting) {
         AtomicReference<IRI> head = new AtomicReference<>();
 
         if (persisting.isAnchored()) {
             head.set(persisting.getProvenanceAnchor());
         } else {
-
-            findHead(persisting, head, stopProcessingOnFindingHead);
+            findHead(persisting, head);
         }
         return head;
     }
 
-    private static void findHead(Persisting persisting, AtomicReference<IRI> head, boolean stopProcessingOnFindingHead) {
+    private static void findHead(Persisting persisting, AtomicReference<IRI> head) {
         final ProvenanceTracer provenanceTracer = persisting.getProvenanceTracer();
         IRI provenanceAnchor = persisting.getProvenanceAnchor();
         try {
@@ -34,9 +33,7 @@ public class AnchorUtil {
                                 IRI iri = VersionUtil.mostRecentVersion(statement);
                                 if (iri != null) {
                                     head.set(iri);
-                                    if (stopProcessingOnFindingHead) {
-                                        provenanceTracer.stopProcessing();
-                                    }
+                                    provenanceTracer.stopProcessing();
                                 }
                             }
                     );
@@ -50,7 +47,7 @@ public class AnchorUtil {
     }
 
     public static AtomicReference<IRI> findHeadOrThrow(Persisting persisting) {
-        AtomicReference<IRI> head = findHead(persisting, true);
+        AtomicReference<IRI> head = findHead(persisting);
 
         if (head.get() == null) {
             throw new RuntimeException("Cannot find most recent version: no provenance logs found.");

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
@@ -21,12 +22,10 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
 
     private final KeyValueStoreReadOnly blobStore;
 
-    private final ProcessorState cmd;
+    private final AtomicBoolean keepProcessing = new AtomicBoolean(true);
 
     public ProvenanceTracerImpl(KeyValueStoreReadOnly blobStore, ProcessorState cmd) {
         this.blobStore = blobStore;
-        this.cmd = cmd;
-
     }
 
     @Override
@@ -43,7 +42,7 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
                 }};
 
 
-        while (cmd.shouldKeepProcessing() && !statementQueue.isEmpty()) {
+        while (shouldKeepProcessing() && !statementQueue.isEmpty()) {
             IRI someOrigin = statementQueue.poll();
             InputStream inputStream = getBlobStore().get(someOrigin);
             if (inputStream != null) {
@@ -55,7 +54,7 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
                 );
                 new EmittingStreamOfUsedByVersions(
                         emitter,
-                        cmd
+                        this
                 ).parseAndEmit(inputStream);
 
                 if (discoveredStatements.size() == 0) {
@@ -81,11 +80,11 @@ public class ProvenanceTracerImpl implements ProvenanceTracer {
 
     @Override
     public void stopProcessing() {
-        cmd.stopProcessing();
+        keepProcessing.set(false);
     }
 
     @Override
     public boolean shouldKeepProcessing() {
-        return cmd.shouldKeepProcessing();
+        return keepProcessing.get();
     }
 }
