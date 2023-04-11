@@ -65,9 +65,13 @@ public class ContentStreamFactory implements InputStreamFactory {
 
     @Override
     public InputStream create(InputStream is) throws IOException {
+        if (is == null) {
+            throw new IOException("cannot find content identified by [" + targetIri + "]");
+        }
+
         InputStream contentStream = requestContentStream(is);
         if (contentStream == null) {
-            throw new IOException("failed to find content identified by [" + targetIri + "]");
+            throw new IOException("cannot find content identified by [" + targetIri + "]");
         }
         return contentStream;
     }

@@ -106,10 +106,10 @@ public class ContentStreamFactoryTest {
         InputStream inputStream = factory.create(getClass().getResourceAsStream("foo4.txt.gz"));
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is(
                 "bar\n" +
-                "bar2\n" +
-                "bar3bar\n" +
-                "bar2\n" +
-                "bar3"));
+                        "bar2\n" +
+                        "bar3bar\n" +
+                        "bar2\n" +
+                        "bar3"));
     }
 
     @Test
@@ -154,16 +154,28 @@ public class ContentStreamFactoryTest {
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("49\t23\t6027003\tmobot31753000028362\ti11506039\tQK495.F67 T7 1916\t\thttps://www.biodiversitylibrary.org/item/49 \t\t1916\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\n150\t47\t6208526\tmobot31753000049772\ti11534485\tQK400.5 .B65 1837\t\thttps://www.biodiversitylibrary.org/item/150 \t\t1837\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\n668\t60\t197749\tmobot31753002220777\ti11576042\tQK1 .B55\tv.9 (1888)\thttps://www.biodiversitylibrary.org/item/668 \t\t1888\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\n693\t60\t211920\tmobot31753002220991\ti11576273\tQK1 .B55\tv.31 (1902)\thttps://www.biodiversitylibrary.org/item/693 \t\t1902\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\n709\t60\t218036\tmobot31753002221080\ti11576406\tQK1 .B55\tv.47 (1912)\thttps://www.biodiversitylibrary.org/item/709 \t\t1912\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00"));
     }
 
+
     @Test
-    public void copyContentStreamForLineRanges() throws IOException {
+    public void contentStreamForLineRangesNonExistingResource() throws IOException {
         ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("line:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/L3-L5,L7-L8"));
         InputStream inputStream = factory.create(new GZIPInputStream(getClass().getResourceAsStream("/bio/guoda/preston/process/bhl_item.txt.gz")));
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("49\t23\t6027003\tmobot31753000028362\ti11506039\tQK495.F67 T7 1916\t\thttps://www.biodiversitylibrary.org/item/49 \t\t1916\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\n150\t47\t6208526\tmobot31753000049772\ti11534485\tQK400.5 .B65 1837\t\thttps://www.biodiversitylibrary.org/item/150 \t\t1837\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\n668\t60\t197749\tmobot31753002220777\ti11576042\tQK1 .B55\tv.9 (1888)\thttps://www.biodiversitylibrary.org/item/668 \t\t1888\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\n693\t60\t211920\tmobot31753002220991\ti11576273\tQK1 .B55\tv.31 (1902)\thttps://www.biodiversitylibrary.org/item/693 \t\t1902\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\n709\t60\t218036\tmobot31753002221080\ti11576406\tQK1 .B55\tv.47 (1912)\thttps://www.biodiversitylibrary.org/item/709 \t\t1912\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00"));
+    }
+
+    @Test(expected = IOException.class)
+    public void copyContentStreamForLineRanges() throws IOException {
+        ContentStreamFactory factory
+                = new ContentStreamFactory(
+                RefNodeFactory.toIRI("line:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/L3-L5,L7-L8")
+        );
+        InputStream inputStream = factory.create(null);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
         IOUtils.copyLarge(inputStream, out);
 
         assertThat(out.toString("UTF-8"), Is.is("49\t23\t6027003\tmobot31753000028362\ti11506039\tQK495.F67 T7 1916\t\thttps://www.biodiversitylibrary.org/item/49 \t\t1916\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\n150\t47\t6208526\tmobot31753000049772\ti11534485\tQK400.5 .B65 1837\t\thttps://www.biodiversitylibrary.org/item/150 \t\t1837\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\n668\t60\t197749\tmobot31753002220777\ti11576042\tQK1 .B55\tv.9 (1888)\thttps://www.biodiversitylibrary.org/item/668 \t\t1888\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\n693\t60\t211920\tmobot31753002220991\ti11576273\tQK1 .B55\tv.31 (1902)\thttps://www.biodiversitylibrary.org/item/693 \t\t1902\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00\n709\t60\t218036\tmobot31753002221080\ti11576406\tQK1 .B55\tv.47 (1912)\thttps://www.biodiversitylibrary.org/item/709 \t\t1912\tMissouri Botanical Garden, Peter H. Raven Library\t\t2006-05-04 00:00"));
     }
+
     @Test
     public void copyContentStreamForCutZipHashContentId() throws IOException {
         ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("cut:zip:hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f!/treatments-xml-main/data/C3/05/87/C30587A9A562FF93FF2F350F875ED55F.xml!/b3714-3735"));
