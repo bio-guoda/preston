@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.Seeds;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,14 +29,28 @@ import static org.hamcrest.Matchers.greaterThan;
 public class CmdUpdateTest {
 
 
-    @Test
-    public void doUpdate() throws IOException {
+    @Test(expected = IllegalArgumentException.class)
+    public void doUpdateNoTrackingLocationNoSeeds() throws IOException {
+        BlobStoreNull blobStore = new BlobStoreNull();
+        HexaStoreNull logRelations = new HexaStoreNull();
+
+        CmdUpdate cmdUpdate = new CmdUpdate();
+        cmdUpdate.run(
+                blobStore,
+                logRelations);
+    }
+
+
+        @Test
+    public void doUpdateWithSeeds() throws IOException {
         BlobStoreNull blobStore = new BlobStoreNull();
         HexaStoreNull logRelations = new HexaStoreNull();
         assertThat(blobStore.putAttemptCount.get(), Is.is(0));
         assertThat(logRelations.putLogVersionAttemptCount.get(), Is.is(0));
 
-        new CmdUpdate().run(
+        CmdUpdate cmdUpdate = new CmdUpdate();
+        cmdUpdate.setSeeds(Arrays.asList(Seeds.IDIGBIO, Seeds.GBIF, Seeds.BIOCASE));
+        cmdUpdate.run(
                 blobStore,
                 logRelations);
 

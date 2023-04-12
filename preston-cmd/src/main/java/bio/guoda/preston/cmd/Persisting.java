@@ -48,14 +48,13 @@ import java.util.stream.Stream;
 
 public class Persisting extends PersistingLocal {
 
-    private static final String REMOTES = "Included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)";
     private static final String DISABLE_LOCAL_CONTENT_CACHE = "Disable local content cache";
     private static final String DISABLE_PROGRESS_MONITOR = "Disable progress monitor";
 
     @CommandLine.Option(
             names = {"--remote", "--remotes", "--include", "--repos", "--repositories"},
             split = ",",
-            description = REMOTES
+            description = "Included repositories dependency (e.g., https://linker.bio/,https://softwareheritage.org)"
     )
 
     private List<URI> remotes = new ArrayList<>();

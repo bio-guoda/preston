@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.Seeds;
 import bio.guoda.preston.process.RegistryReaderALA;
 import bio.guoda.preston.process.RegistryReaderBHL;
 import bio.guoda.preston.process.RegistryReaderBioCASE;
@@ -42,14 +41,14 @@ public class CmdUpdate extends CmdTrack {
             names = {"-u", "--seed"},
             description = "Starting points for graph discovery. Only active when no content urls are provided."
     )
-    private List<String> seedUrls = new ArrayList<String>() {{
-        add(Seeds.IDIGBIO.getIRIString());
-        add(Seeds.GBIF.getIRIString());
-        add(Seeds.BIOCASE.getIRIString());
-    }};
+    private List<IRI> seeds = new ArrayList<>();
 
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
+        if (getIRIs().isEmpty() && seeds.isEmpty()) {
+            throw new IllegalArgumentException("nothing to do: no tracked location or seed provided");
+        }
+
         if (getIRIs().isEmpty()) {
             statementQueue.add(generateSeeds(ctx.getActivity()));
         } else {
@@ -82,9 +81,16 @@ public class CmdUpdate extends CmdTrack {
     }
 
     private List<Quad> generateSeeds(final IRI crawlActivity) {
-        return seedUrls.stream()
-                .map((String uriString) -> toStatement(crawlActivity, toIRI(uriString), WAS_ASSOCIATED_WITH, crawlActivity))
+        return seeds.stream()
+                .map(seed -> toStatement(crawlActivity, seed, WAS_ASSOCIATED_WITH, crawlActivity))
                 .collect(Collectors.toList());
     }
 
+    public void setSeeds(List<IRI> seeds) {
+        this.seeds = seeds;
+    }
+
+    public List<IRI> getSeeds() {
+        return seeds;
+    }
 }
