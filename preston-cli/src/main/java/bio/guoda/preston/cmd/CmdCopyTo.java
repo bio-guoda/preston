@@ -1,7 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.EmittingStreamFactory;
-import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
+import bio.guoda.preston.process.EmittingStreamOfAnyQuad;
 import bio.guoda.preston.process.ParsingEmitter;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementEmitter;
@@ -14,9 +14,9 @@ import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreCopying;
 import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
+import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
 import bio.guoda.preston.util.JekyllUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.joda.time.DateTime;
@@ -119,7 +119,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
                 provenanceTracer, new EmittingStreamFactory() {
                     @Override
                     public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
-                        return new EmittingStreamOfAnyVersions(emitter, context);
+                        return new EmittingStreamOfAnyQuad(emitter, context);
                     }
                 }
         );

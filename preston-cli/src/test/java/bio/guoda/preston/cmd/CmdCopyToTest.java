@@ -2,15 +2,18 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.store.KeyTo1LevelPath;
 import net.lingala.zip4j.ZipFile;
+import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +25,46 @@ public class CmdCopyToTest {
 
     @Rule
     public TemporaryFolder tmpDir = new TemporaryFolder();
+
+    @Test
+    public void generateJekyllSite() throws URISyntaxException, IOException {
+        // https://github.com/bio-guoda/preston/issues/231
+        URL resource = getClass().getResource("/bio/guoda/preston/cmd/bees-data.zip");
+        assertNotNull(resource);
+
+        ZipFile zipFile = new ZipFile(new File(resource.toURI()));
+        File src1 = tmpDir.newFolder("src");
+        zipFile.extractAll(src1.getAbsolutePath());
+        File src = src1;
+        File copyTo = tmpDir.newFolder("dst");
+        CmdCopyTo cmdCopyTo = new CmdCopyTo();
+        cmdCopyTo.setLocalDataDir(src.getAbsolutePath());
+        cmdCopyTo.setTargetDir(copyTo.getAbsolutePath());
+        cmdCopyTo.setArchiveType(ArchiveType.jekyll);
+
+        assertThat(copyTo.list(), Is.is(new String[]{}));
+
+        cmdCopyTo.run();
+
+        assertNotNull(copyTo);
+        assertNotNull(copyTo.list());
+        List<String> actual = Arrays.asList(copyTo.list());
+        assertThat(actual.size(), Is.is(9));
+        assertThat(actual,
+                (hasItems("assets","index.md","_includes","data.json",".gitignore","pages","_data", "_layouts", "registry.json")));
+
+        File dataDir = new File(copyTo, "_data");
+
+        File contentTable = new File(dataDir, "content.tsv");
+        assertThat(contentTable.exists(), Is.is(true));
+
+        String contentTableContent = IOUtils.toString(new FileInputStream(contentTable), StandardCharsets.UTF_8);
+
+        assertThat(contentTableContent, Is.is("url\tverb\thash\tgraphname\ndonald\n"));
+
+
+    }
+
 
     @Test
     public void trackAndCopy() throws URISyntaxException, IOException {

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.CloseShieldOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
@@ -68,7 +69,7 @@ public class JekyllUtil {
             FileUtils.deleteQuietly(contentVersions);
         }
 
-        try (OutputStream os = new FileOutputStream(contentVersions)) {
+        try (OutputStream os = CloseShieldOutputStream.wrap(new FileOutputStream(contentVersions))) {
             IOUtils.write("url\tverb\thash\tgraphname\n", os, StandardCharsets.UTF_8);
             final StatementListener versionLogger = new StatementLoggerTSV(os);
             return createPageGenerators(store, posts, versionLogger);
