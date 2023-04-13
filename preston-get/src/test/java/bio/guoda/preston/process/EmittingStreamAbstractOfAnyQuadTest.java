@@ -3,6 +3,7 @@ package bio.guoda.preston.process;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.Quad;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -34,7 +35,7 @@ public class EmittingStreamAbstractOfAnyQuadTest {
     }
 
     @Test
-    public void shouldNotEmitBlankNode() {
+    public void shouldNotEmitBlankObject() {
         List<Quad> quads = new ArrayList<>();
 
         String nquad = "<https://example.org> <http://purl.org/pav/hasVersion> _:ae63fa95-362c-38b5-b74f-203f8d7f92b3 .";
@@ -47,6 +48,42 @@ public class EmittingStreamAbstractOfAnyQuadTest {
         }).parseAndEmit(IOUtils.toInputStream(nquad, StandardCharsets.UTF_8));
 
         assertThat(quads.size(), Is.is(0));
+    }
+
+    @Test
+    public void shouldNotEmitBlankSubject() {
+        List<Quad> quads = new ArrayList<>();
+
+        String nquad = "_:ae63fa95-362c-38b5-b74f-203f8d7f92b3 <http://purl.org/pav/hasVersion> <https://example.org> .";
+
+        new EmittingStreamOfAnyQuad(new StatementsEmitterAdapter() {
+            @Override
+            public void emit(Quad statement) {
+                quads.add(statement);
+            }
+        }).parseAndEmit(IOUtils.toInputStream(nquad, StandardCharsets.UTF_8));
+
+        assertThat(quads.size(), Is.is(0));
+    }
+
+    @Test
+    public void shouldEmitPaddedRelativeIRIs() {
+        List<Quad> quads = new ArrayList<>();
+
+        String nquad = "<http://n2t.net/ark:/65665/m34827bfe7-c154-4812-9a3b-470b08cdff1b> <http://xmlns.com/foaf/0.1/depicts> <32ae6807-d695-44d4-9d6a-5764a0e3e711> <6d3e5d7b-4e8c-4302-8ee6-31fa37b68afb> .";
+
+        new EmittingStreamOfAnyQuad(new StatementsEmitterAdapter() {
+            @Override
+            public void emit(Quad statement) {
+                quads.add(statement);
+            }
+        }).parseAndEmit(IOUtils.toInputStream(nquad, StandardCharsets.UTF_8));
+
+        assertThat(quads.size(), Is.is(1));
+
+        assertThat(quads.get(0).getGraphName().get().ntriplesString(), Is.is("<x:preston:6d3e5d7b-4e8c-4302-8ee6-31fa37b68afb>"));
+
+
     }
 
     @Test
@@ -64,7 +101,8 @@ public class EmittingStreamAbstractOfAnyQuadTest {
         assertThat(quads.get(0).getSubject().ntriplesString(), Is.is("<urn:uuid:5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1>"));
         assertThat(quads.get(0).getPredicate().ntriplesString(), Is.is("<http://www.w3.org/ns/prov#usedBy>"));
         assertThat(quads.get(0).getObject().ntriplesString(), Is.is("<http://www.w3.org/ns/prov#SoftwareAgent>"));
-        assertThat(quads.get(0).getGraphName().isPresent(), Is.is(false));
+        assertThat(quads.get(0).getGraphName().isPresent(), Is.is(true));
+        assertThat(quads.get(0).getGraphName().get().ntriplesString(), Is.is("<x:preston:>"));
 
     }
 
@@ -101,7 +139,7 @@ public class EmittingStreamAbstractOfAnyQuadTest {
         }, new ProcessorState() {
             @Override
             public boolean shouldKeepProcessing() {
-                return counter.getAndIncrement() == 0;
+                return quads.size() == 0;
             }
 
             @Override
@@ -146,10 +184,10 @@ public class EmittingStreamAbstractOfAnyQuadTest {
             }
         }).parseAndEmit(getClass().getResourceAsStream("/bio/guoda/preston/store/issue-214-data-example/18/b5/18b51a180c63929d5e3a50dbb72295579c2645546d22ae3fdcd5e2095c43d199"));
 
-        assertThat(quads.size(), Is.is(113));
+        assertThat(quads.size(), Is.is(612));
     }
 
-    @Test
+    @Test(expected = RDFHandlerException.class)
     public void emitQuadNeverStart() {
         List<Quad> quads = new ArrayList<>();
         new EmittingStreamOfAnyQuad(new StatementsEmitterAdapter() {
@@ -168,8 +206,6 @@ public class EmittingStreamAbstractOfAnyQuadTest {
 
             }
         }).parseAndEmit(IOUtils.toInputStream("bla bla", StandardCharsets.UTF_8));
-
-        assertThat(quads.size(), Is.is(0));
 
     }
 
