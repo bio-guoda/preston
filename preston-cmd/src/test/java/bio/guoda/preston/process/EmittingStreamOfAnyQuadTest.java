@@ -54,8 +54,8 @@ public class EmittingStreamOfAnyQuadTest {
         assertThat(actual, Is.is(CoreMatchers.not(CoreMatchers.nullValue())));
 
         assertThat(actual.getGraphName().get().toString(), Is.is("<urn:uuid:88948228-e967-415c-8cc6-b3f4b4c77a26>"));
-        assertThat(actual.getObject().toString(), Is.is("<urn:uuid:88948228-e967-415c-8cc6-b3f4b4c77a26>"));
-        assertThat(actual.getPredicate().toString(), Is.is("<urn:uuid:88948228-e967-415c-8cc6-b3f4b4c77a26>"));
+        assertThat(actual.getObject().toString(), Is.is("\"2023-04-13T02:25:42.491Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime>"));
+        assertThat(actual.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#startedAtTime>"));
         assertThat(actual.getSubject().toString(), Is.is("<urn:uuid:88948228-e967-415c-8cc6-b3f4b4c77a26>"));
     }
 
