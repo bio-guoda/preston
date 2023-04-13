@@ -1,21 +1,7 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.RDFUtil;
-import bio.guoda.preston.StatementLoggerTSV;
-import bio.guoda.preston.process.CmdUtil;
-import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.ProcessorStateReadOnly;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.rdf.api.BlankNodeOrIRI;
-import org.apache.commons.rdf.api.RDF;
-import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFHandler;
-import org.eclipse.rdf4j.rio.RDFHandlerException;
-import org.eclipse.rdf4j.rio.RDFParser;
-import org.eclipse.rdf4j.rio.Rio;
-import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,10 +9,24 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CopyShopNQuadToTSV implements CopyShop {
+
+    public static final String SUBJECT_VERB_IRI_OBJECT_NAMESPACE
+            = "<(?<subject>.*)> <(?<verb>.*)> <(?<object>.*)>[ ]<(?<namespace>.*)> \\.";
+
+    public static final String SUBJECT_VERB_LITERAL_OBJECT_NAMESPACE
+            = "<(?<subject>.*)> <(?<verb>.*)>[ ](?<object>.*)[ ]<(?<namespace>.*)> \\.";
+
+    public static final Pattern WITH_IRI_OBJECT
+            = Pattern.compile(SUBJECT_VERB_IRI_OBJECT_NAMESPACE);
+
+    public static final Pattern WITH_LITERAL_OBJECT
+            = Pattern.compile(SUBJECT_VERB_LITERAL_OBJECT_NAMESPACE);
 
     private final ProcessorStateReadOnly context;
 
@@ -36,28 +36,18 @@ public class CopyShopNQuadToTSV implements CopyShop {
 
     @Override
     public void copy(InputStream is, OutputStream os) throws IOException {
-        RDFParser parser = Rio.createParser(RDFFormat.NQUADS);
-        parser.setRDFHandler(new AbstractRDFHandler() {
-            @Override
-            public void handleStatement(Statement statement) throws RDFHandlerException {
-                String subject = statement.getSubject().stringValue();
-                String predicate = statement.getPredicate().stringValue();
-                String object = statement.getObject().stringValue();
-                Resource context = statement.getContext();
-                String graphName = context == null ? "" : context.stringValue();
-
-                try {
-                    IOUtils.write(subject + "\t" + predicate + "\t" + object + "\t" + graphName + "\n", os, StandardCharsets.UTF_8);
-                } catch (IOException e) {
-                    throw new RDFHandlerException("failed to generate tsv", e);
-                }
-            }
-        });
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         String line;
         while (getContext().shouldKeepProcessing() && (line = reader.readLine()) != null) {
-            parser.parse(IOUtils.toInputStream(line, StandardCharsets.UTF_8));
+            Matcher matcher = WITH_IRI_OBJECT.matcher(line);
+            if (!matcher.matches()) {
+                matcher = WITH_LITERAL_OBJECT.matcher(line);
+            }
+
+            if (matcher.matches()) {
+                Stream<String> groups = Stream.of(matcher.group("subject"), matcher.group("verb"), matcher.group("object"), matcher.group("namespace"));
+                IOUtils.write(groups.collect(Collectors.joining("\t", "", "\n")), os, StandardCharsets.UTF_8);
+            }
         }
     }
 
