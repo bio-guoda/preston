@@ -44,7 +44,7 @@ public class CopyShopNQuadToTSVTest {
         assertThat(matcher.group("namespace"), Is.is("d2c8a96a-89c8-4dd6-ba37-06809d4ff9ae"));
     }
 
-    private String exampleWithIRIObject() {
+    public static String exampleWithIRIObject() {
         return "<https://preston.guoda.bio>" +
                 " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>" +
                 " <http://www.w3.org/ns/prov#SoftwareAgent>" +
@@ -87,10 +87,7 @@ public class CopyShopNQuadToTSVTest {
         Pattern pattern = CopyShopNQuadToTSV.WITH_LITERAL_OBJECT;
 
         Matcher matcher = pattern.matcher(
-                "<https://preston.guoda.bio>" +
-                        " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>" +
-                        " \"2020-09-12T05:57:53.420Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime>" +
-                        " <d2c8a96a-89c8-4dd6-ba37-06809d4ff9ae> .");
+                getLiteralObjectWithTypeAndRelativeGraphLabelIRI());
 
         assertThat(matcher.matches(), Is.is(true));
 
@@ -98,6 +95,13 @@ public class CopyShopNQuadToTSVTest {
         assertThat(matcher.group("verb"), Is.is("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"));
         assertThat(matcher.group("object"), Is.is("\"2020-09-12T05:57:53.420Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime>"));
         assertThat(matcher.group("namespace"), Is.is("d2c8a96a-89c8-4dd6-ba37-06809d4ff9ae"));
+    }
+
+    public static String getLiteralObjectWithTypeAndRelativeGraphLabelIRI() {
+        return "<https://preston.guoda.bio>" +
+                " <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>" +
+                " \"2020-09-12T05:57:53.420Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime>" +
+                " <d2c8a96a-89c8-4dd6-ba37-06809d4ff9ae> .";
     }
 
     @Test

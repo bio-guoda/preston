@@ -1,20 +1,19 @@
 package bio.guoda.preston.process;
 
-import org.apache.commons.rdf.api.BlankNode;
+import bio.guoda.preston.RDFUtil;
+import bio.guoda.preston.cmd.CopyShopNQuadToTSV;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.commons.rdf.rdf4j.RDF4J;
-import org.eclipse.rdf4j.model.Statement;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFHandler;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
-import org.eclipse.rdf4j.rio.RDFParseException;
-import org.eclipse.rdf4j.rio.RDFParser;
-import org.eclipse.rdf4j.rio.Rio;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-
-import static bio.guoda.preston.RefNodeFactory.toIRI;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.regex.Matcher;
 
 public class EmittingStreamOfAnyQuad extends EmittingStreamAbstract {
 
@@ -27,48 +26,66 @@ public class EmittingStreamOfAnyQuad extends EmittingStreamAbstract {
     }
 
     @Override
-    public void parseAndEmit(InputStream inputStream) {
-
-        RDFParser rdfParser = Rio.createParser(RDFFormat.NQUADS);
-
-        rdfParser.setRDFHandler(new RDFHandler() {
-            @Override
-            public void startRDF() throws RDFHandlerException {
-
-            }
-
-            @Override
-            public void endRDF() throws RDFHandlerException {
-
-            }
-
-            @Override
-            public void handleNamespace(String prefix, String uri) throws RDFHandlerException {
-
-            }
-
-            @Override
-            public void handleStatement(Statement st) throws RDFHandlerException {
-                if (!getContext().shouldKeepProcessing()) {
-                    throw new RDFHandlerException("stop processing");
-                }
-                Quad quad = new RDF4J().asQuad(st);
-                if (!(quad.getSubject() instanceof BlankNode) && !(quad.getObject() instanceof BlankNode)) {
-                    copyOnEmit(quad);
-                }
-            }
-
-            @Override
-            public void handleComment(String comment) throws RDFHandlerException {
-
-            }
-        });
-
-        try {
-            rdfParser.parse(inputStream);
-        } catch (IOException | RDFParseException | RDFHandlerException ex) {
-            // ignore
+    public void parseAndEmit(InputStream is) {
+        if (!getContext().shouldKeepProcessing()) {
+            throw new RDFHandlerException("stop processing");
         }
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+        String line;
+        try {
+            while (getContext().shouldKeepProcessing() && (line = reader.readLine()) != null) {
+                Matcher matcher = CopyShopNQuadToTSV.WITH_IRI_OBJECT.matcher(line);
+                if (matcher.matches()) {
+                    emitQuadWithIRIObject(matcher);
+                } else {
+                    matcher = CopyShopNQuadToTSV.WITH_LITERAL_OBJECT.matcher(line);
+                    if (matcher.matches()) {
+                        emitQuadWithLiteralObject(matcher);
+                    }
+                }
+            }
+        } catch (IOException ex) {
+            throw new RDFHandlerException("failed processing likely nquad stream", ex);
+        }
+
+    }
+
+    private void emitQuadWithIRIObject(Matcher matcher) {
+        String subject = padIfNeeded(matcher, "subject");
+        String verb = padIfNeeded(matcher, "verb");
+        String object = padIfNeeded(matcher, "object");
+        String namespace = padIfNeeded(matcher, "namespace");
+
+        List<Quad> quads = RDFUtil.parseQuads(
+                IOUtils.toInputStream("<" + subject + "> <" + verb + "> <" + object + "> <" + namespace + "> .", StandardCharsets.UTF_8)
+        );
+        quads.forEach(this::copyOnEmit);
+    }
+
+    private String padIfNeeded(Matcher matcher, String termName) {
+        // prefix relative IRIs to make RDF4J happy
+        String term = matcher.group(termName);
+        if (!StringUtils.contains(term, ":")) {
+            term = "x-preston:" + term;
+        }
+        return term;
+    }
+
+    private void emitQuadWithLiteralObject(Matcher matcher) {
+        String subject = padIfNeeded(matcher, "subject");
+        String verb = padIfNeeded(matcher, "verb");
+
+        // no need to "fix" the object - it is a literal
+        String object = matcher.group("object");
+
+        String namespace = padIfNeeded(matcher, "namespace");
+
+
+        List<Quad> quads = RDFUtil.parseQuads(
+                IOUtils.toInputStream("<" + subject + "> <" + verb + "> " + object + " <" + namespace + "> .", StandardCharsets.UTF_8)
+        );
+        quads.forEach(this::copyOnEmit);
     }
 
 

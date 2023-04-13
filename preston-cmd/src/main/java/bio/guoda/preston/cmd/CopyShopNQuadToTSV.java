@@ -39,15 +39,19 @@ public class CopyShopNQuadToTSV implements CopyShop {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         String line;
         while (getContext().shouldKeepProcessing() && (line = reader.readLine()) != null) {
-            Matcher matcher = WITH_IRI_OBJECT.matcher(line);
-            if (!matcher.matches()) {
-                matcher = WITH_LITERAL_OBJECT.matcher(line);
-            }
+            lineToTSVQuad(os, line);
+        }
+    }
 
-            if (matcher.matches()) {
-                Stream<String> groups = Stream.of(matcher.group("subject"), matcher.group("verb"), matcher.group("object"), matcher.group("namespace"));
-                IOUtils.write(groups.collect(Collectors.joining("\t", "", "\n")), os, StandardCharsets.UTF_8);
-            }
+    private void lineToTSVQuad(OutputStream os, String line) throws IOException {
+        Matcher matcher = WITH_IRI_OBJECT.matcher(line);
+        if (!matcher.matches()) {
+            matcher = WITH_LITERAL_OBJECT.matcher(line);
+        }
+
+        if (matcher.matches()) {
+            Stream<String> groups = Stream.of(matcher.group("subject"), matcher.group("verb"), matcher.group("object"), matcher.group("namespace"));
+            IOUtils.write(groups.collect(Collectors.joining("\t", "", "\n")), os, StandardCharsets.UTF_8);
         }
     }
 
