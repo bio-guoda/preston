@@ -94,7 +94,10 @@ public class JekyllUtil {
                         ".jekyll-cache", StandardCharsets.UTF_8), new File(jekyllDir, ".gitignore"));
     }
 
-    public static StatementsListener createPageGenerators(BlobStoreReadOnly store, File posts, StatementListener contentVersionLogger) {
+    public static StatementsListener createPageGenerators(
+            BlobStoreReadOnly store,
+            File posts,
+            StatementListener contentVersionLogger) {
         return new StatementsListenerAdapter() {
 
             @Override

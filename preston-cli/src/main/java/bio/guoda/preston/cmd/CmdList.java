@@ -3,11 +3,14 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.LogErrorHandler;
 import bio.guoda.preston.process.StatementsListener;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @CommandLine.Command(
@@ -26,13 +29,10 @@ public class CmdList extends LoggingPersisting implements Runnable {
     }
 
     public void run(LogErrorHandler handler) {
+        CopyShop copyShop = LogTypes.nquads.equals(getLogMode())
+                ? new CopyShopImpl()
+                : new CopyShopNQuadToTSV(this);
 
-
-        StatementsListener listener = StatementLogFactory
-                .createPrintingLogger(
-                        getLogMode(),
-                        getOutputStream(),
-                        handler);
 
         AtomicBoolean foundHistory = new AtomicBoolean(false);
         try {
@@ -45,7 +45,8 @@ public class CmdList extends LoggingPersisting implements Runnable {
                                     ContentQueryUtil.copyMostRecentContent(
                                             resolvingBlobStore(ReplayUtil.getBlobStore(this)),
                                             statement,
-                                            this);
+                                            this,
+                                            copyShop);
                                 } catch (IOException e) {
                                     LOG.warn("failed to resolve content related to [" + statement.toString() + "]");
                                     handler.handleError();

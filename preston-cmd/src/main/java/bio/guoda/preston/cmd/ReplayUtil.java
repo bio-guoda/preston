@@ -42,7 +42,8 @@ public final class ReplayUtil {
         attemptReplay(
                 provenanceLogStore,
                 new CmdContext(new ProcessorStateAlwaysContinue(), provRoot, listeners),
-                provenanceTracer, emitterFactory
+                provenanceTracer,
+                emitterFactory
         );
     }
 

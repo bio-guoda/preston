@@ -21,22 +21,8 @@ public class StatementLogFactory {
         StatementsListener logger;
         if (LogTypes.tsv == logMode) {
             logger = new StatementLoggerTSV(out, handler);
-        } else if (LogTypes.nquads == logMode) {
-            logger = new StatementLoggerNQuads(out, handler);
         } else {
-            logger = new StatementLogger(out, handler) {
-                AtomicLong count = new AtomicLong(1);
-
-                @Override
-                public void on(Quad statement) {
-                    long index = count.getAndIncrement();
-                    if ((index % 80) == 0) {
-                        print("\n");
-                    } else {
-                        print(".");
-                    }
-                }
-            };
+            logger = new StatementLoggerNQuads(out, handler);
         }
         return logger;
     }

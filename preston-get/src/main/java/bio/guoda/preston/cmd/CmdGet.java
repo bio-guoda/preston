@@ -6,6 +6,7 @@ import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.VersionUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -13,7 +14,9 @@ import picocli.CommandLine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,12 +62,12 @@ public class CmdGet extends Persisting implements Runnable {
                 }
                 if (iri != null) {
                     Quad quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, iri);
-                    ContentQueryUtil.copyMostRecentContent(blobStore, quad, this);
+                    ContentQueryUtil.copyMostRecentContent(blobStore, quad, this, new CopyShopImpl());
                 }
             }
         } else {
             for (IRI contentIdOrAlias : contentIdsOrAliases) {
-                ContentQueryUtil.copyContent(blobStore, contentIdOrAlias, this);
+                ContentQueryUtil.copyContent(blobStore, contentIdOrAlias, this, new CopyShopImpl());
             }
         }
     }

@@ -3,7 +3,6 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.VersionUtil;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
@@ -12,10 +11,13 @@ import java.io.InputStream;
 
 public class ContentQueryUtil {
 
-    static void copyMostRecentContent(BlobStoreReadOnly blobStore, Quad quad, Persisting persisting) throws IOException {
+    static void copyMostRecentContent(BlobStoreReadOnly blobStore,
+                                      Quad quad,
+                                      Persisting persisting,
+                                      CopyShop copyShop) throws IOException {
         IRI version = VersionUtil.mostRecentVersion(quad);
         if (version != null) {
-            copyContent(blobStore, version, persisting);
+            copyContent(blobStore, version, persisting, copyShop);
         }
     }
 
@@ -30,10 +32,11 @@ public class ContentQueryUtil {
     public static void copyContent(
             BlobStoreReadOnly blobStore,
             IRI queryIRI,
-            Persisting persisting
+            Persisting persisting,
+            CopyShop copyShop
     ) throws IOException {
         InputStream contentStream = getContent(blobStore, queryIRI, persisting);
-        IOUtils.copyLarge(contentStream, persisting.getOutputStream());
+        copyShop.copy(contentStream, persisting.getOutputStream());
     }
 
     public static InputStream getContent(
