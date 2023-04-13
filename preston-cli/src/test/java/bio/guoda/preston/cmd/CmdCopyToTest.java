@@ -60,7 +60,15 @@ public class CmdCopyToTest {
 
         String contentTableContent = IOUtils.toString(new FileInputStream(contentTable), StandardCharsets.UTF_8);
 
-        assertThat(contentTableContent, Is.is("url\tverb\thash\tgraphname\ndonald\n"));
+        assertThat(contentTableContent, Is.is(
+                "url\tverb\thash\tgraphname\n" +
+                "https://search.idigbio.org/v2/search/records/?rq=%7B%22family%22%3A%22Andrenidae%22%2c%22hasImage%22%3A%22true%22%7D&limit=1&offset=0\thttp://purl.org/pav/hasVersion\thash://sha256/e094a0c1b7fbe977fc60d4e63bce17d2e93a2e9e30b82282760e95effa6ebc94\turn:uuid:f8672268-2dda-44a8-be5d-18889b1af614\n" +
+                "https://search.idigbio.org/v2/view/mediarecords/9625f568-1001-4e35-97f3-6335c8526e0d\thttp://purl.org/pav/hasVersion\thash://sha256/2ff68ec8fb3c7e0ead608ab632619d960757593b50f8bc9eaaca17042ca93d4f\turn:uuid:62d2b280-8738-49bc-b8c5-80970425a318\n" +
+                "https://api.idigbio.org/v2/media/9625f568-1001-4e35-97f3-6335c8526e0d?size=thumbnail\thttp://purl.org/pav/hasVersion\thash://sha256/92ec00809785532def79364e3d32cc593e6b3d3ee5875b6d5adf3adcad7049cc\turn:uuid:83d1af8a-6134-49ff-91d3-77cc7d7871c7\n" +
+                "https://api.idigbio.org/v2/media/9625f568-1001-4e35-97f3-6335c8526e0d?size=webview\thttp://purl.org/pav/hasVersion\thash://sha256/92ec00809785532def79364e3d32cc593e6b3d3ee5875b6d5adf3adcad7049cc\turn:uuid:f107aae1-befe-4d9c-9508-418344e7ca5d\n" +
+                "https://api.idigbio.org/v2/media/9625f568-1001-4e35-97f3-6335c8526e0d?size=fullsize\thttp://purl.org/pav/hasVersion\thash://sha256/92ec00809785532def79364e3d32cc593e6b3d3ee5875b6d5adf3adcad7049cc\turn:uuid:e12adadf-46d5-46f9-be4c-93a86315505c\n" +
+                "https://iiif.mcz.harvard.edu/iiif/3/3812681/full/max/0/default.jpg\thttp://purl.org/pav/hasVersion\thash://sha256/d24fb91674817ea43a661045271e03f0278a4d7a78d32ecc8d2136a860ae1bf7\turn:uuid:bdda03fc-5d1b-49e4-aef9-33bdda4d6119\n"
+        ));
 
 
     }

@@ -69,11 +69,10 @@ public class JekyllUtil {
             FileUtils.deleteQuietly(contentVersions);
         }
 
-        try (OutputStream os = CloseShieldOutputStream.wrap(new FileOutputStream(contentVersions))) {
-            IOUtils.write("url\tverb\thash\tgraphname\n", os, StandardCharsets.UTF_8);
-            final StatementListener versionLogger = new StatementLoggerTSV(os);
-            return createPageGenerators(store, posts, versionLogger);
-        }
+        OutputStream os = CloseShieldOutputStream.wrap(new FileOutputStream(contentVersions));
+        IOUtils.write("url\tverb\thash\tgraphname\n", os, StandardCharsets.UTF_8);
+        final StatementListener versionLogger = new StatementLoggerTSV(os);
+        return createPageGenerators(store, posts, versionLogger);
     }
 
     public static void copyStatic(File jekyllDir) throws IOException {
