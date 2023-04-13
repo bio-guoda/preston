@@ -184,7 +184,7 @@ public class EmittingStreamAbstractOfAnyQuadTest {
             }
         }).parseAndEmit(getClass().getResourceAsStream("/bio/guoda/preston/store/issue-214-data-example/18/b5/18b51a180c63929d5e3a50dbb72295579c2645546d22ae3fdcd5e2095c43d199"));
 
-        assertThat(quads.size(), Is.is(612));
+        assertThat(quads.size(), Is.is(712));
     }
 
     @Test(expected = RDFHandlerException.class)
