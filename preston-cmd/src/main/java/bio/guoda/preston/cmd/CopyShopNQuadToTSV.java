@@ -20,10 +20,10 @@ import java.util.stream.Stream;
 public class CopyShopNQuadToTSV implements CopyShop {
 
     public static final String SUBJECT_VERB_IRI_OBJECT_NAMESPACE
-            = "<(?<subject>[^>])> <(?<verb>[^>])> <(?<object>[^>])>[ ]<(?<namespace>[^>])> \\.";
+            = "<(?<subject>[^>]+)> <(?<verb>[^>]+)> <(?<object>[^>]+)>[ ]<(?<namespace>[^>]+)> \\.";
 
     public static final String SUBJECT_VERB_IRI_OBJECT_NO_NAMESPACE
-            = "<(?<subject>[^>]+)> <(?<verb>[^>])> <(?<object>[^>])> \\.";
+            = "<(?<subject>[^>]+)> <(?<verb>[^>]+)> <(?<object>[^>]+)> \\.";
 
     public static final String SUBJECT_VERB_LITERAL_OBJECT_NAMESPACE
             = "<(?<subject>[^>]+)> <(?<verb>[^>]+)>[ ](?<object>[^_].*)[ ]<(?<namespace>[^>]+)> \\.";
