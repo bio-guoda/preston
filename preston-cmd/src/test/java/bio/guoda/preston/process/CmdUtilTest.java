@@ -34,6 +34,11 @@ public class CmdUtilTest {
     }
 
     @Test
+    public void printMsgDefaultNamespace() {
+        assertPrintResult("<foo> <bar> <abc> .", "<foo> <bar> <x:preston:abc> <x:preston:> .");
+    }
+
+    @Test
     public void printMsgWithNamespacePadding2() {
         assertPrintResult("<foo> <bar> <foo> <abc> .", "<foo> <bar> <foo> <x:preston:abc> .");
     }

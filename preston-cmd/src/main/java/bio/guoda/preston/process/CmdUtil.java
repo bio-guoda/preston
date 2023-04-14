@@ -14,8 +14,8 @@ public class CmdUtil {
 
     public static void print(String msg, OutputStream outputStream, LogErrorHandler handler) {
         try {
-            String msgWithoutPadding = RegExUtils.removeAll(msg, Pattern.compile("[<]{0,1}" + EmittingStreamOfAnyQuad.DEFAULT_PREFIX_X_PRESTON + "[>]{0,1}[ ]{0,1}"));
-            IOUtils.write(msgWithoutPadding, outputStream, StandardCharsets.UTF_8);
+            String msgWithoutPadding = RegExUtils.removeAll(msg, Pattern.compile(EmittingStreamOfAnyQuad.DEFAULT_PREFIX_X_PRESTON));
+            IOUtils.write(msgWithoutPadding.replaceAll("<> ", ""), outputStream, StandardCharsets.UTF_8);
             if (handler != null) {
                 if (outputStream instanceof PrintStream) {
                     if (((PrintStream) outputStream).checkError()) {
