@@ -100,7 +100,9 @@ public class CmdListTest {
         String actualTSVString = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
         String expectedTSVString = new String(expected.toByteArray(), StandardCharsets.UTF_8);
 
-        assertThat(TestUtil.removeCarriageReturn(actualTSVString), Is.is(TestUtil.removeCarriageReturn(expectedTSVString)));
+        String actual = TestUtil.removeCarriageReturn(actualTSVString);
+        IOUtils.copy(IOUtils.toInputStream(actual, StandardCharsets.UTF_8), new FileOutputStream("target/origins.tsv"));
+        assertThat(actual, Is.is(TestUtil.removeCarriageReturn(expectedTSVString)));
 
     }
 
