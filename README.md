@@ -764,6 +764,8 @@ https://github.com/cboettig/contentid
 
 ### Related Forum Posts / Tweets
 
+https://discourse.gbif.org/t/data-queries-doi-10-15468-dl-6cxfsw-doi-10-15468-dl-b9rfa7-doi-10-15468-dl-w2nndm-used-in-chesshire-et-al-2023-were-cited-but-remain-marked-for-deletion/3915
+
 https://github.com/beehind/beehind.github.io/issues/5
 
 https://discourse.gbif.org/t/type-specimen-castype1652-found-in-via-filtered-query-https-doi-org-10-15468-dl-xf6ahb-but-not-in-open-access-gbif-data-product-https-doi-org-10-15468-dl-pk3trq/3884
