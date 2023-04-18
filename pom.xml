@@ -18,6 +18,7 @@
         <module>preston-plazi</module>
         <module>preston-dbase</module>
         <module>preston-excel</module>
+        <module>preston-paradox</module>
         <module>preston-index</module>
         <module>preston-get</module>
         <module>preston-track</module>

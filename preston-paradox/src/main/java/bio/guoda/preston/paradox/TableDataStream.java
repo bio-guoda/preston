@@ -1,0 +1,135 @@
+/*
+ * Copyright (C) 2009 Leonardo Alves da Costa
+ *
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+ * License for more details. You should have received a copy of the GNU General Public License along with this
+ * program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package bio.guoda.preston.paradox;
+
+import com.googlecode.paradox.data.ParadoxData;
+import com.googlecode.paradox.data.ParadoxFieldFactory;
+import com.googlecode.paradox.metadata.Field;
+import com.googlecode.paradox.metadata.paradox.ParadoxTable;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.channels.FileChannel;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
+
+/**
+ * Utility class for loading table files.
+ *
+ * @version 1.10
+ * @since 1.0
+ */
+public final class TableDataStream extends ParadoxData {
+
+    /**
+     * Load the table data from file.
+     *
+     * @param table  the table to read.
+     * @param fields the fields to read.
+     * @return the row values.
+     * @throws SQLException in case of failures.
+     */
+    public static void streamData(final ParadoxTable table,
+                                  final Field[] fields,
+                                  Consumer<Pair<Long, List<Pair<Field, Object>>>> sink
+    ) throws IOException {
+
+        AtomicLong rowNumberWithOffsetOne = new AtomicLong(1);
+
+        final int blockSize = table.getBlockSizeBytes();
+        final int recordSize = table.getRecordSize();
+        final int headerSize = table.getHeaderSize();
+
+        try (final FileInputStream fs = new FileInputStream(table.getFile());
+             final FileChannel channel = fs.getChannel()) {
+
+            long nextBlock = table.getFirstBlock();
+
+            final ByteBuffer buffer = ByteBuffer.allocate(blockSize);
+            do {
+                buffer.order(ByteOrder.LITTLE_ENDIAN);
+                long position = headerSize + ((nextBlock - 1) * blockSize);
+                channel.position(position);
+
+                buffer.clear();
+                channel.read(buffer);
+                checkDBEncryption(buffer, table, blockSize, nextBlock);
+                buffer.flip();
+
+                nextBlock = buffer.getShort() & 0xFFFF;
+
+                // The block number.
+                buffer.getShort();
+
+                final int addDataSize = buffer.getShort();
+                final int rowsInBlock = (addDataSize / recordSize) + 1;
+
+                buffer.order(ByteOrder.BIG_ENDIAN);
+
+                for (int loop = 0; loop < rowsInBlock; loop++) {
+                    sink.accept(Pair.of(rowNumberWithOffsetOne.getAndIncrement(), readRow(table, fields, buffer)));
+                }
+            } while (nextBlock != 0);
+
+        } catch (final IOException e) {
+            throw new IOException("failed to load [" + table.getName() + "]");
+        }
+    }
+
+    /**
+     * Read a entire row.
+     *
+     * @param table  the table to read of.
+     * @param fields the fields to read.
+     * @param buffer the buffer to read of.
+     * @return the row.
+     * @throws SQLException in case of parse errors.
+     */
+    private static List<Pair<Field, Object>> readRow(final ParadoxTable table, final Field[] fields, final ByteBuffer buffer) throws IOException {
+        final List<Pair<Field, Object>> row = new ArrayList<>(fields.length);
+
+        for (final Field field : table.getFields()) {
+            // Field filter
+            final int index = search(fields, field);
+            if (index != -1) {
+                Object value = null;
+                try {
+                    value = ParadoxFieldFactory.parse(table, buffer, field);
+                } catch (SQLException e) {
+                    throw new IOException("failed to parse field [" + field.getName() + "] in table [" + table.getName() + "]", e);
+                }
+                row.add(Pair.of(field, value));
+            } else {
+                int size = field.getRealSize();
+                buffer.position(buffer.position() + size);
+            }
+        }
+
+        return row;
+    }
+
+    private static int search(final Field[] values, Object find) {
+        for (int i = 0; i < values.length; i++) {
+            if (Objects.equals(values[i], find)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+}
