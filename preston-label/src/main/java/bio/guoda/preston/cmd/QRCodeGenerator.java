@@ -22,7 +22,7 @@ public class QRCodeGenerator {
     public static void generateQRCode(IRI iri, OutputStream output) throws WriterException, IOException {
         BitMatrix byteMatrix =
                 new QRCodeWriter().encode(
-                        iri.getIRIString(),
+                        "https://linker.bio/" + iri.getIRIString(),
                         BarcodeFormat.QR_CODE,
                         256,
                         256,
