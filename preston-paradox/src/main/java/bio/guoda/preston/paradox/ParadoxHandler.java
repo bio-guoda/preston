@@ -10,6 +10,7 @@ import com.googlecode.paradox.data.TableData;
 import com.googlecode.paradox.data.filefilters.TableFilter;
 import com.googlecode.paradox.metadata.Field;
 import com.googlecode.paradox.metadata.Table;
+import com.googlecode.paradox.metadata.paradox.ParadoxDataFile;
 import com.googlecode.paradox.metadata.paradox.ParadoxTable;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -52,9 +53,12 @@ public class ParadoxHandler extends ParadoxData {
 
 
             try {
-                ParadoxTable table = TableData.loadHeader(file, connectionInfo);
-                table.setName(tableNameCandidate);
-                streamTable(out, resourceIRI, table);
+                ParadoxDataFile data = loadHeader(file, connectionInfo);
+                if (data instanceof ParadoxTable) {
+                    ParadoxTable table = (ParadoxTable) data;
+                    table.setName(tableNameCandidate);
+                    streamTable(out, resourceIRI, table);
+                }
             } catch (SQLException var10) {
                 connectionInfo.addWarning(var10);
             }
@@ -72,7 +76,7 @@ public class ParadoxHandler extends ParadoxData {
         TableDataStream.streamData(table, table.getFields(), row -> {
             ObjectMapper obj = new ObjectMapper();
             ObjectNode objectNode = obj.createObjectNode();
-            String iriString = "line:paradox:" + resourceIRI.getIRIString() + "!/table!/" + row.getLeft().toString();
+            String iriString = "line:paradox:" + resourceIRI.getIRIString() + "!/" + table.getName() + "!/" + row.getLeft().toString();
             objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf(iriString));
             objectNode.set("http://purl.org/dc/elements/1.1/format", TextNode.valueOf("application/paradox"));
 

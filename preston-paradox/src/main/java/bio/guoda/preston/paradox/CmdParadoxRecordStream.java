@@ -2,6 +2,7 @@ package bio.guoda.preston.paradox;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.cmd.LoggingPersisting;
+import bio.guoda.preston.process.EmittingStreamOfAnyQuad;
 import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
@@ -43,7 +44,9 @@ public class CmdParadoxRecordStream extends LoggingPersisting implements Runnabl
                     URI uri = URI.create(versionSource.getIRIString());
                     String[] parts = StringUtils.split(uri.getPath(), "/");
                     final String tableNameCandidate = (parts != null && parts.length > 0)
-                            ? parts[parts.length - 1] : "table";
+                            ? parts[parts.length - 1]
+                            : "table";
+
                     try {
                         ParadoxHandler.asJsonStream(
                                 getOutputStream(),
@@ -58,7 +61,7 @@ public class CmdParadoxRecordStream extends LoggingPersisting implements Runnabl
 
         };
 
-        new EmittingStreamOfAnyVersions(emitter, this)
+        new EmittingStreamOfAnyQuad(emitter, this)
                 .parseAndEmit(getInputStream());
 
     }

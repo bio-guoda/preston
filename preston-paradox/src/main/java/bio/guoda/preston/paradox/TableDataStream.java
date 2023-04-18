@@ -39,55 +39,103 @@ public final class TableDataStream extends ParadoxData {
     /**
      * Load the table data from file.
      *
-     * @param table  the table to read.
+     * @param data   the data to read.
      * @param fields the fields to read.
      * @return the row values.
      * @throws SQLException in case of failures.
      */
-    public static void streamData(final ParadoxTable table,
+    public static void streamData(final ParadoxTable data,
                                   final Field[] fields,
                                   Consumer<Pair<Long, List<Pair<Field, Object>>>> sink
     ) throws IOException {
-
         AtomicLong rowNumberWithOffsetOne = new AtomicLong(1);
 
-        final int blockSize = table.getBlockSizeBytes();
-        final int recordSize = table.getRecordSize();
-        final int headerSize = table.getHeaderSize();
+        final int blockSize = data.getBlockSizeBytes();
+        final int recordSize = data.getRecordSize();
+        final int headerSize = data.getHeaderSize();
 
-        try (final FileInputStream fs = new FileInputStream(table.getFile());
-             final FileChannel channel = fs.getChannel()) {
+        if (blockSize > 0 && recordSize > 0 && headerSize > 0) {
 
-            long nextBlock = table.getFirstBlock();
+            try (final FileInputStream fs = new FileInputStream(data.getFile());
+                 final FileChannel channel = fs.getChannel()) {
 
-            final ByteBuffer buffer = ByteBuffer.allocate(blockSize);
-            do {
-                buffer.order(ByteOrder.LITTLE_ENDIAN);
-                long position = headerSize + ((nextBlock - 1) * blockSize);
-                channel.position(position);
+                long nextBlock = data.getFirstBlock();
 
-                buffer.clear();
-                channel.read(buffer);
-                checkDBEncryption(buffer, table, blockSize, nextBlock);
-                buffer.flip();
+                final ByteBuffer buffer = ByteBuffer.allocate(blockSize);
+                do {
+                    buffer.order(ByteOrder.LITTLE_ENDIAN);
+                    long position = headerSize + ((nextBlock - 1) * blockSize);
+                    channel.position(position);
 
-                nextBlock = buffer.getShort() & 0xFFFF;
+                    buffer.clear();
+                    channel.read(buffer);
+                    checkDBEncryption(buffer, data, blockSize, nextBlock);
+                    buffer.flip();
 
-                // The block number.
-                buffer.getShort();
+                    nextBlock = buffer.getShort() & 0xFFFF;
 
-                final int addDataSize = buffer.getShort();
-                final int rowsInBlock = (addDataSize / recordSize) + 1;
+                    // The block number.
+                    buffer.getShort();
 
-                buffer.order(ByteOrder.BIG_ENDIAN);
+                    final int addDataSize = buffer.getShort();
+                    final int rowsInBlock = (addDataSize / recordSize) + 1;
 
-                for (int loop = 0; loop < rowsInBlock; loop++) {
-                    sink.accept(Pair.of(rowNumberWithOffsetOne.getAndIncrement(), readRow(table, fields, buffer)));
-                }
-            } while (nextBlock != 0);
+                    buffer.order(ByteOrder.BIG_ENDIAN);
 
-        } catch (final IOException e) {
-            throw new IOException("failed to load [" + table.getName() + "]");
+                    for (int loop = 0; loop < rowsInBlock; loop++) {
+                        sink.accept(Pair.of(rowNumberWithOffsetOne.getAndIncrement(), readRow(data, fields, buffer)));
+                    }
+                } while (nextBlock != 0);
+
+            } catch (final IOException e) {
+                throw new IOException("failed to load [" + data.getName() + "]");
+            }
+        }
+    }
+
+    private static void streamTableData(ParadoxTable data, Field[] fields, Consumer<Pair<Long, List<Pair<Field, Object>>>> sink) throws IOException {
+        AtomicLong rowNumberWithOffsetOne = new AtomicLong(1);
+
+        final int blockSize = data.getBlockSizeBytes();
+        final int recordSize = data.getRecordSize();
+        final int headerSize = data.getHeaderSize();
+
+        if (blockSize > 0 && recordSize > 0 && headerSize > 0) {
+
+            try (final FileInputStream fs = new FileInputStream(data.getFile());
+                 final FileChannel channel = fs.getChannel()) {
+
+                long nextBlock = data.getFirstBlock();
+
+                final ByteBuffer buffer = ByteBuffer.allocate(blockSize);
+                do {
+                    buffer.order(ByteOrder.LITTLE_ENDIAN);
+                    long position = headerSize + ((nextBlock - 1) * blockSize);
+                    channel.position(position);
+
+                    buffer.clear();
+                    channel.read(buffer);
+                    checkDBEncryption(buffer, data, blockSize, nextBlock);
+                    buffer.flip();
+
+                    nextBlock = buffer.getShort() & 0xFFFF;
+
+                    // The block number.
+                    buffer.getShort();
+
+                    final int addDataSize = buffer.getShort();
+                    final int rowsInBlock = (addDataSize / recordSize) + 1;
+
+                    buffer.order(ByteOrder.BIG_ENDIAN);
+
+                    for (int loop = 0; loop < rowsInBlock; loop++) {
+                        sink.accept(Pair.of(rowNumberWithOffsetOne.getAndIncrement(), readRow(data, fields, buffer)));
+                    }
+                } while (nextBlock != 0);
+
+            } catch (final IOException e) {
+                throw new IOException("failed to load [" + data.getName() + "]");
+            }
         }
     }
 

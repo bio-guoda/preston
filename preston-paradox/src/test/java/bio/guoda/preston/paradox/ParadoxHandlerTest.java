@@ -8,6 +8,7 @@ import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -32,12 +33,11 @@ public class ParadoxHandlerTest {
         };
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        asJsonStream(out, resourceIRI, "table", contentStore);
+        asJsonStream(out, resourceIRI, "COLL.DB", contentStore);
 
 
         String expected = IOUtils.toString(getClass().getResourceAsStream("COLL.DB.json"), StandardCharsets.UTF_8);
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
-
         assertThat(actual, Is.is(expected));
     }
 
