@@ -32,7 +32,7 @@ public class ParadoxHandlerTest {
         };
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        asJsonStream(out, resourceIRI, contentStore);
+        asJsonStream(out, resourceIRI, "table", contentStore);
 
 
         String expected = IOUtils.toString(getClass().getResourceAsStream("COLL.DB.json"), StandardCharsets.UTF_8);
@@ -55,7 +55,7 @@ public class ParadoxHandlerTest {
         };
 
 
-        asJsonStream(out, resourceIRI, contentStore);
+        asJsonStream(out, resourceIRI, "table", contentStore);
 
         assertThat(out.size(), Is.is(0));
     }
@@ -73,7 +73,7 @@ public class ParadoxHandlerTest {
         };
 
 
-        asJsonStream(out, resourceIRI, contentStore);
+        asJsonStream(out, resourceIRI, "table", contentStore);
 
         assertThat(out.size(), Is.is(0));
     }
@@ -92,7 +92,7 @@ public class ParadoxHandlerTest {
         };
 
 
-        asJsonStream(out, resourceIRI, contentStore);
+        asJsonStream(out, resourceIRI, "table", contentStore);
     }
 
 }

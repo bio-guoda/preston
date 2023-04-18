@@ -37,6 +37,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>preston-paradox</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>preston-plazi</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -7,17 +7,20 @@ import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
+import org.apache.commons.lang3.RegExUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
 import java.io.IOException;
+import java.net.URI;
 
 @CommandLine.Command(
-        name = "dbase-json-stream",
-        aliases = {"dbase2json", "dbase-stream"},
-        description = "Extract records from DBase files (*.DBF) in line-json"
+        name = "paradox-stream",
+        aliases = {"paradox2json"},
+        description = "Extract records from Paradox Database files (*.DB) in line-json"
 )
 public class CmdParadoxRecordStream extends LoggingPersisting implements Runnable {
 
@@ -36,17 +39,23 @@ public class CmdParadoxRecordStream extends LoggingPersisting implements Runnabl
             public void emit(Quad statement) {
                 if (RefNodeFactory.hasVersionAvailable(statement)) {
                     BlankNodeOrIRI version = RefNodeFactory.getVersion(statement);
+                    IRI versionSource = RefNodeFactory.getVersionSource(statement);
+                    URI uri = URI.create(versionSource.getIRIString());
+                    String[] parts = StringUtils.split(uri.getPath(), "/");
+                    final String tableNameCandidate = (parts != null && parts.length > 0)
+                            ? parts[parts.length - 1] : "table";
                     try {
                         ParadoxHandler.asJsonStream(
                                 getOutputStream(),
                                 (IRI) version,
+                                tableNameCandidate,
                                 blobStoreReadOnly);
                     } catch (IOException e) {
                         // ignore
                     }
                 }
-
             }
+
         };
 
         new EmittingStreamOfAnyVersions(emitter, this)

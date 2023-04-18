@@ -34,7 +34,10 @@ import java.util.function.Consumer;
 public class ParadoxHandler extends ParadoxData {
 
 
-    public static void asJsonStream(OutputStream out, IRI resourceIRI, KeyValueStoreReadOnly contentStore) throws IOException {
+    public static void asJsonStream(OutputStream out,
+                                    IRI resourceIRI,
+                                    String tableNameCandidate,
+                                    KeyValueStoreReadOnly contentStore) throws IOException {
 
         File tempFile = File.createTempFile("paradox", "db");
 
@@ -50,6 +53,7 @@ public class ParadoxHandler extends ParadoxData {
 
             try {
                 ParadoxTable table = TableData.loadHeader(file, connectionInfo);
+                table.setName(tableNameCandidate);
                 streamTable(out, resourceIRI, table);
             } catch (SQLException var10) {
                 connectionInfo.addWarning(var10);
