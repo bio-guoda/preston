@@ -725,6 +725,8 @@ Boettiger, C (2020). Content-based Identifiers for Iterative Forecasts: A Propos
 
 ### Data publications
 
+Noyes, JS. (2019). Universal Chalcidoidea Database World Wide Web electronic publication. http://www.nhm.ac.uk/chalcidoids. hash://sha256/ec1760dc83dfb17df003ef5e626b965dd4403850bc58286ac59c7ef3a447e063 hash://md5/b89cbd6285133d5c25ad2aef819de388 . (0.1) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7844167
+
 Poelen, Jorrit H. (2023). A biodiversity dataset graph: GBIF, iDigBio, BioCASe hash://sha256/450deb8ed9092ac9b2f0f31d3dcf4e2b9be003c460df63dd6463d252bff37b55 hash://md5/898a9c02bedccaea5434ee4c6d64b7a2 (0.0.4) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7651831
 
 Big Bee Community, Poelen, Jorrit H., & Seltmann, Katja. (2022). Xylocopa sonorina - UCSB-IZC00012194 - Bee Library - 73e389aa-5886-4c48-8778-ba8932d1bd7e hash://sha256/96bfde1efa599e0e8e61de18b14d61dd308737f684950e4079c04e9bc0f33958 hash://md5/4940f68c84cffa4412f7ffb98bb255bd (0.0.3) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7114665
