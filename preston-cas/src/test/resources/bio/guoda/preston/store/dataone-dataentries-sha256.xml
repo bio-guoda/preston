@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:objectLocationList xmlns:ns2="http://ns.dataone.org/service/types/v1">
+    <identifier>urn:uuid:5bdbbf91-2e42-49f8-8801-ec8004160d48</identifier>
+    <objectLocation>
+        <nodeIdentifier>urn:node:ARCTIC</nodeIdentifier>
+        <baseURL>https://arcticdata.io/metacat/d1/mn</baseURL>
+        <version>v1</version>
+        <version>v2</version>
+        <url>https://arcticdata.io/metacat/d1/mn/v2/object/urn:uuid:5bdbbf91-2e42-49f8-8801-ec8004160d48</url>
+    </objectLocation>
+</ns2:objectLocationList>

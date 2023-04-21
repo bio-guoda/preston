@@ -14,11 +14,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class KeyTo1LevelDataOnePath implements KeyToPath {
 
     public static final String DATAONE_URL_PREFIX = "https://cn.dataone.org/cn/v2/query/solr/?q=checksum:";
+    public static final List<HashType> HASH_TYPES_SUPPORTED = Arrays.asList(HashType.md5, HashType.sha256);
     private final URI baseURI;
     private final Dereferencer<InputStream> deref;
 
@@ -35,7 +37,7 @@ public class KeyTo1LevelDataOnePath implements KeyToPath {
         int offset = hashType.getPrefix().length();
         String contentId = StringUtils.substring(key.getIRIString(), offset);
         if (StringUtils.startsWith(baseURI.toString(), DATAONE_URL_PREFIX)) {
-            IRI query = RefNodeFactory.toIRI(baseURI.toString() +  contentId + "&fl=identifier,size,formatId,checksum,checksumAlgorithm,replicaMN,dataUrl&rows=10&wt=json");
+            IRI query = RefNodeFactory.toIRI(baseURI.toString() + contentId + "&fl=identifier,size,formatId,checksum,checksumAlgorithm,replicaMN,dataUrl&rows=10&wt=json");
             try (InputStream inputStream = deref.get(query)) {
                 URI dataEntryURI = findFirstHit(contentId, inputStream);
                 try (InputStream dataEntryStream = deref.get(RefNodeFactory.toIRI(dataEntryURI))) {
@@ -67,7 +69,7 @@ public class KeyTo1LevelDataOnePath implements KeyToPath {
 
     @Override
     public boolean supports(IRI key) {
-        return HashType.md5.equals(HashKeyUtil.hashTypeFor(key));
+        return HASH_TYPES_SUPPORTED.contains(HashKeyUtil.hashTypeFor(key));
     }
 
     private static URI detectPath(URI baseURI) {

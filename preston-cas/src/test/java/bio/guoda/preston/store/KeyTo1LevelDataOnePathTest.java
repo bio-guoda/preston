@@ -55,12 +55,32 @@ public class KeyTo1LevelDataOnePathTest {
     }
 
     @Test
-    public void toPath2() {
+    public void toPathMD5() {
         URI actualPath
                 = new KeyTo1LevelDataOnePath(URI.create("https://dataone.org"), getDeref())
-                .toPath(getMD5IRI());
+                .toPath(RefNodeFactory.toIRI("hash://md5/e27c99a7f701dab97b7d09c467acf468"));
         assertThat(actualPath.toString(),
                 Is.is("https://mn-orc-1.dataone.org/knb/d1/mn/v2/object/ess-dive-0462dff585f94f8-20180716T160600643874"));
+    }
+
+    @Test
+    public void toPathSHA256() {
+        URI actualPath
+                = new KeyTo1LevelDataOnePath(URI.create("https://dataone.org"), new Dereferencer<InputStream>() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                if (StringUtils.equals(uri.getIRIString(), "https://cn.dataone.org/cn/v2/query/solr/?q=checksum:bd2f8004d746be0b6e2abe08e7e21474bfd5ccd855734fe971a8631de1e2bf39&fl=identifier,size,formatId,checksum,checksumAlgorithm,replicaMN,dataUrl&rows=10&wt=json")) {
+                    return KeyTo1LevelDataOnePathTest.this.getClass().getResourceAsStream("dataone-response-sha256.json");
+                } else if (StringUtils.equals(uri.getIRIString(), "https://cn.dataone.org/cn/v2/resolve/urn%3Auuid%3A5bdbbf91-2e42-49f8-8801-ec8004160d48")) {
+                    return KeyTo1LevelDataOnePathTest.this.getClass().getResourceAsStream("dataone-dataentries-sha256.xml");
+                }
+                throw new IOException("not supported" + uri.getIRIString());
+            }
+        })
+                .toPath(RefNodeFactory.toIRI("hash://sha256/bd2f8004d746be0b6e2abe08e7e21474bfd5ccd855734fe971a8631de1e2bf39"));
+        assertThat(actualPath.toString(),
+                Is.is("https://arcticdata.io/metacat/d1/mn/v2/object/urn:uuid:5bdbbf91-2e42-49f8-8801-ec8004160d48"));
     }
 
     @Test
