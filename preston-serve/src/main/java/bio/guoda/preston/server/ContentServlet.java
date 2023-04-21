@@ -1,9 +1,7 @@
 package bio.guoda.preston.server;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.cmd.CmdGet;
-import bio.guoda.preston.store.HashKeyUtil;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -16,10 +14,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
-import static bio.guoda.preston.server.PropertyNames.*;
+import static bio.guoda.preston.server.PropertyNames.PRESTON_PROPERTY_CACHE_ENABLED;
+import static bio.guoda.preston.server.PropertyNames.PRESTON_PROPERTY_LOCAL_PATH;
+import static bio.guoda.preston.server.PropertyNames.PRESTON_PROPERTY_REMOTE_PATH;
 import static bio.guoda.preston.store.HashKeyUtil.isLikelyCompositeHashURI;
 
 public class ContentServlet extends HttpServlet {
@@ -82,14 +81,4 @@ public class ContentServlet extends HttpServlet {
         }
     }
 
-    private IRI attemptToGuessHashURIFromHexPattern(String requestURI, IRI iri) {
-        for (HashType type : HashType.values()) {
-            Matcher matcher = type.getHexPattern().matcher(requestURI);
-            if (matcher.matches()) {
-                iri = RefNodeFactory.toIRI(type.getPrefix() + requestURI);
-                break;
-            }
-        }
-        return iri;
-    }
 }
