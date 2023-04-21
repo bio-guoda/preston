@@ -29,7 +29,7 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
         int offset = hashType.getPrefix().length();
         String md5HexHash = StringUtils.substring(key.getIRIString(), offset);
         if (StringUtils.startsWith(baseURI.toString(), ZENODO_API_PREFIX)) {
-            IRI zenodoQuery = RefNodeFactory.toIRI(baseURI.toString() + "%22md5:" + md5HexHash + "%22");
+            IRI zenodoQuery = RefNodeFactory.toIRI(baseURI.toString() + "%22md5:" + md5HexHash + "%22&all_versions=true");
             try (InputStream inputStream = deref.get(zenodoQuery)) {
                 path = findFirstHit(md5HexHash, inputStream);
             } catch (IOException e) {

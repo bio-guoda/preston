@@ -1,0 +1,360 @@
+{
+  "aggregations": {
+    "access_right": {
+      "buckets": [
+        {
+          "doc_count": 1,
+          "key": "open"
+        }
+      ],
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0
+    },
+    "file_type": {
+      "buckets": [
+        {
+          "doc_count": 1,
+          "key": ""
+        },
+        {
+          "doc_count": 1,
+          "key": "gz"
+        },
+        {
+          "doc_count": 1,
+          "key": "zip"
+        }
+      ],
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0
+    },
+    "keywords": {
+      "buckets": [
+        {
+          "doc_count": 1,
+          "key": "biology"
+        },
+        {
+          "doc_count": 1,
+          "key": "biotic assocations"
+        },
+        {
+          "doc_count": 1,
+          "key": "biotic interactions"
+        },
+        {
+          "doc_count": 1,
+          "key": "ecological informatics"
+        },
+        {
+          "doc_count": 1,
+          "key": "ecology"
+        },
+        {
+          "doc_count": 1,
+          "key": "species interactions"
+        }
+      ],
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0
+    },
+    "type": {
+      "buckets": [
+        {
+          "doc_count": 1,
+          "key": "dataset",
+          "subtype": {
+            "buckets": [],
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0
+          }
+        }
+      ],
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0
+    }
+  },
+  "hits": {
+    "hits": [
+      {
+        "conceptdoi": "10.5281/zenodo.3950589",
+        "conceptrecid": "3950589",
+        "created": "2022-06-01T21:55:07.419980+00:00",
+        "doi": "10.5281/zenodo.6604060",
+        "files": [
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:2740a71d014663822b34ccc8627acd9c",
+            "key": "citations.csv.gz",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/citations.csv.gz"
+            },
+            "size": 46385627,
+            "type": "gz"
+          },
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:2740a71d014663822b34ccc8627acd9c",
+            "key": "citations.tsv.gz",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/citations.tsv.gz"
+            },
+            "size": 46385627,
+            "type": "gz"
+          },
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:15a93b49d3d408e3aaa6e8794f9aaffc",
+            "key": "dwca-by-study.zip",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/dwca-by-study.zip"
+            },
+            "size": 318812110,
+            "type": "zip"
+          },
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:fd235a0034edada8f561e7956fd66c4a",
+            "key": "dwca.zip",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/dwca.zip"
+            },
+            "size": 451526972,
+            "type": "zip"
+          },
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:92a9dc493b7ed70e6704b0d78a7aa8fc",
+            "key": "interactions.csv.gz",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/interactions.csv.gz"
+            },
+            "size": 1460504420,
+            "type": "gz"
+          },
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:1adad42713442644e3b3ed6378352a5d",
+            "key": "interactions.nq.gz",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/interactions.nq.gz"
+            },
+            "size": 4609207168,
+            "type": "gz"
+          },
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:a75c2e8ea12ed635de05d51b961a93c2",
+            "key": "interactions.tsv.gz",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/interactions.tsv.gz"
+            },
+            "size": 1458842543,
+            "type": "gz"
+          },
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:8de6cda739e7a62596c13e50591c8149",
+            "key": "neo4j-graphdb.zip",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/neo4j-graphdb.zip"
+            },
+            "size": 5656181887,
+            "type": "zip"
+          },
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:d11ddcecf3d5cbc627439260bdbfda72",
+            "key": "README",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/README"
+            },
+            "size": 6277,
+            "type": ""
+          },
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:2e4b427305fa62f3369e5eb61c42871f",
+            "key": "refuted-interactions.csv.gz",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/refuted-interactions.csv.gz"
+            },
+            "size": 2310681,
+            "type": "gz"
+          },
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:c69a1fe70d431831fd8306ada7d91ae9",
+            "key": "refuted-interactions.tsv.gz",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/refuted-interactions.tsv.gz"
+            },
+            "size": 2310501,
+            "type": "gz"
+          },
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:83aca10c106435944e5fea751a6b539c",
+            "key": "taxonCache.tsv.gz",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/taxonCache.tsv.gz"
+            },
+            "size": 114605059,
+            "type": "gz"
+          },
+          {
+            "bucket": "b522e8c8-f898-4861-b4e2-453e52ec9f56",
+            "checksum": "md5:e1965e266b1ac6a0694dbed09d369ec4",
+            "key": "taxonMap.tsv.gz",
+            "links": {
+              "self": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/taxonMap.tsv.gz"
+            },
+            "size": 59141093,
+            "type": "gz"
+          }
+        ],
+        "id": 6604060,
+        "links": {
+          "badge": "https://zenodo.org/badge/doi/10.5281/zenodo.6604060.svg",
+          "bucket": "https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56",
+          "conceptbadge": "https://zenodo.org/badge/doi/10.5281/zenodo.3950589.svg",
+          "conceptdoi": "https://doi.org/10.5281/zenodo.3950589",
+          "doi": "https://doi.org/10.5281/zenodo.6604060",
+          "html": "https://zenodo.org/record/6604060",
+          "latest": "https://zenodo.org/api/records/7348355",
+          "latest_html": "https://zenodo.org/record/7348355",
+          "self": "https://zenodo.org/api/records/6604060"
+        },
+        "metadata": {
+          "access_right": "open",
+          "access_right_category": "success",
+          "creators": [
+            {
+              "name": "GloBI Community"
+            }
+          ],
+          "description": "<p>Global Biotic Interactions: Interpreted Data Products</p>\n\n<p>Global Biotic Interactions (GloBI, https://globalbioticinteractions.org, [1]) aims to facilitate access to existing species interaction records (e.g., predator-prey, plant-pollinator, virus-host). This data publication provides interpreted species interaction data products. These products are the result of a process in which versioned, existing species interaction datasets ([2]) are linked to the so-called GloBI Taxon Graph ([3]) and transformed into various aggregate formats (e.g., tsv, csv, neo4j, rdf/nquad, darwin core-ish archives). In addition, the applied name maps are included to make the applied taxonomic linking explicit.&nbsp;</p>\n\n<p>Citation<br>\n--------</p>\n\n<p>GloBI is made possible by researchers, collections, projects and institutions openly sharing their datasets. When using this data, please make sure to attribute these *original data contributors*, including citing the specific datasets in derivative work. Each species interaction record indexed by GloBI contains a reference and dataset citation. Also, a full lists of all references can be found in citations.csv/citations.tsv files in this publication. If you have ideas on how to make it easier to cite original datasets, please open/join a discussion via https://globalbioticinteractions.org or related projects.</p>\n\n<p>To credit GloBI for more easily finding interaction data, please use the following citation to reference GloBI:</p>\n\n<p>Jorrit H. Poelen, James D. Simons and Chris J. Mungall. (2014). Global Biotic Interactions: An open infrastructure to share and analyze species-interaction datasets. Ecological Informatics. https://doi.org/10.1016/j.ecoinf.2014.08.005.</p>\n\n<p>Bias and Errors<br>\n--------</p>\n\n<p>As with any analysis and processing workflow, care should be taken to understand the bias and error propagation of data sources and related data transformation processes. The datasets indexed by GloBI are biased geospatially, temporally and taxonomically ([5], [6]). Also, mapping of verbatim names from datasets to known name concept may contains errors due to synonym mismatches, outdated names lists, typos or conflicting name authorities. Finally, bugs may introduce bias and errors in the resulting integrated data product.</p>\n\n<p>To help better understand where bias and errors are introduced, only versioned data and code are used as an input: the datasets ([2]), name maps ([3]) and integration software ([6]) are versioned so that the integration processes can be reproduced if needed. This way, steps take to compile an integrated data record can be traced and the sources of bias and errors can be more easily found.</p>\n\n<p>Contents<br>\n--------</p>\n\n<p>README:<br>\nthis file</p>\n\n<p>citations.csv.gz:<br>\ncontains data citations in a in a gzipped comma-separated values format.</p>\n\n<p>interactions.csv.gz:<br>\ncontains species interactions tabulated as pair-wise interactions in a gzipped comma-separated values format.</p>\n\n<p>citations.tsv.gz:<br>\ncontains data citations in a gzipped tab-separated values format.</p>\n\n<p>interactions.tsv.gz:<br>\ncontains species interactions tabulated as pair-wise interactions in a gzipped tab-separated values format.</p>\n\n<p>interactions.nq.gz:<br>\ncontains species interactions expressed in the resource description framework in a gzipped rdf/quads format.</p>\n\n<p>dwca-by-study.zip:<br>\ncontains species interactions data as a Darwin Core Archive aggregated by study using a custom, occurrence level, association extension.</p>\n\n<p>dwca.zip:<br>\ncontains species interactions data as a Darwin Core Archive using a custom, occurrence level, association extension.</p>\n\n<p>neo4j-graphdb.zip:<br>\ncontains a neo4j v3.5.29 graph database snapshot containing a graph representation of the species interaction data.</p>\n\n<p>taxonCache.tsv.gz:<br>\ncontains hierarchies and identifiers associated with names from naming schemes in a gzipped tab-separated values format.</p>\n\n<p>taxonMap.tsv.gz:<br>\ndescribes how names in existing datasets were mapped into existing naming schemes in a gzipped tab-separated values format.</p>\n\n<p>References<br>\n-----</p>\n\n<p>[1] Jorrit H. Poelen, James D. Simons and Chris J. Mungall. (2014). Global Biotic Interactions: An open infrastructure to share and analyze species-interaction datasets. Ecological Informatics. doi: 10.1016/j.ecoinf.2014.08.005.</p>\n\n<p>[2] Poelen, J. H. (2020) Global Biotic Interactions: Elton Dataset Cache. Zenodo. doi: 10.5281/ZENODO.3950557.</p>\n\n<p>[3] Poelen, J. H. (2021). Global Biotic Interactions: Taxon Graph (Version 0.3.28) [Data set]. Zenodo. http://doi.org/10.5281/zenodo.4451472</p>\n\n<p>[4] Hortal, J. et al. (2015) Seven Shortfalls that Beset Large-Scale Knowledge of Biodiversity. Annual Review of Ecology, Evolution, and Systematics, 46(1), pp.523&ndash;549. doi: 10.1146/annurev-ecolsys-112414-054400.</p>\n\n<p>[5] Cains, M. et al. (2017) Ivmooc 2017 - Gap Analysis Of Globi: Identifying Research And Data Sharing Opportunities For Species Interactions. Zenodo. Zenodo. doi: 10.5281/ZENODO.814978.</p>\n\n<p>[6] Poelen, J. et al. (2020) globalbioticinteractions/globalbioticinteractions v0.19.0. Zenodo. doi: 10.5281/ZENODO.3946991.</p>\n\n<p>Content References<br>\n-----</p>\n\n<p>hash://sha256/602448aef7ce921dbce12424d710130dfd4e2168c8865c08f5d7bda93b71db40 &nbsp;citations.csv.gz<br>\nhash://sha256/602448aef7ce921dbce12424d710130dfd4e2168c8865c08f5d7bda93b71db40 &nbsp;citations.tsv.gz<br>\nhash://sha256/fbd954bd6baf4e0b2ae5929123a720466bfbca63a78ae2aa649b7793af43f54a &nbsp;dwca-by-study.zip<br>\nhash://sha256/ed312b03f5d06cedbba5128ff4bcda8dbf18bcb89331e4f3e549e36fc393d1d3 &nbsp;dwca.zip<br>\nhash://sha256/1944e095b2ced1c4ebe794bae9f509149da3bd4f1ae49041fd9d6320a8db4892 &nbsp;interactions.csv.gz<br>\nhash://sha256/1a0cfb23edde2a2521cbac2143179c16ad4e3f40cf14b050532768b0d1f79418 &nbsp;interactions.nq.gz<br>\nhash://sha256/c29262701a396623a9a8208ed14f9caf5e8aab3ec313146d6f7c069df992b365 &nbsp;interactions.tsv.gz<br>\nhash://sha256/1419974ff7ed79675bd2b41a39c03681490a93f4561df24d0ce5175444593ac3 &nbsp;neo4j-graphdb.zip<br>\nhash://sha256/d296a3b7c5577e06ec5b431203f5810523def180810c31ff9df65ea8ce7bb530 &nbsp;README<br>\nhash://sha256/daa148b6360506db0f207a00de27e91efb80021b81d3d4c4f6d0608e652ed4c6 &nbsp;refuted-interactions.csv.gz<br>\nhash://sha256/cd1121a27c26052c60543a9142e6c1d87db968201c5d7bba42670b12181dd036 &nbsp;refuted-interactions.tsv.gz<br>\nhash://sha256/66a14e68924a33029752a9230aa73d96c34dcd314c8b9c8c4eb8e829efc0d6e0 &nbsp;taxonCache.tsv.gz<br>\nhash://sha256/b48f18e48f0077dd655fc25bc2c6cd9c8a217364964d94ade159cf790d5c3a5b &nbsp;taxonMap.tsv.gz<br>\n&nbsp;</p>",
+          "doi": "10.5281/zenodo.6604060",
+          "keywords": [
+            "biotic assocations",
+            "species interactions",
+            "biotic interactions",
+            "ecology",
+            "biology",
+            "ecological informatics"
+          ],
+          "license": {
+            "id": "CC0-1.0"
+          },
+          "publication_date": "2022-06-01",
+          "related_identifiers": [
+            {
+              "identifier": "10.1146/annurev-ecolsys-112414-054400",
+              "relation": "cites",
+              "scheme": "doi"
+            },
+            {
+              "identifier": "10.1016/j.ecoinf.2014.08.005",
+              "relation": "cites",
+              "scheme": "doi"
+            },
+            {
+              "identifier": "10.5281/ZENODO.814978",
+              "relation": "cites",
+              "scheme": "doi"
+            },
+            {
+              "identifier": "10.5281/zenodo.5711446",
+              "relation": "isDerivedFrom",
+              "scheme": "doi"
+            },
+            {
+              "identifier": "10.5281/zenodo.5711304",
+              "relation": "isDerivedFrom",
+              "scheme": "doi"
+            },
+            {
+              "identifier": "10.5281/zenodo.5711396",
+              "relation": "isDerivedFrom",
+              "scheme": "doi"
+            },
+            {
+              "identifier": "10.5281/zenodo.5711415",
+              "relation": "isDerivedFrom",
+              "scheme": "doi"
+            },
+            {
+              "identifier": "10.5281/zenodo.5711816",
+              "relation": "isDerivedFrom",
+              "scheme": "doi"
+            },
+            {
+              "identifier": "10.5281/zenodo.5711834",
+              "relation": "isDerivedFrom",
+              "scheme": "doi"
+            },
+            {
+              "identifier": "10.5281/zenodo.5711875",
+              "relation": "isDerivedFrom",
+              "scheme": "doi"
+            },
+            {
+              "identifier": "10.5281/zenodo.5526782",
+              "relation": "isDerivedFrom",
+              "scheme": "doi"
+            },
+            {
+              "identifier": "10.5281/zenodo.3950589",
+              "relation": "isVersionOf",
+              "scheme": "doi"
+            }
+          ],
+          "relations": {
+            "version": [
+              {
+                "count": 5,
+                "index": 3,
+                "is_last": false,
+                "last_child": {
+                  "pid_type": "recid",
+                  "pid_value": "7348355"
+                },
+                "parent": {
+                  "pid_type": "recid",
+                  "pid_value": "3950589"
+                }
+              }
+            ]
+          },
+          "resource_type": {
+            "title": "Dataset",
+            "type": "dataset"
+          },
+          "title": "Global Biotic Interactions: Interpreted Data Products",
+          "version": "0.4"
+        },
+        "owners": [
+          7292
+        ],
+        "revision": 4,
+        "stats": {
+          "downloads": 7523,
+          "unique_downloads": 494,
+          "unique_views": 123,
+          "version_downloads": 17932,
+          "version_unique_downloads": 2319,
+          "version_unique_views": 531,
+          "version_views": 667,
+          "version_volume": 69824210309620,
+          "views": 193,
+          "volume": 39436033966088
+        },
+        "updated": "2022-11-22T18:04:08.522492+00:00"
+      }
+    ],
+    "total": 1
+  },
+  "links": {
+    "self": "https://zenodo.org/api/records/?sort=bestmatch&q=_files.checksum%3A%22md5%3Ad11ddcecf3d5cbc627439260bdbfda72%22&all_versions=true&page=1&size=10"
+  }
+}

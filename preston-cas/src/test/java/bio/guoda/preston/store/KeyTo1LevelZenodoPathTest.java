@@ -29,8 +29,28 @@ public class KeyTo1LevelZenodoPathTest {
 
             @Override
             public InputStream get(IRI uri) throws IOException {
-                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records/?q=_files.checksum:%22md5:eb5e8f37583644943b86d1d9ebd4ded5%22"));
+                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records/?q=_files.checksum:%22md5:eb5e8f37583644943b86d1d9ebd4ded5%22&all_versions=true"));
                 return KeyTo1LevelZenodoPathTest.this.getClass().getResourceAsStream("zenodo-response.json");
+            }
+        };
+    }
+
+    @Test
+    public void toPathOlderVersion() {
+        IRI hash = RefNodeFactory.toIRI("hash://md5/d11ddcecf3d5cbc627439260bdbfda72");
+
+        URI actualPath = new KeyTo1LevelZenodoPath(URI.create("https://zenodo.org"), getDerefREADMEOlder())
+                .toPath(hash);
+        assertThat(actualPath.toString(), Is.is("https://zenodo.org/api/files/b522e8c8-f898-4861-b4e2-453e52ec9f56/README"));
+    }
+
+    Dereferencer<InputStream> getDerefREADMEOlder() {
+        return new Dereferencer<InputStream>() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records/?q=_files.checksum:%22md5:d11ddcecf3d5cbc627439260bdbfda72%22&all_versions=true"));
+                return KeyTo1LevelZenodoPathTest.this.getClass().getResourceAsStream("zenodo-response-all-versions.json");
             }
         };
     }
@@ -55,9 +75,9 @@ public class KeyTo1LevelZenodoPathTest {
     public void nonZenodoNoTrailingSlash() {
 
         URI actualPath
-                = new KeyTo1LevelZenodoPath(URI.create("https://deeplinker.bio"), getExplodingReref())
+                = new KeyTo1LevelZenodoPath(URI.create("https://linker.bio"), getExplodingReref())
                 .toPath(getMD5IRI());
-        assertThat(actualPath.toString(), Is.is("https://deeplinker.bio/eb5e8f37583644943b86d1d9ebd4ded5"));
+        assertThat(actualPath.toString(), Is.is("https://linker.bio/eb5e8f37583644943b86d1d9ebd4ded5"));
     }
 
     private Dereferencer<InputStream> getExplodingReref() {
@@ -72,9 +92,9 @@ public class KeyTo1LevelZenodoPathTest {
     @Test
     public void nonZenodoTrailingSlash() {
 
-        URI actualPath = new KeyTo1LevelZenodoPath(URI.create("https://deeplinker.bio/"), getExplodingReref())
+        URI actualPath = new KeyTo1LevelZenodoPath(URI.create("https://linker.bio/"), getExplodingReref())
                 .toPath(getMD5IRI());
-        assertThat(actualPath.toString(), Is.is("https://deeplinker.bio/eb5e8f37583644943b86d1d9ebd4ded5"));
+        assertThat(actualPath.toString(), Is.is("https://linker.bio/eb5e8f37583644943b86d1d9ebd4ded5"));
     }
 
     private IRI getMD5IRI() {

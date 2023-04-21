@@ -199,16 +199,16 @@
         ],
         "revision": 2,
         "stats": {
-          "downloads": 4,
-          "unique_downloads": 3,
-          "unique_views": 9,
-          "version_downloads": 4,
-          "version_unique_downloads": 3,
-          "version_unique_views": 9,
-          "version_views": 11,
-          "version_volume": 132630,
-          "views": 11,
-          "volume": 132630
+          "downloads": 13,
+          "unique_downloads": 8,
+          "unique_views": 13,
+          "version_downloads": 13,
+          "version_unique_downloads": 8,
+          "version_unique_views": 13,
+          "version_views": 15,
+          "version_volume": 427103,
+          "views": 15,
+          "volume": 427103
         },
         "updated": "2021-03-09T08:08:22.072185+00:00"
       }
@@ -216,6 +216,6 @@
     "total": 1
   },
   "links": {
-    "self": "https://zenodo.org/api/records/?sort=bestmatch&q=_files.checksum%3A%22md5%3Aeb5e8f37583644943b86d1d9ebd4ded5%22&page=1&size=10"
+    "self": "https://zenodo.org/api/records/?sort=bestmatch&q=_files.checksum%3A%22md5%3Aeb5e8f37583644943b86d1d9ebd4ded5%22&all_versions=true&page=1&size=10"
   }
 }
