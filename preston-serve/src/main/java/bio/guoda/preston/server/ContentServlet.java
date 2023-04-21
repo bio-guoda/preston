@@ -64,19 +64,18 @@ public class ContentServlet extends HttpServlet {
         if (!isLikelyCompositeHashURI(requestIRI)) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            IRI iri = requestIRI;
-            log("attempting to resolve [" + iri.getIRIString() + "]");
+            log("attempting to resolve [" + requestIRI.getIRIString() + "]");
             CmdGet cmdGet = initCmdGet();
             cmdGet.setDisableProgress(true);
-            cmdGet.setContentIdsOrAliases(Collections.singletonList(iri));
+            cmdGet.setContentIdsOrAliases(Collections.singletonList(requestIRI));
             cmdGet.setOutputStream(response.getOutputStream());
             try {
                 cmdGet.run();
                 response.setStatus(HttpServletResponse.SC_OK);
-                log("response [" + iri.getIRIString() + "]");
+                log("response [" + requestIRI.getIRIString() + "]");
             } catch (Throwable th) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                log("not found [" + iri.getIRIString() + "]");
+                log("not found [" + requestIRI.getIRIString() + "]");
                 throw th;
             }
 
