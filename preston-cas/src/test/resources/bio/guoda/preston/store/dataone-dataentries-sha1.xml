@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:objectLocationList xmlns:ns2="http://ns.dataone.org/service/types/v1">
+    <identifier>urn:uuid:19dbf77c-65a7-4945-9cfd-2dfa6bcd8f4d</identifier>
+    <objectLocation>
+        <nodeIdentifier>urn:node:KNB</nodeIdentifier>
+        <baseURL>https://knb.ecoinformatics.org/knb/d1/mn</baseURL>
+        <version>v1</version>
+        <version>v2</version>
+        <url>https://knb.ecoinformatics.org/knb/d1/mn/v2/object/urn:uuid:19dbf77c-65a7-4945-9cfd-2dfa6bcd8f4d</url>
+    </objectLocation>
+</ns2:objectLocationList>

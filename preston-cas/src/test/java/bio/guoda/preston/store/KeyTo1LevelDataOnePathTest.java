@@ -90,13 +90,15 @@ public class KeyTo1LevelDataOnePathTest {
             public InputStream get(IRI uri) throws IOException {
                 if (StringUtils.equals(uri.getIRIString(), "https://cn.dataone.org/cn/v2/query/solr/?q=checksum:398ab74e3da160d52705bb2477eb0f2f2cde5f15&fl=identifier,size,formatId,checksum,checksumAlgorithm,replicaMN,dataUrl&rows=10&wt=json")) {
                     return KeyTo1LevelDataOnePathTest.this.getClass().getResourceAsStream("dataone-response-sha1.json");
+                } else if (StringUtils.equals(uri.getIRIString(), "https://cn.dataone.org/cn/v2/resolve/urn%3Auuid%3A19dbf77c-65a7-4945-9cfd-2dfa6bcd8f4d")) {
+                    return KeyTo1LevelDataOnePathTest.this.getClass().getResourceAsStream("dataone-dataentries-sha1.xml");
                 }
                 throw new IOException("not supported" + uri.getIRIString());
             }
         })
                 .toPath(RefNodeFactory.toIRI("hash://sha1/398ab74e3da160d52705bb2477eb0f2f2cde5f15"));
         assertThat(actualPath.toString(),
-                Is.is("https://cn.dataone.org/cn/v2/query/solr/?q=checksum:/398ab74e3da160d52705bb2477eb0f2f2cde5f15"));
+                Is.is("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/urn:uuid:19dbf77c-65a7-4945-9cfd-2dfa6bcd8f4d"));
     }
 
     @Test
