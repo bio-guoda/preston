@@ -1,0 +1,29 @@
+{
+  "responseHeader": {
+    "status": 0,
+    "QTime": 2,
+    "params": {
+      "q": "checksum:398ab74e3da160d52705bb2477eb0f2f2cde5f15",
+      "fl": "identifier,size,formatId,checksum,checksumAlgorithm,replicaMN,dataUrl",
+      "rows": "10",
+      "wt": "json"
+    }
+  },
+  "response": {
+    "numFound": 1,
+    "start": 0,
+    "docs": [
+      {
+        "identifier": "urn:uuid:19dbf77c-65a7-4945-9cfd-2dfa6bcd8f4d",
+        "formatId": "application/pdf",
+        "size": 3392786,
+        "checksum": "398ab74e3da160d52705bb2477eb0f2f2cde5f15",
+        "checksumAlgorithm": "SHA1",
+        "replicaMN": [
+          "urn:node:KNB"
+        ],
+        "dataUrl": "https://cn.dataone.org/cn/v2/resolve/urn%3Auuid%3A19dbf77c-65a7-4945-9cfd-2dfa6bcd8f4d"
+      }
+    ]
+  }
+}

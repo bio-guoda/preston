@@ -56,6 +56,8 @@ public class HashKeyUtil {
             type = HashType.sha256;
         } else if (StringUtils.startsWith(iriString, HashType.md5.getPrefix())) {
             type = HashType.md5;
+        } else if (StringUtils.startsWith(iriString, HashType.sha1.getPrefix())) {
+            type = HashType.sha1;
         }
         return type;
     }

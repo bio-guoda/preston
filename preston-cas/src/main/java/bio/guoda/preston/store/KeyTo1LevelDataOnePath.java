@@ -20,7 +20,7 @@ import java.util.List;
 public class KeyTo1LevelDataOnePath implements KeyToPath {
 
     public static final String DATAONE_URL_PREFIX = "https://cn.dataone.org/cn/v2/query/solr/?q=checksum:";
-    public static final List<HashType> HASH_TYPES_SUPPORTED = Arrays.asList(HashType.md5, HashType.sha256);
+    public static final List<HashType> HASH_TYPES_SUPPORTED = Arrays.asList(HashType.md5, HashType.sha256, HashType.sha1);
     private final URI baseURI;
     private final Dereferencer<InputStream> deref;
 
@@ -59,7 +59,7 @@ public class KeyTo1LevelDataOnePath implements KeyToPath {
         return path;
     }
 
-    static URI findFirstHit(String suffix, InputStream inputStream) throws IOException, URISyntaxException {
+    private static URI findFirstHit(String suffix, InputStream inputStream) throws IOException, URISyntaxException {
         List<URI> iris = parseResponse(inputStream);
         if (iris.size() == 0) {
             throw new IOException("dataone does not have content [" + suffix + "]");
