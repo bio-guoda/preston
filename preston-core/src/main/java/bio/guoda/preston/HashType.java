@@ -4,7 +4,8 @@ import java.util.regex.Pattern;
 
 public enum HashType {
     sha256("hash://sha256/", "SHA-256", 64, 78),
-    md5("hash://md5/", "MD5", 32, 43);
+    md5("hash://md5/", "MD5", 32, 43),
+    sha1("hash://sha1/", "SHA-1", 40, 52);
 
     private final String prefix;
     private final String algorithm;

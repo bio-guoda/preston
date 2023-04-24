@@ -23,4 +23,10 @@ public class HashTypeTest {
         assertThat(iri.getIRIString().length(), Is.is(43));
     }
 
+   @Test
+    public void hashLengthSHA1() {
+        IRI iri = Hasher.calcHashIRI("bla", HashType.sha1);
+        assertThat(iri.getIRIString().length(), Is.is(52));
+    }
+
 }

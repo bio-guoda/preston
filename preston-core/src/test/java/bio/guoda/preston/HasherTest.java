@@ -46,6 +46,16 @@ public class HasherTest {
     }
 
     @Test
+    public void testSHA1() throws IOException {
+        assertThat(Hasher.calcHashIRI(IOUtils.toInputStream("something", StandardCharsets.UTF_8),
+                new ByteArrayOutputStream(),
+                true,
+                HashType.sha1)
+                        .getIRIString(),
+                is("hash://sha1/1af17e73721dbe0c40011b82ed4bb1a7dbe3ce29"));
+    }
+
+    @Test
     public void testSHA256Generator() throws IOException {
         InputStream is = IOUtils.toInputStream("something", StandardCharsets.UTF_8);
         String something = createHashGenerator(HashType.sha256).hash(is);
@@ -57,6 +67,13 @@ public class HasherTest {
         InputStream is = IOUtils.toInputStream("something", StandardCharsets.UTF_8);
         String something = createHashGenerator(HashType.md5).hash(is);
         assertThat(something, is("hash://md5/437b930db84b8079c2dd804a71936b5f"));
+    }
+
+    @Test
+    public void testSHA1Generator() throws IOException {
+        InputStream is = IOUtils.toInputStream("something", StandardCharsets.UTF_8);
+        String something = createHashGenerator(HashType.sha1).hash(is);
+        assertThat(something, is("hash://sha1/1af17e73721dbe0c40011b82ed4bb1a7dbe3ce29"));
     }
 
     @Test

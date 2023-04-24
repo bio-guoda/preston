@@ -72,7 +72,7 @@ public final class Hasher {
                     }
                 }).collect(Collectors.toList());
 
-        final AtomicReference<DigestInputStream> digestInputStream = new AtomicReference(null);
+        final AtomicReference<DigestInputStream> digestInputStream = new AtomicReference<>(null);
         digests
                 .forEach(x -> {
                     DigestInputStream chainedInputStream = digestInputStream.get() == null
@@ -101,20 +101,22 @@ public final class Hasher {
 
     public static List<IRI> calcHashIRIs(List<MessageDigest> messageDigests) {
         return messageDigests
-                    .stream()
-                    .map(md -> {
-                        String algorithm = md.getAlgorithm();
-                        Optional<IRI> hashIRI = Optional.empty();
-                        if (StringUtils.equals(algorithm, HashType.sha256.getAlgorithm())) {
-                            hashIRI = Optional.of(toHashIRI(md, HashType.sha256));
-                        } else if (StringUtils.equals(algorithm, HashType.md5.getAlgorithm())) {
-                            hashIRI = Optional.of(toHashIRI(md, HashType.md5));
-                        }
-                        return hashIRI;
-                    })
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toList());
+                .stream()
+                .map(md -> {
+                    String algorithm = md.getAlgorithm();
+                    Optional<IRI> hashIRI = Optional.empty();
+                    if (StringUtils.equals(algorithm, HashType.sha256.getAlgorithm())) {
+                        hashIRI = Optional.of(toHashIRI(md, HashType.sha256));
+                    } else if (StringUtils.equals(algorithm, HashType.md5.getAlgorithm())) {
+                        hashIRI = Optional.of(toHashIRI(md, HashType.md5));
+                    } else if (StringUtils.equals(algorithm, HashType.sha1.getAlgorithm())) {
+                        hashIRI = Optional.of(toHashIRI(md, HashType.sha1));
+                    }
+                    return hashIRI;
+                })
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     public static List<IRI> calcHashIRIs(InputStream is, OutputStream os, boolean shouldCloseInputStream, Stream<HashType> algorithms) throws IOException {
