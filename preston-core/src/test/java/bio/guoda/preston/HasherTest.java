@@ -34,9 +34,10 @@ public class HasherTest {
         Stream<HashType> hashTypes = Stream.of(HashType.values());
         List<IRI> IRIs = Hasher.calcHashIRIs(is, os, shouldCloseInputStream, hashTypes);
 
-        assertThat(IRIs.size(), is(2));
+        assertThat(IRIs.size(), is(3));
         assertThat(IRIs.get(0).getIRIString(), is("hash://sha256/3fc9b689459d738f8c88a3a48aa9e33542016b7a4052e001aaa536fca74813cb"));
         assertThat(IRIs.get(1).getIRIString(), is("hash://md5/437b930db84b8079c2dd804a71936b5f"));
+        assertThat(IRIs.get(2).getIRIString(), is("hash://sha1/1af17e73721dbe0c40011b82ed4bb1a7dbe3ce29"));
     }
 
     @Test
