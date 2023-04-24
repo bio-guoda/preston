@@ -53,6 +53,13 @@ public class HashKeyUtilTest {
         assertTrue(HashKeyUtil.isLikelyCompositeHashURI(RefNodeFactory.toIRI(comboHashURI)));
     }
 
+
+    @Test
+    public void validCompositeHashURISHA1() {
+        String comboHashURI = "hash://sha1/398ab74e3da160d52705bb2477eb0f2f2cde5f15";
+        assertTrue(HashKeyUtil.isLikelyCompositeHashURI(RefNodeFactory.toIRI(comboHashURI)));
+    }
+
     @Test
     public void validCompositeHashURIPlainHashURI() {
         String comboHashURI = "hash://sha256/e0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e57b84f51f22ca";

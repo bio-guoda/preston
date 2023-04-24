@@ -7,6 +7,7 @@ import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +20,9 @@ public class HashKeyUtil {
 
     public static final Pattern URI_PATTERN_HASH_URI_COMPOSITE_MD5 = Pattern
             .compile("([a-zA-Z0-9]+:)*(" + HashType.md5.getIRIPatternString() + "){1}(!/.*){0,1}");
+
+    public static final Pattern URI_PATTERN_HASH_URI_COMPOSITE_SHA1 = Pattern
+            .compile("([a-zA-Z0-9]+:)*(" + HashType.sha1.getIRIPatternString() + "){1}(!/.*){0,1}");
 
     public static final Pattern URI_PATTERN_URI_COMPOSITE = Pattern
             .compile("([a-zA-Z0-9]+[:]{1})+([^!:]*)(!/.*){0,1}");
@@ -75,6 +79,8 @@ public class HashKeyUtil {
                 && (URI_PATTERN_HASH_URI_COMPOSITE_SHA256
                 .matcher(comboHashURI.getIRIString()).matches()
                 || URI_PATTERN_HASH_URI_COMPOSITE_MD5
+                .matcher(comboHashURI.getIRIString()).matches()
+                || URI_PATTERN_HASH_URI_COMPOSITE_SHA1
                 .matcher(comboHashURI.getIRIString()).matches());
     }
 
