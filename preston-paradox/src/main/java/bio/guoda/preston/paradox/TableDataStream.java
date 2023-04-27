@@ -22,7 +22,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
@@ -59,36 +61,38 @@ public final class TableDataStream extends ParadoxData {
             try (final FileInputStream fs = new FileInputStream(data.getFile());
                  final FileChannel channel = fs.getChannel()) {
 
+
                 long nextBlock = data.getFirstBlock();
+                if (nextBlock != 0) {
+                    final ByteBuffer buffer = ByteBuffer.allocate(blockSize);
+                    do {
+                        buffer.order(ByteOrder.LITTLE_ENDIAN);
+                        long position = headerSize + ((nextBlock - 1) * blockSize);
+                        channel.position(position);
 
-                final ByteBuffer buffer = ByteBuffer.allocate(blockSize);
-                do {
-                    buffer.order(ByteOrder.LITTLE_ENDIAN);
-                    long position = headerSize + ((nextBlock - 1) * blockSize);
-                    channel.position(position);
+                        buffer.clear();
+                        channel.read(buffer);
+                        checkDBEncryption(buffer, data, blockSize, nextBlock);
+                        buffer.flip();
 
-                    buffer.clear();
-                    channel.read(buffer);
-                    checkDBEncryption(buffer, data, blockSize, nextBlock);
-                    buffer.flip();
+                        nextBlock = buffer.getShort() & 0xFFFF;
 
-                    nextBlock = buffer.getShort() & 0xFFFF;
+                        // The block number.
+                        buffer.getShort();
 
-                    // The block number.
-                    buffer.getShort();
+                        final int addDataSize = buffer.getShort();
+                        final int rowsInBlock = (addDataSize / recordSize) + 1;
 
-                    final int addDataSize = buffer.getShort();
-                    final int rowsInBlock = (addDataSize / recordSize) + 1;
+                        buffer.order(ByteOrder.BIG_ENDIAN);
 
-                    buffer.order(ByteOrder.BIG_ENDIAN);
-
-                    for (int loop = 0; loop < rowsInBlock; loop++) {
-                        sink.accept(Pair.of(rowNumberWithOffsetOne.getAndIncrement(), readRow(data, fields, buffer)));
-                    }
-                } while (nextBlock != 0);
+                        for (int loop = 0; loop < rowsInBlock; loop++) {
+                            sink.accept(Pair.of(rowNumberWithOffsetOne.getAndIncrement(), readRow(data, fields, buffer)));
+                        }
+                    } while (nextBlock != 0);
+                }
 
             } catch (final IOException e) {
-                throw new IOException("failed to load [" + data.getName() + "]");
+                throw new IOException("failed to load [" + data.getName() + "]", e);
             }
         }
     }
@@ -152,19 +156,23 @@ public final class TableDataStream extends ParadoxData {
         final List<Pair<Field, Object>> row = new ArrayList<>(fields.length);
 
         for (final Field field : table.getFields()) {
-            // Field filter
-            final int index = search(fields, field);
-            if (index != -1) {
-                Object value = null;
-                try {
-                    value = ParadoxFieldFactory.parse(table, buffer, field);
-                } catch (SQLException e) {
-                    throw new IOException("failed to parse field [" + field.getName() + "] in table [" + table.getName() + "]", e);
-                }
-                row.add(Pair.of(field, value));
+            if (Arrays.asList(Types.BLOB, Types.CLOB).contains(field.getSqlType())) {
+                row.add(Pair.of(field, "BLOB_CLOB_TYPES_NOT_SUPPORTED"));
             } else {
-                int size = field.getRealSize();
-                buffer.position(buffer.position() + size);
+                // Field filter
+                final int index = search(fields, field);
+                if (index != -1) {
+                    Object value = null;
+                    try {
+                        value = ParadoxFieldFactory.parse(table, buffer, field);
+                    } catch (SQLException e) {
+                        throw new IOException("failed to parse field [" + field.getName() + "] in table [" + table.getName() + "]", e);
+                    }
+                    row.add(Pair.of(field, value));
+                } else {
+                    int size = field.getRealSize();
+                    buffer.position(buffer.position() + size);
+                }
             }
         }
 

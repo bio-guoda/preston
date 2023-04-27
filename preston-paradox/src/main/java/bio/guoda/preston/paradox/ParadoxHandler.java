@@ -47,13 +47,10 @@ public class ParadoxHandler extends ParadoxData {
 
             IOUtils.copyLarge(inputStream, os);
 
-            File file = tempFile;
-
             ConnectionInfo connectionInfo = new ConnectionInfo("foo:bar");
 
-
             try {
-                ParadoxDataFile data = loadHeader(file, connectionInfo);
+                ParadoxDataFile data = loadHeader(tempFile, connectionInfo);
                 if (data instanceof ParadoxTable) {
                     ParadoxTable table = (ParadoxTable) data;
                     table.setName(tableNameCandidate);
@@ -61,6 +58,8 @@ public class ParadoxHandler extends ParadoxData {
                 }
             } catch (SQLException var10) {
                 connectionInfo.addWarning(var10);
+            } catch (RuntimeException ex) {
+                throw new IOException("failed to read [" + resourceIRI.getIRIString() + "]", ex);
             }
 
 
