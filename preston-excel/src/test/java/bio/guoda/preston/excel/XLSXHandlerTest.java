@@ -131,7 +131,7 @@ public class XLSXHandlerTest {
 
         JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[0]);
 
-        assertThat(StringUtils.replace(jsonNode.toPrettyString(), "\" :", "\":"),
+        assertThat(StringUtils.replace(jsonNode.toString(), "\" :", "\":"),
                 Is.is(expected));
 
     }
