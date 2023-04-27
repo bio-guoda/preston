@@ -20,7 +20,7 @@ public class CmdGrepTest {
 
     @Test
     public void processOneVersion() {
-        IRI aContentHash = toIRI("hash://sha256/blabla");
+        IRI aContentHash = toIRI("hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03");
 
         BlobStoreNull blobStoreNull = new BlobStoreNull(){
             @Override
@@ -44,7 +44,7 @@ public class CmdGrepTest {
 
     @Test(expected = RuntimeException.class)
     public void attemptToProcessUnvailableHash() {
-        IRI aContentHash = toIRI("hash://sha256/blabla");
+        IRI aContentHash = toIRI("hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03");
 
         BlobStoreNull blobStoreNull = new BlobStoreNull(){
             @Override
