@@ -5,6 +5,7 @@ import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.Is;
@@ -107,6 +108,31 @@ public class XLSXHandlerTest {
         assertThat(jsonNode.get("1").asText(), Is.is("MONOTREMATA"));
 
         assertThat(actual, Is.is(expected));
+
+    }
+
+    @Test
+    public void dumpTableICTV() throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IRI resourceIRI = RefNodeFactory.toIRI("some:iri");
+
+        KeyValueStoreReadOnly contentStore = new KeyValueStoreReadOnly() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                return getClass().getResourceAsStream("ictv.xlsx");
+            }
+        };
+
+        XLSXHandler.asJsonStream(out, resourceIRI, contentStore, 0, false);
+
+        String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "ictv.xlsx.json");
+        String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
+
+        JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[0]);
+
+        assertThat(StringUtils.replace(jsonNode.toPrettyString(), "\" :", "\":"),
+                Is.is(expected));
 
     }
 

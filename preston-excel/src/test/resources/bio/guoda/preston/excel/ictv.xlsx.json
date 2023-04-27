@@ -1,0 +1,9 @@
+{
+  "http://www.w3.org/ns/prov#wasDerivedFrom": "line:xlsx:some:iri!/Version!/L2",
+  "http://purl.org/dc/elements/1.1/format": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "column1": "ICTV 2022 Master Species List (MSL38)",
+  "column2": "",
+  "column3": "",
+  "column4": "",
+  "column5": ""
+}
