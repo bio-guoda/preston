@@ -13,6 +13,7 @@ import static bio.guoda.preston.RefNodeFactory.toBlank;
 import static bio.guoda.preston.RefNodeFactory.toDateTime;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
+import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
@@ -61,6 +62,41 @@ public class RefNodeFactoryTest {
         Optional<BlankNodeOrIRI> graphName = quad.getGraphName();
         assertFalse(graphName.isPresent());
     }
+
+    @Test
+    public void getVersion() {
+        Quad quad = RefNodeFactory.toStatement(
+                toIRI("subj"),
+                RefNodeConstants.HAS_VERSION,
+                toIRI("obj")
+        );
+        BlankNodeOrIRI version = RefNodeFactory.getVersion(quad);
+        assertThat(version.ntriplesString(), is("<obj>"));
+    }
+
+    @Test
+    public void getVersion2() {
+        Quad quad = RefNodeFactory.toStatement(
+                toIRI("https://doi.org/10.5281/zenodo.1410543"),
+                RefNodeConstants.USED_BY,
+                toIRI("urn:uuid:2ae013aa-9422-42c7-9afd-845dd0ad6112")
+        );
+        BlankNodeOrIRI version = RefNodeFactory.getVersion(quad);
+        assertNull(version);
+    }
+
+    @Test
+    public void getVersionSource() {
+        Quad quad = RefNodeFactory.toStatement(
+                toIRI("subj"),
+                RefNodeConstants.HAS_VERSION,
+                toIRI("obj")
+        );
+        BlankNodeOrIRI version = RefNodeFactory.getVersionSource(quad);
+        assertThat(version.ntriplesString(), is("<subj>"));
+    }
+
+
 
 
 }

@@ -4,6 +4,7 @@ import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.HashKeyUtil;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.io.IOUtils;
@@ -56,12 +57,9 @@ public class CmdGet extends Persisting implements Runnable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
-                IRI iri = VersionUtil.mostRecentVersion(line);
-                if (iri == null && VersionUtil.maybeNotQuad(line)) {
-                    iri = toIRI(StringUtils.trim(line));
-                }
-                if (iri != null) {
-                    Quad quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, iri);
+                IRI contentId = VersionUtil.getMostRecentContentId(line);
+                if (contentId != null) {
+                    Quad quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, contentId);
                     ContentQueryUtil.copyMostRecentContent(blobStore, quad, this, new CopyShopImpl());
                 }
             }

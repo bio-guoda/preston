@@ -53,6 +53,23 @@ public class EmittingStreamOfAnyVersionsTest {
     }
 
     @Test
+    public void shouldNotEmitNonContentIds() {
+        List<Quad> quads = new ArrayList<>();
+
+        String nquad = "<https://doi.org/10.5281/zenodo.1410543> <http://www.w3.org/ns/prov#usedBy> <urn:uuid:2ae013aa-9422-42c7-9afd-845dd0ad6112> <urn:uuid:2ae013aa-9422-42c7-9afd-845dd0ad6112> .";
+
+        new EmittingStreamOfAnyVersions(new StatementsEmitterAdapter() {
+            @Override
+            public void emit(Quad statement) {
+                quads.add(statement);
+            }
+        }).parseAndEmit(IOUtils.toInputStream(nquad, StandardCharsets.UTF_8));
+
+        assertThat(quads.size(), Is.is(0));
+
+    }
+
+    @Test
     public void emitQuadURIWithUUID() {
         List<Quad> quads = new ArrayList<>();
         new EmittingStreamOfAnyVersions(new StatementsEmitterAdapter() {
@@ -62,9 +79,7 @@ public class EmittingStreamOfAnyVersionsTest {
             }
         }).parseAndEmit(IOUtils.toInputStream("<urn:uuid:5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1> <http://www.w3.org/ns/prov#usedBy> <http://www.w3.org/ns/prov#SoftwareAgent> .", StandardCharsets.UTF_8));
 
-        assertThat(quads.size(), Is.is(1));
-
-        assertThat(quads.get(0).getObject().ntriplesString(), Is.is("<urn:uuid:5b0c34bb-fa0a-4dbb-947a-ef93afcad8b1>"));
+        assertThat(quads.size(), Is.is(0));
 
     }
 
@@ -72,7 +87,7 @@ public class EmittingStreamOfAnyVersionsTest {
     public void emitQuadStopAfterFirst() {
         AtomicInteger counter = new AtomicInteger(0);
         List<Quad> quads = new ArrayList<>();
-        String line0 = "<foo:bar> <http://www.w3.org/ns/prov#usedBy> <foo:bar> .";
+        String line0 = "<hash://sha256/a8770ba1ae326327fddb91178ed58cc97462e78d6cdb97370a578f31a79ff817> <http://www.w3.org/ns/prov#usedBy> <foo:bar> .";
         new EmittingStreamOfAnyVersions(new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
@@ -92,7 +107,7 @@ public class EmittingStreamOfAnyVersionsTest {
 
         assertThat(quads.size(), Is.is(1));
 
-        assertThat(quads.get(0).getObject().ntriplesString(), Is.is("<foo:bar>"));
+        assertThat(quads.get(0).getObject().ntriplesString(), Is.is("<hash://sha256/a8770ba1ae326327fddb91178ed58cc97462e78d6cdb97370a578f31a79ff817>"));
 
     }
 
@@ -126,7 +141,7 @@ public class EmittingStreamOfAnyVersionsTest {
             }
         }).parseAndEmit(getClass().getResourceAsStream("/bio/guoda/preston/store/issue-214-data-example/18/b5/18b51a180c63929d5e3a50dbb72295579c2645546d22ae3fdcd5e2095c43d199"));
 
-        assertThat(quads.size(), Is.is(102));
+        assertThat(quads.size(), Is.is(68));
     }
 
     @Test

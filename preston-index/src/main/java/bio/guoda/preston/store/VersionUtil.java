@@ -18,6 +18,7 @@ import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.USED_BY;
 import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class VersionUtil {
@@ -96,7 +97,7 @@ public class VersionUtil {
         return mostRecentVersion;
     }
 
-    public static IRI mostRecentVersion(String someStatement) {
+    static IRI mostRecentVersion(String someStatement) {
         String newerVersionString;
         final Matcher matcherSubject = PATTERN_SUBJECT_NEWER.matcher(someStatement);
         if (matcherSubject.matches()) {
@@ -123,5 +124,18 @@ public class VersionUtil {
 
     public static boolean maybeNotQuad(String line) {
         return !StringUtils.endsWith(line, " .");
+    }
+
+    public static IRI getMostRecentContentId(String line) {
+        IRI iri = mostRecentVersion(line);
+        if (iri == null && maybeNotQuad(line)) {
+            try {
+                iri = toIRI(StringUtils.trim(line));
+            } catch (IllegalArgumentException ex) {
+                // simply ignore invalid IRIs
+            }
+        }
+
+        return iri != null && HashKeyUtil.isValidHashKey(iri) ? iri : null;
     }
 }
