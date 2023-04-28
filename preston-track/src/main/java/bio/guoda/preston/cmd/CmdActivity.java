@@ -61,24 +61,34 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
     @Override
     public void run() {
-        KeyValueStore blobKeyValueStore = getKeyValueStore(
+        BlobStore blobStore = createAppendOnlyStore(getKeyValueStore(
                 new ValidatingKeyValueStreamContentAddressedFactory()
-        );
+        ));
 
-        BlobStore blobStore = new BlobStoreAppendOnly(blobKeyValueStore, true, getHashType());
+        BlobStore provStore = createAppendOnlyStore(getKeyValueStore(
+                new ValidatingKeyValueStreamContentAddressedFactory()
+        ));
 
         KeyValueStore provenanceIndex = getKeyValueStore(
                 new ValidatingKeyValueStreamHashTypeIRIFactory()
         );
 
-        run(blobStore, new HexaStoreImpl(provenanceIndex, getHashType()));
+        run(blobStore, provStore, new HexaStoreImpl(provenanceIndex, getHashType()));
+    }
+
+    private BlobStore createAppendOnlyStore(KeyValueStore blobKeyValueStore) {
+        return new BlobStoreAppendOnly(
+                    blobKeyValueStore,
+                    true,
+                    getHashType()
+            );
     }
 
 
-    protected void run(BlobStore blobStore, HexaStore provIndex) {
+    protected void run(BlobStore blobStore, BlobStore provStore, HexaStore provIndex) {
         ActivityContext ctx = createNewActivityContext(getActivityDescription());
 
-        final ArchivingLogger archivingLogger = new ArchivingLogger(blobStore, provIndex, ctx);
+        final ArchivingLogger archivingLogger = new ArchivingLogger(provStore, provIndex, ctx);
         try {
             Runtime.getRuntime().addShutdownHook(new LoggerExitHook(archivingLogger));
 
@@ -238,15 +248,15 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     }
 
     private class ArchivingLogger extends StatementsListenerAdapter {
-        private final BlobStore blobStore;
+        private final BlobStore logStore;
         private final HexaStore hexastore;
         private final ActivityContext ctx;
         File tmpArchive;
         OutputStream os;
         StatementsListener listener;
 
-        public ArchivingLogger(BlobStore blobStore, HexaStore provIndex, ActivityContext ctx) {
-            this.blobStore = blobStore;
+        public ArchivingLogger(BlobStore provStore, HexaStore provIndex, ActivityContext ctx) {
+            this.logStore = provStore;
             this.hexastore = provIndex;
             this.ctx = ctx;
             tmpArchive = null;
@@ -275,8 +285,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                 os = null;
 
                 try (FileInputStream is = new FileInputStream(tmpArchive)) {
-                    IRI newVersion = blobStore.put(is);
-                    RefNodeFactory.nowDateTimeLiteral();
+                    IRI newVersion = logStore.put(is);
 
                     IRI previousVersion = VersionUtil.findMostRecentVersion(getProvenanceAnchor(), hexastore);
                     if (previousVersion == null) {

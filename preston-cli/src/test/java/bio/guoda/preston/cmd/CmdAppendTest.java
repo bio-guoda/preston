@@ -42,7 +42,7 @@ public class CmdAppendTest {
 
         CmdAppend cmdAppend = new CmdAppend();
         cmdAppend.setInputStream(new ByteArrayInputStream("".getBytes()));
-        cmdAppend.run(blobStoreNull, statementStoreNull);
+        cmdAppend.run(blobStoreNull, blobStoreNull, statementStoreNull);
 
         assertThat(blobStoreNull.putAttemptCount.get() > 0, Is.is(true));
         assertThat(statementStoreNull.putLogVersionAttemptCount.get() > 0, Is.is(true));
@@ -75,7 +75,7 @@ public class CmdAppendTest {
 
         cmdAppend.run(
                 blobStoreNull,
-                statementStoreNull
+                blobStoreNull, statementStoreNull
         );
 
         assertThat(blobStoreNull.putAttemptCount.get() > 0, Is.is(true));
@@ -106,7 +106,7 @@ public class CmdAppendTest {
 
         cmdAppend.run(
                 blobStoreNull,
-                statementStoreNull
+                blobStoreNull, statementStoreNull
         );
 
         assertThat(blobStoreNull.putAttemptCount.get() > 0, Is.is(true));

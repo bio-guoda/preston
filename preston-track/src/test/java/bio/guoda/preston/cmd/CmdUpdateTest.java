@@ -37,7 +37,7 @@ public class CmdUpdateTest {
         CmdUpdate cmdUpdate = new CmdUpdate();
         cmdUpdate.run(
                 blobStore,
-                logRelations);
+                blobStore, logRelations);
     }
 
 
@@ -52,7 +52,7 @@ public class CmdUpdateTest {
         cmdUpdate.setSeeds(Arrays.asList(Seeds.IDIGBIO, Seeds.GBIF, Seeds.BIOCASE));
         cmdUpdate.run(
                 blobStore,
-                logRelations);
+                blobStore, logRelations);
 
         assertThat(blobStore.putAttemptCount.get() > 0, Is.is(true));
         assertThat(blobStore.mostRecentBlob.size() > 0, Is.is(true));
