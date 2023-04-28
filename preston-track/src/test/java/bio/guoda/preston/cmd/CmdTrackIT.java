@@ -22,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertNotNull;
 
-public class CmdTrackTest {
+public class CmdTrackIT {
 
     @Rule
     public TemporaryFolder dataDir = new TemporaryFolder();
