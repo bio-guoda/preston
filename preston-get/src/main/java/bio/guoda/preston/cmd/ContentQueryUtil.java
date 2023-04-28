@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.IRIFixingProcessor;
+import bio.guoda.preston.process.StopProcessingException;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.rdf.api.IRI;
@@ -27,8 +28,14 @@ public class ContentQueryUtil {
             Persisting persisting,
             CopyShop copyShop
     ) throws IOException {
-        InputStream contentStream = getContent(blobStore, queryIRI, persisting);
-        copyShop.copy(contentStream, persisting.getOutputStream());
+        try {
+            InputStream contentStream = getContent(blobStore, queryIRI, persisting);
+            copyShop.copy(contentStream, persisting.getOutputStream());
+        } catch (StopProcessingException ex) {
+            if (persisting.shouldKeepProcessing()) {
+                throw ex;
+            }
+        }
     }
 
     public static InputStream getContent(

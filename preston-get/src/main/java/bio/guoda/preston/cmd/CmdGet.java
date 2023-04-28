@@ -47,11 +47,6 @@ public class CmdGet extends Persisting implements Runnable {
     public void run(BlobStoreReadOnly blobStore) {
         try {
             run(blobStore, contentIdsOrAliases);
-        } catch (StopProcessingException th) {
-            if (shouldKeepProcessing()) {
-                th.printStackTrace(System.err);
-                throw new RuntimeException(th);
-            }
         } catch (Throwable th) {
             th.printStackTrace(System.err);
             throw new RuntimeException(th);
