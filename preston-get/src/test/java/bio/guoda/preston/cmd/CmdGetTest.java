@@ -3,10 +3,13 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.StopProcessingException;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
+import org.apache.commons.compress.parallel.InputStreamSupplier;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.ProxyInputStream;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
@@ -19,9 +22,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -31,7 +38,7 @@ public class CmdGetTest {
 
     @Test
     public void getSomething() throws IOException {
-        BlobStoreNull blobStoreNull = new BlobStoreNull(){
+        BlobStoreNull blobStoreNull = new BlobStoreNull() {
             @Override
             public InputStream get(IRI key) throws IOException {
                 if (getAttemptCount.incrementAndGet() > 1 || !toIRI(aContentHash).equals(key)) {
@@ -76,7 +83,7 @@ public class CmdGetTest {
 
     @Test
     public void getVersion() throws IOException {
-        BlobStoreNull blobStoreNull = new BlobStoreNull(){
+        BlobStoreNull blobStoreNull = new BlobStoreNull() {
             @Override
             public InputStream get(IRI key) throws IOException {
                 if (getAttemptCount.incrementAndGet() > 1 || !toIRI(aContentHash).equals(key)) {
@@ -101,7 +108,7 @@ public class CmdGetTest {
 
     @Test
     public void getPreviousVersion() throws IOException {
-        BlobStoreNull blobStoreNull = new BlobStoreNull(){
+        BlobStoreNull blobStoreNull = new BlobStoreNull() {
             @Override
             public InputStream get(IRI key) throws IOException {
                 if (getAttemptCount.incrementAndGet() > 1 || !toIRI(aContentHash).equals(key)) {
@@ -126,7 +133,7 @@ public class CmdGetTest {
 
     @Test
     public void getNothing() throws IOException {
-        BlobStoreNull blobStoreNull = new BlobStoreNull(){
+        BlobStoreNull blobStoreNull = new BlobStoreNull() {
             @Override
             public InputStream get(IRI key) throws IOException {
                 throw new IOException("kaboom!");
@@ -144,6 +151,48 @@ public class CmdGetTest {
         assertThat(out.toString(), is(""));
     }
 
+    @Test
+    public void getPartialNoCacheStopProcessing() throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final CmdGet cmd = new CmdGet();
+        cmd.setOutputStream(out);
+        cmd.setCacheEnabled(false);
+        cmd.setContentIdsOrAliases(Collections.singletonList(toIRI("hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03")));
+        AtomicBoolean askedToStop = new AtomicBoolean(false);
+
+        ProxyInputStream stoppingStream = new ProxyInputStream(IOUtils.toInputStream("hello world", StandardCharsets.UTF_8)) {
+
+            @Override
+            protected void afterRead(final int n) throws IOException {
+                if (askedToStop.get()) {
+                    throw new IOException("asked to stop, but still processing anyway");
+                }
+
+                if (cmd.shouldKeepProcessing()) {
+                    cmd.stopProcessing();
+                    askedToStop.set(true);
+                }
+            }
+        };
+
+
+        BlobStoreNull blobStoreWithStop = new BlobStoreNull() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return stoppingStream;
+            }
+        };
+
+        try {
+            cmd.run(blobStoreWithStop);
+        } catch (RuntimeException ex) {
+            Throwable cause = ex.getCause();
+            assertThat(cause, instanceOf(StopProcessingException.class));
+        }
+
+        assertThat(cmd.shouldKeepProcessing(), is(false));
+        assertThat(askedToStop.get(), is(true));
+    }
 
 
 }

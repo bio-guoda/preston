@@ -21,14 +21,6 @@ public class ContentQueryUtil {
         }
     }
 
-    static InputStream getMostRecentContent(BlobStoreReadOnly blobStore, Quad quad, Persisting persisting) throws IOException {
-        IRI version = VersionUtil.mostRecentVersion(quad);
-        if (version == null) {
-            throw new IOException("no content found associated to [" + quad.toString() + "]");
-        }
-        return getContent(blobStore, version, persisting);
-    }
-
     public static void copyContent(
             BlobStoreReadOnly blobStore,
             IRI queryIRI,

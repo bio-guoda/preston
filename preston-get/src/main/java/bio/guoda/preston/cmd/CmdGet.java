@@ -60,12 +60,12 @@ public class CmdGet extends Persisting implements Runnable {
                 IRI contentId = VersionUtil.getMostRecentContentId(line);
                 if (contentId != null) {
                     Quad quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, contentId);
-                    ContentQueryUtil.copyMostRecentContent(blobStore, quad, this, new CopyShopImpl());
+                    ContentQueryUtil.copyMostRecentContent(blobStore, quad, this, new CopyShopImpl(this));
                 }
             }
         } else {
             for (IRI contentIdOrAlias : contentIdsOrAliases) {
-                ContentQueryUtil.copyContent(blobStore, contentIdOrAlias, this, new CopyShopImpl());
+                ContentQueryUtil.copyContent(blobStore, contentIdOrAlias, this, new CopyShopImpl(this));
             }
         }
     }

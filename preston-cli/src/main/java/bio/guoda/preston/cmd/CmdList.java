@@ -30,7 +30,7 @@ public class CmdList extends LoggingPersisting implements Runnable {
 
     public void run(LogErrorHandler handler) {
         CopyShop copyShop = LogTypes.nquads.equals(getLogMode())
-                ? new CopyShopImpl()
+                ? new CopyShopImpl(this)
                 : new CopyShopNQuadToTSV(this);
 
 
