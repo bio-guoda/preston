@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 
 import static bio.guoda.preston.paradox.ParadoxHandler.asJsonStream;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertNotNull;
 
 public class ParadoxHandlerTest {
@@ -67,6 +68,9 @@ public class ParadoxHandlerTest {
         String expected = TestUtil.removeCarriageReturn(ParadoxHandlerTest.class, "SPECIES.DB.json");
 
         assertThat(actual, Is.is(expected));
+
+        // https://github.com/bio-guoda/preston/issues/237
+        assertThat(actual, containsString("BLOB_CLOB_TYPES_NOT_SUPPORTED"));
     }
 
 
