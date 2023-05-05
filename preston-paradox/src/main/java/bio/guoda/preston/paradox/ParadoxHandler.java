@@ -35,6 +35,8 @@ import java.util.function.Consumer;
 public class ParadoxHandler extends ParadoxData {
 
 
+    public static final int NUMBER_OF_ADDED_FIELDS = 2;
+
     public static void asJsonStream(OutputStream out,
                                     IRI resourceIRI,
                                     String tableNameCandidate,
@@ -80,11 +82,19 @@ public class ParadoxHandler extends ParadoxData {
             objectNode.set("http://purl.org/dc/elements/1.1/format", TextNode.valueOf("application/paradox"));
 
             for (Pair<Field, Object> fieldObjectPair : row.getRight()) {
-                if (fieldObjectPair.getRight() != null & fieldObjectPair.getLeft() != null) {
-                    objectNode.put(fieldObjectPair.getKey().getName(), fieldObjectPair.getValue().toString());
+                String valueString = fieldObjectPair.getValue() == null
+                        ? ""
+                        : fieldObjectPair.getValue().toString();
+                if (fieldObjectPair.getKey() != null) {
+                    objectNode.put(fieldObjectPair.getKey().getName(), valueString);
                 }
 
             }
+
+            if (objectNode.size() != (table.getFieldCount() + NUMBER_OF_ADDED_FIELDS)) {
+                throw new IllegalStateException("found object with [" + objectNode.size() + "] field, but expected [" + table.getFieldCount() + "]");
+            }
+
             try {
                 IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), out);
                 IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), out);

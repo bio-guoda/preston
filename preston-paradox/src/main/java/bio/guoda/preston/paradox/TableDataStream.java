@@ -152,7 +152,9 @@ public final class TableDataStream extends ParadoxData {
      * @return the row.
      * @throws SQLException in case of parse errors.
      */
-    private static List<Pair<Field, Object>> readRow(final ParadoxTable table, final Field[] fields, final ByteBuffer buffer) throws IOException {
+    private static List<Pair<Field, Object>> readRow(final ParadoxTable table,
+                                                     final Field[] fields,
+                                                     final ByteBuffer buffer) throws IOException {
         final List<Pair<Field, Object>> row = new ArrayList<>(fields.length);
 
         for (final Field field : table.getFields()) {
@@ -161,8 +163,8 @@ public final class TableDataStream extends ParadoxData {
             } else {
                 // Field filter
                 final int index = search(fields, field);
+                Object value = "";
                 if (index != -1) {
-                    Object value = null;
                     try {
                         value = ParadoxFieldFactory.parse(table, buffer, field);
                     } catch (SQLException e) {
@@ -176,6 +178,9 @@ public final class TableDataStream extends ParadoxData {
             }
         }
 
+        if (row.size() != fields.length) {
+            throw new IOException("row data misaligned with available table columns");
+        }
         return row;
     }
 

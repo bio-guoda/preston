@@ -3,11 +3,14 @@ package bio.guoda.preston.paradox;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -64,7 +67,11 @@ public class ParadoxHandlerTest {
 
         asJsonStream(out, resourceIRI, "SPECIES.DB", contentStore);
 
+
+
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
+
+        IOUtils.write(actual, new FileOutputStream(new File("/tmp/expected.json")), StandardCharsets.UTF_8);
         String expected = TestUtil.removeCarriageReturn(ParadoxHandlerTest.class, "SPECIES.DB.json");
 
         assertThat(actual, Is.is(expected));
