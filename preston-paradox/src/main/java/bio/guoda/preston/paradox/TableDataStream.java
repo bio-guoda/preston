@@ -10,6 +10,7 @@
  */
 package bio.guoda.preston.paradox;
 
+import bio.guoda.preston.process.ProcessorState;
 import com.googlecode.paradox.data.ParadoxData;
 import com.googlecode.paradox.data.ParadoxFieldFactory;
 import com.googlecode.paradox.metadata.Field;
@@ -41,6 +42,7 @@ public final class TableDataStream extends ParadoxData {
     /**
      * Load the table data from file.
      *
+     * @param state
      * @param data   the data to read.
      * @param fields the fields to read.
      * @return the row values.
@@ -48,8 +50,10 @@ public final class TableDataStream extends ParadoxData {
      */
     public static void streamData(final ParadoxTable data,
                                   final Field[] fields,
-                                  Consumer<Pair<Long, List<Pair<Field, Object>>>> sink
+                                  Consumer<Pair<Long, List<Pair<Field, Object>>>> sink,
+                                  ProcessorState state
     ) throws IOException {
+
         AtomicLong rowNumberWithOffsetOne = new AtomicLong(1);
 
         final int blockSize = data.getBlockSizeBytes();
@@ -88,7 +92,7 @@ public final class TableDataStream extends ParadoxData {
                         for (int loop = 0; loop < rowsInBlock; loop++) {
                             sink.accept(Pair.of(rowNumberWithOffsetOne.getAndIncrement(), readRow(data, fields, buffer)));
                         }
-                    } while (nextBlock != 0);
+                    } while (nextBlock != 0 && state.shouldKeepProcessing());
                 }
 
             } catch (final IOException e) {

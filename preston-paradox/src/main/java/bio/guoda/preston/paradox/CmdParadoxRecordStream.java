@@ -3,12 +3,10 @@ package bio.guoda.preston.paradox;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.cmd.LoggingPersisting;
 import bio.guoda.preston.process.EmittingStreamOfAnyQuad;
-import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
-import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
@@ -52,7 +50,8 @@ public class CmdParadoxRecordStream extends LoggingPersisting implements Runnabl
                                 getOutputStream(),
                                 (IRI) version,
                                 tableNameCandidate,
-                                blobStoreReadOnly);
+                                blobStoreReadOnly,
+                                CmdParadoxRecordStream.this);
                     } catch (IOException e) {
                         // ignore
                     }

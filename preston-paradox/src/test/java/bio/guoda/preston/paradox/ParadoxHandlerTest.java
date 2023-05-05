@@ -1,6 +1,7 @@
 package bio.guoda.preston.paradox;
 
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.io.IOUtils;
@@ -37,7 +38,7 @@ public class ParadoxHandlerTest {
         };
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        asJsonStream(out, resourceIRI, "COLL.DB", contentStore);
+        asJsonStream(out, resourceIRI, "COLL.DB", contentStore, new ProcessorStateAlwaysContinue());
 
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
         String expected = TestUtil.removeCarriageReturn(ParadoxHandlerTest.class, "COLL.DB.json");
@@ -65,13 +66,12 @@ public class ParadoxHandlerTest {
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        asJsonStream(out, resourceIRI, "SPECIES.DB", contentStore);
+        asJsonStream(out, resourceIRI, "SPECIES.DB", contentStore, new ProcessorStateAlwaysContinue());
 
 
 
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
-        IOUtils.write(actual, new FileOutputStream(new File("/tmp/expected.json")), StandardCharsets.UTF_8);
         String expected = TestUtil.removeCarriageReturn(ParadoxHandlerTest.class, "SPECIES.DB.json");
 
         assertThat(actual, Is.is(expected));
@@ -95,7 +95,7 @@ public class ParadoxHandlerTest {
         };
 
 
-        asJsonStream(out, resourceIRI, "table", contentStore);
+        asJsonStream(out, resourceIRI, "table", contentStore, new ProcessorStateAlwaysContinue());
 
         assertThat(out.size(), Is.is(0));
     }
@@ -114,7 +114,7 @@ public class ParadoxHandlerTest {
         };
 
 
-        asJsonStream(out, resourceIRI, "table", contentStore);
+        asJsonStream(out, resourceIRI, "table", contentStore, new ProcessorStateAlwaysContinue());
     }
 
 }

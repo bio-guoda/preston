@@ -1,36 +1,27 @@
 package bio.guoda.preston.paradox;
 
+import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.googlecode.paradox.ConnectionInfo;
 import com.googlecode.paradox.data.ParadoxData;
-import com.googlecode.paradox.data.TableData;
-import com.googlecode.paradox.data.filefilters.TableFilter;
 import com.googlecode.paradox.metadata.Field;
-import com.googlecode.paradox.metadata.Table;
 import com.googlecode.paradox.metadata.paradox.ParadoxDataFile;
 import com.googlecode.paradox.metadata.paradox.ParadoxTable;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
 
 public class ParadoxHandler extends ParadoxData {
 
@@ -40,7 +31,8 @@ public class ParadoxHandler extends ParadoxData {
     public static void asJsonStream(OutputStream out,
                                     IRI resourceIRI,
                                     String tableNameCandidate,
-                                    KeyValueStoreReadOnly contentStore) throws IOException {
+                                    KeyValueStoreReadOnly contentStore,
+                                    ProcessorState state) throws IOException {
 
         File tempFile = File.createTempFile("paradox", "db");
 
@@ -56,7 +48,7 @@ public class ParadoxHandler extends ParadoxData {
                 if (data instanceof ParadoxTable) {
                     ParadoxTable table = (ParadoxTable) data;
                     table.setName(tableNameCandidate);
-                    streamTable(out, resourceIRI, table);
+                    streamTable(out, resourceIRI, table, state);
                 }
             } catch (SQLException var10) {
                 connectionInfo.addWarning(var10);
@@ -73,7 +65,8 @@ public class ParadoxHandler extends ParadoxData {
 
     }
 
-    private static void streamTable(OutputStream out, IRI resourceIRI, ParadoxTable table) throws IOException {
+    private static void streamTable(OutputStream out, IRI resourceIRI, ParadoxTable table, ProcessorState state) throws IOException {
+
         TableDataStream.streamData(table, table.getFields(), row -> {
             ObjectMapper obj = new ObjectMapper();
             ObjectNode objectNode = obj.createObjectNode();
@@ -86,7 +79,7 @@ public class ParadoxHandler extends ParadoxData {
                         ? ""
                         : fieldObjectPair.getValue().toString();
                 if (fieldObjectPair.getKey() != null) {
-                    objectNode.put(fieldObjectPair.getKey().getName(), valueString);
+                    objectNode.put(fieldObjectPair.getKey().getName(), StringUtils.trim(valueString));
                 }
 
             }
@@ -101,6 +94,6 @@ public class ParadoxHandler extends ParadoxData {
             } catch (IOException e) {
                 // ignore
             }
-        });
+        }, state);
     }
 }
