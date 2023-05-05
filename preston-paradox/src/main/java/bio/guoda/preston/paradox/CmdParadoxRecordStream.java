@@ -19,6 +19,7 @@ import java.net.URI;
 @CommandLine.Command(
         name = "paradox-stream",
         aliases = {"paradox2json"},
+        hidden = true,
         description = "Extract records from Paradox Database files (*.DB) in line-json"
 )
 public class CmdParadoxRecordStream extends LoggingPersisting implements Runnable {
