@@ -22,6 +22,7 @@ import picocli.CommandLine;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 
 import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH_UUID_STRING;
@@ -83,8 +84,18 @@ public class PersistingLocal extends Cmd {
     }
 
     protected KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory) {
-        KeyValueStore primary = new KeyValueStoreLocalFileSystem(getTmpDir(), getKeyToPathLocal(), validatingKeyValueStreamFactory);
-        KeyValueStoreReadOnly fallback = new KeyValueStoreLocalFileSystem(getTmpDir(), new KeyTo5LevelPath(getDefaultDataDir().toURI()), validatingKeyValueStreamFactory);
+        KeyValueStore primary = new KeyValueStoreLocalFileSystem(
+                getTmpDir(),
+                getKeyToPathLocal(getDefaultDataDir().toURI()),
+                validatingKeyValueStreamFactory
+        );
+
+        KeyValueStoreReadOnly fallback = new KeyValueStoreLocalFileSystem(
+                getTmpDir(),
+                new KeyTo5LevelPath(getDefaultDataDir().toURI()),
+                validatingKeyValueStreamFactory
+        );
+
         return new KeyValueStoreWithFallback(primary, fallback);
     }
 
@@ -123,8 +134,8 @@ public class PersistingLocal extends Cmd {
     }
 
 
-    public KeyToPath getKeyToPathLocal() {
-        initIfNeeded();
+    public KeyToPath getKeyToPathLocal(URI baseURI) {
+        initIfNeeded(baseURI);
         return keyToPathLocal;
     }
 
@@ -132,9 +143,9 @@ public class PersistingLocal extends Cmd {
         this.keyToPathLocal = keyToPath;
     }
 
-    private void initIfNeeded() {
+    private void initIfNeeded(URI baseURI) {
         if (keyToPathLocal == null) {
-            keyToPathLocal = new KeyTo3LevelPath(getDefaultDataDir().toURI());
+            keyToPathLocal = new KeyTo3LevelPath(baseURI);
         }
     }
 
