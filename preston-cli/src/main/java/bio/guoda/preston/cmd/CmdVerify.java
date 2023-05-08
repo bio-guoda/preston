@@ -64,7 +64,9 @@ public class CmdVerify extends Persisting implements Runnable {
                 verifiedMap,
                 blobStore,
                 hashGenerator,
-                skipHashVerification, this.getOutputStream(), this.getKeyToPathLocal()
+                skipHashVerification,
+                getOutputStream(),
+                getKeyToPathLocal()
         );
         CmdContext ctx = new CmdContext(this, getProvenanceAnchor(), statementListener);
 
