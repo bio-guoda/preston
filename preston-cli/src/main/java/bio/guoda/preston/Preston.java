@@ -6,6 +6,7 @@ package bio.guoda.preston;
 
 import bio.guoda.preston.cmd.CmdAlias;
 import bio.guoda.preston.cmd.CmdAppend;
+import bio.guoda.preston.cmd.CmdBash;
 import bio.guoda.preston.cmd.CmdCite;
 import bio.guoda.preston.cmd.CmdClone;
 import bio.guoda.preston.cmd.CmdCopyTo;
@@ -63,6 +64,7 @@ import static java.lang.System.exit;
                 CmdCite.class,
                 CmdGenerateQRCode.class,
                 CmdHead.class,
+                CmdBash.class,
                 CmdInstallManual.class,
                 ManPageGenerator.class,
                 CommandLine.HelpCommand.class
