@@ -1,6 +1,6 @@
 package bio.guoda.preston.cmd;
 
-import org.hamcrest.core.Is;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -14,7 +14,23 @@ public class CmdBashTest {
     @Test
     public void ls() {
         CmdBash cmdBash = new CmdBash();
-        cmdBash.setScript("ls");
+        cmdBash.setInputStream(IOUtils.toInputStream("ls", StandardCharsets.UTF_8));
+
+        ByteArrayOutputStream boas = new ByteArrayOutputStream();
+        cmdBash.setOutputStream(boas);
+
+        cmdBash.run();
+
+        assertThat(new String(boas.toByteArray(), StandardCharsets.UTF_8),
+                containsString("text/x-shellscript")
+        );
+    }
+
+    @Test
+    public void echo() {
+        CmdBash cmdBash = new CmdBash();
+
+        cmdBash.setInputStream(IOUtils.toInputStream("ls -1", StandardCharsets.UTF_8));
 
         ByteArrayOutputStream boas = new ByteArrayOutputStream();
         cmdBash.setOutputStream(boas);

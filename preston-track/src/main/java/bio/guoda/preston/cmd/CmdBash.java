@@ -5,10 +5,8 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
-import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.DereferencerContentAddressed;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
@@ -19,7 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
-import java.util.UUID;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.USED;
@@ -28,14 +25,10 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 @CommandLine.Command(
         name = "bash",
-        description = "runs provided bash script and tracks output"
+        description = "runs provided bash script and tracks stdout"
 )
 public class CmdBash extends CmdActivity {
 
-    @CommandLine.Parameters(
-            description = "bash script"
-    )
-    private String script;
     private IRI scriptId;
 
     @Override
@@ -51,7 +44,7 @@ public class CmdBash extends CmdActivity {
         StatementsListener processor = createActivityProcessor(blobStore, ctx, listeners);
 
         try {
-            setScriptId(blobStore.put(IOUtils.toInputStream(script, StandardCharsets.UTF_8)));
+            setScriptId(blobStore.put(getInputStream()));
             statementQueue.add(Arrays.asList(
                     toStatement(getScriptId(), RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral("text/x-shellscript")),
                     toStatement(ctx.getActivity(), USED, getScriptId()),
@@ -80,18 +73,15 @@ public class CmdBash extends CmdActivity {
             ActivityContext ctx,
             StatementsListener[] listeners) {
         return new Archiver(
-                new DereferencerContentAddressed(new Dereferencer<InputStream>() {
-                    @Override
-                    public InputStream get(IRI uri) throws IOException {
-                        InputStream inputStream = blobStore.get(getScriptId());
-                        ProcessBuilder bash = new ProcessBuilder(
-                                "bash",
-                                "-c",
-                                IOUtils.toString(inputStream, StandardCharsets.UTF_8)
-                        );
-                        Process proc = bash.start();
-                        return proc.getInputStream();
-                    }
+                new DereferencerContentAddressed(uri -> {
+                    InputStream inputStream = blobStore.get(getScriptId());
+                    ProcessBuilder bash = new ProcessBuilder(
+                            "bash",
+                            "-c",
+                            IOUtils.toString(inputStream, StandardCharsets.UTF_8)
+                    );
+                    Process proc = bash.start();
+                    return proc.getInputStream();
                 }, blobStore),
                 ctx,
                 listeners);
@@ -102,7 +92,4 @@ public class CmdBash extends CmdActivity {
         return scriptId;
     }
 
-    public void setScript(String script) {
-        this.script = script;
-    }
 }
