@@ -61,16 +61,7 @@ public class CmdUpdate extends CmdTrack {
                             toBlank()
                     )
             ));
-            setDereferencer(new Dereferencer<InputStream>() {
-
-                @Override
-                public InputStream get(IRI uri) throws IOException {
-                    if (!RefNodeFactory.toIRI(uuid).equals(uri)) {
-                        throw new IOException("failed to dereference content: iri [" + uri + "] is not associated with any content stream");
-                    }
-                    return getInputStream();
-                }
-            });
+            setDereferencer(getDereferencerOfStdIn(uuid));
         } else if (getIRIs().isEmpty()) {
             statementQueue.add(generateSeeds(ctx.getActivity()));
         } else {
@@ -85,6 +76,19 @@ public class CmdUpdate extends CmdTrack {
                 ));
             });
         }
+    }
+
+    private Dereferencer<InputStream> getDereferencerOfStdIn(UUID uuid) {
+        return new Dereferencer<InputStream>() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                if (!RefNodeFactory.toIRI(uuid).equals(uri)) {
+                    throw new IOException("failed to dereference content: iri [" + uri + "] is not associated with any content stream");
+                }
+                return getInputStream();
+            }
+        };
     }
 
     @Override
