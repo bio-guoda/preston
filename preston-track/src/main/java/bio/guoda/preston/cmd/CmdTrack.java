@@ -4,11 +4,13 @@ import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.DereferencerContentAddressed;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +28,7 @@ public class CmdTrack extends CmdActivity {
     )
 
     private List<IRI> IRIs = new ArrayList<>();
+    private Dereferencer<InputStream> dereferencer = ResourcesHTTP::asInputStream;
 
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
@@ -57,9 +60,17 @@ public class CmdTrack extends CmdActivity {
             ActivityContext ctx,
             StatementsListener[] listeners) {
         return new Archiver(
-                new DereferencerContentAddressed(ResourcesHTTP::asInputStream, blobStore),
+                new DereferencerContentAddressed(getDereferencer(), blobStore),
                 ctx,
                 listeners);
+    }
+
+    protected Dereferencer<InputStream> getDereferencer() {
+        return dereferencer;
+    }
+
+    protected void setDereferencer(Dereferencer<InputStream> dereferencer) {
+        this.dereferencer = dereferencer;
     }
 
     public List<IRI> getIRIs() {

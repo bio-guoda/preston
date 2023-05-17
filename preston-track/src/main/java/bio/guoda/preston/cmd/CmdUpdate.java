@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.RegistryReaderALA;
 import bio.guoda.preston.process.RegistryReaderBHL;
 import bio.guoda.preston.process.RegistryReaderBioCASE;
@@ -12,14 +13,18 @@ import bio.guoda.preston.process.RegistryReaderOBIS;
 import bio.guoda.preston.process.RegistryReaderRSS;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.Dereferencer;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,18 +48,41 @@ public class CmdUpdate extends CmdTrack {
     )
     private List<IRI> seeds = new ArrayList<>();
 
+
+
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
         if (getIRIs().isEmpty() && seeds.isEmpty()) {
-            throw new IllegalArgumentException("nothing to do: no tracked location or seed provided");
-        }
+            UUID uuid = UUID.randomUUID();
+            statementQueue.add(Collections.singletonList(
+                    toStatement(ctx.getActivity(),
+                            RefNodeFactory.toIRI(uuid),
+                            HAS_VERSION,
+                            toBlank()
+                    )
+            ));
+            setDereferencer(new Dereferencer<InputStream>() {
 
-        if (getIRIs().isEmpty()) {
+                @Override
+                public InputStream get(IRI uri) throws IOException {
+                    if (!RefNodeFactory.toIRI(uuid).equals(uri)) {
+                        throw new IOException("failed to dereference content: iri [" + uri + "] is not associated with any content stream");
+                    }
+                    return getInputStream();
+                }
+            });
+        } else if (getIRIs().isEmpty()) {
             statementQueue.add(generateSeeds(ctx.getActivity()));
         } else {
             getIRIs().forEach(iri -> {
-                Quad quad = toStatement(ctx.getActivity(), iri, HAS_VERSION, toBlank());
-                statementQueue.add(Collections.singletonList(quad));
+                statementQueue.add(Collections.singletonList(
+                        toStatement(
+                                ctx.getActivity(),
+                                iri,
+                                HAS_VERSION,
+                                toBlank()
+                        )
+                ));
             });
         }
     }
