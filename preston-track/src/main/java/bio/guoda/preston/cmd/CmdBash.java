@@ -11,6 +11,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -29,7 +30,14 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 )
 public class CmdBash extends CmdActivity {
 
-    private IRI scriptId;
+    @CommandLine.Option(
+            names = {"-c"},
+            description = "Content id of script to be executed."
+    )
+    private IRI commandsContentId;
+
+    private boolean streamingCommands = false;
+
 
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
@@ -44,10 +52,14 @@ public class CmdBash extends CmdActivity {
         StatementsListener processor = createActivityProcessor(blobStore, ctx, listeners);
 
         try {
-            setScriptId(blobStore.put(getInputStream()));
+            if (getCommandsContentId() == null) {
+                setCommandsContentId(blobStore.put(getInputStream()));
+                streamingCommands = true;
+            }
+
             statementQueue.add(Arrays.asList(
-                    toStatement(getScriptId(), RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral("text/x-shellscript")),
-                    toStatement(ctx.getActivity(), USED, getScriptId()),
+                    toStatement(getCommandsContentId(), RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral("text/x-shellscript")),
+                    toStatement(ctx.getActivity(), USED, getCommandsContentId()),
                     toStatement(ctx.getActivity(), HAS_VERSION, toBlank()))
             );
 
@@ -59,8 +71,8 @@ public class CmdBash extends CmdActivity {
         }
     }
 
-    private void setScriptId(IRI scriptId) {
-        this.scriptId = scriptId;
+    public void setCommandsContentId(IRI commandsContentId) {
+        this.commandsContentId = commandsContentId;
     }
 
     @Override
@@ -74,13 +86,16 @@ public class CmdBash extends CmdActivity {
             StatementsListener[] listeners) {
         return new Archiver(
                 new DereferencerContentAddressed(uri -> {
-                    InputStream inputStream = blobStore.get(getScriptId());
+                    InputStream inputStream = blobStore.get(getCommandsContentId());
                     ProcessBuilder bash = new ProcessBuilder(
                             "bash",
                             "-c",
                             IOUtils.toString(inputStream, StandardCharsets.UTF_8)
                     );
-                    Process proc = bash.start();
+
+                    Process proc = streamingCommands
+                            ? bash.start()
+                            : bash.redirectInput(ProcessBuilder.Redirect.from(new File("/dev/stdin"))).start();
                     return proc.getInputStream();
                 }, blobStore),
                 ctx,
@@ -88,8 +103,8 @@ public class CmdBash extends CmdActivity {
     }
 
 
-    public IRI getScriptId() {
-        return scriptId;
+    public IRI getCommandsContentId() {
+        return commandsContentId;
     }
 
 }
