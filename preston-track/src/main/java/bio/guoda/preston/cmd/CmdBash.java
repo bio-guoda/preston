@@ -18,9 +18,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
+import java.util.UUID;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.USED;
+import static bio.guoda.preston.RefNodeConstants.WAS_GENERATED_BY;
 import static bio.guoda.preston.RefNodeFactory.toBlank;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
@@ -58,10 +60,12 @@ public class CmdBash extends CmdActivity {
                 streamingCommands = true;
             }
 
+            IRI output = RefNodeFactory.toIRI(UUID.randomUUID());
             statementQueue.add(Arrays.asList(
                     toStatement(getCommandsContentId(), RefNodeConstants.HAS_FORMAT, RefNodeFactory.toLiteral("text/x-shellscript")),
                     toStatement(ctx.getActivity(), USED, getCommandsContentId()),
-                    toStatement(ctx.getActivity(), HAS_VERSION, toBlank()))
+                    toStatement(output, WAS_GENERATED_BY, ctx.getActivity()),
+                    toStatement(output, HAS_VERSION, toBlank()))
             );
 
             while (!statementQueue.isEmpty()) {
