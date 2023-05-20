@@ -12,8 +12,11 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.startsWith;
@@ -51,6 +54,35 @@ public class CmdAliasTest {
                 fail("should not work");
             }
         });
+    }
+
+
+    @Test
+    public void validCreateContentMakeAlias() throws URISyntaxException, IOException {
+        CmdTrack cmd = new CmdTrack();
+        cmd.setIRIs(Collections.singletonList(RefNodeFactory.toIRI(getClass().getResource("content.txt").toURI())));
+        String dataDir = tmpFolder.newFolder("data").getAbsolutePath();
+        cmd.setLocalDataDir(dataDir);
+        cmd.run();
+
+        CmdAlias cmdAlias = new CmdAlias();
+        IRI alias = RefNodeFactory.toIRI("my:content.txt");
+        IRI contentId = RefNodeFactory.toIRI("hash://sha256/c7be1ed902fb8dd4d48997c6452f5d7e509fbcdbe2808b16bcf4edce4c07d14e");
+        cmdAlias.setParams(Arrays.asList(alias, contentId));
+        cmdAlias.setLocalDataDir(dataDir);
+        cmdAlias.run();
+
+        CmdGet get = new CmdGet();
+        get.setContentIdsOrAliases(Collections.singletonList(RefNodeFactory.toIRI("my:content.txt")));
+        get.setLocalDataDir(dataDir);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        get.setOutputStream(outputStream);
+
+        get.run();
+
+        assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is("This is a test"));
+
+
     }
 
     @Test(expected = IllegalArgumentException.class)

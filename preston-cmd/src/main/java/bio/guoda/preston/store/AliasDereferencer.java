@@ -33,7 +33,12 @@ public class AliasDereferencer implements BlobStoreReadOnly {
         if (HashKeyUtil.isLikelyCompositeHashURI(iri)) {
             firstAliasHash.set(iri);
         } else {
-            attemptToFindAlias(firstAliasHash, AliasUtil.aliasSelectorFor(firstAliasHash.get()), persisting);
+            AliasFindingState aliasFindingState = new AliasFindingState(persisting);
+            attemptToFindAlias(
+                    firstAliasHash,
+                    AliasUtil.aliasSelectorFor(firstAliasHash.get()),
+                    aliasFindingState
+            );
             attemptToFindInnerAlias(firstAliasHash, iri);
         }
 
@@ -47,7 +52,7 @@ public class AliasDereferencer implements BlobStoreReadOnly {
             if (HashKeyUtil.isLikelyCompositeURI(iri)) {
                 IRI innerAlias = HashKeyUtil.extractInnerURI(iri);
                 if (!innerAlias.equals(iri)) {
-                    attemptToFindAlias(firstAliasHash, AliasUtil.aliasSelectorFor(innerAlias), persisting);
+                    attemptToFindAlias(firstAliasHash, AliasUtil.aliasSelectorFor(innerAlias), new AliasFindingState(persisting));
                     if (firstAliasHash.get() != null) {
                         String compositeHashURIString = StringUtils.replace(iri.getIRIString(), innerAlias.getIRIString(), firstAliasHash.get().getIRIString());
                         firstAliasHash.set(RefNodeFactory.toIRI(compositeHashURIString));
@@ -60,7 +65,7 @@ public class AliasDereferencer implements BlobStoreReadOnly {
 
     private void attemptToFindAlias(AtomicReference<IRI> firstAliasHash,
                                     Predicate<Quad> selector,
-                                    final ProcessorState processorState
+                                    final AliasFindingState processorState
     ) {
         AliasUtil.findSelectedAlias(
                 new StatementsListenerAdapter() {
@@ -68,7 +73,7 @@ public class AliasDereferencer implements BlobStoreReadOnly {
                     public void on(Quad statement) {
                         if (statement.getObject() instanceof IRI) {
                             firstAliasHash.set((IRI) statement.getObject());
-                            processorState.stopProcessing();
+                            processorState.foundAlias();
                         }
                     }
                 },
@@ -85,4 +90,27 @@ public class AliasDereferencer implements BlobStoreReadOnly {
         }
     }
 
+    private class AliasFindingState implements ProcessorState {
+
+        private final ProcessorState state;
+        private boolean foundAlias = false;
+
+        AliasFindingState(ProcessorState state) {
+            this.state = state;
+        }
+
+        void foundAlias() {
+            foundAlias = true;
+        }
+
+        @Override
+        public void stopProcessing() {
+            state.stopProcessing();
+        }
+
+        @Override
+        public boolean shouldKeepProcessing() {
+            return !foundAlias && state.shouldKeepProcessing();
+        }
+    }
 }

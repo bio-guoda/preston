@@ -2,11 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.process.EmittingStreamFactory;
 import bio.guoda.preston.process.EmittingStreamOfAnyQuad;
-import bio.guoda.preston.process.ParsingEmitter;
-import bio.guoda.preston.process.ProcessorState;
-import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.ProvenanceTracer;
 import org.apache.commons.rdf.api.IRI;
@@ -20,7 +16,7 @@ public final class AliasUtil {
         ReplayUtil.replay(
                 new SelectiveListener(selector, listener),
                 persisting,
-                getEmitterFactory()
+                EmittingStreamOfAnyQuad::new
         );
     }
 
@@ -29,17 +25,8 @@ public final class AliasUtil {
                 new SelectiveListener(selector, listener),
                 persisting,
                 tracer,
-                getEmitterFactory()
+                EmittingStreamOfAnyQuad::new
         );
-    }
-
-    private static EmittingStreamFactory getEmitterFactory() {
-        return new EmittingStreamFactory() {
-            @Override
-            public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
-                return new EmittingStreamOfAnyQuad(emitter, context);
-            }
-        };
     }
 
     public static Predicate<Quad> aliasSelectorFor(IRI alias) {

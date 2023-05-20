@@ -127,7 +127,8 @@ public final class ReplayUtil {
         attemptReplay(
                 blobstoreReadOnly,
                 new CmdContext(state, provAnchor, processor),
-                provenanceTracer, emitterFactory
+                provenanceTracer,
+                emitterFactory
         );
     }
 

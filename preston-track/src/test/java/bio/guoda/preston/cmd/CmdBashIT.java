@@ -1,12 +1,13 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
+import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.HashKeyUtil;
 import bio.guoda.preston.util.UUIDUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
-import org.hamcrest.core.Is;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -25,7 +26,6 @@ import java.util.regex.Pattern;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.IsNot.not;
 
 public class CmdBashIT {
@@ -102,6 +102,9 @@ public class CmdBashIT {
 
         IRI uuidAlias = RefNodeFactory.toIRI(UUID.fromString(group));
 
+
+
+
         CmdBash cmdBash = new CmdBash();
         cmdBash.setLocalDataDir(folder.getRoot().getAbsolutePath());
         cmdBash.setCommandsContentId(uuidAlias);
@@ -110,8 +113,10 @@ public class CmdBashIT {
         cmdBash.setOutputStream(boas);
 
         File source = folder.newFile("stdinstub");
-        try (FileOutputStream output = new FileOutputStream(source)) {
-            IOUtils.write("foo", output, StandardCharsets.UTF_8);
+
+        String content = "foo";
+        try (FileOutputStream fos = new FileOutputStream(source)) {
+            IOUtils.write(content, fos, StandardCharsets.UTF_8);
         }
         cmdBash.setSource(source);
         cmdBash.run();
@@ -119,7 +124,10 @@ public class CmdBashIT {
         String bashLastLine = getLastLine(boas);
 
         assertThat(bashLastLine, not(containsString("well-known")));
-        assertThat(bashLastLine, containsString(" <http://purl.org/pav/hasVersion> <hash://sha256/2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae>"));
+
+        IRI contentId = Hasher.calcHashIRI(content, HashType.sha256);
+        assertThat(bashLastLine, containsString(" <http://purl.org/pav/hasVersion> " + contentId));
+
 
         assertThat(new String(boas.toByteArray(), StandardCharsets.UTF_8),
                 containsString("text/x-shellscript")
