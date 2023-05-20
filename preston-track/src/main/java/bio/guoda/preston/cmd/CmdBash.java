@@ -38,6 +38,7 @@ public class CmdBash extends CmdActivity {
 
     private boolean streamingCommands = false;
 
+    private File source = new File("/dev/stdin");
 
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
@@ -86,7 +87,7 @@ public class CmdBash extends CmdActivity {
             StatementsListener[] listeners) {
         return new Archiver(
                 new DereferencerContentAddressed(uri -> {
-                    InputStream inputStream = blobStore.get(getCommandsContentId());
+                    InputStream inputStream = ContentQueryUtil.getContent(blobStore, getCommandsContentId(), this);
                     ProcessBuilder bash = new ProcessBuilder(
                             "bash",
                             "-c",
@@ -95,7 +96,7 @@ public class CmdBash extends CmdActivity {
 
                     Process proc = streamingCommands
                             ? bash.start()
-                            : bash.redirectInput(ProcessBuilder.Redirect.from(new File("/dev/stdin"))).start();
+                            : bash.redirectInput(ProcessBuilder.Redirect.from(source)).start();
                     return proc.getInputStream();
                 }, blobStore),
                 ctx,
@@ -105,6 +106,14 @@ public class CmdBash extends CmdActivity {
 
     public IRI getCommandsContentId() {
         return commandsContentId;
+    }
+
+    public File getSource() {
+        return source;
+    }
+
+    public void setSource(File source) {
+        this.source = source;
     }
 
 }

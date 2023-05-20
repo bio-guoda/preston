@@ -48,8 +48,6 @@ public class CmdUpdate extends CmdTrack {
     )
     private List<IRI> seeds = new ArrayList<>();
 
-
-
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
         if (getIRIs().isEmpty() && seeds.isEmpty()) {
@@ -61,7 +59,7 @@ public class CmdUpdate extends CmdTrack {
                             toBlank()
                     )
             ));
-            setDereferencer(getDereferencerOfStdIn(uuid));
+            setDereferencer(getDereferencerOfInputStream(uuid, getInputStream()));
         } else if (getIRIs().isEmpty()) {
             statementQueue.add(generateSeeds(ctx.getActivity()));
         } else {
@@ -78,7 +76,7 @@ public class CmdUpdate extends CmdTrack {
         }
     }
 
-    private Dereferencer<InputStream> getDereferencerOfStdIn(UUID uuid) {
+    private Dereferencer<InputStream> getDereferencerOfInputStream(UUID uuid, final InputStream inputStream) {
         return new Dereferencer<InputStream>() {
 
             @Override
@@ -86,7 +84,7 @@ public class CmdUpdate extends CmdTrack {
                 if (!RefNodeFactory.toIRI(uuid).equals(uri)) {
                     throw new IOException("failed to dereference content: iri [" + uri + "] is not associated with any content stream");
                 }
-                return getInputStream();
+                return inputStream;
             }
         };
     }

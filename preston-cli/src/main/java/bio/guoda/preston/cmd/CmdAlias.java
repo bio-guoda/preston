@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
-import java.util.function.Predicate;
 
 @CommandLine.Command(
         name = "alias",
@@ -69,29 +68,9 @@ public class CmdAlias extends CmdAppend implements Runnable {
     private void findSelectedAlias(StatementsListener listener) {
         AliasUtil.findSelectedAlias(
                 listener,
-                selectorForParams(params),
+                AliasUtil.aliasSelectorFor(params.size() > 0 ? this.params.get(0) : null),
                 this
         );
-    }
-
-    private Predicate<Quad> selectorForParams(List<IRI> params) {
-        Predicate<Quad> selector = quad -> RefNodeConstants.HAS_VERSION.equals(quad.getPredicate());
-
-        if (params.size() > 0) {
-            final IRI origIRI = this.params.get(0);
-            final IRI fixedIRI = new IRIFixingProcessor()
-                    .process(origIRI);
-
-            final Predicate<Quad> subjectMatches
-                    = quad -> origIRI.equals(quad.getSubject()) || fixedIRI.equals(quad.getSubject());
-
-            final Predicate<Quad> objectMatches
-                    = quad -> origIRI.equals(quad.getObject()) || fixedIRI.equals(quad.getObject());
-
-            selector = selector
-                    .and(subjectMatches.or(objectMatches));
-        }
-        return selector;
     }
 
 
