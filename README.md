@@ -709,6 +709,8 @@ Elliott, M. J., Poelen, J. H., & Fortes, J. (2022, August 29). Signed Citations:
 
 ### Other Conference Presentations / Papers
 
+
+
 Poelen, Jorrit H.; Schulz, Kayja; Trei, Kelli J.; Rees, Jonathan A. (2019). Finding Identification of Keys in the Biodiversity Heritage Library. Biodiversity Heritage Library (BHL) and Global Names (GN) Workshop. Champaign, Illinois. Zenodo. http://doi.org/10.5281/zenodo.3311815 . Status = PUBLISHED; Acknowledgement of Federal Support = Yes
 
 Poelen, J. H. (2019) To connect is to preserve: on frugal data integration and preservation solutions. Society for Preservation of Natural History Collections (SPNHC) Annual Meeting. Chicago. https://doi.org/10.17605/OSF.IO/A2V8G. Status = PUBLISHED; Acknowledgement of Federal Support = Yes
@@ -722,6 +724,8 @@ Poelen, J. H., Boettiger, C. (2020). Reliable Data Use In R. 4th Annual Digital 
 Elliott, M. J., Poelen, J. H., Fortes, J. A. B. (2020). Reliable Dataset Identifiers Are Essential Building Blocks For Reproducible Research. 4th Annual Digital Data in Biodiversity Research, 1-3 June 2020. http://doi.org/10.17605/OSF.IO/AT4XE
 
 Boettiger, C (2020). Content-based Identifiers for Iterative Forecasts: A Proposal. Data One Webinars. Accessible at https://www.dataone.org/webinars/iterative-forecasts/ .
+
+Poelen, Jorrit H., & Best, Jason. (2023, May 31). Signed Biodiversity Data Packages: A Method to Cite, Verify, Mobilize, and Future Proof, Large Image Corpora. hash://sha256/eec2c116dd7434863fd3dfb30658beb49726560e55a40459c89020a7b570e14f hash://md5/a96f09d798262518014fefc77495c2d6. Zenodo. https://doi.org/10.5281/zenodo.7990927
 
 ### Data publications
 
