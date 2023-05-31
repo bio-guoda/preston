@@ -3,7 +3,6 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.store.HashKeyUtil;
 import bio.guoda.preston.util.UUIDUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -101,9 +100,6 @@ public class CmdBashIT {
         String group = matcher.group(0);
 
         IRI uuidAlias = RefNodeFactory.toIRI(UUID.fromString(group));
-
-
-
 
         CmdBash cmdBash = new CmdBash();
         cmdBash.setLocalDataDir(folder.getRoot().getAbsolutePath());
