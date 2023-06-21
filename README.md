@@ -354,6 +354,8 @@ location ~ "^/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{58})$" {
 ```
 The first ```location``` block redirects any URIs describing [skolemized blank nodes](https://www.w3.org/TR/rdf11-concepts/#section-skolemization) to the appropriate [w3c](https://w3c.org) documentation on the topic. The second ```location``` block configures the server to attempt to retrieve a static file with a 64 hexadecimal sha256 hash from the appropriate ```data``` file in preston archive directory on the web server. 
 
+For more examples, please see the [nginx configuration](https://github.com/bio-guoda/preston-service/blob/main/nginx/repo.jhpoelen.nl) for the proxying the [md5](https://github.com/bio-guoda/preston-service/blob/main/systemd/system/preston-server-md5.service), [sha1](https://github.com/bio-guoda/preston-service/blob/main/systemd/system/preston-server-sha1.service), and [sha256](https://github.com/bio-guoda/preston-service/blob/main/systemd/system/preston-server-sha256.service) server deployments. At time of writing, these were the configurations used to power. 
+
 ##### ```caddy```
 Similary, for [Caddy](https://caddyserver.com), add the following to your ```Caddyfile```:
 
