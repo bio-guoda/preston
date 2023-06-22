@@ -30,7 +30,7 @@ public class PlaziTreatmentExtractor extends ProcessorExtracting {
                               BlobStoreReadOnly blobStoreReadOnly,
                               OutputStream out,
                               StatementsListener... listeners) {
-        super(processorState, blobStoreReadOnly, listeners);
+        super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
     }

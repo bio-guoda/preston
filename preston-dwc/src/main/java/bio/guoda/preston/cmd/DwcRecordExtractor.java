@@ -17,14 +17,9 @@ import org.gbif.dwc.DwCArchiveStreamHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
-
-import static bio.guoda.preston.RefNodeFactory.getVersion;
-import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
 
 public class DwcRecordExtractor extends ProcessorExtracting {
     private final Logger LOG = LoggerFactory.getLogger(DwcRecordExtractor.class);
@@ -37,7 +32,7 @@ public class DwcRecordExtractor extends ProcessorExtracting {
                               BlobStoreReadOnly blobStoreReadOnly,
                               OutputStream out,
                               StatementsListener... listeners) {
-        super(processorState, blobStoreReadOnly, listeners);
+        super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
     }
