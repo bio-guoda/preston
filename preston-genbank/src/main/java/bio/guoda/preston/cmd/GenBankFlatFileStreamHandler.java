@@ -78,11 +78,11 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
                         } else if (StringUtils.startsWith(line, PREFIX_ACCESSION)) {
                             setValue(objectNode, line, "accession", PREFIX_ACCESSION);
                         } else if (StringUtils.startsWith(line, PREFIX_SPECIMEN_VOUCHER)) {
-                            setValueForFeature(objectNode, line, "specimenVoucher", PREFIX_SPECIMEN_VOUCHER);
+                            setValueForFeature(objectNode, line, "specimen_voucher", PREFIX_SPECIMEN_VOUCHER);
                         } else if (StringUtils.startsWith(line, PREFIX_HOST)) {
                             setValueForFeature(objectNode, line, "host", PREFIX_HOST);
                         } else if (StringUtils.startsWith(line, PREFIX_DB_XREF)) {
-                            setValueForFeature(objectNode, line, "dbXref", PREFIX_DB_XREF);
+                            setValueForFeature(objectNode, line, "db_xref", PREFIX_DB_XREF);
                         } else if (StringUtils.startsWith(line, PREFIX_COUNTRY)) {
                             setValueForFeature(objectNode, line, "country", PREFIX_COUNTRY);
                         } else if (StringUtils.startsWith(line, PREFIX_ORGANISM)) {
