@@ -23,6 +23,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
 
+    public static final String PREFIX_ACCESSION = "ACCESSION   ";
+    private static final CharSequence PREFIX_SPECIMEN_VOUCHER = "                     /specimen_voucher=\"";
+    private static final CharSequence PREFIX_DB_XREF = "                     /db_xref=\"";
+    private static final CharSequence PREFIX_ORGANISM = "                     /organism=\"";
+    private static final CharSequence PREFIX_HOST = "                     /host=\"";
+    private static final CharSequence PREFIX_COUNTRY = "                     /country=\"";
+
     private final Dereferencer<InputStream> dereferencer;
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
@@ -44,6 +51,14 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
             if (charset != null) {
                 int lineStart = -1;
                 int lineFinish = -1;
+                ObjectNode objectNode = new ObjectMapper().createObjectNode();
+
+                String accession = null;
+                String specimenVoucher = null;
+                String taxonId = null;
+                String host = null;
+                String country = null;
+                String organism = null;
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is, charset));
 
                 for (int lineNumber = 1; contentStreamHandler.shouldKeepProcessing(); ++lineNumber) {
@@ -53,14 +68,28 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
                     } else {
                         if (StringUtils.startsWith(line, "LOCUS")) {
                             lineStart = lineNumber;
+                            objectNode.removeAll();
                         } else if (StringUtils.startsWith(line, "//")) {
                             lineFinish = lineNumber;
+                            if (lineFinish > lineStart) {
+                                objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf("line:" + iriString + "!/L" + lineStart + "-" + "L" + lineFinish));
+                                objectNode.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf("genbank-flatfile"));
+                            }
+                        } else if (StringUtils.startsWith(line, PREFIX_ACCESSION)) {
+                            setValue(objectNode, line, "accession", PREFIX_ACCESSION);
+                        } else if (StringUtils.startsWith(line, PREFIX_SPECIMEN_VOUCHER)) {
+                            setValueForFeature(objectNode, line, "specimenVoucher", PREFIX_SPECIMEN_VOUCHER);
+                        } else if (StringUtils.startsWith(line, PREFIX_HOST)) {
+                            setValueForFeature(objectNode, line, "host", PREFIX_HOST);
+                        } else if (StringUtils.startsWith(line, PREFIX_DB_XREF)) {
+                            setValueForFeature(objectNode, line, "dbXref", PREFIX_DB_XREF);
+                        } else if (StringUtils.startsWith(line, PREFIX_COUNTRY)) {
+                            setValueForFeature(objectNode, line, "country", PREFIX_COUNTRY);
+                        } else if (StringUtils.startsWith(line, PREFIX_ORGANISM)) {
+                            setValueForFeature(objectNode, line, "organism", PREFIX_ORGANISM);
                         }
 
                         if (lineFinish > lineStart) {
-                            ObjectNode objectNode = new ObjectMapper().createObjectNode();
-                            objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf("line:" + iriString + "!/L" + lineStart + "-" + "L" + lineFinish));
-                            objectNode.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf("genbank-flatfile"));
                             IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), outputStream);
                             IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
                             lineStart = -1;
@@ -76,6 +105,31 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
         }
 
         return foundAtLeastOne.get();
+    }
+
+    private void setValueForFeature(ObjectNode objectNode,
+                                    String line,
+                                    String key,
+                                    CharSequence keyValue) {
+        int end = line.length() - 1;
+        int start = keyValue.length();
+        setValue(objectNode, line, key, start, end);
+    }
+
+    private void setValue(ObjectNode objectNode, String line, String key, int start, int end) {
+        objectNode.set(key,
+                TextNode.valueOf(
+                        StringUtils.trim(
+                                StringUtils.substring(line, start, end))));
+    }
+
+    private void setValue(ObjectNode objectNode,
+                          String line,
+                          String key,
+                          CharSequence prefix) {
+        int start = prefix.length();
+        int end = line.length();
+        setValue(objectNode, line, key, start, end);
     }
 
     @Override
