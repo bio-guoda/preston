@@ -11,6 +11,7 @@ import bio.guoda.preston.cmd.CmdCite;
 import bio.guoda.preston.cmd.CmdClone;
 import bio.guoda.preston.cmd.CmdCopyTo;
 import bio.guoda.preston.cmd.CmdDwcRecordStream;
+import bio.guoda.preston.cmd.CmdGenBankStream;
 import bio.guoda.preston.cmd.CmdGenerateQRCode;
 import bio.guoda.preston.cmd.CmdGet;
 import bio.guoda.preston.cmd.CmdGrep;
@@ -60,6 +61,7 @@ import static java.lang.System.exit;
                 CmdExcelRecordStream.class,
                 CmdParadoxRecordStream.class,
                 CmdPlazi.class,
+                CmdGenBankStream.class,
                 CmdServe.class,
                 CmdCite.class,
                 CmdGenerateQRCode.class,

@@ -1,0 +1,14 @@
+GBPLN1.SEQ          Genetic Sequence Data Bank
+                            June 15 2023
+
+                NCBI-GenBank Flat File Release 256.0
+
+                         Plant Sequences (Part 1)
+
+  135614 loci,   171560155 bases, from   135614 reported sequences
+
+
+LOCUS       AB000001                 660 bp    DNA     linear   PLN 15-JUL-2009
+DEFINITION  Rhizoctonia solani genes for 18S rRNA, 5.8S rRNA, 28S rRNA, partial
+            and complete sequence, isolate: #1.
+ACCESSION   AB000001

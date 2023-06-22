@@ -19,6 +19,7 @@
         <module>preston-dbase</module>
         <module>preston-excel</module>
         <module>preston-paradox</module>
+        <module>preston-genbank</module>
         <module>preston-index</module>
         <module>preston-get</module>
         <module>preston-track</module>

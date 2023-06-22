@@ -1,0 +1,154 @@
+GBPLN1.SEQ          Genetic Sequence Data Bank
+                            June 15 2023
+
+                NCBI-GenBank Flat File Release 256.0
+
+                         Plant Sequences (Part 1)
+
+  135614 loci,   171560155 bases, from   135614 reported sequences
+
+
+LOCUS       AB000001                 660 bp    DNA     linear   PLN 15-JUL-2009
+DEFINITION  Rhizoctonia solani genes for 18S rRNA, 5.8S rRNA, 28S rRNA, partial
+            and complete sequence, isolate: #1.
+ACCESSION   AB000001
+VERSION     AB000001.1
+KEYWORDS    .
+SOURCE      Rhizoctonia solani
+  ORGANISM  Rhizoctonia solani
+            Eukaryota; Fungi; Dikarya; Basidiomycota; Agaricomycotina;
+            Agaricomycetes; Cantharellales; Ceratobasidiaceae; Rhizoctonia.
+REFERENCE   1
+  AUTHORS   Kuninaga,S., Natsuaki,T., Takeuchi,T. and Yokosawa,R.
+  TITLE     Sequence variation of the rDNA ITS regions within and between
+            anastomosis groups in Rhizoctonia solani
+  JOURNAL   Curr. Genet. 32 (3), 237-243 (1997)
+   PUBMED   9339350
+REFERENCE   2  (bases 1 to 660)
+  AUTHORS   Kuninaga,S.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (19-DEC-1996) Contact:Shiro Kuninaga Health Sciences
+            University of Hokkaido, General Education; 1757 Kanazawa, Tohbetsu,
+            Hokkaido 061-02, Japan
+FEATURES             Location/Qualifiers
+     source          1..660
+                     /organism="Rhizoctonia solani"
+                     /mol_type="genomic DNA"
+                     /isolate="#1"
+                     /db_xref="taxon:456999"
+                     /note="group: AG-3"
+     rRNA            <1..6
+                     /product="18S ribosomal RNA"
+     rRNA            229..383
+                     /product="5.8S ribosomal RNA"
+     rRNA            656..>660
+                     /product="28S ribosomal RNA"
+ORIGIN      
+        1 aattttaatg aagagtttgg ttgtagctgg cccattaatt taggcatgtg cacacctttc
+       61 tctttcatcc catacacacc tgtgaacttg tgagacagat ggggaattta tttattgttt
+      121 ttttttgtaa tataaagatg ataagtcatt gaacccttct gtctactcaa ctcatataaa
+      181 ctcaatttat tttaaaatga atgtaatgga tgtaacgcat ctaatactaa gtttcaacaa
+      241 cggatctctt ggctctcgca tcgatgaaga acgcagcgaa atgcgataag taatgtgaat
+      301 tgcagaattc agtgaatcat cgaatctttg aacgcacctt gcgctccttg gtattccttg
+      361 gagcatgcct gtttgagtat catgaaatct tcaaaatcaa gtcttttgtt aattcaattg
+      421 gctttgactt tggtattgga ggtctttgca gcttcacacc tgctcctctt tgtacattag
+      481 ctggatctca gtgttatgct tggttccact cagcgtgata agttatctat cgctgaggac
+      541 actgtaaaaa ggtggccaag gtaaatgcag atgaaccgct tctaatagtc cattgacttg
+      601 gacaatattt ttatgatctg atctcaaatc aggtaggact acccgctgaa cttaagcata
+//
+LOCUS       AB000002                 660 bp    DNA     linear   PLN 15-JUL-2009
+DEFINITION  Rhizoctonia solani genes for 18S rRNA, 5.8S rRNA, 28S rRNA, partial
+            and complete sequence, isolate: #30.
+ACCESSION   AB000002
+VERSION     AB000002.1
+KEYWORDS    .
+SOURCE      Rhizoctonia solani
+  ORGANISM  Rhizoctonia solani
+            Eukaryota; Fungi; Dikarya; Basidiomycota; Agaricomycotina;
+            Agaricomycetes; Cantharellales; Ceratobasidiaceae; Rhizoctonia.
+REFERENCE   1
+  AUTHORS   Kuninaga,S., Natsuaki,T., Takeuchi,T. and Yokosawa,R.
+  TITLE     Sequence variation of the rDNA ITS regions within and between
+            anastomosis groups in Rhizoctonia solani
+  JOURNAL   Curr. Genet. 32 (3), 237-243 (1997)
+   PUBMED   9339350
+REFERENCE   2  (bases 1 to 660)
+  AUTHORS   Kuninaga,S.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (19-DEC-1996) Contact:Shiro Kuninaga Health Sciences
+            University of Hokkaido, General Education; 1757 Kanazawa, Tohbetsu,
+            Hokkaido 061-02, Japan
+FEATURES             Location/Qualifiers
+     source          1..660
+                     /organism="Rhizoctonia solani"
+                     /mol_type="genomic DNA"
+                     /isolate="#30"
+                     /db_xref="taxon:456999"
+                     /note="group: AG-3"
+     rRNA            <1..6
+                     /product="18S ribosomal RNA"
+     rRNA            229..383
+                     /product="5.8S ribosomal RNA"
+     rRNA            656..>660
+                     /product="28S ribosomal RNA"
+ORIGIN      
+        1 aattttaatg aagagtttgg ttgtagctgg cccattaatt taggcatgtg cacacctttc
+       61 tctttcatcc catacacacc tgtgaacttg tgagacagat ggggaattta tttattgttt
+      121 ttttttgtaa tataaagatg ataagtcatt gaacccttct gtctactcaa ctcatataaa
+      181 ctcaatttat tttaaaatga atgtaatgga tgtaacgcat ctaatactaa gtttcaacaa
+      241 cggatctctt ggctctcgca tcgatgaaga acgcagcgaa atgcgataag taatgtgaat
+      301 tgcagaattc agtgaatcat cgaatctttg aacgcacctt gcgctccttg gtattccttg
+      361 gagcatgcct gtttgagtat catgaaatct tcaaaatcaa gtcttttgtt aattcaattg
+      421 gctttgactt tggtattgga ggtctttgca gcttcacacc tgctcctctt tgtacattag
+      481 ctggatctca gtgttatgct tggttccact cagcgtgata agttatctat cgctgaggac
+      541 actgtaaaaa ggtggccaag gtaaatgcag atgaaccgct tctaatagtc cattgacttg
+      601 gacaatattt ttatgatctg atctcaaatc aggtaggact acccgctgaa cttaagcata
+//
+LOCUS       AB000003                 641 bp    DNA     linear   PLN 15-JUL-2009
+DEFINITION  Rhizoctonia solani genes for 18S rRNA, 5.8S rRNA, 28S rRNA, partial
+            and complete sequence, isolate: 1556.
+ACCESSION   AB000003
+VERSION     AB000003.1
+KEYWORDS    .
+SOURCE      Rhizoctonia solani
+  ORGANISM  Rhizoctonia solani
+            Eukaryota; Fungi; Dikarya; Basidiomycota; Agaricomycotina;
+            Agaricomycetes; Cantharellales; Ceratobasidiaceae; Rhizoctonia.
+REFERENCE   1
+  AUTHORS   Kuninaga,S., Natsuaki,T., Takeuchi,T. and Yokosawa,R.
+  TITLE     Sequence variation of the rDNA ITS regions within and between
+            anastomosis groups in Rhizoctonia solani
+  JOURNAL   Curr. Genet. 32 (3), 237-243 (1997)
+   PUBMED   9339350
+REFERENCE   2  (bases 1 to 641)
+  AUTHORS   Kuninaga,S.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (19-DEC-1996) Contact:Shiro Kuninaga Health Sciences
+            University of Hokkaido, General Education; 1757 Kanazawa, Tohbetsu,
+            Hokkaido 061-02, Japan
+FEATURES             Location/Qualifiers
+     source          1..641
+                     /organism="Rhizoctonia solani"
+                     /mol_type="genomic DNA"
+                     /strain="AG-7"
+                     /isolate="1556"
+                     /db_xref="taxon:456999"
+     rRNA            <1..5
+                     /product="18S ribosomal RNA"
+     rRNA            208..362
+                     /product="5.8S ribosomal RNA"
+     rRNA            637..>641
+                     /product="28S ribosomal RNA"
+ORIGIN      
+        1 aattaaatgt ggagttggtt gtagctggcc ttgattcatt ttctaggcat gtgcacacct
+       61 tctctttcat ccacacacac ctgtgcacct gtgagacagt tagggtggga ggactttatt
+      121 ggactctctc cctctctgtc tactcaattt ttacacaaac tcaatttact ttaaaatgaa
+      181 tgtcattgat gtaacgcatc taatactaag tttcaacaac ggatctcttg gctctcgcat
+      241 cgatgaagaa cgcagcgaaa tgcgataagt aatgtgaatt gcagaattca gtgaatcatc
+      301 gaatctttga acgcaccttg cgctccttgg tattccttgg agcatgcctg tttgagtatc
+      361 atgaaatctt caaagtgaaa tcttttgtta attcaatcgg ttctactttg gtatttggag
+      421 gtcttttgca gcttcacacc tgctcctctt tgtgcattag ctggatctca gtgttatgct
+      481 tggttccact cagcgtgata agttatctat cgctgaggac actgtaaaaa ggtggccaag
+      541 gtaaatacag atgaaccgct tctaatagtc cattgacttg gacaaatcca tttatgatct
+      601 gatctcaaat caggtaggac tacccgctga acttaagcat a
+//
