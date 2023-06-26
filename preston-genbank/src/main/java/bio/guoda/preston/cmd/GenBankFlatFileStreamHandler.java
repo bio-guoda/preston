@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
 
     public static final String PREFIX_ACCESSION = "ACCESSION   ";
+    public static final String PREFIX_DEFINITION = "DEFINITION  ";
     private static final CharSequence PREFIX_SPECIMEN_VOUCHER = "                     /specimen_voucher=\"";
     private static final CharSequence PREFIX_DB_XREF = "                     /db_xref=\"";
     private static final CharSequence PREFIX_ORGANISM = "                     /organism=\"";
@@ -51,14 +52,10 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
             if (charset != null) {
                 int lineStart = -1;
                 int lineFinish = -1;
+                StringBuilder definition = new StringBuilder();
+                AtomicBoolean inDefinition = new AtomicBoolean(false);
                 ObjectNode objectNode = new ObjectMapper().createObjectNode();
 
-                String accession = null;
-                String specimenVoucher = null;
-                String taxonId = null;
-                String host = null;
-                String country = null;
-                String organism = null;
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is, charset));
 
                 for (int lineNumber = 1; contentStreamHandler.shouldKeepProcessing(); ++lineNumber) {
@@ -69,6 +66,8 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
                         if (StringUtils.startsWith(line, "LOCUS")) {
                             lineStart = lineNumber;
                             objectNode.removeAll();
+                            inDefinition.set(false);
+                            definition = new StringBuilder();
                         } else if (StringUtils.startsWith(line, "//")) {
                             lineFinish = lineNumber;
                             if (lineFinish > lineStart) {
@@ -76,7 +75,12 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
                                 objectNode.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf("genbank-flatfile"));
                             }
                         } else if (StringUtils.startsWith(line, PREFIX_ACCESSION)) {
+                            inDefinition.set(false);
                             setValue(objectNode, line, "accession", PREFIX_ACCESSION);
+                            setValue(objectNode, definition.toString(), "definition", "");
+                        } else if (StringUtils.startsWith(line, PREFIX_DEFINITION)) {
+                            inDefinition.set(true);
+                            definition.append(StringUtils.substring(line, PREFIX_DEFINITION.length()));
                         } else if (StringUtils.startsWith(line, PREFIX_SPECIMEN_VOUCHER)) {
                             setValueForFeature(objectNode, line, "specimen_voucher", PREFIX_SPECIMEN_VOUCHER);
                         } else if (StringUtils.startsWith(line, PREFIX_HOST)) {
@@ -87,6 +91,8 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
                             setValueForFeature(objectNode, line, "country", PREFIX_COUNTRY);
                         } else if (StringUtils.startsWith(line, PREFIX_ORGANISM)) {
                             setValueForFeature(objectNode, line, "organism", PREFIX_ORGANISM);
+                        } else if (inDefinition.get()) {
+                            definition.append(" ").append(StringUtils.trim(line));
                         }
 
                         if (lineFinish > lineStart) {

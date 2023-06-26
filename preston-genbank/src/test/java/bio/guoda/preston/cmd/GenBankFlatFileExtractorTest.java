@@ -129,8 +129,9 @@ public class GenBankFlatFileExtractorTest {
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:gz:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L11-L58"));
         assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("genbank-flatfile"));
         assertThat(taxonNode.get("accession").asText(), is("AB000001"));
-        assertThat(taxonNode.get("dbXref").asText(), is("taxon:456999"));
+        assertThat(taxonNode.get("db_xref").asText(), is("taxon:456999"));
         assertThat(taxonNode.get("organism").asText(), is("Rhizoctonia solani"));
+        assertThat(taxonNode.get("definition").asText(), is("Rhizoctonia solani genes for 18S rRNA, 5.8S rRNA, 28S rRNA, partial and complete sequence, isolate: #1."));
 
 
 
