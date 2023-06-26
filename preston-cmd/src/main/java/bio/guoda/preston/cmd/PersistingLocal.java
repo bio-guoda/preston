@@ -51,7 +51,7 @@ public class PersistingLocal extends Cmd {
     private KeyToPath keyToPathLocal = null;
 
     @CommandLine.Option(
-            names = {"--provenanceRoot", "--provenanceAnchor", "--anchor", "-r"},
+            names = {"--anchor", "-r", "--provenance-root", "--provenance-anchor"},
             defaultValue = "urn:uuid:" + BIODIVERSITY_DATASET_GRAPH_UUID_STRING,
             description = "specify the provenance root/anchor of the command. By default, any available data graph will be traversed up to it's most recent additions. If the provenance root is set, only specified provenance signature and their origins are included in the scope."
     )
