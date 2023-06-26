@@ -54,8 +54,7 @@ public class SelectedLinesReader extends Reader {
                     }
                 }
 
-                // To preserve existing behavior, do not print the final newline character
-                if (print && !done) {
+                if (print) {
                     return ch;
                 }
             }

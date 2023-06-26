@@ -27,6 +27,7 @@ public class SelectedLinesReaderTest {
         assertEquals('1', reader.read());
         assertEquals('\n', reader.read());
         assertEquals('2', reader.read());
+        assertEquals('\n', reader.read());
         assertEquals(-1, reader.read());
     }
 
@@ -38,6 +39,7 @@ public class SelectedLinesReaderTest {
         assertEquals('1', reader.read());
         assertEquals('\n', reader.read());
         assertEquals('3', reader.read());
+        assertEquals('\n', reader.read());
         assertEquals(-1, reader.read());
     }
 
