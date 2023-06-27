@@ -71,12 +71,14 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
                         } else if (StringUtils.startsWith(line, "//")) {
                             lineFinish = lineNumber;
                             if (lineFinish > lineStart) {
-                                objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf("line:" + iriString + "!/L" + lineStart + "-" + "L" + lineFinish));
-                                objectNode.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf("genbank-flatfile"));
+                                setValue(objectNode, "http://www.w3.org/ns/prov#wasDerivedFrom", "line:" + iriString + "!/L" + lineStart + "-" + "L" + lineFinish);
+                                setValue(objectNode, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "genbank-flatfile");
                             }
                         } else if (StringUtils.startsWith(line, PREFIX_ACCESSION)) {
                             inDefinition.set(false);
-                            setValue(objectNode, line, "accession", PREFIX_ACCESSION);
+                            String value = getValueWithLinePrefix(line, PREFIX_ACCESSION);
+                            setValue(objectNode, "accession", value);
+                            setValue(objectNode, "http://www.w3.org/2000/01/rdf-schema#seeAlso", String.format("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=%s&rettype=gb&retmode=text", value));
                             setValue(objectNode, definition.toString(), "definition", "");
                         } else if (StringUtils.startsWith(line, PREFIX_DEFINITION)) {
                             inDefinition.set(true);
@@ -119,23 +121,27 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
                                     CharSequence keyValue) {
         int end = line.length() - 1;
         int start = keyValue.length();
-        setValue(objectNode, line, key, start, end);
+        setValue(objectNode, key, StringUtils.trim(
+                StringUtils.substring(line, start, end)));
     }
 
-    private void setValue(ObjectNode objectNode, String line, String key, int start, int end) {
-        objectNode.set(key,
-                TextNode.valueOf(
-                        StringUtils.trim(
-                                StringUtils.substring(line, start, end))));
+    private void setValue(ObjectNode objectNode, String key, String value) {
+        objectNode.set(key, TextNode.valueOf(value));
     }
 
     private void setValue(ObjectNode objectNode,
                           String line,
                           String key,
                           CharSequence prefix) {
+        String value = getValueWithLinePrefix(line, prefix);
+        setValue(objectNode, key, value);
+    }
+
+    private static String getValueWithLinePrefix(String line, CharSequence prefix) {
         int start = prefix.length();
         int end = line.length();
-        setValue(objectNode, line, key, start, end);
+        return StringUtils.trim(
+                StringUtils.substring(line, start, end));
     }
 
     @Override
