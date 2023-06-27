@@ -15,8 +15,9 @@
 
     <properties>
         <asciidoctor-maven-plugin.version>2.2.2</asciidoctor-maven-plugin.version>
-        <cmd.class>bio.guoda.preston.Preston</cmd.class>
+        <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
         <asciidoctorj.version>2.5.3</asciidoctorj.version>
+        <cmd.class>bio.guoda.preston.Preston</cmd.class>
         <generated.docs.dir>${project.build.outputDirectory}/bio/guoda/${project.artifactId}/docs</generated.docs.dir>
     </properties>
 
@@ -129,50 +130,47 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
+                <version>${exec-maven-plugin.version}</version>
                 <executions>
                     <execution>
+                        <id>generate-manpages</id>
                         <phase>process-classes</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>${cmd.class}</argument>
+                                <argument>gen-manpage</argument>
+                                <argument>--outdir</argument>
+                                <argument>${generated.docs.dir}/adoc</argument>
+                            </arguments>
+                        </configuration>
                     </execution>
-                </executions>
-                <configuration>
-                    <executable>java</executable>
-                    <arguments>
-                        <argument>-classpath</argument>
-                        <classpath/>
-                        <argument>${cmd.class}</argument>
-                        <argument>gen-manpage</argument>
-                        <argument>--outdir</argument>
-                        <argument>${generated.docs.dir}/adoc</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
                     <execution>
+                        <id>generate-completion</id>
                         <phase>process-classes</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-Dpicocli.autocomplete.systemExitOnError</argument>
+                                <argument>-cp</argument>
+                                <classpath/>
+                                <argument>picocli.AutoComplete</argument>
+                                <argument>--force</argument><!-- overwrite if exists -->
+                                <argument>--completionScript</argument>
+                                <argument>${project.build.directory}/preston_completion</argument>
+                                <argument>${cmd.class}</argument>
+                            </arguments>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <executable>java</executable>
-                    <arguments>
-                        <argument>-classpath</argument>
-                        <classpath/>
-                        <argument>${cmd.class}</argument>
-                        <argument>generate-completion</argument>
-                        <argument>--outdir</argument>
-                        <argument>${generated.docs.dir}/adoc</argument>
-                    </arguments>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.asciidoctor</groupId>
@@ -199,30 +197,29 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--<plugin>-->
-                <!--<groupId>com.google.cloud.tools</groupId>-->
-                <!--<artifactId>jib-maven-plugin</artifactId>-->
-                <!--<version>0.9.13</version>-->
-                <!--<configuration>-->
-                    <!--<to>-->
-                        <!--<image>${project.groupId}/${project.artifactId}:${project.version}</image>-->
-                    <!--</to>-->
-                    <!--<container>-->
-                        <!--<args>-->
-                            <!--<arg>update</arg>-->
-                        <!--</args>-->
-                    <!--</container>-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>buildTar</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>0.9.13</version>
+                <configuration>
+                    <to>
+                        <image>${project.groupId}/${project.artifactId}:${project.version}</image>
+                    </to>
+                    <container>
+                        <args>
+                            <arg>update</arg>
+                        </args>
+                    </container>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>buildTar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -274,6 +271,18 @@
                                     <mapper>
                                         <type>perm</type>
                                         <prefix>/usr/share/${project.artifactId}/bin</prefix>
+                                        <filemode>755</filemode>
+                                        <user>${project.artifactId}</user>
+                                        <group>${project.artifactId}</group>
+                                    </mapper>
+                                </data>
+
+                                <data>
+                                    <src>${project.build.directory}/preston_completion</src>
+                                    <type>file</type>
+                                    <mapper>
+                                        <type>perm</type>
+                                        <prefix>/etc/bash_completion.d/</prefix>
                                         <filemode>755</filemode>
                                         <user>${project.artifactId}</user>
                                         <group>${project.artifactId}</group>

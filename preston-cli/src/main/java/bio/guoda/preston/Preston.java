@@ -32,7 +32,6 @@ import bio.guoda.preston.excel.CmdExcelRecordStream;
 import bio.guoda.preston.paradox.CmdParadoxRecordStream;
 import bio.guoda.preston.server.CmdServe;
 import org.apache.commons.rdf.api.IRI;
-import picocli.AutoComplete;
 import picocli.CommandLine;
 import picocli.codegen.docgen.manpage.ManPageGenerator;
 
@@ -70,8 +69,7 @@ import static java.lang.System.exit;
                 CmdBash.class,
                 CmdInstallManual.class,
                 ManPageGenerator.class,
-                CommandLine.HelpCommand.class,
-                AutoComplete.GenerateCompletion.class
+                CommandLine.HelpCommand.class
         })
 
 public class Preston {
@@ -86,13 +84,7 @@ public class Preston {
     }
 
     public static int run(String[] args) {
-        CommandLine cmd = getCommandLine();
-        cmd.getSubcommands()
-                .get("generate-completion")
-                .getCommandSpec()
-                .usageMessage()
-                .hidden(true);
-        return cmd.execute(args);
+        return getCommandLine().execute(args);
     }
 
     public static CommandLine getCommandLine() {
