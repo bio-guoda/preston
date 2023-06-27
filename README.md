@@ -8,6 +8,9 @@ When using Preston, please cite:
 
 MJ Elliott, JH Poelen, JAB Fortes (2020). Toward Reliable Biodiversity Dataset References. Ecological Informatics. https://doi.org/10.1016/j.ecoinf.2020.101132
 
+and/or
+
+Elliott, M.J., Poelen, J.H. & Fortes, J.A.B. Signing data citations enables data verification and citation persistence. Sci Data 10, 419 (2023). https://doi.org/10.1038/s41597-023-02230-y
 
 [`toc`](#table-of-contents) / [`quickstart`](#quickstart) / [`introduction`](#introduction) / [`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding) / [`(data) publications`](#publications)
 
@@ -705,13 +708,9 @@ A list of publications using Preston or exploring the idea of using content-base
 
 MJ Elliott, JH Poelen, JAB Fortes (2020). Toward Reliable Biodiversity Dataset References. Ecological Informatics. https://doi.org/10.1016/j.ecoinf.2020.101132
 
-### In Prep
-
-Elliott, M. J., Poelen, J. H., & Fortes, J. (2022, August 29). Signed Citations: Making Persistent and Verifiable Citations of Digital Scientific Content. https://doi.org/10.31222/osf.io/wycjn
+Elliott, M.J., Poelen, J.H. & Fortes, J.A.B. Signing data citations enables data verification and citation persistence. <em>Sci Data</em> 10, 419 (2023). [https://doi.org/10.1038/s41597-023-02230-y](https://doi.org/10.1038/s41597-023-02230-y)
 
 ### Other Conference Presentations / Papers
-
-
 
 Poelen, Jorrit H.; Schulz, Kayja; Trei, Kelli J.; Rees, Jonathan A. (2019). Finding Identification of Keys in the Biodiversity Heritage Library. Biodiversity Heritage Library (BHL) and Global Names (GN) Workshop. Champaign, Illinois. Zenodo. http://doi.org/10.5281/zenodo.3311815 . Status = PUBLISHED; Acknowledgement of Federal Support = Yes
 
