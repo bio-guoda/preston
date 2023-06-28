@@ -1,16 +1,17 @@
 # Preston*: a biodiversity dataset tracker
 
-[![github action test](https://github.com/bio-guoda/preston/actions/workflows/maven.yml/badge.svg)](https://github.com/bio-guoda/preston/actions/workflows/maven.yml) [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1410544.svg)](https://doi.org/10.5281/zenodo.1410544)
+[![github action test](https://github.com/bio-guoda/preston/actions/workflows/maven.yml/badge.svg)](https://github.com/bio-guoda/preston/actions/workflows/maven.yml) [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1410544.svg)](https://doi.org/10.5281/zenodo.1410544) [![SWH](https://archive.softwareheritage.org/badge/swh:1:dir:dc8541724e2ef24935762a206c43afda97af1f9f/)](https://archive.softwareheritage.org/swh:1:dir:dc8541724e2ef24935762a206c43afda97af1f9f;origin=https://github.com/bio-guoda/preston;visit=swh:1:snp:6d8f8de5f4d16a339f600e4bf15f96550aa82fac;anchor=swh:1:rev:2a4f0e2a4d8f0f6a50584792bfe8dad0541746bc)
 
  *Named after [Frank W. Preston (1896-1989)](https://en.wikipedia.org/wiki/Frank_W._Preston) and the Prestonian shortfall, one of the "[Seven Shortfalls that Beset Large-Scale Knowledge of Biodiversity](https://doi.org/10.1146/annurev-ecolsys-112414-054400)" as described by [Hortal et al. 2015](https://doi.org/10.1146/annurev-ecolsys-112414-054400).
 
 When using Preston, please cite:
 
-MJ Elliott, JH Poelen, JAB Fortes (2020). Toward Reliable Biodiversity Dataset References. Ecological Informatics. https://doi.org/10.1016/j.ecoinf.2020.101132
+MJ Elliott, JH Poelen, JAB Fortes (2020). Toward Reliable Biodiversity Dataset References. Ecological Informatics. https://doi.org/10.1016/j.ecoinf.2020.101132 [hash://sha256/136c3c1808bcf463bb04b11622bb2e7b5fba28f5be1fc258c5ea55b3b84f482c](https://linker.bio/hash://sha256/136c3c1808bcf463bb04b11622bb2e7b5fba28f5be1fc258c5ea55b3b84f482c) 
 
 and/or
 
-Elliott, M.J., Poelen, J.H. & Fortes, J.A.B. Signing data citations enables data verification and citation persistence. Sci Data 10, 419 (2023). https://doi.org/10.1038/s41597-023-02230-y
+Elliott, M.J., Poelen, J.H. & Fortes, J.A.B. Signing data citations enables data verification and citation persistence. Sci Data 10, 419 (2023). https://doi.org/10.1038/s41597-023-02230-y [hash://sha256/f849c870565f608899f183ca261365dce9c9f1c5441b1c779e0db49df9c2a19d](https://linker.bio/hash://sha256/f849c870565f608899f183ca261365dce9c9f1c5441b1c779e0db49df9c2a19d) 
+
 
 [`toc`](#table-of-contents) / [`quickstart`](#quickstart) / [`introduction`](#introduction) / [`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding) / [`(data) publications`](#publications)
 
