@@ -28,6 +28,7 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
     private static final CharSequence PREFIX_SPECIMEN_VOUCHER = "                     /specimen_voucher=\"";
     private static final CharSequence PREFIX_DB_XREF = "                     /db_xref=\"";
     private static final CharSequence PREFIX_ORGANISM = "                     /organism=\"";
+    private static final CharSequence PREFIX_ISOLATION_SOURCE = "                     /isolation_source=\"";
     private static final CharSequence PREFIX_HOST = "                     /host=\"";
     private static final CharSequence PREFIX_COUNTRY = "                     /country=\"";
 
@@ -93,6 +94,8 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
                             setValueForFeature(objectNode, line, "country", PREFIX_COUNTRY);
                         } else if (StringUtils.startsWith(line, PREFIX_ORGANISM)) {
                             setValueForFeature(objectNode, line, "organism", PREFIX_ORGANISM);
+                        } else if (StringUtils.startsWith(line, PREFIX_ISOLATION_SOURCE)) {
+                            setValueForFeature(objectNode, line, "isolation_source", PREFIX_ISOLATION_SOURCE);
                         } else if (inDefinition.get()) {
                             definition.append(" ").append(StringUtils.trim(line));
                         }
