@@ -101,7 +101,7 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
                             definition.append(" ").append(StringUtils.trim(line));
                         }
 
-                        if (lineFinish > lineStart) {
+                        if (lineFinish > lineStart && objectNode.has("accession")) {
                             IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), outputStream);
                             IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
                             lineStart = -1;
