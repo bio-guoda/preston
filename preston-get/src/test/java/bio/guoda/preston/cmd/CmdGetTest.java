@@ -202,13 +202,11 @@ public class CmdGetTest {
         // see https://github.com/bio-guoda/preston/issues/248
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         final CmdGet cmd = new CmdGet();
-        String path = "/bio/guoda/preston/cmd/test-alias/2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a";
+        String pth = "/bio/guoda/preston/cmd/alias/2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a";
         File resource = new File(getClass().getResource(path).toURI());
         File dataDir = resource.getParentFile().getParentFile().getParentFile();
 
-        String absolutePath = dataDir.getAbsolutePath();
-        System.out.println(absolutePath);
-        cmd.setLocalDataDir(absolutePath);
+        cmd.setLocalDataDir(dataDir.getAbsolutePath());
         cmd.setOutputStream(out);
         cmd.setContentIdsOrAliases(Collections.singletonList(toIRI("https://bing.com")));
 
