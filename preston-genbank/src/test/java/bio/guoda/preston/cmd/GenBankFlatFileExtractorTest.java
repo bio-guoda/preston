@@ -79,7 +79,7 @@ public class GenBankFlatFileExtractorTest {
 
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L11-L58"));
         assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("genbank-flatfile"));
-        assertThat(taxonNode.get("http://www.w3.org/2000/01/rdf-schema#seeAlso").asText(), is("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=AB000001&rettype=gb&retmode=text"));
+        assertThat(taxonNode.get("http://www.w3.org/2000/01/rdf-schema#seeAlso").asText(), is("https://ncbi.nlm.nih.gov/nuccore/AB000001"));
 
     }
     @Test
