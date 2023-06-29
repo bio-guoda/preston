@@ -10,6 +10,7 @@ import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.commons.compress.parallel.InputStreamSupplier;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ProxyInputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
@@ -28,9 +29,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
 
 public class CmdGetTest {
 
@@ -192,6 +195,35 @@ public class CmdGetTest {
 
         assertThat(cmd.shouldKeepProcessing(), is(false));
         assertThat(askedToStop.get(), is(true));
+    }
+
+    @Test
+    public void retrieveContentByAlias() throws URISyntaxException {
+        // see https://github.com/bio-guoda/preston/issues/248
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final CmdGet cmd = new CmdGet();
+        String path = "/bio/guoda/preston/cmd/cat-alias-issue-248/data/2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a";
+        File resource = new File(getClass().getResource(path).toURI());
+        File dataDir = resource.getParentFile().getParentFile().getParentFile();
+
+        cmd.setLocalDataDir(dataDir.getAbsolutePath());
+        cmd.setOutputStream(out);
+        cmd.setCacheEnabled(false);
+        cmd.setContentIdsOrAliases(Collections.singletonList(toIRI("https://bing.com")));
+
+        try {
+            cmd.run();
+        } catch (RuntimeException ex) {
+            Throwable cause = ex.getCause();
+            assertThat(cause, instanceOf(StopProcessingException.class));
+        }
+
+        assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
+                not(containsString("duckduckgo.com")));
+        assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
+                containsString("bing.com"));
+
+
     }
 
 

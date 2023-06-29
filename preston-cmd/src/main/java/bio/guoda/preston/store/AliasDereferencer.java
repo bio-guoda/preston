@@ -36,7 +36,7 @@ public class AliasDereferencer implements BlobStoreReadOnly {
             AliasFindingState aliasFindingState = new AliasFindingState(persisting);
             attemptToFindAlias(
                     firstAliasHash,
-                    AliasUtil.aliasSelectorFor(firstAliasHash.get()),
+                    AliasUtil.aliasSelectorFor(iri),
                     aliasFindingState
             );
             attemptToFindInnerAlias(firstAliasHash, iri);

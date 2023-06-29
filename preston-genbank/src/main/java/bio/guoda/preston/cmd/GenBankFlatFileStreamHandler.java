@@ -80,6 +80,7 @@ public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
                             String value = getValueWithLinePrefix(line, PREFIX_ACCESSION);
                             setValue(objectNode, "accession", value);
                             setValue(objectNode, "http://www.w3.org/2000/01/rdf-schema#seeAlso", String.format("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=%s&rettype=gb&retmode=text", value));
+                            setValue(objectNode, "http://www.w3.org/2000/01/rdf-schema#seeAlso", String.format("https://ncbi.nlm.nih.gov/nuccore/%s", value));
                             setValue(objectNode, definition.toString(), "definition", "");
                         } else if (StringUtils.startsWith(line, PREFIX_DEFINITION)) {
                             inDefinition.set(true);
