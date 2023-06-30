@@ -64,7 +64,6 @@ public class RegistryReaderSPARQLTest {
 
         HttpGet get = new HttpGet(url);
         get.setHeader(HttpHeaders.ACCEPT, "application/sparql-results+json");
-        get.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
 
         InputStream inputStream = ResourcesHTTP.asInputStream(
                 toIRI(url),
