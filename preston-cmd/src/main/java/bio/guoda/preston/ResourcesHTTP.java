@@ -4,7 +4,6 @@ import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpHeaders;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.config.RequestConfig;
@@ -63,7 +62,6 @@ public class ResourcesHTTP {
                                             List<Integer> ignoreCodes,
                                             DerefProgressListener listener) throws IOException {
         HttpGet get = new HttpGet(URI.create(dataURI.getIRIString()));
-        get.setHeader(HttpHeaders.ACCEPT_ENCODING, "gzip");
         return asInputStream(dataURI, get, ignoreCodes, listener);
     }
 
@@ -136,6 +134,8 @@ public class ResourcesHTTP {
 
             return HttpClientBuilder
                     .create()
+                    // see https://github.com/bio-guoda/preston/issues/249
+                    .disableContentCompression()
                     // see https://github.com/bio-guoda/preston/issues/25
                     .setSSLHostnameVerifier(new NoopHostnameVerifier())
                     .setSSLContext(build)
