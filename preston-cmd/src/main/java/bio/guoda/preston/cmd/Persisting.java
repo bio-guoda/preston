@@ -13,6 +13,7 @@ import bio.guoda.preston.store.KeyTo1LevelDataOnePath;
 import bio.guoda.preston.store.KeyTo1LevelPath;
 import bio.guoda.preston.store.KeyTo1LevelSoftwareHeritageAutoDetectPath;
 import bio.guoda.preston.store.KeyTo1LevelSoftwareHeritagePath;
+import bio.guoda.preston.store.KeyTo1LevelWikiMediaCommonsPath;
 import bio.guoda.preston.store.KeyTo1LevelZenodoBucket;
 import bio.guoda.preston.store.KeyTo1LevelZenodoPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
@@ -114,7 +115,8 @@ public class Persisting extends PersistingLocal {
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritagePath(uri)),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri)),
                                 Pair.of(uri, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, getProgressListener())))),
-                                Pair.of(uri, new KeyTo1LevelDataOnePath(uri, getDerefStream(uri, getProgressListener())))
+                                Pair.of(uri, new KeyTo1LevelDataOnePath(uri, getDerefStream(uri, getProgressListener()))),
+                                Pair.of(uri, new KeyTo1LevelWikiMediaCommonsPath(uri, getDerefStream(uri, getProgressListener())))
                         ));
 
         List<KeyValueStoreReadOnly> keyValueStoreRemotes =
