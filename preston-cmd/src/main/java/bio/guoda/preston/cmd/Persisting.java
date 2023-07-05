@@ -55,7 +55,7 @@ public class Persisting extends PersistingLocal {
     @CommandLine.Option(
             names = {"--remote", "--remotes", "--include", "--repos", "--repositories"},
             split = ",",
-            description = "Included repositories dependency (e.g., https://linker.bio/,https://softwareheritage.org)"
+            description = "Included repository dependencies (e.g., https://linker.bio/,https://softwareheritage.org,https://wikimedia.org,https://dataone.org,https://zenodo.org)"
     )
 
     private List<URI> remotes = new ArrayList<>();
