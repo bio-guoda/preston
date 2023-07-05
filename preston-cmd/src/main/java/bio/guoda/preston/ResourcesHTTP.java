@@ -6,6 +6,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -125,6 +126,7 @@ public class ResourcesHTTP {
 
     private static CloseableHttpClient initClient(RequestConfig.Builder builder) {
         RequestConfig config = builder
+                .setCookieSpec(CookieSpecs.STANDARD)
                 .build();
 
         try {
