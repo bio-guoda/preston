@@ -8,22 +8,14 @@ import org.apache.commons.io.output.ProxyOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cmd implements ProcessorState {
 
-    private ProcessorState state = new ProcessorState() {
-        private AtomicBoolean shouldKeepProcessing = new AtomicBoolean(true);
-        @Override
-        public void stopProcessing() {
-            shouldKeepProcessing.set(false);
-        }
-
-        @Override
-        public boolean shouldKeepProcessing() {
-            return shouldKeepProcessing.get();
-        }
-    };
+    private final List<ProcessorState> states = new ArrayList<ProcessorState>() {{
+        add(new ProcessorStateImpl());
+    }};
 
     private OutputStream outputStream = new ProxyOutputStream(System.out) {
         @Override
@@ -50,18 +42,25 @@ public class Cmd implements ProcessorState {
 //
 //    }
 
-    public void setState(ProcessorState state) {
-        this.state = state;
+    public void addState(ProcessorState state) {
+        states.add(state);
     }
 
     @Override
     public void stopProcessing() {
-        state.stopProcessing();
+        states.forEach(ProcessorState::stopProcessing);
     }
 
     @Override
     public boolean shouldKeepProcessing() {
-        return state.shouldKeepProcessing();
+        boolean keepProcessing = true;
+        for (ProcessorState state : states) {
+            if (!state.shouldKeepProcessing()) {
+                keepProcessing = false;
+                break;
+            }
+        }
+        return keepProcessing;
     }
 
     public OutputStream getOutputStream() {

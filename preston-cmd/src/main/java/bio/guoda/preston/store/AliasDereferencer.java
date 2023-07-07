@@ -3,6 +3,7 @@ package bio.guoda.preston.store;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.cmd.AliasUtil;
 import bio.guoda.preston.cmd.Persisting;
+import bio.guoda.preston.cmd.ProcessorStateImpl;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import org.apache.commons.lang3.StringUtils;
@@ -33,11 +34,9 @@ public class AliasDereferencer implements BlobStoreReadOnly {
         if (HashKeyUtil.isLikelyCompositeHashURI(iri)) {
             firstAliasHash.set(iri);
         } else {
-            AliasFindingState aliasFindingState = new AliasFindingState(persisting);
             attemptToFindAlias(
                     firstAliasHash,
-                    AliasUtil.aliasSelectorFor(iri),
-                    aliasFindingState
+                    AliasUtil.aliasSelectorFor(iri)
             );
             attemptToFindInnerAlias(firstAliasHash, iri);
         }
@@ -52,7 +51,10 @@ public class AliasDereferencer implements BlobStoreReadOnly {
             if (HashKeyUtil.isLikelyCompositeURI(iri)) {
                 IRI innerAlias = HashKeyUtil.extractInnerURI(iri);
                 if (!innerAlias.equals(iri)) {
-                    attemptToFindAlias(firstAliasHash, AliasUtil.aliasSelectorFor(innerAlias), new AliasFindingState(persisting));
+                    attemptToFindAlias(
+                            firstAliasHash,
+                            AliasUtil.aliasSelectorFor(innerAlias)
+                    );
                     if (firstAliasHash.get() != null) {
                         String compositeHashURIString = StringUtils.replace(iri.getIRIString(), innerAlias.getIRIString(), firstAliasHash.get().getIRIString());
                         firstAliasHash.set(RefNodeFactory.toIRI(compositeHashURIString));
@@ -64,16 +66,19 @@ public class AliasDereferencer implements BlobStoreReadOnly {
     }
 
     private void attemptToFindAlias(AtomicReference<IRI> firstAliasHash,
-                                    Predicate<Quad> selector,
-                                    final AliasFindingState processorState
+                                    Predicate<Quad> selector
     ) {
+        ProcessorState aliasFindingState = new ProcessorStateImpl();
+
         AliasUtil.findSelectedAlias(
                 new StatementsListenerAdapter() {
                     @Override
                     public void on(Quad statement) {
-                        if (statement.getObject() instanceof IRI) {
-                            firstAliasHash.set((IRI) statement.getObject());
-                            processorState.foundAlias();
+                        if (aliasFindingState.shouldKeepProcessing()) {
+                            if (statement.getObject() instanceof IRI) {
+                                firstAliasHash.set((IRI) statement.getObject());
+                                aliasFindingState.stopProcessing();
+                            }
                         }
                     }
                 },

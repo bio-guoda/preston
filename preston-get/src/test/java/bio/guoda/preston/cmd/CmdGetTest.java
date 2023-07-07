@@ -237,7 +237,7 @@ public class CmdGetTest {
         cmd.run();
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
-                is("bar2"));
+                is("bar2\n"));
     }
 
     @Test
