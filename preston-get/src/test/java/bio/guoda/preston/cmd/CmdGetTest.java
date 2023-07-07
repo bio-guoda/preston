@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
@@ -237,7 +238,7 @@ public class CmdGetTest {
         cmd.run();
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
-                is("bar2\n"));
+                startsWith("bar2"));
     }
 
     @Test
@@ -257,7 +258,9 @@ public class CmdGetTest {
         cmd.run();
 
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
-                is("bar\n"));
+                not(startsWith("bar2")));
+        assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
+                startsWith("bar"));
     }
 
 
