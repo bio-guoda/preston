@@ -220,5 +220,45 @@ public class CmdGetTest {
 
     }
 
+    @Test
+    public void retrieveLatestContentByAlias() throws URISyntaxException {
+        // see https://github.com/bio-guoda/preston/issues/248
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final CmdGet cmd = new CmdGet();
+        String path = "/bio/guoda/preston/cmd/alias-foo/30/84/30845fefa4a854fc67da113a06759f86902b591bf0708bd625e611680aa1c9c4";
+        File resource = new File(getClass().getResource(path).toURI());
+        File dataDir = resource.getParentFile().getParentFile().getParentFile();
+
+        cmd.setLocalDataDir(dataDir.getAbsolutePath());
+        cmd.setOutputStream(out);
+        cmd.setContentIdsOrAliases(Collections.singletonList(toIRI("file:///tmp/preston-test/foo.txt")));
+        cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/30845fefa4a854fc67da113a06759f86902b591bf0708bd625e611680aa1c9c4"));
+
+        cmd.run();
+
+        assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
+                is("bar2"));
+    }
+
+    @Test
+    public void retrieveLatestContentByAliasWithAnchor() throws URISyntaxException {
+        // see https://github.com/bio-guoda/preston/issues/248
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final CmdGet cmd = new CmdGet();
+        String path = "/bio/guoda/preston/cmd/alias-foo/b1/93/b1937f9fb1d84b02f2e0cd6e11018688fd009280394a7c1fd264c10de9b14998";
+        File resource = new File(getClass().getResource(path).toURI());
+        File dataDir = resource.getParentFile().getParentFile().getParentFile();
+
+        cmd.setLocalDataDir(dataDir.getAbsolutePath());
+        cmd.setOutputStream(out);
+        cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/b1937f9fb1d84b02f2e0cd6e11018688fd009280394a7c1fd264c10de9b14998"));
+        cmd.setContentIdsOrAliases(Collections.singletonList(toIRI("file:///tmp/preston-test/foo.txt")));
+
+        cmd.run();
+
+        assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
+                is("bar\n"));
+    }
+
 
 }
