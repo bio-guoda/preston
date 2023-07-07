@@ -12,7 +12,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Cmd implements ProcessorState {
 
-    private AtomicBoolean shouldKeepProcessing = new AtomicBoolean(true);
+    private ProcessorState state = new ProcessorState() {
+        private AtomicBoolean shouldKeepProcessing = new AtomicBoolean(true);
+        @Override
+        public void stopProcessing() {
+            shouldKeepProcessing.set(false);
+        }
+
+        @Override
+        public boolean shouldKeepProcessing() {
+            return shouldKeepProcessing.get();
+        }
+    };
 
     private OutputStream outputStream = new ProxyOutputStream(System.out) {
         @Override
@@ -39,14 +50,18 @@ public class Cmd implements ProcessorState {
 //
 //    }
 
+    public void setState(ProcessorState state) {
+        this.state = state;
+    }
+
     @Override
     public void stopProcessing() {
-        shouldKeepProcessing.set(false);
+        state.stopProcessing();
     }
 
     @Override
     public boolean shouldKeepProcessing() {
-        return shouldKeepProcessing.get();
+        return state.shouldKeepProcessing();
     }
 
     public OutputStream getOutputStream() {
