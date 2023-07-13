@@ -255,7 +255,7 @@
                                 </data>
 
                                 <data>
-                                    <src>${project.build.directory}/preston_completion</src>
+                                    <src>${project.build.directory}/${project.artifactId}_completion</src>
                                     <type>file</type>
                                     <mapper>
                                         <type>perm</type>
