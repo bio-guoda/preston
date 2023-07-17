@@ -10,6 +10,7 @@ import bio.guoda.preston.store.DerefProgressLogger;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.DereferencerContentAddressedTarGZ;
 import bio.guoda.preston.store.KeyTo1LevelDataOnePath;
+import bio.guoda.preston.store.KeyTo1LevelOCIPath;
 import bio.guoda.preston.store.KeyTo1LevelPath;
 import bio.guoda.preston.store.KeyTo1LevelSoftwareHeritageAutoDetectPath;
 import bio.guoda.preston.store.KeyTo1LevelSoftwareHeritagePath;
@@ -116,6 +117,7 @@ public class Persisting extends PersistingLocal {
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri)),
                                 Pair.of(uri, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, getProgressListener())))),
                                 Pair.of(uri, new KeyTo1LevelDataOnePath(uri, getDerefStream(uri, getProgressListener()))),
+                                Pair.of(uri, new KeyTo1LevelOCIPath(uri)),
                                 Pair.of(uri, new KeyTo1LevelWikiMediaCommonsPath(uri, getDerefStream(uri, getProgressListener())))
                         ));
 
