@@ -78,7 +78,7 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
             IRI currentPage = (IRI) getVersion(statement);
             InputStream is = get(currentPage);
             if (is != null) {
-                parseIssues(currentPage, new StatementsEmitterAdapter() {
+                parseIssuesIgnoreUnexpected(currentPage, new StatementsEmitterAdapter() {
                     @Override
                     public void emit(Quad statement) {
                         nodes.add(statement);
@@ -111,23 +111,27 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
                 .forEach(emitter::emit);
     }
 
-    static void parseIssues(IRI currentPage, StatementsEmitter emitter, InputStream in, IRI versionSource) throws IOException {
-        JsonNode jsonNode = new ObjectMapper().readTree(in);
-        ArrayList<Pair<URI, URI>> uris = new ArrayList<>();
-        appendURIs(jsonNode, uris);
+    private static void parseIssuesIgnoreUnexpected(IRI currentPage, StatementsEmitter emitter, InputStream in, IRI versionSource) throws IOException {
+        try {
+            JsonNode jsonNode = new ObjectMapper().readTree(in);
+            ArrayList<Pair<URI, URI>> uris = new ArrayList<>();
+            appendURIs(jsonNode, uris);
 
-        uris.stream().flatMap(uri -> {
-            IRI reference = toIRI(uri.getKey());
-            IRI referenceContext = toIRI(uri.getValue());
-            return Stream.of(
-                    toStatement(versionSource, HAD_MEMBER, reference),
-                    toStatement(versionSource, SEE_ALSO, currentPage),
-                    toStatement(referenceContext, HAD_MEMBER, reference),
-                    toStatement(reference, HAS_VERSION, toBlank())
-            );
-        }).forEach(emitter::emit);
+            uris.stream().flatMap(uri -> {
+                IRI reference = toIRI(uri.getKey());
+                IRI referenceContext = toIRI(uri.getValue());
+                return Stream.of(
+                        toStatement(versionSource, HAD_MEMBER, reference),
+                        toStatement(versionSource, SEE_ALSO, currentPage),
+                        toStatement(referenceContext, HAD_MEMBER, reference),
+                        toStatement(reference, HAS_VERSION, toBlank())
+                );
+            }).forEach(emitter::emit);
 
-        emitNextPageIfNeeded(emitter, versionSource, jsonNode);
+            emitNextPageIfNeeded(emitter, versionSource, jsonNode);
+        } catch (IOException ex) {
+            // ignore malformed json
+        }
     }
 
     public static void appendURIs(JsonNode jsonNode, final List<Pair<URI, URI>> uris) {
