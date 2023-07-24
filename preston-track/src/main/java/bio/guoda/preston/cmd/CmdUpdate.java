@@ -8,6 +8,7 @@ import bio.guoda.preston.process.RegistryReaderChecklistBank;
 import bio.guoda.preston.process.RegistryReaderDOI;
 import bio.guoda.preston.process.RegistryReaderDataONE;
 import bio.guoda.preston.process.RegistryReaderGBIF;
+import bio.guoda.preston.process.RegistryReaderGitHubIssues;
 import bio.guoda.preston.process.RegistryReaderIDigBio;
 import bio.guoda.preston.process.RegistryReaderOBIS;
 import bio.guoda.preston.process.RegistryReaderRSS;
@@ -100,6 +101,7 @@ public class CmdUpdate extends CmdTrack {
                 new RegistryReaderIDigBio(blobStore, queueAsListener),
                 new RegistryReaderChecklistBank(blobStore, queueAsListener),
                 new RegistryReaderGBIF(blobStore, queueAsListener),
+                new RegistryReaderGitHubIssues(blobStore, queueAsListener),
                 new RegistryReaderBioCASE(blobStore, queueAsListener),
                 new RegistryReaderDataONE(blobStore, queueAsListener),
                 new RegistryReaderRSS(blobStore, queueAsListener),
