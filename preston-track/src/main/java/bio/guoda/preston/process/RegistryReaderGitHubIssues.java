@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -75,9 +76,9 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
         String versionSource = versionSourceIRI.getIRIString();
         Matcher matcher = PATTERN_GH_ORG_REPO.matcher(versionSource);
         if (matcher.matches()) {
+            String org = matcher.group("org");
+            String repo = matcher.group("repo");
             if (StringUtils.isBlank(matcher.group("issueNumber"))) {
-                String org = matcher.group("org");
-                String repo = matcher.group("repo");
                 if (StringUtils.endsWith(versionSource, MOST_RECENT_ISSUE_QUERY)) {
                     emitIssueRequestsFor(statement, org, repo, this);
                 } else {
@@ -89,7 +90,16 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
                     );
                 }
             } else {
-                handleIssues(statement);
+                if (StringUtils.startsWith(versionSource, API_PREFIX)) {
+                    handleIssues(statement, matcher);
+                } else {
+                    Stream<Quad> requestIssueComments = createRequestForIssueComments(org, repo, Integer.parseInt(matcher.group("issueNumber")));
+                    ActivityUtil.emitAsNewActivity(
+                            requestIssueComments,
+                            this,
+                            statement.getGraphName()
+                    );
+                }
             }
         }
     }
@@ -125,18 +135,31 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
             JsonNode issueNumber = node.get("number");
             if (issueNumber.isInt()) {
                 int mostRecentIssue = issueNumber.asInt();
-                Stream<Quad> statements = IntStream
-                        .rangeClosed(1, mostRecentIssue)
-                        .mapToObj(issue -> {
-                            IRI issueCommentsRequest = toIRI(API_PREFIX + org + "/" + repo + "/issues/" + issue + "/comments");
-                            return toStatement(issueCommentsRequest, HAS_VERSION, toBlank());
-                        });
-                ActivityUtil.emitAsNewActivity(statements, emitter, Optional.empty());
+                emitRequestForIssueComments(emitter, org, repo, mostRecentIssue);
             }
         }
     }
 
-    private void handleIssues(Quad statement) {
+    private static void emitRequestForIssueComments(StatementsEmitter emitter, String org, String repo, int mostRecentIssue) {
+        Stream<Quad> statements = IntStream
+                .rangeClosed(1, mostRecentIssue)
+                .mapToObj(issue -> createRequestForIssueComments(org, repo, issue))
+                .flatMap(Function.identity());
+        ActivityUtil.emitAsNewActivity(statements, emitter, Optional.empty());
+    }
+
+    private static Stream<Quad> createRequestForIssueComments(String org, String repo, int issue) {
+        String issueRequestPrefix = API_PREFIX + org + "/" + repo + "/issues/" + issue;
+        IRI issueRequest = toIRI(issueRequestPrefix);
+        IRI issueCommentsRequest = toIRI(issueRequestPrefix + "/comments");
+        return Stream.of(
+                toStatement(issueRequest, HAS_VERSION, toBlank()),
+                toStatement(issueRequest, HAD_MEMBER, issueCommentsRequest),
+                toStatement(issueCommentsRequest, HAS_VERSION, toBlank())
+        );
+    }
+
+    private void handleIssues(Quad statement, Matcher matcher) {
         List<Quad> nodes = new ArrayList<>();
         try {
             IRI currentPage = (IRI) getVersion(statement);
@@ -155,21 +178,23 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
         ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
     }
 
-    private static void parseIssuesIgnoreUnexpected(IRI currentPage, StatementsEmitter emitter, InputStream in, IRI
-            versionSource) throws IOException {
+    private static void parseIssuesIgnoreUnexpected(
+            IRI currentPage,
+            StatementsEmitter emitter,
+            InputStream in,
+            IRI versionSource) {
         try {
             JsonNode jsonNode = new ObjectMapper().readTree(in);
             ArrayList<Pair<URI, URI>> uris = new ArrayList<>();
             appendURIs(jsonNode, uris);
 
             uris.stream().flatMap(uri -> {
-                IRI reference = toIRI(uri.getKey());
-                IRI referenceContext = toIRI(uri.getValue());
+                IRI destination = toIRI(uri.getKey());
+                IRI issueContext = toIRI(uri.getValue());
                 return Stream.of(
-                        toStatement(versionSource, HAD_MEMBER, reference),
-                        toStatement(versionSource, SEE_ALSO, currentPage),
-                        toStatement(referenceContext, HAD_MEMBER, reference),
-                        toStatement(reference, HAS_VERSION, toBlank())
+                        toStatement(currentPage, HAD_MEMBER, destination),
+                        toStatement(issueContext, HAD_MEMBER, destination),
+                        toStatement(destination, HAS_VERSION, toBlank())
                 );
             }).forEach(emitter::emit);
 

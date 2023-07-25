@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 
+import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
@@ -66,6 +67,19 @@ public class RegistryReaderGitHubIssuesTest {
     @Test
     public void matchingIssueAPIURLs() {
         String s = "https://api.github.com/repos/globalbioticinteractions/globalbioticinteractions/issues/904";
+
+        Matcher matcher = RegistryReaderGitHubIssues.PATTERN_GH_ORG_REPO.matcher(s);
+
+        assertTrue(matcher.matches());
+
+        assertThat(matcher.group("repo"), is("globalbioticinteractions"));
+        assertThat(matcher.group("org"), is("globalbioticinteractions"));
+        assertThat(matcher.group("issueNumber"), is("904"));
+    }
+
+    @Test
+    public void matchingIssueURL() {
+        String s = "https://github.com/globalbioticinteractions/globalbioticinteractions/issues/904";
 
         Matcher matcher = RegistryReaderGitHubIssues.PATTERN_GH_ORG_REPO.matcher(s);
 
@@ -138,7 +152,7 @@ public class RegistryReaderGitHubIssuesTest {
                 HAS_VERSION,
                 toIRI("http://something")));
 
-        assertThat(nodes.size(), is(55));
+        assertThat(nodes.size(), is(163));
 
         nodes.clear();
         reader.on(toStatement(
@@ -198,11 +212,22 @@ public class RegistryReaderGitHubIssuesTest {
             }
         }, jsonNode.get(0));
 
-        assertThat(statements.size(), is(55));
-        assertThat(statements.get(statements.size() - 1).getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54/comments>"));
-        assertThat(statements.get(statements.size() - 1).getPredicate(), is(HAS_VERSION));
-        assertThat(statements.get(statements.size() - 1).getObject().ntriplesString(), startsWith("_:"));
+        assertThat(statements.size(), is(163));
 
+        Quad statement = statements.get(statements.size() - 1);
+        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54/comments>"));
+        assertThat(statement.getPredicate(), is(HAS_VERSION));
+        assertThat(statement.getObject().ntriplesString(), startsWith("_:"));
+
+        statement = statements.get(statements.size() - 2);
+        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
+        assertThat(statement.getPredicate(), is(HAD_MEMBER));
+        assertThat(statement.getObject().ntriplesString(), startsWith("<https://api.github.com/repos/foo/bar/issues/54/comments>"));
+
+        statement = statements.get(statements.size() - 3);
+        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
+        assertThat(statement.getPredicate(), is(HAS_VERSION));
+        assertThat(statement.getObject().ntriplesString(), startsWith("_:"));
     }
 
     @Test
