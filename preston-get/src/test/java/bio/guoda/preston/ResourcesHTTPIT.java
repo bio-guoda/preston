@@ -8,6 +8,7 @@ import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -79,6 +80,18 @@ public class ResourcesHTTPIT {
             CountingOutputStream outputStream = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM);
             IOUtils.copy(is, outputStream);
             assertThat(outputStream.getByteCount(), Is.is(233031L));
+        }
+    }
+
+    @Test
+    public void githubAuth() {
+        System.setProperty("GITHUB_TOKEN", "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");
+        try (InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://api.github.com/repos/globalbioticinteractions/elton/issues?per_page=1&state=open")))) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            IOUtils.copy(is, outputStream);
+            assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is("bla"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -20,12 +20,13 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
 
 public class RegistryReaderGitHubIssuesTest {
-
 
     @Test
     public void matchingIssueCommentsAPIURLs() {
@@ -38,6 +39,28 @@ public class RegistryReaderGitHubIssuesTest {
         assertThat(matcher.group("repo"), is("globalbioticinteractions"));
         assertThat(matcher.group("org"), is("globalbioticinteractions"));
         assertThat(matcher.group("issueNumber"), is("904"));
+    }
+
+    @Test
+    public void matchingQueryLatest() {
+        String s = "https://api.github.com/repos/globalbioticinteractions/elton/issues?per_page=1&state=all";
+
+        Matcher matcher = RegistryReaderGitHubIssues.PATTERN_GH_ORG_REPO.matcher(s);
+
+        assertTrue(matcher.matches());
+
+        assertThat(matcher.group("org"), is("globalbioticinteractions"));
+        assertThat(matcher.group("repo"), is("elton"));
+        assertThat(matcher.group("issueNumber"), is(nullValue()));
+    }
+
+    @Test
+    public void matchingNonIssueURL() {
+        String s = "https://github.com/repos/globalbioticinteractions/nomer";
+
+        Matcher matcher = RegistryReaderGitHubIssues.PATTERN_GH_ORG_REPO.matcher(s);
+
+        assertFalse(matcher.matches());
     }
 
     @Test
@@ -80,6 +103,52 @@ public class RegistryReaderGitHubIssuesTest {
         assertThat(nodes.size(), not(is(0)));
     }
 
+
+    @Test
+    public void onProcessOnce() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("issue_904.json");
+        ProcessorReadOnly reader = new RegistryReaderGitHubIssues(blob, TestUtilForProcessor.testListener(nodes));
+
+        reader.on(toStatement(
+                toIRI("https://api.github.com/repos/globalbioticinteractions/globalbioticinteractions/issues/904/comments"),
+                HAS_VERSION,
+                toIRI("http://something")));
+
+        assertThat(nodes.size(), not(is(0)));
+
+        nodes.clear();
+        reader.on(toStatement(
+                toIRI("https://api.github.com/repos/globalbioticinteractions/globalbioticinteractions/issues/904/comments"),
+                HAS_VERSION,
+                toIRI("http://something")));
+
+        assertThat(nodes.size(), is(0));
+    }
+
+    @Test
+    public void onProcessLatest() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("latest_issue.json");
+        ProcessorReadOnly reader = new RegistryReaderGitHubIssues(blob, TestUtilForProcessor.testListener(nodes));
+
+        String queryLatest = "https://api.github.com/repos/globalbioticinteractions/elton/issues?per_page=1&state=all";
+        reader.on(toStatement(
+                toIRI(queryLatest),
+                HAS_VERSION,
+                toIRI("http://something")));
+
+        assertThat(nodes.size(), is(55));
+
+        nodes.clear();
+        reader.on(toStatement(
+                toIRI(queryLatest),
+                HAS_VERSION,
+                toIRI("http://something")));
+
+        assertThat(nodes.size(), is(0));
+    }
+
     @Test
     public void extractURLs() throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("issue_904.json"));
@@ -115,6 +184,24 @@ public class RegistryReaderGitHubIssuesTest {
                                 URI.create("https://github.com/globalbioticinteractions/globalbioticinteractions/assets/1084872/505f6b8a-1029-4211-93f0-65b6f826d1b2"),
                                 URI.create("https://api.github.com/repos/globalbioticinteractions/globalbioticinteractions/issues/comments/1601300431"))
                 ));
+
+    }
+
+    @Test
+    public void onLatestIssue() throws IOException {
+        JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("latest_issue.json"));
+        List<Quad> statements = new ArrayList<>();
+        RegistryReaderGitHubIssues.emitRequestForIssueComments("foo", "bar", new StatementsEmitterAdapter() {
+            @Override
+            public void emit(Quad statement) {
+                statements.add(statement);
+            }
+        }, jsonNode.get(0));
+
+        assertThat(statements.size(), is(55));
+        assertThat(statements.get(statements.size() - 1).getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54/comments>"));
+        assertThat(statements.get(statements.size() - 1).getPredicate(), is(HAS_VERSION));
+        assertThat(statements.get(statements.size() - 1).getObject().ntriplesString(), startsWith("_:"));
 
     }
 

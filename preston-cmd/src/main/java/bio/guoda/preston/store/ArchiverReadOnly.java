@@ -1,8 +1,6 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.store.ProvenanceTracer;
-import bio.guoda.preston.store.VersionProcessor;
 import org.apache.commons.rdf.api.BlankNode;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;

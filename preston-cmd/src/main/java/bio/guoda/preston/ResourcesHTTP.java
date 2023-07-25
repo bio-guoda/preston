@@ -4,24 +4,19 @@ import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.HttpMessage;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestWrapper;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 
@@ -69,10 +64,24 @@ public class ResourcesHTTP {
                                             List<Integer> ignoreCodes,
                                             DerefProgressListener listener) throws IOException {
         HttpGet get = new HttpGet(URI.create(dataURI.getIRIString()));
-        if (StringUtils.startsWith(dataURI.getIRIString(), "https://ghcr.io")) {
-            get.addHeader("Authorization", "Bearer QQ==");
-        }
+        injectAuthorizationIfPossible(dataURI, get);
         return asInputStream(dataURI, get, ignoreCodes, listener);
+    }
+
+    private static void injectAuthorizationIfPossible(IRI dataURI, HttpMessage msg) {
+        if (StringUtils.startsWith(dataURI.getIRIString(), "https://ghcr.io")) {
+            msg.addHeader("Authorization", "Bearer QQ==");
+        } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.github.com/")) {
+            String githubToken = StringUtils.defaultIfBlank(
+                    StringUtils.defaultIfBlank(
+                            System.getenv("secrets.GITHUB_TOKEN"),
+                            System.getenv("GITHUB_TOKEN")
+                    ),
+                    System.getProperty("GITHUB_TOKEN"));
+            if (StringUtils.isNotBlank(githubToken)) {
+                msg.addHeader("Authorization", "token " + githubToken);
+            }
+        }
     }
 
     public static InputStream asInputStream(IRI dataURI,
