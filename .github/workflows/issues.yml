@@ -25,10 +25,10 @@ jobs:
     - name: Install Preston
       run: sudo apt -y install ./preston.deb 
     - name: Track Issues
-      run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} && preston track "https://github.com/${GITHUB_REPOSITORY}/issues"
+      run: export GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" && preston track "https://github.com/${GITHUB_REPOSITORY}/issues"
     - name: Package Tracked Issues
       uses: actions/upload-artifact@v3
       with:
-        name: packaged-issues
+        name: tracked-issues
         path: |
           data 
