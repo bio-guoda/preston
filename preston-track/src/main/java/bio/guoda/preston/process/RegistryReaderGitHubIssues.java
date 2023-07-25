@@ -156,7 +156,7 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
         String issueSuffix = org + "/" + repo + "/issues/" + issue;
         String issueRequestPrefix = API_PREFIX + issueSuffix;
         IRI issueRequest = toIRI(issueRequestPrefix);
-        IRI issueCommentsRequest = toIRI(issueRequestPrefix + "/comments");
+        IRI issueCommentsRequest = toIRI(issueRequestPrefix + "/comments?per_page=100");
         return Stream.of(
                 toStatement(issueRequest, HAS_TYPE, RefNodeFactory.toLiteral(ResourcesHTTP.MIMETYPE_GITHUB_JSON)),
                 toStatement(issueRequest, HAS_VERSION, toBlank()),

@@ -217,19 +217,19 @@ public class RegistryReaderGitHubIssuesTest {
         assertThat(statements.size(), is(325));
 
         Quad statement = statements.get(statements.size() - 1);
-        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54/comments>"));
+        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54/comments?per_page=100>"));
         assertThat(statement.getPredicate(), is(HAS_VERSION));
         assertThat(statement.getObject().ntriplesString(), startsWith("_:"));
 
         statement = statements.get(statements.size() - 2);
-        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54/comments>"));
+        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54/comments?per_page=100>"));
         assertThat(statement.getPredicate(), is(HAS_TYPE));
         assertThat(statement.getObject().ntriplesString(), startsWith("\"application/vnd.github+json\""));
 
         statement = statements.get(statements.size() - 3);
         assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
         assertThat(statement.getPredicate(), is(HAD_MEMBER));
-        assertThat(statement.getObject().ntriplesString(), startsWith("<https://api.github.com/repos/foo/bar/issues/54/comments>"));
+        assertThat(statement.getObject().ntriplesString(), startsWith("<https://api.github.com/repos/foo/bar/issues/54/comments?per_page=100>"));
 
         statement = statements.get(statements.size() - 4);
         assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
