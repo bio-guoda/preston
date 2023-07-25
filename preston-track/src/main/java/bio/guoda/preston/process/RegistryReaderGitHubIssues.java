@@ -153,12 +153,14 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
     }
 
     private static Stream<Quad> createRequestForIssueComments(String org, String repo, int issue) {
-        String issueRequestPrefix = API_PREFIX + org + "/" + repo + "/issues/" + issue;
+        String issueSuffix = org + "/" + repo + "/issues/" + issue;
+        String issueRequestPrefix = API_PREFIX + issueSuffix;
         IRI issueRequest = toIRI(issueRequestPrefix);
         IRI issueCommentsRequest = toIRI(issueRequestPrefix + "/comments");
         return Stream.of(
                 toStatement(issueRequest, HAS_TYPE, RefNodeFactory.toLiteral(ResourcesHTTP.MIMETYPE_GITHUB_JSON)),
                 toStatement(issueRequest, HAS_VERSION, toBlank()),
+                toStatement(issueRequest, SEE_ALSO, toIRI("https://github.com/" + issueSuffix)),
                 toStatement(issueRequest, HAD_MEMBER, issueCommentsRequest),
                 toStatement(issueCommentsRequest, HAS_TYPE, RefNodeFactory.toLiteral(ResourcesHTTP.MIMETYPE_GITHUB_JSON)),
                 toStatement(issueCommentsRequest, HAS_VERSION, toBlank())
