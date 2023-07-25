@@ -31,4 +31,4 @@ jobs:
       with:
         name: tracked-issues
         path: |
-          data 
+          data/** 
