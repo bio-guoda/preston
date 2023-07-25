@@ -72,15 +72,20 @@ public class ResourcesHTTP {
         if (StringUtils.startsWith(dataURI.getIRIString(), "https://ghcr.io")) {
             msg.addHeader("Authorization", "Bearer QQ==");
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.github.com/")) {
-            String githubToken = StringUtils.defaultIfBlank(
-                    StringUtils.defaultIfBlank(
-                            System.getenv("secrets.GITHUB_TOKEN"),
-                            System.getenv("GITHUB_TOKEN")
-                    ),
-                    System.getProperty("GITHUB_TOKEN"));
-            if (StringUtils.isNotBlank(githubToken)) {
-                msg.addHeader("Authorization", "token " + githubToken);
-            }
+            msg.addHeader("Accept", "application/vnd.github+json");
+            appendAuthTokenIfAvailable(msg);
+        }
+    }
+
+    private static void appendAuthTokenIfAvailable(HttpMessage msg) {
+        String githubToken = StringUtils.defaultIfBlank(
+                StringUtils.defaultIfBlank(
+                        System.getenv("secrets.GITHUB_TOKEN"),
+                        System.getenv("GITHUB_TOKEN")
+                ),
+                System.getProperty("GITHUB_TOKEN"));
+        if (StringUtils.isNotBlank(githubToken)) {
+            msg.addHeader("Authorization", "token " + githubToken);
         }
     }
 

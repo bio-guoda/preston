@@ -85,7 +85,7 @@ public class ResourcesHTTPIT {
 
     @Test
     public void githubAuth() {
-        System.setProperty("GITHUB_TOKEN", "[insert token here]");
+        //System.setProperty("GITHUB_TOKEN", "[insert token here]");
         try (InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://api.github.com/repos/globalbioticinteractions/elton/issues?per_page=1&state=open")))) {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             IOUtils.copy(is, outputStream);
