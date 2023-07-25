@@ -31,4 +31,4 @@ jobs:
       with:
         name: packaged-issues
         path: |
-          data/ 
+          data 
