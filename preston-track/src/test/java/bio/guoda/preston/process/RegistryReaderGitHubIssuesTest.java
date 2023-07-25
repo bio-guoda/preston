@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
+import static bio.guoda.preston.RefNodeConstants.HAS_TYPE;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
@@ -152,7 +153,7 @@ public class RegistryReaderGitHubIssuesTest {
                 HAS_VERSION,
                 toIRI("http://something")));
 
-        assertThat(nodes.size(), is(163));
+        assertThat(nodes.size(), is(271));
 
         nodes.clear();
         reader.on(toStatement(
@@ -212,7 +213,7 @@ public class RegistryReaderGitHubIssuesTest {
             }
         }, jsonNode.get(0));
 
-        assertThat(statements.size(), is(163));
+        assertThat(statements.size(), is(271));
 
         Quad statement = statements.get(statements.size() - 1);
         assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54/comments>"));
@@ -220,14 +221,24 @@ public class RegistryReaderGitHubIssuesTest {
         assertThat(statement.getObject().ntriplesString(), startsWith("_:"));
 
         statement = statements.get(statements.size() - 2);
+        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54/comments>"));
+        assertThat(statement.getPredicate(), is(HAS_TYPE));
+        assertThat(statement.getObject().ntriplesString(), startsWith("\"application/vnd.github+json\""));
+
+        statement = statements.get(statements.size() - 3);
         assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
         assertThat(statement.getPredicate(), is(HAD_MEMBER));
         assertThat(statement.getObject().ntriplesString(), startsWith("<https://api.github.com/repos/foo/bar/issues/54/comments>"));
 
-        statement = statements.get(statements.size() - 3);
+        statement = statements.get(statements.size() - 4);
         assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
         assertThat(statement.getPredicate(), is(HAS_VERSION));
         assertThat(statement.getObject().ntriplesString(), startsWith("_:"));
+
+        statement = statements.get(statements.size() - 5);
+        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
+        assertThat(statement.getPredicate(), is(HAS_TYPE));
+        assertThat(statement.getObject().ntriplesString(), startsWith("\"application/vnd.github+json\""));
     }
 
     @Test

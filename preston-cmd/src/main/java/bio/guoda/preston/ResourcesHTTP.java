@@ -34,6 +34,7 @@ import java.util.List;
 
 public class ResourcesHTTP {
     private static final List<Integer> REDIRECT_CODES = Arrays.asList(301, 302, 303);
+    public static final String MIMETYPE_GITHUB_JSON = "application/vnd.github+json";
     private static CloseableHttpClient httpClient = null;
     private static CloseableHttpClient redirectingHttpClient = null;
 
@@ -72,7 +73,7 @@ public class ResourcesHTTP {
         if (StringUtils.startsWith(dataURI.getIRIString(), "https://ghcr.io")) {
             msg.addHeader("Authorization", "Bearer QQ==");
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.github.com/")) {
-            msg.addHeader("Accept", "application/vnd.github+json");
+            msg.addHeader("Accept", MIMETYPE_GITHUB_JSON);
             appendAuthTokenIfAvailable(msg);
         }
     }

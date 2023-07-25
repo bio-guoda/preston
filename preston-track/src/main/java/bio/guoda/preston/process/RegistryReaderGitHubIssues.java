@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +33,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
+import static bio.guoda.preston.RefNodeConstants.HAS_TYPE;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.SEE_ALSO;
 import static bio.guoda.preston.RefNodeFactory.getVersion;
@@ -82,7 +84,7 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
                 if (StringUtils.endsWith(versionSource, MOST_RECENT_ISSUE_QUERY)) {
                     emitIssueRequestsFor(statement, org, repo, this);
                 } else {
-                    IRI mostRecentRequest = RefNodeFactory.toIRI("https://api.github.com/repos/" + org + "/" + repo + MOST_RECENT_ISSUE_QUERY);
+                    IRI mostRecentRequest = RefNodeFactory.toIRI(API_PREFIX + org + "/" + repo + MOST_RECENT_ISSUE_QUERY);
                     ActivityUtil.emitAsNewActivity(
                             Stream.of(RefNodeFactory.toStatement(mostRecentRequest, HAS_VERSION, toBlank())),
                             this,
@@ -153,8 +155,10 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
         IRI issueRequest = toIRI(issueRequestPrefix);
         IRI issueCommentsRequest = toIRI(issueRequestPrefix + "/comments");
         return Stream.of(
+                toStatement(issueRequest, HAS_TYPE, RefNodeFactory.toLiteral(ResourcesHTTP.MIMETYPE_GITHUB_JSON)),
                 toStatement(issueRequest, HAS_VERSION, toBlank()),
                 toStatement(issueRequest, HAD_MEMBER, issueCommentsRequest),
+                toStatement(issueCommentsRequest, HAS_TYPE, RefNodeFactory.toLiteral(ResourcesHTTP.MIMETYPE_GITHUB_JSON)),
                 toStatement(issueCommentsRequest, HAS_VERSION, toBlank())
         );
     }
