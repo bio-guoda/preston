@@ -6,6 +6,7 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.DereferencerContentAddressed;
+import bio.guoda.preston.store.DereferencerCachingProxy;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -90,7 +91,7 @@ public class CmdBash extends CmdActivity {
             ActivityContext ctx,
             StatementsListener[] listeners) {
         return new Archiver(
-                new DereferencerContentAddressed(uri -> {
+                new DereferencerCachingProxy(new DereferencerContentAddressed(uri -> {
                     InputStream inputStream = ContentQueryUtil.getContent(blobStore, getCommandsContentId(), this);
                     ProcessBuilder bash = new ProcessBuilder(
                             "bash",
@@ -102,7 +103,7 @@ public class CmdBash extends CmdActivity {
                             ? bash.start()
                             : bash.redirectInput(ProcessBuilder.Redirect.from(source)).start();
                     return proc.getInputStream();
-                }, blobStore),
+                }, blobStore)),
                 ctx,
                 listeners);
     }

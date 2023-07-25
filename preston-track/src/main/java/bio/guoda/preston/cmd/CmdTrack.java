@@ -6,6 +6,7 @@ import bio.guoda.preston.store.Archiver;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.DereferencerContentAddressed;
+import bio.guoda.preston.store.DereferencerCachingProxy;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
@@ -60,7 +61,7 @@ public class CmdTrack extends CmdActivity {
             ActivityContext ctx,
             StatementsListener[] listeners) {
         return new Archiver(
-                new DereferencerContentAddressed(getDereferencer(), blobStore),
+                new DereferencerCachingProxy(new DereferencerContentAddressed(getDereferencer(), blobStore)),
                 ctx,
                 listeners);
     }

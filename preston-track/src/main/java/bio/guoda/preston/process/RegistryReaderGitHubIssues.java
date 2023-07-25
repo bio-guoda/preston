@@ -5,6 +5,7 @@ import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.collections4.map.LRUMap;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -24,6 +25,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.function.Function;
@@ -54,7 +56,7 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
     private static final String MOST_RECENT_ISSUE_QUERY = "/issues?per_page=1&state=all";
     private static final String API_PREFIX = "https://api.github.com/repos/";
 
-    private Queue<IRI> processedIRIs = new CircularFifoQueue<IRI>(2048);
+    private Map<IRI, IRI> processedIRIs = new LRUMap<>(4096);
 
     public RegistryReaderGitHubIssues(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
@@ -64,11 +66,11 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (hasVersionAvailable(statement)) {
             IRI versionSourceIRI = getVersionSource(statement);
-            if (!processedIRIs.contains(versionSourceIRI)) {
+            if (!processedIRIs.containsKey(versionSourceIRI)) {
                 try {
                     processStatement(statement, versionSourceIRI);
                 } finally {
-                    processedIRIs.add(versionSourceIRI);
+                    processedIRIs.put(versionSourceIRI, versionSourceIRI);
                 }
             }
         }
