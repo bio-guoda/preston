@@ -21,13 +21,16 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import static bio.guoda.preston.RefNodeConstants.HAS_TYPE;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
 
 public class GitHubJSONExtractorTest {
 
@@ -63,15 +66,22 @@ public class GitHubJSONExtractorTest {
     private void assertLineJSONResult(String resourceName, int expectedNumberOfObjects) throws IOException {
         String actual = processResource(resourceName);
 
-        String[] jsonObjects = StringUtils.split(actual, "\n");
-        assertThat(jsonObjects.length, is(expectedNumberOfObjects));
+        String[] actualJSONs = StringUtils.split(actual, "\n");
+        assertThat(actualJSONs.length, is(expectedNumberOfObjects));
 
         JsonNode expectedJSON = new ObjectMapper().readTree(getClass().getResourceAsStream(resourceName));
 
-        assertThat(jsonObjects[0], not(is(IOUtils.toString(getClass().getResourceAsStream(resourceName), StandardCharsets.UTF_8))));
+        assertThat(actualJSONs[0], not(is(IOUtils.toString(getClass().getResourceAsStream(resourceName), StandardCharsets.UTF_8))));
         String expectedJSONString = expectedJSON.isArray() ? expectedJSON.get(0).toString() : expectedJSON.toString();
 
-        assertThat(jsonObjects[0], is(RegExUtils.replacePattern(expectedJSONString, "}$", ",\"http://www.w3.org/ns/prov#wasDerivedFrom\":\"hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1\",\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\":\"application/vnd.github+json\"}")));
+        assertThat(actualJSONs[0], is(RegExUtils.replacePattern(expectedJSONString, "}$", ",\"http://www.w3.org/ns/prov#wasDerivedFrom\":\"hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1\",\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\":\"application/vnd.github+json\"}")));
+
+        JsonNode actualNode = new ObjectMapper().readTree(actualJSONs[0]);
+        assertFalse(actualNode.isArray());
+        assertThat(actualNode.get(WAS_DERIVED_FROM.getIRIString()).asText(), is("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
+        assertThat(actualNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("application/vnd.github+json"));
+
+
     }
 
     private String processResource(String resourceName) throws IOException {
