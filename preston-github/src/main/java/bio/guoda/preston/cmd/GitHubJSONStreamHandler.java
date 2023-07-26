@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
@@ -7,6 +8,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -48,11 +51,10 @@ public class GitHubJSONStreamHandler implements ContentStreamHandler {
                     if (hasGithubAPIURL(candidateNode)) {
                         if (jsonNode.isArray()) {
                             for (JsonNode node : jsonNode) {
-                                IOUtils.copy(IOUtils.toInputStream(node.toString(), StandardCharsets.UTF_8), outputStream);
-                                IOUtils.write("\n", outputStream, StandardCharsets.UTF_8);
+                                writeAsLineJSON(version, node);
                             }
                         } else {
-                            IOUtils.copy(IOUtils.toInputStream(jsonNode.toString(), StandardCharsets.UTF_8), outputStream);
+                            writeAsLineJSON(version, jsonNode);
                         }
                         foundAtLeastOne.set(true);
                     }
@@ -64,6 +66,13 @@ public class GitHubJSONStreamHandler implements ContentStreamHandler {
             throw new ContentStreamException("cannot handle non-github metadata JSON", e);
         }
         return foundAtLeastOne.get();
+    }
+
+    private void writeAsLineJSON(IRI version, JsonNode jsonNode) throws IOException {
+        ((ObjectNode) jsonNode).set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf(version.getIRIString()));
+        ((ObjectNode) jsonNode).set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf(ResourcesHTTP.MIMETYPE_GITHUB_JSON));
+        IOUtils.copy(IOUtils.toInputStream(jsonNode.toString(), StandardCharsets.UTF_8), outputStream);
+        IOUtils.write("\n", outputStream, StandardCharsets.UTF_8);
     }
 
     private boolean hasGithubAPIURL(JsonNode obj) {

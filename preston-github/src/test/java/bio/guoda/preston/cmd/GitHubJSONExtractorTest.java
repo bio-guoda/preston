@@ -5,6 +5,7 @@ import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -68,7 +69,9 @@ public class GitHubJSONExtractorTest {
         JsonNode expectedJSON = new ObjectMapper().readTree(getClass().getResourceAsStream(resourceName));
 
         assertThat(jsonObjects[0], not(is(IOUtils.toString(getClass().getResourceAsStream(resourceName), StandardCharsets.UTF_8))));
-        assertThat(jsonObjects[0], is(expectedJSON.isArray() ? expectedJSON.get(0).toString() : expectedJSON.toString()));
+        String expectedJSONString = expectedJSON.isArray() ? expectedJSON.get(0).toString() : expectedJSON.toString();
+
+        assertThat(jsonObjects[0], is(RegExUtils.replacePattern(expectedJSONString, "}$", ",\"http://www.w3.org/ns/prov#wasDerivedFrom\":\"hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1\",\"http://www.w3.org/1999/02/22-rdf-syntax-ns#type\":\"application/vnd.github+json\"}")));
     }
 
     private String processResource(String resourceName) throws IOException {
