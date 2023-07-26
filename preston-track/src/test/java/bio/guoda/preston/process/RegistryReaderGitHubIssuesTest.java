@@ -108,7 +108,7 @@ public class RegistryReaderGitHubIssuesTest {
     @Test
     public void onGitHubIssueCommentsAPI() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("issue_904.json");
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("904_issue_comments.json");
         ProcessorReadOnly reader = new RegistryReaderGitHubIssues(blob, TestUtilForProcessor.testListener(nodes));
 
         reader.on(toStatement(
@@ -123,7 +123,7 @@ public class RegistryReaderGitHubIssuesTest {
     @Test
     public void onProcessOnce() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("issue_904.json");
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("904_issue_comments.json");
         ProcessorReadOnly reader = new RegistryReaderGitHubIssues(blob, TestUtilForProcessor.testListener(nodes));
 
         reader.on(toStatement(
@@ -154,7 +154,7 @@ public class RegistryReaderGitHubIssuesTest {
                 HAS_VERSION,
                 toIRI("http://something")));
 
-        assertThat(nodes.size(), is(325));
+        assertThat(nodes.size(), is(163));
 
         nodes.clear();
         reader.on(toStatement(
@@ -167,7 +167,7 @@ public class RegistryReaderGitHubIssuesTest {
 
     @Test
     public void extractURLs() throws IOException {
-        JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("issue_904.json"));
+        JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("904_issue_comments.json"));
         List<Pair<URI, URI>> uris = new ArrayList<>();
         RegistryReaderGitHubIssues.appendURIs(jsonNode, uris);
         assertThat(uris,
@@ -207,72 +207,81 @@ public class RegistryReaderGitHubIssuesTest {
     public void onLatestIssue() throws IOException {
         JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("latest_issue.json"));
         List<Quad> statements = new ArrayList<>();
-        RegistryReaderGitHubIssues.emitRequestForIssueComments("foo", "bar", new StatementsEmitterAdapter() {
+        RegistryReaderGitHubIssues.emitRequestForIssuesUpToMostRecent("foo", "bar", new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 statements.add(statement);
             }
         }, jsonNode.get(0));
 
-        assertThat(statements.size(), is(325));
+        assertThat(statements.size(), is(163));
 
         Quad statement = statements.get(statements.size() - 1);
-        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54/comments?per_page=100>"));
-        assertThat(statement.getPredicate(), is(HAS_VERSION));
-        assertThat(statement.getObject().ntriplesString(), startsWith("_:"));
-
-        statement = statements.get(statements.size() - 2);
-        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54/comments?per_page=100>"));
-        assertThat(statement.getPredicate(), is(HAS_TYPE));
-        assertThat(statement.getObject().ntriplesString(), startsWith("\"application/vnd.github+json\""));
-
-        statement = statements.get(statements.size() - 3);
-        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
-        assertThat(statement.getPredicate(), is(HAD_MEMBER));
-        assertThat(statement.getObject().ntriplesString(), startsWith("<https://api.github.com/repos/foo/bar/issues/54/comments?per_page=100>"));
-
-        statement = statements.get(statements.size() - 4);
         assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
         assertThat(statement.getPredicate(), is(SEE_ALSO));
         assertThat(statement.getObject().ntriplesString(), is("<https://github.com/foo/bar/issues/54>"));
 
-        statement = statements.get(statements.size() - 5);
+        statement = statements.get(statements.size() - 2);
         assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
         assertThat(statement.getPredicate(), is(HAS_VERSION));
         assertThat(statement.getObject().ntriplesString(), startsWith("_:"));
 
-        statement = statements.get(statements.size() - 6);
+        statement = statements.get(statements.size() - 3);
         assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
         assertThat(statement.getPredicate(), is(HAS_TYPE));
-        assertThat(statement.getObject().ntriplesString(), startsWith("\"application/vnd.github+json\""));
+        assertThat(statement.getObject().ntriplesString(), is("\"application/vnd.github+json\""));
     }
 
     @Test
     public void onGitHubIssueAPI() {
-        ArrayList<Quad> nodes = new ArrayList<>();
-        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("issue_904.json");
-        ProcessorReadOnly reader = new RegistryReaderGitHubIssues(blob, TestUtilForProcessor.testListener(nodes));
+        ArrayList<Quad> statements = new ArrayList<>();
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("904_issue.json");
+        ProcessorReadOnly reader = new RegistryReaderGitHubIssues(blob, TestUtilForProcessor.testListener(statements));
 
         reader.on(toStatement(
-                toIRI("https://api.github.com/repos/globalbioticinteractions/globalbioticinteractions/issues/904"),
+                toIRI("https://api.github.com/repos/foo/bar/issues/904"),
                 HAS_VERSION,
                 toIRI("http://something")));
 
-        assertThat(nodes.size(), not(is(0)));
+        assertThat(statements.size(), is(5));
+
+
+        Quad statement = statements.get(statements.size() - 1);
+        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/904/comments?per_page=100>"));
+        assertThat(statement.getPredicate(), is(HAS_VERSION));
+        assertThat(statement.getObject().ntriplesString(), startsWith("_:"));
+
+
     }
 
     @Test
     public void onGitHubIssue() {
-        ArrayList<Quad> nodes = new ArrayList<>();
-        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("issue_904.json");
-        ProcessorReadOnly reader = new RegistryReaderGitHubIssues(blob, TestUtilForProcessor.testListener(nodes));
+        ArrayList<Quad> statements = new ArrayList<>();
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("904_issue.json");
+        ProcessorReadOnly reader = new RegistryReaderGitHubIssues(blob, TestUtilForProcessor.testListener(statements));
 
         reader.on(toStatement(
-                toIRI("https://github.com/repos/globalbioticinteractions/globalbioticinteractions/issues/904"),
+                toIRI("https://github.com/repos/foo/bar/issues/54"),
                 HAS_VERSION,
                 toIRI("http://something")));
 
-        assertThat(nodes.size(), not(is(0)));
+        assertThat(statements.size(), not(is(0)));
+
+        Quad statement = statements.get(statements.size() - 1);
+        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
+        assertThat(statement.getPredicate(), is(SEE_ALSO));
+        assertThat(statement.getObject().ntriplesString(), is("<https://github.com/foo/bar/issues/54>"));
+
+        statement = statements.get(statements.size() - 2);
+        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
+        assertThat(statement.getPredicate(), is(HAS_VERSION));
+        assertThat(statement.getObject().ntriplesString(), startsWith("_:"));
+
+        statement = statements.get(statements.size() - 3);
+        assertThat(statement.getSubject().ntriplesString(), is("<https://api.github.com/repos/foo/bar/issues/54>"));
+        assertThat(statement.getPredicate(), is(HAS_TYPE));
+        assertThat(statement.getObject().ntriplesString(), is("\"application/vnd.github+json\""));
+
     }
 
 

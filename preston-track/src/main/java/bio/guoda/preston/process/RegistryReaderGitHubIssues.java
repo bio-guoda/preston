@@ -6,7 +6,6 @@ import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections4.map.LRUMap;
-import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -27,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Queue;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,6 +53,7 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
             "(/(?<issueNumber>[0-9]+)){0,1}(/comments){0,1}(\\?.*){0,1}");
     private static final String MOST_RECENT_ISSUE_QUERY = "/issues?per_page=1&state=all";
     private static final String API_PREFIX = "https://api.github.com/repos/";
+    public static final String COMMENTS_REQUEST_SUFFIX = "/comments?per_page=100";
 
     private Map<IRI, IRI> processedIRIs = new LRUMap<>(4096);
 
@@ -82,7 +81,8 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
         if (matcher.matches()) {
             String org = matcher.group("org");
             String repo = matcher.group("repo");
-            if (StringUtils.isBlank(matcher.group("issueNumber"))) {
+            String issueNumber = matcher.group("issueNumber");
+            if (StringUtils.isBlank(issueNumber)) {
                 if (StringUtils.endsWith(versionSource, MOST_RECENT_ISSUE_QUERY)) {
                     emitIssueRequestsFor(statement, org, repo, this);
                 } else {
@@ -95,17 +95,52 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
                 }
             } else {
                 if (StringUtils.startsWith(versionSource, API_PREFIX)) {
-                    handleIssues(statement, matcher);
+                    deferenceDependencies(statement);
+                    if (issueHasComments(statement, versionSource, issueNumber)) {
+                        ActivityUtil.emitAsNewActivity(
+                                createRequestForIssueComments(org, repo, Integer.parseInt(issueNumber)),
+                                this,
+                                statement.getGraphName()
+                        );
+                    }
                 } else {
-                    Stream<Quad> requestIssueComments = createRequestForIssueComments(org, repo, Integer.parseInt(matcher.group("issueNumber")));
                     ActivityUtil.emitAsNewActivity(
-                            requestIssueComments,
+                            createRequestForIssue(org, repo, Integer.parseInt(issueNumber)),
                             this,
                             statement.getGraphName()
                     );
                 }
+
             }
         }
+    }
+
+    private boolean issueHasComments(Quad statement, String versionSource, String issueNumber) {
+        boolean issueHasComments = false;
+        if (StringUtils.endsWith(versionSource, "/issues/" + issueNumber)) {
+            try {
+                IRI currentPage = (IRI) getVersion(statement);
+                InputStream is = get(currentPage);
+                if (is != null) {
+                    try {
+                        JsonNode jsonNode = new ObjectMapper().readTree(is);
+                        if (jsonNode != null && jsonNode.has("comments")) {
+                            JsonNode comments = jsonNode.get("comments");
+                            if (comments.isIntegralNumber() && comments.intValue() > 0) {
+                                issueHasComments = true;
+                            }
+                        }
+                    } catch (IOException ex) {
+                        // ignore malformed json
+                    }
+                }
+
+            } catch (IOException e) {
+                LOG.warn("failed to handle [" + statement.toString() + "]", e);
+            }
+
+        }
+        return issueHasComments;
     }
 
     private void emitIssueRequestsFor(Quad statement, String org, String repo, StatementsEmitter emitter) {
@@ -118,10 +153,10 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
                     if (jsonNode != null) {
                         if (jsonNode.isArray()) {
                             for (JsonNode node : jsonNode) {
-                                emitRequestForIssueComments(org, repo, emitter, node);
+                                emitRequestForIssuesUpToMostRecent(org, repo, emitter, node);
                             }
                         } else if (jsonNode.isObject()) {
-                            emitRequestForIssueComments(org, repo, emitter, jsonNode);
+                            emitRequestForIssuesUpToMostRecent(org, repo, emitter, jsonNode);
                         }
                     }
                 } catch (IOException ex) {
@@ -134,51 +169,62 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
         }
     }
 
-    public static void emitRequestForIssueComments(String org, String repo, StatementsEmitter emitter, JsonNode node) {
+    public static void emitRequestForIssuesUpToMostRecent(String org, String repo, StatementsEmitter emitter, JsonNode node) {
         if (node.has("number")) {
             JsonNode issueNumber = node.get("number");
             if (issueNumber.isInt()) {
                 int mostRecentIssue = issueNumber.asInt();
-                emitRequestForIssueComments(emitter, org, repo, mostRecentIssue);
+                emitRequestForIssuesUpToMostRecent(emitter, org, repo, mostRecentIssue);
             }
         }
     }
 
-    private static void emitRequestForIssueComments(StatementsEmitter emitter, String org, String repo, int mostRecentIssue) {
+    private static void emitRequestForIssuesUpToMostRecent(StatementsEmitter emitter, String org, String repo, int mostRecentIssue) {
         Stream<Quad> statements = IntStream
                 .rangeClosed(1, mostRecentIssue)
-                .mapToObj(issue -> createRequestForIssueComments(org, repo, issue))
+                .mapToObj(issue -> createRequestForIssue(org, repo, issue))
                 .flatMap(Function.identity());
         ActivityUtil.emitAsNewActivity(statements, emitter, Optional.empty());
     }
 
     private static Stream<Quad> createRequestForIssueComments(String org, String repo, int issue) {
-        String issueSuffix = org + "/" + repo + "/issues/" + issue;
-        String issueRequestPrefix = API_PREFIX + issueSuffix;
+        String issueRequestPrefix = prefixForIssue(org, repo, issue);
         IRI issueRequest = toIRI(issueRequestPrefix);
-        IRI issueCommentsRequest = toIRI(issueRequestPrefix + "/comments?per_page=100");
+        IRI issueCommentsRequest = toIRI(issueRequestPrefix + COMMENTS_REQUEST_SUFFIX);
         return Stream.of(
-                toStatement(issueRequest, HAS_TYPE, RefNodeFactory.toLiteral(ResourcesHTTP.MIMETYPE_GITHUB_JSON)),
-                toStatement(issueRequest, HAS_VERSION, toBlank()),
-                toStatement(issueRequest, SEE_ALSO, toIRI("https://github.com/" + issueSuffix)),
                 toStatement(issueRequest, HAD_MEMBER, issueCommentsRequest),
                 toStatement(issueCommentsRequest, HAS_TYPE, RefNodeFactory.toLiteral(ResourcesHTTP.MIMETYPE_GITHUB_JSON)),
                 toStatement(issueCommentsRequest, HAS_VERSION, toBlank())
         );
     }
 
-    private void handleIssues(Quad statement, Matcher matcher) {
+    private static String prefixForIssue(String org, String repo, int issue) {
+        String issueSuffix = org + "/" + repo + "/issues/" + issue;
+        return API_PREFIX + issueSuffix;
+    }
+
+    private static Stream<Quad> createRequestForIssue(String org, String repo, int issue) {
+        String issueSuffix = org + "/" + repo + "/issues/" + issue;
+        IRI issueRequest = toIRI(prefixForIssue(org, repo, issue));
+        return Stream.of(
+                toStatement(issueRequest, HAS_TYPE, RefNodeFactory.toLiteral(ResourcesHTTP.MIMETYPE_GITHUB_JSON)),
+                toStatement(issueRequest, HAS_VERSION, toBlank()),
+                toStatement(issueRequest, SEE_ALSO, toIRI("https://github.com/" + issueSuffix))
+        );
+    }
+
+    private void deferenceDependencies(Quad statement) {
         List<Quad> nodes = new ArrayList<>();
         try {
             IRI currentPage = (IRI) getVersion(statement);
             InputStream is = get(currentPage);
             if (is != null) {
-                parseIssuesIgnoreUnexpected(currentPage, new StatementsEmitterAdapter() {
+                emitRequestsForIssueDependenciesIfNeeded(currentPage, new StatementsEmitterAdapter() {
                     @Override
                     public void emit(Quad statement) {
                         nodes.add(statement);
                     }
-                }, is, getVersionSource(statement));
+                }, is);
             }
         } catch (IOException e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);
@@ -186,11 +232,10 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
         ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
     }
 
-    private static void parseIssuesIgnoreUnexpected(
+    private static void emitRequestsForIssueDependenciesIfNeeded(
             IRI currentPage,
             StatementsEmitter emitter,
-            InputStream in,
-            IRI versionSource) {
+            InputStream in) {
         try {
             JsonNode jsonNode = new ObjectMapper().readTree(in);
             ArrayList<Pair<URI, URI>> uris = new ArrayList<>();
