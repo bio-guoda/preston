@@ -32,17 +32,17 @@ public class GitHubJSONExtractorTest {
 
     @Test
     public void latestIssueJSON() throws IOException {
-        assertLineJSONResult("/bio/guoda/preston/process/github/latest_issue.json");
+        assertLineJSONResult("/bio/guoda/preston/process/github/latest_issue.json", 1);
     }
 
     @Test
     public void singleIssueJSON() throws IOException {
-        assertLineJSONResult("/bio/guoda/preston/process/github/904_issue.json");
+        assertLineJSONResult("/bio/guoda/preston/process/github/904_issue.json", 1);
     }
 
     @Test
     public void singleIssueCommentJSON() throws IOException {
-        assertLineJSONResult("/bio/guoda/preston/process/github/904_issue_comments.json");
+        assertLineJSONResult("/bio/guoda/preston/process/github/904_issue_comments.json", 18);
     }
 
     @Test
@@ -59,16 +59,16 @@ public class GitHubJSONExtractorTest {
         assertThat(jsonObjects.length, is(0));
     }
 
-    private void assertLineJSONResult(String resourceName) throws IOException {
+    private void assertLineJSONResult(String resourceName, int expectedNumberOfObjects) throws IOException {
         String actual = processResource(resourceName);
 
         String[] jsonObjects = StringUtils.split(actual, "\n");
-        assertThat(jsonObjects.length, is(1));
+        assertThat(jsonObjects.length, is(expectedNumberOfObjects));
 
         JsonNode expectedJSON = new ObjectMapper().readTree(getClass().getResourceAsStream(resourceName));
 
         assertThat(jsonObjects[0], not(is(IOUtils.toString(getClass().getResourceAsStream(resourceName), StandardCharsets.UTF_8))));
-        assertThat(jsonObjects[0], is(expectedJSON.toString()));
+        assertThat(jsonObjects[0], is(expectedJSON.isArray() ? expectedJSON.get(0).toString() : expectedJSON.toString()));
     }
 
     private String processResource(String resourceName) throws IOException {

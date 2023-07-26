@@ -3,6 +3,8 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
@@ -36,15 +38,26 @@ public class GitHubJSONStreamHandler implements ContentStreamHandler {
         try {
             Charset charset = new UniversalEncodingDetector().detect(is, new Metadata());
             if (charset != null) {
-                JsonNode jsonNode = new ObjectMapper().readTree(is);
+                try {
+                    JsonNode jsonNode = new ObjectMapper().readTree(is);
 
-                JsonNode candidateNode = jsonNode.isArray() && jsonNode.size() > 0
-                        ? jsonNode.get(0)
-                        : jsonNode;
+                    JsonNode candidateNode = jsonNode.isArray() && jsonNode.size() > 0
+                            ? jsonNode.get(0)
+                            : jsonNode;
 
-                if (hasGithubAPIURL(candidateNode)) {
-                    IOUtils.copy(IOUtils.toInputStream(jsonNode.toString(), StandardCharsets.UTF_8), outputStream);
-                    foundAtLeastOne.set(true);
+                    if (hasGithubAPIURL(candidateNode)) {
+                        if (jsonNode.isArray()) {
+                            for (JsonNode node : jsonNode) {
+                                IOUtils.copy(IOUtils.toInputStream(node.toString(), StandardCharsets.UTF_8), outputStream);
+                                IOUtils.write("\n", outputStream, StandardCharsets.UTF_8);
+                            }
+                        } else {
+                            IOUtils.copy(IOUtils.toInputStream(jsonNode.toString(), StandardCharsets.UTF_8), outputStream);
+                        }
+                        foundAtLeastOne.set(true);
+                    }
+                } catch (JsonProcessingException ex) {
+                    // ignore assumed malformed json
                 }
             }
         } catch (IOException e) {

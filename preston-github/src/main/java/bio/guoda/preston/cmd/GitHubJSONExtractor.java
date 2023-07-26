@@ -49,7 +49,6 @@ public class GitHubJSONExtractor extends ProcessorExtracting {
 
         private final ContentStreamHandler handler;
         private final StatementEmitter emitter;
-        private int numMatches = 0;
 
         public GitHubStreamHandler(StatementEmitter emitter) {
             this.emitter = emitter;
@@ -76,7 +75,6 @@ public class GitHubJSONExtractor extends ProcessorExtracting {
 
         @Override
         public void emit(List<Quad> statements) {
-            ++numMatches;
             for (Quad statement : statements) {
                 this.emitter.emit(statement);
             }
