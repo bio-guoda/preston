@@ -14,6 +14,7 @@ import bio.guoda.preston.cmd.CmdDwcRecordStream;
 import bio.guoda.preston.cmd.CmdGenBankStream;
 import bio.guoda.preston.cmd.CmdGenerateQRCode;
 import bio.guoda.preston.cmd.CmdGet;
+import bio.guoda.preston.cmd.CmdGitHubStream;
 import bio.guoda.preston.cmd.CmdGrep;
 import bio.guoda.preston.cmd.CmdHash;
 import bio.guoda.preston.cmd.CmdHead;
