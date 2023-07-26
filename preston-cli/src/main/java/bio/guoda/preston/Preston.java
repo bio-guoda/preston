@@ -62,6 +62,7 @@ import static java.lang.System.exit;
                 CmdParadoxRecordStream.class,
                 CmdPlazi.class,
                 CmdGenBankStream.class,
+                CmdGitHubStream.class,
                 CmdServe.class,
                 CmdCite.class,
                 CmdGenerateQRCode.class,

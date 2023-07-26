@@ -145,7 +145,7 @@ public class RegistryReaderGitHubIssuesTest {
     @Test
     public void onProcessLatest() {
         ArrayList<Quad> nodes = new ArrayList<>();
-        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("latest_issue.json");
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("/bio/guoda/preston/process/github/latest_issue.json");
         ProcessorReadOnly reader = new RegistryReaderGitHubIssues(blob, TestUtilForProcessor.testListener(nodes));
 
         String queryLatest = "https://api.github.com/repos/globalbioticinteractions/elton/issues?per_page=1&state=all";
@@ -167,7 +167,7 @@ public class RegistryReaderGitHubIssuesTest {
 
     @Test
     public void extractURLs() throws IOException {
-        JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("904_issue_comments.json"));
+        JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("/bio/guoda/preston/process/github/904_issue_comments.json"));
         List<Pair<URI, URI>> uris = new ArrayList<>();
         RegistryReaderGitHubIssues.appendURIs(jsonNode, uris);
         assertThat(uris,
@@ -205,7 +205,7 @@ public class RegistryReaderGitHubIssuesTest {
 
     @Test
     public void onLatestIssue() throws IOException {
-        JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("latest_issue.json"));
+        JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("/bio/guoda/preston/process/github/latest_issue.json"));
         List<Quad> statements = new ArrayList<>();
         RegistryReaderGitHubIssues.emitRequestForIssuesUpToMostRecent("foo", "bar", new StatementsEmitterAdapter() {
             @Override
@@ -235,7 +235,7 @@ public class RegistryReaderGitHubIssuesTest {
     @Test
     public void onGitHubIssueAPI() {
         ArrayList<Quad> statements = new ArrayList<>();
-        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("904_issue.json");
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("/bio/guoda/preston/process/github/904_issue.json");
         ProcessorReadOnly reader = new RegistryReaderGitHubIssues(blob, TestUtilForProcessor.testListener(statements));
 
         reader.on(toStatement(
@@ -257,7 +257,7 @@ public class RegistryReaderGitHubIssuesTest {
     @Test
     public void onGitHubIssue() {
         ArrayList<Quad> statements = new ArrayList<>();
-        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("904_issue.json");
+        BlobStoreReadOnly blob = key -> getClass().getResourceAsStream("/bio/guoda/preston/process/github/904_issue.json");
         ProcessorReadOnly reader = new RegistryReaderGitHubIssues(blob, TestUtilForProcessor.testListener(statements));
 
         reader.on(toStatement(

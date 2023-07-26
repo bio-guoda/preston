@@ -1,0 +1,67 @@
+package bio.guoda.preston.cmd;
+
+import bio.guoda.preston.store.Dereferencer;
+import bio.guoda.preston.stream.ContentStreamException;
+import bio.guoda.preston.stream.ContentStreamHandler;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.rdf.api.IRI;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.txt.UniversalEncodingDetector;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class GitHubJSONStreamHandler implements ContentStreamHandler {
+
+    private ContentStreamHandler contentStreamHandler;
+    private final OutputStream outputStream;
+
+    public GitHubJSONStreamHandler(ContentStreamHandler contentStreamHandler,
+                                   Dereferencer<InputStream> inputStreamDereferencer,
+                                   OutputStream os) {
+        this.contentStreamHandler = contentStreamHandler;
+        this.outputStream = os;
+    }
+
+    @Override
+    public boolean handle(IRI version, InputStream is) throws ContentStreamException {
+        AtomicBoolean foundAtLeastOne = new AtomicBoolean(false);
+        try {
+            Charset charset = new UniversalEncodingDetector().detect(is, new Metadata());
+            if (charset != null) {
+                JsonNode jsonNode = new ObjectMapper().readTree(is);
+
+                JsonNode candidateNode = jsonNode.isArray() && jsonNode.size() > 0
+                        ? jsonNode.get(0)
+                        : jsonNode;
+
+                if (hasGithubAPIURL(candidateNode)) {
+                    IOUtils.copy(IOUtils.toInputStream(jsonNode.toString(), StandardCharsets.UTF_8), outputStream);
+                    foundAtLeastOne.set(true);
+                }
+            }
+        } catch (IOException e) {
+            throw new ContentStreamException("cannot handle non-github metadata JSON", e);
+        }
+        return foundAtLeastOne.get();
+    }
+
+    private boolean hasGithubAPIURL(JsonNode obj) {
+        return obj.has("url")
+                && StringUtils.startsWith(obj.get("url").asText(), "https://api.github.com/repos/");
+    }
+
+    @Override
+    public boolean shouldKeepProcessing() {
+        return contentStreamHandler.shouldKeepProcessing();
+    }
+
+
+}
