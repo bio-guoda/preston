@@ -12,6 +12,7 @@ import bio.guoda.preston.process.RegistryReaderGitHubIssues;
 import bio.guoda.preston.process.RegistryReaderIDigBio;
 import bio.guoda.preston.process.RegistryReaderOBIS;
 import bio.guoda.preston.process.RegistryReaderRSS;
+import bio.guoda.preston.process.RegistryReaderTaxonWorks;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.Dereferencer;
@@ -98,17 +99,18 @@ public class CmdUpdate extends CmdTrack {
     @Override
     protected Stream<StatementsListener> createProcessors(BlobStoreReadOnly blobStore, StatementsListener queueAsListener) {
         return Stream.of(
+                new RegistryReaderALA(blobStore, queueAsListener),
                 new RegistryReaderIDigBio(blobStore, queueAsListener),
+                new RegistryReaderBHL(blobStore, queueAsListener),
+                new RegistryReaderBioCASE(blobStore, queueAsListener),
                 new RegistryReaderChecklistBank(blobStore, queueAsListener),
+                new RegistryReaderDataONE(blobStore, queueAsListener),
+                new RegistryReaderDOI(blobStore, queueAsListener),
                 new RegistryReaderGBIF(blobStore, queueAsListener),
                 new RegistryReaderGitHubIssues(blobStore, queueAsListener),
-                new RegistryReaderBioCASE(blobStore, queueAsListener),
-                new RegistryReaderDataONE(blobStore, queueAsListener),
-                new RegistryReaderRSS(blobStore, queueAsListener),
-                new RegistryReaderBHL(blobStore, queueAsListener),
                 new RegistryReaderOBIS(blobStore, queueAsListener),
-                new RegistryReaderDOI(blobStore, queueAsListener),
-                new RegistryReaderALA(blobStore, queueAsListener)
+                new RegistryReaderRSS(blobStore, queueAsListener),
+                new RegistryReaderTaxonWorks(blobStore, queueAsListener)
         );
     }
 
