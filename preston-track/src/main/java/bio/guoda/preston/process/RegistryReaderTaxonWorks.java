@@ -16,10 +16,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -46,6 +44,9 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
     private final Logger LOG = LoggerFactory.getLogger(RegistryReaderTaxonWorks.class);
     public static final String TAXONWORKS_API_ENDPOINT = "https://sfg.taxonworks.org/api/v1";
     private static final String TAXONWORKS_CITATIONS = TAXONWORKS_API_ENDPOINT + "/citations";
+    private static final String TAXONWORKS_BIOLOGICAL_ASSOCIATIONS = TAXONWORKS_API_ENDPOINT + "/biological_associations";
+    private static final String TAXONWORKS_OTUS = TAXONWORKS_API_ENDPOINT + "/otus";
+    private static final String TAXONWORKS_TAXON_NAMES = TAXONWORKS_API_ENDPOINT + "/taxon_names";
     public static final IRI TAXONWORKS_OPEN_PROJECTS = toIRI(TAXONWORKS_API_ENDPOINT);
 
 
@@ -78,6 +79,15 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
         } else if (hasVersionAvailable(statement)
                 && StringUtils.startsWith(getVersionSource(statement).getIRIString(), RefNodeFactory.toIRI(TAXONWORKS_CITATIONS).getIRIString())) {
             handleCitations(statement);
+        } else if (hasVersionAvailable(statement)
+                && StringUtils.startsWith(getVersionSource(statement).getIRIString(), RefNodeFactory.toIRI(TAXONWORKS_BIOLOGICAL_ASSOCIATIONS).getIRIString())) {
+            handleBiologicalAssociation(statement);
+        } else if (hasVersionAvailable(statement)
+                && StringUtils.startsWith(getVersionSource(statement).getIRIString(), RefNodeFactory.toIRI(TAXONWORKS_OTUS).getIRIString())) {
+            handleOTUs(statement);
+        } else if (hasVersionAvailable(statement)
+                && StringUtils.startsWith(getVersionSource(statement).getIRIString(), RefNodeFactory.toIRI(TAXONWORKS_TAXON_NAMES).getIRIString())) {
+            handleTaxonNames(statement);
         }
     }
 
@@ -89,6 +99,63 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
             InputStream is = get(currentPage);
             if (is != null) {
                 parseCitations(currentPage, new StatementsEmitterAdapter() {
+                    @Override
+                    public void emit(Quad statement) {
+                        nodes.add(statement);
+                    }
+                }, is, getVersionSource(statement));
+            }
+        } catch (IOException e) {
+            LOG.warn("failed to handle [" + statement.toString() + "]", e);
+        }
+        ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+    }
+
+    public void handleBiologicalAssociation(Quad statement) {
+        List<Quad> nodes = new ArrayList<>();
+        try {
+            IRI currentPage = (IRI) getVersion(statement);
+            InputStream is = get(currentPage);
+            if (is != null) {
+                parseBiologicalAssociation(currentPage, new StatementsEmitterAdapter() {
+                    @Override
+                    public void emit(Quad statement) {
+                        nodes.add(statement);
+                    }
+                }, is, getVersionSource(statement));
+            }
+        } catch (IOException e) {
+            LOG.warn("failed to handle [" + statement.toString() + "]", e);
+        }
+        ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+    }
+
+    public void handleOTUs(Quad statement) {
+        List<Quad> nodes = new ArrayList<>();
+        try {
+            IRI currentPage = (IRI) getVersion(statement);
+            InputStream is = get(currentPage);
+            if (is != null) {
+                parseOTUs(currentPage, new StatementsEmitterAdapter() {
+                    @Override
+                    public void emit(Quad statement) {
+                        nodes.add(statement);
+                    }
+                }, is, getVersionSource(statement));
+            }
+        } catch (IOException e) {
+            LOG.warn("failed to handle [" + statement.toString() + "]", e);
+        }
+        ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+    }
+
+    public void handleTaxonNames(Quad statement) {
+        List<Quad> nodes = new ArrayList<>();
+        try {
+            IRI currentPage = (IRI) getVersion(statement);
+            InputStream is = get(currentPage);
+            if (is != null) {
+                parseTaxonName(currentPage, new StatementsEmitterAdapter() {
                     @Override
                     public void emit(Quad statement) {
                         nodes.add(statement);
@@ -146,6 +213,51 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
         if (jsonNode != null) {
             for (JsonNode node : jsonNode) {
                 parseIndividualCitation(currentPage, emitter, node, versionSource);
+            }
+        }
+
+        emitNextPageIfNeeded(emitter, versionSource, jsonNode);
+    }
+
+    static void parseBiologicalAssociation(IRI currentPage, StatementsEmitter emitter, InputStream in, IRI versionSource) throws IOException {
+        JsonNode jsonNode = new ObjectMapper().readTree(in);
+        if (jsonNode != null) {
+            if (jsonNode.isArray()) {
+                for (JsonNode node : jsonNode) {
+                    parseIndividualBiologicalAssociation(currentPage, emitter, node, versionSource);
+                }
+            } else {
+                parseIndividualBiologicalAssociation(currentPage, emitter, jsonNode, versionSource);
+            }
+        }
+
+        emitNextPageIfNeeded(emitter, versionSource, jsonNode);
+    }
+
+    static void parseOTUs(IRI currentPage, StatementsEmitter emitter, InputStream in, IRI versionSource) throws IOException {
+        JsonNode jsonNode = new ObjectMapper().readTree(in);
+        if (jsonNode != null) {
+            if (jsonNode.isArray()) {
+                for (JsonNode node : jsonNode) {
+                    parseIndividualOTUs(currentPage, emitter, node, versionSource);
+                }
+            } else {
+                parseIndividualOTUs(currentPage, emitter, jsonNode, versionSource);
+            }
+        }
+
+        emitNextPageIfNeeded(emitter, versionSource, jsonNode);
+    }
+
+    static void parseTaxonName(IRI currentPage, StatementsEmitter emitter, InputStream in, IRI versionSource) throws IOException {
+        JsonNode jsonNode = new ObjectMapper().readTree(in);
+        if (jsonNode != null) {
+            if (jsonNode.isArray()) {
+                for (JsonNode node : jsonNode) {
+                    parseIndividualTaxonNames(currentPage, emitter, node, versionSource);
+                }
+            } else {
+                parseIndividualTaxonNames(currentPage, emitter, jsonNode, versionSource);
             }
         }
 
@@ -229,6 +341,62 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
                 emitter.emit(toStatement(associationQuery, WAS_DERIVED_FROM, sourceQuery));
                 emitter.emit(toStatement(associationQuery, HAS_VERSION, toBlank()));
             }
+        }
+
+    }
+
+    private static void parseIndividualBiologicalAssociation(IRI currentPage, StatementsEmitter emitter, JsonNode result, IRI versionSource) {
+        if (result.has("biological_association_subject_id")
+                && result.has("biological_association_object_id")) {
+            Stream<IRI> otuQueries = Stream.of(
+                    result.get("biological_association_subject_id").asText(),
+                    result.get("biological_association_object_id").asText()
+            ).map(id -> TAXONWORKS_API_ENDPOINT + "/otus/" + id)
+                    .map(x -> appendProjectTokenIfAvailable(versionSource, x)
+                    ).map(RefNodeFactory::toIRI);
+
+            otuQueries.forEach(q -> {
+                emitter.emit(toStatement(currentPage, HAD_MEMBER, q));
+                emitter.emit(toStatement(q, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
+                emitter.emit(toStatement(q, HAS_VERSION, toBlank()));
+
+            });
+        }
+
+    }
+
+    private static void parseIndividualOTUs(IRI currentPage, StatementsEmitter emitter, JsonNode result, IRI versionSource) {
+        if (result.has("taxon_name_id")) {
+            Stream<IRI> otuQueries = Stream.of(
+                    result.get("taxon_name_id").asText()
+            ).map(id -> TAXONWORKS_API_ENDPOINT + "/taxon_names/" + id)
+                    .map(x -> appendProjectTokenIfAvailable(versionSource, x)
+                    ).map(RefNodeFactory::toIRI);
+
+            otuQueries.forEach(q -> {
+                emitter.emit(toStatement(currentPage, HAD_MEMBER, q));
+                emitter.emit(toStatement(q, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
+                emitter.emit(toStatement(q, HAS_VERSION, toBlank()));
+
+            });
+        }
+
+    }
+
+    private static void parseIndividualTaxonNames(IRI currentPage, StatementsEmitter emitter, JsonNode result, IRI versionSource) {
+        if (result.hasNonNull("parent_id")) {
+            Stream<IRI> otuQueries = Stream.of(
+                    result.get("parent_id").asText()
+            ).map(id -> TAXONWORKS_API_ENDPOINT + "/taxon_names/" + id)
+                    .map(x -> appendProjectTokenIfAvailable(versionSource, x)
+                    ).map(RefNodeFactory::toIRI);
+
+            otuQueries.forEach(q -> {
+                emitter.emit(toStatement(currentPage, HAD_MEMBER, q));
+                emitter.emit(toStatement(q, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
+                emitter.emit(toStatement(q, HAS_VERSION, toBlank()));
+
+            });
         }
 
     }

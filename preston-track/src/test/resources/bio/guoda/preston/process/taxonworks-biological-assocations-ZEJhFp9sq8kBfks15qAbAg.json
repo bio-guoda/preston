@@ -1,0 +1,19 @@
+{
+  "id": 157457,
+  "biological_relationship_id": 1,
+  "biological_association_subject_id": 41859,
+  "biological_association_subject_type": "Otu",
+  "biological_association_object_id": 80527,
+  "biological_association_object_type": "Otu",
+  "created_by_id": 66,
+  "updated_by_id": 66,
+  "project_id": 13,
+  "created_at": "2019-11-26T03:49:04.812Z",
+  "updated_at": "2019-11-26T03:49:04.812Z",
+  "object_tag": "\u003cspan class=\"otu_tag\"\u003e\u003cspan class=\"otu_tag_taxon_name\" title=\"372119\"\u003e\u003ci\u003eAsymmetrasca decedens\u003c/i\u003e (Paoli, 1932)\u003c/span\u003e \u0026#10003;\u003c/span\u003e \u003cspan class=\"notice\"\u003efeeds on / is host for\u003c/span\u003e \u003cspan class=\"otu_tag\"\u003e\u003cspan class=\"otu_tag_taxon_name\" title=\"441930\"\u003e\u003ci\u003eCarya\u003c/i\u003e Nutt.\u003c/span\u003e \u0026#10003;\u003c/span\u003e",
+  "object_label": null,
+  "global_id": "gid://taxon-works/BiologicalAssociation/157457",
+  "base_class": "BiologicalAssociation",
+  "url_for": "https://sfg.taxonworks.org/api/v1/biological_associations/157457",
+  "object_url": "/biological_associations/157457"
+}
