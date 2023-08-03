@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
@@ -44,18 +43,9 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
-    private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
-        put("DWC_ARCHIVE", MimeTypes.MIME_TYPE_DWCA);
-        put("BIOCASE_XML_ARCHIVE", MimeTypes.MIME_TYPE_ABCDA);
-        put("BIOCASE", MimeTypes.MIME_TYPE_BIOCASE_META);
-        put("EML", MimeTypes.MIME_TYPE_EML);
-    }};
-
-    public static final String GBIF_API_OCCURRENCE_DOWNLOAD_PART = "//api.gbif.org/v1/occurrence/download";
-    public static final String GBIF_OCCURRENCE_PART_PATH = "api.gbif.org/v1/occurrence";
     private final Logger LOG = LoggerFactory.getLogger(RegistryReaderTaxonWorks.class);
     public static final String TAXONWORKS_API_ENDPOINT = "https://sfg.taxonworks.org/api/v1";
-    private static final String TAXONWORKS_CITATIONS = TAXONWORKS_API_ENDPOINT + "citations";
+    private static final String TAXONWORKS_CITATIONS = TAXONWORKS_API_ENDPOINT + "/citations";
     public static final IRI TAXONWORKS_OPEN_PROJECTS = toIRI(TAXONWORKS_API_ENDPOINT);
 
 
@@ -83,10 +73,10 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
             }, TAXONWORKS_OPEN_PROJECTS);
             ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
-                && getVersionSource(statement).toString().contains(TAXONWORKS_API_ENDPOINT)) {
+                && StringUtils.equals(getVersionSource(statement).toString(), TAXONWORKS_OPEN_PROJECTS.toString())) {
             handleProjectIndex(statement);
         } else if (hasVersionAvailable(statement)
-                && getVersionSource(statement).toString().contains(TAXONWORKS_CITATIONS)) {
+                && StringUtils.startsWith(getVersionSource(statement).getIRIString(), RefNodeFactory.toIRI(TAXONWORKS_CITATIONS).getIRIString())) {
             handleCitations(statement);
         }
     }
@@ -111,7 +101,7 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
         ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
     }
 
-    public void handleProjectIndex(Quad statement) {
+    private void handleProjectIndex(Quad statement) {
         List<Quad> nodes = new ArrayList<>();
         try {
             IRI currentPage = (IRI) getVersion(statement);
@@ -155,7 +145,7 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
         JsonNode jsonNode = new ObjectMapper().readTree(in);
         if (jsonNode != null) {
             for (JsonNode node : jsonNode) {
-                parseIndividualCitation(currentPage, emitter, node);
+                parseIndividualCitation(currentPage, emitter, node, versionSource);
             }
         }
 
@@ -221,29 +211,35 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
         return jsonNode == null || jsonNode.size() == 0;
     }
 
-    public static void parseIndividualCitation(IRI currentPage, StatementsEmitter emitter, JsonNode result) {
+    public static void parseIndividualCitation(IRI currentPage, StatementsEmitter emitter, JsonNode result, IRI versionSource) {
         if (result.has("source_id")) {
             String sourceId = result.get("source_id").asText();
-            IRI sourceQuery = toIRI(TAXONWORKS_API_ENDPOINT + "/sources/" + sourceId);
+
+            String sourcesUrl = TAXONWORKS_API_ENDPOINT + "/sources/" + sourceId;
+            IRI sourceQuery = toIRI(appendProjectTokenIfAvailable(versionSource, sourcesUrl));
             if (result.has("citation_object_id")) {
                 emitter.emit(toStatement(currentPage, HAD_MEMBER, sourceQuery));
                 emitter.emit(toStatement(sourceQuery, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
                 emitter.emit(toStatement(sourceQuery, HAS_VERSION, toBlank()));
 
-                Pattern projectToken = Pattern.compile("(.*)([?&]project_token=)(?<projectToken>[a-zA-Z0-9]+)(.*)");
                 String associationId = result.get("citation_object_id").asText();
                 String associationsUrl = TAXONWORKS_API_ENDPOINT + "/biological_associations/" + associationId;
-                Matcher matcher = projectToken.matcher(currentPage.getIRIString());
-                if (matcher.matches()) {
-                    associationsUrl = associationsUrl + "?project_token=" + matcher.group("projectToken");
-                }
 
-                IRI associationQuery = toIRI(associationsUrl);
+                IRI associationQuery = toIRI(appendProjectTokenIfAvailable(versionSource, associationsUrl));
                 emitter.emit(toStatement(associationQuery, WAS_DERIVED_FROM, sourceQuery));
                 emitter.emit(toStatement(associationQuery, HAS_VERSION, toBlank()));
             }
         }
 
+    }
+
+    private static String appendProjectTokenIfAvailable(IRI versionSource, String url) {
+        Pattern projectToken = Pattern.compile("(.*)([?&]project_token=)(?<projectToken>[a-zA-Z0-9]+)(.*)");
+        Matcher matcher = projectToken.matcher(versionSource.getIRIString());
+        if (matcher.matches()) {
+            url = url + "?project_token=" + matcher.group("projectToken");
+        }
+        return url;
     }
 
 

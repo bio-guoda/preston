@@ -1,15 +1,20 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.StatementsListenerEmitterAdapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.BlankNode;
+import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +35,39 @@ public class RegistryReaderTaxonWorksTest {
         }, IOUtils.toInputStream("[]", StandardCharsets.UTF_8), RefNodeFactory.toIRI("https://example.org"));
 
         assertThat(statements.size(), Is.is(0));
+
+    }
+
+    @Test
+    public void parseHandleQuery() throws IOException {
+        List<Quad> emitted = new ArrayList<>();
+
+        new RegistryReaderTaxonWorks(new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                return getClass().getResourceAsStream("taxonworks-citations-VVpT9aMPkqtnzmRVUx5jtg.json");
+            }
+        }, new StatementsListenerEmitterAdapter() {
+            @Override
+            public void emit(Quad statement) {
+
+            }
+
+            @Override
+            public void on(Quad statement) {
+                emitted.add(statement);
+            }
+        }).on(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://sfg.taxonworks.org/api/v1/citations/?citation_object_type=BiologicalAssociation&project_token=VVpT9aMPkqtnzmRVUx5jtg"),
+                RefNodeConstants.HAS_VERSION,
+                RefNodeFactory.toIRI("hash://sha256/abc"))
+        );
+
+        for (Quad quad : emitted) {
+            System.out.println(quad);
+        }
+
+        assertThat(emitted.size(), Is.is(254));
 
     }
 
@@ -146,15 +184,16 @@ public class RegistryReaderTaxonWorksTest {
         assertThat(fifth.getObject() instanceof BlankNode, Is.is(true));
 
     }
+
     @Test
     public void parseProjectIndex() throws IOException {
         List<Quad> statements = new ArrayList<>();
         RegistryReaderTaxonWorks.parseProjectIndex(new StatementsEmitterAdapter() {
-            @Override
-            public void emit(Quad statement) {
-                statements.add(statement);
-            }
-        }, IOUtils.toInputStream("{\n" +
+                                                       @Override
+                                                       public void emit(Quad statement) {
+                                                           statements.add(statement);
+                                                       }
+                                                   }, IOUtils.toInputStream("{\n" +
                         "  \"success\": true,\n" +
                         "  \"open_projects\": [\n" +
                         "    {\n" +
