@@ -15,6 +15,7 @@
         <module>preston-test</module>
         <module>preston-cas</module>
         <module>preston-dwc</module>
+        <module>preston-taxonworks</module>
         <module>preston-plazi</module>
         <module>preston-dbase</module>
         <module>preston-excel</module>
