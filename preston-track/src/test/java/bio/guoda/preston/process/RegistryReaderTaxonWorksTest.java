@@ -45,7 +45,7 @@ public class RegistryReaderTaxonWorksTest {
         new RegistryReaderTaxonWorks(new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI uri) throws IOException {
-                return getClass().getResourceAsStream("taxonworks-citations-VVpT9aMPkqtnzmRVUx5jtg.json");
+                return getClass().getResourceAsStream("taxonworks/citations-VVpT9aMPkqtnzmRVUx5jtg.json");
             }
         }, new StatementsListenerEmitterAdapter() {
             @Override
@@ -74,7 +74,7 @@ public class RegistryReaderTaxonWorksTest {
         new RegistryReaderTaxonWorks(new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI uri) throws IOException {
-                return getClass().getResourceAsStream("taxonworks-biological-assocations-ZEJhFp9sq8kBfks15qAbAg.json");
+                return getClass().getResourceAsStream("taxonworks/biological-assocations-ZEJhFp9sq8kBfks15qAbAg.json");
             }
         }, new StatementsListenerEmitterAdapter() {
             @Override
@@ -103,7 +103,7 @@ public class RegistryReaderTaxonWorksTest {
         new RegistryReaderTaxonWorks(new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI uri) throws IOException {
-                return getClass().getResourceAsStream("taxonworks-otus-ZEJhFp9sq8kBfks15qAbAg.json");
+                return getClass().getResourceAsStream("taxonworks/otus-ZEJhFp9sq8kBfks15qAbAg.json");
             }
         }, new StatementsListenerEmitterAdapter() {
             @Override
@@ -149,7 +149,7 @@ public class RegistryReaderTaxonWorksTest {
         new RegistryReaderTaxonWorks(new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI uri) throws IOException {
-                return getClass().getResourceAsStream("taxonworks-taxon-names-ZEJhFp9sq8kBfks15qAbAg.json");
+                return getClass().getResourceAsStream("taxonworks/taxon-names-ZEJhFp9sq8kBfks15qAbAg.json");
             }
         }, new StatementsListenerEmitterAdapter() {
             @Override
