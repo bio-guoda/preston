@@ -402,7 +402,7 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
     }
 
     private static String appendProjectTokenIfAvailable(IRI versionSource, String url) {
-        Pattern projectToken = Pattern.compile("(.*)([?&]project_token=)(?<projectToken>[a-zA-Z0-9]+)(.*)");
+        Pattern projectToken = Pattern.compile("(.*)([?&]project_token=)(?<projectToken>[a-zA-Z0-9_-]+)(.*)");
         Matcher matcher = projectToken.matcher(versionSource.getIRIString());
         if (matcher.matches()) {
             url = url + "?project_token=" + matcher.group("projectToken");

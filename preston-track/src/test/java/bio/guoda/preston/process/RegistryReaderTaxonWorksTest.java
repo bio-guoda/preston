@@ -64,10 +64,6 @@ public class RegistryReaderTaxonWorksTest {
                 RefNodeFactory.toIRI("hash://sha256/abc"))
         );
 
-        for (Quad quad : emitted) {
-            System.out.println(quad);
-        }
-
         assertThat(emitted.size(), Is.is(254));
 
     }
@@ -318,8 +314,14 @@ public class RegistryReaderTaxonWorksTest {
 
     @Test
     public void parseCitationObjectWithProjectToken() throws IOException {
+        String projectToken = "ABC123";
+        assertAppendProjectToken(projectToken);
+
+    }
+
+    private void assertAppendProjectToken(String projectToken) throws IOException {
         List<Quad> statements = new ArrayList<>();
-        RegistryReaderTaxonWorks.parseCitations(RefNodeFactory.toIRI("https://example.org/?project_token=ABC123"), new StatementsEmitterAdapter() {
+        RegistryReaderTaxonWorks.parseCitations(RefNodeFactory.toIRI("https://example.org/?project_token=" + projectToken), new StatementsEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
                 statements.add(statement);
@@ -335,35 +337,44 @@ public class RegistryReaderTaxonWorksTest {
                 "    \"updated_by_id\": 78,\n" +
                 "    \"project_id\": 16,\n" +
                 "    \"citation_source_body\": \"Abai, 1976:7-15,3-5\"\n" +
-                "  }\n]", StandardCharsets.UTF_8), RefNodeFactory.toIRI("https://example.org?project_token=ABC123"));
+                "  }\n]", StandardCharsets.UTF_8), RefNodeFactory.toIRI("https://example.org?project_token=" + projectToken));
 
         assertThat(statements.size(), Is.is(8));
 
         Quad first = statements.get(0);
-        assertThat(first.getSubject().toString(), Is.is("<https://example.org/?project_token=ABC123>"));
+        assertThat(first.getSubject().toString(), Is.is("<https://example.org/?project_token=" + projectToken + ">"));
         assertThat(first.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#hadMember>"));
-        assertThat(first.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?project_token=ABC123>"));
+        assertThat(first.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?project_token=" + projectToken + ">"));
 
         Quad second = statements.get(1);
-        assertThat(second.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?project_token=ABC123>"));
+        assertThat(second.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?project_token=" + projectToken + ">"));
         assertThat(second.getPredicate().toString(), Is.is("<http://purl.org/dc/elements/1.1/format>"));
         assertThat(second.getObject().toString(), Is.is("\"application/json\""));
 
         Quad third = statements.get(2);
-        assertThat(third.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?project_token=ABC123>"));
+        assertThat(third.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?project_token=" + projectToken + ">"));
         assertThat(third.getPredicate().toString(), Is.is("<http://purl.org/pav/hasVersion>"));
         assertThat(third.getObject() instanceof BlankNode, Is.is(true));
 
         Quad forth = statements.get(3);
-        assertThat(forth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526?project_token=ABC123>"));
+        assertThat(forth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526?project_token=" + projectToken + ">"));
         assertThat(forth.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#wasDerivedFrom>"));
-        assertThat(forth.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?project_token=ABC123>"));
+        assertThat(forth.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?project_token=" + projectToken + ">"));
 
         Quad fifth = statements.get(4);
-        assertThat(fifth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526?project_token=ABC123>"));
+        assertThat(fifth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526?project_token=" + projectToken + ">"));
         assertThat(fifth.getPredicate().toString(), Is.is("<http://purl.org/pav/hasVersion>"));
         assertThat(fifth.getObject() instanceof BlankNode, Is.is(true));
+    }
 
+    @Test
+    public void parseCitationObjectWithProjectTokenWithHyphen() throws IOException {
+        assertAppendProjectToken("Ots0-yen4dVefn0Etyxvgw");
+    }
+
+    @Test
+    public void parseCitationObjectWithProjectTokenWithUnderScore() throws IOException {
+        assertAppendProjectToken("ekMTicbZWijqmdpHKqs_TA");
     }
 
     @Test
