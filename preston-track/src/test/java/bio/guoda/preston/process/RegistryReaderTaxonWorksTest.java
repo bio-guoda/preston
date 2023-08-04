@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.startsWith;
 
 
 public class RegistryReaderTaxonWorksTest {
@@ -51,7 +50,7 @@ public class RegistryReaderTaxonWorksTest {
         }, new StatementsListenerEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
-
+                emitted.add(statement);
             }
 
             @Override
@@ -64,7 +63,7 @@ public class RegistryReaderTaxonWorksTest {
                 RefNodeFactory.toIRI("hash://sha256/abc"))
         );
 
-        assertThat(emitted.size(), Is.is(254));
+        assertThat(emitted.size(), Is.is(253));
 
     }
 
@@ -93,7 +92,7 @@ public class RegistryReaderTaxonWorksTest {
                 RefNodeFactory.toIRI("hash://sha256/abc"))
         );
 
-        assertThat(emitted.size(), Is.is(7));
+        assertThat(emitted.size(), Is.is(6));
 
     }
 
@@ -109,7 +108,7 @@ public class RegistryReaderTaxonWorksTest {
         }, new StatementsListenerEmitterAdapter() {
             @Override
             public void emit(Quad statement) {
-
+                statements.add(statement);
             }
 
             @Override
@@ -122,25 +121,20 @@ public class RegistryReaderTaxonWorksTest {
                 RefNodeFactory.toIRI("hash://sha256/abc"))
         );
 
-        assertThat(statements.size(), Is.is(4));
+        assertThat(statements.size(), Is.is(3));
 
 
-        Quad first = statements.get(0);
-        assertThat(first.getSubject().toString(), startsWith("<urn:uuid:"));
-        assertThat(first.getPredicate().toString(), Is.is("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>"));
-        assertThat(first.getObject().toString(), Is.is("<http://www.w3.org/ns/prov#Activity>"));
-
-        Quad second = statements.get(1);
+        Quad second = statements.get(0);
         assertThat(second.getSubject().toString(), Is.is("<hash://sha256/abc>"));
         assertThat(second.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#hadMember>"));
         assertThat(second.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/taxon_names/372119?project_token=ZEJhFp9sq8kBfks15qAbAg>"));
 
-        Quad third = statements.get(2);
+        Quad third = statements.get(1);
         assertThat(third.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/taxon_names/372119?project_token=ZEJhFp9sq8kBfks15qAbAg>"));
         assertThat(third.getPredicate().toString(), Is.is("<http://purl.org/dc/elements/1.1/format>"));
         assertThat(third.getObject().toString(), Is.is("\"application/json\""));
 
-        Quad forth = statements.get(3);
+        Quad forth = statements.get(2);
         assertThat(forth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/taxon_names/372119?project_token=ZEJhFp9sq8kBfks15qAbAg>"));
         assertThat(forth.getPredicate().toString(), Is.is("<http://purl.org/pav/hasVersion>"));
         assertThat(forth.getObject() instanceof BlankNode, Is.is(true));
@@ -173,28 +167,22 @@ public class RegistryReaderTaxonWorksTest {
                 RefNodeFactory.toIRI("hash://sha256/abc"))
         );
 
-        assertThat(statements.size(), Is.is(4));
+        assertThat(statements.size(), Is.is(3));
 
-        Quad first = statements.get(0);
-        assertThat(first.getSubject().toString(), startsWith("<urn:uuid:"));
-        assertThat(first.getPredicate().toString(), Is.is("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>"));
-        assertThat(first.getObject().toString(), Is.is("<http://www.w3.org/ns/prov#Activity>"));
-
-        Quad second = statements.get(1);
+        Quad second = statements.get(0);
         assertThat(second.getSubject().toString(), Is.is("<hash://sha256/abc>"));
         assertThat(second.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#hadMember>"));
         assertThat(second.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/taxon_names/372113?project_token=ZEJhFp9sq8kBfks15qAbAg>"));
 
-        Quad third = statements.get(2);
+        Quad third = statements.get(1);
         assertThat(third.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/taxon_names/372113?project_token=ZEJhFp9sq8kBfks15qAbAg>"));
         assertThat(third.getPredicate().toString(), Is.is("<http://purl.org/dc/elements/1.1/format>"));
         assertThat(third.getObject().toString(), Is.is("\"application/json\""));
 
-        Quad forth = statements.get(3);
+        Quad forth = statements.get(2);
         assertThat(forth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/taxon_names/372113?project_token=ZEJhFp9sq8kBfks15qAbAg>"));
         assertThat(forth.getPredicate().toString(), Is.is("<http://purl.org/pav/hasVersion>"));
         assertThat(forth.getObject() instanceof BlankNode, Is.is(true));
-
 
 
     }
@@ -262,6 +250,7 @@ public class RegistryReaderTaxonWorksTest {
         assertThat(fifth.getObject() instanceof BlankNode, Is.is(true));
 
     }
+
     @Test
     public void parseCitationObject() throws IOException {
         List<Quad> statements = new ArrayList<>();

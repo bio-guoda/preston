@@ -58,21 +58,14 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (Seeds.TAXONWORKS.equals(statement.getSubject())
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
-            List<Quad> nodes = new ArrayList<>();
             Stream.of(
                     toStatement(Seeds.TAXONWORKS, IS_A, ORGANIZATION),
                     toStatement(RegistryReaderTaxonWorks.TAXONWORKS_OPEN_PROJECTS,
                             DESCRIPTION,
                             toEnglishLiteral("Provides an index of open projects hosted via TaxonWorks."))
-            ).forEach(nodes::add);
+            ).forEach(this::emit);
 
-            emitPageRequest(new StatementsEmitterAdapter() {
-                @Override
-                public void emit(Quad statement) {
-                    nodes.add(statement);
-                }
-            }, TAXONWORKS_OPEN_PROJECTS);
-            ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+            emitPageRequest(this, TAXONWORKS_OPEN_PROJECTS);
         } else if (hasVersionAvailable(statement)
                 && StringUtils.equals(getVersionSource(statement).toString(), TAXONWORKS_OPEN_PROJECTS.toString())) {
             handleProjectIndex(statement);
@@ -93,79 +86,51 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
 
 
     public void handleCitations(Quad statement) {
-        List<Quad> nodes = new ArrayList<>();
         try {
             IRI currentPage = (IRI) getVersion(statement);
             InputStream is = get(currentPage);
             if (is != null) {
-                parseCitations(currentPage, new StatementsEmitterAdapter() {
-                    @Override
-                    public void emit(Quad statement) {
-                        nodes.add(statement);
-                    }
-                }, is, getVersionSource(statement));
+                parseCitations(currentPage, this, is, getVersionSource(statement));
             }
         } catch (IOException e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);
         }
-        ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
     }
 
     public void handleBiologicalAssociation(Quad statement) {
-        List<Quad> nodes = new ArrayList<>();
         try {
             IRI currentPage = (IRI) getVersion(statement);
             InputStream is = get(currentPage);
             if (is != null) {
-                parseBiologicalAssociation(currentPage, new StatementsEmitterAdapter() {
-                    @Override
-                    public void emit(Quad statement) {
-                        nodes.add(statement);
-                    }
-                }, is, getVersionSource(statement));
+                parseBiologicalAssociation(currentPage, this, is, getVersionSource(statement));
             }
         } catch (IOException e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);
         }
-        ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
     }
 
     public void handleOTUs(Quad statement) {
-        List<Quad> nodes = new ArrayList<>();
         try {
             IRI currentPage = (IRI) getVersion(statement);
             InputStream is = get(currentPage);
             if (is != null) {
-                parseOTUs(currentPage, new StatementsEmitterAdapter() {
-                    @Override
-                    public void emit(Quad statement) {
-                        nodes.add(statement);
-                    }
-                }, is, getVersionSource(statement));
+                parseOTUs(currentPage, this, is, getVersionSource(statement));
             }
         } catch (IOException e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);
         }
-        ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
     }
 
     public void handleTaxonNames(Quad statement) {
-        List<Quad> nodes = new ArrayList<>();
         try {
             IRI currentPage = (IRI) getVersion(statement);
             InputStream is = get(currentPage);
             if (is != null) {
-                parseTaxonName(currentPage, new StatementsEmitterAdapter() {
-                    @Override
-                    public void emit(Quad statement) {
-                        nodes.add(statement);
-                    }
-                }, is, getVersionSource(statement));
+                parseTaxonName(currentPage, this, is, getVersionSource(statement));
             }
         } catch (IOException e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);
         }
-        ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
     }
 
     private void handleProjectIndex(Quad statement) {
@@ -174,17 +139,11 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
             IRI currentPage = (IRI) getVersion(statement);
             InputStream is = get(currentPage);
             if (is != null) {
-                parseProjectIndex(new StatementsEmitterAdapter() {
-                    @Override
-                    public void emit(Quad statement) {
-                        nodes.add(statement);
-                    }
-                }, is, getVersionSource(statement));
+                parseProjectIndex(this, is, getVersionSource(statement));
             }
         } catch (IOException e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);
         }
-        ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
     }
 
     static void emitNextPage(int pageNumber, int pageSize, StatementsEmitter emitter, String versionSourceURI) {
@@ -198,6 +157,7 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
         IRI nextPage = toIRI(nextPageURL);
         emitPageRequest(emitter, nextPage);
     }
+
 
     private static void emitPageRequest(StatementsEmitter emitter, IRI nextPage) {
         Stream.of(
