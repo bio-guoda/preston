@@ -32,7 +32,7 @@ public class CmdTaxonWorksStream extends LoggingPersisting implements Runnable {
                 NullPrintStream.NULL_PRINT_STREAM,
                 LogErrorHandlerExitOnError.EXIT_ON_ERROR);
 
-        GitHubJSONExtractor textMatcher = new GitHubJSONExtractor(
+        TaxonWorksJSONExtractor textMatcher = new TaxonWorksJSONExtractor(
                 this,
                 blobStoreReadOnly,
                 getOutputStream(),
