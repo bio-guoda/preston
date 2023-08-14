@@ -11,6 +11,7 @@ import bio.guoda.preston.stream.CompressedStreamHandler;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import bio.guoda.preston.stream.ContentStreamHandlerImpl;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
@@ -19,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
@@ -29,6 +32,7 @@ public class TaxonWorksJSONExtractor extends ProcessorExtracting {
 
     private final ProcessorState processorState;
     private final OutputStream outputStream;
+    private final TreeMap<String, Map<Long, ObjectNode>> requestedIds = new TreeMap<>();
 
     public TaxonWorksJSONExtractor(ProcessorState processorState,
                                    BlobStoreReadOnly blobStoreReadOnly,
@@ -57,8 +61,8 @@ public class TaxonWorksJSONExtractor extends ProcessorExtracting {
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
                     new TaxonWorksJSONStreamHandler(this,
-                            new ContentHashDereferencer(TaxonWorksJSONExtractor.this),
-                            outputStream
+                            outputStream,
+                            requestedIds
                     )
             );
         }

@@ -51,7 +51,7 @@ public class TaxonWorksJSONExtractorTest {
         LinkedList<String> queue = Stream.of(
                 "citation.json",
                 "source.json",
-                "assocation.json",
+                "association.json",
                 "subject_otu.json",
                 "object_otu.json",
                 "subject_name.json",
@@ -112,7 +112,15 @@ public class TaxonWorksJSONExtractorTest {
                 StandardCharsets.UTF_8.name()
         );
 
-        assertThat(actual, not(isEmptyString()));
+        JsonNode jsonNode = new ObjectMapper().readTree(actual);
+
+        assertThat(jsonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(),
+                is("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
+        assertThat(jsonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(),
+                is("application/vnd.taxonworks+json"));
+        assertThat(jsonNode.get("interactionTypeId").asText(),
+                is("gid://taxon-works/BiologicalRelationship/2"));
+
 
     }
 

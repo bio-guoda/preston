@@ -1,1 +1,19 @@
-{"id":5430,"biological_relationship_id":2,"biological_association_subject_id":47016,"biological_association_subject_type":"Otu","biological_association_object_id":81954,"biological_association_object_type":"Otu","created_by_id":2,"updated_by_id":2,"project_id":13,"created_at":"2018-11-15T03:48:29.171Z","updated_at":"2018-11-15T03:48:29.171Z","object_tag":"\u003cspan class=\"otu_tag\"\u003e\u003cspan class=\"otu_tag_taxon_name\" title=\"377136\"\u003e\u003ci\u003eEdwardsiana rosae\u003c/i\u003e (Linnaeus, 1758)\u003c/span\u003e \u0026#10003;\u003c/span\u003e \u003cspan class=\"notice\"\u003eis parasitized by / is parasitoid of\u003c/span\u003e \u003cspan class=\"otu_tag\"\u003e\u003cspan class=\"otu_tag_taxon_name\" title=\"443397\"\u003e\u003ci\u003eAnagrus nigriventris\u003c/i\u003e Girault\u003c/span\u003e \u0026#10003;\u003c/span\u003e","object_label":null,"global_id":"gid://taxon-works/BiologicalAssociation/5430","base_class":"BiologicalAssociation","url_for":"https://sfg.taxonworks.org/api/v1/biological_associations/5430","object_url":"/biological_associations/5430"}
+{
+  "id": 5430,
+  "biological_relationship_id": 2,
+  "biological_association_subject_id": 47016,
+  "biological_association_subject_type": "Otu",
+  "biological_association_object_id": 81954,
+  "biological_association_object_type": "Otu",
+  "created_by_id": 2,
+  "updated_by_id": 2,
+  "project_id": 13,
+  "created_at": "2018-11-15T03:48:29.171Z",
+  "updated_at": "2018-11-15T03:48:29.171Z",
+  "object_tag": "\u003cspan class=\"otu_tag\"\u003e\u003cspan class=\"otu_tag_taxon_name\" title=\"377136\"\u003e\u003ci\u003eEdwardsiana rosae\u003c/i\u003e (Linnaeus, 1758)\u003c/span\u003e \u0026#10003;\u003c/span\u003e \u003cspan class=\"notice\"\u003eis parasitized by / is parasitoid of\u003c/span\u003e \u003cspan class=\"otu_tag\"\u003e\u003cspan class=\"otu_tag_taxon_name\" title=\"443397\"\u003e\u003ci\u003eAnagrus nigriventris\u003c/i\u003e Girault\u003c/span\u003e \u0026#10003;\u003c/span\u003e",
+  "object_label": null,
+  "global_id": "gid://taxon-works/BiologicalAssociation/5430",
+  "base_class": "BiologicalAssociation",
+  "url_for": "https://sfg.taxonworks.org/api/v1/biological_associations/5430",
+  "object_url": "/biological_associations/5430"
+}

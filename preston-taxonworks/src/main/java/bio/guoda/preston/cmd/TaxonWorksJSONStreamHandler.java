@@ -1,10 +1,7 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.ResourcesHTTP;
-import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,18 +18,24 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TaxonWorksJSONStreamHandler implements ContentStreamHandler {
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
+    private LinkedList<ObjectNode> nodes = new LinkedList<>();
+    private final TreeMap<String, Map<Long, ObjectNode>> requestedIds;
 
     public TaxonWorksJSONStreamHandler(ContentStreamHandler contentStreamHandler,
-                                       Dereferencer<InputStream> inputStreamDereferencer,
-                                       OutputStream os) {
+                                       OutputStream os,
+                                       TreeMap<String, Map<Long, ObjectNode>> requestedIds) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
+        this.requestedIds = requestedIds;
     }
 
     @Override
@@ -42,7 +45,35 @@ public class TaxonWorksJSONStreamHandler implements ContentStreamHandler {
             Charset charset = new UniversalEncodingDetector().detect(is, new Metadata());
             if (charset != null) {
                 try {
-                    IOUtils.copy(is, outputStream);
+                    JsonNode jsonNode = new ObjectMapper().readTree(is);
+                    if (isCitation(jsonNode)) {
+                        ObjectNode objectNode = new ObjectMapper().createObjectNode();
+                        objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf(version.getIRIString()));
+                        objectNode.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf("application/vnd.taxonworks+json"));
+                        registerIdForNode(jsonNode.get("id").asLong(), objectNode, "citation_id");
+                        registerIdForNode(jsonNode.get("source_id").asLong(), objectNode, "source_id");
+                        registerIdForNode(jsonNode.get("citation_object_id").asLong(), objectNode, "citation_object_id");
+                    } else if (isSource(jsonNode)) {
+                        resolveId(jsonNode, "source_id");
+                    } else if (isAssociation(jsonNode)) {
+                        ObjectNode resolved = resolveId(jsonNode, "citation_object_id");
+                        if (resolved != null) {
+                            resolved.set("interactionTypeId", new TextNode("gid://taxon-works/BiologicalRelationship/" + jsonNode.get("biological_relationship_id").asText()));
+                            IOUtils.copy(IOUtils.toInputStream(resolved.toString(), StandardCharsets.UTF_8), outputStream);
+                            IOUtils.write("\n", outputStream, StandardCharsets.UTF_8);
+                        }
+                    } else if (isOTU(jsonNode)) {
+                        resolveId(jsonNode, "biological_association_subject_id");
+                        resolveId(jsonNode, "biological_association_object_id");
+                    } else if (isName(jsonNode)) {
+                        ObjectNode objectNode = resolveId(jsonNode, "taxon_name_id");
+                        if (objectNode != null
+                                && jsonNode.has("parent_id")
+                                && jsonNode.hasNonNull("parent_id")) {
+                            registerIdForNode(jsonNode.get("parent_id").asLong(), objectNode, "taxon_name_id");
+                        }
+                    }
+
                 } catch (JsonProcessingException ex) {
                     // ignore assumed malformed json
                 }
@@ -53,16 +84,56 @@ public class TaxonWorksJSONStreamHandler implements ContentStreamHandler {
         return foundAtLeastOne.get();
     }
 
-    private void writeAsLineJSON(IRI version, JsonNode jsonNode) throws IOException {
-        ((ObjectNode) jsonNode).set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf(version.getIRIString()));
-        ((ObjectNode) jsonNode).set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf(ResourcesHTTP.MIMETYPE_GITHUB_JSON));
-        IOUtils.copy(IOUtils.toInputStream(jsonNode.toString(), StandardCharsets.UTF_8), outputStream);
-        IOUtils.write("\n", outputStream, StandardCharsets.UTF_8);
+    private boolean isName(JsonNode jsonNode) {
+        return jsonNode.has("nomenclatural_code");
     }
 
-    private boolean hasGithubAPIURL(JsonNode obj) {
-        return obj.has("url")
-                && StringUtils.startsWith(obj.get("url").asText(), "https://api.github.com/repos/");
+    private boolean isOTU(JsonNode jsonNode) {
+        return jsonNode.has("globi_id")
+                && StringUtils.startsWith(
+                jsonNode.get("global_id").asText(),
+                "gid://taxon-works/Otu/81982"
+        );
+    }
+
+    private boolean isAssociation(JsonNode jsonNode) {
+        return jsonNode.has("biological_relationship_id");
+    }
+
+    private ObjectNode resolveId(JsonNode id, String idType) {
+        ObjectNode resolvedNode = null;
+        Map<Long, ObjectNode> idMap = requestedIds.get(idType);
+        if (idMap != null) {
+            ObjectNode jsonNode = idMap.get(id.get("id").asLong());
+            if (jsonNode != null) {
+                resolvedNode = jsonNode;
+            }
+        }
+        return resolvedNode;
+    }
+
+    private boolean isSource(JsonNode jsonNode) {
+        JsonNode baseClass = jsonNode.get("base_class");
+        return baseClass != null && StringUtils.equals(baseClass.asText(), "Source");
+    }
+
+    private void registerIdForNode(long id, ObjectNode node, String idType) {
+        Map<Long, ObjectNode> typeMap = requestedIds.containsKey(idType)
+                ? requestedIds.get(idType)
+                : new TreeMap<>();
+        typeMap.put(id, node);
+        requestedIds.put(idType, typeMap);
+    }
+
+    private void registerNode(ObjectNode jsonNode) {
+        nodes.add(jsonNode);
+    }
+
+    private boolean isCitation(JsonNode jsonNode) {
+        return jsonNode.has("citation_object_id")
+                && jsonNode.has("citation_object_type")
+                && StringUtils.equals("BiologicalAssociation", jsonNode.get("citation_object_type").asText(""))
+                && jsonNode.has("source_id");
     }
 
     @Override
