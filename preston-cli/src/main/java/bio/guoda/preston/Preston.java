@@ -24,6 +24,7 @@ import bio.guoda.preston.cmd.CmdList;
 import bio.guoda.preston.cmd.CmdMerge;
 import bio.guoda.preston.cmd.CmdPlazi;
 import bio.guoda.preston.cmd.CmdSeeds;
+import bio.guoda.preston.cmd.CmdTaxonWorksStream;
 import bio.guoda.preston.cmd.CmdUpdate;
 import bio.guoda.preston.cmd.CmdVerify;
 import bio.guoda.preston.cmd.CmdVersion;
@@ -64,6 +65,7 @@ import static java.lang.System.exit;
                 CmdPlazi.class,
                 CmdGenBankStream.class,
                 CmdGitHubStream.class,
+                CmdTaxonWorksStream.class,
                 CmdServe.class,
                 CmdCite.class,
                 CmdGenerateQRCode.class,

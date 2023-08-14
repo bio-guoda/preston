@@ -112,6 +112,7 @@ public class TaxonWorksJSONExtractorTest {
                 StandardCharsets.UTF_8.name()
         );
 
+        assertThat(actual, not(isEmptyString()));
         JsonNode jsonNode = new ObjectMapper().readTree(actual);
 
         assertThat(jsonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(),
@@ -120,6 +121,10 @@ public class TaxonWorksJSONExtractorTest {
                 is("application/vnd.taxonworks+json"));
         assertThat(jsonNode.get("interactionTypeId").asText(),
                 is("gid://taxon-works/BiologicalRelationship/2"));
+        assertThat(jsonNode.get("referenceId").asText(),
+                is("gid://taxon-works/Source::Bibtex/11554"));
+        assertThat(jsonNode.get("referenceCitation").asText(),
+                is("Ackerman, A.J. (1919a) Two leafhoppers injurious to apple nursery stock. <i>Bulletin. United States Department of Agriculture. Washington,</i> 805, 1–35."));
 
 
     }
