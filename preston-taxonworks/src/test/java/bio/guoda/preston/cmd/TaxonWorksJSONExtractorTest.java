@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
@@ -112,6 +113,86 @@ public class TaxonWorksJSONExtractorTest {
                 StandardCharsets.UTF_8.name()
         );
 
+        assertPopulatedInteractionClaim(actual);
+
+
+    }
+    @Test
+    public void buildBiologicalInteractionRecordDuplicateParents() throws IOException {
+        LinkedList<String> queue = Stream.of(
+                "citation.json",
+                "source.json",
+                "association.json",
+                "subject_otu.json",
+                "object_otu.json",
+                "subject_name.json",
+                "subject_name_parent.json",
+                "subject_name_parent.json",
+                "object_name.json",
+                "subject_name_parent.json",
+                "object_name_parent.json"
+        )
+                .map(x -> "/bio/guoda/preston/process/taxonworks/association-graph/" + x)
+                .collect(Collectors.toCollection(LinkedList::new));
+
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                return queue.isEmpty()
+                        ? null
+                        : getClass().getResourceAsStream(queue.pop());
+            }
+        };
+
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        TaxonWorksJSONExtractor extractor = new TaxonWorksJSONExtractor(
+                new ProcessorStateAlwaysContinue(),
+                blobStore,
+                byteArrayOutputStream
+        );
+
+        List<String> endpoints = Stream.of(
+                "/citations/?citation_object_type=BiologicalAssociation&",
+                "/sources/11554?",
+                "/biological_associations/5430?",
+                "/otus/47016?",
+                "/otus/81982?",
+                "/taxon_names/377136?",
+                "/taxon_names/376996?",
+                "/taxon_names/376996?",
+                "/taxon_names/443429?",
+                "/taxon_names/376996?",
+                "/taxon_names/443293?"
+        )
+                .map(x -> "https://sfg.taxonworks.org/api/v1" + x)
+                .map(x -> x + "project_token=ZEJhFp9sq8kBfks15qAbAg")
+                .collect(Collectors.toList());
+
+
+        endpoints.stream().flatMap(endpoint ->
+                Stream.of(
+                        toStatement(
+                                toIRI(endpoint),
+                                HAS_FORMAT,
+                                toLiteral("\"application/json\"")
+                        ), toStatement(
+                                toIRI(endpoint),
+                                HAS_VERSION,
+                                toIRI("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1")
+                        ))).forEach(extractor::on);
+
+        String actual = IOUtils.toString(
+                byteArrayOutputStream.toByteArray(),
+                StandardCharsets.UTF_8.name()
+        );
+
+        assertPopulatedInteractionClaim(actual);
+
+
+    }
+
+    private void assertPopulatedInteractionClaim(String actual) throws JsonProcessingException {
         assertThat(actual, not(isEmptyString()));
         JsonNode jsonNode = new ObjectMapper().readTree(actual);
 
@@ -149,8 +230,6 @@ public class TaxonWorksJSONExtractorTest {
                 is("genus | species"));
         assertThat(jsonNode.get("referenceCitation").asText(),
                 is("Ackerman, A.J. (1919a) Two leafhoppers injurious to apple nursery stock. <i>Bulletin. United States Department of Agriculture. Washington,</i> 805, 1–35."));
-
-
     }
 
 

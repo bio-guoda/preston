@@ -284,11 +284,12 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
     }
 
     public static void parseIndividualCitation(IRI currentPage, StatementsEmitter emitter, JsonNode result, IRI versionSource) {
+
         if (result.has("source_id")) {
             String sourceId = result.get("source_id").asText();
 
-            String sourcesUrl = TAXONWORKS_API_ENDPOINT + "/sources/" + sourceId;
-            IRI sourceQuery = toIRI(appendProjectTokenIfAvailable(versionSource, sourcesUrl));
+            String sourcesUrl = TAXONWORKS_API_ENDPOINT + "/sources/" + sourceId + "?extend[]=bibtex";
+            IRI sourceQuery = toIRI(sourcesUrl);
             if (result.has("citation_object_id")) {
                 emitter.emit(toStatement(currentPage, HAD_MEMBER, sourceQuery));
                 emitter.emit(toStatement(sourceQuery, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
@@ -326,27 +327,23 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
     }
 
     private static void parseIndividualOTUs(IRI currentPage, StatementsEmitter emitter, JsonNode result, IRI versionSource) {
-        if (result.has("taxon_name_id")) {
-            Stream<IRI> otuQueries = Stream.of(
-                    result.get("taxon_name_id").asText()
-            ).map(id -> TAXONWORKS_API_ENDPOINT + "/taxon_names/" + id)
-                    .map(x -> appendProjectTokenIfAvailable(versionSource, x)
-                    ).map(RefNodeFactory::toIRI);
-
-            otuQueries.forEach(q -> {
-                emitter.emit(toStatement(currentPage, HAD_MEMBER, q));
-                emitter.emit(toStatement(q, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
-                emitter.emit(toStatement(q, HAS_VERSION, toBlank()));
-
-            });
-        }
+        emitNameRequest(currentPage, emitter, result, versionSource, "taxon_name_id");
 
     }
 
     private static void parseIndividualTaxonNames(IRI currentPage, StatementsEmitter emitter, JsonNode result, IRI versionSource) {
-        if (result.hasNonNull("parent_id")) {
+        emitNameRequest(currentPage, emitter, result, versionSource, "parent_id");
+
+    }
+
+    private static void emitNameRequest(IRI currentPage,
+                                        StatementsEmitter emitter,
+                                        JsonNode result,
+                                        IRI versionSource,
+                                        String nameId) {
+        if (result.hasNonNull(nameId)) {
             Stream<IRI> otuQueries = Stream.of(
-                    result.get("parent_id").asText()
+                    result.get(nameId).asText()
             ).map(id -> TAXONWORKS_API_ENDPOINT + "/taxon_names/" + id)
                     .map(x -> appendProjectTokenIfAvailable(versionSource, x)
                     ).map(RefNodeFactory::toIRI);
@@ -358,7 +355,6 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
 
             });
         }
-
     }
 
     private static String appendProjectTokenIfAvailable(IRI versionSource, String url) {

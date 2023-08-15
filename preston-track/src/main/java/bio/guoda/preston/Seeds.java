@@ -18,5 +18,5 @@ public final class Seeds {
     public final static IRI OBIS = RefNodeFactory.toIRI("https://obis.org");
 
     public final static List<IRI> AVAILABLE
-            = Arrays.asList(GBIF, IDIGBIO, BIOCASE, DATA_ONE, BHL, OBIS, ALA);
+            = Arrays.asList(GBIF, IDIGBIO, BIOCASE, DATA_ONE, BHL, OBIS, ALA, TAXONWORKS);
 }
