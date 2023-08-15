@@ -227,25 +227,25 @@ public class RegistryReaderTaxonWorksTest {
         Quad first = statements.get(0);
         assertThat(first.getSubject().toString(), Is.is("<https://example.org/>"));
         assertThat(first.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#hadMember>"));
-        assertThat(first.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000>"));
+        assertThat(first.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?extend[]=bibtex>"));
 
         Quad second = statements.get(1);
-        assertThat(second.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000>"));
+        assertThat(second.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?extend[]=bibtex>"));
         assertThat(second.getPredicate().toString(), Is.is("<http://purl.org/dc/elements/1.1/format>"));
         assertThat(second.getObject().toString(), Is.is("\"application/json\""));
 
         Quad third = statements.get(2);
-        assertThat(third.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000>"));
+        assertThat(third.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?extend[]=bibtex>"));
         assertThat(third.getPredicate().toString(), Is.is("<http://purl.org/pav/hasVersion>"));
         assertThat(third.getObject() instanceof BlankNode, Is.is(true));
 
         Quad forth = statements.get(3);
-        assertThat(forth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526>"));
+        assertThat(forth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526?extend[]=biological_relationship>"));
         assertThat(forth.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#wasDerivedFrom>"));
-        assertThat(forth.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000>"));
+        assertThat(forth.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?extend[]=bibtex>"));
 
         Quad fifth = statements.get(4);
-        assertThat(fifth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526>"));
+        assertThat(fifth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526?extend[]=biological_relationship>"));
         assertThat(fifth.getPredicate().toString(), Is.is("<http://purl.org/pav/hasVersion>"));
         assertThat(fifth.getObject() instanceof BlankNode, Is.is(true));
 
@@ -277,25 +277,25 @@ public class RegistryReaderTaxonWorksTest {
         Quad first = statements.get(0);
         assertThat(first.getSubject().toString(), Is.is("<https://example.org/>"));
         assertThat(first.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#hadMember>"));
-        assertThat(first.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000>"));
+        assertThat(first.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?extend[]=bibtex>"));
 
         Quad second = statements.get(1);
-        assertThat(second.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000>"));
+        assertThat(second.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?extend[]=bibtex>"));
         assertThat(second.getPredicate().toString(), Is.is("<http://purl.org/dc/elements/1.1/format>"));
         assertThat(second.getObject().toString(), Is.is("\"application/json\""));
 
         Quad third = statements.get(2);
-        assertThat(third.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000>"));
+        assertThat(third.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?extend[]=bibtex>"));
         assertThat(third.getPredicate().toString(), Is.is("<http://purl.org/pav/hasVersion>"));
         assertThat(third.getObject() instanceof BlankNode, Is.is(true));
 
         Quad forth = statements.get(3);
-        assertThat(forth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526>"));
+        assertThat(forth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526?extend[]=biological_relationship>"));
         assertThat(forth.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#wasDerivedFrom>"));
-        assertThat(forth.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000>"));
+        assertThat(forth.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?extend[]=bibtex>"));
 
         Quad fifth = statements.get(4);
-        assertThat(fifth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526>"));
+        assertThat(fifth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526?extend[]=biological_relationship>"));
         assertThat(fifth.getPredicate().toString(), Is.is("<http://purl.org/pav/hasVersion>"));
         assertThat(fifth.getObject() instanceof BlankNode, Is.is(true));
 
@@ -333,25 +333,25 @@ public class RegistryReaderTaxonWorksTest {
         Quad first = statements.get(0);
         assertThat(first.getSubject().toString(), Is.is("<https://example.org/?project_token=" + projectToken + ">"));
         assertThat(first.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#hadMember>"));
-        assertThat(first.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?project_token=" + projectToken + ">"));
+        assertThat(first.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?extend[]=bibtex>"));
 
         Quad second = statements.get(1);
-        assertThat(second.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?project_token=" + projectToken + ">"));
+        assertThat(second.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?extend[]=bibtex>"));
         assertThat(second.getPredicate().toString(), Is.is("<http://purl.org/dc/elements/1.1/format>"));
         assertThat(second.getObject().toString(), Is.is("\"application/json\""));
 
         Quad third = statements.get(2);
-        assertThat(third.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?project_token=" + projectToken + ">"));
+        assertThat(third.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?extend[]=bibtex>"));
         assertThat(third.getPredicate().toString(), Is.is("<http://purl.org/pav/hasVersion>"));
         assertThat(third.getObject() instanceof BlankNode, Is.is(true));
 
         Quad forth = statements.get(3);
-        assertThat(forth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526?project_token=" + projectToken + ">"));
+        assertThat(forth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526?project_token=" + projectToken + "&extend[]=biological_relationship>"));
         assertThat(forth.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#wasDerivedFrom>"));
-        assertThat(forth.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?project_token=" + projectToken + ">"));
+        assertThat(forth.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/sources/49000?extend[]=bibtex>"));
 
         Quad fifth = statements.get(4);
-        assertThat(fifth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526?project_token=" + projectToken + ">"));
+        assertThat(fifth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/biological_associations/54526?project_token=" + projectToken + "&extend[]=biological_relationship>"));
         assertThat(fifth.getPredicate().toString(), Is.is("<http://purl.org/pav/hasVersion>"));
         assertThat(fifth.getObject() instanceof BlankNode, Is.is(true));
     }

@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class TaxonWorksJSONExtractor extends ProcessorExtracting {
     private final Logger LOG = LoggerFactory.getLogger(TaxonWorksJSONExtractor.class);
@@ -28,7 +29,7 @@ public class TaxonWorksJSONExtractor extends ProcessorExtracting {
     private final ProcessorState processorState;
     private final OutputStream outputStream;
 
-    private final Map<String, Map<Long, ObjectNode>> requestedIds = new LRUMap<String, Map<Long, ObjectNode>>(1000,1000);
+    private final Map<String, Map<Long, List<ObjectNode>>> requestedIds = new TreeMap<>();
 
     public TaxonWorksJSONExtractor(ProcessorState processorState,
                                    BlobStoreReadOnly blobStoreReadOnly,

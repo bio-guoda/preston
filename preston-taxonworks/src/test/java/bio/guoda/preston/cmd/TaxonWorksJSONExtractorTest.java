@@ -117,6 +117,7 @@ public class TaxonWorksJSONExtractorTest {
 
 
     }
+
     @Test
     public void buildBiologicalInteractionRecordDuplicateParents() throws IOException {
         LinkedList<String> queue = Stream.of(
@@ -191,6 +192,80 @@ public class TaxonWorksJSONExtractorTest {
 
 
     }
+    @Test
+    public void buildBiologicalInteractionRecordDuplicateParentsSourceLater() throws IOException {
+        LinkedList<String> queue = Stream.of(
+                "citation.json",
+                "association.json",
+                "subject_otu.json",
+                "object_otu.json",
+                "subject_name.json",
+                "subject_name_parent.json",
+                "subject_name_parent.json",
+                "object_name.json",
+                "subject_name_parent.json",
+                "object_name_parent.json",
+                "source.json"
+                )
+                .map(x -> "/bio/guoda/preston/process/taxonworks/association-graph/" + x)
+                .collect(Collectors.toCollection(LinkedList::new));
+
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                return queue.isEmpty()
+                        ? null
+                        : getClass().getResourceAsStream(queue.pop());
+            }
+        };
+
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        TaxonWorksJSONExtractor extractor = new TaxonWorksJSONExtractor(
+                new ProcessorStateAlwaysContinue(),
+                blobStore,
+                byteArrayOutputStream
+        );
+
+        List<String> endpoints = Stream.of(
+                "/citations/?citation_object_type=BiologicalAssociation&",
+                "/sources/11554?",
+                "/biological_associations/5430?",
+                "/otus/47016?",
+                "/otus/81982?",
+                "/taxon_names/377136?",
+                "/taxon_names/376996?",
+                "/taxon_names/376996?",
+                "/taxon_names/443429?",
+                "/taxon_names/376996?",
+                "/taxon_names/443293?"
+        )
+                .map(x -> "https://sfg.taxonworks.org/api/v1" + x)
+                .map(x -> x + "project_token=ZEJhFp9sq8kBfks15qAbAg")
+                .collect(Collectors.toList());
+
+
+        endpoints.stream().flatMap(endpoint ->
+                Stream.of(
+                        toStatement(
+                                toIRI(endpoint),
+                                HAS_FORMAT,
+                                toLiteral("\"application/json\"")
+                        ), toStatement(
+                                toIRI(endpoint),
+                                HAS_VERSION,
+                                toIRI("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1")
+                        ))).forEach(extractor::on);
+
+        String actual = IOUtils.toString(
+                byteArrayOutputStream.toByteArray(),
+                StandardCharsets.UTF_8.name()
+        );
+
+        assertPopulatedInteractionClaim(actual);
+
+
+    }
 
     private void assertPopulatedInteractionClaim(String actual) throws JsonProcessingException {
         assertThat(actual, not(isEmptyString()));
@@ -200,10 +275,25 @@ public class TaxonWorksJSONExtractorTest {
                 is("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
         assertThat(jsonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(),
                 is("application/vnd.taxonworks+json"));
+        assertThat(jsonNode.get("interactionId").asText(),
+                is("https://sfg.taxonworks.org/api/v1/biological_associations/5430"));
         assertThat(jsonNode.get("interactionTypeId").asText(),
                 is("gid://taxon-works/BiologicalRelationship/2"));
+        assertThat(jsonNode.get("interactionTypeName").asText(),
+                is("is parasitized by / is parasitoid of"));
         assertThat(jsonNode.get("referenceId").asText(),
-                is("gid://taxon-works/Source::Bibtex/11554"));
+                is("https://sfg.taxonworks.org/api/v1/sources/11554"));
+        assertThat(jsonNode.get("referenceCitation").asText(),
+                is("@article{11554,\n" +
+                        "  author = {Ackerman, Arthur John},\n" +
+                        "  journal = {Bulletin. United States Department of Agriculture. Washington,},\n" +
+                        "  pages = {1-35},\n" +
+                        "  title = {Two leafhoppers injurious to apple nursery stock.},\n" +
+                        "  volume = {805},\n" +
+                        "  year = {1919},\n" +
+                        "  year_suffix = {a},\n" +
+                        "  note = {2018-11-13 21:10:24 UTC: Dmitriev, Dmitry: Fig(s).: 1-2.   Plate(s): 1-5.   [Economics of Empoasca mali LeB. and Empoa rosae Linn.]}\n}\n"
+                ));
         assertThat(jsonNode.get("sourceTaxonName").asText(),
                 is("rosae"));
         assertThat(jsonNode.get("sourceTaxonId").asText(),
@@ -228,8 +318,6 @@ public class TaxonWorksJSONExtractorTest {
                 is("gid://taxon-works/TaxonName/443293 | gid://taxon-works/TaxonName/443429"));
         assertThat(jsonNode.get("targetTaxonPathNames").asText(),
                 is("genus | species"));
-        assertThat(jsonNode.get("referenceCitation").asText(),
-                is("Ackerman, A.J. (1919a) Two leafhoppers injurious to apple nursery stock. <i>Bulletin. United States Department of Agriculture. Washington,</i> 805, 1–35."));
     }
 
 

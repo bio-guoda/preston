@@ -298,7 +298,9 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
                 String associationId = result.get("citation_object_id").asText();
                 String associationsUrl = TAXONWORKS_API_ENDPOINT + "/biological_associations/" + associationId;
 
-                IRI associationQuery = toIRI(appendProjectTokenIfAvailable(versionSource, associationsUrl));
+                String url = appendProjectTokenIfAvailable(versionSource, associationsUrl);
+                String queryDelimiter = StringUtils.contains(url, "?") ? "&" : "?";
+                IRI associationQuery = toIRI(url + queryDelimiter +"extend[]=biological_relationship");
                 emitter.emit(toStatement(associationQuery, WAS_DERIVED_FROM, sourceQuery));
                 emitter.emit(toStatement(associationQuery, HAS_VERSION, toBlank()));
             }

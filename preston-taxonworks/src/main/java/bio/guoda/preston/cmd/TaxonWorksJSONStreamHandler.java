@@ -5,14 +5,18 @@ import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import org.apache.commons.collections4.map.LRUMap;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,24 +26,26 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 public class TaxonWorksJSONStreamHandler implements ContentStreamHandler {
+    private final Logger LOG = LoggerFactory.getLogger(TaxonWorksJSONStreamHandler.class);
 
-    public static final String TAXON_ID_SUFFIX = "_taxon_id";
-    public static final String TARGET = "target";
-    public static final String SOURCE = "source";
-    public static final String BIOLOGICAL_ASSOCIATION_SUBJECT_ID = "biological_association_subject_id";
-    public static final String BIOLOGICAL_ASSOCIATION_OBJECT_ID = "biological_association_object_id";
+    private static final String TAXON_ID_SUFFIX = "_taxon_id";
+    private static final String TARGET = "target";
+    private static final String SOURCE = "source";
+    private static final String BIOLOGICAL_ASSOCIATION_SUBJECT_ID = "biological_association_subject_id";
+    private static final String BIOLOGICAL_ASSOCIATION_OBJECT_ID = "biological_association_object_id";
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
-    private final Map<String, Map<Long, ObjectNode>> requestedIds;
-    public static final String TAXON_ROOTS_RESOLVED = "taxonRootsResolved";
+    private final Map<String, Map<Long, List<ObjectNode>>> requestedIds;
+    private static final String TAXON_ROOTS_RESOLVED = "taxonRootsResolved";
+    private static final String REFERENCE_RESOLVED = "referenceResolved";
 
     public TaxonWorksJSONStreamHandler(ContentStreamHandler contentStreamHandler,
                                        OutputStream os,
-                                       Map<String, Map<Long, ObjectNode>> requestedIds) {
+                                       Map<String, Map<Long, List<ObjectNode>>> requestedIds) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
         this.requestedIds = requestedIds;
@@ -76,39 +82,58 @@ public class TaxonWorksJSONStreamHandler implements ContentStreamHandler {
             ObjectNode objectNode = new ObjectMapper().createObjectNode();
             objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", TextNode.valueOf(version.getIRIString()));
             objectNode.set("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", TextNode.valueOf("application/vnd.taxonworks+json"));
-            registerIdForNode(jsonNode.get("source_id").asLong(), objectNode, "source_id");
-            registerIdForNode(jsonNode.get("citation_object_id").asLong(), objectNode, "citation_object_id");
+            Long sourceId = jsonNode.get("source_id").asLong();
+            registerIdForNode(sourceId, objectNode, "source_id");
+            long citationObjectId = jsonNode.get("citation_object_id").asLong();
+            registerIdForNode(citationObjectId, objectNode, "citation_object_id");
+            objectNode.set("referenceId", new TextNode("https://sfg.taxonworks.org/api/v1/sources/" + sourceId));
+            objectNode.set("interactionId", new TextNode("https://sfg.taxonworks.org/api/v1/biological_associations/" + citationObjectId));
             objectNode.set(TAXON_ROOTS_RESOLVED, IntNode.valueOf(0));
+            objectNode.set(REFERENCE_RESOLVED, BooleanNode.valueOf(false));
         } else if (isSource(jsonNode)) {
-            ObjectNode resolved = resolveId(jsonNode, "source_id");
-            if (resolved != null) {
-                resolved.set("referenceCitation", new TextNode(jsonNode.get("object_label").asText()));
-                resolved.set("referenceId", new TextNode(jsonNode.get("global_id").asText()));
-                resolvedNodes.add(resolved);
-            }
+            resolveId(jsonNode, "source_id", new Consumer<ObjectNode>() {
+                @Override
+                public void accept(ObjectNode resolved) {
+                    resolved.set("referenceCitation", new TextNode(jsonNode.get("bibtex").asText()));
+                    resolved.set(REFERENCE_RESOLVED, BooleanNode.valueOf(true));
+                    resolvedNodes.add(resolved);
+                }
+            });
         } else if (isAssociation(jsonNode)) {
-            ObjectNode resolved = resolveId(jsonNode, "citation_object_id");
-            if (resolved != null) {
-                resolved.set("interactionTypeId", new TextNode("gid://taxon-works/BiologicalRelationship/" + jsonNode.get("biological_relationship_id").asText()));
-                registerIdForNode(jsonNode.get(BIOLOGICAL_ASSOCIATION_SUBJECT_ID).asLong(), resolved, BIOLOGICAL_ASSOCIATION_SUBJECT_ID);
-                registerIdForNode(jsonNode.get(BIOLOGICAL_ASSOCIATION_OBJECT_ID).asLong(), resolved, BIOLOGICAL_ASSOCIATION_OBJECT_ID);
-                resolvedNodes.add(resolved);
-            }
+            resolveId(jsonNode, "citation_object_id", new Consumer<ObjectNode>() {
+                @Override
+                public void accept(ObjectNode resolved) {
+                    resolved.set("interactionTypeId", TextNode.valueOf("gid://taxon-works/BiologicalRelationship/" + jsonNode.get("biological_relationship_id").asText()));
+                    if (jsonNode.has("biological_relationship")) {
+                        JsonNode rel = jsonNode.get("biological_relationship");
+                        if (rel.has("object_tag")) {
+                            resolved.set("interactionTypeName", TextNode.valueOf(rel.get("object_tag").asText()));
+                        }
+                    }
+                    registerIdForNode(jsonNode.get(BIOLOGICAL_ASSOCIATION_SUBJECT_ID).asLong(), resolved, BIOLOGICAL_ASSOCIATION_SUBJECT_ID);
+                    registerIdForNode(jsonNode.get(BIOLOGICAL_ASSOCIATION_OBJECT_ID).asLong(), resolved, BIOLOGICAL_ASSOCIATION_OBJECT_ID);
+                    resolvedNodes.add(resolved);
+                }
+            });
         } else {
             final String TARGET_TAXON_ID = TARGET + TAXON_ID_SUFFIX;
             final String SOURCE_TAXON_ID = SOURCE + TAXON_ID_SUFFIX;
             if (isOTU(jsonNode)) {
-                ObjectNode resolvedSubject = resolveId(jsonNode, BIOLOGICAL_ASSOCIATION_SUBJECT_ID);
-                if (resolvedSubject != null) {
-                    registerIdForNode(jsonNode.get("taxon_name_id").asLong(), resolvedSubject, SOURCE_TAXON_ID);
-                    resolvedNodes.add(resolvedSubject);
-                }
+                resolveId(jsonNode, BIOLOGICAL_ASSOCIATION_SUBJECT_ID, new Consumer<ObjectNode>() {
+                    @Override
+                    public void accept(ObjectNode resolvedSubject) {
+                        registerIdForNode(jsonNode.get("taxon_name_id").asLong(), resolvedSubject, SOURCE_TAXON_ID);
+                        resolvedNodes.add(resolvedSubject);
+                    }
+                });
 
-                ObjectNode resolvedObject = resolveId(jsonNode, BIOLOGICAL_ASSOCIATION_OBJECT_ID);
-                if (resolvedObject != null) {
-                    registerIdForNode(jsonNode.get("taxon_name_id").asLong(), resolvedObject, TARGET_TAXON_ID);
-                    resolvedNodes.add(resolvedObject);
-                }
+                resolveId(jsonNode, BIOLOGICAL_ASSOCIATION_OBJECT_ID, new Consumer<ObjectNode>() {
+                    @Override
+                    public void accept(ObjectNode resolvedObject) {
+                        registerIdForNode(jsonNode.get("taxon_name_id").asLong(), resolvedObject, TARGET_TAXON_ID);
+                        resolvedNodes.add(resolvedObject);
+                    }
+                });
             } else if (isName(jsonNode)) {
                 applyName(jsonNode, resolvedNodes, TARGET);
                 applyName(jsonNode, resolvedNodes, SOURCE);
@@ -118,23 +143,27 @@ public class TaxonWorksJSONStreamHandler implements ContentStreamHandler {
     }
 
     private void applyName(JsonNode jsonNode, List<ObjectNode> resolvedNodes, String nameRole) {
-        ObjectNode resolvedNode = resolveName(jsonNode, nameRole + TAXON_ID_SUFFIX);
-        if (resolvedNode != null) {
-            String taxonName = jsonNode.get("name").asText();
-            String taxonId = "gid://taxon-works/TaxonName/" + jsonNode.get("id").asText();
-            String taxonRank = jsonNode.hasNonNull("rank") ? jsonNode.get("rank").asText() : "";
-            if (!resolvedNode.has(nameRole + "TaxonName")) {
-                resolvedNode.set(nameRole + "TaxonName", TextNode.valueOf(taxonName));
-                resolvedNode.set(nameRole + "TaxonId", TextNode.valueOf(taxonId));
-                resolvedNode.set(nameRole + "TaxonRank", TextNode.valueOf(taxonRank));
+        resolveName(jsonNode, nameRole + TAXON_ID_SUFFIX, new Consumer<ObjectNode>() {
+
+            @Override
+            public void accept(ObjectNode resolvedNode) {
+                String taxonName = jsonNode.get("name").asText();
+                String taxonId = "gid://taxon-works/TaxonName/" + jsonNode.get("id").asText();
+                String taxonRank = jsonNode.hasNonNull("rank") ? jsonNode.get("rank").asText() : "";
+                if (!resolvedNode.has(nameRole + "TaxonName")) {
+                    resolvedNode.set(nameRole + "TaxonName", TextNode.valueOf(taxonName));
+                    resolvedNode.set(nameRole + "TaxonId", TextNode.valueOf(taxonId));
+                    resolvedNode.set(nameRole + "TaxonRank", TextNode.valueOf(taxonRank));
+                }
+
+                appendPath(resolvedNode, taxonName, nameRole + "TaxonPath");
+                appendPath(resolvedNode, taxonId, nameRole + "TaxonPathIds");
+                appendPath(resolvedNode, taxonRank, nameRole + "TaxonPathNames");
+
+                resolvedNodes.add(resolvedNode);
+
             }
-
-            appendPath(resolvedNode, taxonName, nameRole + "TaxonPath");
-            appendPath(resolvedNode, taxonId, nameRole + "TaxonPathIds");
-            appendPath(resolvedNode, taxonRank, nameRole + "TaxonPathNames");
-
-            resolvedNodes.add(resolvedNode);
-        }
+        });
     }
 
     private void appendPath(ObjectNode resolvedNode, String taxonName, String fieldName) {
@@ -145,19 +174,25 @@ public class TaxonWorksJSONStreamHandler implements ContentStreamHandler {
         resolvedNode.set(fieldName, TextNode.valueOf(taxonName + (StringUtils.isBlank(prefix) ? "" : " | " + prefix)));
     }
 
-    private ObjectNode resolveName(JsonNode jsonNode, String idType) {
-        ObjectNode objectNode = resolveId(jsonNode, idType);
-        if (objectNode != null) {
-            if (jsonNode.has("parent_id")) {
-                if (jsonNode.hasNonNull("parent_id")) {
-                    registerIdForNode(jsonNode.get("parent_id").asLong(), objectNode, idType);
-                } else {
-                    int taxonRootsResolved = objectNode.get(TAXON_ROOTS_RESOLVED).intValue();
-                    objectNode.set(TAXON_ROOTS_RESOLVED, IntNode.valueOf(taxonRootsResolved + 1));
+    private void resolveName(JsonNode jsonNode, String idType, Consumer<ObjectNode> consumer) {
+        resolveId(jsonNode, idType, new Consumer<ObjectNode>() {
+            @Override
+            public void accept(ObjectNode objectNode) {
+                if (jsonNode.has("parent_id")) {
+                    if (jsonNode.hasNonNull("parent_id")) {
+                        registerIdForNode(jsonNode.get("parent_id").asLong(), objectNode, idType);
+                    } else {
+                        incrementCounter(objectNode, TAXON_ROOTS_RESOLVED);
+                    }
                 }
+                consumer.accept(objectNode);
             }
-        }
-        return objectNode;
+        });
+    }
+
+    private void incrementCounter(ObjectNode objectNode, String counterName) {
+        int counterValue = objectNode.get(counterName).intValue();
+        objectNode.set(counterName, IntNode.valueOf(counterValue + 1));
     }
 
     private boolean isName(JsonNode jsonNode) {
@@ -176,21 +211,19 @@ public class TaxonWorksJSONStreamHandler implements ContentStreamHandler {
         return jsonNode.has("biological_relationship_id");
     }
 
-    private ObjectNode resolveId(JsonNode id, String idType) {
-        ObjectNode resolvedNode = null;
-        Map<Long, ObjectNode> idMap = requestedIds.get(idType);
+    private void resolveId(JsonNode id, String idType, Consumer<ObjectNode> resolvedListener) {
+        Map<Long, List<ObjectNode>> idMap = requestedIds.get(idType);
         if (idMap != null) {
-            long idValue = id.get("id").asLong();
-            ObjectNode jsonNode = idMap.remove(idValue);
-            if (jsonNode != null) {
-                resolvedNode = jsonNode;
+            List<ObjectNode> objectNodes = idMap.remove(id.get("id").asLong());
+            if (objectNodes != null) {
+                objectNodes.forEach(resolvedListener);
             }
         }
-        return resolvedNode;
     }
 
     private void notifyResolution(ObjectNode resolvedNode) {
-        if (discoveredTaxonRoots(resolvedNode)) {
+        if (discoveredTaxonRoots(resolvedNode)
+                && hasResolvedReference(resolvedNode)) {
             try {
                 IOUtils.copy(IOUtils.toInputStream(resolvedNode.toString(), StandardCharsets.UTF_8), outputStream);
                 IOUtils.write("\n", outputStream, StandardCharsets.UTF_8);
@@ -201,8 +234,14 @@ public class TaxonWorksJSONStreamHandler implements ContentStreamHandler {
     }
 
     private boolean discoveredTaxonRoots(ObjectNode resolvedNode) {
-        return resolvedNode.has(TAXON_ROOTS_RESOLVED)
-                && resolvedNode.get(TAXON_ROOTS_RESOLVED).intValue() == 2;
+        int taxonRoots = resolvedNode.has(TAXON_ROOTS_RESOLVED)
+                ? resolvedNode.get(TAXON_ROOTS_RESOLVED).intValue() : 0;
+        return taxonRoots >= 2;
+    }
+
+    private boolean hasResolvedReference(ObjectNode resolvedNode) {
+        return resolvedNode.has(REFERENCE_RESOLVED)
+                && resolvedNode.get(REFERENCE_RESOLVED).booleanValue();
     }
 
     private boolean isSource(JsonNode jsonNode) {
@@ -211,10 +250,18 @@ public class TaxonWorksJSONStreamHandler implements ContentStreamHandler {
     }
 
     private void registerIdForNode(long id, ObjectNode node, String idType) {
-        Map<Long, ObjectNode> typeMap = requestedIds.containsKey(idType)
+        Map<Long, List<ObjectNode>> typeMap = requestedIds.containsKey(idType)
                 ? requestedIds.get(idType)
-                : new TreeMap<>();
-        typeMap.put(id, node);
+                : new LRUMap<Long, List<ObjectNode>>(10000, 10000) {
+            @Override
+            protected boolean removeLRU(LinkEntry entry) {
+                LOG.warn("evicting entry: [" + entry.getKey() + "]: ");
+                return super.removeLRU(entry);
+            }
+        };
+        List<ObjectNode> objectNodes = typeMap.containsKey(id) ? typeMap.get(id) : new ArrayList<>();
+        objectNodes.add(node);
+        typeMap.put(id, objectNodes);
         requestedIds.put(idType, typeMap);
     }
 

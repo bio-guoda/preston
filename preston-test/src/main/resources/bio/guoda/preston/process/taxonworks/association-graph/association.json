@@ -15,5 +15,24 @@
   "global_id": "gid://taxon-works/BiologicalAssociation/5430",
   "base_class": "BiologicalAssociation",
   "url_for": "https://sfg.taxonworks.org/api/v1/biological_associations/5430",
-  "object_url": "/biological_associations/5430"
+  "object_url": "/biological_associations/5430",
+  "biological_relationship": {
+    "id": 2,
+    "name": "is parasitized by",
+    "definition": null,
+    "inverted_name": "is parasitoid of",
+    "is_transitive": null,
+    "is_reflexive": null,
+    "created_by_id": 2,
+    "updated_by_id": 2,
+    "project_id": 13,
+    "created_at": "2018-11-13T21:03:25.316Z",
+    "updated_at": "2018-11-13T21:03:25.316Z",
+    "object_tag": "is parasitized by / is parasitoid of",
+    "object_label": "is parasitized by",
+    "global_id": "gid://taxon-works/BiologicalRelationship/2",
+    "base_class": "BiologicalRelationship",
+    "url_for": "https://sfg.taxonworks.org/api/v1/biological_associations/5430",
+    "object_url": "/biological_relationships/2"
+  }
 }

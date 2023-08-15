@@ -30,7 +30,7 @@
   "language": null,
   "stated_year": null,
   "verbatim": null,
-  "cached": "Ackerman, A.J. (1919a) Two leafhoppers injurious to apple nursery stock. \u003ci\u003eBulletin. United States Department of Agriculture. Washington,\u003c/i\u003e 805, 1–35.",
+  "cached": "Ackerman, A.J. (1919a) Two leafhoppers injurious to apple nursery stock. <i>Bulletin. United States Department of Agriculture. Washington,</i> 805, 1–35.",
   "cached_author_string": "Ackerman",
   "bibtex_type": "article",
   "created_by_id": 2,
@@ -48,12 +48,13 @@
   "url": null,
   "created_at": "2018-11-13T21:10:24.456Z",
   "updated_at": "2018-11-13T21:10:24.456Z",
-  "object_tag": "Ackerman, A.J. (1919a) Two leafhoppers injurious to apple nursery stock. \u003ci\u003eBulletin. United States Department of Agriculture. Washington,\u003c/i\u003e 805, 1–35.",
-  "object_label": "Ackerman, A.J. (1919a) Two leafhoppers injurious to apple nursery stock. \u003ci\u003eBulletin. United States Department of Agriculture. Washington,\u003c/i\u003e 805, 1–35.",
+  "object_tag": "Ackerman, A.J. (1919a) Two leafhoppers injurious to apple nursery stock. <i>Bulletin. United States Department of Agriculture. Washington,</i> 805, 1–35.",
+  "object_label": "Ackerman, A.J. (1919a) Two leafhoppers injurious to apple nursery stock. <i>Bulletin. United States Department of Agriculture. Washington,</i> 805, 1–35.",
   "global_id": "gid://taxon-works/Source::Bibtex/11554",
   "base_class": "Source",
   "url_for": "https://sfg.taxonworks.org/api/v1/sources/11554",
   "object_url": "/sources/11554",
   "source_in_project": false,
-  "project_source_id": null
+  "project_source_id": null,
+  "bibtex": "@article{11554,\n  author = {Ackerman, Arthur John},\n  journal = {Bulletin. United States Department of Agriculture. Washington,},\n  pages = {1-35},\n  title = {Two leafhoppers injurious to apple nursery stock.},\n  volume = {805},\n  year = {1919},\n  year_suffix = {a},\n  note = {2018-11-13 21:10:24 UTC: Dmitriev, Dmitry: Fig(s).: 1-2.   Plate(s): 1-5.   [Economics of Empoasca mali LeB. and Empoa rosae Linn.]}\n}\n"
 }
