@@ -5,13 +5,13 @@ import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.ContentHashDereferencer;
 import bio.guoda.preston.stream.ArchiveStreamHandler;
 import bio.guoda.preston.stream.CompressedStreamHandler;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import bio.guoda.preston.stream.ContentStreamHandlerImpl;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.collections4.map.LRUMap;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
@@ -21,18 +21,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-
-import static bio.guoda.preston.RefNodeFactory.toIRI;
-import static bio.guoda.preston.RefNodeFactory.toStatement;
-import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 
 public class TaxonWorksJSONExtractor extends ProcessorExtracting {
     private final Logger LOG = LoggerFactory.getLogger(TaxonWorksJSONExtractor.class);
 
     private final ProcessorState processorState;
     private final OutputStream outputStream;
-    private final TreeMap<String, Map<Long, ObjectNode>> requestedIds = new TreeMap<>();
+
+    private final Map<String, Map<Long, ObjectNode>> requestedIds = new LRUMap<String, Map<Long, ObjectNode>>(1000,1000);
 
     public TaxonWorksJSONExtractor(ProcessorState processorState,
                                    BlobStoreReadOnly blobStoreReadOnly,

@@ -123,6 +123,30 @@ public class TaxonWorksJSONExtractorTest {
                 is("gid://taxon-works/BiologicalRelationship/2"));
         assertThat(jsonNode.get("referenceId").asText(),
                 is("gid://taxon-works/Source::Bibtex/11554"));
+        assertThat(jsonNode.get("sourceTaxonName").asText(),
+                is("rosae"));
+        assertThat(jsonNode.get("sourceTaxonId").asText(),
+                is("gid://taxon-works/TaxonName/377136"));
+        assertThat(jsonNode.get("sourceTaxonRank").asText(),
+                is("species"));
+        assertThat(jsonNode.get("sourceTaxonPath").asText(),
+                is("Edwardsiana | rosae"));
+        assertThat(jsonNode.get("sourceTaxonPathIds").asText(),
+                is("gid://taxon-works/TaxonName/376996 | gid://taxon-works/TaxonName/377136"));
+        assertThat(jsonNode.get("sourceTaxonPathNames").asText(),
+                is("genus | species"));
+        assertThat(jsonNode.get("targetTaxonName").asText(),
+                is("epos"));
+        assertThat(jsonNode.get("targetTaxonId").asText(),
+                is("gid://taxon-works/TaxonName/443429"));
+        assertThat(jsonNode.get("targetTaxonRank").asText(),
+                is("species"));
+        assertThat(jsonNode.get("targetTaxonPath").asText(),
+                is("Anagrus | epos"));
+        assertThat(jsonNode.get("targetTaxonPathIds").asText(),
+                is("gid://taxon-works/TaxonName/443293 | gid://taxon-works/TaxonName/443429"));
+        assertThat(jsonNode.get("targetTaxonPathNames").asText(),
+                is("genus | species"));
         assertThat(jsonNode.get("referenceCitation").asText(),
                 is("Ackerman, A.J. (1919a) Two leafhoppers injurious to apple nursery stock. <i>Bulletin. United States Department of Agriculture. Washington,</i> 805, 1–35."));
 
