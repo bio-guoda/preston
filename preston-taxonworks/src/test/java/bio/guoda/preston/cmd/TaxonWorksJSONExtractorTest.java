@@ -295,25 +295,29 @@ public class TaxonWorksJSONExtractorTest {
                         "  note = {2018-11-13 21:10:24 UTC: Dmitriev, Dmitry: Fig(s).: 1-2.   Plate(s): 1-5.   [Economics of Empoasca mali LeB. and Empoa rosae Linn.]}\n}\n"
                 ));
         assertThat(jsonNode.get("sourceTaxonName").asText(),
-                is("rosae"));
+                is("Edwardsiana rosae"));
         assertThat(jsonNode.get("sourceTaxonId").asText(),
                 is("gid://taxon-works/TaxonName/377136"));
         assertThat(jsonNode.get("sourceTaxonRank").asText(),
                 is("species"));
+        assertThat(jsonNode.get("sourceTaxonAuthorship").asText(),
+                is("(Linnaeus, 1758)"));
         assertThat(jsonNode.get("sourceTaxonPath").asText(),
-                is("Edwardsiana | rosae"));
+                is("Edwardsiana | Edwardsiana rosae"));
         assertThat(jsonNode.get("sourceTaxonPathIds").asText(),
                 is("gid://taxon-works/TaxonName/376996 | gid://taxon-works/TaxonName/377136"));
         assertThat(jsonNode.get("sourceTaxonPathNames").asText(),
                 is("genus | species"));
         assertThat(jsonNode.get("targetTaxonName").asText(),
-                is("epos"));
+                is("Anagrus epos"));
         assertThat(jsonNode.get("targetTaxonId").asText(),
                 is("gid://taxon-works/TaxonName/443429"));
         assertThat(jsonNode.get("targetTaxonRank").asText(),
                 is("species"));
+        assertThat(jsonNode.get("targetTaxonAuthorship").asText(),
+                is("Girault"));
         assertThat(jsonNode.get("targetTaxonPath").asText(),
-                is("Anagrus | epos"));
+                is("Anagrus | Anagrus epos"));
         assertThat(jsonNode.get("targetTaxonPathIds").asText(),
                 is("gid://taxon-works/TaxonName/443293 | gid://taxon-works/TaxonName/443429"));
         assertThat(jsonNode.get("targetTaxonPathNames").asText(),

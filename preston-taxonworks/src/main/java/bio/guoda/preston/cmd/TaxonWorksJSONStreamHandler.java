@@ -147,13 +147,15 @@ public class TaxonWorksJSONStreamHandler implements ContentStreamHandler {
 
             @Override
             public void accept(ObjectNode resolvedNode) {
-                String taxonName = jsonNode.get("name").asText();
+                String taxonName = jsonNode.get("cached").asText();
                 String taxonId = "gid://taxon-works/TaxonName/" + jsonNode.get("id").asText();
                 String taxonRank = jsonNode.hasNonNull("rank") ? jsonNode.get("rank").asText() : "";
+                String taxonAuthorship = jsonNode.hasNonNull("cached_author_year") ? jsonNode.get("cached_author_year").asText() : "";
                 if (!resolvedNode.has(nameRole + "TaxonName")) {
                     resolvedNode.set(nameRole + "TaxonName", TextNode.valueOf(taxonName));
                     resolvedNode.set(nameRole + "TaxonId", TextNode.valueOf(taxonId));
                     resolvedNode.set(nameRole + "TaxonRank", TextNode.valueOf(taxonRank));
+                    resolvedNode.set(nameRole + "TaxonAuthorship", TextNode.valueOf(taxonAuthorship));
                 }
 
                 appendPath(resolvedNode, taxonName, nameRole + "TaxonPath");
