@@ -4,9 +4,7 @@ import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.Version;
-import bio.guoda.preston.process.StatementLoggerNQuads;
 import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
@@ -15,20 +13,12 @@ import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
-import bio.guoda.preston.store.VersionUtil;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +31,6 @@ import java.util.stream.Stream;
 import static bio.guoda.preston.RefNodeConstants.AGENT;
 import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
 import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
-import static bio.guoda.preston.RefNodeConstants.HAS_PREVIOUS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.PRESTON;
 import static bio.guoda.preston.RefNodeConstants.SOFTWARE_AGENT;
@@ -88,7 +77,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     protected void run(BlobStore blobStore, BlobStore provStore, HexaStore provIndex) {
         ActivityContext ctx = createNewActivityContext(getActivityDescription());
 
-        final ArchivingLogger archivingLogger = new ArchivingLogger(provStore, provIndex, ctx);
+        final ArchivingLogger archivingLogger = new ArchivingLogger(this, provStore, provIndex, ctx);
         try {
             Runtime.getRuntime().addShutdownHook(new LoggerExitHook(archivingLogger));
 
@@ -247,69 +236,4 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         }
     }
 
-    private class ArchivingLogger extends StatementsListenerAdapter {
-        private final BlobStore logStore;
-        private final HexaStore hexastore;
-        private final ActivityContext ctx;
-        File tmpArchive;
-        OutputStream os;
-        StatementsListener listener;
-
-        public ArchivingLogger(BlobStore provStore, HexaStore provIndex, ActivityContext ctx) {
-            this.logStore = provStore;
-            this.hexastore = provIndex;
-            this.ctx = ctx;
-            tmpArchive = null;
-            os = null;
-            listener = null;
-        }
-
-        @Override
-        public void on(Quad statement) {
-            if (listener != null) {
-                listener.on(statement);
-            }
-        }
-
-        void start() throws IOException {
-            tmpArchive = File.createTempFile("archive", "nq", getTmpDir());
-            os = IOUtils.buffer(new FileOutputStream(tmpArchive));
-            listener = new StatementLoggerNQuads(os);
-        }
-
-        void stop() throws IOException {
-            if (tmpArchive != null && tmpArchive.exists() && os != null && listener != null) {
-                os.flush();
-                os.close();
-
-                os = null;
-
-                try (FileInputStream is = new FileInputStream(tmpArchive)) {
-                    IRI newVersion = logStore.put(is);
-
-                    IRI previousVersion = VersionUtil.findMostRecentVersion(getProvenanceAnchor(), hexastore);
-                    if (previousVersion == null) {
-                        hexastore.put(RefNodeConstants.PROVENANCE_ROOT_QUERY, newVersion);
-                    } else {
-                        hexastore.put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
-                    }
-                }
-            }
-
-        }
-
-        void destroy() {
-            if (os != null) {
-                try {
-                    os.flush();
-                    os.close();
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
-            if (tmpArchive != null) {
-                FileUtils.deleteQuietly(tmpArchive);
-            }
-        }
-    }
 }

@@ -34,7 +34,10 @@ public class Archiver extends VersionProcessor {
 
     private final Dereferencer<IRI> dereferencer;
 
-    public Archiver(Dereferencer<IRI> dereferencer, ActivityContext activityCtx, StatementsListener... listener) {
+    public Archiver(
+            Dereferencer<IRI> dereferencer,
+            ActivityContext activityCtx,
+            StatementsListener... listener) {
         super(listener);
         this.activityCtx = activityCtx;
         this.dereferencer = dereferencer;
