@@ -12,6 +12,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.rdf.api.RDFTerm;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -67,15 +68,14 @@ public class ArchivingLogger extends StatementsListenerAdapter {
             try (FileInputStream is = new FileInputStream(tmpArchive)) {
                 IRI newVersion = logStore.put(is);
 
-                if (persistingLocal.isAnchored()) {
-                    hexastore.put(Pair.of(HAS_PREVIOUS_VERSION, persistingLocal.getProvenanceAnchor()), newVersion);
+                IRI previousVersion = VersionUtil.findMostRecentVersion(persistingLocal.getProvenanceAnchor(), hexastore);
+                if (previousVersion == null) {
+                    Pair<RDFTerm, RDFTerm> queryKey = persistingLocal.isAnchored()
+                            ? Pair.of(HAS_PREVIOUS_VERSION, persistingLocal.getProvenanceAnchor())
+                            : RefNodeConstants.PROVENANCE_ROOT_QUERY;
+                    hexastore.put(queryKey, newVersion);
                 } else {
-                    IRI previousVersion = VersionUtil.findMostRecentVersion(persistingLocal.getProvenanceAnchor(), hexastore);
-                    if (previousVersion == null) {
-                        hexastore.put(RefNodeConstants.PROVENANCE_ROOT_QUERY, newVersion);
-                    } else {
-                        hexastore.put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
-                    }
+                    hexastore.put(Pair.of(HAS_PREVIOUS_VERSION, previousVersion), newVersion);
                 }
             }
         }

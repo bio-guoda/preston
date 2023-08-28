@@ -77,4 +77,25 @@ public class CmdHeadTest {
 
     }
 
+    @Test
+    public void findHeadWithAnchorAndUpdate() throws IOException {
+        populateDataDir();
+        CmdHead cmdHead = new CmdHead();
+
+        // note that data dir *is* populated
+        cmdHead.setLocalDataDir(dataDir.getRoot().getAbsolutePath() + "/data");
+        // set anchor to first, but not most recent version
+        cmdHead.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/b1937f9fb1d84b02f2e0cd6e11018688fd009280394a7c1fd264c10de9b14998"));
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmdHead.setOutputStream(outputStream);
+
+        cmdHead.run();
+
+        // expect most recent version
+        String expectedHeadContentId = "hash://sha256/30845fefa4a854fc67da113a06759f86902b591bf0708bd625e611680aa1c9c4";
+        assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is(expectedHeadContentId));
+
+    }
+
 }

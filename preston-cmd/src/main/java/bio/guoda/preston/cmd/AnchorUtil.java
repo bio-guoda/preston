@@ -15,7 +15,11 @@ public class AnchorUtil {
         AtomicReference<IRI> head = new AtomicReference<>();
 
         if (persisting.isAnchored()) {
-            head.set(persisting.getProvenanceAnchor());
+            final ProvenanceTracer provenanceTracer = persisting.getTracerOfDescendants();
+            findHead(persisting, head, provenanceTracer);
+            if (head.get() == null) {
+                head.set(persisting.getProvenanceAnchor());
+            }
         } else {
             findHead(persisting, head);
         }
@@ -24,6 +28,10 @@ public class AnchorUtil {
 
     private static void findHead(Persisting persisting, AtomicReference<IRI> head) {
         final ProvenanceTracer provenanceTracer = persisting.getProvenanceTracer();
+        findHead(persisting, head, provenanceTracer);
+    }
+
+    private static void findHead(Persisting persisting, AtomicReference<IRI> head, ProvenanceTracer provenanceTracer) {
         IRI provenanceAnchor = persisting.getProvenanceAnchor();
         try {
             provenanceTracer

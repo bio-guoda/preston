@@ -110,7 +110,7 @@ public class PersistingLocal extends Cmd {
         return !RefNodeConstants.BIODIVERSITY_DATASET_GRAPH.equals(getProvenanceAnchor());
     }
 
-    private ProvenanceTracer getTracerOfDescendants() {
+    protected ProvenanceTracer getTracerOfDescendants() {
         KeyValueStore keyValueStore = getKeyValueStore(
                 new ValidatingKeyValueStreamHashTypeIRIFactory()
         );
