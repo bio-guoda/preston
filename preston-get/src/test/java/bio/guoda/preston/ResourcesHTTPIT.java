@@ -32,7 +32,7 @@ public class ResourcesHTTPIT {
     public void irelandServerPickyAboutContentHeaderWithJSON404Ignore() throws IOException {
         final AtomicBoolean gotBusyMessage = new AtomicBoolean(false);
         final AtomicBoolean gotDoneMessage = new AtomicBoolean(false);
-        try (InputStream is = ResourcesHTTP.asInputStreamIgnore404(RefNodeFactory.toIRI(URI.create("http://gbif.biodiversityireland.ie/HareSurveyOfIreland0607.zip")), new DerefProgressListener() {
+        try (InputStream is = ResourcesHTTP.asInputStreamIgnore40x50x(RefNodeFactory.toIRI(URI.create("http://gbif.biodiversityireland.ie/HareSurveyOfIreland0607.zip")), new DerefProgressListener() {
             @Override
             public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
                 if (DerefState.BUSY.equals(derefState)) {
@@ -58,7 +58,7 @@ public class ResourcesHTTPIT {
                 gotDoneMessage.set(true);
             }
         };
-        try (InputStream is = ResourcesHTTP.asInputStreamIgnore404(dataURI, listener)) {
+        try (InputStream is = ResourcesHTTP.asInputStreamIgnore40x50x(dataURI, listener)) {
             IOUtils.copy(is, NullOutputStream.NULL_OUTPUT_STREAM);
         }
         assertThat(gotDoneMessage.get(), Is.is(true));

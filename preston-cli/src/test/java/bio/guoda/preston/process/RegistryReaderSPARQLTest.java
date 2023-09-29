@@ -16,7 +16,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
@@ -68,8 +67,8 @@ public class RegistryReaderSPARQLTest {
         InputStream inputStream = ResourcesHTTP.asInputStream(
                 toIRI(url),
                 get,
-                Collections.emptyList(),
-                ContentStreamUtil.getNOOPDerefProgressListener());
+                ContentStreamUtil.getNOOPDerefProgressListener(),
+                ResourcesHTTP.NEVER_IGNORE);
 
         return IOUtils.toString(inputStream, StandardCharsets.UTF_8.name());
     }

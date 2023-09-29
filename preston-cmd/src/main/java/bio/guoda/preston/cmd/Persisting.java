@@ -233,7 +233,7 @@ public class Persisting extends PersistingLocal {
     }
 
     public static Dereferencer<InputStream> getDerefStreamHTTP(final DerefProgressListener listener) {
-        return uri -> ResourcesHTTP.asInputStreamIgnore404(uri, listener);
+        return uri -> ResourcesHTTP.asInputStreamIgnore40x50x(uri, listener);
     }
 
     private KeyValueStoreReadOnly remoteWithTarGz(URI baseURI) {

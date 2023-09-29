@@ -19,6 +19,7 @@ import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.rdf4j.query.algebra.In;
 
 import javax.net.ssl.SSLContext;
 import java.io.File;
@@ -31,10 +32,19 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ResourcesHTTP {
     private static final List<Integer> REDIRECT_CODES = Arrays.asList(301, 302, 303);
     public static final String MIMETYPE_GITHUB_JSON = "application/vnd.github+json";
+    public static final Predicate<Integer> SHOULD_IGNORE_40x_50x
+            = statusCode -> statusCode >= 400;
+    public static final Predicate<Integer> NEVER_IGNORE = new Predicate<Integer>() {
+        @Override
+        public boolean test(Integer integer) {
+            return false;
+        }
+    };
     private static CloseableHttpClient httpClient = null;
     private static CloseableHttpClient redirectingHttpClient = null;
 
@@ -48,12 +58,12 @@ public class ResourcesHTTP {
         return is;
     }
 
-    public static InputStream asInputStreamIgnore404(IRI dataURI, DerefProgressListener derefProgressListener) throws IOException {
-        return asInputStream(dataURI, Arrays.asList(400, 404), derefProgressListener);
+    public static InputStream asInputStreamIgnore40x50x(IRI dataURI, DerefProgressListener derefProgressListener) throws IOException {
+        return asInputStream(dataURI, derefProgressListener, SHOULD_IGNORE_40x_50x);
     }
 
     public static InputStream asInputStream(IRI dataURI, DerefProgressListener nullDerefProgressListener) throws IOException {
-        return asInputStream(dataURI, Collections.emptyList(), nullDerefProgressListener);
+        return asInputStream(dataURI, nullDerefProgressListener, NEVER_IGNORE);
     }
 
     public static InputStream asInputStream(IRI dataURI) throws IOException {
@@ -62,11 +72,11 @@ public class ResourcesHTTP {
 
 
     public static InputStream asInputStream(IRI dataURI,
-                                            List<Integer> ignoreCodes,
-                                            DerefProgressListener listener) throws IOException {
+                                            DerefProgressListener listener,
+                                            Predicate<Integer> shouldIgnore) throws IOException {
         HttpGet get = new HttpGet(URI.create(dataURI.getIRIString()));
         injectAuthorizationIfPossible(dataURI, get);
-        return asInputStream(dataURI, get, ignoreCodes, listener);
+        return asInputStream(dataURI, get, listener, shouldIgnore);
     }
 
     private static void injectAuthorizationIfPossible(IRI dataURI, HttpMessage msg) {
@@ -92,8 +102,8 @@ public class ResourcesHTTP {
 
     public static InputStream asInputStream(IRI dataURI,
                                             HttpUriRequest request,
-                                            List<Integer> ignoreCodes,
-                                            DerefProgressListener listener) throws IOException {
+                                            DerefProgressListener listener,
+                                            Predicate<Integer> shouldIgnore) throws IOException {
         InputStream is = asInputStreamOfflineOnly(dataURI);
         if (is == null) {
 
@@ -105,7 +115,7 @@ public class ResourcesHTTP {
 
             StatusLine statusLine = response.getStatusLine();
             HttpEntity entity = response.getEntity();
-            if (ignoreCodes.contains(statusLine.getStatusCode())) {
+            if (shouldIgnore.test(statusLine.getStatusCode())) {
                 EntityUtils.consume(entity);
             } else {
                 if (statusLine.getStatusCode() >= 300) {
@@ -184,4 +194,5 @@ public class ResourcesHTTP {
                 .setSocketTimeout(soTimeoutMs)
                 .setConnectTimeout(soTimeoutMs);
     }
+
 }
