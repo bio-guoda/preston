@@ -71,6 +71,17 @@ public class KeyTo1LevelZenodoPathTest {
         assertThat(bla.toString(), is("https://zenodo.org/api/files/cbb44724-b635-4c75-94e8-c7a824efbc72/figure.png"));
     }
 
+    @Test(expected = IOException.class)
+    public void findFirstHitMalformed() throws IOException {
+        InputStream is = getClass().getResourceAsStream("zenodo-response-malformed.json");
+        KeyTo1LevelZenodoPath.findFirstHit("eb5e8f37583644943b86d1d9ebd4ded5", is);
+    }
+
+    @Test(expected = IOException.class)
+    public void findFirstHitNull() throws IOException {
+        KeyTo1LevelZenodoPath.findFirstHit("eb5e8f37583644943b86d1d9ebd4ded5", null);
+    }
+
     @Test
     public void nonZenodoNoTrailingSlash() {
 

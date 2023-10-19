@@ -43,6 +43,9 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
     }
 
     static URI findFirstHit(String suffix, InputStream inputStream) throws IOException {
+        if (inputStream == null) {
+            throw new IOException("no input found");
+        }
         JsonNode jsonNode = new ObjectMapper().readTree(inputStream);
 
         if (jsonNode != null && jsonNode.has("hits")) {
