@@ -14,12 +14,21 @@ import java.net.URI;
 public class KeyTo1LevelZenodoPath implements KeyToPath {
 
     public static final String ZENODO_API_PREFIX = "https://zenodo.org/api/records/?q=_files.checksum:";
+    public static final String ZENODO_API_SUFFIX = "%22&all_versions=true";
     private final URI baseURI;
     private final Dereferencer<InputStream> deref;
+    private final String prefix;
+    private final String suffix;
 
     public KeyTo1LevelZenodoPath(URI baseURI, Dereferencer<InputStream> deref) {
-        this.baseURI = detectPath(baseURI);
+        this(baseURI, deref, ZENODO_API_PREFIX, ZENODO_API_SUFFIX);
+    }
+
+    public KeyTo1LevelZenodoPath(URI baseURI, Dereferencer<InputStream> deref, String prefix, String suffix) {
         this.deref = deref;
+        this.prefix = prefix;
+        this.suffix = suffix;
+        this.baseURI = detectPath(baseURI);
     }
 
     @Override
@@ -28,8 +37,8 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
         HashType hashType = HashKeyUtil.hashTypeFor(key);
         int offset = hashType.getPrefix().length();
         String md5HexHash = StringUtils.substring(key.getIRIString(), offset);
-        if (StringUtils.startsWith(baseURI.toString(), ZENODO_API_PREFIX)) {
-            IRI zenodoQuery = RefNodeFactory.toIRI(baseURI.toString() + "%22md5:" + md5HexHash + "%22&all_versions=true");
+        if (StringUtils.startsWith(baseURI.toString(), getPrefix())) {
+            IRI zenodoQuery = RefNodeFactory.toIRI(baseURI.toString() + "%22md5:" + md5HexHash + getSuffix());
             try (InputStream inputStream = deref.get(zenodoQuery)) {
                 path = findFirstHit(md5HexHash, inputStream);
             } catch (IOException e) {
@@ -40,6 +49,14 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
             path = HashKeyUtil.insertSlashIfNeeded(baseURI, md5HexHash);
         }
         return path;
+    }
+
+    private String getSuffix() {
+        return suffix;
+    }
+
+    private String getPrefix() {
+        return prefix;
     }
 
     static URI findFirstHit(String suffix, InputStream inputStream) throws IOException {
@@ -58,7 +75,8 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
                         for (JsonNode file : files) {
                             if (file.has("checksum")) {
                                 String checksum = file.get("checksum").asText();
-                                if (StringUtils.equals("md5:" + suffix, checksum)) {
+                                if (StringUtils.equals(suffix, checksum)
+                                        || StringUtils.equals("md5:" + suffix, checksum)) {
                                     if (file.has("links")) {
                                         JsonNode links = file.get("links");
                                         if (links.has("self")) {
@@ -80,10 +98,10 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
         return HashType.md5.equals(HashKeyUtil.hashTypeFor(key));
     }
 
-    private static URI detectPath(URI baseURI) {
+    private URI detectPath(URI baseURI) {
         return StringUtils.contains(baseURI.getHost(), "zenodo.org")
                 && (StringUtils.isBlank(baseURI.getPath()) || StringUtils.equals(baseURI.getPath(), "/"))
-                ? URI.create(ZENODO_API_PREFIX)
+                ? URI.create(getPrefix())
                 : baseURI;
     }
 

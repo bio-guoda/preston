@@ -36,6 +36,30 @@ public class KeyTo1LevelZenodoPathTest {
     }
 
     @Test
+    public void toPath20231020() {
+        IRI hash = RefNodeFactory.toIRI("hash://md5/eb5e8f37583644943b86d1d9ebd4ded5");
+
+        Dereferencer<InputStream> dereferencer = new Dereferencer<InputStream>() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records?q=files.entries.checksum:%22md5:eb5e8f37583644943b86d1d9ebd4ded5%22&allversions=1"));
+                return KeyTo1LevelZenodoPathTest.this.getClass().getResourceAsStream("zenodo-response-all-versions-2023-10-20.json");
+            }
+        };
+
+        URI actualPath = new KeyTo1LevelZenodoPath(
+                URI.create("https://zenodo.org"),
+                dereferencer,
+                "https://zenodo.org/api/records?q=files.entries.checksum:",
+                "%22&allversions=1"
+        )
+                .toPath(hash);
+        assertThat(actualPath.toString(), Is.is("https://zenodo.org/api/records/4589980/files/figure.png"));
+    }
+
+
+    @Test
     public void toPathOlderVersion() {
         IRI hash = RefNodeFactory.toIRI("hash://md5/d11ddcecf3d5cbc627439260bdbfda72");
 
