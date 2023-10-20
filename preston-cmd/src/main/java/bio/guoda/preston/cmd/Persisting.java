@@ -116,6 +116,7 @@ public class Persisting extends PersistingLocal {
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritagePath(uri)),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri)),
                                 Pair.of(uri, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, getProgressListener())))),
+                                Pair.of(uri, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13))),
                                 Pair.of(uri, new KeyTo1LevelDataOnePath(uri, getDerefStream(uri, getProgressListener()))),
                                 Pair.of(uri, new KeyTo1LevelOCIPath(uri)),
                                 Pair.of(uri, new KeyTo1LevelWikiMediaCommonsPath(uri, getDerefStream(uri, getProgressListener())))

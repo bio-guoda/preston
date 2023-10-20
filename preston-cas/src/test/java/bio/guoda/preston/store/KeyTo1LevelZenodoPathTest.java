@@ -51,8 +51,8 @@ public class KeyTo1LevelZenodoPathTest {
         URI actualPath = new KeyTo1LevelZenodoPath(
                 URI.create("https://zenodo.org"),
                 dereferencer,
-                "https://zenodo.org/api/records?q=files.entries.checksum:",
-                "%22&allversions=1"
+                KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13,
+                KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13
         )
                 .toPath(hash);
         assertThat(actualPath.toString(), Is.is("https://zenodo.org/api/records/4589980/files/figure.png/content"));

@@ -15,6 +15,9 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
 
     public static final String ZENODO_API_PREFIX = "https://zenodo.org/api/records/?q=_files.checksum:";
     public static final String ZENODO_API_SUFFIX = "%22&all_versions=true";
+
+    public static final String ZENODO_API_PREFIX_2023_10_13 = "https://zenodo.org/api/records?q=files.entries.checksum:";
+    public static final String ZENODO_API_SUFFIX_2023_10_13 = "%22&allversions=1";
     private final URI baseURI;
     private final Dereferencer<InputStream> deref;
     private final String prefix;
@@ -24,7 +27,10 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
         this(baseURI, deref, ZENODO_API_PREFIX, ZENODO_API_SUFFIX);
     }
 
-    public KeyTo1LevelZenodoPath(URI baseURI, Dereferencer<InputStream> deref, String prefix, String suffix) {
+    public KeyTo1LevelZenodoPath(URI baseURI,
+                                 Dereferencer<InputStream> deref,
+                                 String prefix,
+                                 String suffix) {
         this.deref = deref;
         this.prefix = prefix;
         this.suffix = suffix;

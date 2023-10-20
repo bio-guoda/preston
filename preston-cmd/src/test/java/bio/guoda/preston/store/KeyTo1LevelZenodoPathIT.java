@@ -28,8 +28,9 @@ public class KeyTo1LevelZenodoPathIT {
                 = new KeyTo1LevelZenodoPath(
                 URI.create("https://zenodo.org"),
                 ResourcesHTTP::asInputStream,
-                "https://zenodo.org/api/records?q=files.entries.checksum:",
-                "%22&allversions=1");
+                KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13,
+                KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13
+        );
         URI uri = keyTo1LevelZenodoPath.toPath(RefNodeFactory.toIRI("hash://md5/eb5e8f37583644943b86d1d9ebd4ded5"));
         assertThat(uri.toString(), is("https://zenodo.org/api/records/4589980/files/figure.png/content"));
     }
