@@ -79,7 +79,9 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
                                         || StringUtils.equals("md5:" + suffix, checksum)) {
                                     if (file.has("links")) {
                                         JsonNode links = file.get("links");
-                                        if (links.has("self")) {
+                                        if (links.has("download")) {
+                                            return URI.create(links.get("download").asText());
+                                        } else if (links.has("self")) {
                                             return URI.create(links.get("self").asText());
                                         }
                                     }

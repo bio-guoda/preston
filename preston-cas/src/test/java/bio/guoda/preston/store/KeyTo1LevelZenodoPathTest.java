@@ -55,7 +55,7 @@ public class KeyTo1LevelZenodoPathTest {
                 "%22&allversions=1"
         )
                 .toPath(hash);
-        assertThat(actualPath.toString(), Is.is("https://zenodo.org/api/records/4589980/files/figure.png"));
+        assertThat(actualPath.toString(), Is.is("https://zenodo.org/api/records/4589980/files/figure.png/content"));
     }
 
 

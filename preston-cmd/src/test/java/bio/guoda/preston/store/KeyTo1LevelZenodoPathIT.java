@@ -31,7 +31,7 @@ public class KeyTo1LevelZenodoPathIT {
                 "https://zenodo.org/api/records?q=files.entries.checksum:",
                 "%22&allversions=1");
         URI uri = keyTo1LevelZenodoPath.toPath(RefNodeFactory.toIRI("hash://md5/eb5e8f37583644943b86d1d9ebd4ded5"));
-        assertThat(uri.toString(), is("https://zenodo.org/api/records/4589980/files/figure.png"));
+        assertThat(uri.toString(), is("https://zenodo.org/api/records/4589980/files/figure.png/content"));
     }
 
 
