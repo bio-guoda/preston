@@ -23,9 +23,8 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class CmdTrack extends CmdActivity {
 
-    public static final String URL_1_URL_2 = "[url1] [url2] ...";
     @CommandLine.Parameters(
-            description = URL_1_URL_2
+            description = "[url1] [url2] ..."
     )
 
     private List<IRI> IRIs = new ArrayList<>();
