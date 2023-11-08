@@ -41,6 +41,36 @@ public class CmdTrackIT {
 
     }
 
+    @Test
+    public void track406() throws IOException {
+        CmdTrack cmd = new CmdTrack();
+
+        String localDataDir = dataDir.getRoot().getAbsolutePath() + "/data";
+        cmd.setLocalDataDir(localDataDir);
+        cmd.setIRIs(Collections.singletonList(RefNodeFactory.toIRI("https://mbd-db.osu.edu/api/v1/backend_table/hol/taxon_name/collecting_units/records?taxon_name_id=05fbf4bb-f8e1-404e-a27c-759d345aa4d0&page=2840")));
+        cmd.setCacheEnabled(true);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmd.setOutputStream(outputStream);
+
+
+        assertThat(new File(localDataDir).exists(), Is.is(false));
+
+        cmd.run();
+
+        String actual = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+        List<Quad> quads = RDFUtil.parseQuads(IOUtils.toInputStream(actual, StandardCharsets.UTF_8));
+
+        Quad quad = quads.get(quads.size() - 1);
+        RDFTerm object = quad.getObject();
+        String contentId = RDFUtil.getValueFor(object);
+        assertThat(contentId, startsWith("hash://sha256/"));
+
+        File file = new File(localDataDir);
+        assertNotNull(file);
+        assertThat(file.list().length, Is.is(3));
+
+    }
+
     private void assertNumberOfDataFiles(int expectedNumberOfFiles, boolean enableCache) {
         CmdTrack cmd = new CmdTrack();
 

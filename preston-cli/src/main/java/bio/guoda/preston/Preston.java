@@ -21,6 +21,7 @@ import bio.guoda.preston.cmd.CmdHead;
 import bio.guoda.preston.cmd.CmdHistory;
 import bio.guoda.preston.cmd.CmdInstallManual;
 import bio.guoda.preston.cmd.CmdList;
+import bio.guoda.preston.cmd.CmdMBDStream;
 import bio.guoda.preston.cmd.CmdMerge;
 import bio.guoda.preston.cmd.CmdPlazi;
 import bio.guoda.preston.cmd.CmdSeeds;
@@ -64,6 +65,7 @@ import static java.lang.System.exit;
                 CmdParadoxRecordStream.class,
                 CmdPlazi.class,
                 CmdGenBankStream.class,
+                CmdMBDStream.class,
                 CmdGitHubStream.class,
                 CmdTaxonWorksStream.class,
                 CmdServe.class,

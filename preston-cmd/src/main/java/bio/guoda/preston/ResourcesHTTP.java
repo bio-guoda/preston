@@ -75,6 +75,7 @@ public class ResourcesHTTP {
                                             DerefProgressListener listener,
                                             Predicate<Integer> shouldIgnore) throws IOException {
         HttpGet get = new HttpGet(URI.create(dataURI.getIRIString()));
+        get.addHeader("Accept", "*/*");
         injectAuthorizationIfPossible(dataURI, get);
         return asInputStream(dataURI, get, listener, shouldIgnore);
     }

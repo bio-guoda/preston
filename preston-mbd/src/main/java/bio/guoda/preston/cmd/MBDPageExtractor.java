@@ -20,20 +20,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import static bio.guoda.preston.RefNodeFactory.toIRI;
-import static bio.guoda.preston.RefNodeFactory.toStatement;
-import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
-
-public class GenBankFlatFileExtractor extends ProcessorExtracting {
-    private final Logger LOG = LoggerFactory.getLogger(GenBankFlatFileExtractor.class);
+public class MBDPageExtractor extends ProcessorExtracting {
+    private final Logger LOG = LoggerFactory.getLogger(MBDPageExtractor.class);
 
     private final ProcessorState processorState;
     private final OutputStream outputStream;
 
-    public GenBankFlatFileExtractor(ProcessorState processorState,
-                                    BlobStoreReadOnly blobStoreReadOnly,
-                                    OutputStream out,
-                                    StatementsListener... listeners) {
+    public MBDPageExtractor(ProcessorState processorState,
+                            BlobStoreReadOnly blobStoreReadOnly,
+                            OutputStream out,
+                            StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
@@ -41,23 +37,23 @@ public class GenBankFlatFileExtractor extends ProcessorExtracting {
 
 
     public ContentStreamHandler getStreamHandler(BatchingEmitter batchingStatementEmitter) {
-        return new GenBankStreamHandlerImpl(batchingStatementEmitter);
+        return new MBDPageStreamHandlerImpl(batchingStatementEmitter);
     }
 
 
-    private class GenBankStreamHandlerImpl extends ContentStreamHandlerImpl implements StatementsEmitter {
+    private class MBDPageStreamHandlerImpl extends ContentStreamHandlerImpl implements StatementsEmitter {
 
         private final ContentStreamHandler handler;
         private final StatementEmitter emitter;
 
-        public GenBankStreamHandlerImpl(StatementEmitter emitter) {
+        public MBDPageStreamHandlerImpl(StatementEmitter emitter) {
             this.emitter = emitter;
 
             this.handler = new ContentStreamHandlerImpl(
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
-                    new GenBankFlatFileStreamHandler(this,
-                            new ContentHashDereferencer(GenBankFlatFileExtractor.this),
+                    new MBDPageStreamHandler(this,
+                            new ContentHashDereferencer(MBDPageExtractor.this),
                             outputStream
                     )
             );
@@ -87,7 +83,7 @@ public class GenBankFlatFileExtractor extends ProcessorExtracting {
     }
 
     public String getActivityDescription() {
-        return "An activity that streams Genbank Flat Files into line-json.";
+        return "An activity that streams Museum for Biological Diversity Web Pages into line-json.";
     }
 
 }
