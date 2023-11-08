@@ -1,14 +1,15 @@
 package bio.guoda.preston.store;
 
-import bio.guoda.preston.stream.ContentStreamUtil;
+import bio.guoda.preston.HashType;
+import bio.guoda.preston.Hasher;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,30 +36,6 @@ public class ContentHashDereferencerTest {
         assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), is("https://example.org"));
     }
 
-    @Test
-    public void apacheVFSUrl() {
-        String input = "tar:gz:hash://sha256/bababab!/nested.tar!/file.txt";
-        assertThat(ContentStreamUtil.truncateGZNotationForVFSIfNeeded(input),
-                is("tar:gz:hash://sha256/bababab!/file.txt"));
-
-    }
-
-    @Test
-    public void apacheVFSUrl2() {
-        String input = "zip:tar:gz:hash://sha256/bababab!/nested.tar!/file.zip!/file.txt";
-        assertThat(ContentStreamUtil.truncateGZNotationForVFSIfNeeded(input),
-                is("zip:tar:gz:hash://sha256/bababab!/file.zip!/file.txt"));
-
-    }
-
-    @Test
-    public void apacheVFSUrl3() {
-        String url = "zip:tar:gz:hash://sha256/bababab!/file.zip!/file.txt";
-        url = ContentStreamUtil.truncateGZNotationForVFSIfNeeded(url);
-
-        assertThat(url, is("zip:tar:gz:hash://sha256/bababab!/file.zip!/file.txt"));
-
-    }
 
     @Test
     public void getFileInArchiveWithApacheVSF() throws IOException {
@@ -112,6 +89,27 @@ public class ContentHashDereferencerTest {
         IOUtils.copyLarge(content, byteGobbler);
 
         assertThat(bytesWritten.get(), is(303));
+    }
+
+    @Test
+    public void getNODCArchiveExplicitTar() throws IOException {
+        String urlString = "tar:gz:hash://sha256/bf18509ad6a2a97143d4f74e72dc4177ec31a4c50b3d7052f9a9cf6735f65e43!/50418.1.1.tar!/0050418/1.1/data/0-data/NODC_TaxonomicCode_V8_CD-ROM/TAXBRIEF.DAT";
+        assertNODCContent(urlString);
+    }
+
+    @Test
+    public void getNODCArchiveImplicitTar() throws IOException {
+        String query = "tar:gz:hash://sha256/bf18509ad6a2a97143d4f74e72dc4177ec31a4c50b3d7052f9a9cf6735f65e43!/0050418/1.1/data/0-data/NODC_TaxonomicCode_V8_CD-ROM/TAXBRIEF.DAT";
+        assertNODCContent(query);
+    }
+
+    private void assertNODCContent(String query) throws IOException {
+        BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nodc.tar.gz");
+
+        InputStream content = new ContentHashDereferencer(blobStore).get(toIRI(query));
+        IRI iri = Hasher.calcHashIRI(content, NullOutputStream.NULL_OUTPUT_STREAM, HashType.sha256);
+
+        assertThat(iri.getIRIString(), is("hash://sha256/a908d1b21a86d95df40168df4795ad7c33ab668a383cb5944e6f4557e5186255"));
     }
 
 }

@@ -87,9 +87,16 @@ public class ContentStreamUtil {
         Matcher matcher = GZ_APACHE_VFS_PATTERN
                 .matcher(url);
 
-        if (matcher.matches() &&
-                StringUtils.split(matcher.group(1), ":").length == StringUtils.split(matcher.group(5), "!/").length) {
-            url = matcher.group(1) + matcher.group(2) + matcher.group(3) + matcher.group(5);
+        if (matcher.matches()) {
+            String prefix = matcher.group(1);
+            String path = matcher.group(5);
+            String[] prefixSplit = StringUtils.split(prefix, ":");
+            String[] pathSplit = StringUtils.splitByWholeSeparator(path, "!/");
+            if (prefixSplit.length == pathSplit.length) {
+                String gzipPrefix = matcher.group(2);
+                String contentReference = matcher.group(3);
+                url = prefix + gzipPrefix + contentReference + path;
+            }
         }
         return url;
     }
