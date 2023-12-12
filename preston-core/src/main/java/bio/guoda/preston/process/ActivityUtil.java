@@ -99,14 +99,15 @@ public class ActivityUtil {
             ActivityContext ctx,
             IRI softwareAgent,
             IRI softwareAgentDOI,
-            String softwareAgentCitation) {
+            String softwareAgentCitation,
+            String softwareAgentDescription) {
 
         IRI activityId = ctx.getActivity();
 
         return Arrays.asList(
                 toStatement(activityId, softwareAgent, IS_A, SOFTWARE_AGENT),
                 toStatement(activityId, softwareAgent, IS_A, AGENT),
-                toStatement(activityId, softwareAgent, DESCRIPTION, toEnglishLiteral("Preston is a software program that finds, archives and provides access to biodiversity datasets.")),
+                toStatement(activityId, softwareAgent, DESCRIPTION, toEnglishLiteral(softwareAgentDescription)),
 
 
                 toStatement(activityId, activityId, IS_A, ACTIVITY),
@@ -124,5 +125,24 @@ public class ActivityUtil {
                 toStatement(activityId, BIODIVERSITY_DATASET_GRAPH, IS_A, RefNodeConstants.ENTITY),
                 toStatement(activityId, BIODIVERSITY_DATASET_GRAPH, DESCRIPTION, toEnglishLiteral("A biodiversity dataset graph archive."))
         );
+    }
+
+    public static ActivityContext createNewActivityContext(String activityDescription) {
+        return new ActivityContext() {
+            private final IRI activity = toIRI(UUID.randomUUID());
+
+            @Override
+            public IRI getActivity() {
+                return activity;
+            }
+
+            @Override
+            public String getDescription() {
+                return activityDescription;
+            }
+
+            ;
+
+        };
     }
 }

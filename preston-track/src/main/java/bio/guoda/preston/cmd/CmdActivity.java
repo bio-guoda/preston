@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
@@ -64,7 +63,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
 
     protected void run(BlobStore blobStore, BlobStore provStore, HexaStore provIndex) {
-        ActivityContext ctx = createNewActivityContext(getActivityDescription());
+        ActivityContext ctx = ActivityUtil.createNewActivityContext(getActivityDescription());
 
         final ArchivingLogger archivingLogger = new ArchivingLogger(this, provStore, provIndex, ctx);
         try {
@@ -155,29 +154,10 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     }
 
 
-    private ActivityContext createNewActivityContext(String activityDescription) {
-        return new ActivityContext() {
-            private final IRI activity = toIRI(UUID.randomUUID());
-
-            @Override
-            public IRI getActivity() {
-                return activity;
-            }
-
-            @Override
-            public String getDescription() {
-                return activityDescription;
-            }
-
-            ;
-
-        };
-    }
-
     static List<Quad> findActivityInfo(ActivityContext activity) {
         String version = Version.getVersionString(null);
         String softwareAgentVersion = version == null ? "" : (" (Version " + Version.getVersionString() + ")");
-        return ActivityUtil.generateSoftwareAgentProcessDescription(activity, PRESTON, PRESTON_DOI_IRI, "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2021. Preston: a biodiversity dataset tracker" + softwareAgentVersion + " [Software]. Zenodo. " + PRESTON_DOI_IRI.getIRIString());
+        return ActivityUtil.generateSoftwareAgentProcessDescription(activity, PRESTON, PRESTON_DOI_IRI, "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2021. Preston: a biodiversity dataset tracker" + softwareAgentVersion + " [Software]. Zenodo. " + PRESTON_DOI_IRI.getIRIString(), "Preston is a software program that finds, archives and provides access to biodiversity datasets.");
     }
 
     abstract String getActivityDescription();
