@@ -145,7 +145,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
     }
 
     private KeyToPath getKeyToPath(File target) {
-        if (HashPathPattern.directoryDepth0.equals(pathPattern)) {
+        if (HashPathPattern.directoryDepth0.equals(getPathPattern())) {
             return new KeyTo1LevelPath(target.toURI());
         } else {
             return new KeyTo3LevelPath(target.toURI());
@@ -224,6 +224,10 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     public void setPathPattern(HashPathPattern pathPattern) {
         this.pathPattern = pathPattern;
+    }
+
+    public HashPathPattern getPathPattern() {
+        return pathPattern;
     }
 
 }
