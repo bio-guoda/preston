@@ -19,7 +19,6 @@ import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
-import org.eclipse.rdf4j.query.algebra.In;
 
 import javax.net.ssl.SSLContext;
 import java.io.File;
@@ -30,7 +29,6 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
