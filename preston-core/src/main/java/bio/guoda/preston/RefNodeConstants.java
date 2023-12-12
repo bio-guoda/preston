@@ -33,6 +33,7 @@ public class RefNodeConstants {
     public static final IRI WAS_GENERATED_BY = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasGeneratedBy"));
     public static final IRI WAS_DERIVED_FROM = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasDerivedFrom"));
     public static final IRI QUALIFIED_GENERATION = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#qualifiedGeneration"));
+    public static final IRI GENERATION = toIRI("http://www.w3.org/ns/prov#Generation");
 
 
     public static final String BIODIVERSITY_DATASET_GRAPH_UUID_STRING = "0659a54f-b713-4f86-a917-5be166a14110";

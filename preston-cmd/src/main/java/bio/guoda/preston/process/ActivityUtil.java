@@ -70,7 +70,7 @@ public class ActivityUtil {
         emitter.emit(toStatement(
                 downloadActivity,
                 newVersion,
-                toIRI("http://www.w3.org/ns/prov#qualifiedGeneration"),
+                RefNodeConstants.QUALIFIED_GENERATION,
                 downloadActivity));
         emitter.emit(toStatement(
                 downloadActivity,
@@ -81,11 +81,11 @@ public class ActivityUtil {
                 downloadActivity,
                 downloadActivity,
                 IS_A,
-                toIRI("http://www.w3.org/ns/prov#Generation")));
+                RefNodeConstants.GENERATION));
         sourceActivity.ifPresent(blankNodeOrIRI -> emitter.emit(toStatement(
                 downloadActivity,
                 downloadActivity,
-                toIRI("http://www.w3.org/ns/prov#wasInformedBy"),
+                RefNodeConstants.WAS_INFORMED_BY,
                 blankNodeOrIRI)));
         emitter.emit(toStatement(
                 downloadActivity,
