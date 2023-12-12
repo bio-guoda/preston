@@ -1,9 +1,8 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.Version;
+import bio.guoda.preston.process.ActivityUtil;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
@@ -19,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
@@ -28,24 +26,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
-import static bio.guoda.preston.RefNodeConstants.AGENT;
-import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
-import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
-import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.PRESTON;
-import static bio.guoda.preston.RefNodeConstants.SOFTWARE_AGENT;
 import static bio.guoda.preston.RefNodeConstants.USED_BY;
-import static bio.guoda.preston.RefNodeFactory.toEnglishLiteral;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public abstract class CmdActivity extends LoggingPersisting implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(CmdActivity.class);
 
-    private static final IRI ENTITY = toIRI("http://www.w3.org/ns/prov#Entity");
-    private static final IRI ACTIVITY = toIRI("http://www.w3.org/ns/prov#Activity");
-    public static final String PRESTON_DOI = "https://doi.org/10.5281/zenodo.1410543";
-    public static final IRI PRESTON_DOI_IRI = toIRI(PRESTON_DOI);
+    public static final IRI PRESTON_DOI_IRI = toIRI("https://doi.org/10.5281/zenodo.1410543");
 
 
     @Override
@@ -186,33 +175,9 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     }
 
     static List<Quad> findActivityInfo(ActivityContext activity) {
-
-        IRI crawlActivity = activity.getActivity();
-
-
         String version = Version.getVersionString(null);
-        String versionString = version == null ? "" : (" (Version " + Version.getVersionString() + ")");
-        return Arrays.asList(
-                toStatement(crawlActivity, PRESTON, IS_A, SOFTWARE_AGENT),
-                toStatement(crawlActivity, PRESTON, IS_A, AGENT),
-                toStatement(crawlActivity, PRESTON, DESCRIPTION, toEnglishLiteral("Preston is a software program that finds, archives and provides access to biodiversity datasets.")),
-
-
-                toStatement(crawlActivity, crawlActivity, IS_A, ACTIVITY),
-                toStatement(crawlActivity, crawlActivity, DESCRIPTION, toEnglishLiteral(activity.getDescription())),
-                toStatement(crawlActivity, crawlActivity, toIRI("http://www.w3.org/ns/prov#startedAtTime"), RefNodeFactory.nowDateTimeLiteral()),
-                toStatement(crawlActivity, crawlActivity, RefNodeConstants.WAS_STARTED_BY, PRESTON),
-
-
-                toStatement(crawlActivity, PRESTON_DOI_IRI, USED_BY, crawlActivity),
-                toStatement(crawlActivity, PRESTON_DOI_IRI, IS_A, toIRI("http://purl.org/dc/dcmitype/Software")),
-                toStatement(crawlActivity, PRESTON_DOI_IRI,
-                        toIRI("http://purl.org/dc/terms/bibliographicCitation"),
-                        toEnglishLiteral("Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2021. Preston: a biodiversity dataset tracker" + versionString + " [Software]. Zenodo. http://doi.org/10.5281/zenodo.1410543")),
-
-                toStatement(crawlActivity, BIODIVERSITY_DATASET_GRAPH, IS_A, ENTITY),
-                toStatement(crawlActivity, BIODIVERSITY_DATASET_GRAPH, DESCRIPTION, toEnglishLiteral("A biodiversity dataset graph archive."))
-        );
+        String softwareAgentVersion = version == null ? "" : (" (Version " + Version.getVersionString() + ")");
+        return ActivityUtil.generateSoftwareAgentProcessDescription(activity, PRESTON, PRESTON_DOI_IRI, "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2021. Preston: a biodiversity dataset tracker" + softwareAgentVersion + " [Software]. Zenodo. " + PRESTON_DOI_IRI.getIRIString());
     }
 
     abstract String getActivityDescription();
