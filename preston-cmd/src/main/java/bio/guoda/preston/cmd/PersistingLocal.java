@@ -3,6 +3,7 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.store.HexaStoreImpl;
+import bio.guoda.preston.store.KeyTo1LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyTo5LevelPath;
 import bio.guoda.preston.store.KeyToPath;
@@ -35,6 +36,13 @@ public class PersistingLocal extends Cmd {
             description = "Location of local content cache"
     )
     private String localDataDir = "data";
+
+    @CommandLine.Option(
+            names = {"-d", "--depth"},
+            defaultValue = "2",
+            description = "folder depth of data dir"
+    )
+    private int depth = 2;
 
     @CommandLine.Option(
             names = {"--tmp-dir"},
@@ -145,7 +153,13 @@ public class PersistingLocal extends Cmd {
 
     private void initIfNeeded(URI baseURI) {
         if (keyToPathLocal == null) {
-            keyToPathLocal = new KeyTo3LevelPath(baseURI);
+            if (depth == 2) {
+                keyToPathLocal = new KeyTo3LevelPath(baseURI);
+            } else if (depth == 0) {
+                keyToPathLocal = new KeyTo1LevelPath(baseURI);
+            } else {
+                throw new IllegalArgumentException("only directory depths in {0,2} are supported, but found [" + depth + "]");
+            }
         }
     }
 
