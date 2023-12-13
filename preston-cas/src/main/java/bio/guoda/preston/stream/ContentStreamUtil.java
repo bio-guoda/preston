@@ -2,7 +2,6 @@ package bio.guoda.preston.stream;
 
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.DerefState;
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BoundedInputStream;
@@ -10,12 +9,14 @@ import org.apache.commons.io.input.CountingInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static bio.guoda.preston.RefNodeFactory.toIRI;
 
 public class ContentStreamUtil {
 

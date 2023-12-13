@@ -47,7 +47,7 @@ public class KeyTo1LevelDataVersePath implements KeyToPath {
 
             if (StringUtils.equals(baseURI.getHost(), MAGIC_HOST)) {
                 Optional<URI> first = registeredDataVerseHosts
-                        .parallelStream()
+                        .stream()
                         .filter(x -> !failedHosts.contains(x))
                         .map(host -> Pair.of(queryForHost(md5HexHash, URI.create("https://" + host)), host))
                         .map(q -> Optional.ofNullable(findFirstAndDisqualifyIfNeeded(q.getLeft(), q.getRight())))
