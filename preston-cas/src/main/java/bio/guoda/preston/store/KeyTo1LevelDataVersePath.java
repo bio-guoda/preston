@@ -88,8 +88,6 @@ public class KeyTo1LevelDataVersePath implements KeyToPath {
             path = findFirstHit(inputStream);
         } catch (IOException e) {
             // opportunistic
-            System.out.println("failed [" + host + "]");
-            e.printStackTrace();
             failedHosts.add(host);
         }
         return path;
