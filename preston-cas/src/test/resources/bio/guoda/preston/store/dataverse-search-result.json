@@ -1,0 +1,32 @@
+{
+  "status": "OK",
+  "data": {
+    "q": "fileMd5:48a76222cf5c06cb4f2d8f75cc0caa63",
+    "total_count": 1,
+    "start": 0,
+    "spelling_alternatives": {},
+    "items": [
+      {
+        "name": "Auter Fine PB Replication Code.txt",
+        "type": "file",
+        "url": "https://dataverse.harvard.edu/api/access/datafile/2829688",
+        "file_id": "2829688",
+        "published_at": "2016-05-18T17:57:24Z",
+        "file_type": "Plain Text",
+        "file_content_type": "text/plain",
+        "size_in_bytes": 2065,
+        "md5": "48a76222cf5c06cb4f2d8f75cc0caa63",
+        "checksum": {
+          "type": "MD5",
+          "value": "48a76222cf5c06cb4f2d8f75cc0caa63"
+        },
+        "file_persistent_id": "doi:10.7910/DVN/TGKZ2T/Y1ZZXT",
+        "dataset_name": "Replication Data for: \"Negative Campaigning in the Social Media Age: Attack Advertising on Facebook\"",
+        "dataset_id": "2829686",
+        "dataset_persistent_id": "doi:10.7910/DVN/TGKZ2T",
+        "dataset_citation": "Auter, Zachary, 2016, \"Replication Data for: \"Negative Campaigning in the Social Media Age: Attack Advertising on Facebook\"\", https://doi.org/10.7910/DVN/TGKZ2T, Harvard Dataverse, V1, UNF:6:LSx44nECMNQun46yUutUuA== [fileUNF]"
+      }
+    ],
+    "count_in_response": 1
+  }
+}
