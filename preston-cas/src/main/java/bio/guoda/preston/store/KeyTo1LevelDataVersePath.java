@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class KeyTo1LevelDataVersePath implements KeyToPath {
@@ -27,6 +28,7 @@ public class KeyTo1LevelDataVersePath implements KeyToPath {
     private final URI baseURI;
     private final Dereferencer<InputStream> deref;
 
+    private static final List<String> registeredDataVerseEndpoints = Collections.synchronizedList(new ArrayList<>());
     private static final List<String> registeredDataVerseHosts = Collections.synchronizedList(new ArrayList<>());
     private static final List<String> failedHosts = Collections.synchronizedList(new ArrayList<>());
 
@@ -94,16 +96,21 @@ public class KeyTo1LevelDataVersePath implements KeyToPath {
     }
 
     private void lazyInitHostList() {
-        if (registeredDataVerseHosts.size() == 0) {
+        if (registeredDataVerseEndpoints.size() == 0) {
             try (InputStream inputStream = deref.get(RefNodeFactory.toIRI("https://iqss.github.io/dataverse-installations/data/data.json"))) {
-                registeredDataVerseHosts.addAll(findHostNames(inputStream));
+                registeredDataVerseEndpoints.addAll(findHostNames(inputStream));
             } catch (IOException e) {
                 // opportunistic
             } finally {
-                if (registeredDataVerseHosts.size() == 0) {
-                    registeredDataVerseHosts.addAll(hostsHardcoded());
+                if (registeredDataVerseEndpoints.size() == 0) {
+                    registeredDataVerseEndpoints.addAll(getHardcodedEndpoints());
                 }
             }
+            registeredDataVerseHosts.addAll(registeredDataVerseEndpoints
+                    .stream()
+                    .map(endpoint -> URI.create("https://" + endpoint)
+                            .getHost())
+                    .collect(Collectors.toList()));
         }
     }
 
@@ -148,7 +155,7 @@ public class KeyTo1LevelDataVersePath implements KeyToPath {
         return hosts;
     }
 
-    public List<String> hostsHardcoded() {
+    public List<String> getHardcodedEndpoints() {
         String[] split = StringUtils.split("abacus.library.ubc.ca\n" +
                 "dataverse.theacss.org\n" +
                 "dataverse.ada.edu.au\n" +
