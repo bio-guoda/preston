@@ -11,6 +11,7 @@ import java.net.URI;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class KeyTo1LevelZenodoPathTest {
@@ -110,26 +111,23 @@ public class KeyTo1LevelZenodoPathTest {
     public void nonZenodoNoTrailingSlash() {
 
         URI actualPath
-                = new KeyTo1LevelZenodoPath(URI.create("https://linker.bio"), getExplodingReref())
+                = new KeyTo1LevelZenodoPath(URI.create("https://linker.bio"), explodingDeref())
                 .toPath(getMD5IRI());
-        assertThat(actualPath.toString(), Is.is("https://linker.bio/eb5e8f37583644943b86d1d9ebd4ded5"));
+        assertThat(actualPath, Is.is(nullValue()));
     }
 
-    private Dereferencer<InputStream> getExplodingReref() {
-        return new Dereferencer<InputStream>() {
-            @Override
-            public InputStream get(IRI uri) throws IOException {
-                throw new IOException("kaboom!");
-            }
+    private Dereferencer<InputStream> explodingDeref() {
+        return uri -> {
+            throw new IOException("kaboom!");
         };
     }
 
     @Test
     public void nonZenodoTrailingSlash() {
 
-        URI actualPath = new KeyTo1LevelZenodoPath(URI.create("https://linker.bio/"), getExplodingReref())
+        URI actualPath = new KeyTo1LevelZenodoPath(URI.create("https://linker.bio/"), explodingDeref())
                 .toPath(getMD5IRI());
-        assertThat(actualPath.toString(), Is.is("https://linker.bio/eb5e8f37583644943b86d1d9ebd4ded5"));
+        assertThat(actualPath, Is.is(nullValue()));
     }
 
     private IRI getMD5IRI() {
@@ -139,9 +137,9 @@ public class KeyTo1LevelZenodoPathTest {
 
     @Test
     public void toTryPath() {
-        URI actualPath = new KeyTo1LevelZenodoPath(URI.create("https://zenodo.org/blabla/"), getExplodingReref())
+        URI actualPath = new KeyTo1LevelZenodoPath(URI.create("https://zenodo.org/blabla/"), explodingDeref())
                 .toPath(getMD5IRI());
-        assertThat(actualPath.toString(), Is.is("https://zenodo.org/blabla/eb5e8f37583644943b86d1d9ebd4ded5"));
+        assertThat(actualPath, Is.is(nullValue()));
     }
 
     @Test

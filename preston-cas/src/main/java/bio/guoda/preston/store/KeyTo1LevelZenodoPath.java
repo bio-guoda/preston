@@ -51,9 +51,6 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
                 // opportunistic
             }
         }
-        if (path == null) {
-            path = HashKeyUtil.insertSlashIfNeeded(baseURI, md5HexHash);
-        }
         return path;
     }
 
