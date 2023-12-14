@@ -111,7 +111,7 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
     private static void rethrowStreamException(Throwable ex, String iriString) throws ContentStreamException {
         if (ex instanceof IllegalStateException && ex.getCause() != null && ex.getCause() instanceof ParseException) {
             ParseException e = (ParseException) ex.getCause();
-            iriString = "line:" + iriString + "!/" + e.getErrorOffset();
+            iriString = "line:" + iriString + "!/L" + e.getErrorOffset();
         }
         throw new ContentStreamException("failed to handle dwc records from <" + iriString + ">", ex);
     }

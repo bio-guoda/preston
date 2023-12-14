@@ -74,7 +74,7 @@ public class DwCArchiveStreamHandlerTest {
             handler.handle(RefNodeFactory.toIRI("foo:bar!/meta.xml"),
                     getClass().getResourceAsStream("issue162/meta.xml"));
         } catch(ContentStreamException ex) {
-            assertThat(ex.getMessage(), is("failed to handle dwc records from <line:foo:bar!/DarwinCore.txt!/2>"));
+            assertThat(ex.getMessage(), is("failed to handle dwc records from <line:foo:bar!/DarwinCore.txt!/L2>"));
             throw ex;
         }
     }
