@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class DwCArchiveStreamHandlerTest {
 
@@ -69,8 +70,13 @@ public class DwCArchiveStreamHandlerTest {
             }
         }, os);
 
-        handler.handle(RefNodeFactory.toIRI("foo:bar!/meta.xml"),
-                getClass().getResourceAsStream("issue162/meta.xml"));
+        try {
+            handler.handle(RefNodeFactory.toIRI("foo:bar!/meta.xml"),
+                    getClass().getResourceAsStream("issue162/meta.xml"));
+        } catch(ContentStreamException ex) {
+            assertThat(ex.getMessage(), is("failed to handle dwc records from <line:foo:bar!/DarwinCore.txt!/2>"));
+            throw ex;
+        }
     }
 
 }

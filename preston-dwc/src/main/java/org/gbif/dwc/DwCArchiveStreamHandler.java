@@ -29,6 +29,7 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
 
@@ -103,8 +104,16 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
                 streamAsJson(resourceIRIs, tabularFileReader, iterator.next(), outputStream, idIRI);
             }
         } catch (Throwable ex) {
-            throw new ContentStreamException("failed to handle dwc records from [" + resourceIRIs.getLeft().getIRIString() + "]", ex);
+            rethrowStreamException(ex, resourceIRIs.getLeft().getIRIString());
         }
+    }
+
+    private static void rethrowStreamException(Throwable ex, String iriString) throws ContentStreamException {
+        if (ex instanceof IllegalStateException && ex.getCause() != null && ex.getCause() instanceof ParseException) {
+            ParseException e = (ParseException) ex.getCause();
+            iriString = "line:" + iriString + "!/" + e.getErrorOffset();
+        }
+        throw new ContentStreamException("failed to handle dwc records from <" + iriString + ">", ex);
     }
 
     private static void streamAsJson(Pair<IRI, ArchiveFile> resourceIRIs,
