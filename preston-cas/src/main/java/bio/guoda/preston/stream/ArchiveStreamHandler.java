@@ -64,8 +64,10 @@ public class ArchiveStreamHandler implements ContentStreamHandler {
                 }
             }
         } catch (Throwable th) {
-            String entryDescription = entry == null ? "some entry" : ("entry [" + entry.getName() + "]");
-            String msg = "failed to process " + entryDescription + " in [" + version.getIRIString() + "]";
+            String dataCoordinates = entry == null || entry.isDirectory()
+                    ? version.getIRIString()
+                    : "<zip:" + version.getIRIString() + "!/" + entry.getName() + ">";
+            String msg = "failed to process " + dataCoordinates;
             LOG.warn(msg, th);
             throw new ContentStreamException(msg, th);
         }
