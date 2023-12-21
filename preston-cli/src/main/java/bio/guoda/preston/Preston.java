@@ -33,6 +33,7 @@ import bio.guoda.preston.cmd.TypeConverterIRI;
 import bio.guoda.preston.dbase.CmdDBaseRecordStream;
 import bio.guoda.preston.excel.CmdExcelRecordStream;
 import bio.guoda.preston.paradox.CmdParadoxRecordStream;
+import bio.guoda.preston.server.CmdRedirect;
 import bio.guoda.preston.server.CmdServe;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
@@ -69,6 +70,7 @@ import static java.lang.System.exit;
                 CmdGitHubStream.class,
                 CmdTaxonWorksStream.class,
                 CmdServe.class,
+                CmdRedirect.class,
                 CmdCite.class,
                 CmdGenerateQRCode.class,
                 CmdHead.class,

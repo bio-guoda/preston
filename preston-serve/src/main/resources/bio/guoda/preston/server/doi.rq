@@ -1,0 +1,46 @@
+#+ endpoint: https://lod.globalbioticinteractions.org/query
+#+ defaults:
+#+   - doi: https://doi.org/10.15468/aomfnb
+
+SELECT DISTINCT
+  ?doi
+  ?uuid 
+  ?contentId
+  ?archiveUrl 
+  ?seenAt
+  ?provenanceId
+WHERE  
+{
+    BIND(?_doi_iri as ?doi) 
+    BIND(<hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd> as ?provenanceId)
+
+{
+    SELECT ?contentId ?seenAt ?archiveUrl ?uuid
+WHERE {
+  graph ?g1 {
+   ?uuid <http://www.w3.org/ns/prov#hadMember> ?archiveUrl .
+   ?uuid <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> ?_doi_iri .
+   ?archiveUrl <http://purl.org/dc/elements/1.1/format> "application/dwca" .
+  }
+  graph ?activity {
+    ?activity <http://www.w3.org/ns/prov#used> ?archiveUrl .
+    ?activity <http://www.w3.org/ns/prov#generatedAtTime> ?seenAt .
+    ?contentId <http://www.w3.org/ns/prov#qualifiedGeneration> ?activity .  
+    }
+
+}
+} 
+UNION
+{
+    SELECT ?contentId ?seenAt ?archiveUrl ?uuid
+WHERE {
+   ?uuid <http://www.w3.org/ns/prov#hadMember> ?archiveUrl . 
+   ?uuid <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> ?_doi_iri .
+   ?archiveUrl <http://purl.org/dc/elements/1.1/format> "application/dwca" .
+    ?activity <http://www.w3.org/ns/prov#used> ?archiveUrl .
+    ?activity <http://www.w3.org/ns/prov#generatedAtTime> ?seenAt .
+    ?contentId <http://www.w3.org/ns/prov#qualifiedGeneration> ?activity . 
+}
+} 
+} ORDER BY DESC(?seenAt) LIMIT 2
+

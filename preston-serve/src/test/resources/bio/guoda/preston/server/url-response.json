@@ -1,0 +1,70 @@
+{
+  "head": {
+    "vars": [
+      "doi",
+      "uuid",
+      "contentId",
+      "archiveUrl",
+      "seenAt",
+      "provenanceId"
+    ]
+  },
+  "results": {
+    "bindings": [
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/aomfnb"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:4fa7b334-ce0d-4e88-aaae-2e0c138d049e"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://hosted-datasets.gbif.org/eBird/2022-eBird-dwca-1.0.zip"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-12-02T16:05:25.261Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/aomfnb"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:4fa7b334-ce0d-4e88-aaae-2e0c138d049e"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://hosted-datasets.gbif.org/eBird/2022-eBird-dwca-1.0.zip"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-11-02T04:13:34.257Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        }
+      }
+    ]
+  }
+}
