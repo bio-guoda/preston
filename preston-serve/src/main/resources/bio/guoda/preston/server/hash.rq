@@ -9,13 +9,14 @@ SELECT DISTINCT
   ?archiveUrl 
   ?seenAt
   ?provenanceId
+  ?activity
 WHERE  
 {
     BIND(?_hash_iri as ?contentId) 
     BIND(<hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd> as ?provenanceId)
 
 {
-    SELECT ?doi ?seenAt ?archiveUrl ?uuid
+    SELECT ?doi ?seenAt ?archiveUrl ?uuid ?activity
 WHERE {
   graph ?activity {
     ?_hash_iri <http://www.w3.org/ns/prov#qualifiedGeneration> ?activity .  
@@ -32,7 +33,7 @@ WHERE {
 } 
 UNION
 {
-    SELECT ?doi ?seenAt ?archiveUrl ?uuid
+    SELECT ?doi ?seenAt ?archiveUrl ?uuid ?activity
 WHERE {
    ?_hash_iri <http://www.w3.org/ns/prov#qualifiedGeneration> ?activity . 
    ?activity <http://www.w3.org/ns/prov#used> ?archiveUrl .
