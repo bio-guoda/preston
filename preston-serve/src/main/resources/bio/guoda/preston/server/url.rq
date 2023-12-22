@@ -42,6 +42,9 @@ WHERE {
     ?activity <http://www.w3.org/ns/prov#generatedAtTime> ?seenAt .
     ?contentId <http://www.w3.org/ns/prov#qualifiedGeneration> ?activity . 
 }
-} 
+}
+  # exclude blank nodes that represent unavailable or non-content
+  FILTER(!CONTAINS(str(?contentId), ".well-known/genid" ) )
+
 } ORDER BY DESC(?seenAt) LIMIT 2
 
