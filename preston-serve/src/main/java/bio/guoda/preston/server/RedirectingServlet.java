@@ -131,6 +131,7 @@ public class RedirectingServlet extends HttpServlet {
                 .map(req -> URN_UUID_REQUEST_PATTERN.matcher(req).matches() ? QUERY_TYPE_UUID : req)
                 .map(req -> Pattern.compile("^(10[.])([^/]+)/(.*)$").matcher(req).matches() ? QUERY_TYPE_DOI : req)
                 .map(req -> Pattern.compile("^http[s]{0,1}://[^ ]+").matcher(req).matches() ? QUERY_TYPE_URL : req)
+                .filter(type -> Arrays.asList(QUERY_TYPE_DOI, QUERY_TYPE_UUID, QUERY_TYPE_URL).contains(type))
                 .findFirst()
                 .orElse("unknown");
     }
