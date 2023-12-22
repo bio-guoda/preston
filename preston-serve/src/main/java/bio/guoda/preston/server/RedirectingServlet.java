@@ -94,7 +94,9 @@ public class RedirectingServlet extends HttpServlet {
                 response.setHeader(HttpHeaders.ETAG, contentId);
                 response.setHeader(HttpHeaders.CONTENT_LOCATION, provInfo.get(ARCHIVE_URL));
                 response.setHeader("X-UUID", provInfo.get(UUID));
-                response.setHeader("X-DOI", provInfo.get(DOI));
+                if (StringUtils.isNotBlank(provInfo.get(DOI))) {
+                    response.setHeader("X-DOI", provInfo.get(DOI));
+                }
                 response.setHeader("X-PROV", provInfo.get(PROVENANCE_ID));
                 response.setHeader("X-PROV-wasInfluencedBy", StringUtils.join(Arrays.asList(provInfo.get(DOI), provInfo.get(UUID)), " , "));
                 response.setHeader("X-PROV-wasGeneratedBy", provInfo.get(ACTIVITY));

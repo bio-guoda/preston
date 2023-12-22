@@ -12,6 +12,7 @@ import java.util.Map;
 
 import static bio.guoda.preston.server.RedirectingServlet.ACTIVITY;
 import static bio.guoda.preston.server.RedirectingServlet.CONTENT_ID;
+import static bio.guoda.preston.server.RedirectingServlet.DOI;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RedirectingServletIT {
