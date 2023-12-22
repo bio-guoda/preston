@@ -20,7 +20,7 @@ WHERE
 WHERE {
   graph ?g1 {
    ?uuid <http://www.w3.org/ns/prov#hadMember> ?_url_iri .
-   ?uuid <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> ?doi .
+   OPTIONAL { ?uuid <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> ?doi . }
    ?_url_iri <http://purl.org/dc/elements/1.1/format> "application/dwca" .
   }
   graph ?activity {
@@ -36,11 +36,11 @@ UNION
     SELECT ?contentId ?seenAt ?uuid ?activity
 WHERE {
    ?uuid <http://www.w3.org/ns/prov#hadMember> ?_url_iri . 
-   ?uuid <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> ?doi .
+   OPTIONAL { ?uuid <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> ?doi . }
    ?_url_iri <http://purl.org/dc/elements/1.1/format> "application/dwca" .
-    ?activity <http://www.w3.org/ns/prov#used> ?_url_iri .
-    ?activity <http://www.w3.org/ns/prov#generatedAtTime> ?seenAt .
-    ?contentId <http://www.w3.org/ns/prov#qualifiedGeneration> ?activity . 
+   ?activity <http://www.w3.org/ns/prov#used> ?_url_iri .
+   ?activity <http://www.w3.org/ns/prov#generatedAtTime> ?seenAt .
+   ?contentId <http://www.w3.org/ns/prov#qualifiedGeneration> ?activity .
 }
 }
   # exclude blank nodes that represent unavailable or non-content

@@ -1,6 +1,5 @@
 package bio.guoda.preston.server;
 
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.ResourcesHTTP;
@@ -43,8 +42,8 @@ public class RedirectingServlet extends HttpServlet {
     public static final String DOI = "doi";
     public static final String CONTENT_ID = "contentId";
     public static final String ACTIVITY = "activity";
+
     public static final String QUERY_TYPE_UUID = "uuid";
-    public static final String QUERY_TYPE_HASH = "hash";
     public static final String QUERY_TYPE_URL = "url";
     public static final String QUERY_TYPE_DOI = "doi";
 
@@ -130,9 +129,6 @@ public class RedirectingServlet extends HttpServlet {
     static String queryTypeForRequestedId(String requestURI) {
         return Stream.of(requestURI)
                 .map(req -> URN_UUID_REQUEST_PATTERN.matcher(req).matches() ? QUERY_TYPE_UUID : req)
-                .map(req -> HashType.sha1.getIRIPattern().matcher(req).matches() ? QUERY_TYPE_HASH : req)
-                .map(req -> HashType.md5.getIRIPattern().matcher(req).matches() ? QUERY_TYPE_HASH : req)
-                .map(req -> HashType.sha256.getIRIPattern().matcher(req).matches() ? QUERY_TYPE_HASH : req)
                 .map(req -> Pattern.compile("^(10[.])([^/]+)/(.*)$").matcher(req).matches() ? QUERY_TYPE_DOI : req)
                 .map(req -> Pattern.compile("^http[s]{0,1}://[^ ]+").matcher(req).matches() ? QUERY_TYPE_URL : req)
                 .findFirst()
