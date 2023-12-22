@@ -1,7 +1,5 @@
 package bio.guoda.preston.server;
 
-import bio.guoda.preston.cmd.LoggingPersisting;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -32,16 +30,16 @@ public class CmdRedirect implements Runnable {
     String host = "localhost";
 
     @CommandLine.Option(
-            names = {"-q", "--query-endpoint"},
-            description = "host to listen on"
+            names = {"--registry"},
+            description = "sparql endpoint to query provenance registry"
     )
-    String sparqlEndpoint = "http://localhost:7878/query";
+    String registry = "http://localhost:7878/query";
 
     @CommandLine.Option(
-            names = {"-c", "--content-resolver"},
-            description = "server to redirect content requests to"
+            names = {"--repository"},
+            description = "endpoint to access content of known provenance"
     )
-    String contentResolver = "https://linker.bio/";
+    String repository = "https://linker.bio/";
 
 
     @Override
@@ -54,8 +52,8 @@ public class CmdRedirect implements Runnable {
         ServletHandler servletHandler = new ServletHandler();
         ServletHolder servletHolder = new ServletHolder(RedirectingServlet.class);
         Map<String, String> properties = new TreeMap<String, String>() {{
-            put(PropertyNames.PRESTON_CONTENT_RESOLVER_ENDPONT, contentResolver);
-            put(PropertyNames.PRESTON_SPARQL_ENDPONT, sparqlEndpoint);
+            put(PropertyNames.PRESTON_CONTENT_RESOLVER_ENDPONT, repository);
+            put(PropertyNames.PRESTON_SPARQL_ENDPONT, registry);
         }};
 
         servletHolder.setInitParameters(properties);

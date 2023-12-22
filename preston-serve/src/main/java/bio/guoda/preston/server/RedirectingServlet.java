@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
@@ -93,11 +94,13 @@ public class RedirectingServlet extends HttpServlet {
                 response.setHeader(HttpHeaders.CONTENT_TYPE, MimeTypes.MIME_TYPE_DWCA);
                 response.setHeader(HttpHeaders.ETAG, contentId);
                 response.setHeader(HttpHeaders.CONTENT_LOCATION, provInfo.get(ARCHIVE_URL));
-                response.setHeader(HttpHeaders.DATE, provInfo.get(SEEN_AT));
                 response.setHeader("X-UUID", provInfo.get(UUID));
                 response.setHeader("X-DOI", provInfo.get(DOI));
-                response.setHeader("X-PROVENANCE-ANCHOR", provInfo.get(PROVENANCE_ID));
-                response.setHeader("X-PROVENANCE-ACTIVITY", provInfo.get(ACTIVITY));
+                response.setHeader("X-PROV", provInfo.get(PROVENANCE_ID));
+                response.setHeader("X-PROV-wasInfluencedBy", StringUtils.join(Arrays.asList(provInfo.get(DOI), provInfo.get(UUID)), " , "));
+                response.setHeader("X-PROV-wasGeneratedBy", provInfo.get(ACTIVITY));
+                response.setHeader("X-PROV-generatedAtTime", provInfo.get(SEEN_AT));
+                response.setHeader("X-PAV-hasVersion", provInfo.get(CONTENT_ID));
                 response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
                 log("response [" + requestedIdIRI.getIRIString() + "]");
             } else {
