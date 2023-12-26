@@ -44,10 +44,10 @@ public class RedirectingServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
-        String resolverEndpoint = getInitParameter(PRESTON_CONTENT_RESOLVER_ENDPONT);
+        String resolverEndpoint = getResolverEndpoint();
         String sparqlEndpoint = getInitParameter(PRESTON_SPARQL_ENDPONT);
 
-        String requestedId = parseRequestedIdOrThrow(request.getRequestURI());
+        String requestedId = parseRequestedIdOrThrow(request.getRequestURI(), getPrefix());
 
         String queryType = ProvUtil.queryTypeForRequestedId(requestedId);
 
@@ -73,6 +73,14 @@ public class RedirectingServlet extends HttpServlet {
         }
     }
 
+    protected String getPrefix() {
+        return "/";
+    }
+
+    protected String getResolverEndpoint() {
+        return getInitParameter(PRESTON_CONTENT_RESOLVER_ENDPONT);
+    }
+
     private int redirectOnGetRequest(HttpServletRequest request) {
         return StringUtils.equals(request.getMethod(), "HEAD")
                 ? HttpServletResponse.SC_OK
@@ -90,27 +98,8 @@ public class RedirectingServlet extends HttpServlet {
                     requestedIdIRI,
                     queryType,
                     sparqlEndpoint);
-            if (provInfo.containsKey(CONTENT_ID) && StringUtils.isNotBlank(provInfo.get(CONTENT_ID))) {
-                String contentId = provInfo.get(CONTENT_ID);
-                URI uri = HashKeyUtil.insertSlashIfNeeded(URI.create(resolverEndpoint), contentId);
-                response.setHeader(HttpHeaders.LOCATION, uri.toString());
-                response.setHeader(HttpHeaders.CONTENT_TYPE, MimeTypes.MIME_TYPE_DWCA);
-                response.setHeader(HttpHeaders.ETAG, contentId);
-                response.setHeader(HttpHeaders.CONTENT_LOCATION, provInfo.get(ARCHIVE_URL));
-                List<String> influencedBy = new ArrayList<>();
-                String uuid = provInfo.get(UUID);
-                response.setHeader("X-UUID", uuid);
-                influencedBy.add(uuid);
-                String doi = provInfo.get(DOI);
-                if (StringUtils.isNotBlank(doi)) {
-                    response.setHeader("X-DOI", doi);
-                    influencedBy.add(doi);
-                }
-                response.setHeader("X-PROV", provInfo.get(PROVENANCE_ID));
-                response.setHeader("X-PROV-wasInfluencedBy", StringUtils.join(influencedBy, " "));
-                response.setHeader("X-PROV-wasGeneratedBy", provInfo.get(ACTIVITY));
-                response.setHeader("X-PROV-generatedAtTime", provInfo.get(SEEN_AT));
-                response.setHeader("X-PAV-hasVersion", provInfo.get(CONTENT_ID));
+            if (isOfKnownOrigin(provInfo)) {
+                populateResponseHeader(response, resolverEndpoint, provInfo);
                 response.setStatus(responseHttpStatus);
                 log("response [" + requestedIdIRI.getIRIString() + "]");
             } else {
@@ -127,12 +116,43 @@ public class RedirectingServlet extends HttpServlet {
         }
     }
 
-    private String parseRequestedIdOrThrow(String requestURI) throws ServletException {
+    protected URI populateResponseHeader(HttpServletResponse response, String resolverEndpoint, Map<String, String> provInfo) {
+        String contentId = provInfo.get(CONTENT_ID);
+        URI uri = getResolverURI(resolverEndpoint, contentId);
+        response.setHeader(HttpHeaders.LOCATION, uri.toString());
+        response.setHeader(HttpHeaders.CONTENT_TYPE, MimeTypes.MIME_TYPE_DWCA);
+        response.setHeader(HttpHeaders.ETAG, contentId);
+        response.setHeader(HttpHeaders.CONTENT_LOCATION, provInfo.get(ARCHIVE_URL));
+        List<String> influencedBy = new ArrayList<>();
+        String uuid = provInfo.get(UUID);
+        response.setHeader("X-UUID", uuid);
+        influencedBy.add(uuid);
+        String doi = provInfo.get(DOI);
+        if (StringUtils.isNotBlank(doi)) {
+            response.setHeader("X-DOI", doi);
+            influencedBy.add(doi);
+        }
+        response.setHeader("X-PROV", provInfo.get(PROVENANCE_ID));
+        response.setHeader("X-PROV-wasInfluencedBy", StringUtils.join(influencedBy, " "));
+        response.setHeader("X-PROV-wasGeneratedBy", provInfo.get(ACTIVITY));
+        response.setHeader("X-PROV-generatedAtTime", provInfo.get(SEEN_AT));
+        response.setHeader("X-PAV-hasVersion", provInfo.get(CONTENT_ID));
+        return uri;
+    }
+
+    protected URI getResolverURI(String resolverEndpoint, String contentId) {
+        return HashKeyUtil.insertSlashIfNeeded(URI.create(resolverEndpoint), contentId);
+    }
+
+    protected boolean isOfKnownOrigin(Map<String, String> provInfo) {
+        return provInfo.containsKey(CONTENT_ID) && StringUtils.isNotBlank(provInfo.get(CONTENT_ID));
+    }
+
+    private String parseRequestedIdOrThrow(String requestURI, String prefix) throws ServletException {
         log("request [" + requestURI + "]");
 
-
-        return Stream.of(requestURI).filter(req -> StringUtils.startsWith(req, "/"))
-                .map(req -> StringUtils.substring(req, 1))
+        return Stream.of(requestURI).filter(req -> StringUtils.startsWith(req, prefix))
+                .map(req -> StringUtils.substring(req, prefix.length()))
                 .findFirst()
                 .orElseThrow(() -> new ServletException("invalid request [" + requestURI + "]"));
     }

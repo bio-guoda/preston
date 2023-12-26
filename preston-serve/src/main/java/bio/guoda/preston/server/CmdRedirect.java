@@ -50,15 +50,9 @@ public class CmdRedirect implements Runnable {
         connector.setHost(host);
         server.setConnectors(new Connector[] {connector});
         ServletHandler servletHandler = new ServletHandler();
-        ServletHolder servletHolder = new ServletHolder(RedirectingServlet.class);
-        Map<String, String> properties = new TreeMap<String, String>() {{
-            put(PropertyNames.PRESTON_CONTENT_RESOLVER_ENDPONT, repository);
-            put(PropertyNames.PRESTON_SPARQL_ENDPONT, registry);
-        }};
 
-        servletHolder.setInitParameters(properties);
-
-        servletHandler.addServletWithMapping(servletHolder, "/");
+        servletHandler.addServletWithMapping(initServletHolder(new ServletHolder(BadgeServlet.class)), "/badge/*");
+        servletHandler.addServletWithMapping(initServletHolder(new ServletHolder(RedirectingServlet.class)), "/");
         server.insertHandler(servletHandler);
         try {
             server.start();
@@ -66,6 +60,16 @@ public class CmdRedirect implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private ServletHolder initServletHolder(ServletHolder servletHolder) {
+        Map<String, String> properties = new TreeMap<String, String>() {{
+            put(PropertyNames.PRESTON_CONTENT_RESOLVER_ENDPONT, repository);
+            put(PropertyNames.PRESTON_SPARQL_ENDPONT, registry);
+        }};
+
+        servletHolder.setInitParameters(properties);
+        return servletHolder;
     }
 
 }

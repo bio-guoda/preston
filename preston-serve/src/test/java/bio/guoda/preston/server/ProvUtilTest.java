@@ -23,7 +23,6 @@ public class ProvUtilTest {
         assertThat(actual.get(RedirectingServlet.ARCHIVE_URL), Is.is("https://hosted-datasets.gbif.org/eBird/2022-eBird-dwca-1.0.zip"));
         assertThat(actual.get(RedirectingServlet.SEEN_AT), Is.is("2023-12-02T16:05:25.261Z"));
         assertThat(actual.get(RedirectingServlet.PROVENANCE_ID), Is.is("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
-
     }
 
     @Test
