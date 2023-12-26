@@ -11,12 +11,12 @@ import java.util.Map;
 import static bio.guoda.preston.server.RedirectingServlet.CONTENT_ID;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class RedirectingServletTest {
+public class ProvUtilTest {
 
     @Test
     public void parseResult() throws IOException {
         JsonNode response = new ObjectMapper().readTree(getClass().getResourceAsStream("url-response.json"));
-        Map<String, String> actual = RedirectingServlet.extractProvenanceInfo(response);
+        Map<String, String> actual = ProvUtil.extractProvenanceInfo(response);
         assertThat(actual.get(CONTENT_ID), Is.is("hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"));
         assertThat(actual.get(RedirectingServlet.DOI), Is.is("https://doi.org/10.15468/aomfnb"));
         assertThat(actual.get(RedirectingServlet.UUID), Is.is("urn:uuid:4fa7b334-ce0d-4e88-aaae-2e0c138d049e"));
@@ -28,26 +28,26 @@ public class RedirectingServletTest {
 
     @Test
     public void queryTypeDOI() {
-        String s = RedirectingServlet.queryTypeForRequestedId("10.123/2345");
-        assertThat(s, Is.is(RedirectingServlet.QUERY_TYPE_DOI));
+        String s = ProvUtil.queryTypeForRequestedId("10.123/2345");
+        assertThat(s, Is.is(ProvUtil.QUERY_TYPE_DOI));
     }
 
     @Test
     public void queryTypeUUID() {
-        String s = RedirectingServlet.queryTypeForRequestedId("urn:uuid:4fa7b334-ce0d-4e88-aaae-2e0c138d049e");
-        assertThat(s, Is.is(RedirectingServlet.QUERY_TYPE_UUID));
+        String s = ProvUtil.queryTypeForRequestedId("urn:uuid:4fa7b334-ce0d-4e88-aaae-2e0c138d049e");
+        assertThat(s, Is.is(ProvUtil.QUERY_TYPE_UUID));
     }
 
     @Test
     public void queryTypeHash() {
-        String s = RedirectingServlet.queryTypeForRequestedId("hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d");
+        String s = ProvUtil.queryTypeForRequestedId("hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d");
         assertThat(s, Is.is("unknown"));
     }
 
     @Test
     public void queryTypeUrl() {
-        String s = RedirectingServlet.queryTypeForRequestedId("https://example.org");
-        assertThat(s, Is.is(RedirectingServlet.QUERY_TYPE_URL));
+        String s = ProvUtil.queryTypeForRequestedId("https://example.org");
+        assertThat(s, Is.is(ProvUtil.QUERY_TYPE_URL));
     }
 
 }
