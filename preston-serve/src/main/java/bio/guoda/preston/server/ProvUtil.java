@@ -16,6 +16,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
@@ -25,8 +26,10 @@ public class ProvUtil {
     public static final Pattern URN_UUID_REQUEST_PATTERN
             = Pattern.compile("^urn:uuid:" + UUIDUtil.UUID_PATTERN_PART + "$");
     public static final String QUERY_TYPE_UUID = "uuid";
+    public static final String QUERY_TYPE_CONTENT_ID = "contentId";
     public static final String QUERY_TYPE_URL = "url";
     public static final String QUERY_TYPE_DOI = "doi";
+    public static final List<String> QUERIES_SUPPORTED = Arrays.asList(QUERY_TYPE_DOI, QUERY_TYPE_UUID, QUERY_TYPE_URL, QUERY_TYPE_CONTENT_ID);
 
     public static Map<String, String> findMostRecentContentId(IRI iri, String paramName, String sparqlEndpoint) throws IOException, URISyntaxException {
         String response = findProvenance(iri, paramName, sparqlEndpoint);
@@ -75,7 +78,8 @@ public class ProvUtil {
                 .map(req -> URN_UUID_REQUEST_PATTERN.matcher(req).matches() ? QUERY_TYPE_UUID : req)
                 .map(req -> Pattern.compile("^(10[.])([^/]+)/(.*)$").matcher(req).matches() ? QUERY_TYPE_DOI : req)
                 .map(req -> Pattern.compile("^http[s]{0,1}://[^ ]+").matcher(req).matches() ? QUERY_TYPE_URL : req)
-                .filter(type -> Arrays.asList(QUERY_TYPE_DOI, QUERY_TYPE_UUID, QUERY_TYPE_URL).contains(type))
+                .map(req -> Pattern.compile("^hash://[a-zA-Z0-9]+/[a-f0-9]+$").matcher(req).matches() ? QUERY_TYPE_CONTENT_ID : req)
+                .filter(QUERIES_SUPPORTED::contains)
                 .findFirst()
                 .orElse("unknown");
     }

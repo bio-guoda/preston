@@ -1,0 +1,45 @@
+#+ endpoint: https://lod.globalbioticinteractions.org/query
+#+ defaults:
+#+   - uuid: urn:uuid:4fa7b334-ce0d-4e88-aaae-2e0c138d049e
+
+SELECT DISTINCT
+  ?uuid
+  ?doi
+  ?contentId
+  ?archiveUrl
+  ?seenAt
+  ?provenanceId
+  ?activity
+  WHERE {
+            {
+                SELECT DISTINCT
+                  ?contentId
+                  ?archiveUrl
+                  ?seenAt
+                  ?provenanceId
+                  ?activity
+                WHERE  {
+                    BIND(?_contentId_iri as ?contentId)
+                    BIND(<hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd> as ?provenanceId)
+                  {
+                    SELECT ?uuid ?seenAt ?archiveUrl ?doi ?activity
+                    WHERE {
+                      graph ?activity {
+                        ?activity <http://www.w3.org/ns/prov#used> ?archiveUrl .
+                        ?activity <http://www.w3.org/ns/prov#generatedAtTime> ?seenAt .
+                        ?_contentId_iri <http://www.w3.org/ns/prov#qualifiedGeneration> ?activity .
+                      }
+                    }
+                  }
+                } ORDER BY DESC(?seenAt) LIMIT 2
+            }
+            {
+                graph ?g1 {
+                  ?uuid <http://www.w3.org/ns/prov#hadMember> ?archiveUrl .
+                  ?uuid <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> ?doi .
+                  ?archiveUrl <http://purl.org/dc/elements/1.1/format> "application/dwca" .
+                }
+            }
+
+
+  }

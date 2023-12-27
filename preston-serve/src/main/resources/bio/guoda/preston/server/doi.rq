@@ -28,18 +28,6 @@ WHERE  {
       }
     }
   }
-  UNION
-  {
-    SELECT ?contentId ?seenAt ?archiveUrl ?uuid ?activity
-    WHERE {
-       ?uuid <http://www.w3.org/ns/prov#hadMember> ?archiveUrl .
-       ?uuid <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> ?_doi_iri .
-       ?archiveUrl <http://purl.org/dc/elements/1.1/format> "application/dwca" .
-       ?activity <http://www.w3.org/ns/prov#used> ?archiveUrl .
-       ?activity <http://www.w3.org/ns/prov#generatedAtTime> ?seenAt .
-       ?contentId <http://www.w3.org/ns/prov#qualifiedGeneration> ?activity .
-    }
-  }
 
   # exclude blank nodes that represent unavailable or non-content
   FILTER(!CONTAINS(str(?contentId), ".well-known/genid" ) )
