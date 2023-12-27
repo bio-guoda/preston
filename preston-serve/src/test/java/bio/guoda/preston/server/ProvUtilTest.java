@@ -40,7 +40,7 @@ public class ProvUtilTest {
     @Test
     public void queryTypeHash() {
         String s = ProvUtil.queryTypeForRequestedId("hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d");
-        assertThat(s, Is.is("unknown"));
+        assertThat(s, Is.is(ProvUtil.QUERY_TYPE_CONTENT_ID));
     }
 
     @Test
