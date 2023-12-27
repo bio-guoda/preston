@@ -15,6 +15,7 @@ import static bio.guoda.preston.server.RedirectingServlet.DOI;
 import static bio.guoda.preston.server.RedirectingServlet.PROVENANCE_ID;
 import static bio.guoda.preston.server.RedirectingServlet.SEEN_AT;
 import static bio.guoda.preston.server.RedirectingServlet.UUID;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RedirectingServletIT {
@@ -56,7 +57,21 @@ public class RedirectingServletIT {
         assertThat(contentId.get(ARCHIVE_URL), Is.is("https://hosted-datasets.gbif.org/eBird/2022-eBird-dwca-1.0.zip"));
         assertThat(contentId.get(UUID), Is.is("urn:uuid:4fa7b334-ce0d-4e88-aaae-2e0c138d049e"));
         assertThat(contentId.get(DOI), Is.is("https://doi.org/10.15468/aomfnb"));
+    }
 
+    @Test
+    public void dealiasContentIdiDigBio() throws IOException, URISyntaxException {
+        Map<String, String> contentId = ProvUtil.findMostRecentContentId(
+                RefNodeFactory.toIRI("hash://sha256/f5d8f67c1eca34cbba1abac12f353585c78bb053bc8ce7ee7e7a78846e1bfc4a"),
+                ProvUtil.QUERY_TYPE_CONTENT_ID,
+                sparqlEndpoint);
+        assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/f5d8f67c1eca34cbba1abac12f353585c78bb053bc8ce7ee7e7a78846e1bfc4a"));
+        assertThat(contentId.get(ACTIVITY), Is.is("urn:uuid:603cb45b-c23e-4d3e-a0bf-604d8537296d"));
+        assertThat(contentId.get(PROVENANCE_ID), Is.is("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
+        assertThat(contentId.get(SEEN_AT), Is.is("2023-12-03T06:16:07.462Z"));
+        assertThat(contentId.get(ARCHIVE_URL), Is.is("https://ecdysis.org/content/dwca/UCSB-IZC_DwC-A.zip"));
+        assertThat(contentId.get(UUID), Is.is("urn:uuid:d6097f75-f99e-4c2a-b8a5-b0fc213ecbd0"));
+        assertThat(contentId.get(DOI), Is.is("https://doi.org/10.15468/w6hvhv"));
     }
 
     @Test
