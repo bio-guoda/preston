@@ -45,6 +45,7 @@ public class BadgeServlet extends RedirectingServlet {
                         URI.create(getResolverEndpoint() + requestedIdIRI.getIRIString()),
                         "origin-unknown.svg"
                 );
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 log("did not find origin of [" + requestedIdIRI.getIRIString() + "]");
             }
         } catch (Throwable th) {
