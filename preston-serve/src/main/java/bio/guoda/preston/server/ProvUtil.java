@@ -31,17 +31,23 @@ public class ProvUtil {
     public static final String QUERY_TYPE_DOI = "doi";
     public static final List<String> QUERIES_SUPPORTED = Arrays.asList(QUERY_TYPE_DOI, QUERY_TYPE_UUID, QUERY_TYPE_URL, QUERY_TYPE_CONTENT_ID);
 
-    public static Map<String, String> findMostRecentContentId(IRI iri, String paramName, String sparqlEndpoint) throws IOException, URISyntaxException {
-        String response = findProvenance(iri, paramName, sparqlEndpoint);
+    public static Map<String, String> findMostRecentContentId(IRI iri, String paramName, String sparqlEndpoint, String resourceType) throws IOException, URISyntaxException {
+        String response = findProvenance(iri, paramName, sparqlEndpoint, resourceType);
         return extractProvenanceInfo(response);
     }
 
-    protected static String findProvenance(IRI iri, String paramName, String sparqlEndpoint) throws IOException, URISyntaxException {
-        InputStream resourceAsStream = RedirectingServlet.class.getResourceAsStream(paramName + ".rq");
+    protected static String findProvenance(IRI iri, String paramName, String sparqlEndpoint, String resourceType) throws IOException, URISyntaxException {
+        String queryTemplateName = paramName + ".rq";
+        InputStream resourceAsStream = RedirectingServlet.class.getResourceAsStream(queryTemplateName);
 
+        if (resourceAsStream == null) {
+            throw new IOException("failed to location query template [" + queryTemplateName + "]");
+        }
         String queryTemplate = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
 
-        String queryString = StringUtils.replace(queryTemplate, "?_" + paramName + "_iri", iri.toString());
+        String queryString = StringUtils
+                .replace(queryTemplate, "?_" + paramName + "_iri", iri.toString())
+                .replace("?_type", "\"" + resourceType + "\"");
 
         URI query = new URI("https", "example.org", "/query", "query=" + queryString, null);
 

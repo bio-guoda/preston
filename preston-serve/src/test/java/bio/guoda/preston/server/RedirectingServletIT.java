@@ -1,5 +1,6 @@
 package bio.guoda.preston.server;
 
+import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.RefNodeFactory;
 import org.hamcrest.core.Is;
 import org.junit.Test;
@@ -20,7 +21,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RedirectingServletIT {
 
-
     private String sparqlEndpoint = "http://localhost:7878/query";
 
     @Test
@@ -28,7 +28,8 @@ public class RedirectingServletIT {
         Map<String, String> contentId = ProvUtil.findMostRecentContentId(
                 RefNodeFactory.toIRI("https://doi.org/10.15468/aomfnb"),
                 ProvUtil.QUERY_TYPE_DOI,
-                sparqlEndpoint
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_DWCA
         );
         assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"));
         assertThat(contentId.get(ACTIVITY), Is.is("urn:uuid:77f3faf7-acd2-4f14-9c0e-4e04ef5b63c7"));
@@ -39,9 +40,29 @@ public class RedirectingServletIT {
         Map<String, String> contentId = ProvUtil.findMostRecentContentId(
                 RefNodeFactory.toIRI("urn:uuid:4fa7b334-ce0d-4e88-aaae-2e0c138d049e"),
                 ProvUtil.QUERY_TYPE_UUID,
-                sparqlEndpoint);
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_DWCA);
         assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"));
+    }
 
+    @Test
+    public void dealiasUUID_GBIF_EML() throws IOException, URISyntaxException {
+        Map<String, String> contentId = ProvUtil.findMostRecentContentId(
+                RefNodeFactory.toIRI("urn:uuid:a44859c6-af4f-4a2a-a184-1b2d68c82099"),
+                ProvUtil.QUERY_TYPE_UUID,
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_EML);
+        assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/0e07014e3835de619d4aa658c2eb11b1cba74716769d4884018c3b21e4f3d7c5"));
+    }
+
+    @Test
+    public void dealiasUUID_iDigBio_EML() throws IOException, URISyntaxException {
+        Map<String, String> contentId = ProvUtil.findMostRecentContentId(
+                RefNodeFactory.toIRI("urn:uuid:c9316f11-d955-4472-a276-6a26a6514590"),
+                ProvUtil.QUERY_TYPE_UUID,
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_EML);
+        assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/23e74c5513ef391a7e757643d20970b44633cc2f768f926c815507d804ae3cb5"));
     }
 
     @Test
@@ -49,7 +70,8 @@ public class RedirectingServletIT {
         Map<String, String> contentId = ProvUtil.findMostRecentContentId(
                 RefNodeFactory.toIRI("hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"),
                 ProvUtil.QUERY_TYPE_CONTENT_ID,
-                sparqlEndpoint);
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_DWCA);
         assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"));
         assertThat(contentId.get(ACTIVITY), Is.is("urn:uuid:77f3faf7-acd2-4f14-9c0e-4e04ef5b63c7"));
         assertThat(contentId.get(PROVENANCE_ID), Is.is("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
@@ -64,7 +86,8 @@ public class RedirectingServletIT {
         Map<String, String> contentId = ProvUtil.findMostRecentContentId(
                 RefNodeFactory.toIRI("hash://sha256/f5d8f67c1eca34cbba1abac12f353585c78bb053bc8ce7ee7e7a78846e1bfc4a"),
                 ProvUtil.QUERY_TYPE_CONTENT_ID,
-                sparqlEndpoint);
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_DWCA);
         assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/f5d8f67c1eca34cbba1abac12f353585c78bb053bc8ce7ee7e7a78846e1bfc4a"));
         assertThat(contentId.get(ACTIVITY), Is.is("urn:uuid:603cb45b-c23e-4d3e-a0bf-604d8537296d"));
         assertThat(contentId.get(PROVENANCE_ID), Is.is("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
@@ -79,8 +102,20 @@ public class RedirectingServletIT {
         Map<String, String> contentId = ProvUtil.findMostRecentContentId(
                 RefNodeFactory.toIRI("urn:uuid:65007e62-740c-4302-ba20-260fe68da291"),
                 ProvUtil.QUERY_TYPE_UUID,
-                sparqlEndpoint);
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_DWCA);
         assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/f5d8f67c1eca34cbba1abac12f353585c78bb053bc8ce7ee7e7a78846e1bfc4a"));
+
+    }
+
+   @Test
+    public void dealiasUUIDiDigBioEML() throws IOException, URISyntaxException {
+        Map<String, String> contentId = ProvUtil.findMostRecentContentId(
+                RefNodeFactory.toIRI("urn:uuid:65007e62-740c-4302-ba20-260fe68da291"),
+                ProvUtil.QUERY_TYPE_UUID,
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_EML);
+        assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/3b7bd23786c91a1fc22e0a0f163a14ee8b821194f4629be549caf88f969d9ee1"));
 
     }
 
@@ -89,8 +124,29 @@ public class RedirectingServletIT {
         Map<String, String> contentId = ProvUtil.findMostRecentContentId(
                 RefNodeFactory.toIRI("https://hosted-datasets.gbif.org/eBird/2022-eBird-dwca-1.0.zip"),
                 ProvUtil.QUERY_TYPE_URL,
-                sparqlEndpoint);
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_DWCA);
         assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"));
+    }
+
+    @Test
+    public void dealias_GBIF_URL() throws URISyntaxException, IOException {
+        Map<String, String> contentId = ProvUtil.findMostRecentContentId(
+                RefNodeFactory.toIRI("http://gbif.ru:8080/ipt/eml.do?r=kurilfauna"),
+                ProvUtil.QUERY_TYPE_URL,
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_EML);
+        assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/0e07014e3835de619d4aa658c2eb11b1cba74716769d4884018c3b21e4f3d7c5"));
+    }
+
+    @Test
+    public void dealias_iDigBio_URL() throws URISyntaxException, IOException {
+        Map<String, String> contentId = ProvUtil.findMostRecentContentId(
+                RefNodeFactory.toIRI("http://ipt.vertnet.org:8080/ipt/eml.do?r=lsumz_fishes"),
+                ProvUtil.QUERY_TYPE_URL,
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_EML);
+        assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/c75b1864de7c906ab0685fce5c2eba44ed62b11aee9b0aa15081a9c5c90b32b5"));
     }
 
 }

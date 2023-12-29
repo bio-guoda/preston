@@ -6,14 +6,16 @@ SELECT DISTINCT
   ?doi
   ?uuid 
   ?contentId
-  ?archiveUrl 
+  ?contentType
+  ?archiveUrl
   ?seenAt
   ?provenanceId
   ?activity
 WHERE  
 {
-    BIND(?_url_iri as ?archiveUrl) 
-    BIND(<hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd> as ?provenanceId)
+   BIND(?_url_iri as ?archiveUrl)
+   BIND(?_type as ?contentType)
+   BIND(<hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd> as ?provenanceId)
 
 {
     SELECT ?contentId ?seenAt ?uuid ?doi ?activity
@@ -21,7 +23,7 @@ WHERE {
   graph ?g1 {
    ?uuid <http://www.w3.org/ns/prov#hadMember> ?_url_iri .
    OPTIONAL { ?uuid <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> ?doi . }
-   ?_url_iri <http://purl.org/dc/elements/1.1/format> "application/dwca" .
+   ?_url_iri <http://purl.org/dc/elements/1.1/format> ?_type .
   }
   graph ?activity {
     ?activity <http://www.w3.org/ns/prov#used> ?_url_iri .

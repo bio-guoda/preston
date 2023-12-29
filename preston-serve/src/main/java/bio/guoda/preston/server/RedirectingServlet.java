@@ -6,6 +6,8 @@ import bio.guoda.preston.store.HashKeyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpHeaders;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +30,7 @@ public class RedirectingServlet extends HttpServlet {
     public static final String SEEN_AT = "seenAt";
     public static final String PROVENANCE_ID = "provenanceId";
     public static final String ARCHIVE_URL = "archiveUrl";
+    public static final String CONTENT_TYPE = "contentType";
     public static final String UUID = "uuid";
     public static final String DOI = "doi";
     public static final String CONTENT_ID = "contentId";
@@ -68,9 +72,19 @@ public class RedirectingServlet extends HttpServlet {
                     sparqlEndpoint,
                     queryType,
                     requestedIdIRI,
-                    redirectOnGetRequest(request));
+                    redirectOnGetRequest(request),
+                    getResourceType(request.getRequestURI()));
 
         }
+    }
+
+    private String getResourceType(String requestURI) {
+        List<NameValuePair> parse = URLEncodedUtils.parse(requestURI, StandardCharsets.UTF_8);
+        return parse
+                .stream()
+                .filter(p -> StringUtils.equals(p.getName(), "type"))
+                .findFirst().map(NameValuePair::getValue)
+                .orElse(MimeTypes.MIME_TYPE_DWCA);
     }
 
     protected String getPrefix() {
@@ -92,12 +106,13 @@ public class RedirectingServlet extends HttpServlet {
                                  String sparqlEndpoint,
                                  String queryType,
                                  IRI requestedIdIRI,
-                                 int responseHttpStatus) throws IOException, ServletException {
+                                 int responseHttpStatus,
+                                 String resourceType) throws IOException, ServletException {
         try {
             Map<String, String> provInfo = ProvUtil.findMostRecentContentId(
                     requestedIdIRI,
                     queryType,
-                    sparqlEndpoint);
+                    sparqlEndpoint, resourceType);
             if (isOfKnownOrigin(provInfo)) {
                 populateResponseHeader(response, resolverEndpoint, provInfo);
                 response.setStatus(responseHttpStatus);
@@ -120,7 +135,7 @@ public class RedirectingServlet extends HttpServlet {
         String contentId = provInfo.get(CONTENT_ID);
         URI uri = getResolverURI(resolverEndpoint, contentId);
         response.setHeader(HttpHeaders.LOCATION, uri.toString());
-        response.setHeader(HttpHeaders.CONTENT_TYPE, MimeTypes.MIME_TYPE_DWCA);
+        response.setHeader(HttpHeaders.CONTENT_TYPE, provInfo.get(CONTENT_TYPE));
         response.setHeader(HttpHeaders.ETAG, contentId);
         response.setHeader(HttpHeaders.CONTENT_LOCATION, provInfo.get(ARCHIVE_URL));
         List<String> influencedBy = new ArrayList<>();

@@ -10,7 +10,7 @@ public class KeyTo1LevelZenodoBucket implements KeyToPath {
 
     private final KeyToPath proxied;
 
-    private final AtomicReference<URI> lastZenodoBucket = new AtomicReference<URI>();
+    private final AtomicReference<URI> lastZenodoBucket = new AtomicReference<>();
 
     public KeyTo1LevelZenodoBucket(KeyToPath keyToPath) {
         this.proxied = keyToPath;
