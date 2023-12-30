@@ -41,10 +41,10 @@ public class BadgeServlet extends RedirectingServlet {
                             getProvenanceId()
                     );
             final TreeMap<String, String> labelMap = new TreeMap<String, String>() {{
-                put(MimeTypes.MIME_TYPE_DWCA, "DwC Archive");
-                put(MimeTypes.MIME_TYPE_EML, "EML File");
+                put(MimeTypes.MIME_TYPE_DWCA, "DwC-A");
+                put(MimeTypes.MIME_TYPE_EML, "EML");
             }};
-            String typeLabel = labelMap.getOrDefault(contentType, "DwC Archive");
+            String typeLabel = labelMap.getOrDefault(contentType, "unknown type");
             if (isOfKnownOrigin(provInfo)) {
                 URI uri = populateResponseHeader(response, getResolverEndpoint(), provInfo);
                 renderTemplate(
