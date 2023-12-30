@@ -15,6 +15,7 @@ SELECT DISTINCT
             {
                 SELECT DISTINCT
                   ?contentId
+                  ?contentType
                   ?archiveUrl
                   ?seenAt
                   ?provenanceId

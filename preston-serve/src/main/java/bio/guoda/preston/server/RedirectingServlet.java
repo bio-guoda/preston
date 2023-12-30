@@ -73,13 +73,13 @@ public class RedirectingServlet extends HttpServlet {
                     queryType,
                     requestedIdIRI,
                     redirectOnGetRequest(request),
-                    getContentType(URI.create(request.getRequestURI())));
+                    getContentType(request.getQueryString()));
 
         }
     }
 
-    static String getContentType(URI requestURI) {
-        List<NameValuePair> parse = URLEncodedUtils.parse(requestURI.getQuery(), StandardCharsets.UTF_8);
+    static String getContentType(String queryString) {
+        List<NameValuePair> parse = URLEncodedUtils.parse(queryString, StandardCharsets.UTF_8);
         return parse
                 .stream()
                 .filter(p -> StringUtils.equals(p.getName(), "type"))
@@ -108,13 +108,13 @@ public class RedirectingServlet extends HttpServlet {
                                  String queryType,
                                  IRI requestedIdIRI,
                                  int responseHttpStatus,
-                                 String resourceType) throws IOException, ServletException {
+                                 String contentType) throws IOException, ServletException {
         try {
             Map<String, String> provInfo = ProvUtil.findMostRecentContentId(
                     requestedIdIRI,
                     queryType,
                     sparqlEndpoint,
-                    resourceType,
+                    contentType,
                     getProvenanceId()
             );
             if (isOfKnownOrigin(provInfo)) {
@@ -135,7 +135,9 @@ public class RedirectingServlet extends HttpServlet {
         }
     }
 
-    protected URI populateResponseHeader(HttpServletResponse response, String resolverEndpoint, Map<String, String> provInfo) {
+    protected URI populateResponseHeader(HttpServletResponse response,
+                                         String resolverEndpoint,
+                                         Map<String, String> provInfo) {
         String contentId = provInfo.get(CONTENT_ID);
         URI uri = getResolverURI(resolverEndpoint, contentId);
         response.setHeader(HttpHeaders.LOCATION, uri.toString());
@@ -156,6 +158,7 @@ public class RedirectingServlet extends HttpServlet {
         response.setHeader("X-PROV-wasGeneratedBy", provInfo.get(ACTIVITY));
         response.setHeader("X-PROV-generatedAtTime", provInfo.get(SEEN_AT));
         response.setHeader("X-PAV-hasVersion", provInfo.get(CONTENT_ID));
+        response.setHeader("X-DC-format", provInfo.get(CONTENT_TYPE));
         return uri;
     }
 

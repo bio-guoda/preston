@@ -30,20 +30,21 @@ public class BadgeServlet extends RedirectingServlet {
                                  String queryType,
                                  IRI requestedIdIRI,
                                  int responseHttpStatus,
-                                 String resourceType) throws IOException, ServletException {
+                                 String contentType) throws IOException, ServletException {
         try {
             Map<String, String> provInfo = ProvUtil
                     .findMostRecentContentId(
                             requestedIdIRI,
                             queryType,
                             sparqlEndpoint,
-                            resourceType, getProvenanceId()
+                            contentType,
+                            getProvenanceId()
                     );
             final TreeMap<String, String> labelMap = new TreeMap<String, String>() {{
                 put(MimeTypes.MIME_TYPE_DWCA, "DwC Archive");
                 put(MimeTypes.MIME_TYPE_EML, "EML File");
             }};
-            String typeLabel = labelMap.getOrDefault(resourceType, "DwC Archive");
+            String typeLabel = labelMap.getOrDefault(contentType, "DwC Archive");
             if (isOfKnownOrigin(provInfo)) {
                 URI uri = populateResponseHeader(response, getResolverEndpoint(), provInfo);
                 renderTemplate(

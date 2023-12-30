@@ -11,22 +11,19 @@ public class RedirectingServletTest {
 
     @Test
     public void parseQuery() {
-        URI requestURI = URI.create("http://localhost:8080/badge/10.15468/w6hvhv?type=application/bla");
-        String contentType = RedirectingServlet.getContentType(requestURI);
+        String contentType = RedirectingServlet.getContentType("type=application/bla");
         assertThat(contentType, is("application/bla"));
     }
 
     @Test
     public void parseQueryEML() {
-        URI requestURI = URI.create("http://localhost:8080/badge/10.15468/w6hvhv?type=application/eml");
-        String contentType = RedirectingServlet.getContentType(requestURI);
+        String contentType = RedirectingServlet.getContentType("type=application/eml");
         assertThat(contentType, is("application/eml"));
     }
 
     @Test
     public void parseQueryDWCA() {
-        URI requestURI = URI.create("http://localhost:8080/badge/10.15468/w6hvhv?type=application/dwca");
-        String contentType = RedirectingServlet.getContentType(requestURI);
+        String contentType = RedirectingServlet.getContentType("type=application/dwca");
         assertThat(contentType, is("application/dwca"));
     }
 
