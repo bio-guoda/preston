@@ -31,12 +31,12 @@ public class ProvUtil {
     public static final String QUERY_TYPE_DOI = "doi";
     public static final List<String> QUERIES_SUPPORTED = Arrays.asList(QUERY_TYPE_DOI, QUERY_TYPE_UUID, QUERY_TYPE_URL, QUERY_TYPE_CONTENT_ID);
 
-    public static Map<String, String> findMostRecentContentId(IRI iri, String paramName, String sparqlEndpoint, String resourceType) throws IOException, URISyntaxException {
-        String response = findProvenance(iri, paramName, sparqlEndpoint, resourceType);
+    public static Map<String, String> findMostRecentContentId(IRI iri, String paramName, String sparqlEndpoint, String resourceType, IRI provenanceId) throws IOException, URISyntaxException {
+        String response = findProvenance(iri, paramName, sparqlEndpoint, resourceType, provenanceId);
         return extractProvenanceInfo(response);
     }
 
-    protected static String findProvenance(IRI iri, String paramName, String sparqlEndpoint, String resourceType) throws IOException, URISyntaxException {
+    protected static String findProvenance(IRI iri, String paramName, String sparqlEndpoint, String resourceType, IRI provenanceId) throws IOException, URISyntaxException {
         String queryTemplateName = paramName + ".rq";
         InputStream resourceAsStream = RedirectingServlet.class.getResourceAsStream(queryTemplateName);
 
@@ -47,7 +47,8 @@ public class ProvUtil {
 
         String queryString = StringUtils
                 .replace(queryTemplate, "?_" + paramName + "_iri", iri.toString())
-                .replace("?_type", "\"" + resourceType + "\"");
+                .replace("?_type", "\"" + resourceType + "\"")
+                .replace("?_provenanceId_iri", provenanceId.toString());
 
         URI query = new URI("https", "example.org", "/query", "query=" + queryString, null);
 

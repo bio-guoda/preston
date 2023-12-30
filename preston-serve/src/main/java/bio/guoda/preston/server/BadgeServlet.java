@@ -23,7 +23,6 @@ public class BadgeServlet extends RedirectingServlet {
         log("destroying [" + this.getServletName() + "]");
     }
 
-
     @Override
     protected void handleRequest(HttpServletResponse response,
                                  String resolverEndpoint,
@@ -38,7 +37,7 @@ public class BadgeServlet extends RedirectingServlet {
                             requestedIdIRI,
                             queryType,
                             sparqlEndpoint,
-                            resourceType
+                            resourceType, getProvenanceId()
                     );
             final TreeMap<String, String> labelMap = new TreeMap<String, String>() {{
                 put(MimeTypes.MIME_TYPE_DWCA, "DwC Archive");

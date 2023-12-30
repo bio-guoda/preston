@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import static bio.guoda.preston.server.RedirectingServlet.CONTENT_ID;
+import static bio.guoda.preston.server.RedirectingServlet.CONTENT_TYPE;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ProvUtilTest {
@@ -18,6 +19,7 @@ public class ProvUtilTest {
         JsonNode response = new ObjectMapper().readTree(getClass().getResourceAsStream("url-response.json"));
         Map<String, String> actual = ProvUtil.extractProvenanceInfo(response);
         assertThat(actual.get(CONTENT_ID), Is.is("hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"));
+        assertThat(actual.get(CONTENT_TYPE), Is.is("application/dwca"));
         assertThat(actual.get(RedirectingServlet.DOI), Is.is("https://doi.org/10.15468/aomfnb"));
         assertThat(actual.get(RedirectingServlet.UUID), Is.is("urn:uuid:4fa7b334-ce0d-4e88-aaae-2e0c138d049e"));
         assertThat(actual.get(RedirectingServlet.ARCHIVE_URL), Is.is("https://hosted-datasets.gbif.org/eBird/2022-eBird-dwca-1.0.zip"));

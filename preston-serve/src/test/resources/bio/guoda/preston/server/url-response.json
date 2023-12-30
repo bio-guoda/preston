@@ -4,6 +4,7 @@
       "doi",
       "uuid",
       "contentId",
+      "contentType",
       "archiveUrl",
       "seenAt",
       "provenanceId"
@@ -23,6 +24,10 @@
         "contentId": {
           "type": "uri",
           "value": "hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
         },
         "archiveUrl": {
           "type": "uri",
@@ -50,6 +55,10 @@
         "contentId": {
           "type": "uri",
           "value": "hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
         },
         "archiveUrl": {
           "type": "uri",

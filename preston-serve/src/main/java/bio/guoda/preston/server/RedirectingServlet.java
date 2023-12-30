@@ -73,17 +73,18 @@ public class RedirectingServlet extends HttpServlet {
                     queryType,
                     requestedIdIRI,
                     redirectOnGetRequest(request),
-                    getResourceType(request.getRequestURI()));
+                    getContentType(URI.create(request.getRequestURI())));
 
         }
     }
 
-    private String getResourceType(String requestURI) {
-        List<NameValuePair> parse = URLEncodedUtils.parse(requestURI, StandardCharsets.UTF_8);
+    static String getContentType(URI requestURI) {
+        List<NameValuePair> parse = URLEncodedUtils.parse(requestURI.getQuery(), StandardCharsets.UTF_8);
         return parse
                 .stream()
                 .filter(p -> StringUtils.equals(p.getName(), "type"))
-                .findFirst().map(NameValuePair::getValue)
+                .findFirst()
+                .map(NameValuePair::getValue)
                 .orElse(MimeTypes.MIME_TYPE_DWCA);
     }
 
@@ -112,7 +113,10 @@ public class RedirectingServlet extends HttpServlet {
             Map<String, String> provInfo = ProvUtil.findMostRecentContentId(
                     requestedIdIRI,
                     queryType,
-                    sparqlEndpoint, resourceType);
+                    sparqlEndpoint,
+                    resourceType,
+                    getProvenanceId()
+            );
             if (isOfKnownOrigin(provInfo)) {
                 populateResponseHeader(response, resolverEndpoint, provInfo);
                 response.setStatus(responseHttpStatus);
@@ -170,6 +174,10 @@ public class RedirectingServlet extends HttpServlet {
                 .map(req -> StringUtils.substring(req, prefix.length()))
                 .findFirst()
                 .orElseThrow(() -> new ServletException("invalid request [" + requestURI + "]"));
+    }
+
+    protected IRI getProvenanceId() {
+        return RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd");
     }
 
 
