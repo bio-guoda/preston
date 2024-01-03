@@ -770,7 +770,9 @@ https://github.com/bio-guoda/preston-scripts
 
 https://github.com/cboettig/contentid
 
-### Related Forum Posts / Tweets
+### Related Forum Posts
+
+https://discourse.gbif.org/t/assessing-fairness-of-biodiversity-data-through-badges-and-download-buttons/4246
 
 https://discourse.gbif.org/t/data-queries-doi-10-15468-dl-6cxfsw-doi-10-15468-dl-b9rfa7-doi-10-15468-dl-w2nndm-used-in-chesshire-et-al-2023-were-cited-but-remain-marked-for-deletion/3915
 
@@ -790,8 +792,6 @@ https://discourse.gbif.org/t/when-to-assign-a-new-doi-to-an-existing-dataset/231
 
 https://discourse.gbif.org/t/toward-reliable-biodiversity-dataset-references/1637
 
-https://twitter.com/GlobalBiotic/status/1306710330148519936
-
 https://discourse.gbif.org/t/10-transactional-mechanisms-and-provenance/2667/13
 
 https://discourse.gbif.org/t/10-transactional-mechanisms-and-provenance/2667/51
@@ -799,8 +799,6 @@ https://discourse.gbif.org/t/10-transactional-mechanisms-and-provenance/2667/51
 https://discourse.gbif.org/t/identifying-potentially-related-records-how-does-the-gbif-data-clustring-feature-work-gbif-data-blog/3083/9
 
 https://discourse.gbif.org/t/searching-on-catalogue-number/3202/4?u=jhpoelen
-
-https://twitter.com/GlobalBiotic/status/1433517595475382278 (re: Data Dryad linkrot / content drift example) 
 
 https://github.com/ArctosDB/arctos/issues/3950 (re: internet no-fly list - internet addresses blacklisted from image retrieval) 
 
