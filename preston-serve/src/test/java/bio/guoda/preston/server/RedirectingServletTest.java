@@ -2,8 +2,6 @@ package bio.guoda.preston.server;
 
 import org.junit.Test;
 
-import java.net.URI;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 

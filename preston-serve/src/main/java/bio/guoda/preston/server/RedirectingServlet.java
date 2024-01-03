@@ -153,7 +153,7 @@ public class RedirectingServlet extends HttpServlet {
             response.setHeader("X-DOI", doi);
             influencedBy.add(doi);
         }
-        response.setHeader("X-PROV", provInfo.get(PROVENANCE_ID));
+        response.setHeader("X-PROV-hadPrimarySource", provInfo.get(PROVENANCE_ID));
         response.setHeader("X-PROV-wasInfluencedBy", StringUtils.join(influencedBy, " "));
         response.setHeader("X-PROV-wasGeneratedBy", provInfo.get(ACTIVITY));
         response.setHeader("X-PROV-generatedAtTime", provInfo.get(SEEN_AT));
