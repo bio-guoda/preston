@@ -44,7 +44,7 @@ public class BadgeServlet extends RedirectingServlet {
                 put(MimeTypes.MIME_TYPE_DWCA, "DwC-A");
                 put(MimeTypes.MIME_TYPE_EML, "EML");
             }};
-            String typeLabel = labelMap.getOrDefault(contentType, "unknown type");
+            String typeLabel = labelMap.getOrDefault(contentType, "content");
             if (isOfKnownOrigin(provInfo)) {
                 URI uri = populateResponseHeader(response, getResolverEndpoint(), provInfo);
                 renderTemplate(
