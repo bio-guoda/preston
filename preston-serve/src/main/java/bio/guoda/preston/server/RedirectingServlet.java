@@ -117,10 +117,13 @@ public class RedirectingServlet extends HttpServlet {
                     contentType,
                     getProvenanceId()
             );
-            if (isOfKnownOrigin(provInfo)) {
-                populateResponseHeader(response, resolverEndpoint, provInfo);
+            if (hasKnownAndAccessibleContent(provInfo)) {
+                populateResponseHeaderKnownContent(response, resolverEndpoint, provInfo);
                 response.setStatus(responseHttpStatus);
                 log("response [" + requestedIdIRI.getIRIString() + "]");
+            } else if (hasKnownButInaccessibleContent(provInfo)) {
+                populateResponseHeader(response, provInfo);
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             } else {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             }
@@ -135,14 +138,22 @@ public class RedirectingServlet extends HttpServlet {
         }
     }
 
-    protected URI populateResponseHeader(HttpServletResponse response,
-                                         String resolverEndpoint,
-                                         Map<String, String> provInfo) {
+    protected URI populateResponseHeaderKnownContent(HttpServletResponse response,
+                                                     String resolverEndpoint,
+                                                     Map<String, String> provInfo) {
+        populateResponseHeader(response, provInfo);
+
         String contentId = provInfo.get(CONTENT_ID);
+        response.setHeader(HttpHeaders.ETAG, contentId);
+        response.setHeader("X-PAV-hasVersion", provInfo.get(CONTENT_ID));
         URI uri = getResolverURI(resolverEndpoint, contentId);
         response.setHeader(HttpHeaders.LOCATION, uri.toString());
+
+        return uri;
+    }
+
+    protected void populateResponseHeader(HttpServletResponse response, Map<String, String> provInfo) {
         response.setHeader(HttpHeaders.CONTENT_TYPE, provInfo.get(CONTENT_TYPE));
-        response.setHeader(HttpHeaders.ETAG, contentId);
         response.setHeader(HttpHeaders.CONTENT_LOCATION, provInfo.get(ARCHIVE_URL));
         List<String> influencedBy = new ArrayList<>();
         String uuid = provInfo.get(UUID);
@@ -153,21 +164,31 @@ public class RedirectingServlet extends HttpServlet {
             response.setHeader("X-DOI", doi);
             influencedBy.add(doi);
         }
-        response.setHeader("X-PROV-hadPrimarySource", provInfo.get(PROVENANCE_ID));
         response.setHeader("X-PROV-wasInfluencedBy", StringUtils.join(influencedBy, " "));
         response.setHeader("X-PROV-wasGeneratedBy", provInfo.get(ACTIVITY));
         response.setHeader("X-PROV-generatedAtTime", provInfo.get(SEEN_AT));
-        response.setHeader("X-PAV-hasVersion", provInfo.get(CONTENT_ID));
         response.setHeader("X-DC-format", provInfo.get(CONTENT_TYPE));
-        return uri;
+        populateReponseHeaderWithProvenanceGraphVersion(response, provInfo);
+    }
+
+    protected void populateReponseHeaderWithProvenanceGraphVersion(HttpServletResponse response, Map<String, String> provInfo) {
+        response.setHeader("X-PROV-hadPrimarySource", provInfo.get(PROVENANCE_ID));
     }
 
     protected URI getResolverURI(String resolverEndpoint, String contentId) {
         return HashKeyUtil.insertSlashIfNeeded(URI.create(resolverEndpoint), contentId);
     }
 
-    protected boolean isOfKnownOrigin(Map<String, String> provInfo) {
-        return provInfo.containsKey(CONTENT_ID) && StringUtils.isNotBlank(provInfo.get(CONTENT_ID));
+    protected boolean hasKnownAndAccessibleContent(Map<String, String> provInfo) {
+        return provInfo.containsKey(CONTENT_ID)
+                && StringUtils.isNotBlank(provInfo.get(CONTENT_ID))
+                && !StringUtils.contains(provInfo.get(CONTENT_ID), ".well-known/genid/");
+    }
+
+    protected boolean hasKnownButInaccessibleContent(Map<String, String> provInfo) {
+        return provInfo.containsKey(CONTENT_ID)
+                && StringUtils.isNotBlank(provInfo.get(CONTENT_ID))
+                && StringUtils.contains(provInfo.get(CONTENT_ID), ".well-known/genid/");
     }
 
     private String parseRequestedIdOrThrow(String requestURI, String prefix) throws ServletException {

@@ -151,6 +151,51 @@ public class RedirectingServletIT {
     }
 
     @Test
+    public void dealiasURLNoAccess() throws URISyntaxException, IOException {
+        Map<String, String> contentId = ProvUtil.findMostRecentContentId(
+                RefNodeFactory.toIRI("https://registry.nbnatlas.org/archives/dr940/dr940.zip"),
+                ProvUtil.QUERY_TYPE_URL,
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_DWCA,
+                RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
+        assertThat(contentId.get(CONTENT_ID), Is.is("https://deeplinker.bio/.well-known/genid/2d84741f-c34d-3c9e-a905-eaa8bfa0bb79"));
+        assertThat(contentId.get(CONTENT_TYPE), Is.is("application/dwca"));
+        assertThat(contentId.get(DOI), Is.is("https://doi.org/10.15468/mwjnku"));
+        assertThat(contentId.get(UUID), Is.is("urn:uuid:926f5a1c-8995-498a-913b-fe0312e1071f"));
+        assertThat(contentId.get(SEEN_AT), Is.is("2023-12-03T09:46:45.012Z"));
+    }
+
+    @Test
+    public void dealiasUUIDNoAccess() throws URISyntaxException, IOException {
+        Map<String, String> contentId = ProvUtil.findMostRecentContentId(
+                RefNodeFactory.toIRI("urn:uuid:926f5a1c-8995-498a-913b-fe0312e1071f"),
+                ProvUtil.QUERY_TYPE_UUID,
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_DWCA,
+                RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
+        assertThat(contentId.get(CONTENT_ID), Is.is("https://deeplinker.bio/.well-known/genid/2d84741f-c34d-3c9e-a905-eaa8bfa0bb79"));
+        assertThat(contentId.get(CONTENT_TYPE), Is.is("application/dwca"));
+        assertThat(contentId.get(DOI), Is.is("https://doi.org/10.15468/mwjnku"));
+        assertThat(contentId.get(UUID), Is.is("urn:uuid:926f5a1c-8995-498a-913b-fe0312e1071f"));
+        assertThat(contentId.get(SEEN_AT), Is.is("2023-12-03T09:46:45.012Z"));
+    }
+
+    @Test
+    public void dealiasDOINoAccess() throws URISyntaxException, IOException {
+        Map<String, String> contentId = ProvUtil.findMostRecentContentId(
+                RefNodeFactory.toIRI("https://doi.org/10.15468/mwjnku"),
+                ProvUtil.QUERY_TYPE_DOI,
+                sparqlEndpoint,
+                MimeTypes.MIME_TYPE_DWCA,
+                RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
+        assertThat(contentId.get(CONTENT_ID), Is.is("https://deeplinker.bio/.well-known/genid/2d84741f-c34d-3c9e-a905-eaa8bfa0bb79"));
+        assertThat(contentId.get(CONTENT_TYPE), Is.is("application/dwca"));
+        assertThat(contentId.get(DOI), Is.is("https://doi.org/10.15468/mwjnku"));
+        assertThat(contentId.get(UUID), Is.is("urn:uuid:926f5a1c-8995-498a-913b-fe0312e1071f"));
+        assertThat(contentId.get(SEEN_AT), Is.is("2023-12-03T09:46:45.012Z"));
+    }
+
+    @Test
     public void dealias_GBIF_URL() throws URISyntaxException, IOException {
         Map<String, String> contentId = ProvUtil.findMostRecentContentId(
                 RefNodeFactory.toIRI("http://gbif.ru:8080/ipt/eml.do?r=kurilfauna"),

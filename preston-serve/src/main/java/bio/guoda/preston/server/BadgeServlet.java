@@ -45,8 +45,8 @@ public class BadgeServlet extends RedirectingServlet {
                 put(MimeTypes.MIME_TYPE_EML, "EML");
             }};
             String typeLabel = labelMap.getOrDefault(contentType, "content");
-            if (isOfKnownOrigin(provInfo)) {
-                URI uri = populateResponseHeader(response, getResolverEndpoint(), provInfo);
+            if (hasKnownAndAccessibleContent(provInfo)) {
+                URI uri = populateResponseHeaderKnownContent(response, getResolverEndpoint(), provInfo);
                 renderTemplate(
                         response,
                         uri,
@@ -54,7 +54,18 @@ public class BadgeServlet extends RedirectingServlet {
                         typeLabel
                 );
                 log("found origin of [" + requestedIdIRI.getIRIString() + "]");
+            } else if (hasKnownButInaccessibleContent(provInfo)) {
+                populateResponseHeader(response, provInfo);
+                renderTemplate(
+                        response,
+                        URI.create(getResolverEndpoint() + requestedIdIRI.getIRIString()),
+                        "origin-no-access.svg",
+                        typeLabel
+                );
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                log("found [" + requestedIdIRI.getIRIString() + "] but no associated content");
             } else {
+                populateReponseHeaderWithProvenanceGraphVersion(response, provInfo);
                 renderTemplate(
                         response,
                         URI.create(getResolverEndpoint() + requestedIdIRI.getIRIString()),
