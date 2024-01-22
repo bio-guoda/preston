@@ -31,16 +31,33 @@ public class ProvUtil {
     public static final String QUERY_TYPE_DOI = "doi";
     public static final List<String> QUERIES_SUPPORTED = Arrays.asList(QUERY_TYPE_DOI, QUERY_TYPE_UUID, QUERY_TYPE_URL, QUERY_TYPE_CONTENT_ID);
 
-    public static Map<String, String> findMostRecentContentId(IRI iri, String paramName, String sparqlEndpoint, String contentType, IRI provenanceId) throws IOException, URISyntaxException {
-        Map<String, String> provenanceInfo = getProvenanceInfo(iri, paramName, sparqlEndpoint, contentType, provenanceId, false);
+    public static Map<String, String> findMostRecentContentId(IRI iri,
+                                                              String paramName,
+                                                              String sparqlEndpoint,
+                                                              String contentType,
+                                                              IRI provenanceAnchor) throws IOException, URISyntaxException {
+        Map<String, String> provenanceInfo = getProvenanceInfo(iri, paramName, sparqlEndpoint, contentType, provenanceAnchor, false);
         if (provenanceInfo.size() == 0) {
-            provenanceInfo = getProvenanceInfo(iri, paramName, sparqlEndpoint, contentType, provenanceId, true);
+            provenanceInfo = getProvenanceInfo(iri, paramName, sparqlEndpoint, contentType, provenanceAnchor, true);
         }
         return provenanceInfo;
     }
 
-    private static Map<String, String> getProvenanceInfo(IRI iri, String paramName, String sparqlEndpoint, String contentType, IRI provenanceId, boolean includeBlanks) throws IOException, URISyntaxException {
-        String response = findProvenance(iri, paramName, sparqlEndpoint, contentType, provenanceId, includeBlanks);
+    private static Map<String, String> getProvenanceInfo(
+            IRI iri,
+            String paramName,
+            String sparqlEndpoint,
+            String contentType,
+            IRI provenanceAnchor,
+            boolean includeBlanks) throws IOException, URISyntaxException {
+        String response = findProvenance(
+                iri,
+                paramName,
+                sparqlEndpoint,
+                contentType,
+                provenanceAnchor,
+                includeBlanks
+        );
         return extractProvenanceInfo(response);
     }
 
@@ -48,7 +65,7 @@ public class ProvUtil {
                                            String paramName,
                                            String sparqlEndpoint,
                                            String contentType,
-                                           IRI provenanceId,
+                                           IRI provenanceAnchor,
                                            boolean includeBlanks) throws IOException, URISyntaxException {
         String queryTemplateName = paramName + ".rq";
         InputStream resourceAsStream = RedirectingServlet.class.getResourceAsStream(queryTemplateName);
@@ -61,7 +78,7 @@ public class ProvUtil {
         String queryString = StringUtils
                 .replace(queryTemplate, "?_" + paramName + "_iri", iri.toString())
                 .replace("?_type", "\"" + contentType + "\"")
-                .replace("?_provenanceId_iri", provenanceId.toString());
+                .replace("?_provenanceId_iri", provenanceAnchor.toString());
 
         if (includeBlanks) {
             queryString = StringUtils.replace(queryString, "FILTER", "# FILTER");

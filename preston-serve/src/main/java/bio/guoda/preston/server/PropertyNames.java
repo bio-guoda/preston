@@ -8,4 +8,5 @@ public final class PropertyNames {
 
     public static final String PRESTON_SPARQL_ENDPONT = "preston.sparql.endpoint";
     public static final String PRESTON_CONTENT_RESOLVER_ENDPONT = "preston.resolver.endpoint";
+    public static final String PRESTON_PROVENANCE_ANCHOR = "preston.provenance.anchor";
 }

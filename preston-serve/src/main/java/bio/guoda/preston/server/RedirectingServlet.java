@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.server.PropertyNames.PRESTON_CONTENT_RESOLVER_ENDPONT;
+import static bio.guoda.preston.server.PropertyNames.PRESTON_PROVENANCE_ANCHOR;
 import static bio.guoda.preston.server.PropertyNames.PRESTON_SPARQL_ENDPONT;
 
 public class RedirectingServlet extends HttpServlet {
@@ -201,7 +202,7 @@ public class RedirectingServlet extends HttpServlet {
     }
 
     protected IRI getProvenanceId() {
-        return RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd");
+        return RefNodeFactory.toIRI(getInitParameter(PRESTON_PROVENANCE_ANCHOR));
     }
 
 

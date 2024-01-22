@@ -1,5 +1,8 @@
 package bio.guoda.preston.server;
 
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.cmd.CmdWithProvenance;
+import org.apache.commons.rdf.api.IRI;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -15,7 +18,7 @@ import java.util.TreeMap;
         aliases = {"r", "proxy"},
         description = "attempts to redirect to content associated with provided identifier in a defined content universe"
 )
-public class CmdRedirect implements Runnable {
+public class CmdRedirect extends CmdWithProvenance implements Runnable {
 
     @CommandLine.Option(
             names = {"-p", "--port"},
@@ -48,7 +51,7 @@ public class CmdRedirect implements Runnable {
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(port);
         connector.setHost(host);
-        server.setConnectors(new Connector[] {connector});
+        server.setConnectors(new Connector[]{connector});
         ServletHandler servletHandler = new ServletHandler();
 
         servletHandler.addServletWithMapping(initServletHolder(new ServletHolder(BadgeServlet.class)), "/badge/*");
@@ -66,6 +69,7 @@ public class CmdRedirect implements Runnable {
         Map<String, String> properties = new TreeMap<String, String>() {{
             put(PropertyNames.PRESTON_CONTENT_RESOLVER_ENDPONT, repository);
             put(PropertyNames.PRESTON_SPARQL_ENDPONT, registry);
+            put(PropertyNames.PRESTON_PROVENANCE_ANCHOR, getProvenanceAnchor().getIRIString());
         }};
 
         servletHolder.setInitParameters(properties);

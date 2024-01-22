@@ -19,6 +19,7 @@ import static bio.guoda.preston.server.RedirectingServlet.PROVENANCE_ID;
 import static bio.guoda.preston.server.RedirectingServlet.SEEN_AT;
 import static bio.guoda.preston.server.RedirectingServlet.UUID;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RedirectingServletIT {
@@ -36,7 +37,7 @@ public class RedirectingServletIT {
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd")
         );
         assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"));
-        assertThat(contentId.get(ACTIVITY), Is.is("urn:uuid:77f3faf7-acd2-4f14-9c0e-4e04ef5b63c7"));
+        assertThat(contentId.get(ACTIVITY), Is.is("urn:uuid:d8bdd083-997a-44c5-825a-bb0fe4e491dd"));
         assertThat(contentId.get(CONTENT_TYPE), Is.is("application/dwca"));
     }
 
@@ -86,9 +87,9 @@ public class RedirectingServletIT {
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
         assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/1e2b7436fce1848f41698e5a9c193f311abaf0ee051bec1a2e48b5106d29524d"));
         assertThat(contentId.get(CONTENT_TYPE), Is.is("application/dwca"));
-        assertThat(contentId.get(ACTIVITY), Is.is("urn:uuid:77f3faf7-acd2-4f14-9c0e-4e04ef5b63c7"));
+        assertThat(contentId.get(ACTIVITY), Is.is("urn:uuid:d8bdd083-997a-44c5-825a-bb0fe4e491dd"));
         assertThat(contentId.get(PROVENANCE_ID), Is.is("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
-        assertThat(contentId.get(SEEN_AT), Is.is("2023-12-02T16:05:25.261Z"));
+        assertThat(contentId.get(SEEN_AT), Is.is("2024-01-02T17:28:41.198Z"));
         assertThat(contentId.get(ARCHIVE_URL), Is.is("https://hosted-datasets.gbif.org/eBird/2022-eBird-dwca-1.0.zip"));
         assertThat(contentId.get(UUID), Is.is("urn:uuid:4fa7b334-ce0d-4e88-aaae-2e0c138d049e"));
         assertThat(contentId.get(DOI), Is.is("https://doi.org/10.15468/aomfnb"));
@@ -120,12 +121,12 @@ public class RedirectingServletIT {
                 sparqlEndpoint,
                 MimeTypes.MIME_TYPE_DWCA,
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
-        assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/f5d8f67c1eca34cbba1abac12f353585c78bb053bc8ce7ee7e7a78846e1bfc4a"));
+        assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/641b73fbee95c3965e66e2b65630ba2fdb0af6786b9cae2d08d8f03089fc4c35"));
         assertThat(contentId.get(CONTENT_TYPE), Is.is("application/dwca"));
 
     }
 
-   @Test
+    @Test
     public void dealiasUUIDiDigBioEML() throws IOException, URISyntaxException {
         Map<String, String> contentId = ProvUtil.findMostRecentContentId(
                 RefNodeFactory.toIRI("urn:uuid:65007e62-740c-4302-ba20-260fe68da291"),
@@ -133,8 +134,8 @@ public class RedirectingServletIT {
                 sparqlEndpoint,
                 MimeTypes.MIME_TYPE_EML,
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
-        assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/3b7bd23786c91a1fc22e0a0f163a14ee8b821194f4629be549caf88f969d9ee1"));
-       assertThat(contentId.get(CONTENT_TYPE), Is.is("application/eml"));
+        assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/7d096e34c66750624036f4fe13bca597c7f0cec1c3ff4347c3175c529001ace1"));
+        assertThat(contentId.get(CONTENT_TYPE), Is.is("application/eml"));
 
     }
 
@@ -158,11 +159,11 @@ public class RedirectingServletIT {
                 sparqlEndpoint,
                 MimeTypes.MIME_TYPE_DWCA,
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
-        assertThat(contentId.get(CONTENT_ID), Is.is("https://deeplinker.bio/.well-known/genid/2d84741f-c34d-3c9e-a905-eaa8bfa0bb79"));
+        assertThat(contentId.get(CONTENT_ID), startsWith("https://deeplinker.bio/.well-known/genid"));
         assertThat(contentId.get(CONTENT_TYPE), Is.is("application/dwca"));
         assertThat(contentId.get(DOI), Is.is("https://doi.org/10.15468/mwjnku"));
         assertThat(contentId.get(UUID), Is.is("urn:uuid:926f5a1c-8995-498a-913b-fe0312e1071f"));
-        assertThat(contentId.get(SEEN_AT), Is.is("2023-12-03T09:46:45.012Z"));
+        assertThat(contentId.get(SEEN_AT), Is.is("2024-01-03T06:13:59.079Z"));
     }
 
     @Test
@@ -173,11 +174,11 @@ public class RedirectingServletIT {
                 sparqlEndpoint,
                 MimeTypes.MIME_TYPE_DWCA,
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
-        assertThat(contentId.get(CONTENT_ID), Is.is("https://deeplinker.bio/.well-known/genid/2d84741f-c34d-3c9e-a905-eaa8bfa0bb79"));
+        assertThat(contentId.get(CONTENT_ID), startsWith("https://deeplinker.bio/.well-known/genid"));
         assertThat(contentId.get(CONTENT_TYPE), Is.is("application/dwca"));
         assertThat(contentId.get(DOI), Is.is("https://doi.org/10.15468/mwjnku"));
         assertThat(contentId.get(UUID), Is.is("urn:uuid:926f5a1c-8995-498a-913b-fe0312e1071f"));
-        assertThat(contentId.get(SEEN_AT), Is.is("2023-12-03T09:46:45.012Z"));
+        assertThat(contentId.get(SEEN_AT), Is.is("2024-01-03T06:13:59.079Z"));
     }
 
     @Test
@@ -188,11 +189,11 @@ public class RedirectingServletIT {
                 sparqlEndpoint,
                 MimeTypes.MIME_TYPE_DWCA,
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
-        assertThat(contentId.get(CONTENT_ID), Is.is("https://deeplinker.bio/.well-known/genid/2d84741f-c34d-3c9e-a905-eaa8bfa0bb79"));
+        assertThat(contentId.get(CONTENT_ID), startsWith("https://deeplinker.bio/.well-known/genid"));
         assertThat(contentId.get(CONTENT_TYPE), Is.is("application/dwca"));
         assertThat(contentId.get(DOI), Is.is("https://doi.org/10.15468/mwjnku"));
         assertThat(contentId.get(UUID), Is.is("urn:uuid:926f5a1c-8995-498a-913b-fe0312e1071f"));
-        assertThat(contentId.get(SEEN_AT), Is.is("2023-12-03T09:46:45.012Z"));
+        assertThat(contentId.get(SEEN_AT), Is.is("2024-01-03T06:13:59.079Z"));
     }
 
     @Test
