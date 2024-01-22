@@ -65,7 +65,7 @@ public class BadgeServlet extends RedirectingServlet {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 log("found [" + requestedIdIRI.getIRIString() + "] but no associated content");
             } else {
-                populateReponseHeaderWithProvenanceGraphVersion(response, provInfo);
+                populateReponseHeaderWithProvenanceAnchor(response, getProvenanceId().getIRIString());
                 renderTemplate(
                         response,
                         URI.create(getResolverEndpoint() + requestedIdIRI.getIRIString()),
@@ -76,6 +76,7 @@ public class BadgeServlet extends RedirectingServlet {
                 log("did not find origin of [" + requestedIdIRI.getIRIString() + "]");
             }
         } catch (Throwable th) {
+            populateReponseHeaderWithProvenanceAnchor(response, getProvenanceId().getIRIString());
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             log("not found [" + requestedIdIRI.getIRIString() + "]");
             try {

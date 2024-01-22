@@ -2,7 +2,14 @@ package bio.guoda.preston.server;
 
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.ResourcesHTTP;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.http.Header;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.HttpClientUtils;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -18,6 +25,7 @@ import static bio.guoda.preston.server.RedirectingServlet.DOI;
 import static bio.guoda.preston.server.RedirectingServlet.PROVENANCE_ID;
 import static bio.guoda.preston.server.RedirectingServlet.SEEN_AT;
 import static bio.guoda.preston.server.RedirectingServlet.UUID;
+import static bio.guoda.preston.server.RedirectingServlet.X_PROV_HAD_PRIMARY_SOURCE;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -75,6 +83,32 @@ public class RedirectingServletIT {
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
         assertThat(contentId.get(CONTENT_ID), Is.is("hash://sha256/23e74c5513ef391a7e757643d20970b44633cc2f768f926c815507d804ae3cb5"));
         assertThat(contentId.get(CONTENT_TYPE), Is.is("application/eml"));
+    }
+
+    @Test
+    public void dealiasNonExistentUUID_iDigBio_EML() throws IOException, URISyntaxException {
+        String anchor = "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd";
+
+        CloseableHttpClient build = HttpClientBuilder.create().build();
+        String nonExistentUUID = "urn:uuid:c9316f11-d955-4472-a276-6a26a6514599";
+        CloseableHttpResponse response = build.execute(new HttpGet("http://localhost:8080/" + nonExistentUUID));
+
+        Header firstHeader = response.getFirstHeader(X_PROV_HAD_PRIMARY_SOURCE);
+        assertThat(firstHeader.getName(), Is.is(X_PROV_HAD_PRIMARY_SOURCE));
+        assertThat(firstHeader.getValue(), Is.is("urn:uuid:0659a54f-b713-4f86-a917-5be166a14110"));
+    }
+
+    @Test
+    public void dealiasBadgeNonExistentUUID_iDigBio_EML() throws IOException, URISyntaxException {
+        String anchor = "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd";
+
+        CloseableHttpClient build = HttpClientBuilder.create().build();
+        String nonExistentUUID = "urn:uuid:c9316f11-d955-4472-a276-6a26a6514599";
+        CloseableHttpResponse response = build.execute(new HttpGet("http://localhost:8080/badge/" + nonExistentUUID));
+
+        Header firstHeader = response.getFirstHeader(X_PROV_HAD_PRIMARY_SOURCE);
+        assertThat(firstHeader.getName(), Is.is(X_PROV_HAD_PRIMARY_SOURCE));
+        assertThat(firstHeader.getValue(), Is.is("urn:uuid:0659a54f-b713-4f86-a917-5be166a14110"));
     }
 
     @Test

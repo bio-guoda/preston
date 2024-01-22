@@ -36,6 +36,7 @@ public class RedirectingServlet extends HttpServlet {
     public static final String DOI = "doi";
     public static final String CONTENT_ID = "contentId";
     public static final String ACTIVITY = "activity";
+    public static final String X_PROV_HAD_PRIMARY_SOURCE = "X-PROV-hadPrimarySource";
 
     @Override
     public void destroy() {
@@ -126,9 +127,11 @@ public class RedirectingServlet extends HttpServlet {
                 populateResponseHeader(response, provInfo);
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             } else {
+                populateReponseHeaderWithProvenanceAnchor(response, getProvenanceId().getIRIString());
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             }
         } catch (Throwable th) {
+            populateReponseHeaderWithProvenanceAnchor(response, getProvenanceId().getIRIString());
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             log("not found [" + requestedIdIRI.getIRIString() + "]");
             try {
@@ -169,11 +172,11 @@ public class RedirectingServlet extends HttpServlet {
         response.setHeader("X-PROV-wasGeneratedBy", provInfo.get(ACTIVITY));
         response.setHeader("X-PROV-generatedAtTime", provInfo.get(SEEN_AT));
         response.setHeader("X-DC-format", provInfo.get(CONTENT_TYPE));
-        populateReponseHeaderWithProvenanceGraphVersion(response, provInfo);
+        populateReponseHeaderWithProvenanceAnchor(response, provInfo.get(PROVENANCE_ID));
     }
 
-    protected void populateReponseHeaderWithProvenanceGraphVersion(HttpServletResponse response, Map<String, String> provInfo) {
-        response.setHeader("X-PROV-hadPrimarySource", provInfo.get(PROVENANCE_ID));
+    protected void populateReponseHeaderWithProvenanceAnchor(HttpServletResponse response, String provenanceAnchor) {
+        response.setHeader(X_PROV_HAD_PRIMARY_SOURCE, provenanceAnchor);
     }
 
     protected URI getResolverURI(String resolverEndpoint, String contentId) {
