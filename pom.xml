@@ -5,7 +5,7 @@
 
     <groupId>org.globalbioticinteractions</groupId>
     <artifactId>preston-all</artifactId>
-    <version>0.7.17-SNAPSHOT</version>
+    <version>0.7.17</version>
     <packaging>pom</packaging>
     <name>Preston Modules</name>
     <modules>
