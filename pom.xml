@@ -21,6 +21,7 @@
         <module>preston-excel</module>
         <module>preston-paradox</module>
         <module>preston-genbank</module>
+        <module>preston-taxodros</module>
         <module>preston-mbd</module>
         <module>preston-github</module>
         <module>preston-index</module>
