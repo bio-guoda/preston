@@ -60,8 +60,11 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                 for (int lineNumber = 1; contentStreamHandler.shouldKeepProcessing(); ++lineNumber) {
                     String line = reader.readLine();
                     if (line == null || StringUtils.startsWith(line, ".TEXT;")) {
-                        lineFinish = lineNumber - 1;
-                        if (lineFinish > lineStart && objectNode.size() > 0) {
+                        if (lineFinish > lineStart
+                                && objectNode.size() > 0
+                                && objectNode.has("authors")
+                                && objectNode.has("title")
+                                && objectNode.has("year")) {
                             setValue(objectNode, "filename", getAndResetCapture(textCapture));
                             setValue(objectNode, "http://www.w3.org/ns/prov#wasDerivedFrom", "line:" + iriString + "!/L" + lineStart + "-" + "L" + lineFinish);
                             setValue(objectNode, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "taxodros-flatfile");
@@ -94,7 +97,8 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                     } else if (StringUtils.startsWith(line, PREFIX_FILENAME)) {
                         setValue(objectNode, "method", getAndResetCapture(textCapture));
                         append(textCapture, line, PREFIX_FILENAME);
-                    } else {
+                        lineFinish = lineNumber;
+                    } else if (lineStart > lineFinish){
                         append(textCapture, line);
                     }
                 }
@@ -108,7 +112,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
 
     private void append(AtomicReference<StringBuilder> textCapture, String line, String prefix) {
         String value = getValueWithLinePrefix(line, prefix);
-        append(textCapture, value);
+        if (StringUtils.isNotBlank(value)) {
+            append(textCapture, value);
+        }
     }
 
     private StringBuilder append(AtomicReference<StringBuilder> textCapture, String line) {
@@ -122,7 +128,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
 
 
     private void setValue(ObjectNode objectNode, String key, String value) {
-        objectNode.set(key, TextNode.valueOf(value));
+        if (StringUtils.isNotBlank(value)) {
+            objectNode.set(key, TextNode.valueOf(value));
+        }
     }
 
     private static String getValueWithLinePrefix(String line, CharSequence prefix) {

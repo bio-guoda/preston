@@ -32,11 +32,25 @@ public class TaxoDrosFileExtractorTest {
 
     @Test
     public void streamTaxoDrosToLineJson() throws IOException {
+        assertAssumptions("DROS5.TEXT.example.txt");
 
+    }
+
+    @Test
+    public void streamTaxoDrosToLineJsonWithIncomplete() throws IOException {
+        assertAssumptions("DROS5.TEXT.incomplete.txt");
+    }
+
+    @Test
+    public void streamTaxoDrosToLineJsonWithMultilineFilename() throws IOException {
+        assertAssumptions("DROS5.TEXT.longfilename.txt");
+    }
+
+    private void assertAssumptions(String testResource) throws IOException {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) {
-                URL resource = getClass().getResource("DROS5.TEXT.example.txt");
+                URL resource = getClass().getResource(testResource);
                 IRI iri = toIRI(resource.toExternalForm());
 
                 if (StringUtils.equals("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1", key.getIRIString())) {
@@ -83,7 +97,6 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("year").asText(), is("2005"));
         assertThat(taxonNode.get("method").asText(), is("ocr"));
         assertThat(taxonNode.get("filename").asText(), is("Abd El-Halim et al., 2005M.pdf"));
-
     }
 
 
