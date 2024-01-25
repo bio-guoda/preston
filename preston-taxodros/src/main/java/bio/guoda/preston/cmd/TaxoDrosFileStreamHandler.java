@@ -21,6 +21,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
 
@@ -61,17 +63,16 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                     String line = reader.readLine();
                     if (line == null || StringUtils.startsWith(line, ".TEXT;")) {
                         if (lineFinish > lineStart
-                                && objectNode.size() > 0
-                                && objectNode.has("authors")
-                                && objectNode.has("title")
-                                && objectNode.has("year")) {
-                            setValue(objectNode, "filename", getAndResetCapture(textCapture));
-                            setValue(objectNode, "http://www.w3.org/ns/prov#wasDerivedFrom", "line:" + iriString + "!/L" + lineStart + "-" + "L" + lineFinish);
-                            setValue(objectNode, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "taxodros-flatfile");
-                            IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), outputStream);
-                            IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
-                            foundAtLeastOne.set(true);
-                            lineFinish = -1;
+                                && objectNode.size() > 0) {
+                            if (isLikelyDROS5Record(objectNode)) {
+                                setValue(objectNode, "filename", getAndResetCapture(textCapture));
+                                setValue(objectNode, "http://www.w3.org/ns/prov#wasDerivedFrom", "line:" + iriString + "!/L" + lineStart + "-" + "L" + lineFinish);
+                                setValue(objectNode, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "taxodros-flatfile");
+                                IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), outputStream);
+                                IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
+                                foundAtLeastOne.set(true);
+                                lineFinish = -1;
+                            }
                         }
                         lineStart = lineNumber;
                         objectNode.removeAll();
@@ -95,8 +96,16 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         setValue(objectNode, "journal", getAndResetCapture(textCapture));
                         append(textCapture, line, PREFIX_METHOD_DIGITIZATION);
                     } else if (StringUtils.startsWith(line, PREFIX_FILENAME)) {
-                        setValue(objectNode, "method", getAndResetCapture(textCapture));
+                        String methodText = getAndResetCapture(textCapture);
+                        Matcher matcher = Pattern.compile("(.*)DOI:(?<doi>[^ ]+)(.*)").matcher(methodText);
+                        if (matcher.matches()) {
+                            setValue(objectNode, "doi", matcher.group("doi"));
+                        }
+                        setValue(objectNode, "method", methodText);
                         append(textCapture, line, PREFIX_FILENAME);
+                        lineFinish = lineNumber;
+                    } else if (StringUtils.startsWith(line, ".DESC;")) {
+                        // DROS3 file not support yet
                         lineFinish = lineNumber;
                     } else if (lineStart > lineFinish){
                         append(textCapture, line);
@@ -108,6 +117,14 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         }
 
         return foundAtLeastOne.get();
+    }
+
+    private boolean isLikelyDROS5Record(ObjectNode objectNode) {
+        return objectNode.has("authors")
+                && objectNode.has("title")
+                && objectNode.has("id")
+                && objectNode.has("journal")
+                && objectNode.has("year");
     }
 
     private void append(AtomicReference<StringBuilder> textCapture, String line, String prefix) {
