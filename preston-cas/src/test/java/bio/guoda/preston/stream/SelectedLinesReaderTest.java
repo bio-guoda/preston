@@ -32,6 +32,58 @@ public class SelectedLinesReaderTest {
     }
 
     @Test
+    public void readContiguousMacOS() throws IOException {
+        InputStream in = IOUtils.toInputStream("1\r2\r3\r", CHARSET);
+        SelectedLinesReader reader = new SelectedLinesReader(LongStream.of(1, 2).iterator(), new InputStreamReader(in, CHARSET));
+
+        assertEquals('1', reader.read());
+        assertEquals('\r', reader.read());
+        assertEquals('2', reader.read());
+        assertEquals('\r', reader.read());
+        assertEquals(-1, reader.read());
+    }
+
+    @Test
+    public void readDisjointMacOS() throws IOException {
+        InputStream in = IOUtils.toInputStream("1\r2\r3\r", CHARSET);
+        SelectedLinesReader reader = new SelectedLinesReader(LongStream.of(1, 3).iterator(), new InputStreamReader(in, CHARSET));
+
+        assertEquals('1', reader.read());
+        assertEquals('\r', reader.read());
+        assertEquals('3', reader.read());
+        assertEquals('\r', reader.read());
+        assertEquals(-1, reader.read());
+    }
+
+    @Test
+    public void readContiguousDOS() throws IOException {
+        InputStream in = IOUtils.toInputStream("1\r\n2\r\n3\r\n", CHARSET);
+        SelectedLinesReader reader = new SelectedLinesReader(LongStream.of(1, 2).iterator(), new InputStreamReader(in, CHARSET));
+
+        assertEquals('1', reader.read());
+        assertEquals('\r', reader.read());
+        assertEquals('\n', reader.read());
+        assertEquals('2', reader.read());
+        assertEquals('\r', reader.read());
+        assertEquals('\n', reader.read());
+        assertEquals(-1, reader.read());
+    }
+
+    @Test
+    public void readDisjointDOS() throws IOException {
+        InputStream in = IOUtils.toInputStream("1\r\n2\r\n3\r\n", CHARSET);
+        SelectedLinesReader reader = new SelectedLinesReader(LongStream.of(1, 3).iterator(), new InputStreamReader(in, CHARSET));
+
+        assertEquals('1', reader.read());
+        assertEquals('\r', reader.read());
+        assertEquals('\n', reader.read());
+        assertEquals('3', reader.read());
+        assertEquals('\r', reader.read());
+        assertEquals('\n', reader.read());
+        assertEquals(-1, reader.read());
+    }
+
+    @Test
     public void readDisjoint() throws IOException {
         InputStream in = IOUtils.toInputStream("1\n2\n3\n", CHARSET);
         SelectedLinesReader reader = new SelectedLinesReader(LongStream.of(1, 3).iterator(), new InputStreamReader(in, CHARSET));

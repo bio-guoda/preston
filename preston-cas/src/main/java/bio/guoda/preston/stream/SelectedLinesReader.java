@@ -15,6 +15,7 @@ public class SelectedLinesReader extends Reader {
     private long markedSeekLine;
     private final Queue<Long> seekLinesSinceMark;
     private final Reader in;
+    private int prev = -1;
 
     public SelectedLinesReader(Iterator<Long> lineNumberIterator, Reader reader) {
         super(reader);
@@ -47,13 +48,14 @@ public class SelectedLinesReader extends Reader {
                 done = true;
             } else {
                 boolean print = currentLine == seekLine;
-                if (ch == '\n') {
-                    ++currentLine;
-                    if (currentLine > seekLine) {
-                        updateSeekLine();
-                    }
+                if (hasUnixOrDOSLineEnding(ch)) {
+                    nextLine();
+                } else if (hasMACLineEnding(ch)) {
+                    nextLine();
+                    print = currentLine == seekLine;
                 }
 
+                prev = ch;
                 if (print) {
                     return ch;
                 }
@@ -61,6 +63,21 @@ public class SelectedLinesReader extends Reader {
         }
 
         return -1;
+    }
+
+    private void nextLine() {
+        ++currentLine;
+        if (currentLine > seekLine) {
+            updateSeekLine();
+        }
+    }
+
+    private boolean hasMACLineEnding(int ch) {
+        return prev == '\r' && ch != '\n';
+    }
+
+    private boolean hasUnixOrDOSLineEnding(int ch) {
+        return ch == '\n';
     }
 
     @Override

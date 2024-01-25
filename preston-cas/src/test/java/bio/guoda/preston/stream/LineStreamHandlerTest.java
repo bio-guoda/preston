@@ -29,6 +29,16 @@ public class LineStreamHandlerTest {
         assertThat(lines.get(lines.size() - 1), is(""));
     }
 
+    @Test
+    public void handleMacEndlines() throws IOException, ContentStreamException {
+        List<String> lines = handle("/bio/guoda/preston/process/DROS5.TEXT.example.txt");
+
+        assertThat(lines.size(), is(30));
+        assertThat(lines.get(0), is(".TEXT;"));
+        assertThat(lines.get(1), is("abd el-halim et al., 2005"));
+
+    }
+
     @Ignore("see Byte Order Mark issue at https://github.com/bio-guoda/preston/issues/122")
     @Test
     public void handleWithBOM() throws IOException, ContentStreamException {
