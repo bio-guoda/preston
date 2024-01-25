@@ -18,6 +18,7 @@ import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
 import bio.guoda.preston.util.JekyllUtil;
+import org.apache.commons.collections4.Factory;
 import org.apache.commons.rdf.api.IRI;
 import org.joda.time.DateTime;
 import picocli.CommandLine;
@@ -73,16 +74,22 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
             }
             File tmp = getTmpDir();
 
-            ProvenanceTracer tracerOfDescendants = getTracerOfDescendants(getCopyingKeyValueStore(target, tmp));
+            Factory<KeyValueStore> keyValueStoreFactory = new Factory<KeyValueStore>() {
+                @Override
+                public KeyValueStore create() {
+                    return getCopyingKeyValueStore(target, tmp);
+                }
+            };
+            ProvenanceTracer tracer = getTracerOfDescendants(keyValueStoreFactory);
 
             if (ArchiveType.data_prov_provindex.equals(getArchiveType())) {
-                copyAll(target, tmp, tracerOfDescendants);
+                copyAll(target, tmp, tracer);
             } else if (ArchiveType.data.equals(getArchiveType())) {
-                copyDataOnly(target, tmp, tracerOfDescendants);
+                copyDataOnly(target, tmp, tracer);
             } else if (ArchiveType.prov.equals(getArchiveType())) {
-                copyProvLogsOnly(target, tmp, tracerOfDescendants);
+                copyProvLogsOnly(target, tmp, tracer);
             } else if (ArchiveType.provindex.equals(getArchiveType())) {
-                copyProvIndexOnly(tracerOfDescendants);
+                copyProvIndexOnly(tracer);
             } else {
                 throw new IllegalStateException("unsupport archive type [" + getArchiveType().name() + "]");
             }

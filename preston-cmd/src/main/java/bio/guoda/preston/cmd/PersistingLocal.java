@@ -17,16 +17,13 @@ import bio.guoda.preston.store.ProvenanceTracerImpl;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
+import org.apache.commons.collections4.Factory;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-
-import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH;
-import static bio.guoda.preston.RefNodeConstants.BIODIVERSITY_DATASET_GRAPH_UUID_STRING;
 
 public class PersistingLocal extends CmdWithProvenance {
 
@@ -95,9 +92,18 @@ public class PersistingLocal extends CmdWithProvenance {
 
 
     public ProvenanceTracer getProvenanceTracer() {
+        Factory<KeyValueStore> factoryForOrigins = getKeyValueStoreFactoryForOrigins();
+
+
         return isAnchored()
-                ? getTracerOfOrigins()
+                ? getTracerOfOrigins(factoryForOrigins)
                 : getTracerOfDescendants();
+    }
+
+    private Factory<KeyValueStore> getKeyValueStoreFactoryForOrigins() {
+        return () -> getKeyValueStore(
+                    new ValidatingKeyValueStreamContentAddressedFactory()
+            );
     }
 
     public boolean isAnchored() {
@@ -105,26 +111,23 @@ public class PersistingLocal extends CmdWithProvenance {
     }
 
     protected ProvenanceTracer getTracerOfDescendants() {
-        KeyValueStore keyValueStore = getKeyValueStore(
+        Factory<KeyValueStore> factory = () -> getKeyValueStore(
                 new ValidatingKeyValueStreamHashTypeIRIFactory()
         );
-        return getTracerOfDescendants(keyValueStore);
+        return getTracerOfDescendants(factory);
     }
 
-    protected ProvenanceTracer getTracerOfDescendants(KeyValueStore keyValueStore) {
+    protected ProvenanceTracer getTracerOfDescendants(Factory<KeyValueStore>  keyValueStoreFactory) {
         HexaStoreImpl hexastore = new HexaStoreImpl(
-                keyValueStore,
+                keyValueStoreFactory.create(),
                 getHashType()
         );
 
-        return new ProvenanceTracerByIndex(hexastore, getTracerOfOrigins());
+        return new ProvenanceTracerByIndex(hexastore, getTracerOfOrigins(getKeyValueStoreFactoryForOrigins()));
     }
 
-    private ProvenanceTracer getTracerOfOrigins() {
-        KeyValueStore keyValueStore = getKeyValueStore(
-                new ValidatingKeyValueStreamContentAddressedFactory()
-        );
-        return new ProvenanceTracerImpl(keyValueStore, this);
+    protected ProvenanceTracer getTracerOfOrigins(Factory<KeyValueStore> keyValueStoreFactory) {
+        return new ProvenanceTracerImpl(keyValueStoreFactory.create(), this);
     }
 
 

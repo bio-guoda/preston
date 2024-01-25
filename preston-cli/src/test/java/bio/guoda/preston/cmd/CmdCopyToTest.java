@@ -1,9 +1,11 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.KeyTo1LevelPath;
 import net.lingala.zip4j.ZipFile;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.Is;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -82,10 +84,69 @@ public class CmdCopyToTest {
         assertCopy(src, copyTo);
     }
 
+    @Test
+    public void trackAndCopyTwoVersionsNoAnchhor() throws URISyntaxException, IOException {
+        File src = prepareSrcDir(getClass().getResource("/bio/guoda/preston/cmd/data-two-versions.zip"));
+        File copyTo = tmpDir.newFolder("dst");
+        CmdCopyTo cmdCopyTo = new CmdCopyTo();
+        cmdCopyTo.setLocalDataDir(src.getAbsolutePath());
+        cmdCopyTo.setTargetDir(copyTo.getAbsolutePath());
+        cmdCopyTo.setPathPattern(HashPathPattern.directoryDepth0);
+        cmdCopyTo.setArchiveType(ArchiveType.data_prov_provindex);
+
+        assertThat(copyTo.list(), Is.is(new String[]{}));
+
+        cmdCopyTo.run();
+
+        assertNotNull(copyTo);
+        assertNotNull(copyTo.list());
+        List<String> actual = Arrays.asList(copyTo.list());
+        assertThat(actual.size(), Is.is(5));
+        assertThat(actual,
+                (hasItems("71d606eab8fd7e0d8ac4c263ca725d4a88f0d0199602e79f686fd03f260eebf7",
+                        "ad5b025a1f9eee92412429dd9d42297703c13367ac0eb6fbe33092de90988bdc",
+                        "df1d4e1f20e1d8f89ddbb0fccb9f8005283c334a6e5a6fb19e30720bed2a9c1c",
+                        "ea8fac7c65fb589b0d53560f5251f74f9e9b243478dcb6b3ea79b5e36449c8d9",
+                        "2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a"))
+        );
+    }
+
+
+    @Ignore("https://github.com/bio-guoda/preston/issues/274")
+    @Test
+    public void trackAndCopyTwoVersionsSpecificAnchhor() throws URISyntaxException, IOException {
+        File src = prepareSrcDir(getClass().getResource("/bio/guoda/preston/cmd/data-two-versions.zip"));
+        File copyTo = tmpDir.newFolder("dst");
+        CmdCopyTo cmdCopyTo = new CmdCopyTo();
+        cmdCopyTo.setLocalDataDir(src.getAbsolutePath());
+        cmdCopyTo.setTargetDir(copyTo.getAbsolutePath());
+        cmdCopyTo.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/df1d4e1f20e1d8f89ddbb0fccb9f8005283c334a6e5a6fb19e30720bed2a9c1c"));
+        cmdCopyTo.setPathPattern(HashPathPattern.directoryDepth0);
+        cmdCopyTo.setArchiveType(ArchiveType.data_prov_provindex);
+
+        assertThat(copyTo.list(), Is.is(new String[]{}));
+
+        cmdCopyTo.run();
+
+        assertNotNull(copyTo);
+        assertNotNull(copyTo.list());
+        List<String> actual = Arrays.asList(copyTo.list());
+        assertThat(actual.size(), Is.is(3));
+        assertThat(actual,
+                (hasItems("df1d4e1f20e1d8f89ddbb0fccb9f8005283c334a6e5a6fb19e30720bed2a9c1c",
+                        "ea8fac7c65fb589b0d53560f5251f74f9e9b243478dcb6b3ea79b5e36449c8d9",
+                        "2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a"))
+        );
+    }
+
     private File prepareSrcDir() throws URISyntaxException, IOException {
         URL resource = getClass().getResource("/bio/guoda/preston/cmd/copy-test-data.zip");
         assertNotNull(resource);
 
+        return prepareSrcDir(resource);
+    }
+
+    private File prepareSrcDir(URL resource) throws URISyntaxException, IOException {
         ZipFile zipFile = new ZipFile(new File(resource.toURI()));
         File src = tmpDir.newFolder("src");
         zipFile.extractAll(src.getAbsolutePath());
