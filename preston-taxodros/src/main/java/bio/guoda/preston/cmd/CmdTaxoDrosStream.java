@@ -13,7 +13,7 @@ import picocli.CommandLine;
 
 @CommandLine.Command(
         name = "taxodros-stream",
-        description = "Stream TaxoDros https://www.taxodros.uzh.ch/ records into line-json"
+        description = "Stream TaxoDros https://www.taxodros.uzh.ch/ records into line-json; Also see Bächli, G. (2024). TaxoDros - The Database on Taxonomy of Drosophilidae hash://md5/d68c923002c43271cee07ba172c67b0b hash://sha256/3e41eec4c91598b8a2de96e1d1ed47d271a7560eb6ef350a17bc67cc61255302 [Data set]. Zenodo. https://doi.org/10.5281/zenodo.10565403 ."
 )
 public class CmdTaxoDrosStream extends LoggingPersisting implements Runnable {
 
