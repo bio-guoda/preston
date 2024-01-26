@@ -53,6 +53,17 @@ public class TaxoDrosFileExtractorTest {
     }
 
     @Test
+    public void streamTaxoDrosToLineJsonWithDOILowerCase() throws IOException {
+        String[] jsonObjects = getResource("DROS5.TEXT.doi.lower.txt");
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+
+        assertThat(taxonNode.has("doi"), is(true));
+        assertThat(taxonNode.get("doi").textValue(), is("10.7868/S0016675814060150"));
+    }
+
+    @Test
     public void streamTaxoDrosToLineJsonWithMultilineFilename() throws IOException {
         assertAssumptions("DROS5.TEXT.longfilename.txt");
     }

@@ -97,7 +97,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         append(textCapture, line, PREFIX_METHOD_DIGITIZATION);
                     } else if (StringUtils.startsWith(line, PREFIX_FILENAME)) {
                         String methodText = getAndResetCapture(textCapture);
-                        Matcher matcher = Pattern.compile("(.*)DOI:(?<doi>[^ ]+)(.*)").matcher(methodText);
+                        Matcher matcher = Pattern.compile("(.*)(DOI|doi):(?<doi>[^ ]+)(.*)").matcher(methodText);
                         if (matcher.matches()) {
                             setValue(objectNode, "doi", matcher.group("doi"));
                         }
