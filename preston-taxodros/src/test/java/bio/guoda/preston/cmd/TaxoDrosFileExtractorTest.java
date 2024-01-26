@@ -4,6 +4,7 @@ import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -28,6 +29,7 @@ import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 
 public class TaxoDrosFileExtractorTest {
@@ -52,6 +54,35 @@ public class TaxoDrosFileExtractorTest {
 
         assertThat(taxonNode.has("doi"), is(true));
         assertThat(taxonNode.get("doi").textValue(), is("10.7868/S0016675814060150"));
+    }
+
+    @Test
+    public void streamTaxoDrosToLineJsonBook() throws IOException {
+        String[] jsonObjects = getResource("DROS5.TEXT.book.txt");
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+
+        assertThat(StringUtils.startsWith(".Z.Nijhoff", ".Z"), is(true));
+
+        assertThat(taxonNode.get("title").textValue(), is("Catalogue of the described Diptera from South Asia. 222 pp."));
+        assertThat(taxonNode.get("type").textValue(), is("book"));
+        assertThat(taxonNode.get("publisher").textValue(), is("Nijhoff"));
+    }
+
+    @Test
+    public void streamTaxoDrosToLineJsonCollection() throws IOException {
+        String[] jsonObjects = getResource("DROS5.TEXT.collection.txt");
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+
+        assertThat(StringUtils.startsWith(".Z.Nijhoff", ".Z"), is(true));
+
+        assertThat(taxonNode.get("id").textValue(), is("collection, zmc"));
+        assertThat(taxonNode.get("title").textValue(), is("Zoological Museum University of Copenhagen Universitetsparken 15 DK-2100 Copenhagen O Denmark"));
+        assertThat(taxonNode.get("type").textValue(), is("collection"));
+        assertThat(taxonNode.get("collection").textValue(), is("collection, zmc"));
     }
 
     @Test
@@ -93,6 +124,34 @@ public class TaxoDrosFileExtractorTest {
         assertThat(keywords.get(2).asText(), is("egypt"));
     }
 
+    @Test
+    public void parseJournalInfoWithNumber() {
+        ObjectNode ref = new ObjectMapper().createObjectNode();
+        TaxoDrosFileStreamHandler.enrichWithJournalInfo(ref, "32(1981):107");
+
+        assertThat(ref.get("pages").asText(), is("107"));
+        assertThat(ref.get("volume").asText(), is("32"));
+        assertThat(ref.get("number").asText(), is("1981"));
+    }
+
+    @Test
+    public void parseJournalInfo2() {
+        ObjectNode ref = new ObjectMapper().createObjectNode();
+        TaxoDrosFileStreamHandler.enrichWithJournalInfo(ref, "32:107");
+
+        assertThat(ref.get("pages").asText(), is("107"));
+        assertThat(ref.get("volume").asText(), is("32"));
+    }
+
+    @Test
+    public void parseJournalInfo3() {
+        ObjectNode ref = new ObjectMapper().createObjectNode();
+        TaxoDrosFileStreamHandler.enrichWithJournalInfo(ref, "35:351-362.");
+
+        assertThat(ref.get("pages").asText(), is("351-362"));
+        assertThat(ref.get("volume").asText(), is("35"));
+    }
+
     private void assertAssumptions(String testResource) throws IOException {
         String[] jsonObjects = getResource(testResource);
         assertThat(jsonObjects.length, is(3));
@@ -104,9 +163,13 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("id").asText(), is("abd el-halim et al., 2005"));
         assertThat(taxonNode.get("authors").asText(), is("Abd El-Halim, A.S., Mostafa, A.A., & Allam, K.A.M.a.,"));
         assertThat(taxonNode.get("title").asText(), is("Dipterous flies species and their densities in fourteen Egyptian governorates."));
-        assertThat(taxonNode.get("journal").asText(), is("J. Egypt. Soc. Parasitol., 35:351-362."));
+        assertThat(taxonNode.get("journal").asText(), is("J. Egypt. Soc. Parasitol."));
+        assertThat(taxonNode.get("volume").asText(), is("35"));
+        assertThat(taxonNode.get("number"), is(nullValue()));
+        assertThat(taxonNode.get("pages").asText(), is("351-362"));
         assertThat(taxonNode.get("year").asText(), is("2005"));
         assertThat(taxonNode.get("method").asText(), is("ocr"));
+        assertThat(taxonNode.get("type").textValue(), is("article"));
         assertThat(taxonNode.get("filename").asText(), is("Abd El-Halim et al., 2005M.pdf"));
     }
 

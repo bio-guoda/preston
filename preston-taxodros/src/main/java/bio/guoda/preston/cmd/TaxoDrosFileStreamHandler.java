@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
+import org.eclipse.rdf4j.common.text.StringUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
     public static final String DROS_5 = "taxodros-dros5";
     public static final String DROS_3 = "taxodros-dros3";
+    private static final String PREFIX_PUBLISHER = ".Z.";
 
     private final Dereferencer<InputStream> dereferencer;
     private ContentStreamHandler contentStreamHandler;
@@ -102,13 +104,35 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         setTypeDROS5(objectNode);
                         setValue(objectNode, "year", getAndResetCapture(textCapture));
                         append(textCapture, line, PREFIX_TITLE);
+                    } else if (StringUtils.startsWith(line, PREFIX_PUBLISHER)) {
+                        setTypeDROS5(objectNode);
+                        if (objectNode.has("id")
+                                && StringUtils.containsIgnoreCase(objectNode.get("id").asText(), "collection")) {
+                            setValue(objectNode, "type", "collection");
+                            setValue(objectNode, "collection", objectNode.get("id").asText());
+                        } else {
+                            setValue(objectNode, "type", "book");
+                        }
+                        setValue(objectNode, "title", getAndResetCapture(textCapture));
+                        append(textCapture, line, PREFIX_PUBLISHER);
                     } else if (StringUtils.startsWith(line, PREFIX_JOURNAL)) {
                         setTypeDROS5(objectNode);
                         setValue(objectNode, "title", getAndResetCapture(textCapture));
+                        setValue(objectNode, "type", "article");
                         append(textCapture, line, PREFIX_JOURNAL);
                     } else if (StringUtils.startsWith(line, PREFIX_METHOD_DIGITIZATION)) {
                         setTypeDROS5(objectNode);
-                        setValue(objectNode, "journal", getAndResetCapture(textCapture));
+                        if (isArticle(objectNode)) {
+                            String journalString = getAndResetCapture(textCapture);
+                            String[] split = StringUtils.split(journalString, ",");
+                            setValue(objectNode, "journal", split[0]);
+                            if (split.length > 1) {
+                                String remainder = StringUtils.substring(journalString, split[0].length() + 1);
+                                enrichWithJournalInfo(objectNode, remainder);
+                            }
+                        } else {
+                            setValue(objectNode, "publisher", getAndResetCapture(textCapture));
+                        }
                         append(textCapture, line, PREFIX_METHOD_DIGITIZATION);
                     } else if (StringUtils.startsWith(line, PREFIX_FILENAME)) {
                         setTypeDROS5(objectNode);
@@ -141,6 +165,23 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         }
 
         return foundAtLeastOne.get();
+    }
+
+    private boolean isArticle(ObjectNode objectNode) {
+        return objectNode.has("type") && StringUtils.equals("article", objectNode.get("type").textValue());
+    }
+
+    public static void enrichWithJournalInfo(ObjectNode objectNode, String remainder) {
+        Pattern articleCoordinates = Pattern.compile("(?<volume>[^\\(:]+){0,1}(?<number>\\([^)]*\\)){0,1}:(?<pages>[^.]*){0,1}([ .]*)$");
+        Matcher matcher = articleCoordinates.matcher(remainder);
+        if (matcher.matches()) {
+            setValue(objectNode, "volume", StringUtils.trim(matcher.group("volume")));
+            setValue(objectNode, "pages", matcher.group("pages"));
+            String number = matcher.group("number");
+            if (StringUtils.isNotBlank(number)) {
+                setValue(objectNode, "number", StringUtils.substring(number, 1, number.length() - 1));
+            }
+        }
     }
 
     private void setTypeDROS3(ObjectNode objectNode) {
@@ -195,7 +236,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     }
 
 
-    private void setValue(ObjectNode objectNode, String key, String value) {
+    private static void setValue(ObjectNode objectNode, String key, String value) {
         if (StringUtils.isNotBlank(value)) {
             objectNode.set(key, TextNode.valueOf(value));
         }
