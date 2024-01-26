@@ -4,6 +4,7 @@ import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.commons.io.IOUtils;
@@ -32,6 +33,10 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     private static final String PREFIX_METHOD_DIGITIZATION = ".K ";
     private static final String PREFIX_JOURNAL = ".Z ";
     private static final String PREFIX_FILENAME = ".P ";
+    public static final String LOCALITIES = "localities";
+    public static final String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+    public static final String DROS_5 = "taxodros-dros5";
+    public static final String DROS_3 = "taxodros-dros3";
 
     private final Dereferencer<InputStream> dereferencer;
     private ContentStreamHandler contentStreamHandler;
@@ -62,12 +67,17 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                 for (int lineNumber = 1; contentStreamHandler.shouldKeepProcessing(); ++lineNumber) {
                     String line = reader.readLine();
                     if (line == null || StringUtils.startsWith(line, ".TEXT;")) {
-                        if (lineFinish > lineStart
-                                && objectNode.size() > 0) {
-                            if (isLikelyDROS5Record(objectNode)) {
-                                setValue(objectNode, "filename", getAndResetCapture(textCapture));
-                                setValue(objectNode, "http://www.w3.org/ns/prov#wasDerivedFrom", "line:" + iriString + "!/L" + lineStart + "-" + "L" + lineFinish);
-                                setValue(objectNode, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "taxodros-flatfile");
+                        if (objectNode.size() > 0) {
+                            if (isType(objectNode, DROS_5) || isType(objectNode, DROS_3)) {
+                                if (isType(objectNode, DROS_5)) {
+                                    setOriginReference(iriString, lineStart, lineFinish, objectNode);
+                                    setValue(objectNode, "filename", getAndResetCapture(textCapture));
+                                    setType(objectNode, DROS_5);
+                                } else if (isType(objectNode, DROS_3)) {
+                                    lineFinish = lineNumber;
+                                    setOriginReference(iriString, lineStart, lineFinish, objectNode);
+                                    setValue(objectNode, "keywords", getAndResetCapture(textCapture));
+                                }
                                 IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), outputStream);
                                 IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
                                 foundAtLeastOne.set(true);
@@ -81,21 +91,27 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                             break;
                         }
                     } else if (StringUtils.startsWith(line, PREFIX_AUTHOR)) {
+                        setTypeDROS5(objectNode);
                         setValue(objectNode, "id", getAndResetCapture(textCapture));
                         append(textCapture, line, PREFIX_AUTHOR);
                     } else if (StringUtils.startsWith(line, PREFIX_YEAR)) {
+                        setTypeDROS5(objectNode);
                         setValue(objectNode, "authors", getAndResetCapture(textCapture));
                         append(textCapture, line, PREFIX_YEAR);
                     } else if (StringUtils.startsWith(line, PREFIX_TITLE)) {
+                        setTypeDROS5(objectNode);
                         setValue(objectNode, "year", getAndResetCapture(textCapture));
                         append(textCapture, line, PREFIX_TITLE);
                     } else if (StringUtils.startsWith(line, PREFIX_JOURNAL)) {
+                        setTypeDROS5(objectNode);
                         setValue(objectNode, "title", getAndResetCapture(textCapture));
                         append(textCapture, line, PREFIX_JOURNAL);
                     } else if (StringUtils.startsWith(line, PREFIX_METHOD_DIGITIZATION)) {
+                        setTypeDROS5(objectNode);
                         setValue(objectNode, "journal", getAndResetCapture(textCapture));
                         append(textCapture, line, PREFIX_METHOD_DIGITIZATION);
                     } else if (StringUtils.startsWith(line, PREFIX_FILENAME)) {
+                        setTypeDROS5(objectNode);
                         String methodText = getAndResetCapture(textCapture);
                         Matcher matcher = Pattern.compile("(.*)(DOI|doi):(?<doi>[^ ]+)(.*)").matcher(methodText);
                         if (matcher.matches()) {
@@ -105,10 +121,18 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         append(textCapture, line, PREFIX_FILENAME);
                         lineFinish = lineNumber;
                     } else if (StringUtils.startsWith(line, ".DESC;")) {
-                        // DROS3 file not support yet
-                        lineFinish = lineNumber;
-                    } else if (lineStart > lineFinish){
-                        append(textCapture, line);
+                        setIdIfMissing(textCapture, objectNode);
+                        setTypeDROS3(objectNode);
+                    } else if (StringUtils.startsWith(line, "=e=")) {
+                        setIdIfMissing(textCapture, objectNode);
+                        String value = getValueWithLinePrefix(line, "=e=");
+                        append(objectNode, LOCALITIES, value);
+                    } else if (lineStart > lineFinish) {
+                        if (isType(objectNode, DROS_3)) {
+                            append(objectNode, "keywords", line);
+                        } else {
+                            append(textCapture, line);
+                        }
                     }
                 }
             }
@@ -119,12 +143,39 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         return foundAtLeastOne.get();
     }
 
-    private boolean isLikelyDROS5Record(ObjectNode objectNode) {
-        return objectNode.has("authors")
-                && objectNode.has("title")
-                && objectNode.has("id")
-                && objectNode.has("journal")
-                && objectNode.has("year");
+    private void setTypeDROS3(ObjectNode objectNode) {
+        setType(objectNode, DROS_3);
+    }
+
+    private void setTypeDROS5(ObjectNode objectNode) {
+        setType(objectNode, "taxodros-dros5");
+    }
+
+    private void append(ObjectNode objectNode, String key, String value) {
+        ArrayNode localities = objectNode.has(key)
+                ? (ArrayNode) objectNode.get(key)
+                : new ObjectMapper().createArrayNode();
+        localities.add(value);
+        objectNode.set(key, localities);
+    }
+
+    private void setOriginReference(String iriString, int lineStart, int lineFinish, ObjectNode objectNode) {
+        setValue(objectNode, "http://www.w3.org/ns/prov#wasDerivedFrom", "line:" + iriString + "!/L" + lineStart + "-" + "L" + lineFinish);
+    }
+
+    private void setType(ObjectNode objectNode, String type) {
+        setValue(objectNode, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", type);
+    }
+
+    private boolean isType(ObjectNode objectNode, String typeValue) {
+        return objectNode.has(TYPE)
+                && StringUtils.equals(typeValue, objectNode.get(TYPE).asText());
+    }
+
+    private void setIdIfMissing(AtomicReference<StringBuilder> textCapture, ObjectNode objectNode) {
+        if (!objectNode.has("id")) {
+            setValue(objectNode, "id", getAndResetCapture(textCapture));
+        }
     }
 
     private void append(AtomicReference<StringBuilder> textCapture, String line, String prefix) {

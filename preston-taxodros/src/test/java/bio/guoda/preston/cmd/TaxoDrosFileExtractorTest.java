@@ -27,6 +27,7 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
 public class TaxoDrosFileExtractorTest {
@@ -69,19 +70,27 @@ public class TaxoDrosFileExtractorTest {
         assertAssumptions("DROS5.TEXT.longfilename.txt");
     }
 
-    @Ignore
     @Test
     public void streamTaxoDros3ToLineJson() throws IOException {
         String[] jsonObjects = getResource("DROS3.TEXT.example.txt");
         assertThat(jsonObjects.length, is(3));
         JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
-        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L10"));
-        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("taxodros-flatfile"));
-        assertThat(taxonNode.get("authors").asText(), is("Abd El-Halim, A.S., Mostafa, A.A., & Allam, K.A.M.a.,"));
-        assertThat(taxonNode.get("title").asText(), is("Dipterous flies species and their densities in fourteen Egyptian governorates."));
-        assertThat(taxonNode.get("journal").asText(), is("J. Egypt. Soc. Parasitol., 35:351-362."));
-        assertThat(taxonNode.get("year").asText(), is("2005"));
-        assertThat(taxonNode.get("method").asText(), is("ocr"));
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L9"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("taxodros-dros3"));
+        assertThat(taxonNode.get("id").asText(), is("abd el-halim et al., 2005"));
+        JsonNode localities = taxonNode.get("localities");
+        assertThat(localities, is(notNullValue()));
+        assertThat(localities.isArray(), is(true));
+        assertThat(localities.size(), is(2));
+        assertThat(localities.get(0).asText(), is("kena"));
+        assertThat(localities.get(1).asText(), is("sinai"));
+        JsonNode keywords = taxonNode.get("keywords");
+        assertThat(keywords, is(notNullValue()));
+        assertThat(keywords.isArray(), is(true));
+        assertThat(keywords.size(), is(3));
+        assertThat(keywords.get(0).asText(), is("histrioides"));
+        assertThat(keywords.get(1).asText(), is("distr$"));
+        assertThat(keywords.get(2).asText(), is("egypt"));
     }
 
     private void assertAssumptions(String testResource) throws IOException {
@@ -91,7 +100,7 @@ public class TaxoDrosFileExtractorTest {
         JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
 
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L10"));
-        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("taxodros-flatfile"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("taxodros-dros5"));
         assertThat(taxonNode.get("id").asText(), is("abd el-halim et al., 2005"));
         assertThat(taxonNode.get("authors").asText(), is("Abd El-Halim, A.S., Mostafa, A.A., & Allam, K.A.M.a.,"));
         assertThat(taxonNode.get("title").asText(), is("Dipterous flies species and their densities in fourteen Egyptian governorates."));
