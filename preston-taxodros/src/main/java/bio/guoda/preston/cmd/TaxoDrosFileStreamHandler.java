@@ -74,7 +74,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                     setValue(objectNode, "filename", getAndResetCapture(textCapture));
                                     setType(objectNode, DROS_5);
                                 } else if (isType(objectNode, DROS_3)) {
-                                    lineFinish = lineNumber;
+                                    lineFinish = lineNumber - 1;
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
                                     setValue(objectNode, "keywords", getAndResetCapture(textCapture));
                                 }
