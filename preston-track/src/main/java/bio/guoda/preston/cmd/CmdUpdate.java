@@ -16,6 +16,7 @@ import bio.guoda.preston.process.RegistryReaderTaxonWorks;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.Dereferencer;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
@@ -52,7 +53,7 @@ public class CmdUpdate extends CmdTrack {
 
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
-        if (getIRIs().isEmpty() && seeds.isEmpty()) {
+        if (shouldListenToStdIn()) {
             UUID uuid = UUID.randomUUID();
             statementQueue.add(Collections.singletonList(
                     toStatement(ctx.getActivity(),
@@ -78,16 +79,16 @@ public class CmdUpdate extends CmdTrack {
         }
     }
 
-    private Dereferencer<InputStream> getDereferencerOfInputStream(UUID uuid, final InputStream inputStream) {
-        return new Dereferencer<InputStream>() {
+    private boolean shouldListenToStdIn() {
+        return getIRIs().isEmpty() && seeds.isEmpty() && StringUtils.isBlank(getFilename());
+    }
 
-            @Override
-            public InputStream get(IRI uri) throws IOException {
-                if (!RefNodeFactory.toIRI(uuid).equals(uri)) {
-                    throw new IOException("failed to dereference content: iri [" + uri + "] is not associated with any content stream");
-                }
-                return inputStream;
+    private Dereferencer<InputStream> getDereferencerOfInputStream(UUID uuid, final InputStream inputStream) {
+        return uri -> {
+            if (!RefNodeFactory.toIRI(uuid).equals(uri)) {
+                throw new IOException("failed to dereference content: iri [" + uri + "] is not associated with any content stream");
             }
+            return inputStream;
         };
     }
 
