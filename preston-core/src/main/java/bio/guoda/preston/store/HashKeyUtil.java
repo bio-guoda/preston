@@ -15,7 +15,7 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 
 public class HashKeyUtil {
 
-    public static final String PREFIX_SCHEMA = "([a-zA-Z0-9]+:)";
+    public static final String PREFIX_SCHEMA = "([a-zA-Z0-9]{2,}:)";
 
     public static final Pattern URI_PATTERN_HASH_URI_COMPOSITE_SHA256 = Pattern
             .compile(PREFIX_SCHEMA + "*(" + HashType.sha256.getIRIPatternString() + "){1}(!/.*){0,1}");

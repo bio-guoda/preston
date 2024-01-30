@@ -5,6 +5,9 @@ import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -135,6 +138,15 @@ public class HashKeyUtilTest {
     @Test(expected = IllegalArgumentException.class)
     public void extractNonContentHash() {
         HashKeyUtil.extractContentHash(toIRI("urn:uuid:619e692b-e75d-487b-b80e-0f86958be405"));
+    }
+
+    @Test
+    public void windowsAbsoluteFilePathPrefix() {
+        Matcher matcher = Pattern
+                .compile(HashKeyUtil.PREFIX_SCHEMA + ".*")
+                .matcher("C:\\Users\\RUNNER~1\\AppData\\Local\\Temp\\junit3284240593125276828\\foo.txt");
+        assertFalse(matcher.matches());
+
     }
 
 }
