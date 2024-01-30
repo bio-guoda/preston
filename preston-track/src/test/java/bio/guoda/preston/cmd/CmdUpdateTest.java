@@ -55,7 +55,19 @@ public class CmdUpdateTest {
 
 
     @Test
-    public void trackFile() throws IOException {
+    public void trackFileByAbsolutePath() throws IOException {
+        File foo = getDataFile("foo.txt");
+        assertTrackedContent(foo.getAbsolutePath());
+    }
+
+    @Test
+    public void trackFileByURIPath() throws IOException {
+        File foo = getDataFile("foo.txt");
+        assertTrackedContent(foo.toPath().toUri().toString());
+    }
+
+    private void assertTrackedContent(String dataLocation) throws IOException {
+
         AtomicReference<String> actual = new AtomicReference<>();
         BlobStore blobStore = new BlobStore() {
             @Override
@@ -72,15 +84,13 @@ public class CmdUpdateTest {
         HexaStoreNull logRelations = new HexaStoreNull();
         assertThat(logRelations.putLogVersionAttemptCount.get(), Is.is(0));
 
-        File file = folder.newFile("list.txt");
-        File foo = folder.newFile("foo.txt");
-        try (FileOutputStream listOs = new FileOutputStream(file); FileOutputStream contentOs = new FileOutputStream(foo)) {
-            IOUtils.write("hello world", contentOs, StandardCharsets.UTF_8);
-            IOUtils.write(foo.toURI().toString(), listOs, StandardCharsets.UTF_8);
+        File list = folder.newFile("list.txt");
+        try (FileOutputStream listOs = new FileOutputStream(list)) {
+            IOUtils.write(dataLocation, listOs, StandardCharsets.UTF_8);
         }
 
         CmdUpdate cmdUpdate = new CmdUpdate();
-        cmdUpdate.setFilename(file.getAbsolutePath());
+        cmdUpdate.setFilename(list.getAbsolutePath());
         cmdUpdate.run(
                 blobStore,
                 new BlobStoreNull(),
@@ -88,6 +98,14 @@ public class CmdUpdateTest {
         );
 
         assertThat(actual.get(), is("hello world"));
+    }
+
+    private File getDataFile(String filename) throws IOException {
+        File foo = folder.newFile(filename);
+        try (FileOutputStream contentOs = new FileOutputStream(foo)) {
+            IOUtils.write("hello world", contentOs, StandardCharsets.UTF_8);
+        }
+        return foo;
     }
 
 }

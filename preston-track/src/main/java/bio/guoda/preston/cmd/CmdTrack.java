@@ -8,7 +8,7 @@ import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.DereferencerContentAddressed;
 import bio.guoda.preston.store.DereferencerCachingProxy;
-import org.apache.commons.io.IOUtils;
+import bio.guoda.preston.store.HashKeyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -17,18 +17,18 @@ import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
-import java.util.stream.Stream;
+import java.util.function.Function;
+import java.util.regex.Pattern;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toBlank;
@@ -36,6 +36,7 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class CmdTrack extends CmdActivity {
     private static final Logger LOG = LoggerFactory.getLogger(CmdTrack.class);
+    public static final Pattern PREFIX_SCHEMA_PATTERN = Pattern.compile(HashKeyUtil.PREFIX_SCHEMA + ".*");
 
     private Dereferencer<InputStream> dereferencer = ResourcesHTTP::asInputStream;
 
@@ -75,10 +76,10 @@ public class CmdTrack extends CmdActivity {
         }
 
         if (StringUtils.isNotBlank(getFilename())) {
-            Stream<String> lines = null;
             try {
-                lines = Files.lines(Paths.get(new File(getFilename()).toURI()), StandardCharsets.UTF_8);
-                lines.map(RefNodeFactory::toIRI)
+                Files.lines(Paths.get(new File(getFilename()).toURI()), StandardCharsets.UTF_8)
+                        .map(expandToFileURIIfNeeded())
+                        .map(RefNodeFactory::toIRI)
                         .map(iri -> toStatement(ctx.getActivity(), iri, HAS_VERSION, toBlank()))
                         .forEach(processor::on);
             } catch (IOException e) {
@@ -87,6 +88,12 @@ public class CmdTrack extends CmdActivity {
                 throw new RuntimeException(msg, e);
             }
         }
+    }
+
+    private Function<String, String> expandToFileURIIfNeeded() {
+        return locationCandidate -> PREFIX_SCHEMA_PATTERN.matcher(locationCandidate).matches()
+                ? locationCandidate
+                : new File(locationCandidate).toPath().toUri().toString();
     }
 
     @Override
