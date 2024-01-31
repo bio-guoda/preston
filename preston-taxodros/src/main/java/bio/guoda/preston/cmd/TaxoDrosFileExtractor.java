@@ -57,7 +57,6 @@ public class TaxoDrosFileExtractor extends ProcessorExtracting {
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
                     new TaxoDrosFileStreamHandler(this,
-                            new ContentHashDereferencer(TaxoDrosFileExtractor.this),
                             outputStream
                     )
             );

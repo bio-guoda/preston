@@ -119,10 +119,9 @@ public class TaxoDrosFileExtractorTest {
         JsonNode keywords = taxonNode.get("keywords");
         assertThat(keywords, is(notNullValue()));
         assertThat(keywords.isArray(), is(true));
-        assertThat(keywords.size(), is(3));
-        assertThat(keywords.get(0).asText(), is("histrioides"));
-        assertThat(keywords.get(1).asText(), is("distr$"));
-        assertThat(keywords.get(2).asText(), is("egypt"));
+        assertThat(keywords.size(), is(2));
+        assertThat(keywords.get(0).asText(), is("distr$"));
+        assertThat(keywords.get(1).asText(), is("egypt"));
     }
 
     @Test

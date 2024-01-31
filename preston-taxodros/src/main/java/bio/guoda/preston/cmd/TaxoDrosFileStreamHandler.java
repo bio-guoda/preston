@@ -39,16 +39,15 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String DROS_5 = "taxodros-dros5";
     public static final String DROS_3 = "taxodros-dros3";
     private static final String PREFIX_PUBLISHER = ".Z.";
+    public static final String KEYWORDS = "keywords";
+    public static final String TAXON_ID = "taxonId";
 
-    private final Dereferencer<InputStream> dereferencer;
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
 
     public TaxoDrosFileStreamHandler(ContentStreamHandler contentStreamHandler,
-                                     Dereferencer<InputStream> inputStreamDereferencer,
                                      OutputStream os) {
         this.contentStreamHandler = contentStreamHandler;
-        this.dereferencer = inputStreamDereferencer;
         this.outputStream = os;
     }
 
@@ -78,7 +77,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                 } else if (isType(objectNode, DROS_3)) {
                                     lineFinish = lineNumber - 1;
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
-                                    setValue(objectNode, "keywords", getAndResetCapture(textCapture));
+                                    setValue(objectNode, KEYWORDS, getAndResetCapture(textCapture));
                                 }
                                 IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), outputStream);
                                 IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
@@ -153,10 +152,11 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         append(objectNode, LOCALITIES, value);
                     } else if (lineStart > lineFinish) {
                         if (isType(objectNode, DROS_3)) {
-                            if (!objectNode.has("taxonId")) {
-                                setValue(objectNode, "taxonId", StringUtils.trim(line));
+                            if (objectNode.has(TAXON_ID)) {
+                                append(objectNode, KEYWORDS, line);
+                            } else {
+                                setValue(objectNode, TAXON_ID, StringUtils.trim(line));
                             }
-                            append(objectNode, "keywords", line);
                         } else {
                             append(textCapture, line);
                         }
