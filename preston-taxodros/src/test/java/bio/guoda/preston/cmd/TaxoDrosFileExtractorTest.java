@@ -109,6 +109,7 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L8"));
         assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("taxodros-dros3"));
         assertThat(taxonNode.get("id").asText(), is("abd el-halim et al., 2005"));
+        assertThat(taxonNode.get("taxonId").asText(), is("histrioides"));
         JsonNode localities = taxonNode.get("localities");
         assertThat(localities, is(notNullValue()));
         assertThat(localities.isArray(), is(true));

@@ -153,6 +153,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         append(objectNode, LOCALITIES, value);
                     } else if (lineStart > lineFinish) {
                         if (isType(objectNode, DROS_3)) {
+                            if (!objectNode.has("taxonId")) {
+                                setValue(objectNode, "taxonId", StringUtils.trim(line));
+                            }
                             append(objectNode, "keywords", line);
                         } else {
                             append(textCapture, line);
