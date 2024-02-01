@@ -5,7 +5,6 @@ import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.ContentHashDereferencer;
 import bio.guoda.preston.stream.ArchiveStreamHandler;
 import bio.guoda.preston.stream.CompressedStreamHandler;
 import bio.guoda.preston.stream.ContentStreamException;
@@ -19,10 +18,6 @@ import org.slf4j.LoggerFactory;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-
-import static bio.guoda.preston.RefNodeFactory.toIRI;
-import static bio.guoda.preston.RefNodeFactory.toStatement;
-import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 
 public class TaxoDrosFileExtractor extends ProcessorExtracting {
     private final Logger LOG = LoggerFactory.getLogger(TaxoDrosFileExtractor.class);
@@ -56,10 +51,7 @@ public class TaxoDrosFileExtractor extends ProcessorExtracting {
             this.handler = new ContentStreamHandlerImpl(
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
-                    new TaxoDrosFileStreamHandler(this,
-                            new ContentHashDereferencer(TaxoDrosFileExtractor.this),
-                            outputStream
-                    )
+                    new TaxoDrosFileStreamHandler(this, outputStream)
             );
         }
 

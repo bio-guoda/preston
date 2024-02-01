@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
@@ -37,7 +39,6 @@ public class TaxoDrosFileExtractorTest {
     @Test
     public void streamTaxoDrosToLineJson() throws IOException {
         assertAssumptions("DROS5.TEXT.example.txt");
-
     }
 
     @Test
@@ -79,7 +80,7 @@ public class TaxoDrosFileExtractorTest {
 
         assertThat(StringUtils.startsWith(".Z.Nijhoff", ".Z"), is(true));
 
-        assertThat(taxonNode.get("id").textValue(), is("collection, zmc"));
+        assertThat(taxonNode.get("referenceId").textValue(), is("collection, zmc"));
         assertThat(taxonNode.get("title").textValue(), is("Zoological Museum University of Copenhagen Universitetsparken 15 DK-2100 Copenhagen O Denmark"));
         assertThat(taxonNode.get("type").textValue(), is("collection"));
         assertThat(taxonNode.get("collection").textValue(), is("collection, zmc"));
@@ -108,7 +109,7 @@ public class TaxoDrosFileExtractorTest {
         JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L8"));
         assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("taxodros-dros3"));
-        assertThat(taxonNode.get("id").asText(), is("abd el-halim et al., 2005"));
+        assertThat(taxonNode.get("referenceId").asText(), is("abd el-halim et al., 2005"));
         JsonNode localities = taxonNode.get("localities");
         assertThat(localities, is(notNullValue()));
         assertThat(localities.isArray(), is(true));
@@ -122,6 +123,28 @@ public class TaxoDrosFileExtractorTest {
         assertThat(keywords.get(0).asText(), is("histrioides"));
         assertThat(keywords.get(1).asText(), is("distr$"));
         assertThat(keywords.get(2).asText(), is("egypt"));
+    }
+
+    @Test
+    public void streamSYSToLineJson() throws IOException {
+        String[] jsonObjects = getResource("SYS.TEXT.example.txt");
+        assertThat(jsonObjects.length, is(9));
+        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText()
+                , is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText()
+                , is("taxodros-syst"));
+        assertThat(taxonNode.get("taxonId").asText(), is("urn:lsid:taxodros.uzh.ch:taxon:abarista"));
+        assertThat(taxonNode.get(".KF").asText(), is("abarista"));
+        assertThat(taxonNode.get("genus").asText(), is("Cladochaeta"));
+        assertThat(taxonNode.get("family").asText(), is("Drosophilidae"));
+        assertThat(taxonNode.get("tribe").asText(), is("Cladochaetini"));
+        assertThat(taxonNode.get("acceptedName").asText(), is("abarista"));
+        assertThat(taxonNode.get("originalSpecificEpithet").asText(), is("abarista Grimaldi and Nguyen, 1999:254"));
+        assertThat(taxonNode.get("originalGenus").asText(), is("Cladochaeta"));
+        assertThat(taxonNode.get("accordingTo").asText(), is("grimaldi & nguyen, 1999"));
+        assertThat(taxonNode.get("referenceId").asText(), is("grimaldi & nguyen, 1999"));
+        assertThat(taxonNode.get(".ST").asText(), is(""));
     }
 
     @Test
@@ -160,7 +183,7 @@ public class TaxoDrosFileExtractorTest {
 
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L10"));
         assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("taxodros-dros5"));
-        assertThat(taxonNode.get("id").asText(), is("abd el-halim et al., 2005"));
+        assertThat(taxonNode.get("referenceId").asText(), is("abd el-halim et al., 2005"));
         assertThat(taxonNode.get("authors").asText(), is("Abd El-Halim, A.S., Mostafa, A.A., & Allam, K.A.M.a.,"));
         assertThat(taxonNode.get("title").asText(), is("Dipterous flies species and their densities in fourteen Egyptian governorates."));
         assertThat(taxonNode.get("journal").asText(), is("J. Egypt. Soc. Parasitol."));
