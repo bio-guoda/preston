@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
-import org.eclipse.rdf4j.common.text.StringUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -97,7 +95,6 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                 } else if (isType(objectNode, DROS_3)) {
                                     lineFinish = lineNumber - 1;
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
-                                    setValue(objectNode, "keywords", getAndResetCapture(textCapture));
                                 }
                                 writeRecord(foundAtLeastOne, objectNode);
                                 lineFinish = -1;
@@ -188,6 +185,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     }
 
     private void handleTaxonRecord(AtomicBoolean foundAtLeastOne, String iriString, ObjectNode objectNode, int lineNumber, String line) throws IOException {
+        setOriginReference(iriString, lineNumber, lineNumber, objectNode);
         setType(objectNode, SYS);
         String[] row = StringUtils.split(line, '\t');
         for (String cellRaw : row) {
@@ -206,9 +204,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                     setValue(objectNode, "referenceId", value);
                 }
             }
-
         }
-        setOriginReference(iriString, lineNumber, lineNumber, objectNode);
         writeRecord(foundAtLeastOne, objectNode);
     }
 
