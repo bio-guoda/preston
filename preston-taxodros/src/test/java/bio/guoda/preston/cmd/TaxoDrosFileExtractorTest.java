@@ -145,6 +145,7 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("accordingTo").asText(), is("grimaldi & nguyen, 1999"));
         assertThat(taxonNode.get("referenceId").asText(), is("grimaldi & nguyen, 1999"));
         assertThat(taxonNode.get(".ST").asText(), is(""));
+        assertThat(taxonNode.get("remarks").asText(), is(""));
     }
 
     @Test

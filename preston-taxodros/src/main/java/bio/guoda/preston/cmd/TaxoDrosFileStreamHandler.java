@@ -44,6 +44,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         put(".SR", "speciessubgroup");
         put(".SC", "speciescomplex");
         put(".SS", "subspecies");
+        put(".CO", "remarks");
 
     }};
     private static final String PREFIX_AUTHOR = ".A ";
