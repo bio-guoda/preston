@@ -192,12 +192,12 @@ public class TaxoDrosFileExtractorTest {
         JsonNode creators = taxonNode.get("creators");
         assertThat(creators.isArray(), is(true));
         assertThat(creators.size(), is(3));
-        assertThat(creators.get(0).get("givenName").asText(), is("A.S."));
-        assertThat(creators.get(0).get("familyName").asText(), is("Abd El-Halim"));
-        assertThat(creators.get(1).get("givenName").asText(), is("A.A."));
-        assertThat(creators.get(1).get("familyName").asText(), is("Mostafa"));
-        assertThat(creators.get(2).get("givenName").asText(), is("K.A.M.a."));
-        assertThat(creators.get(2).get("familyName").asText(), is("Allam"));
+        assertThat(creators.get(0).get("given_name").asText(), is("A.S."));
+        assertThat(creators.get(0).get("family_name").asText(), is("Abd El-Halim"));
+        assertThat(creators.get(1).get("given_name").asText(), is("A.A."));
+        assertThat(creators.get(1).get("family_name").asText(), is("Mostafa"));
+        assertThat(creators.get(2).get("given_name").asText(), is("K.A.M.a."));
+        assertThat(creators.get(2).get("family_name").asText(), is("Allam"));
         assertThat(taxonNode.get("title").asText(), is("Dipterous flies species and their densities in fourteen Egyptian governorates."));
         assertThat(taxonNode.get("journal_title").asText(), is("J. Egypt. Soc. Parasitol."));
         assertThat(taxonNode.get("journal_volume").asText(), is("35"));

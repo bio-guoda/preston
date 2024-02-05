@@ -126,9 +126,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                             String author = StringUtils.trim(StringUtils.replace(authors[i], "&", ""));
                             if (i % 2 == 0) {
                                 creator = new ObjectMapper().createObjectNode();
-                                creator.put("familyName", author);
+                                creator.put("family_name", author);
                             } else {
-                                creator.put("givenName", author);
+                                creator.put("given_name", author);
                                 creators.add(creator);
                             }
                         }
