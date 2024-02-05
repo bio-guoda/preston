@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeFactory.nowDateTimeLiteral;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static junit.framework.TestCase.assertNull;
@@ -67,8 +68,10 @@ public class TaxoDrosFileExtractorTest {
         assertThat(StringUtils.startsWith(".Z.Nijhoff", ".Z"), is(true));
 
         assertThat(taxonNode.get("title").textValue(), is("Catalogue of the described Diptera from South Asia. 222 pp."));
-        assertThat(taxonNode.get("type").textValue(), is("book"));
-        assertThat(taxonNode.get("publisher").textValue(), is("Nijhoff"));
+        assertThat(taxonNode.get("upload_type").textValue(), is("publication"));
+        assertThat(taxonNode.get("upload_type").textValue(), is("publication"));
+        assertThat(taxonNode.get("publication_type").textValue(), is("book"));
+        assertThat(taxonNode.get("imprint_publisher").textValue(), is("Nijhoff"));
     }
 
     @Test
@@ -82,7 +85,8 @@ public class TaxoDrosFileExtractorTest {
 
         assertThat(taxonNode.get("referenceId").textValue(), is("collection, zmc"));
         assertThat(taxonNode.get("title").textValue(), is("Zoological Museum University of Copenhagen Universitetsparken 15 DK-2100 Copenhagen O Denmark"));
-        assertThat(taxonNode.get("type").textValue(), is("collection"));
+        assertThat(taxonNode.get("upload_type").textValue(), is("publication"));
+        assertThat(taxonNode.get("publication_type").textValue(), is("other"));
         assertThat(taxonNode.get("collection").textValue(), is("collection, zmc"));
     }
 
@@ -110,12 +114,12 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L8"));
         assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("taxodros-dros3"));
         assertThat(taxonNode.get("referenceId").asText(), is("abd el-halim et al., 2005"));
-        JsonNode localities = taxonNode.get("localities");
+        JsonNode localities = taxonNode.get("locations");
         assertThat(localities, is(notNullValue()));
         assertThat(localities.isArray(), is(true));
         assertThat(localities.size(), is(2));
-        assertThat(localities.get(0).asText(), is("kena"));
-        assertThat(localities.get(1).asText(), is("sinai"));
+        assertThat(localities.get(0).get("place").asText(), is("kena"));
+        assertThat(localities.get(1).get("place").asText(), is("sinai"));
         JsonNode keywords = taxonNode.get("keywords");
         assertThat(keywords, is(notNullValue()));
         assertThat(keywords.isArray(), is(true));
@@ -153,9 +157,9 @@ public class TaxoDrosFileExtractorTest {
         ObjectNode ref = new ObjectMapper().createObjectNode();
         TaxoDrosFileStreamHandler.enrichWithJournalInfo(ref, "32(1981):107");
 
-        assertThat(ref.get("pages").asText(), is("107"));
-        assertThat(ref.get("volume").asText(), is("32"));
-        assertThat(ref.get("number").asText(), is("1981"));
+        assertThat(ref.get("journal_pages").asText(), is("107"));
+        assertThat(ref.get("journal_volume").asText(), is("32"));
+        assertThat(ref.get("journal_issue").asText(), is("1981"));
     }
 
     @Test
@@ -163,8 +167,8 @@ public class TaxoDrosFileExtractorTest {
         ObjectNode ref = new ObjectMapper().createObjectNode();
         TaxoDrosFileStreamHandler.enrichWithJournalInfo(ref, "32:107");
 
-        assertThat(ref.get("pages").asText(), is("107"));
-        assertThat(ref.get("volume").asText(), is("32"));
+        assertThat(ref.get("journal_pages").asText(), is("107"));
+        assertThat(ref.get("journal_volume").asText(), is("32"));
     }
 
     @Test
@@ -172,8 +176,8 @@ public class TaxoDrosFileExtractorTest {
         ObjectNode ref = new ObjectMapper().createObjectNode();
         TaxoDrosFileStreamHandler.enrichWithJournalInfo(ref, "35:351-362.");
 
-        assertThat(ref.get("pages").asText(), is("351-362"));
-        assertThat(ref.get("volume").asText(), is("35"));
+        assertThat(ref.get("journal_pages").asText(), is("351-362"));
+        assertThat(ref.get("journal_volume").asText(), is("35"));
     }
 
     private void assertAssumptions(String testResource) throws IOException {
@@ -185,15 +189,24 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L10"));
         assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("taxodros-dros5"));
         assertThat(taxonNode.get("referenceId").asText(), is("abd el-halim et al., 2005"));
-        assertThat(taxonNode.get("authors").asText(), is("Abd El-Halim, A.S., Mostafa, A.A., & Allam, K.A.M.a.,"));
+        JsonNode creators = taxonNode.get("creators");
+        assertThat(creators.isArray(), is(true));
+        assertThat(creators.size(), is(3));
+        assertThat(creators.get(0).get("givenName").asText(), is("A.S."));
+        assertThat(creators.get(0).get("familyName").asText(), is("Abd El-Halim"));
+        assertThat(creators.get(1).get("givenName").asText(), is("A.A."));
+        assertThat(creators.get(1).get("familyName").asText(), is("Mostafa"));
+        assertThat(creators.get(2).get("givenName").asText(), is("K.A.M.a."));
+        assertThat(creators.get(2).get("familyName").asText(), is("Allam"));
         assertThat(taxonNode.get("title").asText(), is("Dipterous flies species and their densities in fourteen Egyptian governorates."));
-        assertThat(taxonNode.get("journal").asText(), is("J. Egypt. Soc. Parasitol."));
-        assertThat(taxonNode.get("volume").asText(), is("35"));
-        assertThat(taxonNode.get("number"), is(nullValue()));
-        assertThat(taxonNode.get("pages").asText(), is("351-362"));
-        assertThat(taxonNode.get("year").asText(), is("2005"));
+        assertThat(taxonNode.get("journal_title").asText(), is("J. Egypt. Soc. Parasitol."));
+        assertThat(taxonNode.get("journal_volume").asText(), is("35"));
+        assertThat(taxonNode.get("journal_issue"), is(nullValue()));
+        assertThat(taxonNode.get("journal_pages").asText(), is("351-362"));
+        assertThat(taxonNode.get("publication_year").asText(), is("2005"));
+        assertThat(taxonNode.get("access_right").asText(), is("restricted"));
         assertThat(taxonNode.get("method").asText(), is("ocr"));
-        assertThat(taxonNode.get("type").textValue(), is("article"));
+        assertThat(taxonNode.get("publication_type").textValue(), is("article"));
         assertThat(taxonNode.get("filename").asText(), is("Abd El-Halim et al., 2005M.pdf"));
     }
 

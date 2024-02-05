@@ -53,13 +53,17 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     private static final String PREFIX_METHOD_DIGITIZATION = ".K ";
     private static final String PREFIX_JOURNAL = ".Z ";
     private static final String PREFIX_FILENAME = ".P ";
-    public static final String LOCALITIES = "localities";
+    public static final String LOCATIONS = "locations";
     public static final String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
     public static final String DROS_5 = "taxodros-dros5";
     public static final String DROS_3 = "taxodros-dros3";
     public static final String SYS = "taxodros-syst";
     private static final String PREFIX_PUBLISHER = ".Z.";
     public static final String REFERENCE_ID = "referenceId";
+    public static final String JOURNAL_ISSUE = "journal_issue";
+    public static final String JOURNAL_PAGES = "journal_pages";
+    public static final String JOURNAL_VOLUME = "journal_volume";
+    public static final String PUBLICATION_TYPE = "publication_type";
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
@@ -92,6 +96,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                 if (isType(objectNode, DROS_5)) {
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
                                     setValue(objectNode, "filename", getAndResetCapture(textCapture));
+                                    setValue(objectNode, "upload_type", "publication");
                                     setType(objectNode, DROS_5);
                                 } else if (isType(objectNode, DROS_3)) {
                                     lineFinish = lineNumber - 1;
@@ -113,40 +118,61 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         append(textCapture, line, PREFIX_AUTHOR);
                     } else if (StringUtils.startsWith(line, PREFIX_YEAR)) {
                         setTypeDROS5(objectNode);
-                        setValue(objectNode, "authors", getAndResetCapture(textCapture));
+                        String andResetCapture = getAndResetCapture(textCapture);
+                        String[] authors = StringUtils.split(andResetCapture, ",");
+                        ObjectNode creator = null;
+                        ArrayNode creators = new ObjectMapper().createArrayNode();
+                        for (int i = 0; i < authors.length; i++) {
+                            String author = StringUtils.trim(StringUtils.replace(authors[i], "&", ""));
+                            if (i % 2 == 0) {
+                                creator = new ObjectMapper().createObjectNode();
+                                creator.put("familyName", author);
+                            } else {
+                                creator.put("givenName", author);
+                                creators.add(creator);
+                            }
+                        }
+                        objectNode.set("creators", creators);
                         append(textCapture, line, PREFIX_YEAR);
                     } else if (StringUtils.startsWith(line, PREFIX_TITLE)) {
                         setTypeDROS5(objectNode);
-                        setValue(objectNode, "year", getAndResetCapture(textCapture));
+                        String publicationYear = getAndResetCapture(textCapture);
+                        if (StringUtils.isNumeric(publicationYear)) {
+                            if (publicationYear.startsWith("2") || publicationYear.length() < 4) {
+                                setValue(objectNode, "access_right", "restricted");
+                            }
+                            setValue(objectNode, "publication_year", publicationYear);
+                        }
+
                         append(textCapture, line, PREFIX_TITLE);
                     } else if (StringUtils.startsWith(line, PREFIX_PUBLISHER)) {
                         setTypeDROS5(objectNode);
                         if (objectNode.has(REFERENCE_ID)
                                 && StringUtils.containsIgnoreCase(objectNode.get(REFERENCE_ID).asText(), "collection")) {
-                            setValue(objectNode, "type", "collection");
+                            setValue(objectNode, PUBLICATION_TYPE, "other");
                             setValue(objectNode, "collection", objectNode.get(REFERENCE_ID).asText());
                         } else {
-                            setValue(objectNode, "type", "book");
+                            setValue(objectNode, PUBLICATION_TYPE, "book");
                         }
                         setValue(objectNode, "title", getAndResetCapture(textCapture));
                         append(textCapture, line, PREFIX_PUBLISHER);
                     } else if (StringUtils.startsWith(line, PREFIX_JOURNAL)) {
                         setTypeDROS5(objectNode);
                         setValue(objectNode, "title", getAndResetCapture(textCapture));
-                        setValue(objectNode, "type", "article");
+                        setValue(objectNode, PUBLICATION_TYPE, "article");
                         append(textCapture, line, PREFIX_JOURNAL);
                     } else if (StringUtils.startsWith(line, PREFIX_METHOD_DIGITIZATION)) {
                         setTypeDROS5(objectNode);
                         if (isArticle(objectNode)) {
                             String journalString = getAndResetCapture(textCapture);
                             String[] split = StringUtils.split(journalString, ",");
-                            setValue(objectNode, "journal", split[0]);
+                            setValue(objectNode, "journal_title", split[0]);
                             if (split.length > 1) {
                                 String remainder = StringUtils.substring(journalString, split[0].length() + 1);
                                 enrichWithJournalInfo(objectNode, remainder);
                             }
                         } else {
-                            setValue(objectNode, "publisher", getAndResetCapture(textCapture));
+                            setValue(objectNode, "imprint_publisher", getAndResetCapture(textCapture));
                         }
                         append(textCapture, line, PREFIX_METHOD_DIGITIZATION);
                     } else if (StringUtils.startsWith(line, PREFIX_FILENAME)) {
@@ -165,13 +191,12 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                     } else if (StringUtils.startsWith(line, "=e=")) {
                         setIdIfMissing(textCapture, objectNode);
                         String value = getValueWithLinePrefix(line, "=e=");
-                        append(objectNode, LOCALITIES, value);
+                        appendLocation(objectNode, LOCATIONS, value);
                     } else if (StringUtils.startsWith(line, ".KF=")) {
                         handleTaxonRecord(foundAtLeastOne, iriString, objectNode, lineNumber, line);
-                    }
-                      else if (lineStart > lineFinish) {
+                    } else if (lineStart > lineFinish) {
                         if (isType(objectNode, DROS_3)) {
-                            append(objectNode, "keywords", line);
+                            appendKeyword(objectNode, "keywords", line);
                         } else {
                             append(textCapture, line);
                         }
@@ -217,18 +242,18 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     }
 
     private boolean isArticle(ObjectNode objectNode) {
-        return objectNode.has("type") && StringUtils.equals("article", objectNode.get("type").textValue());
+        return objectNode.has(PUBLICATION_TYPE) && StringUtils.equals("article", objectNode.get(PUBLICATION_TYPE).textValue());
     }
 
     public static void enrichWithJournalInfo(ObjectNode objectNode, String remainder) {
-        Pattern articleCoordinates = Pattern.compile("(?<volume>[^\\(:]+){0,1}(?<number>\\([^)]*\\)){0,1}:(?<pages>[^.]*){0,1}([ .]*)$");
+        Pattern articleCoordinates = Pattern.compile("(?<volume>[^\\(:]+){0,1}(?<issue>\\([^)]*\\)){0,1}:(?<pages>[^.]*){0,1}([ .]*)$");
         Matcher matcher = articleCoordinates.matcher(remainder);
         if (matcher.matches()) {
-            setValue(objectNode, "volume", StringUtils.trim(matcher.group("volume")));
-            setValue(objectNode, "pages", matcher.group("pages"));
-            String number = matcher.group("number");
-            if (StringUtils.isNotBlank(number)) {
-                setValue(objectNode, "number", StringUtils.substring(number, 1, number.length() - 1));
+            setValue(objectNode, JOURNAL_VOLUME, StringUtils.trim(matcher.group("volume")));
+            setValue(objectNode, JOURNAL_PAGES, matcher.group("pages"));
+            String issue = matcher.group("issue");
+            if (StringUtils.isNotBlank(issue)) {
+                setValue(objectNode, JOURNAL_ISSUE, StringUtils.substring(issue, 1, issue.length() - 1));
             }
         }
     }
@@ -241,12 +266,22 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         setType(objectNode, "taxodros-dros5");
     }
 
-    private void append(ObjectNode objectNode, String key, String value) {
-        ArrayNode localities = objectNode.has(key)
+    private void appendLocation(ObjectNode objectNode, String key, String value) {
+        ArrayNode locations = objectNode.has(key)
                 ? (ArrayNode) objectNode.get(key)
                 : new ObjectMapper().createArrayNode();
-        localities.add(value);
-        objectNode.set(key, localities);
+        ObjectNode location = new ObjectMapper().createObjectNode();
+        location.put("place", value);
+        locations.add(location);
+        objectNode.set(key, locations);
+    }
+
+    private void appendKeyword(ObjectNode objectNode, String key, String value) {
+        ArrayNode keywords = objectNode.has(key)
+                ? (ArrayNode) objectNode.get(key)
+                : new ObjectMapper().createArrayNode();
+        keywords.add(value);
+        objectNode.set(key, keywords);
     }
 
     private void setOriginReference(String iriString, int lineStart, int lineFinish, ObjectNode objectNode) {
