@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -9,7 +10,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -21,11 +21,8 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.TreeMap;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
-import static bio.guoda.preston.RefNodeFactory.nowDateTimeLiteral;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static junit.framework.TestCase.assertNull;
@@ -52,7 +49,8 @@ public class TaxoDrosFileExtractorTest {
         String[] jsonObjects = getResource("DROS5.TEXT.doi.txt");
         assertThat(jsonObjects.length, is(1));
 
-        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+
 
         assertThat(taxonNode.has("doi"), is(true));
         assertThat(taxonNode.get("doi").textValue(), is("10.7868/S0016675814060150"));
@@ -63,12 +61,11 @@ public class TaxoDrosFileExtractorTest {
         String[] jsonObjects = getResource("DROS5.TEXT.book.txt");
         assertThat(jsonObjects.length, is(1));
 
-        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
 
         assertThat(StringUtils.startsWith(".Z.Nijhoff", ".Z"), is(true));
 
         assertThat(taxonNode.get("title").textValue(), is("Catalogue of the described Diptera from South Asia. 222 pp."));
-        assertThat(taxonNode.get("upload_type").textValue(), is("publication"));
         assertThat(taxonNode.get("upload_type").textValue(), is("publication"));
         assertThat(taxonNode.get("publication_type").textValue(), is("book"));
         assertThat(taxonNode.get("imprint_publisher").textValue(), is("Nijhoff"));
@@ -79,7 +76,7 @@ public class TaxoDrosFileExtractorTest {
         String[] jsonObjects = getResource("DROS5.TEXT.collection.txt");
         assertThat(jsonObjects.length, is(1));
 
-        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
 
         assertThat(StringUtils.startsWith(".Z.Nijhoff", ".Z"), is(true));
 
@@ -95,7 +92,7 @@ public class TaxoDrosFileExtractorTest {
         String[] jsonObjects = getResource("DROS5.TEXT.doi.lower.txt");
         assertThat(jsonObjects.length, is(1));
 
-        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
 
         assertThat(taxonNode.has("doi"), is(true));
         assertThat(taxonNode.get("doi").textValue(), is("10.7868/S0016675814060150"));
@@ -110,7 +107,7 @@ public class TaxoDrosFileExtractorTest {
     public void streamTaxoDros3ToLineJson() throws IOException {
         String[] jsonObjects = getResource("DROS3.TEXT.example.txt");
         assertThat(jsonObjects.length, is(3));
-        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L8"));
         assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("taxodros-dros3"));
         assertThat(taxonNode.get("referenceId").asText(), is("abd el-halim et al., 2005"));
@@ -133,7 +130,7 @@ public class TaxoDrosFileExtractorTest {
     public void streamSYSToLineJson() throws IOException {
         String[] jsonObjects = getResource("SYS.TEXT.example.txt");
         assertThat(jsonObjects.length, is(9));
-        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText()
                 , is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1"));
         assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText()
@@ -150,6 +147,11 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("referenceId").asText(), is("grimaldi & nguyen, 1999"));
         assertThat(taxonNode.get(".ST").asText(), is(""));
         assertThat(taxonNode.get("remarks").asText(), is(""));
+    }
+
+    private JsonNode unwrapMetadata(String jsonObject) throws JsonProcessingException {
+        JsonNode rootNode = new ObjectMapper().readTree(jsonObject);
+        return rootNode.get("metadata");
     }
 
     @Test
@@ -184,7 +186,7 @@ public class TaxoDrosFileExtractorTest {
         String[] jsonObjects = getResource(testResource);
         assertThat(jsonObjects.length, is(3));
 
-        JsonNode taxonNode = new ObjectMapper().readTree(jsonObjects[0]);
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
 
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L10"));
         assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("taxodros-dros5"));
@@ -198,12 +200,9 @@ public class TaxoDrosFileExtractorTest {
         JsonNode creators = taxonNode.get("creators");
         assertThat(creators.isArray(), is(true));
         assertThat(creators.size(), is(3));
-        assertThat(creators.get(0).get("given_name").asText(), is("A.S."));
-        assertThat(creators.get(0).get("family_name").asText(), is("Abd El-Halim"));
-        assertThat(creators.get(1).get("given_name").asText(), is("A.A."));
-        assertThat(creators.get(1).get("family_name").asText(), is("Mostafa"));
-        assertThat(creators.get(2).get("given_name").asText(), is("K.A.M.a."));
-        assertThat(creators.get(2).get("family_name").asText(), is("Allam"));
+        assertThat(creators.get(0).get("name").asText(), is("Abd El-Halim, A.S."));
+        assertThat(creators.get(1).get("name").asText(), is("Mostafa, A.A."));
+        assertThat(creators.get(2).get("name").asText(), is("Allam, K.A.M.a."));
         assertThat(taxonNode.get("title").asText(), is("Dipterous flies species and their densities in fourteen Egyptian governorates."));
         assertThat(taxonNode.get("journal_title").asText(), is("J. Egypt. Soc. Parasitol."));
         assertThat(taxonNode.get("journal_volume").asText(), is("35"));

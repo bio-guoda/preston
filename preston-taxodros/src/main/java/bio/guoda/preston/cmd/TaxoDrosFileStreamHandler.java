@@ -63,7 +63,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String JOURNAL_ISSUE = "journal_issue";
     public static final String JOURNAL_PAGES = "journal_pages";
     public static final String JOURNAL_VOLUME = "journal_volume";
+    public static final String JOURNAL_TITLE = "journal_title";
     public static final String PUBLICATION_TYPE = "publication_type";
+    public static final String IMPRINT_PUBLISHER = "imprint_publisher";
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
@@ -126,14 +128,18 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         String[] authors = StringUtils.split(andResetCapture, ",");
                         ObjectNode creator = null;
                         ArrayNode creators = new ObjectMapper().createArrayNode();
+                        StringBuilder creatorName = new StringBuilder();
                         for (int i = 0; i < authors.length; i++) {
                             String author = StringUtils.trim(StringUtils.replace(authors[i], "&", ""));
                             if (i % 2 == 0) {
-                                creator = new ObjectMapper().createObjectNode();
-                                creator.put("family_name", author);
+                                creatorName.append(author);
                             } else {
-                                creator.put("given_name", author);
+                                creatorName.append(", ");
+                                creatorName.append(author);
+                                creator = new ObjectMapper().createObjectNode();
+                                creator.put("name", creatorName.toString());
                                 creators.add(creator);
+                                creatorName = new StringBuilder();
                             }
                         }
                         objectNode.set("creators", creators);
@@ -170,13 +176,13 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         if (isArticle(objectNode)) {
                             String journalString = getAndResetCapture(textCapture);
                             String[] split = StringUtils.split(journalString, ",");
-                            setValue(objectNode, "journal_title", split[0]);
+                            setValue(objectNode, JOURNAL_TITLE, split[0]);
                             if (split.length > 1) {
                                 String remainder = StringUtils.substring(journalString, split[0].length() + 1);
                                 enrichWithJournalInfo(objectNode, remainder);
                             }
                         } else {
-                            setValue(objectNode, "imprint_publisher", getAndResetCapture(textCapture));
+                            setValue(objectNode, IMPRINT_PUBLISHER, getAndResetCapture(textCapture));
                         }
                         append(textCapture, line, PREFIX_METHOD_DIGITIZATION);
                     } else if (StringUtils.startsWith(line, PREFIX_FILENAME)) {
@@ -239,7 +245,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     }
 
     private void writeRecord(AtomicBoolean foundAtLeastOne, ObjectNode objectNode) throws IOException {
-        IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), outputStream);
+        ObjectNode metadata = new ObjectMapper().createObjectNode();
+        metadata.set("metadata", objectNode);
+        IOUtils.copy(IOUtils.toInputStream(metadata.toString(), StandardCharsets.UTF_8), outputStream);
         IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
         objectNode.removeAll();
         foundAtLeastOne.set(true);
