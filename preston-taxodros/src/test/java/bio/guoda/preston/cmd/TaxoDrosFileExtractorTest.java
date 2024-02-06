@@ -208,7 +208,7 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("journal_volume").asText(), is("35"));
         assertThat(taxonNode.get("journal_issue"), is(nullValue()));
         assertThat(taxonNode.get("journal_pages").asText(), is("351-362"));
-        assertThat(taxonNode.get("publication_year").asText(), is("2005"));
+        assertThat(taxonNode.get("publication_date").asText(), is("2005"));
         assertThat(taxonNode.get("access_right").asText(), is("restricted"));
         assertThat(taxonNode.get("method").asText(), is("ocr"));
         assertThat(taxonNode.get("publication_type").textValue(), is("article"));

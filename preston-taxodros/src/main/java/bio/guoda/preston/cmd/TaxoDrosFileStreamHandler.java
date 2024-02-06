@@ -66,6 +66,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String JOURNAL_TITLE = "journal_title";
     public static final String PUBLICATION_TYPE = "publication_type";
     public static final String IMPRINT_PUBLISHER = "imprint_publisher";
+    public static final String PUBLICATION_DATE = "publication_date";
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
@@ -151,7 +152,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                             if (publicationYear.startsWith("2") || publicationYear.length() < 4) {
                                 setValue(objectNode, "access_right", "restricted");
                             }
-                            setValue(objectNode, "publication_year", publicationYear);
+                            setValue(objectNode, PUBLICATION_DATE, publicationYear);
                         }
 
                         append(textCapture, line, PREFIX_TITLE);
