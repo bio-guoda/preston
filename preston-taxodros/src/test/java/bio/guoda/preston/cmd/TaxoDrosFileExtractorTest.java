@@ -189,6 +189,12 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L10"));
         assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("taxodros-dros5"));
         assertThat(taxonNode.get("referenceId").asText(), is("abd el-halim et al., 2005"));
+        JsonNode communities = taxonNode.get("communities");
+        assertThat(communities.isArray(), is(true));
+        assertThat(communities.size(), is(2));
+        assertThat(communities.get(0).asText(), is("taxodros"));
+        assertThat(communities.get(1).asText(), is("biosyslit"));
+
         JsonNode creators = taxonNode.get("creators");
         assertThat(creators.isArray(), is(true));
         assertThat(creators.size(), is(3));

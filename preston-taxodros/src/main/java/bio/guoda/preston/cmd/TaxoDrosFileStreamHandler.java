@@ -97,6 +97,10 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
                                     setValue(objectNode, "filename", getAndResetCapture(textCapture));
                                     setValue(objectNode, "upload_type", "publication");
+                                    ArrayNode communities = new ObjectMapper().createArrayNode();
+                                    communities.add("taxodros");
+                                    communities.add("biosyslit");
+                                    objectNode.set("communities", communities);
                                     setType(objectNode, DROS_5);
                                 } else if (isType(objectNode, DROS_3)) {
                                     lineFinish = lineNumber - 1;
