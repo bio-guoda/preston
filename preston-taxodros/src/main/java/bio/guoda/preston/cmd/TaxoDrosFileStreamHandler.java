@@ -69,8 +69,13 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String IMPRINT_PUBLISHER = "imprint_publisher";
     public static final String PUBLICATION_DATE = "publication_date";
 
+    public static final String TAXODROS_DATA_DOI = "10.5281/zenodo.10593902";
+    public static final String TAXODROS_DATA_VERSION_SHA256 = "hash://sha256/e05466f33c755f11bd1c2fa30eef2388bf24ff7989931bae1426daff0200af19";
+    public static final String TAXODROS_DATA_VERSION_MD5 = "hash://md5/4fa9eeed1c8cff2490483a48c718df02";
+
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
+    public static final String RELATED_IDENTIFIERS = "related_identifiers";
 
     public TaxoDrosFileStreamHandler(ContentStreamHandler contentStreamHandler,
                                      OutputStream os) {
@@ -130,7 +135,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                     } else if (StringUtils.startsWith(line, PREFIX_AUTHOR)) {
                         setTypeDROS5(objectNode);
                         setValue(objectNode, REFERENCE_ID, getAndResetCapture(textCapture));
-                        append(textCapture, line, PREFIX_AUTHOR);
+                        appendIdentifier(textCapture, line, PREFIX_AUTHOR);
                     } else if (StringUtils.startsWith(line, PREFIX_YEAR)) {
                         setTypeDROS5(objectNode);
                         String andResetCapture = getAndResetCapture(textCapture);
@@ -152,7 +157,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                             }
                         }
                         objectNode.set("creators", creators);
-                        append(textCapture, line, PREFIX_YEAR);
+                        appendIdentifier(textCapture, line, PREFIX_YEAR);
                     } else if (StringUtils.startsWith(line, PREFIX_TITLE)) {
                         setTypeDROS5(objectNode);
                         String publicationYear = getAndResetCapture(textCapture);
@@ -163,7 +168,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                             setValue(objectNode, PUBLICATION_DATE, publicationYear);
                         }
 
-                        append(textCapture, line, PREFIX_TITLE);
+                        appendIdentifier(textCapture, line, PREFIX_TITLE);
                     } else if (StringUtils.startsWith(line, PREFIX_PUBLISHER)) {
                         setTypeDROS5(objectNode);
                         if (objectNode.has(REFERENCE_ID)
@@ -174,12 +179,12 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                             setValue(objectNode, PUBLICATION_TYPE, "book");
                         }
                         setValue(objectNode, "title", getAndResetCapture(textCapture));
-                        append(textCapture, line, PREFIX_PUBLISHER);
+                        appendIdentifier(textCapture, line, PREFIX_PUBLISHER);
                     } else if (StringUtils.startsWith(line, PREFIX_JOURNAL)) {
                         setTypeDROS5(objectNode);
                         setValue(objectNode, "title", getAndResetCapture(textCapture));
                         setValue(objectNode, PUBLICATION_TYPE, "article");
-                        append(textCapture, line, PREFIX_JOURNAL);
+                        appendIdentifier(textCapture, line, PREFIX_JOURNAL);
                     } else if (StringUtils.startsWith(line, PREFIX_METHOD_DIGITIZATION)) {
                         setTypeDROS5(objectNode);
                         if (isArticle(objectNode)) {
@@ -193,7 +198,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         } else {
                             setValue(objectNode, IMPRINT_PUBLISHER, getAndResetCapture(textCapture));
                         }
-                        append(textCapture, line, PREFIX_METHOD_DIGITIZATION);
+                        appendIdentifier(textCapture, line, PREFIX_METHOD_DIGITIZATION);
                     } else if (StringUtils.startsWith(line, PREFIX_FILENAME)) {
                         setTypeDROS5(objectNode);
                         String methodText = getAndResetCapture(textCapture);
@@ -202,7 +207,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                             setValue(objectNode, "doi", matcher.group("doi"));
                         }
                         setValue(objectNode, "method", methodText);
-                        append(textCapture, line, PREFIX_FILENAME);
+                        appendIdentifier(textCapture, line, PREFIX_FILENAME);
                         lineFinish = lineNumber;
                     } else if (StringUtils.startsWith(line, ".DESC;")) {
                         setIdIfMissing(textCapture, objectNode);
@@ -215,9 +220,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         handleTaxonRecord(foundAtLeastOne, iriString, objectNode, lineNumber, line);
                     } else if (lineStart > lineFinish) {
                         if (isType(objectNode, DROS_3)) {
-                            appendKeyword(objectNode, "keywords", line);
+                            append(objectNode, "keywords", line);
                         } else {
-                            append(textCapture, line);
+                            appendIdentifier(textCapture, line);
                         }
                     }
                 }
@@ -297,7 +302,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         objectNode.set(key, locations);
     }
 
-    private void appendKeyword(ObjectNode objectNode, String key, String value) {
+    private void append(ObjectNode objectNode, String key, String value) {
         ArrayNode keywords = objectNode.has(key)
                 ? (ArrayNode) objectNode.get(key)
                 : new ObjectMapper().createArrayNode();
@@ -309,7 +314,23 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         String suffix = lineFinish > lineStart
                 ? "-" + "L" + lineFinish
                 : "";
-        setValue(objectNode, "http://www.w3.org/ns/prov#wasDerivedFrom", "line:" + iriString + "!/L" + lineStart + suffix);
+        String value = "line:" + iriString + "!/L" + lineStart + suffix;
+        setValue(objectNode, "http://www.w3.org/ns/prov#wasDerivedFrom", value);
+        appendIdentifier(objectNode, "isDerivedFrom", "https://linker.bio" + value);
+        appendIdentifier(objectNode, "isDerivedFrom", TAXODROS_DATA_DOI);
+        appendIdentifier(objectNode, "isPartOf", "https://www.taxodros.uzh.ch/");
+        append(objectNode, "references", "Bächli, G. (2024). TaxoDros - The Database on Taxonomy of Drosophilidae " + TAXODROS_DATA_VERSION_MD5 + " " + TAXODROS_DATA_VERSION_SHA256 + " [Data set]. Zenodo. " + "https://doi.org/" + TAXODROS_DATA_DOI);
+    }
+
+    private void appendIdentifier(ObjectNode objectNode, String relationType, String value) {
+        ArrayNode relatedIdentifiers = objectNode.has(TaxoDrosFileStreamHandler.RELATED_IDENTIFIERS) && objectNode.get(TaxoDrosFileStreamHandler.RELATED_IDENTIFIERS).isArray()
+                ? (ArrayNode) objectNode.get(TaxoDrosFileStreamHandler.RELATED_IDENTIFIERS)
+                : new ObjectMapper().createArrayNode();
+        relatedIdentifiers.add(new ObjectMapper().createObjectNode()
+                .put("relation", relationType)
+                .put("identifier", value)
+        );
+        objectNode.set(TaxoDrosFileStreamHandler.RELATED_IDENTIFIERS, relatedIdentifiers);
     }
 
     private void setType(ObjectNode objectNode, String type) {
@@ -327,14 +348,14 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         }
     }
 
-    private void append(AtomicReference<StringBuilder> textCapture, String line, String prefix) {
+    private void appendIdentifier(AtomicReference<StringBuilder> textCapture, String line, String prefix) {
         String value = getValueWithLinePrefix(line, prefix);
         if (StringUtils.isNotBlank(value)) {
-            append(textCapture, value);
+            appendIdentifier(textCapture, value);
         }
     }
 
-    private StringBuilder append(AtomicReference<StringBuilder> textCapture, String line) {
+    private StringBuilder appendIdentifier(AtomicReference<StringBuilder> textCapture, String line) {
         return textCapture.get().append(" ").append(StringUtils.trim(line));
     }
 
