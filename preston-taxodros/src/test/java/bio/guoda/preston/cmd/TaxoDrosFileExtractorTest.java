@@ -18,7 +18,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -101,6 +103,13 @@ public class TaxoDrosFileExtractorTest {
     @Test
     public void streamTaxoDrosToLineJsonWithMultilineFilename() throws IOException {
         assertAssumptions("DROS5.TEXT.longfilename.txt");
+    }
+
+    @Test
+    public void urlEncodeFilename() throws URISyntaxException, MalformedURLException {
+        String filename = "one two.pdf";
+        String path = TaxoDrosFileStreamHandler.urlEncodeFilename(filename);
+        assertThat(path, is("one%20two.pdf"));
     }
 
     @Test
@@ -210,9 +219,10 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("journal_pages").asText(), is("351-362"));
         assertThat(taxonNode.get("publication_date").asText(), is("2005"));
         assertThat(taxonNode.get("access_right").asText(), is("restricted"));
-        assertThat(taxonNode.get("method").asText(), is("ocr"));
+        assertThat(taxonNode.get("taxodros:method").asText(), is("ocr"));
         assertThat(taxonNode.get("publication_type").textValue(), is("article"));
         assertThat(taxonNode.get("filename").asText(), is("Abd El-Halim et al., 2005M.pdf"));
+        assertThat(taxonNode.get("filenameUrlEncoded").asText(), is("Abd%20El-Halim%20et%20al.,%202005M.pdf"));
     }
 
     private String[] getResource(String testResource) throws IOException {

@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -83,6 +85,11 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         this.outputStream = os;
     }
 
+    static String urlEncodeFilename(String filename) throws URISyntaxException {
+        URI uri = new URI("https", null, "example.org", -1, "/" + filename, null, null);
+        return StringUtils.substring(uri.getRawPath(), 1);
+    }
+
     @Override
     public boolean handle(IRI version, InputStream is) throws ContentStreamException {
         AtomicBoolean foundAtLeastOne = new AtomicBoolean(false);
@@ -104,7 +111,13 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                             if (isType(objectNode, DROS_5) || isType(objectNode, DROS_3)) {
                                 if (isType(objectNode, DROS_5)) {
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
-                                    setValue(objectNode, "filename", getAndResetCapture(textCapture));
+                                    String filename = getAndResetCapture(textCapture);
+                                    try {
+                                        setValue(objectNode, "filenameUrlEncoded", urlEncodeFilename(filename));
+                                    } catch (URISyntaxException e) {
+                                        throw new ContentStreamException("unexpected failure of URL Encoding filename [" + filename + "]", e);
+                                    }
+                                    setValue(objectNode, "filename", filename);
                                     setValue(objectNode, "upload_type", "publication");
                                     ArrayNode communitiesArray = Stream.of("taxodros", "biosyslit")
                                             .map(id -> {
@@ -202,11 +215,11 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                     } else if (StringUtils.startsWith(line, PREFIX_FILENAME)) {
                         setTypeDROS5(objectNode);
                         String methodText = getAndResetCapture(textCapture);
-                        Matcher matcher = Pattern.compile("(.*)(DOI|doi):(?<doi>[^ ]+)(.*)").matcher(methodText);
+                        Matcher matcher = Pattern.compile("(.*)(10[.])(?<doiPrefix>[0-9]+)/(?<doiSuffix>[^ ]+)(.*)").matcher(methodText);
                         if (matcher.matches()) {
-                            setValue(objectNode, "doi", matcher.group("doi"));
+                            setValue(objectNode, "doi", "10." + matcher.group("doiPrefix") + "/" + matcher.group("doiSuffix"));
                         }
-                        setValue(objectNode, "method", methodText);
+                        setValue(objectNode, "taxodros:method", methodText);
                         appendIdentifier(textCapture, line, PREFIX_FILENAME);
                         lineFinish = lineNumber;
                     } else if (StringUtils.startsWith(line, ".DESC;")) {
