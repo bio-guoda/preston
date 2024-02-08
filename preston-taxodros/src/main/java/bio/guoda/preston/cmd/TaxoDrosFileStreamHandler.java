@@ -316,9 +316,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                 : "";
         String value = "line:" + iriString + "!/L" + lineStart + suffix;
         setValue(objectNode, "http://www.w3.org/ns/prov#wasDerivedFrom", value);
-        appendIdentifier(objectNode, "isDerivedFrom", "https://linker.bio" + value);
+        appendIdentifier(objectNode, "isDerivedFrom", "https://linker.bio/" + value);
         appendIdentifier(objectNode, "isDerivedFrom", TAXODROS_DATA_DOI);
-        appendIdentifier(objectNode, "isPartOf", "https://www.taxodros.uzh.ch/");
+        appendIdentifier(objectNode, "isPartOf", "https://www.taxodros.uzh.ch");
         append(objectNode, "references", "Bächli, G. (2024). TaxoDros - The Database on Taxonomy of Drosophilidae " + TAXODROS_DATA_VERSION_MD5 + " " + TAXODROS_DATA_VERSION_SHA256 + " [Data set]. Zenodo. " + "https://doi.org/" + TAXODROS_DATA_DOI);
     }
 
