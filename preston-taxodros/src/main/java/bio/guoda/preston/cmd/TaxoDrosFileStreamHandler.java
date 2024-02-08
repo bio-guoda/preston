@@ -19,12 +19,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
 
@@ -100,10 +102,17 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
                                     setValue(objectNode, "filename", getAndResetCapture(textCapture));
                                     setValue(objectNode, "upload_type", "publication");
-                                    ArrayNode communities = new ObjectMapper().createArrayNode();
-                                    communities.add("taxodros");
-                                    communities.add("biosyslit");
-                                    objectNode.set("communities", communities);
+                                    ArrayNode communitiesArray = Stream.of("taxodros", "biosyslit")
+                                            .map(id -> {
+                                                ObjectNode objectNode1 = new ObjectMapper().createObjectNode();
+                                                objectNode1.put("identifier", id);
+                                                return objectNode1;
+                                            })
+                                            .reduce(new ObjectMapper().createArrayNode(),
+                                                    ArrayNode::add,
+                                                    ArrayNode::add
+                                            );
+                                    objectNode.set("communities", communitiesArray);
                                     setType(objectNode, DROS_5);
                                 } else if (isType(objectNode, DROS_3)) {
                                     lineFinish = lineNumber - 1;

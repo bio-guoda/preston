@@ -194,8 +194,8 @@ public class TaxoDrosFileExtractorTest {
         JsonNode communities = taxonNode.get("communities");
         assertThat(communities.isArray(), is(true));
         assertThat(communities.size(), is(2));
-        assertThat(communities.get(0).asText(), is("taxodros"));
-        assertThat(communities.get(1).asText(), is("biosyslit"));
+        assertThat(communities.get(0).get("identifier").asText(), is("taxodros"));
+        assertThat(communities.get(1).get("identifier").asText(), is("biosyslit"));
 
         JsonNode creators = taxonNode.get("creators");
         assertThat(creators.isArray(), is(true));
