@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.stream.ContentStreamException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -106,7 +107,7 @@ public class TaxoDrosFileExtractorTest {
     }
 
     @Test
-    public void urlEncodeFilename() throws URISyntaxException, MalformedURLException {
+    public void urlEncodeFilename() throws ContentStreamException {
         String filename = "one two.pdf";
         String path = TaxoDrosFileStreamHandler.urlEncodeFilename(filename);
         assertThat(path, is("one%20two.pdf"));

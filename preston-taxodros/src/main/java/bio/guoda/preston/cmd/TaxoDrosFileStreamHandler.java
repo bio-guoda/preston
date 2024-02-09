@@ -74,6 +74,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String TAXODROS_DATA_DOI = "10.5281/zenodo.10593902";
     public static final String TAXODROS_DATA_VERSION_SHA256 = "hash://sha256/e05466f33c755f11bd1c2fa30eef2388bf24ff7989931bae1426daff0200af19";
     public static final String TAXODROS_DATA_VERSION_MD5 = "hash://md5/4fa9eeed1c8cff2490483a48c718df02";
+    public static final String LSID_PREFIX = "urn:lsid:taxodros.uzh.ch";
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
@@ -85,9 +86,14 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         this.outputStream = os;
     }
 
-    static String urlEncodeFilename(String filename) throws URISyntaxException {
-        URI uri = new URI("https", null, "example.org", -1, "/" + filename, null, null);
-        return StringUtils.substring(uri.getRawPath(), 1);
+    static String urlEncodeFilename(String filename) throws ContentStreamException {
+        try {
+            URI uri = new URI("https", null, "example.org", -1, "/" + filename, null, null);
+            return StringUtils.substring(uri.getRawPath(), 1);
+        } catch (URISyntaxException e) {
+            throw new ContentStreamException("unexpected failure of URL Encoding filename [" + filename + "]", e);
+        }
+
     }
 
     @Override
@@ -112,11 +118,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                 if (isType(objectNode, DROS_5)) {
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
                                     String filename = getAndResetCapture(textCapture);
-                                    try {
-                                        setValue(objectNode, "filenameUrlEncoded", urlEncodeFilename(filename));
-                                    } catch (URISyntaxException e) {
-                                        throw new ContentStreamException("unexpected failure of URL Encoding filename [" + filename + "]", e);
-                                    }
+                                    String encodedFilename = urlEncodeFilename(filename);
+                                    setValue(objectNode, "filenameUrlEncoded", encodedFilename);
+                                    appendIdentifier(objectNode, "isAlternateIdentifier", LSID_PREFIX + ":filename:" + encodedFilename);
                                     setValue(objectNode, "filename", filename);
                                     setValue(objectNode, "upload_type", "publication");
                                     ArrayNode communitiesArray = Stream.of("taxodros", "biosyslit")
@@ -147,7 +151,8 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         }
                     } else if (StringUtils.startsWith(line, PREFIX_AUTHOR)) {
                         setTypeDROS5(objectNode);
-                        setValue(objectNode, REFERENCE_ID, getAndResetCapture(textCapture));
+                        String referenceId = getAndResetCapture(textCapture);
+                        setValue(objectNode, REFERENCE_ID, referenceId);
                         appendIdentifier(textCapture, line, PREFIX_AUTHOR);
                     } else if (StringUtils.startsWith(line, PREFIX_YEAR)) {
                         setTypeDROS5(objectNode);
@@ -262,9 +267,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                     setValue(objectNode, TRANSLATION_MAP.get(key), value);
                 }
                 if (StringUtils.equals(key, ".KF")) {
-                    setValue(objectNode, "taxonId", "urn:lsid:taxodros.uzh.ch:taxon:" + StringUtils.replace(value, " ", "_"));
+                    setValue(objectNode, "taxonId", LSID_PREFIX + ":taxon:" + StringUtils.replace(value, " ", "_"));
                 } else if (StringUtils.equals(key, ".AU")) {
-                    setValue(objectNode, "referenceId", value);
+                    setValue(objectNode, REFERENCE_ID, value);
                 }
             }
         }
