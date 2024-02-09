@@ -75,6 +75,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String TAXODROS_DATA_VERSION_SHA256 = "hash://sha256/e05466f33c755f11bd1c2fa30eef2388bf24ff7989931bae1426daff0200af19";
     public static final String TAXODROS_DATA_VERSION_MD5 = "hash://md5/4fa9eeed1c8cff2490483a48c718df02";
     public static final String LSID_PREFIX = "urn:lsid:taxodros.uzh.ch";
+    public static final String IS_ALTERNATE_IDENTIFIER = "isAlternateIdentifier";
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
@@ -120,7 +121,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                     String filename = getAndResetCapture(textCapture);
                                     String encodedFilename = urlEncodeFilename(filename);
                                     setValue(objectNode, "filenameUrlEncoded", encodedFilename);
-                                    appendIdentifier(objectNode, "isAlternateIdentifier", LSID_PREFIX + ":filename:" + encodedFilename);
+                                    appendIdentifier(objectNode, IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":filename:" + encodedFilename);
                                     setValue(objectNode, "filename", filename);
                                     setValue(objectNode, "upload_type", "publication");
                                     ArrayNode communitiesArray = Stream.of("taxodros", "biosyslit")
@@ -153,6 +154,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         setTypeDROS5(objectNode);
                         String referenceId = getAndResetCapture(textCapture);
                         setValue(objectNode, REFERENCE_ID, referenceId);
+                        appendIdentifier(objectNode, "isAlternateIdentifier", LSID_PREFIX + ":id:" + urlEncodeFilename(referenceId));
                         appendIdentifier(textCapture, line, PREFIX_AUTHOR);
                     } else if (StringUtils.startsWith(line, PREFIX_YEAR)) {
                         setTypeDROS5(objectNode);
