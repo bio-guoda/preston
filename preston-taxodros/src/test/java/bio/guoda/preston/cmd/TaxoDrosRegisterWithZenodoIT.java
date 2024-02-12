@@ -4,25 +4,22 @@ import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.DerefState;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.ResourcesHTTP;
+import bio.guoda.preston.util.UUIDUtil;
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonpCharacterEscapes;
-import com.fasterxml.jackson.core.io.CharacterEscapes;
 import com.fasterxml.jackson.core.json.JsonWriteFeature;
-import com.fasterxml.jackson.core.json.UTF8JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.http.HttpHeaders;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.util.EncodingUtils;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.InputStreamEntity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,9 +32,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -45,28 +43,80 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertNotNull;
 
 public class TaxoDrosRegisterWithZenodoIT {
 
     public static final String CONTENT_ID_PDF = "hash://md5/639988a4074ded5208a575b760a5dc5e";
     public static final String TAXODROS_ID = "urn:lsid:taxodros.uzh.ch:id:abd%20el-halim%20et%20al.,%202005";
     public static final String ZENODO_API_ENDPOINT = "https://sandbox.zenodo.org";
+    public static final String APPLICATION_JSON = ContentType.APPLICATION_JSON.getMimeType();
 
-    public Long depositId;
+    private ZenodoContext ctx = null;
 
     @Before
-    public void createDeposit() throws IOException {
-        InputStream request = getClass().getResourceAsStream("zenodo-metadata.json");
+    public void create() throws IOException {
+        InputStream request = getInputStream();
         ObjectMapper objectMapper = getObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(IOUtils.toString(request, StandardCharsets.UTF_8));
-        InputStream is = createDeposit(getAccessToken(), jsonNode);
-        JsonNode response = new ObjectMapper().readTree(is);
-        if (response.has("id") && response.get("id").isIntegralNumber()) {
-            depositId = response.get("id").asLong();
-        } else {
-            fail("failed to create zenodo deposit");
+        ctx = new ZenodoContext(getAccessToken());
+        ctx = create(ctx, jsonNode);
+
+        assertNotNull(ctx);
+        assertNotNull(ctx.getBucketId());
+        assertNotNull(ctx.getDepositId());
+
+    }
+
+    @After
+    public void delete() throws IOException {
+        try {
+            delete(this.ctx);
+            cleanupPreExisting();
+        } catch (IOException ex) {
+            // ignore
         }
+    }
+
+    private void cleanupPreExisting() throws IOException {
+        Collection<Pair<Long, String>> byAlternateIds = findByAlternateIds(ctx, Arrays.asList(CONTENT_ID_PDF, TAXODROS_ID));
+        byAlternateIds
+                .stream()
+                .filter(d -> StringUtils.equals(d.getValue(), "unsubmitted"))
+                .map(Pair::getKey)
+                .forEach(depositId -> {
+                    ZenodoContext ctx = new ZenodoContext(this.ctx.getAccessToken());
+                    ctx.setDepositId(depositId);
+                    try {
+                        delete(ctx);
+                    } catch (IOException e) {
+                        // ignore
+                    }
+                });
+    }
+
+
+    private ZenodoContext create(ZenodoContext ctx, JsonNode jsonNode) throws IOException {
+        InputStream is = create(ctx.getAccessToken(), jsonNode);
+        return updateContext(ctx, is);
+    }
+
+    private static ZenodoContext updateContext(ZenodoContext ctx, InputStream is) throws IOException {
+        JsonNode response = new ObjectMapper().readTree(is);
+        JsonNode deposit = response.at("/id");
+        if (deposit != null) {
+            ctx.setDepositId(deposit.asLong());
+        }
+
+        JsonNode bucket = response.at("/links/bucket");
+        if (bucket != null) {
+            Matcher matcher = UUIDUtil.ENDING_WITH_UUID_PATTERN.matcher(bucket.asText());
+            if (matcher.matches()) {
+                ctx.setBucketId(UUID.fromString(matcher.group("uuid")));
+            }
+        }
+
+        return ctx;
     }
 
     private static ObjectMapper getObjectMapper() {
@@ -76,9 +126,15 @@ public class TaxoDrosRegisterWithZenodoIT {
         return new ObjectMapper(jf);
     }
 
-    @After
-    public void deleteDeposit() throws IOException {
-        deleteDeposit(getAccessToken(), depositId);
+
+    private void delete(ZenodoContext ctx) throws IOException {
+        String deleteRequestURI = ZENODO_API_ENDPOINT + "/api/deposit/depositions/" + ctx.getDepositId() + "?access_token=" + ctx.getAccessToken();
+        ResourcesHTTP.asInputStream(
+                RefNodeFactory.toIRI(deleteRequestURI),
+                new HttpDelete(URI.create(deleteRequestURI)),
+                ignoreProgress(),
+                ignoreNone()
+        );
     }
 
 
@@ -99,65 +155,104 @@ public class TaxoDrosRegisterWithZenodoIT {
 
     private void assertOneRecordWithMatchingId(List<String> contentId) throws IOException {
 
-        Collection<Pair<Long, String>> ids = findByAlternateIds(contentId, getAccessToken());
+        Collection<Pair<Long, String>> ids = findByAlternateIds(ctx, contentId);
         assertThat(ids, not(nullValue()));
         List<Long> filteredIds = ids
                 .stream()
-                .filter(x -> depositId.equals(x.getKey()))
+                .filter(x -> ctx.getDepositId().equals(x.getKey()))
                 .map(Pair::getKey)
                 .collect(Collectors.toList());
         assertThat(filteredIds.size(), is(1));
-        assertThat(filteredIds.get(0), is(depositId));
+        assertThat(filteredIds.get(0), is(ctx.getDepositId()));
 
     }
 
 
     @Test
     public void uploadData() throws IOException {
+        InputStream resourceAsStream = getInputStream();
+        assertNotNull(resourceAsStream);
+        upload(this.ctx, "some spacey name.json", resourceAsStream);
+    }
+
+    private InputStream getInputStream() {
+        return getClass().getResourceAsStream("zenodo-metadata.json");
     }
 
     @Test
-    public void uploadMetadata() throws IOException {
+    public void updateMetadata() throws IOException {
+        InputStream inputStream = getInputStream();
+        JsonNode payload = getObjectMapper().readTree(inputStream);
+        String input = getObjectMapper().writer().writeValueAsString(payload);
+        update(this.ctx, input);
+    }
+
+    public static ZenodoContext update(ZenodoContext ctx, String metadata) throws IOException {
+        String requestURI = ZENODO_API_ENDPOINT + "/api/deposit/depositions/" + ctx.getDepositId() + "?access_token=" + ctx.getAccessToken();
+        IRI dataURI = RefNodeFactory.toIRI(requestURI);
+        HttpPut request = new HttpPut(URI.create(requestURI));
+
+        BasicHttpEntity entity = new BasicHttpEntity();
+        entity.setContent(IOUtils.toInputStream(metadata, StandardCharsets.UTF_8));
+        entity.setContentLength(metadata.length());
+        entity.setContentType(APPLICATION_JSON);
+        request.setEntity(entity);
+        InputStream inputStream1 = ResourcesHTTP.asInputStream(
+                dataURI,
+                request,
+                ignoreProgress(),
+                ignoreNone()
+        );
+        return updateContext(ctx, inputStream1);
     }
 
     @Test
-    public void createOrUpdateDeposit() throws IOException {
-        String accessToken = getAccessToken();
+    public void createNewVersion() throws IOException {
 
-        Collection<Pair<Long, String>> matchingRecords
-                = findByAlternateIds(Arrays.asList(CONTENT_ID_PDF), getAccessToken());
-        List<Pair<Long, String>> unsubmitted = matchingRecords
-                .stream()
-                .filter(hit -> StringUtils.equals(hit.getValue(), "unsubmitted"))
-                .collect(Collectors.toList());
+        InputStream resourceAsStream = getInputStream();
 
-        for (Pair<Long, String> unsubmittedDeposit : unsubmitted) {
-            Long depositId = unsubmittedDeposit.getKey();
-            deleteDeposit(accessToken, depositId);
+        assertNotNull(resourceAsStream);
 
+        upload(this.ctx, "some spacey name.json", resourceAsStream);
+
+        publish(this.ctx);
+        Long depositIdPrevious = ctx.getDepositId();
+        ctx = createNewVersion(this.ctx);
+        assertThat(ctx.getDepositId(), is(notNullValue()));
+        assertThat(ctx.getDepositId(), is(greaterThan(depositIdPrevious)));
+
+    }
+
+    private static ZenodoContext createNewVersion(ZenodoContext ctx) throws IOException {
+        String requestURI = ZENODO_API_ENDPOINT + "/api/deposit/depositions/" + ctx.getDepositId() + "/actions/newversion?access_token=" + ctx.getAccessToken();
+        IRI dataURI = RefNodeFactory.toIRI(requestURI);
+        InputStream is = ResourcesHTTP.asInputStream(
+                dataURI,
+                new HttpPost(URI.create(dataURI.getIRIString())),
+                ignoreProgress(),
+                ignoreNone()
+        );
+        JsonNode response = new ObjectMapper().readTree(is);
+        JsonNode deposit = response.at("/id");
+        if (deposit != null) {
+            ctx.setDepositId(deposit.asLong());
         }
 
-        List<Pair<Long, String>> submitted = matchingRecords
-                .stream()
-                .filter(hit -> StringUtils.equals(hit.getValue(), "done"))
-                .collect(Collectors.toList());
+        JsonNode bucket = response.at("/links/bucket");
+        if (bucket != null) {
+            Matcher matcher = UUIDUtil.ENDING_WITH_UUID_PATTERN.matcher(bucket.asText());
+            if (matcher.matches()) {
+                ctx.setBucketId(UUID.fromString(matcher.group("uuid")));
+            }
+        }
 
-
-        assertThat(submitted.size(), is(1));
-
-        Long depositId = submitted.stream().findFirst().get().getKey();
-        InputStream is = createDepositVersion(accessToken, depositId);
-        JsonNode response = getObjectMapper().readTree(is);
-
-        assertThat(response.get("id"), is(notNullValue()));
-        assertThat(response.get("id").asLong(), is(greaterThan(matchingRecords.stream().findFirst().get().getKey())));
-
+        return ctx;
     }
 
-    private static InputStream createDepositVersion(String accessToken, Long depositId) throws IOException {
-        String requestURI = ZENODO_API_ENDPOINT + "/api/deposit/depositions/" + depositId + "/actions/newversion?access_token=" + accessToken;
+    private void publish(ZenodoContext ctx) throws IOException {
+        String requestURI = ZENODO_API_ENDPOINT + "/api/deposit/depositions/" + ctx.getDepositId() + "/actions/publish?access_token=" + ctx.getAccessToken();
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
-        return ResourcesHTTP.asInputStream(
+        ResourcesHTTP.asInputStream(
                 dataURI,
                 new HttpPost(URI.create(dataURI.getIRIString())),
                 ignoreProgress(),
@@ -165,12 +260,22 @@ public class TaxoDrosRegisterWithZenodoIT {
         );
     }
 
-    private static InputStream createDeposit(String accessToken) throws IOException {
-        return createDeposit(accessToken, getObjectMapper().createObjectNode());
+    private void upload(ZenodoContext ctx, String filename, InputStream is) throws IOException {
+        String requestURI = ZENODO_API_ENDPOINT + "/api/files/" + ctx.getBucketId() + "/" + URLEncodingUtil.urlEncode(filename) + "?access_token=" + ctx.getAccessToken();
+        IRI dataURI = RefNodeFactory.toIRI(requestURI);
+        HttpPut request = new HttpPut(URI.create(dataURI.getIRIString()));
+        HttpEntity entity = new InputStreamEntity(is);
+        request.setEntity(entity);
+        ResourcesHTTP.asInputStream(
+                dataURI,
+                request,
+                ignoreProgress(),
+                ignoreNone()
+        );
     }
 
 
-    private static InputStream createDeposit(String accessToken, JsonNode metadata) throws IOException {
+    private static InputStream create(String accessToken, JsonNode metadata) throws IOException {
         String requestURI = ZENODO_API_ENDPOINT + "/api/deposit/depositions?access_token=" + accessToken;
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
         JsonNode payload = metadata == null ? getObjectMapper().createObjectNode() : metadata;
@@ -181,36 +286,11 @@ public class TaxoDrosRegisterWithZenodoIT {
         String input = getObjectMapper().writer().writeValueAsString(payload);
         entity.setContent(IOUtils.toInputStream(input, StandardCharsets.UTF_8));
         entity.setContentLength(input.length());
-        entity.setContentType("application/json");
+        entity.setContentType(APPLICATION_JSON);
         request.setEntity(entity);
         return ResourcesHTTP.asInputStream(
                 dataURI,
                 request,
-                ignoreProgress(),
-                ignoreNone()
-        );
-    }
-
-    private static InputStream updateDeposit(String accessToken, JsonNode metadata, Long depositId) throws IOException {
-        String requestURI = ZENODO_API_ENDPOINT + "/api/deposit/depositions/" + depositId + "?access_token=" + accessToken;
-        IRI dataURI = RefNodeFactory.toIRI(requestURI);
-        HttpPost request = new HttpPost(URI.create(dataURI.getIRIString()));
-        BasicHttpEntity entity = new BasicHttpEntity();
-        entity.setContent(IOUtils.toInputStream(metadata.toString(), StandardCharsets.UTF_8));
-        request.setEntity(entity);
-        return ResourcesHTTP.asInputStream(
-                dataURI,
-                request,
-                ignoreProgress(),
-                ignoreNone()
-        );
-    }
-
-    private static void deleteDeposit(String accessToken, Long depositId) throws IOException {
-        String deleteRequestURI = ZENODO_API_ENDPOINT + "/api/deposit/depositions/" + depositId + "?access_token=" + accessToken;
-        ResourcesHTTP.asInputStream(
-                RefNodeFactory.toIRI(deleteRequestURI),
-                new HttpDelete(URI.create(deleteRequestURI)),
                 ignoreProgress(),
                 ignoreNone()
         );
@@ -238,11 +318,10 @@ public class TaxoDrosRegisterWithZenodoIT {
         return IOUtils.toString(getClass().getResourceAsStream("zenodo-token.hidden"), StandardCharsets.UTF_8);
     }
 
-    private Collection<Pair<Long, String>> findByAlternateIds(List<String> contentIds, String accessToken) throws IOException {
+    private Collection<Pair<Long, String>> findByAlternateIds(ZenodoContext ctx, List<String> contentIds) throws IOException {
         Collection<Pair<Long, String>> foundIds = new TreeSet<>();
         appendIds(foundIds, ZENODO_API_ENDPOINT, "communities=taxodros&all_versions=true&q=" + getQueryForIds(contentIds), "/api/records");
-        appendIds(foundIds, ZENODO_API_ENDPOINT, "q=" + getQueryForIds(contentIds) + "&access_token=" + accessToken, "/api/deposit/depositions");
-
+        appendIds(foundIds, ZENODO_API_ENDPOINT, "q=" + getQueryForIds(contentIds) + "&access_token=" + ctx.getAccessToken(), "/api/deposit/depositions");
         return foundIds;
     }
 
