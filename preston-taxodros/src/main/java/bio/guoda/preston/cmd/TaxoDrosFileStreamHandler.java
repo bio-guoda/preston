@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -87,16 +85,6 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         this.outputStream = os;
     }
 
-    static String urlEncodeFilename(String filename) throws ContentStreamException {
-        try {
-            URI uri = new URI("https", null, "example.org", -1, "/" + filename, null, null);
-            return StringUtils.substring(uri.getRawPath(), 1);
-        } catch (URISyntaxException e) {
-            throw new ContentStreamException("unexpected failure of URL Encoding filename [" + filename + "]", e);
-        }
-
-    }
-
     @Override
     public boolean handle(IRI version, InputStream is) throws ContentStreamException {
         AtomicBoolean foundAtLeastOne = new AtomicBoolean(false);
@@ -119,7 +107,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                 if (isType(objectNode, DROS_5)) {
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
                                     String filename = getAndResetCapture(textCapture);
-                                    String encodedFilename = urlEncodeFilename(filename);
+                                    String encodedFilename = URLEncodingUtil.urlEncode(filename);
                                     setValue(objectNode, "filenameUrlEncoded", encodedFilename);
                                     appendIdentifier(objectNode, IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":filename:" + encodedFilename);
                                     setValue(objectNode, "filename", filename);
@@ -154,7 +142,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         setTypeDROS5(objectNode);
                         String referenceId = getAndResetCapture(textCapture);
                         setValue(objectNode, REFERENCE_ID, referenceId);
-                        appendIdentifier(objectNode, "isAlternateIdentifier", LSID_PREFIX + ":id:" + urlEncodeFilename(referenceId));
+                        appendIdentifier(objectNode, "isAlternateIdentifier", LSID_PREFIX + ":id:" + URLEncodingUtil.urlEncode(referenceId));
                         appendIdentifier(textCapture, line, PREFIX_AUTHOR);
                     } else if (StringUtils.startsWith(line, PREFIX_YEAR)) {
                         setTypeDROS5(objectNode);

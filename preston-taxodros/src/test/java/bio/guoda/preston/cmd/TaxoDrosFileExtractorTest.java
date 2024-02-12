@@ -19,9 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -109,7 +107,7 @@ public class TaxoDrosFileExtractorTest {
     @Test
     public void urlEncodeFilename() throws ContentStreamException {
         String filename = "one two.pdf";
-        String path = TaxoDrosFileStreamHandler.urlEncodeFilename(filename);
+        String path = URLEncodingUtil.urlEncode(filename);
         assertThat(path, is("one%20two.pdf"));
     }
 

@@ -21,6 +21,7 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -124,14 +125,20 @@ public class ResourcesHTTP {
                     }
                 }
 
-                final long contentLength = entity.getContentLength();
-
-                InputStream contentStream = entity.getContent();
-
-                return ContentStreamUtil.getInputStreamWithProgressLogger(dataURI, listener, contentLength, contentStream);
+                return entity == null
+                        ? new ByteArrayInputStream("".getBytes())
+                        : getInputStream(dataURI, listener, entity);
             }
         }
         return is;
+    }
+
+    private static InputStream getInputStream(IRI dataURI, DerefProgressListener listener, HttpEntity entity) throws IOException {
+        final long contentLength = entity.getContentLength();
+
+        InputStream contentStream = entity.getContent();
+
+        return ContentStreamUtil.getInputStreamWithProgressLogger(dataURI, listener, contentLength, contentStream);
     }
 
     private static boolean shouldRedirect(IRI dataURI) {
