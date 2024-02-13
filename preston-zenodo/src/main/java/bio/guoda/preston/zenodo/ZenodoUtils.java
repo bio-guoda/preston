@@ -15,11 +15,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ContentType;
-import org.apache.http.entity.InputStreamEntity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,21 +39,22 @@ public class ZenodoUtils {
     private final static String APPLICATION_JSON = ContentType.APPLICATION_JSON.getMimeType();
 
     private static ZenodoContext updateContext(ZenodoContext ctx, InputStream is) throws IOException {
+        ZenodoContext copy = new ZenodoContext(ctx.getAccessToken(), ctx.getEndpoint());
         JsonNode response = new ObjectMapper().readTree(is);
+        copy.setMetadata(response);
         JsonNode deposit = response.at("/id");
         if (deposit != null) {
-            ctx.setDepositId(deposit.asLong());
+            copy.setDepositId(deposit.asLong());
         }
 
         JsonNode bucket = response.at("/links/bucket");
         if (bucket != null) {
             Matcher matcher = UUIDUtil.ENDING_WITH_UUID_PATTERN.matcher(bucket.asText());
             if (matcher.matches()) {
-                ctx.setBucketId(UUID.fromString(matcher.group("uuid")));
+                copy.setBucketId(UUID.fromString(matcher.group("uuid")));
             }
         }
-
-        return ctx;
+        return copy;
     }
 
     static ObjectMapper getObjectMapper() {
@@ -65,12 +66,14 @@ public class ZenodoUtils {
 
     public static void delete(ZenodoContext ctx) throws IOException {
         String deleteRequestURI = ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId() + "?access_token=" + ctx.getAccessToken();
-        ResourcesHTTP.asInputStream(
+        try (InputStream inputStream = ResourcesHTTP.asInputStream(
                 RefNodeFactory.toIRI(deleteRequestURI),
                 new HttpDelete(URI.create(deleteRequestURI)),
                 ignoreProgress(),
                 ignoreNone()
-        );
+        )) {
+            updateContext(ctx, inputStream);
+        }
     }
 
     public static ZenodoContext update(ZenodoContext ctx, String metadata) throws IOException {
@@ -92,30 +95,46 @@ public class ZenodoUtils {
         return updateContext(ctx, inputStream1);
     }
 
+    public static ZenodoContext get(ZenodoContext ctx) throws IOException {
+        String requestURI = ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId() + "?access_token=" + ctx.getAccessToken();
+        IRI dataURI = RefNodeFactory.toIRI(requestURI);
+        HttpGet request = new HttpGet(URI.create(requestURI));
+
+        try (InputStream is = ResourcesHTTP.asInputStream(
+                dataURI,
+                request,
+                ignoreProgress(),
+                ignoreNone()
+        )) {
+            return updateContext(ctx, is);
+        }
+    }
+
     public static ZenodoContext createNewVersion(ZenodoContext ctx) throws IOException {
         String requestURI = ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId() + "/actions/newversion?access_token=" + ctx.getAccessToken();
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
-        InputStream is = ResourcesHTTP.asInputStream(
+        try (InputStream is = ResourcesHTTP.asInputStream(
                 dataURI,
                 new HttpPost(URI.create(dataURI.getIRIString())),
                 ignoreProgress(),
                 ignoreNone()
-        );
-        JsonNode response = new ObjectMapper().readTree(is);
-        JsonNode deposit = response.at("/id");
-        if (deposit != null) {
-            ctx.setDepositId(deposit.asLong());
-        }
-
-        JsonNode bucket = response.at("/links/bucket");
-        if (bucket != null) {
-            Matcher matcher = UUIDUtil.ENDING_WITH_UUID_PATTERN.matcher(bucket.asText());
-            if (matcher.matches()) {
-                ctx.setBucketId(UUID.fromString(matcher.group("uuid")));
+        )) {
+            JsonNode response = new ObjectMapper().readTree(is);
+            JsonNode deposit = response.at("/id");
+            if (deposit != null) {
+                ctx.setDepositId(deposit.asLong());
             }
-        }
 
-        return ctx;
+            JsonNode bucket = response.at("/links/bucket");
+            if (bucket != null) {
+                Matcher matcher = UUIDUtil.ENDING_WITH_UUID_PATTERN.matcher(bucket.asText());
+                if (matcher.matches()) {
+                    ctx.setBucketId(UUID.fromString(matcher.group("uuid")));
+                }
+            }
+
+            return ctx;
+        }
     }
 
     static DerefProgressListener ignoreProgress() {
@@ -149,38 +168,43 @@ public class ZenodoUtils {
         entity.setContentLength(input.length());
         entity.setContentType(APPLICATION_JSON);
         request.setEntity(entity);
-        InputStream is = ResourcesHTTP.asInputStream(
+        try (InputStream is = ResourcesHTTP.asInputStream(
                 dataURI,
                 request,
                 ignoreProgress(),
                 ignoreNone()
-        );
-        return updateContext(ctx, is);
+        )) {
+            return updateContext(ctx, is);
+        }
     }
 
-    public static void publish(ZenodoContext ctx) throws IOException {
+    public static ZenodoContext publish(ZenodoContext ctx) throws IOException {
         String requestURI = ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId() + "/actions/publish?access_token=" + ctx.getAccessToken();
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
-        ResourcesHTTP.asInputStream(
+        try (InputStream inputStream = ResourcesHTTP.asInputStream(
                 dataURI,
                 new HttpPost(URI.create(dataURI.getIRIString())),
                 ignoreProgress(),
                 ignoreNone()
-        );
+        )) {
+            return updateContext(ctx, inputStream);
+        }
     }
 
-    public static void upload(ZenodoContext ctx, String filename, InputStream is) throws IOException {
+    public static ZenodoContext upload(ZenodoContext ctx, String filename, HttpEntity entity) throws IOException {
         String requestURI = ctx.getEndpoint() + "/api/files/" + ctx.getBucketId() + "/" + URLEncodingUtil.urlEncode(filename) + "?access_token=" + ctx.getAccessToken();
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
-        HttpPut request = new HttpPut(URI.create(dataURI.getIRIString()));
-        HttpEntity entity = new InputStreamEntity(is);
+        HttpPut request = new HttpPut(requestURI);
         request.setEntity(entity);
-        ResourcesHTTP.asInputStream(
+
+        try (InputStream is = ResourcesHTTP.asInputStream(
                 dataURI,
                 request,
                 ignoreProgress(),
                 ignoreNone()
-        );
+        )) {
+            return updateContext(ctx, is);
+        }
     }
 
     public static Collection<Pair<Long, String>> findByAlternateIds(ZenodoContext ctx, List<String> contentIds) throws IOException {
@@ -198,19 +222,17 @@ public class ZenodoUtils {
     }
 
     private static void appendIds(Collection<Pair<Long, String>> foundIds, String apiEndpoint, String filter, String method) throws IOException {
-        InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI((apiEndpoint
-                + method) + "?" + filter));
-
-        JsonNode jsonNode = getObjectMapper().readTree(is);
-
-        JsonNode hits = jsonNode.has("hits")
-                && jsonNode.get("hits").has("hits") ? jsonNode.get("hits").get("hits") : jsonNode;
-
-        for (JsonNode hit : hits) {
-            if (hit.has("id")
-                    && hit.get("id").isIntegralNumber()
-                    && hit.has("state")) {
-                foundIds.add(Pair.of(hit.get("id").asLong(), hit.get("state").asText()));
+        IRI query = RefNodeFactory.toIRI((apiEndpoint + method) + "?" + filter);
+        try (InputStream is = ResourcesHTTP.asInputStream(query)) {
+            JsonNode jsonNode = getObjectMapper().readTree(is);
+            JsonNode hits = jsonNode.has("hits")
+                    && jsonNode.get("hits").has("hits") ? jsonNode.get("hits").get("hits") : jsonNode;
+            for (JsonNode hit : hits) {
+                if (hit.has("id")
+                        && hit.get("id").isIntegralNumber()
+                        && hit.has("state")) {
+                    foundIds.add(Pair.of(hit.get("id").asLong(), hit.get("state").asText()));
+                }
             }
         }
     }

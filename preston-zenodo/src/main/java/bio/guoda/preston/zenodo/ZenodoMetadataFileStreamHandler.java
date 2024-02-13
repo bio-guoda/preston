@@ -61,7 +61,6 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                         break;
                     } else {
                         JsonNode jsonNode = ZenodoUtils.getObjectMapper().readTree(line);
-                        System.out.println(jsonNode.toPrettyString());
                         if (maybeContainsPrestonEnabledZenodoMetadata(jsonNode)) {
                             List<String> ids = new ArrayList<>();
                             JsonNode alternateIdentifiers = jsonNode.at("/metadata/related_identifiers");

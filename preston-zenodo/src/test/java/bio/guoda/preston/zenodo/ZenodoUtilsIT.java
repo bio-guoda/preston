@@ -1,29 +1,47 @@
 package bio.guoda.preston.zenodo;
 
+import bio.guoda.preston.HashType;
+import bio.guoda.preston.Hasher;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.Dereferencer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.CountingOutputStream;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.rdf.api.IRI;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.AbstractHttpEntity;
+import org.apache.http.entity.FileEntity;
+import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.entity.StringEntity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 public class ZenodoUtilsIT {
 
@@ -63,7 +81,7 @@ public class ZenodoUtilsIT {
                 .filter(d -> StringUtils.equals(d.getValue(), "unsubmitted"))
                 .map(Pair::getKey)
                 .forEach(depositId -> {
-                    ZenodoContext ctx = new ZenodoContext(this.ctx.getAccessToken());
+                    ZenodoContext ctx = new ZenodoContext(this.ctx.getAccessToken(), this.ctx.getEndpoint());
                     ctx.setDepositId(depositId);
                     try {
                         ZenodoUtils.delete(ctx);
@@ -105,10 +123,65 @@ public class ZenodoUtilsIT {
 
 
     @Test
-    public void uploadData() throws IOException {
-        InputStream resourceAsStream = getInputStream();
-        assertNotNull(resourceAsStream);
-        ZenodoUtils.upload(this.ctx, "some spacey name.json", resourceAsStream);
+    public void uploadDataUsingFileEntity() throws IOException, URISyntaxException {
+        File file = new File(getClass().getResource("zenodo-metadata.json").toURI());
+        FileEntity entity = new FileEntity(file);
+        assertTrue(entity.isRepeatable());
+        assertFalse(entity.isStreaming());
+        assertFalse(entity.isChunked());
+        assertUpload(entity, expectedContentId());
+    }
+
+    @Test
+    public void uploadDataUsingStreamEntity() throws IOException {
+        InputStreamEntity entity = new InputStreamEntity(getInputStream());
+        assertFalse(entity.isRepeatable());
+        assertTrue(entity.isStreaming());
+        assertFalse(entity.isChunked());
+        // stream entities not supported somehow, but accepted as 0 length content
+        assertUpload(entity, contentIdZeroLengthContent());
+    }
+
+    private String expectedContentId() throws IOException {
+        return Hasher.calcHashIRI(getInputStream(), NullOutputStream.NULL_OUTPUT_STREAM, HashType.md5).getIRIString();
+    }
+
+
+    @Test
+    public void uploadDataUsingDereferencingEntity() throws IOException {
+        Dereferencer<InputStream> dereferencer = new Dereferencer<InputStream>() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                return getInputStream();
+            }
+        };
+
+        HttpEntity entity = new DerferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"));
+        assertTrue(entity.isRepeatable());
+        assertTrue(entity.isStreaming());
+        assertFalse(entity.isChunked());
+        assertUpload(entity, expectedContentId());
+    }
+
+    private String contentIdZeroLengthContent() throws IOException {
+        return Hasher.calcHashIRI(IOUtils.toInputStream("", StandardCharsets.UTF_8), NullOutputStream.NULL_OUTPUT_STREAM, HashType.md5).getIRIString();
+    }
+
+    private void assertUpload(HttpEntity entity, String expectedChecksum) throws IOException {
+        ZenodoContext uploadContext = ZenodoUtils.upload(this.ctx, "some spacey name.json", entity);
+        JsonNode checksum = uploadContext.getMetadata().at("/checksum");
+        if (checksum != null) {
+            String actualChecksum = checksum.asText();
+            assertThat("hash://md5/" + StringUtils.substring(actualChecksum, 4), is(expectedChecksum));
+        } else {
+            fail("no file found");
+        }
+    }
+
+
+    private long getContentLength() {
+        return new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM).getByteCount();
     }
 
     private InputStream getInputStream() {
@@ -130,9 +203,11 @@ public class ZenodoUtilsIT {
 
         assertNotNull(resourceAsStream);
 
-        ZenodoUtils.upload(this.ctx, "some spacey name.json", resourceAsStream);
+        ZenodoUtils.upload(this.ctx, "some spacey name.json", new InputStreamEntity(resourceAsStream));
 
         ZenodoUtils.publish(this.ctx);
+
+
         Long depositIdPrevious = ctx.getDepositId();
         ctx = ZenodoUtils.createNewVersion(this.ctx);
         assertThat(ctx.getDepositId(), is(notNullValue()));
@@ -146,4 +221,45 @@ public class ZenodoUtilsIT {
     }
 
 
+    public class DerferencingEntity extends AbstractHttpEntity {
+        private Dereferencer<InputStream> dereferencer;
+        private IRI resource;
+
+        public DerferencingEntity(Dereferencer<InputStream> dereferencer, IRI resource) {
+            this.dereferencer = dereferencer;
+            this.resource = resource;
+        }
+
+        @Override
+        public boolean isRepeatable() {
+            return true;
+        }
+
+        @Override
+        public long getContentLength() {
+            try (InputStream inputStream = dereferencer.get(resource)) {
+                return IOUtils.copy(inputStream, NullOutputStream.NULL_OUTPUT_STREAM);
+            } catch (IOException e) {
+                return -1;
+            }
+        }
+
+        @Override
+        public InputStream getContent() throws IOException, UnsupportedOperationException {
+            return dereferencer.get(resource);
+        }
+
+        @Override
+        public void writeTo(OutputStream outStream) throws IOException {
+            try (InputStream is = dereferencer.get(resource)) {
+                IOUtils.copy(is, outStream);
+            }
+        }
+
+        @Override
+        public boolean isStreaming() {
+            return true;
+        }
+
+    }
 }

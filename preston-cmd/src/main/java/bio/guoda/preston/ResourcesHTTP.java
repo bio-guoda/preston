@@ -112,7 +112,6 @@ public class ResourcesHTTP {
                     : getHttpClient();
 
             CloseableHttpResponse response = client.execute(request);
-
             StatusLine statusLine = response.getStatusLine();
             HttpEntity entity = response.getEntity();
             if (shouldIgnore.test(statusLine.getStatusCode())) {

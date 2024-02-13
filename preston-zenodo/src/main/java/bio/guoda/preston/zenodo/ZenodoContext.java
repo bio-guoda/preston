@@ -1,5 +1,7 @@
 package bio.guoda.preston.zenodo;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.util.UUID;
 
 public class ZenodoContext {
@@ -8,6 +10,7 @@ public class ZenodoContext {
     private Long depositId;
     private UUID bucketId;
     private final String accessToken;
+    private JsonNode metadata;
 
     public ZenodoContext(String accessToken) {
         this(accessToken, "https://zenodo.org");
@@ -41,5 +44,13 @@ public class ZenodoContext {
 
     public String getEndpoint() {
         return endpoint;
+    }
+
+    public void setMetadata(JsonNode metadata) {
+        this.metadata = metadata;
+    }
+
+    public JsonNode getMetadata() {
+        return metadata;
     }
 }
