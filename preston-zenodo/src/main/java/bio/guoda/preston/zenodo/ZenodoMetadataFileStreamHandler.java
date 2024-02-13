@@ -88,25 +88,25 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             }
             if (!ids.isEmpty()) {
                 Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, ids);
-                Stream<Long> publishedMatches = foundDeposits
+                List<Long> existingIds = foundDeposits
                         .stream()
                         .filter(x -> !StringUtils.equals(x.getValue(), "unsubmitted"))
-                        .map(Pair::getKey);
-
-                List<Long> collect = publishedMatches.collect(Collectors.toList());
+                        .map(Pair::getKey)
+                        .distinct()
+                        .collect(Collectors.toList());
 
                 ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
-                if (collect.size() == 0) {
+                if (existingIds.size() == 0) {
                     ZenodoContext newDeposit = ZenodoUtils.create(ctxLocal, zenodoMetadata);
                     uploadContentAndPublish(zenodoMetadata, ids, newDeposit);
-                } else if (collect.size() == 1) {
-                    ctxLocal.setDepositId(collect.get(0));
+                } else if (existingIds.size() == 1) {
+                    ctxLocal.setDepositId(existingIds.get(0));
                     ZenodoContext newDepositVersion = ZenodoUtils.createNewVersion(ctxLocal);
                     String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
                     ZenodoUtils.update(newDepositVersion, input);
                     uploadContentAndPublish(zenodoMetadata, ids, newDepositVersion);
                 } else {
-                    throw new ContentStreamException("found more than one deposit ids (e.g., " + StringUtils.join(collect, ", ") + " matching (" + StringUtils.join(ids, ", ") + ") ");
+                    throw new ContentStreamException("found more than one deposit ids (e.g., " + StringUtils.join(existingIds, ", ") + " matching (" + StringUtils.join(ids, ", ") + ") ");
                 }
             }
 

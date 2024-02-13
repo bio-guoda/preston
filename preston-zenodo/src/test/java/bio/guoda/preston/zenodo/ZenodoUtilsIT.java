@@ -11,6 +11,7 @@ import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.FileEntity;
@@ -209,6 +210,26 @@ public class ZenodoUtilsIT {
         ctx = ZenodoUtils.createNewVersion(this.ctx);
         assertThat(ctx.getDepositId(), is(notNullValue()));
         assertThat(ctx.getDepositId(), is(greaterThan(depositIdPrevious)));
+
+    }
+
+
+    @Test
+    public void findDepositByBothContentIdAndTaxoDrosIdPickMostRecentVersion() throws IOException {
+
+        List<String> contentIds = Arrays.asList(
+                "hash://md5/8ec637e349f8bbce57cd0054d20d9d8f",
+                "urn:lsid:taxodros.uzh.ch:id:aboul-nasr,%201954b");
+        Collection<Pair<Long, String>> ids = ZenodoUtils.findByAlternateIds(ctx, contentIds);
+        assertThat(ids, not(nullValue()));
+        List<Long> filteredIds = ids
+                .stream()
+                .map(Pair::getKey)
+                .distinct()
+                .collect(Collectors.toList());
+        assertThat(filteredIds.size(), is(1));
+        assertThat(filteredIds.get(0), is(28657L));
+
 
     }
 
