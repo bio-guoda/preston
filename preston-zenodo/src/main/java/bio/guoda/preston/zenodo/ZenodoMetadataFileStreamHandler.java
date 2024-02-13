@@ -26,6 +26,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static bio.guoda.preston.zenodo.ZenodoUtils.getObjectMapper;
+
 public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
 
@@ -58,7 +60,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     if (line == null) {
                         break;
                     } else {
-                        JsonNode zenodoMetadata = ZenodoUtils.getObjectMapper().readTree(line);
+                        JsonNode zenodoMetadata = getObjectMapper().readTree(line);
                         if (maybeContainsPrestonEnabledZenodoMetadata(zenodoMetadata)) {
                             List<String> ids = new ArrayList<>();
                             JsonNode alternateIdentifiers = zenodoMetadata.at("/metadata/related_identifiers");
@@ -89,6 +91,8 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                                 } else if (collect.size() == 1) {
                                     ctx.setDepositId(collect.get(0));
                                     ZenodoContext newDepositVersion = ZenodoUtils.createNewVersion(ctx);
+                                    String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
+                                    ZenodoUtils.update(newDepositVersion, input);
                                     uploadContentAndPublish(zenodoMetadata, ids, newDepositVersion);
                                 } else  {
                                     throw new ContentStreamException("found more than one deposit ids (e.g., " + StringUtils.join(collect, ", ") + " matching (" + StringUtils.join(ids, ", ") + ") ");
