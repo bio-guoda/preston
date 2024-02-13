@@ -119,21 +119,7 @@ public class ZenodoUtils {
                 ignoreProgress(),
                 ignoreNone()
         )) {
-            JsonNode response = new ObjectMapper().readTree(is);
-            JsonNode deposit = response.at("/id");
-            if (deposit != null) {
-                ctx.setDepositId(deposit.asLong());
-            }
-
-            JsonNode bucket = response.at("/links/bucket");
-            if (bucket != null) {
-                Matcher matcher = UUIDUtil.ENDING_WITH_UUID_PATTERN.matcher(bucket.asText());
-                if (matcher.matches()) {
-                    ctx.setBucketId(UUID.fromString(matcher.group("uuid")));
-                }
-            }
-
-            return ctx;
+            return updateContext(ctx, is);
         }
     }
 

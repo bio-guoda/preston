@@ -13,10 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
-import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.InputStreamEntity;
-import org.apache.http.entity.StringEntity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +22,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -221,45 +218,4 @@ public class ZenodoUtilsIT {
     }
 
 
-    public class DerferencingEntity extends AbstractHttpEntity {
-        private Dereferencer<InputStream> dereferencer;
-        private IRI resource;
-
-        public DerferencingEntity(Dereferencer<InputStream> dereferencer, IRI resource) {
-            this.dereferencer = dereferencer;
-            this.resource = resource;
-        }
-
-        @Override
-        public boolean isRepeatable() {
-            return true;
-        }
-
-        @Override
-        public long getContentLength() {
-            try (InputStream inputStream = dereferencer.get(resource)) {
-                return IOUtils.copy(inputStream, NullOutputStream.NULL_OUTPUT_STREAM);
-            } catch (IOException e) {
-                return -1;
-            }
-        }
-
-        @Override
-        public InputStream getContent() throws IOException, UnsupportedOperationException {
-            return dereferencer.get(resource);
-        }
-
-        @Override
-        public void writeTo(OutputStream outStream) throws IOException {
-            try (InputStream is = dereferencer.get(resource)) {
-                IOUtils.copy(is, outStream);
-            }
-        }
-
-        @Override
-        public boolean isStreaming() {
-            return true;
-        }
-
-    }
 }

@@ -1,13 +1,11 @@
 package bio.guoda.preston.zenodo;
 
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.Dereferencer;
+import bio.guoda.preston.store.HashKeyUtil;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -20,10 +18,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,17 +58,18 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     if (line == null) {
                         break;
                     } else {
-                        JsonNode jsonNode = ZenodoUtils.getObjectMapper().readTree(line);
-                        if (maybeContainsPrestonEnabledZenodoMetadata(jsonNode)) {
+                        JsonNode zenodoMetadata = ZenodoUtils.getObjectMapper().readTree(line);
+                        if (maybeContainsPrestonEnabledZenodoMetadata(zenodoMetadata)) {
                             List<String> ids = new ArrayList<>();
-                            JsonNode alternateIdentifiers = jsonNode.at("/metadata/related_identifiers");
+                            JsonNode alternateIdentifiers = zenodoMetadata.at("/metadata/related_identifiers");
                             if (alternateIdentifiers != null && alternateIdentifiers.isArray()) {
                                 for (JsonNode alternateIdentifier : alternateIdentifiers) {
                                     JsonNode relation = alternateIdentifier.at("/relation");
                                     JsonNode identifier = alternateIdentifier.at("/identifier");
                                     if (relation != null && identifier != null) {
                                         if (StringUtils.equals(relation.asText(), "isAlternateIdentifier")) {
-                                            ids.add(identifier.asText());
+                                            String identiferText = identifier.asText();
+                                            ids.add(identiferText);
                                         }
                                     }
                                 }
@@ -83,10 +82,14 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                                         .map(Pair::getKey);
 
                                 List<Long> collect = publishedMatches.collect(Collectors.toList());
+
                                 if (collect.size() == 0) {
-                                    ZenodoUtils.create(ctx, jsonNode);
+                                    ZenodoContext newDeposit = ZenodoUtils.create(ctx, zenodoMetadata);
+                                    uploadContentAndPublish(zenodoMetadata, ids, newDeposit);
                                 } else if (collect.size() == 1) {
-                                    // create new version and update
+                                    ctx.setDepositId(collect.get(0));
+                                    ZenodoContext newDepositVersion = ZenodoUtils.createNewVersion(ctx);
+                                    uploadContentAndPublish(zenodoMetadata, ids, newDepositVersion);
                                 } else  {
                                     throw new ContentStreamException("found more than one deposit ids (e.g., " + StringUtils.join(collect, ", ") + " matching (" + StringUtils.join(ids, ", ") + ") ");
                                 }
@@ -102,6 +105,26 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         }
 
         return foundAtLeastOne.get();
+    }
+
+    private void uploadContentAndPublish(JsonNode taxodrosMetadata, List<String> ids, ZenodoContext ctx) throws IOException {
+        uploadAttempt(taxodrosMetadata, ids, ctx);
+        ZenodoUtils.publish(this.ctx);
+    }
+
+    private void uploadAttempt(JsonNode taxodrosMetadata, List<String> ids, ZenodoContext ctx) throws IOException {
+        JsonNode filename = taxodrosMetadata.at("/metadata/filename");
+        if (filename != null) {
+            Optional<IRI> contentIdCandidate = ids.stream()
+                    .map(RefNodeFactory::toIRI)
+                    .filter(HashKeyUtil::isValidHashKey)
+                    .findFirst();
+            if (contentIdCandidate.isPresent()) {
+                ZenodoUtils.upload(ctx,
+                        filename.asText(),
+                        new DerferencingEntity(dereferencer, contentIdCandidate.get()));
+            }
+        }
     }
 
     private boolean maybeContainsPrestonEnabledZenodoMetadata(JsonNode jsonNode) {
