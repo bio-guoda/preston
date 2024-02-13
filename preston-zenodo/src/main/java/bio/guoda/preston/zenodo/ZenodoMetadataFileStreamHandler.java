@@ -33,14 +33,14 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
 
     private final Dereferencer<InputStream> dereferencer;
-    private final ZenodoContext ctx;
+    private final ZenodoConfig ctx;
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
 
     public ZenodoMetadataFileStreamHandler(ContentStreamHandler contentStreamHandler,
                                            Dereferencer<InputStream> inputStreamDereferencer,
                                            OutputStream os,
-                                           ZenodoContext ctx) {
+                                           ZenodoConfig ctx) {
         this.contentStreamHandler = contentStreamHandler;
         this.dereferencer = inputStreamDereferencer;
         this.outputStream = os;
@@ -95,12 +95,13 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
                 List<Long> collect = publishedMatches.collect(Collectors.toList());
 
+                ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
                 if (collect.size() == 0) {
-                    ZenodoContext newDeposit = ZenodoUtils.create(ctx, zenodoMetadata);
+                    ZenodoContext newDeposit = ZenodoUtils.create(ctxLocal, zenodoMetadata);
                     uploadContentAndPublish(zenodoMetadata, ids, newDeposit);
                 } else if (collect.size() == 1) {
-                    ctx.setDepositId(collect.get(0));
-                    ZenodoContext newDepositVersion = ZenodoUtils.createNewVersion(ctx);
+                    ctxLocal.setDepositId(collect.get(0));
+                    ZenodoContext newDepositVersion = ZenodoUtils.createNewVersion(ctxLocal);
                     String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
                     ZenodoUtils.update(newDepositVersion, input);
                     uploadContentAndPublish(zenodoMetadata, ids, newDepositVersion);

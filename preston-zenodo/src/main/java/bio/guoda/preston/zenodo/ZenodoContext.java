@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.UUID;
 
-public class ZenodoContext {
+public class ZenodoContext implements ZenodoConfig {
 
     private final String endpoint;
     private Long depositId;
@@ -13,7 +13,7 @@ public class ZenodoContext {
     private JsonNode metadata;
 
     public ZenodoContext(String accessToken) {
-        this(accessToken, "https://zenodo.org");
+        this(accessToken, "https://sandbox.zenodo.org");
     }
 
     public ZenodoContext(String accessToken, String endpoint) {
@@ -21,7 +21,13 @@ public class ZenodoContext {
         this.endpoint = endpoint;
     }
 
+    public ZenodoContext(ZenodoConfig config) {
+        this.accessToken = config.getAccessToken();
+        this.endpoint = config.getEndpoint();
+    }
 
+
+    @Override
     public String getAccessToken() {
         return accessToken;
     }
@@ -42,6 +48,7 @@ public class ZenodoContext {
         this.depositId = depositId;
     }
 
+    @Override
     public String getEndpoint() {
         return endpoint;
     }
