@@ -60,10 +60,12 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     try {
                         attemptToHandleJSON(line, coordinate);
                     } catch (IOException ex) {
+                        // ignore
                     }
                 }
             }
         } catch (IOException e) {
+            throw new ContentStreamException("failed to handle [" + iriString + "]", e);
         }
 
         return foundAtLeastOne.get();
@@ -102,7 +104,6 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
                 ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
                 try {
-
                     if (existingIds.size() == 0) {
                         ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
                         uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
