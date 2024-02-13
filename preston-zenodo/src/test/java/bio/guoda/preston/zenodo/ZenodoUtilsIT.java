@@ -52,7 +52,7 @@ public class ZenodoUtilsIT {
         InputStream request = getInputStream();
         ObjectMapper objectMapper = ZenodoUtils.getObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(IOUtils.toString(request, StandardCharsets.UTF_8));
-        ctx = new ZenodoContext(getAccessToken(), "https://sandbox.zenodo.org");
+        ctx = new ZenodoContext(ZenodoTestUtil.getAccessToken(), "https://sandbox.zenodo.org");
         ctx = ZenodoUtils.create(ctx, jsonNode);
 
         assertNotNull(ctx);
@@ -210,11 +210,6 @@ public class ZenodoUtilsIT {
         assertThat(ctx.getDepositId(), is(notNullValue()));
         assertThat(ctx.getDepositId(), is(greaterThan(depositIdPrevious)));
 
-    }
-
-
-    private String getAccessToken() throws IOException {
-        return IOUtils.toString(getClass().getResourceAsStream("zenodo-token.hidden"), StandardCharsets.UTF_8);
     }
 
 

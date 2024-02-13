@@ -76,4 +76,12 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
     public String getApiEndpoint() {
         return apiEndpoint;
     }
+
+    public void setApiEndpoint(String apiEndpoint) {
+        this.apiEndpoint = apiEndpoint;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 }

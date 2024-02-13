@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -51,69 +52,69 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         AtomicBoolean foundAtLeastOne = new AtomicBoolean(false);
         String iriString = version.getIRIString();
         try {
-            Charset charset = new UniversalEncodingDetector().detect(is, new Metadata());
-            if (charset != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is, charset));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
-                for (int lineNumber = 1; contentStreamHandler.shouldKeepProcessing(); ++lineNumber) {
-                    String line = reader.readLine();
-                    if (line == null) {
-                        break;
-                    } else {
-                        JsonNode zenodoMetadata = getObjectMapper().readTree(line);
-                        if (maybeContainsPrestonEnabledZenodoMetadata(zenodoMetadata)) {
-                            List<String> ids = new ArrayList<>();
-                            JsonNode alternateIdentifiers = zenodoMetadata.at("/metadata/related_identifiers");
-                            if (alternateIdentifiers != null && alternateIdentifiers.isArray()) {
-                                for (JsonNode alternateIdentifier : alternateIdentifiers) {
-                                    JsonNode relation = alternateIdentifier.at("/relation");
-                                    JsonNode identifier = alternateIdentifier.at("/identifier");
-                                    if (relation != null && identifier != null) {
-                                        if (StringUtils.equals(relation.asText(), "isAlternateIdentifier")) {
-                                            String identiferText = identifier.asText();
-                                            ids.add(identiferText);
-                                        }
-                                    }
-                                }
-                            }
-                            if (!ids.isEmpty()) {
-                                Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, ids);
-                                Stream<Long> publishedMatches = foundDeposits
-                                        .stream()
-                                        .filter(x -> !StringUtils.equals(x.getValue(), "unsubmitted"))
-                                        .map(Pair::getKey);
-
-                                List<Long> collect = publishedMatches.collect(Collectors.toList());
-
-                                if (collect.size() == 0) {
-                                    ZenodoContext newDeposit = ZenodoUtils.create(ctx, zenodoMetadata);
-                                    uploadContentAndPublish(zenodoMetadata, ids, newDeposit);
-                                } else if (collect.size() == 1) {
-                                    ctx.setDepositId(collect.get(0));
-                                    ZenodoContext newDepositVersion = ZenodoUtils.createNewVersion(ctx);
-                                    String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
-                                    ZenodoUtils.update(newDepositVersion, input);
-                                    uploadContentAndPublish(zenodoMetadata, ids, newDepositVersion);
-                                } else  {
-                                    throw new ContentStreamException("found more than one deposit ids (e.g., " + StringUtils.join(collect, ", ") + " matching (" + StringUtils.join(ids, ", ") + ") ");
-                                }
-                            }
-
-                        }
-                    }
+            for (int lineNumber = 1; contentStreamHandler.shouldKeepProcessing(); ++lineNumber) {
+                String line = reader.readLine();
+                if (line == null) {
+                    break;
+                } else {
+                    attemptToHandleJSON(line);
                 }
             }
-
         } catch (IOException e) {
-            throw new ContentStreamException("no charset detected");
+            throw new ContentStreamException("no charset detected", e);
         }
 
         return foundAtLeastOne.get();
     }
 
+    private void attemptToHandleJSON(String line) throws IOException, ContentStreamException {
+        JsonNode zenodoMetadata = getObjectMapper().readTree(line);
+        if (maybeContainsPrestonEnabledZenodoMetadata(zenodoMetadata)) {
+            List<String> ids = new ArrayList<>();
+            JsonNode alternateIdentifiers = zenodoMetadata.at("/metadata/related_identifiers");
+            if (alternateIdentifiers != null && alternateIdentifiers.isArray()) {
+                for (JsonNode alternateIdentifier : alternateIdentifiers) {
+                    JsonNode relation = alternateIdentifier.at("/relation");
+                    JsonNode identifier = alternateIdentifier.at("/identifier");
+                    if (relation != null && identifier != null) {
+                        if (StringUtils.equals(relation.asText(), "isAlternateIdentifier")) {
+                            String identiferText = identifier.asText();
+                            ids.add(identiferText);
+                        }
+                    }
+                }
+            }
+            if (!ids.isEmpty()) {
+                Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, ids);
+                Stream<Long> publishedMatches = foundDeposits
+                        .stream()
+                        .filter(x -> !StringUtils.equals(x.getValue(), "unsubmitted"))
+                        .map(Pair::getKey);
+
+                List<Long> collect = publishedMatches.collect(Collectors.toList());
+
+                if (collect.size() == 0) {
+                    ZenodoContext newDeposit = ZenodoUtils.create(ctx, zenodoMetadata);
+                    uploadContentAndPublish(zenodoMetadata, ids, newDeposit);
+                } else if (collect.size() == 1) {
+                    ctx.setDepositId(collect.get(0));
+                    ZenodoContext newDepositVersion = ZenodoUtils.createNewVersion(ctx);
+                    String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
+                    ZenodoUtils.update(newDepositVersion, input);
+                    uploadContentAndPublish(zenodoMetadata, ids, newDepositVersion);
+                } else {
+                    throw new ContentStreamException("found more than one deposit ids (e.g., " + StringUtils.join(collect, ", ") + " matching (" + StringUtils.join(ids, ", ") + ") ");
+                }
+            }
+
+        }
+    }
+
     private void uploadContentAndPublish(JsonNode taxodrosMetadata, List<String> ids, ZenodoContext ctx) throws IOException {
         uploadAttempt(taxodrosMetadata, ids, ctx);
-        ZenodoUtils.publish(this.ctx);
+        ZenodoUtils.publish(ctx);
     }
 
     private void uploadAttempt(JsonNode taxodrosMetadata, List<String> ids, ZenodoContext ctx) throws IOException {
