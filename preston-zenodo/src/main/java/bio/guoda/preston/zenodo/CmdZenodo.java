@@ -21,13 +21,13 @@ import picocli.CommandLine;
 public class CmdZenodo extends LoggingPersisting implements Runnable {
 
     @CommandLine.Option(
-            names = {"--zenodo-access-token"},
+            names = {"--access-token"},
             description = "Zenodo Access Token"
     )
     private String accessToken;
 
     @CommandLine.Option(
-            names = {"--zenodo-api-endpoint"},
+            names = {"--endpoint"},
             description = "Zenodo api endpoint"
     )
     private String apiEndpoint = "https://zenodo.org";
@@ -36,7 +36,8 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
     @Override
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
-                = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), true, getHashType());
+                = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()),
+                true, getHashType());
         run(resolvingBlobStore(blobStoreAppendOnly));
 
     }
@@ -44,7 +45,7 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
     public void run(BlobStoreReadOnly blobStoreReadOnly) {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
-                NullPrintStream.NULL_PRINT_STREAM,
+                getOutputStream(),
                 LogErrorHandlerExitOnError.EXIT_ON_ERROR);
 
         ZenodoMetadataFileExtractor textMatcher = new ZenodoMetadataFileExtractor(

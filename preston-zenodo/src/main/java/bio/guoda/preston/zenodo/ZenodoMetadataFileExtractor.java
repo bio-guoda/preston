@@ -58,7 +58,7 @@ public class ZenodoMetadataFileExtractor extends ProcessorExtracting {
                     new CompressedStreamHandler(this),
                     new ZenodoMetadataFileStreamHandler(this,
                             new ContentHashDereferencer(ZenodoMetadataFileExtractor.this),
-                            outputStream,
+                            this,
                             zenodoContext
                     )
             );
@@ -83,12 +83,12 @@ public class ZenodoMetadataFileExtractor extends ProcessorExtracting {
 
         @Override
         public void emit(Quad statement) {
-            // don't do this; statements need to be grouped to allow matches to be counted
+            this.emitter.emit(statement);
         }
     }
 
     public String getActivityDescription() {
-        return "An activity that streams Genbank Flat Files into line-json.";
+        return "An activity that creates or updates Zenodo records.";
     }
 
 }

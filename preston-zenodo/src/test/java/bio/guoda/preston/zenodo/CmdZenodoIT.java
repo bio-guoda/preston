@@ -1,6 +1,7 @@
 package bio.guoda.preston.zenodo;
 
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
@@ -12,10 +13,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.startsWith;
 
 
 public class CmdZenodoIT {
@@ -48,12 +54,11 @@ public class CmdZenodoIT {
                 return getClass().getResourceAsStream("taxodros-data/7e/5a/7e5ae7ff14d66bff5224b21c80cdb87d");
             }
         });
-
-        assertThat(requested.get().getIRIString(), Is.is("hash://md5/2b9b15fceffd48f29f58949373bebbd5"));
-        assertThat(counter.get(), Is.is(2));
-
-        System.out.println(new String(outputStream.toByteArray()));
-
+        String log = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+        String[] split = StringUtils.split(log, '\n');
+        assertThat(split.length, greaterThan(0));
+        assertThat(split[split.length-1], startsWith("<https://sandbox.zenodo.org/records/"));
+        assertThat(split[split.length-1], containsString("> <http://www.w3.org/ns/prov#wasDerivedFrom> <line:hash://md5/7e5ae7ff14d66bff5224b21c80cdb87d!/L1> <urn:uuid:"));
     }
 
 }

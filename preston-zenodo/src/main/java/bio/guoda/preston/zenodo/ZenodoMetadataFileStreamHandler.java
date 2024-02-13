@@ -1,6 +1,8 @@
 package bio.guoda.preston.zenodo;
 
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.HashKeyUtil;
 import bio.guoda.preston.stream.ContentStreamException;
@@ -9,15 +11,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.parser.txt.UniversalEncodingDetector;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static bio.guoda.preston.zenodo.ZenodoUtils.getObjectMapper;
 
@@ -34,16 +31,16 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
     private final Dereferencer<InputStream> dereferencer;
     private final ZenodoConfig ctx;
+    private final StatementEmitter emitter;
     private ContentStreamHandler contentStreamHandler;
-    private final OutputStream outputStream;
 
     public ZenodoMetadataFileStreamHandler(ContentStreamHandler contentStreamHandler,
                                            Dereferencer<InputStream> inputStreamDereferencer,
-                                           OutputStream os,
+                                           StatementEmitter emitter,
                                            ZenodoConfig ctx) {
         this.contentStreamHandler = contentStreamHandler;
         this.dereferencer = inputStreamDereferencer;
-        this.outputStream = os;
+        this.emitter = emitter;
         this.ctx = ctx;
     }
 
@@ -55,21 +52,24 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
             for (int lineNumber = 1; contentStreamHandler.shouldKeepProcessing(); ++lineNumber) {
+                IRI coordinate = RefNodeFactory.toIRI("line:" + iriString + "!/L" + lineNumber);
                 String line = reader.readLine();
                 if (line == null) {
                     break;
                 } else {
-                    attemptToHandleJSON(line);
+                    try {
+                        attemptToHandleJSON(line, coordinate);
+                    } catch (IOException ex) {
+                    }
                 }
             }
         } catch (IOException e) {
-            throw new ContentStreamException("no charset detected", e);
         }
 
         return foundAtLeastOne.get();
     }
 
-    private void attemptToHandleJSON(String line) throws IOException, ContentStreamException {
+    private void attemptToHandleJSON(String line, IRI coordinate) throws IOException, ContentStreamException {
         JsonNode zenodoMetadata = getObjectMapper().readTree(line);
         if (maybeContainsPrestonEnabledZenodoMetadata(zenodoMetadata)) {
             List<String> lsids = new ArrayList<>();
@@ -84,7 +84,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                             String identiferText = identifier.asText();
                             if (StringUtils.startsWith(identiferText, "urn:lsid")) {
                                 lsids.add(identiferText);
-                            } else if (StringUtils.startsWith(identiferText, "hash:")){
+                            } else if (StringUtils.startsWith(identiferText, "hash:")) {
                                 contentIds.add(identiferText);
                             }
                         }
@@ -101,21 +101,54 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                         .collect(Collectors.toList());
 
                 ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
-                if (existingIds.size() == 0) {
-                    ZenodoContext newDeposit = ZenodoUtils.create(ctxLocal, zenodoMetadata);
-                    uploadContentAndPublish(zenodoMetadata, contentIds, newDeposit);
-                } else if (existingIds.size() == 1) {
-                    ctxLocal.setDepositId(existingIds.get(0));
-                    ZenodoContext newDepositVersion = ZenodoUtils.createNewVersion(ctxLocal);
-                    String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
-                    ZenodoUtils.update(newDepositVersion, input);
-                    uploadContentAndPublish(zenodoMetadata, contentIds, newDepositVersion);
-                } else {
-                    throw new ContentStreamException("found more than one deposit ids (e.g., " + StringUtils.join(existingIds, ", ") + " matching (" + StringUtils.join(lsids, ", ") + ") ");
+                try {
+
+                    if (existingIds.size() == 0) {
+                        ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
+                        uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
+                        emitCoordinateReference(coordinate, ctxLocal);
+                    } else if (existingIds.size() == 1) {
+                        ctxLocal.setDepositId(existingIds.get(0));
+                        ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
+                        String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
+                        ZenodoUtils.update(ctxLocal, input);
+                        uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
+                        emitCoordinateReference(coordinate, ctxLocal);
+                    } else {
+                        emitPossibleDuplicateRecords(coordinate, existingIds, ctxLocal);
+                    }
+                } catch (IOException e) {
+                    attemptCleanupAndRethrow(ctxLocal, e);
                 }
+
             }
 
         }
+
+    }
+
+    private void emitPossibleDuplicateRecords(IRI coordinate, List<Long> existingIds, ZenodoContext ctxLocal) {
+        for (Long existingId : existingIds) {
+            emitter.emit(
+                    RefNodeFactory.toStatement(
+                            RefNodeFactory.toIRI(ctxLocal.getEndpoint() + "/records/" + existingId),
+                            RefNodeConstants.SEE_ALSO,
+                            coordinate)
+            );
+        }
+    }
+
+    private void attemptCleanupAndRethrow(ZenodoContext ctxLocal, IOException e) throws IOException {
+        try {
+            ZenodoUtils.delete(ctxLocal);
+        } catch (IOException ex) {
+            // ignore
+        }
+        throw e;
+    }
+
+    private void emitCoordinateReference(IRI coordinate, ZenodoContext ctxLocal) {
+        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toIRI(ctxLocal.getEndpoint() + "/records/" + ctxLocal.getDepositId()), RefNodeConstants.WAS_DERIVED_FROM, coordinate));
     }
 
     private void uploadContentAndPublish(JsonNode taxodrosMetadata, List<String> ids, ZenodoContext ctx) throws IOException {
