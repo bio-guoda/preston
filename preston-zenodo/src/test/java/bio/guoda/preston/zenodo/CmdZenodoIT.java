@@ -26,7 +26,7 @@ public class CmdZenodoIT {
     @Test
     public void createOrUpdate() throws URISyntaxException, IOException {
         CmdZenodo cmdZenodo = new CmdZenodo();
-        String resourceURI = "taxodros-data/4e/a9/4ea9ec0a300f006813340cc7ac85dfa5";
+        String resourceURI = "taxodros-data/6e/f3/6ef3b8e326cd52972da1c00de60dc222";
 
         File dataDir = folder.newFolder("zenodo-test");
         cmdZenodo.setLocalDataDir(dataDir.getAbsolutePath());
@@ -45,12 +45,14 @@ public class CmdZenodoIT {
             public InputStream get(IRI uri) throws IOException {
                 requested.set(uri);
                 counter.incrementAndGet();
-                return getClass().getResourceAsStream("taxodros/26/a2/26a2275383a5372f0f8d2e3852690ad6");
+                return getClass().getResourceAsStream("taxodros-data/7e/5a/7e5ae7ff14d66bff5224b21c80cdb87d");
             }
         });
 
-        assertThat(requested.get().getIRIString(), Is.is("hash://md5/26a2275383a5372f0f8d2e3852690ad6"));
-        assertThat(counter.get(), Is.is(1));
+        assertThat(requested.get().getIRIString(), Is.is("hash://md5/2b9b15fceffd48f29f58949373bebbd5"));
+        assertThat(counter.get(), Is.is(2));
+
+        System.out.println(new String(outputStream.toByteArray()));
 
     }
 
