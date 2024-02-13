@@ -28,12 +28,12 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 
-public class Zenodo {
+public class ZenodoUtils {
 
 
-    public final static String APPLICATION_JSON = ContentType.APPLICATION_JSON.getMimeType();
+    private final static String APPLICATION_JSON = ContentType.APPLICATION_JSON.getMimeType();
 
-    static ZenodoContext updateContext(ZenodoContext ctx, InputStream is) throws IOException {
+    private static ZenodoContext updateContext(ZenodoContext ctx, InputStream is) throws IOException {
         JsonNode response = new ObjectMapper().readTree(is);
         JsonNode deposit = response.at("/id");
         if (deposit != null) {
@@ -51,7 +51,7 @@ public class Zenodo {
         return ctx;
     }
 
-    public static ObjectMapper getObjectMapper() {
+    static ObjectMapper getObjectMapper() {
         JsonFactory jf = JsonFactory.builder()
                 .enable(JsonWriteFeature.ESCAPE_NON_ASCII)
                 .build();

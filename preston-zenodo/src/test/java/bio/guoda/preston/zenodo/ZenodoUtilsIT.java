@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertNotNull;
 
-public class ZenodoIT {
+public class ZenodoUtilsIT {
 
     public static final String CONTENT_ID_PDF = "hash://md5/639988a4074ded5208a575b760a5dc5e";
     public static final String TAXODROS_ID = "urn:lsid:taxodros.uzh.ch:id:abd%20el-halim%20et%20al.,%202005";
@@ -39,10 +39,10 @@ public class ZenodoIT {
     @Before
     public void create() throws IOException {
         InputStream request = getInputStream();
-        ObjectMapper objectMapper = Zenodo.getObjectMapper();
+        ObjectMapper objectMapper = ZenodoUtils.getObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(IOUtils.toString(request, StandardCharsets.UTF_8));
         ctx = new ZenodoContext(getAccessToken(), "https://sandbox.zenodo.org");
-        ctx = Zenodo.create(ctx, jsonNode);
+        ctx = ZenodoUtils.create(ctx, jsonNode);
 
         assertNotNull(ctx);
         assertNotNull(ctx.getBucketId());
@@ -53,7 +53,7 @@ public class ZenodoIT {
     @After
     public void delete() throws IOException {
         try {
-            Zenodo.delete(this.ctx);
+            ZenodoUtils.delete(this.ctx);
             cleanupPreExisting();
         } catch (IOException ex) {
             // ignore
@@ -70,7 +70,7 @@ public class ZenodoIT {
                     ZenodoContext ctx = new ZenodoContext(this.ctx.getAccessToken());
                     ctx.setDepositId(depositId);
                     try {
-                        Zenodo.delete(ctx);
+                        ZenodoUtils.delete(ctx);
                     } catch (IOException e) {
                         // ignore
                     }
@@ -112,7 +112,7 @@ public class ZenodoIT {
     public void uploadData() throws IOException {
         InputStream resourceAsStream = getInputStream();
         assertNotNull(resourceAsStream);
-        Zenodo.upload(this.ctx, "some spacey name.json", resourceAsStream);
+        ZenodoUtils.upload(this.ctx, "some spacey name.json", resourceAsStream);
     }
 
     private InputStream getInputStream() {
@@ -122,9 +122,9 @@ public class ZenodoIT {
     @Test
     public void updateMetadata() throws IOException {
         InputStream inputStream = getInputStream();
-        JsonNode payload = Zenodo.getObjectMapper().readTree(inputStream);
-        String input = Zenodo.getObjectMapper().writer().writeValueAsString(payload);
-        Zenodo.update(this.ctx, input);
+        JsonNode payload = ZenodoUtils.getObjectMapper().readTree(inputStream);
+        String input = ZenodoUtils.getObjectMapper().writer().writeValueAsString(payload);
+        ZenodoUtils.update(this.ctx, input);
     }
 
     @Test
@@ -134,11 +134,11 @@ public class ZenodoIT {
 
         assertNotNull(resourceAsStream);
 
-        Zenodo.upload(this.ctx, "some spacey name.json", resourceAsStream);
+        ZenodoUtils.upload(this.ctx, "some spacey name.json", resourceAsStream);
 
-        Zenodo.publish(this.ctx);
+        ZenodoUtils.publish(this.ctx);
         Long depositIdPrevious = ctx.getDepositId();
-        ctx = Zenodo.createNewVersion(this.ctx);
+        ctx = ZenodoUtils.createNewVersion(this.ctx);
         assertThat(ctx.getDepositId(), is(notNullValue()));
         assertThat(ctx.getDepositId(), is(greaterThan(depositIdPrevious)));
 
@@ -167,7 +167,7 @@ public class ZenodoIT {
         InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI((apiEndpoint
                 + method) + "?" + filter));
 
-        JsonNode jsonNode = Zenodo.getObjectMapper().readTree(is);
+        JsonNode jsonNode = ZenodoUtils.getObjectMapper().readTree(is);
 
         JsonNode hits = jsonNode.has("hits")
                 && jsonNode.get("hits").has("hits") ? jsonNode.get("hits").get("hits") : jsonNode;
