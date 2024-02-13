@@ -195,7 +195,7 @@ public class ZenodoUtils {
 
     public static Collection<Pair<Long, String>> findByAlternateIds(ZenodoConfig ctx, List<String> contentIds) throws IOException {
         Collection<Pair<Long, String>> foundIds = new TreeSet<>();
-        appendIds(foundIds, ctx.getEndpoint(), "communities=taxodros&all_versions=false&q=" + getQueryForIds(contentIds), "/api/records");
+        appendIds(foundIds, ctx.getEndpoint(), "communities=taxodros&all_versions=false&q=" + getQueryForIds(contentIds) + "&access_token=" + ctx.getAccessToken(), "/api/records" );
         appendIds(foundIds, ctx.getEndpoint(), "q=" + getQueryForIds(contentIds) + "&access_token=" + ctx.getAccessToken(), "/api/deposit/depositions");
         return foundIds;
     }

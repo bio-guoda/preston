@@ -72,7 +72,8 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
     private void attemptToHandleJSON(String line) throws IOException, ContentStreamException {
         JsonNode zenodoMetadata = getObjectMapper().readTree(line);
         if (maybeContainsPrestonEnabledZenodoMetadata(zenodoMetadata)) {
-            List<String> ids = new ArrayList<>();
+            List<String> lsids = new ArrayList<>();
+            List<String> contentIds = new ArrayList<>();
             JsonNode alternateIdentifiers = zenodoMetadata.at("/metadata/related_identifiers");
             if (alternateIdentifiers != null && alternateIdentifiers.isArray()) {
                 for (JsonNode alternateIdentifier : alternateIdentifiers) {
@@ -81,13 +82,17 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     if (relation != null && identifier != null) {
                         if (StringUtils.equals(relation.asText(), "isAlternateIdentifier")) {
                             String identiferText = identifier.asText();
-                            ids.add(identiferText);
+                            if (StringUtils.startsWith(identiferText, "urn:lsid")) {
+                                lsids.add(identiferText);
+                            } else if (StringUtils.startsWith(identiferText, "hash:")){
+                                contentIds.add(identiferText);
+                            }
                         }
                     }
                 }
             }
-            if (!ids.isEmpty()) {
-                Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, ids);
+            if (!lsids.isEmpty()) {
+                Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, lsids);
                 List<Long> existingIds = foundDeposits
                         .stream()
                         .filter(x -> !StringUtils.equals(x.getValue(), "unsubmitted"))
@@ -98,15 +103,15 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
                 if (existingIds.size() == 0) {
                     ZenodoContext newDeposit = ZenodoUtils.create(ctxLocal, zenodoMetadata);
-                    uploadContentAndPublish(zenodoMetadata, ids, newDeposit);
+                    uploadContentAndPublish(zenodoMetadata, contentIds, newDeposit);
                 } else if (existingIds.size() == 1) {
                     ctxLocal.setDepositId(existingIds.get(0));
                     ZenodoContext newDepositVersion = ZenodoUtils.createNewVersion(ctxLocal);
                     String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
                     ZenodoUtils.update(newDepositVersion, input);
-                    uploadContentAndPublish(zenodoMetadata, ids, newDepositVersion);
+                    uploadContentAndPublish(zenodoMetadata, contentIds, newDepositVersion);
                 } else {
-                    throw new ContentStreamException("found more than one deposit ids (e.g., " + StringUtils.join(existingIds, ", ") + " matching (" + StringUtils.join(ids, ", ") + ") ");
+                    throw new ContentStreamException("found more than one deposit ids (e.g., " + StringUtils.join(existingIds, ", ") + " matching (" + StringUtils.join(lsids, ", ") + ") ");
                 }
             }
 
