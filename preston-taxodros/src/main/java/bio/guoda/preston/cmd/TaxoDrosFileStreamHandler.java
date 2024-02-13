@@ -147,22 +147,28 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                     } else if (StringUtils.startsWith(line, PREFIX_YEAR)) {
                         setTypeDROS5(objectNode);
                         String andResetCapture = getAndResetCapture(textCapture);
-                        String[] authors = StringUtils.split(andResetCapture, ",");
-                        ObjectNode creator = null;
                         ArrayNode creators = new ObjectMapper().createArrayNode();
-                        StringBuilder creatorName = new StringBuilder();
-                        for (int i = 0; i < authors.length; i++) {
-                            String author = StringUtils.trim(StringUtils.replace(authors[i], "&", ""));
-                            if (i % 2 == 0) {
-                                creatorName.append(author);
-                            } else {
-                                creatorName.append(", ");
-                                creatorName.append(author);
-                                creator = new ObjectMapper().createObjectNode();
-                                creator.put("name", creatorName.toString());
-                                creators.add(creator);
-                                creatorName = new StringBuilder();
+
+                        String[] authorsFirstSplit = StringUtils.split(andResetCapture, "&");
+
+                        for (String s : authorsFirstSplit) {
+                            String[] authors = StringUtils.split(s, ",");
+                            ObjectNode creator = null;
+                            StringBuilder creatorName = new StringBuilder();
+                            for (int i = 0; i < authors.length; i++) {
+                                String author = StringUtils.trim(StringUtils.replace(authors[i], "&", ""));
+                                if (i % 2 == 0) {
+                                    creatorName.append(author);
+                                } else {
+                                    creatorName.append(", ");
+                                    creatorName.append(author);
+                                    creator = new ObjectMapper().createObjectNode();
+                                    creator.put("name", creatorName.toString());
+                                    creators.add(creator);
+                                    creatorName = new StringBuilder();
+                                }
                             }
+
                         }
                         objectNode.set("creators", creators);
                         appendIdentifier(textCapture, line, PREFIX_YEAR);

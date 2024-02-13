@@ -58,6 +58,24 @@ public class TaxoDrosFileExtractorTest {
     }
 
     @Test
+    public void streamTaxoDrosToLineJsonAuthorsWithAmpersand() throws IOException {
+        String[] jsonObjects = getResource("DROS5.TEXT.authors.ampersand.txt");
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+
+
+        assertThat(taxonNode.has("doi"), is(true));
+        assertThat(taxonNode.get("doi").textValue(), is("10.1016/j.tpb.2006.05.001"));
+
+        JsonNode creatorNames = taxonNode.at("/creators");
+
+        assertThat(creatorNames.get(0).get("name").asText(), is("Abrusan, G."));
+        assertThat(creatorNames.get(1).get("name").asText(), is("Krambeck, H.-J."));
+        assertThat(creatorNames.size(), is(2));
+    }
+
+    @Test
     public void streamTaxoDrosToLineJsonBook() throws IOException {
         String[] jsonObjects = getResource("DROS5.TEXT.book.txt");
         assertThat(jsonObjects.length, is(1));
