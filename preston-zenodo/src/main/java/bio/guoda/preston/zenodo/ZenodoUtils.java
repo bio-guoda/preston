@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.json.JsonWriteFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -24,9 +25,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.List;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 public class ZenodoUtils {
 
@@ -176,5 +181,37 @@ public class ZenodoUtils {
                 ignoreProgress(),
                 ignoreNone()
         );
+    }
+
+    public static Collection<Pair<Long, String>> findByAlternateIds(ZenodoContext ctx, List<String> contentIds) throws IOException {
+        Collection<Pair<Long, String>> foundIds = new TreeSet<>();
+        appendIds(foundIds, ctx.getEndpoint(), "communities=taxodros&all_versions=true&q=" + getQueryForIds(contentIds), "/api/records");
+        appendIds(foundIds, ctx.getEndpoint(), "q=" + getQueryForIds(contentIds) + "&access_token=" + ctx.getAccessToken(), "/api/deposit/depositions");
+        return foundIds;
+    }
+
+    private static String getQueryForIds(List<String> ids) {
+        return ids.stream()
+                .map(URLEncodingUtil::urlEncode)
+                .map(id -> "alternate.identifier:%22" + id + "%22")
+                .collect(Collectors.joining("%20AND%20"));
+    }
+
+    private static void appendIds(Collection<Pair<Long, String>> foundIds, String apiEndpoint, String filter, String method) throws IOException {
+        InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI((apiEndpoint
+                + method) + "?" + filter));
+
+        JsonNode jsonNode = getObjectMapper().readTree(is);
+
+        JsonNode hits = jsonNode.has("hits")
+                && jsonNode.get("hits").has("hits") ? jsonNode.get("hits").get("hits") : jsonNode;
+
+        for (JsonNode hit : hits) {
+            if (hit.has("id")
+                    && hit.get("id").isIntegralNumber()
+                    && hit.has("state")) {
+                foundIds.add(Pair.of(hit.get("id").asLong(), hit.get("state").asText()));
+            }
+        }
     }
 }

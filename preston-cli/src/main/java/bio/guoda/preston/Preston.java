@@ -36,6 +36,7 @@ import bio.guoda.preston.excel.CmdExcelRecordStream;
 import bio.guoda.preston.paradox.CmdParadoxRecordStream;
 import bio.guoda.preston.server.CmdRedirect;
 import bio.guoda.preston.server.CmdServe;
+import bio.guoda.preston.zenodo.CmdZenodo;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
 import picocli.codegen.docgen.manpage.ManPageGenerator;
@@ -66,6 +67,7 @@ import static java.lang.System.exit;
                 CmdExcelRecordStream.class,
                 CmdParadoxRecordStream.class,
                 CmdPlazi.class,
+                CmdZenodo.class,
                 CmdGenBankStream.class,
                 CmdTaxoDrosStream.class,
                 CmdMBDStream.class,

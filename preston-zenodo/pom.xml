@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>preston-cmd</artifactId>
+            <artifactId>preston-get</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
