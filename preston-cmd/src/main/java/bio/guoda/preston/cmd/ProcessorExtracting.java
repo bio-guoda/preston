@@ -32,6 +32,8 @@ import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 public abstract class ProcessorExtracting extends ProcessorReadOnly {
     private final Logger LOG = LoggerFactory.getLogger(ProcessorExtracting.class);
 
+    private int emittingBatchSize = 256;
+
     public ProcessorExtracting(BlobStoreReadOnly blobStoreReadOnly,
                                ProcessorState processorState,
                                StatementsListener... listeners) {
@@ -102,11 +104,16 @@ public abstract class ProcessorExtracting extends ProcessorReadOnly {
         }
 
         private int getBatchSize() {
-            return 256;
+            return emittingBatchSize;
         }
     }
 
 
     abstract public String getActivityDescription();
+
+    public void setEmittingBatchSize(int emittingBatchSize) {
+        this.emittingBatchSize = emittingBatchSize;
+    }
+
 
 }

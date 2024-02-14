@@ -2,7 +2,6 @@ package bio.guoda.preston.zenodo;
 
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.cmd.LogErrorHandlerExitOnError;
-import bio.guoda.preston.cmd.LogTypes;
 import bio.guoda.preston.cmd.LoggingPersisting;
 import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
@@ -10,7 +9,6 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
-import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
@@ -51,7 +49,6 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
         ZenodoMetadataFileExtractor textMatcher = new ZenodoMetadataFileExtractor(
                 this,
                 blobStoreReadOnly,
-                getOutputStream(),
                 new ZenodoContext(getAccessToken(), getApiEndpoint()),
                 listener
         );
