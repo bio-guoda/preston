@@ -125,7 +125,7 @@ public class TaxoDrosFileExtractorTest {
     @Test
     public void urlEncodeFilename() throws ContentStreamException {
         String filename = "one two.pdf";
-        String path = URLEncodingUtil.urlEncode(filename);
+        String path = JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename);
         assertThat(path, is("one%20two.pdf"));
     }
 
@@ -239,7 +239,6 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("taxodros:method").asText(), is("ocr"));
         assertThat(taxonNode.get("publication_type").textValue(), is("article"));
         assertThat(taxonNode.get("filename").asText(), is("Abd El-Halim et al., 2005M.pdf"));
-        assertThat(taxonNode.get("filenameUrlEncoded").asText(), is("Abd%20El-Halim%20et%20al.,%202005M.pdf"));
     }
 
     private String[] getResource(String testResource) throws IOException {

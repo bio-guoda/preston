@@ -107,9 +107,6 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                 if (isType(objectNode, DROS_5)) {
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
                                     String filename = getAndResetCapture(textCapture);
-                                    String encodedFilename = URLEncodingUtil.urlEncode(filename);
-                                    setValue(objectNode, "filenameUrlEncoded", encodedFilename);
-                                    appendIdentifier(objectNode, IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":filename:" + encodedFilename);
                                     setValue(objectNode, "filename", filename);
                                     setValue(objectNode, "upload_type", "publication");
                                     ArrayNode communitiesArray = Stream.of("taxodros", "biosyslit")
@@ -142,7 +139,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         setTypeDROS5(objectNode);
                         String referenceId = getAndResetCapture(textCapture);
                         setValue(objectNode, REFERENCE_ID, referenceId);
-                        appendIdentifier(objectNode, "isAlternateIdentifier", LSID_PREFIX + ":id:" + URLEncodingUtil.urlEncode(referenceId));
+                        appendIdentifier(objectNode, "isAlternateIdentifier", LSID_PREFIX + ":id:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(referenceId));
                         appendIdentifier(textCapture, line, PREFIX_AUTHOR);
                     } else if (StringUtils.startsWith(line, PREFIX_YEAR)) {
                         setTypeDROS5(objectNode);

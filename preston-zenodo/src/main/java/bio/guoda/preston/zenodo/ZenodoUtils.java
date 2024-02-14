@@ -4,7 +4,7 @@ import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.DerefState;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.ResourcesHTTP;
-import bio.guoda.preston.cmd.URLEncodingUtil;
+import bio.guoda.preston.cmd.JavaScriptAndPythonFriendlyURLEncodingUtil;
 import bio.guoda.preston.util.UUIDUtil;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.json.JsonWriteFeature;
@@ -178,7 +178,7 @@ public class ZenodoUtils {
     }
 
     public static ZenodoContext upload(ZenodoContext ctx, String filename, HttpEntity entity) throws IOException {
-        String requestURI = ctx.getEndpoint() + "/api/files/" + ctx.getBucketId() + "/" + URLEncodingUtil.urlEncode(filename) + "?access_token=" + ctx.getAccessToken();
+        String requestURI = ctx.getEndpoint() + "/api/files/" + ctx.getBucketId() + "/" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename) + "?access_token=" + ctx.getAccessToken();
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
         HttpPut request = new HttpPut(requestURI);
         request.setEntity(entity);
@@ -202,7 +202,7 @@ public class ZenodoUtils {
 
     private static String getQueryForIds(List<String> ids) {
         return ids.stream()
-                .map(URLEncodingUtil::urlEncode)
+                .map(JavaScriptAndPythonFriendlyURLEncodingUtil::urlEncode)
                 .map(id -> "alternate.identifier:%22" + id + "%22")
                 .collect(Collectors.joining("%20AND%20"));
     }

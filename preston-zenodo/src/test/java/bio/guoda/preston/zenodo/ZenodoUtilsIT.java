@@ -11,7 +11,6 @@ import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.FileEntity;
@@ -50,10 +49,11 @@ public class ZenodoUtilsIT {
 
     @Before
     public void create() throws IOException {
+        ctx = new ZenodoContext(ZenodoTestUtil.getAccessToken(), "https://sandbox.zenodo.org");
         InputStream request = getInputStream();
+        assertNotNull(request);
         ObjectMapper objectMapper = ZenodoUtils.getObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(IOUtils.toString(request, StandardCharsets.UTF_8));
-        ctx = new ZenodoContext(ZenodoTestUtil.getAccessToken(), "https://sandbox.zenodo.org");
         ctx = ZenodoUtils.create(ctx, jsonNode);
 
         assertNotNull(ctx);
@@ -127,7 +127,7 @@ public class ZenodoUtilsIT {
         assertTrue(entity.isRepeatable());
         assertFalse(entity.isStreaming());
         assertFalse(entity.isChunked());
-        assertUpload(entity, expectedContentId());
+        assertUpload(entity, expectedContentId(), "some spacey name.json");
     }
 
     @Test
@@ -137,7 +137,7 @@ public class ZenodoUtilsIT {
         assertTrue(entity.isStreaming());
         assertFalse(entity.isChunked());
         // stream entities not supported somehow, but accepted as 0 length content
-        assertUpload(entity, contentIdZeroLengthContent());
+        assertUpload(entity, contentIdZeroLengthContent(), "some spacey name.json");
     }
 
     private String expectedContentId() throws IOException {
@@ -159,15 +159,26 @@ public class ZenodoUtilsIT {
         assertTrue(entity.isRepeatable());
         assertTrue(entity.isStreaming());
         assertFalse(entity.isChunked());
-        assertUpload(entity, expectedContentId());
+        assertUpload(entity, expectedContentId(), "some spacey name.json");
+    }
+
+    @Test
+    public void uploadDataUsingDereferencingEntityWithAmpersandAndComma() throws IOException {
+        Dereferencer<InputStream> dereferencer = uri -> getClass().getResourceAsStream("zenodo-metadata.json");
+
+        HttpEntity entity = new DerferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"));
+        assertTrue(entity.isRepeatable());
+        assertTrue(entity.isStreaming());
+        assertFalse(entity.isChunked());
+        assertUpload(entity, expectedContentId(), "some space & name , comma.json");
     }
 
     private String contentIdZeroLengthContent() throws IOException {
         return Hasher.calcHashIRI(IOUtils.toInputStream("", StandardCharsets.UTF_8), NullOutputStream.NULL_OUTPUT_STREAM, HashType.md5).getIRIString();
     }
 
-    private void assertUpload(HttpEntity entity, String expectedChecksum) throws IOException {
-        ZenodoContext uploadContext = ZenodoUtils.upload(this.ctx, "some spacey name.json", entity);
+    private void assertUpload(HttpEntity entity, String expectedChecksum, String filename) throws IOException {
+        ZenodoContext uploadContext = ZenodoUtils.upload(this.ctx, filename, entity);
         JsonNode checksum = uploadContext.getMetadata().at("/checksum");
         if (checksum != null) {
             String actualChecksum = checksum.asText();
@@ -201,7 +212,12 @@ public class ZenodoUtilsIT {
 
         assertNotNull(resourceAsStream);
 
-        ZenodoUtils.upload(this.ctx, "some spacey name.json", new InputStreamEntity(resourceAsStream));
+        Dereferencer<InputStream> dereferencer = uri -> getInputStream();
+
+        ZenodoUtils.upload(this.ctx,
+                "some spacey & name.json",
+                new DerferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"))
+        );
 
         ZenodoUtils.publish(this.ctx);
 
