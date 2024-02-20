@@ -35,6 +35,8 @@ import static org.hamcrest.core.Is.is;
 
 public class TaxoDrosFileExtractorTest {
 
+    public static final String NON_JOURNAL_TITLE = "title";
+
     @Test
     public void streamTaxoDrosToLineJson() throws IOException {
         assertAssumptions("DROS5.TEXT.example.txt");
@@ -84,7 +86,8 @@ public class TaxoDrosFileExtractorTest {
 
         assertThat(StringUtils.startsWith(".Z.Nijhoff", ".Z"), is(true));
 
-        assertThat(taxonNode.get("title").textValue(), is("Catalogue of the described Diptera from South Asia. 222 pp."));
+        assertThat(taxonNode.get(NON_JOURNAL_TITLE).textValue(), is("Catalogue of the described Diptera from South Asia. 222 pp."));
+        assertThat(taxonNode.get("partof_title").textValue(), is("Catalogue of the described Diptera from South Asia. 222 pp."));
         assertThat(taxonNode.get("upload_type").textValue(), is("publication"));
         assertThat(taxonNode.get("publication_type").textValue(), is("book"));
         assertThat(taxonNode.get("imprint_publisher").textValue(), is("Nijhoff"));
@@ -100,7 +103,7 @@ public class TaxoDrosFileExtractorTest {
         assertThat(StringUtils.startsWith(".Z.Nijhoff", ".Z"), is(true));
 
         assertThat(taxonNode.get("referenceId").textValue(), is("collection, zmc"));
-        assertThat(taxonNode.get("title").textValue(), is("Zoological Museum University of Copenhagen Universitetsparken 15 DK-2100 Copenhagen O Denmark"));
+        assertThat(taxonNode.get(NON_JOURNAL_TITLE).textValue(), is("Zoological Museum University of Copenhagen Universitetsparken 15 DK-2100 Copenhagen O Denmark"));
         assertThat(taxonNode.get("upload_type").textValue(), is("publication"));
         assertThat(taxonNode.get("publication_type").textValue(), is("other"));
         assertThat(taxonNode.get("collection").textValue(), is("collection, zmc"));
@@ -191,6 +194,38 @@ public class TaxoDrosFileExtractorTest {
 
     }
 
+    @Test
+    public void parseBookChapterCitation() throws IOException {
+        String[] jsonObjects = getResource("DROS5.TEXT.bookchapter.txt");
+        assertThat(jsonObjects.length, is(1));
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText()
+                , is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L15"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText()
+                , is("taxodros-dros5"));
+        assertThat(taxonNode.get("upload_type").asText(), is("publication"));
+        assertThat(taxonNode.get("publication_type").asText(), is("section"));
+        assertThat(taxonNode.get(NON_JOURNAL_TITLE).asText(), is("La prevenzione delle contaminazioni entomatiche negli ortaggi per l'industria alimentare: sperimentazione di una macchina aspiratrice su colture di spinacio. In: Cravedi, P. (ed.), Atti del 60 Simposio \"La difesa antiparassitaria nelle industrie alimentari e la protezione degli alimenti\", pp. 57-65."));
+        assertThat(taxonNode.get("partof_title").asText(), is("La prevenzione delle contaminazioni entomatiche negli ortaggi per l'industria alimentare: sperimentazione di una macchina aspiratrice su colture di spinacio. In: Cravedi, P. (ed.), Atti del 60 Simposio \"La difesa antiparassitaria nelle industrie alimentari e la protezione degli alimenti\""));
+        assertThat(taxonNode.get("partof_pages").asText(), is("57-65"));
+    }
+
+    @Test
+    public void parseBookChapterCitationSinglePage() throws IOException {
+        String[] jsonObjects = getResource("DROS5.TEXT.bookchapter.single.page.txt");
+        assertThat(jsonObjects.length, is(1));
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText()
+                , is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L15"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText()
+                , is("taxodros-dros5"));
+        assertThat(taxonNode.get("upload_type").asText(), is("publication"));
+        assertThat(taxonNode.get("publication_type").asText(), is("section"));
+        assertThat(taxonNode.get(NON_JOURNAL_TITLE).asText(), is("La prevenzione delle contaminazioni entomatiche negli ortaggi per l'industria alimentare: sperimentazione di una macchina aspiratrice su colture di spinacio. In: Cravedi, P. (ed.), Atti del 60 Simposio \"La difesa antiparassitaria nelle industrie alimentari e la protezione degli alimenti\", p. 57."));
+        assertThat(taxonNode.get("partof_title").asText(), is("La prevenzione delle contaminazioni entomatiche negli ortaggi per l'industria alimentare: sperimentazione di una macchina aspiratrice su colture di spinacio. In: Cravedi, P. (ed.), Atti del 60 Simposio \"La difesa antiparassitaria nelle industrie alimentari e la protezione degli alimenti\""));
+        assertThat(taxonNode.get("partof_pages").asText(), is("57"));
+    }
+
     private JsonNode unwrapMetadata(String jsonObject) throws JsonProcessingException {
         JsonNode rootNode = new ObjectMapper().readTree(jsonObject);
         return rootNode.get("metadata");
@@ -245,7 +280,7 @@ public class TaxoDrosFileExtractorTest {
         assertThat(creators.get(0).get("name").asText(), is("Abd El-Halim, A.S."));
         assertThat(creators.get(1).get("name").asText(), is("Mostafa, A.A."));
         assertThat(creators.get(2).get("name").asText(), is("Allam, K.A.M.a."));
-        assertThat(taxonNode.get("title").asText(), is("Dipterous flies species and their densities in fourteen Egyptian governorates."));
+        assertThat(taxonNode.get(NON_JOURNAL_TITLE).asText(), is("Dipterous flies species and their densities in fourteen Egyptian governorates."));
         assertThat(taxonNode.get("journal_title").asText(), is("J. Egypt. Soc. Parasitol."));
         assertThat(taxonNode.get("journal_volume").asText(), is("35"));
         assertThat(taxonNode.get("journal_issue"), is(nullValue()));

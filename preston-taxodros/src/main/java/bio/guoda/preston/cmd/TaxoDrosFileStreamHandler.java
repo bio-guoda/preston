@@ -74,6 +74,8 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String TAXODROS_DATA_VERSION_MD5 = "hash://md5/4fa9eeed1c8cff2490483a48c718df02";
     public static final String LSID_PREFIX = "urn:lsid:taxodros.uzh.ch";
     public static final String IS_ALTERNATE_IDENTIFIER = "isAlternateIdentifier";
+    public static final String PARTOF_PAGES = "partof_pages";
+    public static final String PARTOF_TITLE = "partof_title";
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
@@ -182,14 +184,24 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         appendIdentifier(textCapture, line, PREFIX_TITLE);
                     } else if (StringUtils.startsWith(line, PREFIX_PUBLISHER)) {
                         setTypeDROS5(objectNode);
+                        String title = getAndResetCapture(textCapture);
+                        setValue(objectNode, "title", title);
                         if (objectNode.has(REFERENCE_ID)
                                 && StringUtils.containsIgnoreCase(objectNode.get(REFERENCE_ID).asText(), "collection")) {
                             setValue(objectNode, PUBLICATION_TYPE, "other");
                             setValue(objectNode, "collection", objectNode.get(REFERENCE_ID).asText());
                         } else {
-                            setValue(objectNode, PUBLICATION_TYPE, "book");
+                            Pattern pageNumberPattern = Pattern.compile("(?<title>.*)[, ]+(?<pagesSignature>[ ][p]{1,2}\\.)[ ]+(?<pages>[0-9 -]+).*");
+                            Matcher matcher = pageNumberPattern.matcher(title);
+                            if (matcher.matches()) {
+                                setValue(objectNode, PARTOF_PAGES, matcher.group("pages"));
+                                setValue(objectNode, PARTOF_TITLE, matcher.group("title"));
+                                setValue(objectNode, PUBLICATION_TYPE, "section");
+                            } else {
+                                setValue(objectNode, PARTOF_TITLE, title);
+                                setValue(objectNode, PUBLICATION_TYPE, "book");
+                            }
                         }
-                        setValue(objectNode, "title", getAndResetCapture(textCapture));
                         appendIdentifier(textCapture, line, PREFIX_PUBLISHER);
                     } else if (StringUtils.startsWith(line, PREFIX_JOURNAL)) {
                         setTypeDROS5(objectNode);
