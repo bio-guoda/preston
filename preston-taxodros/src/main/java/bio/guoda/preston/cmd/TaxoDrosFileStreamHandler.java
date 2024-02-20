@@ -141,7 +141,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         setTypeDROS5(objectNode);
                         String referenceId = getAndResetCapture(textCapture);
                         setValue(objectNode, REFERENCE_ID, referenceId);
-                        appendIdentifier(objectNode, "isAlternateIdentifier", LSID_PREFIX + ":id:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(referenceId));
+                        appendIdentifier(objectNode, IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":id:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(referenceId));
                         appendIdentifier(textCapture, line, PREFIX_AUTHOR);
                     } else if (StringUtils.startsWith(line, PREFIX_YEAR)) {
                         setTypeDROS5(objectNode);
@@ -289,6 +289,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     }
 
     private void writeRecord(AtomicBoolean foundAtLeastOne, ObjectNode objectNode) throws IOException {
+        objectNode.put("description", "Uploaded by Plazi for Taxodros. We do not have abstracts.");
         ObjectNode metadata = new ObjectMapper().createObjectNode();
         metadata.set("metadata", objectNode);
         IOUtils.copy(IOUtils.toInputStream(metadata.toString(), StandardCharsets.UTF_8), outputStream);
