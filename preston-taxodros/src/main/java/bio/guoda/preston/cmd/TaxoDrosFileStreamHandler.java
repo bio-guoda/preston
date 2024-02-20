@@ -200,12 +200,15 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         setTypeDROS5(objectNode);
                         if (isArticle(objectNode)) {
                             String journalString = getAndResetCapture(textCapture);
-                            String[] split = StringUtils.split(journalString, ",");
-                            setValue(objectNode, JOURNAL_TITLE, split[0]);
-                            if (split.length > 1) {
-                                String remainder = StringUtils.substring(journalString, split[0].length() + 1);
-                                enrichWithJournalInfo(objectNode, remainder);
+                            int commaIndex = StringUtils.lastIndexOf(journalString, ',');
+                            String journalTitle = journalString;
+                            String remainder = "";
+                            if (commaIndex > 0) {
+                                journalTitle = StringUtils.substring(journalString, 0, commaIndex);
+                                remainder = StringUtils.substring(journalString, commaIndex + 1);
                             }
+                            setJournalTitle(objectNode, journalTitle);
+                            enrichWithJournalInfo(objectNode, remainder);
                         } else {
                             setValue(objectNode, IMPRINT_PUBLISHER, getAndResetCapture(textCapture));
                         }
@@ -243,6 +246,10 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         }
 
         return foundAtLeastOne.get();
+    }
+
+    private void setJournalTitle(ObjectNode objectNode, String value) {
+        setValue(objectNode, JOURNAL_TITLE, value);
     }
 
     private void handleTaxonRecord(AtomicBoolean foundAtLeastOne, String iriString, ObjectNode objectNode, int lineNumber, String line) throws IOException {

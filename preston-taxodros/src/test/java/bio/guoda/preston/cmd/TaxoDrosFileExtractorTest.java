@@ -175,6 +175,22 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("remarks").asText(), is(""));
     }
 
+    @Test
+    public void parseBibliographicCitation() throws IOException {
+        String[] jsonObjects = getResource("DROS5.TEXT.journal.txt");
+        assertThat(jsonObjects.length, is(1));
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText()
+                , is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L9"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText()
+                , is("taxodros-dros5"));
+        assertThat(taxonNode.get("journal_title").asText(), is("Bull. Inst. Sci. Ind., Melb."));
+        assertThat(taxonNode.get("journal_volume").asText(), is("29"));
+        assertThat(taxonNode.get("journal_issue"), is(nullValue()));
+        assertThat(taxonNode.get("journal_pages").asText(), is("1-"));
+
+    }
+
     private JsonNode unwrapMetadata(String jsonObject) throws JsonProcessingException {
         JsonNode rootNode = new ObjectMapper().readTree(jsonObject);
         return rootNode.get("metadata");

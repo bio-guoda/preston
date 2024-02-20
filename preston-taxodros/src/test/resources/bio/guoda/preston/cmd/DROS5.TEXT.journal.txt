@@ -1,0 +1,9 @@
+.TEXT;
+alexander, 1925
+.A Alexander, W.B.,
+.J 1925
+.S Natural Enemies of Prickly Pear and their
+Introduction into Australia.
+.Z Bull. Inst. Sci. Ind., Melb., 29:1-..
+.K ocr / part
+.P Alexander, 1925.pdf
