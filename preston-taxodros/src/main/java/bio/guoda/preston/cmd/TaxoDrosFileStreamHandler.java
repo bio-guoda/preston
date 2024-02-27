@@ -110,6 +110,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
                                     String filename = getAndResetCapture(textCapture);
                                     setValue(objectNode, "filename", filename);
+                                    appendIdentifier(objectNode, "isAlternateIdentifier", LSID_PREFIX + ":filename:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename));
                                     setValue(objectNode, "upload_type", "publication");
                                     ArrayNode communitiesArray = Stream.of("taxodros", "biosyslit")
                                             .map(id -> {
