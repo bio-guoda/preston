@@ -289,7 +289,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     }
 
     private void writeRecord(AtomicBoolean foundAtLeastOne, ObjectNode objectNode) throws IOException {
-        objectNode.put("description", "Uploaded by Plazi for Taxodros. We do not have abstracts.");
+        objectNode.put("description", "Uploaded by Plazi for TaxoDros. We do not have abstracts.");
         ObjectNode metadata = new ObjectMapper().createObjectNode();
         metadata.set("metadata", objectNode);
         IOUtils.copy(IOUtils.toInputStream(metadata.toString(), StandardCharsets.UTF_8), outputStream);
