@@ -25,4 +25,13 @@ public class JavaScriptAndPythonFriendlyURLEncodingUtilTest {
         assertThat(s, Is.is("space%20%3F%20question.txt"));
     }
 
+    @Test
+    public void unreservedCharacters() {
+        String unreservedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
+        assertThat(
+                JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(unreservedCharacters),
+                Is.is(unreservedCharacters)
+        );
+    }
+
 }
