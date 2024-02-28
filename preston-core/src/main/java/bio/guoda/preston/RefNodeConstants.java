@@ -32,6 +32,7 @@ public class RefNodeConstants {
     public static final IRI GENERATED_AT_TIME = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#generatedAtTime"));
     public static final IRI WAS_GENERATED_BY = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasGeneratedBy"));
     public static final IRI WAS_DERIVED_FROM = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#wasDerivedFrom"));
+    public static final IRI ALTERNATE_OF = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#alternateOf"));
     public static final IRI QUALIFIED_GENERATION = RefNodeFactory.toIRI(URI.create("http://www.w3.org/ns/prov#qualifiedGeneration"));
     public static final IRI GENERATION = toIRI("http://www.w3.org/ns/prov#Generation");
 
@@ -74,4 +75,5 @@ public class RefNodeConstants {
 
     public static final IRI DEPICTS = toIRI("http://xmlns.com/foaf/0.1/depicts");
 
+    public static final IRI LAST_REFRESHED_ON = toIRI("http://purl.org/pav/lastRefreshedOn");
 }

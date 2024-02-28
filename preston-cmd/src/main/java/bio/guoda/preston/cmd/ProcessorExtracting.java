@@ -32,7 +32,7 @@ import static bio.guoda.preston.process.ActivityUtil.emitAsNewActivity;
 public abstract class ProcessorExtracting extends ProcessorReadOnly {
     private final Logger LOG = LoggerFactory.getLogger(ProcessorExtracting.class);
 
-    private int emittingBatchSize = 256;
+    private EmitSelector selector = new EmitBySize(256);
 
     public ProcessorExtracting(BlobStoreReadOnly blobStoreReadOnly,
                                ProcessorState processorState,
@@ -45,8 +45,7 @@ public abstract class ProcessorExtracting extends ProcessorReadOnly {
         if (hasVersionAvailable(statement)) {
             IRI version = (IRI) getVersion(statement);
             final List<Quad> nodes = new ArrayList<>();
-
-            BatchingEmitter batchingStatementEmitter = new BatchingEmitter(nodes, version, statement);
+            BatchingEmitter batchingStatementEmitter = new BatchingEmitter(nodes, version, statement, getEmitSelector());
             ContentStreamHandler streamHandler = getStreamHandler(batchingStatementEmitter);
             try (InputStream in = get(version)) {
                 if (in != null) {
@@ -65,6 +64,14 @@ public abstract class ProcessorExtracting extends ProcessorReadOnly {
         }
     }
 
+     public EmitSelector getEmitSelector() {
+        return this.selector;
+    }
+
+     public void setEmitSelector(EmitSelector selector) {
+        this.selector = selector;
+    }
+
     public abstract ContentStreamHandler getStreamHandler(BatchingEmitter batchingStatementEmitter);
 
     public class BatchingEmitter extends StatementsEmitterAdapter {
@@ -72,11 +79,13 @@ public abstract class ProcessorExtracting extends ProcessorReadOnly {
         private final List<Quad> nodes;
         private final IRI version;
         private final Quad statement;
+        private final EmitSelector selector;
 
-        public BatchingEmitter(List<Quad> nodes, IRI version, Quad statement) {
+        public BatchingEmitter(List<Quad> nodes, IRI version, Quad statement, EmitSelector selector) {
             this.nodes = nodes;
             this.version = version;
             this.statement = statement;
+            this.selector = selector;
         }
 
         private void emitBatch() {
@@ -98,22 +107,28 @@ public abstract class ProcessorExtracting extends ProcessorReadOnly {
         @Override
         public void emit(Quad statement) {
             nodes.add(statement);
-            if (nodes.size() > getBatchSize()) {
+            if (selector.shouldEmit(nodes)) {
                 emitBatch();
             }
         }
 
-        private int getBatchSize() {
-            return emittingBatchSize;
-        }
+
     }
 
 
     abstract public String getActivityDescription();
 
-    public void setEmittingBatchSize(int emittingBatchSize) {
-        this.emittingBatchSize = emittingBatchSize;
+
+    private class EmitBySize implements EmitSelector {
+        private int batchSize = 256;
+
+        public EmitBySize(int batchSize) {
+            this.batchSize = batchSize;
+        }
+
+        @Override
+        public boolean shouldEmit(List<Quad> nodes) {
+            return nodes.size() > batchSize;
+        }
     }
-
-
 }

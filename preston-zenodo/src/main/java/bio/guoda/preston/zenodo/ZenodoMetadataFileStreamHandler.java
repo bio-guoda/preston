@@ -1,5 +1,6 @@
 package bio.guoda.preston.zenodo;
 
+import bio.guoda.preston.DateUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementEmitter;
@@ -80,6 +81,8 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         if (maybeContainsPrestonEnabledZenodoMetadata(zenodoMetadata)) {
             List<String> lsids = new ArrayList<>();
             List<String> contentIds = new ArrayList<>();
+            List<String> origins = new ArrayList<>();
+            origins.add(coordinate.getIRIString());
             JsonNode alternateIdentifiers = zenodoMetadata.at("/metadata/related_identifiers");
             if (alternateIdentifiers != null && alternateIdentifiers.isArray()) {
                 for (JsonNode alternateIdentifier : alternateIdentifiers) {
@@ -92,6 +95,11 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                                 lsids.add(identiferText);
                             } else if (StringUtils.startsWith(identiferText, "hash:")) {
                                 contentIds.add(identiferText);
+                            }
+                        } else if (StringUtils.equals(relation.asText(), "isDerivedFrom")) {
+                            String identiferText = identifier.asText();
+                            if (StringUtils.isNotBlank(identiferText)) {
+                                origins.add(identiferText);
                             }
                         }
                     }
@@ -111,17 +119,24 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     if (existingIds.size() == 0) {
                         ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
                         uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
-                        emitCoordinateReference(coordinate, ctxLocal);
+                        emitRelations(lsids, contentIds, origins, ctxLocal);
                     } else if (existingIds.size() == 1) {
                         ctxLocal.setDepositId(existingIds.get(0));
                         ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
                         String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
                         ZenodoUtils.update(ctxLocal, input);
                         uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
-                        emitCoordinateReference(coordinate, ctxLocal);
+                        emitRelations(lsids, contentIds, origins, ctxLocal);
                     } else {
                         emitPossibleDuplicateRecords(coordinate, existingIds, ctxLocal);
                     }
+                    emitter.emit(
+                            RefNodeFactory.toStatement(
+                                    getRecordUrl(ctxLocal),
+                                    RefNodeConstants.LAST_REFRESHED_ON,
+                                    RefNodeFactory.toDateTime(DateUtil.now())
+                            )
+                    );
                 } catch (IOException e) {
                     attemptCleanupAndRethrow(ctxLocal, e);
                 }
@@ -132,15 +147,25 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
     }
 
+    private void emitRelations(List<String> lsids, List<String> contentIds, List<String> origins, ZenodoContext ctxLocal) {
+        emitRelations(ctxLocal, RefNodeConstants.WAS_DERIVED_FROM, origins);
+        emitRelations(ctxLocal, RefNodeConstants.ALTERNATE_OF, contentIds);
+        emitRelations(ctxLocal, RefNodeConstants.ALTERNATE_OF, lsids);
+    }
+
     private void emitPossibleDuplicateRecords(IRI coordinate, List<Long> existingIds, ZenodoContext ctxLocal) {
         for (Long existingId : existingIds) {
             emitter.emit(
                     RefNodeFactory.toStatement(
-                            RefNodeFactory.toIRI(ctxLocal.getEndpoint() + "/records/" + existingId),
+                            getRecordUrl(ctxLocal, existingId),
                             RefNodeConstants.SEE_ALSO,
                             coordinate)
             );
         }
+    }
+
+    private IRI getRecordUrl(ZenodoContext ctxLocal, Long existingId) {
+        return RefNodeFactory.toIRI(ctxLocal.getEndpoint() + "/records/" + existingId);
     }
 
     private void attemptCleanupAndRethrow(ZenodoContext ctxLocal, IOException e) throws IOException {
@@ -152,8 +177,23 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         throw e;
     }
 
-    private void emitCoordinateReference(IRI coordinate, ZenodoContext ctxLocal) {
-        emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toIRI(ctxLocal.getEndpoint() + "/records/" + ctxLocal.getDepositId()), RefNodeConstants.WAS_DERIVED_FROM, coordinate));
+    private void emitRelations(ZenodoContext ctxLocal, IRI relationType, List<String> orgins) {
+        orgins
+                .stream()
+                .map(RefNodeFactory::toIRI)
+                .forEach(o -> emitOrigin(o, ctxLocal, relationType));
+    }
+
+    private void emitOrigin(IRI origin, ZenodoContext ctxLocal, IRI wasDerivedFrom) {
+        emitter.emit(RefNodeFactory.toStatement(
+                getRecordUrl(ctxLocal),
+                wasDerivedFrom,
+                origin)
+        );
+    }
+
+    private IRI getRecordUrl(ZenodoContext ctxLocal) {
+        return getRecordUrl(ctxLocal, ctxLocal.getDepositId());
     }
 
     private void uploadContentAndPublish(JsonNode taxodrosMetadata, List<String> ids, ZenodoContext ctx) throws IOException {

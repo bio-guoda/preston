@@ -1,5 +1,7 @@
 package bio.guoda.preston.zenodo;
 
+import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.cmd.EmitSelector;
 import bio.guoda.preston.cmd.ProcessorExtracting;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementEmitter;
@@ -12,6 +14,7 @@ import bio.guoda.preston.stream.CompressedStreamHandler;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import bio.guoda.preston.stream.ContentStreamHandlerImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
@@ -34,12 +37,22 @@ public class ZenodoMetadataFileExtractor extends ProcessorExtracting {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.zenodoContext = zenodoContext;
-        setEmittingBatchSize(1);
+        setEmitSelector(new EmitAfterZenodoRecordUpdate());
     }
 
 
     public ContentStreamHandler getStreamHandler(BatchingEmitter batchingStatementEmitter) {
         return new ZenodoStreamHandlerImpl(batchingStatementEmitter);
+    }
+
+    private static class EmitAfterZenodoRecordUpdate implements EmitSelector {
+        @Override
+        public boolean shouldEmit(List<Quad> nodes) {
+            long count = nodes.stream()
+                    .filter(q -> StringUtils.equals(RefNodeConstants.LAST_REFRESHED_ON.toString(), q.getPredicate().getIRIString()))
+                    .count();
+            return count > 0 || nodes.size() > 256;
+        }
     }
 
 
