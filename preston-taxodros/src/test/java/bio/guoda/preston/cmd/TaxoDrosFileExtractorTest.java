@@ -299,6 +299,11 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("taxodros:method").asText(), is("ocr"));
         assertThat(taxonNode.get("publication_type").textValue(), is("article"));
         assertThat(taxonNode.get("filename").asText(), is("Abd El-Halim et al., 2005M.pdf"));
+
+        JsonNode keywords = taxonNode.at("/keywords");
+        assertThat(keywords.get(0).asText(), is("Biodiversity"));
+        JsonNode custom = taxonNode.at("/custom");
+        assertThat(custom.toString(), is("[{\"dwc:kingdom\":[\"Animalia\"]},{\"dwc:phylum\":[\"Arthropoda\"]},{\"dwc:class\":[\"Insecta\"]},{\"dwc:order\":[\"Diptera\"]}]"));
     }
 
     private String[] getResource(String testResource) throws IOException {

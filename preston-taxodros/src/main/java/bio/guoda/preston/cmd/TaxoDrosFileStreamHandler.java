@@ -76,6 +76,8 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String IS_ALTERNATE_IDENTIFIER = "isAlternateIdentifier";
     public static final String PARTOF_PAGES = "partof_pages";
     public static final String PARTOF_TITLE = "partof_title";
+    private static final String KEYWORDS = "keywords";
+    private static final String CUSTOM = "custom";
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
@@ -140,6 +142,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         }
                     } else if (StringUtils.startsWith(line, PREFIX_AUTHOR)) {
                         setTypeDROS5(objectNode);
+                        setKeywords(objectNode);
                         String referenceId = getAndResetCapture(textCapture);
                         setValue(objectNode, REFERENCE_ID, referenceId);
                         appendIdentifier(objectNode, IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":id:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(referenceId));
@@ -352,6 +355,36 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         appendIdentifier(objectNode, "isDerivedFrom", TAXODROS_DATA_DOI);
         appendIdentifier(objectNode, "isPartOf", "https://www.taxodros.uzh.ch");
         append(objectNode, "references", "Bächli, G. (2024). TaxoDros - The Database on Taxonomy of Drosophilidae " + TAXODROS_DATA_VERSION_MD5 + " " + TAXODROS_DATA_VERSION_SHA256 + " [Data set]. Zenodo. " + "https://doi.org/" + TAXODROS_DATA_DOI);
+
+    }
+
+    private void setKeywords(ObjectNode objectNode) {
+        addKeyword(objectNode, "Biodiversity");
+        addKeyword(objectNode, "Taxonomy");
+        addKeyword(objectNode, "fruit flies");
+        addKeyword(objectNode, "flies");
+        addKeyword(objectNode, "terrestrial");
+
+        addCustomField(objectNode, "dwc:kingdom", "Animalia");
+        addCustomField(objectNode, "dwc:phylum", "Arthropoda");
+        addCustomField(objectNode, "dwc:class", "Insecta");
+        addCustomField(objectNode, "dwc:order", "Diptera");
+    }
+
+    private void addCustomField(ObjectNode objectNode, String fieldName, String fieldValue) {
+        ArrayNode relatedIdentifiers = objectNode.has(TaxoDrosFileStreamHandler.CUSTOM) && objectNode.get(TaxoDrosFileStreamHandler.CUSTOM).isArray()
+                ? (ArrayNode) objectNode.get(TaxoDrosFileStreamHandler.CUSTOM)
+                : new ObjectMapper().createArrayNode();
+        relatedIdentifiers.add(new ObjectMapper().createObjectNode().set(fieldName, new ObjectMapper().createArrayNode().add(fieldValue)));
+        objectNode.set(TaxoDrosFileStreamHandler.CUSTOM, relatedIdentifiers);
+    }
+
+    private void addKeyword(ObjectNode objectNode, String biodiversity) {
+        ArrayNode relatedIdentifiers = objectNode.has(TaxoDrosFileStreamHandler.KEYWORDS) && objectNode.get(TaxoDrosFileStreamHandler.KEYWORDS).isArray()
+                ? (ArrayNode) objectNode.get(TaxoDrosFileStreamHandler.KEYWORDS)
+                : new ObjectMapper().createArrayNode();
+        relatedIdentifiers.add(biodiversity);
+        objectNode.set(TaxoDrosFileStreamHandler.KEYWORDS, relatedIdentifiers);
     }
 
     private void appendIdentifier(ObjectNode objectNode, String relationType, String value) {

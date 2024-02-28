@@ -206,6 +206,14 @@ public class ZenodoUtilsIT {
     }
 
     @Test
+    public void updateMetadataWithKeywords() throws IOException {
+        InputStream inputStream = getClass().getResourceAsStream("zenodo-metadata-with-keywords.json");
+        JsonNode payload = ZenodoUtils.getObjectMapper().readTree(inputStream);
+        String input = ZenodoUtils.getObjectMapper().writer().writeValueAsString(payload);
+        ZenodoUtils.update(this.ctx, input);
+    }
+
+    @Test
     public void createNewVersion() throws IOException {
 
         InputStream resourceAsStream = getInputStream();
