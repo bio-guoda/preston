@@ -363,12 +363,15 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         addKeyword(objectNode, "Taxonomy");
         addKeyword(objectNode, "fruit flies");
         addKeyword(objectNode, "flies");
-        addKeyword(objectNode, "terrestrial");
+        addKeyword(objectNode, "Animalia");
+        addKeyword(objectNode, "Arthropoda");
+        addKeyword(objectNode, "Insecta");
+        addKeyword(objectNode, "Diptera");
 
-        addCustomField(objectNode, "dwc:kingdom", "Animalia");
-        addCustomField(objectNode, "dwc:phylum", "Arthropoda");
-        addCustomField(objectNode, "dwc:class", "Insecta");
-        addCustomField(objectNode, "dwc:order", "Diptera");
+//        addCustomField(objectNode, "dwc:kingdom", "Animalia");
+//        addCustomField(objectNode, "dwc:phylum", "Arthropoda");
+//        addCustomField(objectNode, "dwc:class", "Insecta");
+//        addCustomField(objectNode, "dwc:order", "Diptera");
     }
 
     private void addCustomField(ObjectNode objectNode, String fieldName, String fieldValue) {
