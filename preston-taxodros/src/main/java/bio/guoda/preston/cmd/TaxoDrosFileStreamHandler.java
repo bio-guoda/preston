@@ -69,9 +69,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String IMPRINT_PUBLISHER = "imprint_publisher";
     public static final String PUBLICATION_DATE = "publication_date";
 
-    public static final String TAXODROS_DATA_DOI = "10.5281/zenodo.10593902";
-    public static final String TAXODROS_DATA_VERSION_SHA256 = "hash://sha256/e05466f33c755f11bd1c2fa30eef2388bf24ff7989931bae1426daff0200af19";
-    public static final String TAXODROS_DATA_VERSION_MD5 = "hash://md5/4fa9eeed1c8cff2490483a48c718df02";
+    public static final String TAXODROS_DATA_DOI = "10.5281/zenodo.10723540";
+    public static final String TAXODROS_DATA_VERSION_SHA256 = "hash://sha256/ca86d74b318a334bddbc7c6a387a09530a083b8617718f5369ad548744c602d3";
+    public static final String TAXODROS_DATA_VERSION_MD5 = "hash://md5/26a67012dde325cf2a3a058cc2f9c1b8";
     public static final String LSID_PREFIX = "urn:lsid:taxodros.uzh.ch";
     public static final String IS_ALTERNATE_IDENTIFIER = "isAlternateIdentifier";
     public static final String PARTOF_PAGES = "partof_pages";
