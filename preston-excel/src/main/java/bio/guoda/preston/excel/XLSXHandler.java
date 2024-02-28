@@ -3,6 +3,7 @@ package bio.guoda.preston.excel;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import com.monitorjbl.xlsx.StreamingReader;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -23,7 +24,7 @@ public class XLSXHandler {
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     skipLines,
                     headerless);
-        } catch (NotOfficeXmlFileException ex) {
+        } catch (NotOfficeXmlFileException | InvalidOperationException ex) {
             // ignore runtime exception to implement opportunistic handling
         }
     }
