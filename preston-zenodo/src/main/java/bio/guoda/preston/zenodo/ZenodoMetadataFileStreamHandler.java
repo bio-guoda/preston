@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 import static bio.guoda.preston.zenodo.ZenodoUtils.getObjectMapper;
 
 public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(ZenodoMetadataFileStreamHandler.class);
 
 
     private final Dereferencer<InputStream> dereferencer;
@@ -60,6 +63,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     try {
                         attemptToHandleJSON(line, coordinate);
                     } catch (IOException ex) {
+                        LOG.warn("failed to handle json [" + line + "]", ex);
                         // ignore
                     }
                 }
@@ -71,7 +75,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         return foundAtLeastOne.get();
     }
 
-    private void attemptToHandleJSON(String line, IRI coordinate) throws IOException, ContentStreamException {
+    private void attemptToHandleJSON(String line, IRI coordinate) throws IOException {
         JsonNode zenodoMetadata = getObjectMapper().readTree(line);
         if (maybeContainsPrestonEnabledZenodoMetadata(zenodoMetadata)) {
             List<String> lsids = new ArrayList<>();
