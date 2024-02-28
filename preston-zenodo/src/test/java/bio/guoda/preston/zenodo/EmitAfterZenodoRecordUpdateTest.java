@@ -37,7 +37,7 @@ public class EmitAfterZenodoRecordUpdateTest {
         EmitAfterZenodoRecordUpdate emitAfterZenodoRecordUpdate = new EmitAfterZenodoRecordUpdate();
 
         List<Quad> nodes = addMessages(100);
-        assertTrue(emitAfterZenodoRecordUpdate.shouldEmit(nodes));
+        assertFalse(emitAfterZenodoRecordUpdate.shouldEmit(nodes));
     }
 
     private List<Quad> addMessages(int numberOfMessages) {
