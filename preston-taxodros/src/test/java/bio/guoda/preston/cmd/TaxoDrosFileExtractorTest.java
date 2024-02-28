@@ -229,7 +229,7 @@ public class TaxoDrosFileExtractorTest {
     }
 
     private void assertDescription(JsonNode taxonNode) {
-        assertThat(taxonNode.get("description").asText(), is("Uploaded by Plazi for Taxodros. We do not have abstracts."));
+        assertThat(taxonNode.get("description").asText(), is("Uploaded by Plazi for TaxoDros. We do not have abstracts."));
     }
 
     private JsonNode unwrapMetadata(String jsonObject) throws JsonProcessingException {
