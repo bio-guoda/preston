@@ -368,17 +368,17 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         addKeyword(objectNode, "Insecta");
         addKeyword(objectNode, "Diptera");
 
-//        addCustomField(objectNode, "dwc:kingdom", "Animalia");
-//        addCustomField(objectNode, "dwc:phylum", "Arthropoda");
-//        addCustomField(objectNode, "dwc:class", "Insecta");
-//        addCustomField(objectNode, "dwc:order", "Diptera");
+        addCustomField(objectNode, "dwc:kingdom", "Animalia");
+        addCustomField(objectNode, "dwc:phylum", "Arthropoda");
+        addCustomField(objectNode, "dwc:class", "Insecta");
+        addCustomField(objectNode, "dwc:order", "Diptera");
     }
 
     private void addCustomField(ObjectNode objectNode, String fieldName, String fieldValue) {
-        ArrayNode relatedIdentifiers = objectNode.has(TaxoDrosFileStreamHandler.CUSTOM) && objectNode.get(TaxoDrosFileStreamHandler.CUSTOM).isArray()
-                ? (ArrayNode) objectNode.get(TaxoDrosFileStreamHandler.CUSTOM)
-                : new ObjectMapper().createArrayNode();
-        relatedIdentifiers.add(new ObjectMapper().createObjectNode().set(fieldName, new ObjectMapper().createArrayNode().add(fieldValue)));
+        ObjectNode relatedIdentifiers = objectNode.has(TaxoDrosFileStreamHandler.CUSTOM) && objectNode.get(TaxoDrosFileStreamHandler.CUSTOM).isObject()
+                ? (ObjectNode) objectNode.get(TaxoDrosFileStreamHandler.CUSTOM)
+                : new ObjectMapper().createObjectNode();
+        relatedIdentifiers.set(fieldName, new ObjectMapper().createArrayNode().add(fieldValue));
         objectNode.set(TaxoDrosFileStreamHandler.CUSTOM, relatedIdentifiers);
     }
 

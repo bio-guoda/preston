@@ -302,8 +302,8 @@ public class TaxoDrosFileExtractorTest {
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Biodiversity"));
-//        JsonNode custom = taxonNode.at("/custom");
-//        assertThat(custom.toString(), is("[{\"dwc:kingdom\":[\"Animalia\"]},{\"dwc:phylum\":[\"Arthropoda\"]},{\"dwc:class\":[\"Insecta\"]},{\"dwc:order\":[\"Diptera\"]}]"));
+        JsonNode custom = taxonNode.at("/custom");
+        assertThat(custom.toString(), is("{\"dwc:kingdom\":[\"Animalia\"],\"dwc:phylum\":[\"Arthropoda\"],\"dwc:class\":[\"Insecta\"],\"dwc:order\":[\"Diptera\"]}"));
     }
 
     private String[] getResource(String testResource) throws IOException {
