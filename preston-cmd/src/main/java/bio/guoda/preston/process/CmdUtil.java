@@ -16,15 +16,19 @@ public class CmdUtil {
         try {
             String msgWithoutPadding = RegExUtils.removeAll(msg, Pattern.compile(EmittingStreamOfAnyQuad.DEFAULT_PREFIX_X_PRESTON));
             IOUtils.write(msgWithoutPadding.replaceAll("<> ", ""), outputStream, StandardCharsets.UTF_8);
-            if (handler != null) {
-                if (outputStream instanceof PrintStream) {
-                    if (((PrintStream) outputStream).checkError()) {
-                        handler.handleError();
-                    }
-                }
-            }
+            checkError(outputStream, handler);
         } catch (IOException e) {
             handler.handleError();
+        }
+    }
+
+    public static void checkError(OutputStream outputStream, LogErrorHandler handler) {
+        if (handler != null) {
+            if (outputStream instanceof PrintStream) {
+                if (((PrintStream) outputStream).checkError()) {
+                    handler.handleError();
+                }
+            }
         }
     }
 }

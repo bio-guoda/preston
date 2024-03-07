@@ -20,11 +20,8 @@ public class Cmd implements ProcessorState {
     private OutputStream outputStream = new ProxyOutputStream(System.out) {
         @Override
         protected void afterWrite(int n) throws IOException {
-            if (System.out.checkError()) {
-                stopProcessing();
-            }
+            CmdUtil.checkError(this.out, Cmd.this::stopProcessing);
         }
-
 
     };
 
