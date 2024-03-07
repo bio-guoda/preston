@@ -3,9 +3,7 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.process.CmdUtil;
 import bio.guoda.preston.process.LogErrorHandler;
 import bio.guoda.preston.process.ProcessorState;
-import org.apache.commons.io.output.ProxyOutputStream;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -17,13 +15,7 @@ public class Cmd implements ProcessorState {
         add(new ProcessorStateImpl());
     }};
 
-    private OutputStream outputStream = new ProxyOutputStream(System.out) {
-        @Override
-        protected void afterWrite(int n) throws IOException {
-            CmdUtil.checkError(this.out, Cmd.this::stopProcessing);
-        }
-
-    };
+    private OutputStream outputStream = new CheckingProxyOutputStream(this, System.out);
 
     private InputStream inputStream = System.in;
 
