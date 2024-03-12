@@ -2,6 +2,7 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.cmd.JavaScriptAndPythonFriendlyURLEncodingUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +11,8 @@ import org.apache.commons.rdf.api.IRI;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class KeyTo1LevelZenodoPath implements KeyToPath {
 
@@ -22,6 +25,7 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
     private final Dereferencer<InputStream> deref;
     private final String prefix;
     private final String suffix;
+    private static final Pattern URL_PATTERN_SELF = Pattern.compile("(?<prefix>^http.*([0-9]+)/files/)(?<filename>[^/]+)(?<suffix>/content)");
 
     public KeyTo1LevelZenodoPath(URI baseURI, Dereferencer<InputStream> deref) {
         this(baseURI, deref, ZENODO_API_PREFIX, ZENODO_API_SUFFIX);
@@ -85,7 +89,11 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
                                         if (links.has("download")) {
                                             return URI.create(links.get("download").asText());
                                         } else if (links.has("self")) {
-                                            return URI.create(links.get("self").asText());
+                                            String selfURI = links.get("self").asText();
+                                            Matcher matcher = URL_PATTERN_SELF.matcher(selfURI);
+                                            return matcher.matches()
+                                                    ? URI.create(matcher.group("prefix") + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(matcher.group("filename")) + matcher.group("suffix"))
+                                                    : URI.create(selfURI);
                                         }
                                     }
                                 }

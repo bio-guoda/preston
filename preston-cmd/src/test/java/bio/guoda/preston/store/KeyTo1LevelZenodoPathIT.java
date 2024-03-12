@@ -40,5 +40,18 @@ public class KeyTo1LevelZenodoPathIT {
         assertThat(uri.toString(), is("https://zenodo.org/api/records/4589980/files/figure.png/content"));
     }
 
+    @Test
+    public void findFirstHitNewAPIWhitespaces() {
+        KeyTo1LevelZenodoPath keyTo1LevelZenodoPath
+                = new KeyTo1LevelZenodoPath(
+                URI.create("https://zenodo.org"),
+                ResourcesHTTP::asInputStream,
+                KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13,
+                KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13
+        );
+        URI uri = keyTo1LevelZenodoPath.toPath(RefNodeFactory.toIRI("hash://md5/58fd5af87a78f16c995c987ea4ab390e"));
+        assertThat(uri.toString(), is("https://zenodo.org/api/records/10778598/files/Driessen%20et%20al.%2C%201991.pdf/content"));
+    }
+
 
 }
