@@ -1,0 +1,2035 @@
+[
+    {
+        "key": "45IC4D9G",
+        "version": 7155,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/45IC4D9G",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/45IC4D9G",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/I5ED2F3N",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 1981167
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Hosken",
+            "parsedDate": "1996",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "45IC4D9G",
+            "version": 7155,
+            "itemType": "journalArticle",
+            "title": "Roost selection by the lesser long-eared bat, Nyctophilus geoffroyi, and the greater long-eared bat, N. Major (Chiroptera: Vespertilionidae) in Banksia woodlands",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "D. J.",
+                    "lastName": "Hosken"
+                }
+            ],
+            "abstractNote": "",
+            "publicationTitle": "Journal of the Royal Society of Western Australia",
+            "volume": "79",
+            "issue": "Part 3",
+            "pages": "211-216",
+            "date": "1996",
+            "series": "",
+            "seriesTitle": "",
+            "seriesText": "",
+            "journalAbbreviation": "",
+            "language": "",
+            "DOI": "",
+            "ISSN": "",
+            "shortTitle": "",
+            "url": "",
+            "accessDate": "",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "",
+            "callNumber": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-04-23T18:26:09Z",
+            "dateModified": "2024-04-23T18:29:27Z"
+        }
+    },
+    {
+        "key": "I5ED2F3N",
+        "version": 7145,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/I5ED2F3N",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/I5ED2F3N",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/45IC4D9G",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/I5ED2F3N/file/view",
+                "title": "Hosken_1996.pdf",
+                "length": 1981167
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "I5ED2F3N",
+            "version": 7145,
+            "parentItem": "45IC4D9G",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Hosken_1996.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Hosken_1996.pdf",
+            "md5": "1aecc8af78b213706bd379d00660b23a",
+            "mtime": 1713475298476,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:14Z",
+            "dateModified": "2024-04-23T18:26:09Z"
+        }
+    },
+    {
+        "key": "C2P2IBEI",
+        "version": 7144,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/C2P2IBEI",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/C2P2IBEI",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/Z3L7EK3H",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 10717625
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Hutson et al.",
+            "parsedDate": "2001",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "C2P2IBEI",
+            "version": 7144,
+            "itemType": "book",
+            "title": "Microchiropteran bats : global status survey and conservation action plan",
+            "creators": [
+                {
+                    "creatorType": "editor",
+                    "firstName": "Anthony M.",
+                    "lastName": "Hutson"
+                },
+                {
+                    "creatorType": "editor",
+                    "firstName": "Simon P.",
+                    "lastName": "Mickleburgh"
+                },
+                {
+                    "creatorType": "editor",
+                    "firstName": "Paul A.",
+                    "lastName": "Racey"
+                }
+            ],
+            "abstractNote": "",
+            "series": "",
+            "seriesNumber": "",
+            "volume": "",
+            "numberOfVolumes": "",
+            "edition": "",
+            "place": "",
+            "publisher": "IUCN",
+            "date": "2001",
+            "numPages": "",
+            "language": "",
+            "ISBN": "978-2-8317-0595-8",
+            "shortTitle": "Microchiropteran bats",
+            "url": "https://portals.iucn.org/library/node/7877",
+            "accessDate": "2024-04-23T18:24:57Z",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "DOI.org (Crossref)",
+            "callNumber": "",
+            "rights": "",
+            "extra": "DOI: 10.2305/IUCN.CH.2001.SSC-AP.1.en",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-04-23T18:24:57Z",
+            "dateModified": "2024-04-23T18:24:57Z"
+        }
+    },
+    {
+        "key": "Z3L7EK3H",
+        "version": 7144,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/Z3L7EK3H",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/Z3L7EK3H",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/C2P2IBEI",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/Z3L7EK3H/file/view",
+                "title": "Hutson_etal_2001.pdf",
+                "length": 10717625
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "Z3L7EK3H",
+            "version": 7144,
+            "parentItem": "C2P2IBEI",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Hutson_etal_2001.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Hutson_etal_2001.pdf",
+            "md5": "3e42924ae999d9fc97af66ebb4a72dcc",
+            "mtime": 1713476275670,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:17Z",
+            "dateModified": "2024-04-23T18:24:57Z"
+        }
+    },
+    {
+        "key": "BUIGEP3L",
+        "version": 7143,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/BUIGEP3L",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/BUIGEP3L",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/LSBNM2BQ",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 4286965
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Hutterer et al.",
+            "parsedDate": "1995",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "BUIGEP3L",
+            "version": 7143,
+            "itemType": "journalArticle",
+            "title": "An inventory of mammals observed at Panguana Biological Station, Amazonian Peru",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Rainer",
+                    "lastName": "Hutterer"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Manfred",
+                    "lastName": "Verhaagh"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Juliane",
+                    "lastName": "Diller"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Richard",
+                    "lastName": "Podloucky"
+                }
+            ],
+            "abstractNote": "",
+            "publicationTitle": "Ecotropica",
+            "volume": "1",
+            "issue": "",
+            "pages": "3-20",
+            "date": "1995",
+            "series": "",
+            "seriesTitle": "",
+            "seriesText": "",
+            "journalAbbreviation": "",
+            "language": "",
+            "DOI": "",
+            "ISSN": "",
+            "shortTitle": "",
+            "url": "",
+            "accessDate": "",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "",
+            "callNumber": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-04-23T15:55:55Z",
+            "dateModified": "2024-04-23T15:59:33Z"
+        }
+    },
+    {
+        "key": "LSBNM2BQ",
+        "version": 7132,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/LSBNM2BQ",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/LSBNM2BQ",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/BUIGEP3L",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/LSBNM2BQ/file/view",
+                "title": "Hutterer_etal_1995.pdf",
+                "length": 4286965
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "LSBNM2BQ",
+            "version": 7132,
+            "parentItem": "BUIGEP3L",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Hutterer_etal_1995.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Hutterer_etal_1995.pdf",
+            "md5": "5d0290d1bf50546304c76ef6602b7156",
+            "mtime": 1713475298661,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:19Z",
+            "dateModified": "2024-04-23T15:55:55Z"
+        }
+    },
+    {
+        "key": "2XANJEW3",
+        "version": 7131,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/2XANJEW3",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/2XANJEW3",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/RQHWLYHL",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 1340377
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Ingles",
+            "parsedDate": "1953-05-01",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "2XANJEW3",
+            "version": 7131,
+            "itemType": "journalArticle",
+            "title": "Observations on Barro Colorado Island Mammals",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "L. G.",
+                    "lastName": "Ingles"
+                }
+            ],
+            "abstractNote": "",
+            "publicationTitle": "Journal of Mammalogy",
+            "volume": "34",
+            "issue": "2",
+            "pages": "266-268",
+            "date": "1953-05-01",
+            "series": "",
+            "seriesTitle": "",
+            "seriesText": "",
+            "journalAbbreviation": "Journal of Mammalogy",
+            "language": "en",
+            "DOI": "10.1093/jmammal/34.2.266a",
+            "ISSN": "1545-1542, 0022-2372",
+            "shortTitle": "",
+            "url": "https://academic.oup.com/jmammal/article-lookup/doi/10.1093/jmammal/34.2.266a",
+            "accessDate": "2024-04-23T15:50:03Z",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "DOI.org (Crossref)",
+            "callNumber": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-04-23T15:50:03Z",
+            "dateModified": "2024-04-23T15:50:03Z"
+        }
+    },
+    {
+        "key": "RQHWLYHL",
+        "version": 7131,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/RQHWLYHL",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/RQHWLYHL",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/2XANJEW3",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/RQHWLYHL/file/view",
+                "title": "Ingles_1953.pdf",
+                "length": 1340377
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "RQHWLYHL",
+            "version": 7131,
+            "parentItem": "2XANJEW3",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Ingles_1953.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Ingles_1953.pdf",
+            "md5": "9d751c2fb2d644cf36ad44456fcd64f1",
+            "mtime": 1713475298690,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:19Z",
+            "dateModified": "2024-04-23T15:50:03Z"
+        }
+    },
+    {
+        "key": "ZY2YL9NH",
+        "version": 7130,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/ZY2YL9NH",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/ZY2YL9NH",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/QGQHQ9BK",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/ZY2YL9NH/file/view",
+                "title": "Jones_Manning_1989.pdf",
+                "length": 571617
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "ZY2YL9NH",
+            "version": 7130,
+            "parentItem": "QGQHQ9BK",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Jones_Manning_1989.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Jones_Manning_1989.pdf",
+            "md5": "b8d66130346365c36a56dc9cb39560e9",
+            "mtime": 1713475298994,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:25Z",
+            "dateModified": "2024-04-23T15:49:42Z"
+        }
+    },
+    {
+        "key": "QGQHQ9BK",
+        "version": 7130,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/QGQHQ9BK",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/QGQHQ9BK",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/ZY2YL9NH",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 571617
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Jones and Manning",
+            "parsedDate": "1989-05-12",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "QGQHQ9BK",
+            "version": 7130,
+            "itemType": "journalArticle",
+            "title": "Myotis austroriparius",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Clyde",
+                    "lastName": "Jones"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Richard W.",
+                    "lastName": "Manning"
+                }
+            ],
+            "abstractNote": "",
+            "publicationTitle": "Mammalian Species",
+            "volume": "",
+            "issue": "332",
+            "pages": "1",
+            "date": "1989-05-12",
+            "series": "",
+            "seriesTitle": "",
+            "seriesText": "",
+            "journalAbbreviation": "Mammalian Species",
+            "language": "",
+            "DOI": "10.2307/3504306",
+            "ISSN": "00763519",
+            "shortTitle": "",
+            "url": "https://academic.oup.com/mspecies/article-lookup/doi/10.2307/3504306",
+            "accessDate": "2024-04-23T15:49:41Z",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "DOI.org (Crossref)",
+            "callNumber": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-04-23T15:49:41Z",
+            "dateModified": "2024-04-23T15:49:41Z"
+        }
+    },
+    {
+        "key": "UNTDI29Y",
+        "version": 7129,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/UNTDI29Y",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/UNTDI29Y",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/SKQ4F55J",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 779531
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Jones and Suttkus",
+            "parsedDate": "1975-07-25",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "UNTDI29Y",
+            "version": 7129,
+            "itemType": "journalArticle",
+            "title": "Notes On The Natural History Of Plecotus RafinesQuii",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Clyde",
+                    "lastName": "Jones"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Royal",
+                    "lastName": "Suttkus"
+                }
+            ],
+            "abstractNote": "",
+            "publicationTitle": "Occasional Papers of the Museum of Natural Science, Louisiana State University",
+            "volume": "1",
+            "issue": "1",
+            "pages": "",
+            "date": "1975-07-25",
+            "series": "",
+            "seriesTitle": "",
+            "seriesText": "",
+            "journalAbbreviation": "opmns",
+            "language": "",
+            "DOI": "10.31390/opmns.047",
+            "ISSN": "2474-8935",
+            "shortTitle": "",
+            "url": "https://repository.lsu.edu/opmns/vol1/iss47/1",
+            "accessDate": "2024-04-23T15:49:23Z",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "DOI.org (Crossref)",
+            "callNumber": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-04-23T15:49:23Z",
+            "dateModified": "2024-04-23T15:49:23Z"
+        }
+    },
+    {
+        "key": "SKQ4F55J",
+        "version": 7129,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/SKQ4F55J",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/SKQ4F55J",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/UNTDI29Y",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/SKQ4F55J/file/view",
+                "title": "Jones_Sutkus_1975.pdf",
+                "length": 779531
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "SKQ4F55J",
+            "version": 7129,
+            "parentItem": "UNTDI29Y",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Jones_Sutkus_1975.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Jones_Sutkus_1975.pdf",
+            "md5": "ed6478e29ce2a3dc45fa2eefde36df65",
+            "mtime": 1713475299018,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:25Z",
+            "dateModified": "2024-04-23T15:49:23Z"
+        }
+    },
+    {
+        "key": "5F37WY2I",
+        "version": 7128,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/5F37WY2I",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/5F37WY2I",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/7SYAPYD4",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 299148
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Kalcounis and Hecker",
+            "parsedDate": "1996",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "5F37WY2I",
+            "version": 7128,
+            "itemType": "bookSection",
+            "title": "Intraspecific variation in roost-site selection by little brown bats (Myotis lucifugus)",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Matina C.",
+                    "lastName": "Kalcounis"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "K.R.",
+                    "lastName": "Hecker"
+                }
+            ],
+            "abstractNote": "Although many species of bats select roost sites in large trees that are in open areas, intraspecific variation in roost-site selection may exist. We collected data on the roosting behaviour of little brown bats in the Cypress Hills, Saskatchewan, to determine the extent of intraspecific variation in roost-site selection. In addition, we examined the thermal microclimate of the tree-roosts selected by bats, to determine if roost-microsite variation can explain why certain cavities are selected over others. We found little brown bats roosting in trees as well as buildings. With the exception of a male who roosted in a spruce (Picea glauca ) stump, tree-roosts selected by male and female little brown bats were all in trembling aspen (Populus tremuloides ) trees. We found variation in roost-site fidelity and differential use of torpor by male bats. Temperatures within conifer snag cavities differed from aspen cavities during the day, and mirrored ambient temperature, which tended to be warmer than aspen cavities. We propose that bats select cavities in aspens because they are susceptible to heart rot. Aspen trees with heart rot provide cavities with an intact sapwood shell that protects bats against harsh ambient conditions as well as predators, and provides a unique thermal microclimate. Our results suggest that the origin of a roost site may be unimportant to a bat, provided certain other requirements are met.",
+            "bookTitle": "Bats and Forest Symposium",
+            "series": "Working Paper",
+            "seriesNumber": "",
+            "volume": "23",
+            "numberOfVolumes": "1996",
+            "edition": "",
+            "place": "",
+            "publisher": "",
+            "date": "1996",
+            "pages": "81-90",
+            "language": "",
+            "ISBN": "",
+            "shortTitle": "",
+            "url": "",
+            "accessDate": "",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "",
+            "callNumber": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-04-23T15:46:20Z",
+            "dateModified": "2024-04-23T15:48:40Z"
+        }
+    },
+    {
+        "key": "7SYAPYD4",
+        "version": 7117,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/7SYAPYD4",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/7SYAPYD4",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/5F37WY2I",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/7SYAPYD4/file/view",
+                "title": "Kalcounis_Hecker_1996.pdf",
+                "length": 299148
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "7SYAPYD4",
+            "version": 7117,
+            "parentItem": "5F37WY2I",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Kalcounis_Hecker_1996.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Kalcounis_Hecker_1996.pdf",
+            "md5": "caf7574d3f0370adaa46bd965599e13a",
+            "mtime": 1713475299105,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:27Z",
+            "dateModified": "2024-04-23T15:46:20Z"
+        }
+    },
+    {
+        "key": "H3PI7D7J",
+        "version": 7115,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/H3PI7D7J",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/H3PI7D7J",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/PC9LC9LD",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 111334131
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Kingdon",
+            "parsedDate": "1984",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "H3PI7D7J",
+            "version": 7115,
+            "itemType": "book",
+            "title": "East African mammals: an atlas of evolution in Africa",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Jonathan",
+                    "lastName": "Kingdon"
+                }
+            ],
+            "abstractNote": "",
+            "series": "",
+            "seriesNumber": "",
+            "volume": "",
+            "numberOfVolumes": "",
+            "edition": "",
+            "place": "Chicago",
+            "publisher": "University of Chicago press",
+            "date": "1984",
+            "numPages": "",
+            "language": "eng",
+            "ISBN": "978-0-226-43719-4",
+            "shortTitle": "East African mammals",
+            "url": "",
+            "accessDate": "",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "BnF ISBN",
+            "callNumber": "599.138",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-04-23T15:40:20Z",
+            "dateModified": "2024-04-23T15:40:20Z"
+        }
+    },
+    {
+        "key": "PC9LC9LD",
+        "version": 7115,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/PC9LC9LD",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/PC9LC9LD",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/H3PI7D7J",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/PC9LC9LD/file/view",
+                "title": "Kingdon_1974.pdf",
+                "length": 111334131
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "PC9LC9LD",
+            "version": 7115,
+            "parentItem": "H3PI7D7J",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Kingdon_1974.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Kingdon_1974.pdf",
+            "md5": "dc2062f6715479d0fa508f8e82d28275",
+            "mtime": 1713476276577,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:28Z",
+            "dateModified": "2024-04-23T15:40:20Z"
+        }
+    },
+    {
+        "key": "SIYPJG84",
+        "version": 7106,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/SIYPJG84",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/SIYPJG84",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/WXQAGHD3",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/SIYPJG84/file/view",
+                "title": "Kitchener_1990.pdf",
+                "length": 38330292
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "SIYPJG84",
+            "version": 7106,
+            "parentItem": "WXQAGHD3",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Kitchener_1990",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Kitchener - 1990 - Wild mammals of Lombok Island Nusa Tenggara, Indo.pdf",
+            "md5": "c767fe02489f5b76f228ddea24025f2d",
+            "mtime": 1713476276803,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:30Z",
+            "dateModified": "2024-04-23T15:32:05Z"
+        }
+    },
+    {
+        "key": "7WZLRIEJ",
+        "version": 7105,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/7WZLRIEJ",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/7WZLRIEJ",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/UTB7GCHL",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 23741306
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Kowalczyk and Ruprecht",
+            "parsedDate": "1981",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "7WZLRIEJ",
+            "version": 7105,
+            "itemType": "bookSection",
+            "title": "Chiroptera",
+            "creators": [
+                {
+                    "creatorType": "editor",
+                    "firstName": "Zdzislaw",
+                    "lastName": "Pucek"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Kazimierz",
+                    "lastName": "Kowalczyk"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Andrzej L.",
+                    "lastName": "Ruprecht"
+                }
+            ],
+            "abstractNote": "",
+            "bookTitle": "Keys to vertebrates of Poland, mammals",
+            "series": "",
+            "seriesNumber": "",
+            "volume": "",
+            "numberOfVolumes": "",
+            "edition": "",
+            "place": "Warszawa",
+            "publisher": "PWN",
+            "date": "1981",
+            "pages": "101-154",
+            "language": "eng",
+            "ISBN": "978-83-01-02553-3",
+            "shortTitle": "",
+            "url": "",
+            "accessDate": "",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "K10plus ISBN",
+            "callNumber": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-04-23T15:26:23Z",
+            "dateModified": "2024-04-23T15:31:22Z"
+        }
+    },
+    {
+        "key": "UTB7GCHL",
+        "version": 7099,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/UTB7GCHL",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/UTB7GCHL",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/7WZLRIEJ",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/UTB7GCHL/file/view",
+                "title": "Kowalski_Ruprecht_1981.pdf",
+                "length": 23741306
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "UTB7GCHL",
+            "version": 7099,
+            "parentItem": "7WZLRIEJ",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Kowalski_Ruprecht_1981.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Kowalski_Ruprecht_1981.pdf",
+            "md5": "bb49b8a246ac59713810f4c7efa3fc24",
+            "mtime": 1713475299385,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:32Z",
+            "dateModified": "2024-04-23T15:26:23Z"
+        }
+    },
+    {
+        "key": "IZQLWMCM",
+        "version": 7098,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/IZQLWMCM",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/IZQLWMCM",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/89U48GQI",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/IZQLWMCM/file/view",
+                "title": "Kunz_Martin_1982.pdf",
+                "length": 741389
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "IZQLWMCM",
+            "version": 7098,
+            "parentItem": "89U48GQI",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Kunz_Martin_1982.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Kunz_Martin_1982.pdf",
+            "md5": "73ebf883c953ae6a709001ec53e8637b",
+            "mtime": 1713475299510,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:35Z",
+            "dateModified": "2024-04-23T15:18:07Z"
+        }
+    },
+    {
+        "key": "89U48GQI",
+        "version": 7098,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/89U48GQI",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/89U48GQI",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/IZQLWMCM",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 741389
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Kunz and Martin",
+            "parsedDate": "1982-06-18",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "89U48GQI",
+            "version": 7098,
+            "itemType": "journalArticle",
+            "title": "Plecotus townsendii",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Thomas H.",
+                    "lastName": "Kunz"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Robert A.",
+                    "lastName": "Martin"
+                }
+            ],
+            "abstractNote": "",
+            "publicationTitle": "Mammalian Species",
+            "volume": "",
+            "issue": "175",
+            "pages": "1",
+            "date": "1982-06-18",
+            "series": "",
+            "seriesTitle": "",
+            "seriesText": "",
+            "journalAbbreviation": "Mammalian Species",
+            "language": "",
+            "DOI": "10.2307/3503998",
+            "ISSN": "00763519",
+            "shortTitle": "",
+            "url": "https://academic.oup.com/mspecies/article-lookup/doi/10.2307/3503998",
+            "accessDate": "2024-04-23T15:18:06Z",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "DOI.org (Crossref)",
+            "callNumber": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-04-23T15:18:06Z",
+            "dateModified": "2024-04-23T15:18:06Z"
+        }
+    },
+    {
+        "key": "64F7TYLW",
+        "version": 7097,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/64F7TYLW",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/64F7TYLW",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/SCKFEI6T",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 1041886
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Kurta et al.",
+            "parsedDate": "1996",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "64F7TYLW",
+            "version": 7097,
+            "itemType": "bookSection",
+            "title": "Ecological, behavioral, and thermal observations of a peripheral population of Indiana bats (Myotis sodalis)",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Allen",
+                    "lastName": "Kurta"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Kimberly J.",
+                    "lastName": "Williams"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Rob",
+                    "lastName": "Mies"
+                }
+            ],
+            "abstractNote": "",
+            "bookTitle": "Bats and Forests Symposium, October 19-21,1995",
+            "series": "",
+            "seriesNumber": "",
+            "volume": "",
+            "numberOfVolumes": "",
+            "edition": "R. Barclay and R. M. Brigham",
+            "place": "Victoria, British Columbia, Canada",
+            "publisher": "British Columbia Ministry of Forests",
+            "date": "1996",
+            "pages": "102-117",
+            "language": "En",
+            "ISBN": "",
+            "shortTitle": "",
+            "url": "",
+            "accessDate": "",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "",
+            "callNumber": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-04-23T15:03:54Z",
+            "dateModified": "2024-04-23T15:17:17Z"
+        }
+    },
+    {
+        "key": "SCKFEI6T",
+        "version": 7084,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/SCKFEI6T",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/SCKFEI6T",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/64F7TYLW",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/SCKFEI6T/file/view",
+                "title": "Kurta_etal_1996.PDF",
+                "length": 1041886
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "SCKFEI6T",
+            "version": 7084,
+            "parentItem": "64F7TYLW",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Kurta_etal_1996.PDF",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Kurta_etal_1996.PDF",
+            "md5": "e34fdae0031cb60aaac47580a8be90a8",
+            "mtime": 1713475299791,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:41Z",
+            "dateModified": "2024-04-23T15:03:54Z"
+        }
+    },
+    {
+        "key": "22YN6GB9",
+        "version": 7083,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/22YN6GB9",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/22YN6GB9",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/UAAMPR4G",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 529947
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "LaVal and LaVal",
+            "parsedDate": "1980-05-20",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "22YN6GB9",
+            "version": 7083,
+            "itemType": "journalArticle",
+            "title": "Prey Selection by a Neotropical Foliage-Gleaning Bat, Micronycteris megalotis",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "R. K.",
+                    "lastName": "LaVal"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "M. L.",
+                    "lastName": "LaVal"
+                }
+            ],
+            "abstractNote": "",
+            "publicationTitle": "Journal of Mammalogy",
+            "volume": "61",
+            "issue": "2",
+            "pages": "327-330",
+            "date": "1980-05-20",
+            "series": "",
+            "seriesTitle": "",
+            "seriesText": "",
+            "journalAbbreviation": "Journal of Mammalogy",
+            "language": "en",
+            "DOI": "10.2307/1380057",
+            "ISSN": "1545-1542, 0022-2372",
+            "shortTitle": "",
+            "url": "https://academic.oup.com/jmammal/article-lookup/doi/10.2307/1380057",
+            "accessDate": "2024-04-23T14:58:28Z",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "DOI.org (Crossref)",
+            "callNumber": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-04-23T14:58:28Z",
+            "dateModified": "2024-04-23T14:58:28Z"
+        }
+    },
+    {
+        "key": "UAAMPR4G",
+        "version": 7083,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/UAAMPR4G",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/UAAMPR4G",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/22YN6GB9",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/UAAMPR4G/file/view",
+                "title": "LaVal_LaVal_1980.pdf",
+                "length": 529947
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "UAAMPR4G",
+            "version": 7083,
+            "parentItem": "22YN6GB9",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "LaVal_LaVal_1980.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "LaVal_LaVal_1980.pdf",
+            "md5": "27ca7e00c93b804c3d90040f9404a446",
+            "mtime": 1713475299854,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-04-18T22:06:43Z",
+            "dateModified": "2024-04-23T14:58:28Z"
+        }
+    }
+]
