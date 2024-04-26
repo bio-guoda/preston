@@ -85,6 +85,8 @@ public class ResourcesHTTP {
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.github.com/")) {
             msg.addHeader("Accept", MIMETYPE_GITHUB_JSON);
             appendAuthTokenIfAvailable(msg);
+        }else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.zotero.org/")) {
+            appendAuthBearerIfAvailable(msg);
         }
     }
 
@@ -97,6 +99,18 @@ public class ResourcesHTTP {
                 System.getProperty("GITHUB_TOKEN"));
         if (StringUtils.isNotBlank(githubToken)) {
             msg.addHeader("Authorization", "token " + githubToken);
+        }
+    }
+
+    private static void appendAuthBearerIfAvailable(HttpMessage msg) {
+        String zoteroToken = StringUtils.defaultIfBlank(
+                StringUtils.defaultIfBlank(
+                        System.getenv("secrets.ZOTERO_TOKEN"),
+                        System.getenv("ZOTERO_TOKEN")
+                ),
+                System.getProperty("ZOTERO_TOKEN"));
+        if (StringUtils.isNotBlank(zoteroToken)) {
+            msg.addHeader("Authorization", "Bearer " + zoteroToken);
         }
     }
 

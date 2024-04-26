@@ -3,7 +3,6 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.RefNodeFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
@@ -11,16 +10,21 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
+import static bio.guoda.preston.RefNodeConstants.ALTERNATE_OF;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class RegistryReaderZoteroTest {
+
+    public static final Pattern URL_PATTERN_ZOTERO_GROUP = Pattern.compile("http[s]{0,1}://(www\\.){0,1}(zotero\\.org/groups/)(?<groupIdOrName>[^/]+)(/.*){0,1}");
 
     @Test
     public void onItem() throws IOException {
@@ -106,8 +110,82 @@ public class RegistryReaderZoteroTest {
         assertThat(list.size(), is(126));
         assertThat(list.get(0).getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items?start=0&limit=100>"));
 
-        assertThat(list.get(list.size()-1).getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items?start=12500&limit=100>"));
+        assertThat(list.get(list.size() - 1).getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items?start=12500&limit=100>"));
 
+    }
+
+    @Test
+    public void onZoteroGroupUrl() {
+        String url = "https://www.zotero.org/groups/5435545/bat_literature_project";
+
+        List<Quad> statements = new ArrayList<>();
+
+        StatementEmitter statementEmitter = new StatementEmitter() {
+
+            @Override
+            public void emit(Quad statement) {
+                statements.add(statement);
+            }
+
+        };
+
+        String groupIdOrName = getGroupIdOrName(url);
+        if (StringUtils.isNotBlank(groupIdOrName)) {
+            String zoteroGroupRequest = "https://api.zotero.org/groups/" + groupIdOrName;
+            statementEmitter.emit(RefNodeFactory.toStatement(
+                    RefNodeFactory.toIRI(zoteroGroupRequest),
+                    ALTERNATE_OF,
+                    RefNodeFactory.toIRI(url)
+            ));
+            statementEmitter.emit(RefNodeFactory.toStatement(
+                    RefNodeFactory.toIRI(zoteroGroupRequest),
+                    HAS_VERSION,
+                    RefNodeFactory.toBlank()
+            ));
+
+        }
+
+        assertThat(statements.size(), is(2));
+
+
+    }
+
+    @Test
+    public void urlPatternForGroup1() {
+        assertThat(
+                getGroupIdOrName("https://www.zotero.org/groups/5435545/bat_literature_project"),
+                is("5435545")
+        );
+    }
+
+    @Test
+    public void urlPatternForGroup2() {
+        assertThat(
+                getGroupIdOrName("https://zotero.org/groups/5435545/bat_literature_project"),
+                is("5435545")
+        );
+    }
+
+    @Test
+    public void urlPatternForGroup3() {
+        assertThat(
+                getGroupIdOrName("http://www.zotero.org/groups/5435545/bat_literature_project"),
+                is("5435545")
+        );
+    }
+
+    @Test
+    public void urlPatternForGroup4() {
+        assertThat(
+                getGroupIdOrName("http://www.zotero.org/groups/bat_literature_project"),
+                is("bat_literature_project")
+        );
+    }
+
+    private String getGroupIdOrName(String urlStringCandidate) {
+        Matcher matcher = URL_PATTERN_ZOTERO_GROUP
+                .matcher(urlStringCandidate);
+        return matcher.matches() ? matcher.group("groupIdOrName") : null;
     }
 
 

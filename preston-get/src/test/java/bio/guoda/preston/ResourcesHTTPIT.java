@@ -1,5 +1,7 @@
 package bio.guoda.preston;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
@@ -93,6 +95,19 @@ public class ResourcesHTTPIT {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void zoteroAuth() throws IOException {
+        //System.setProperty("ZOTERO_TOKEN", "[insert token here]");
+        try (InputStream is
+                     = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://api.zotero.org/groups/5435545")))) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            IOUtils.copy(is, outputStream);
+            JsonNode jsonNode = new ObjectMapper().readTree(outputStream.toByteArray());
+            assertThat(jsonNode.at("/id").longValue(), Is.is(5435545L));
+        }
+
     }
 
 }
