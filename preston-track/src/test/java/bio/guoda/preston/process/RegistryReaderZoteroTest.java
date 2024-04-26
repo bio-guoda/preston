@@ -47,6 +47,54 @@ public class RegistryReaderZoteroTest {
     }
 
     @Test
+    public void onAttachment() {
+        List<Quad> statements= new ArrayList<>();
+        RegistryReaderZotero registryReaderZotero = new RegistryReaderZotero(new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                throw new IOException("kaboom!");
+            }
+        }, new StatementsListenerAdapter() {
+            @Override
+            public void on(Quad statement) {
+                statements.add(statement);
+            }
+        });
+
+        registryReaderZotero.on(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://api.zotero.org/groups/5435545/items/REYQJNPD/file/view"),
+                RefNodeFactory.toIRI("http://purl.org/pav/hasVersion"),
+                RefNodeFactory.toIRI("hash://sha256/8a48d091d0637aefe86d837918f5fa569d8dfd14cb1c7e042c327064c81a8149"))
+        );
+
+        assertThat(statements.size(), is(0));
+    }
+
+    @Test
+    public void onItemsVersion() {
+        List<Quad> statements= new ArrayList<>();
+        RegistryReaderZotero registryReaderZotero = new RegistryReaderZotero(new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                return getClass().getResourceAsStream("/bio/guoda/preston/process/zotero/group-items.json");
+            }
+        }, new StatementsListenerAdapter() {
+            @Override
+            public void on(Quad statement) {
+                statements.add(statement);
+            }
+        });
+
+        registryReaderZotero.on(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://api.zotero.org/groups/5435545/items"),
+                RefNodeFactory.toIRI("http://purl.org/pav/hasVersion"),
+                RefNodeFactory.toIRI("hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab"))
+        );
+
+        assertThat(statements.size(), is(24));
+    }
+
+    @Test
     public void onItem() throws IOException {
         //
         // retrieved from address below on 2024-04-23
@@ -63,36 +111,25 @@ public class RegistryReaderZoteroTest {
             }
         };
 
-        JsonNode items = new ObjectMapper().readTree(is);
-
         RegistryReaderZotero.requestItemAttachments(is, emitter);
 
-        assertThat(statements.size(), is(36));
+        assertThat(statements.size(), is(24));
+
 
         Quad itemFormat = statements.get(0);
-        assertThat(itemFormat.getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items/45IC4D9G>"));
+        assertThat(itemFormat.getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items/I5ED2F3N/file/view>"));
         assertThat(itemFormat.getPredicate(), is(HAS_FORMAT));
         assertThat(itemFormat.getObject(), is(RefNodeFactory.toLiteral("application/pdf")));
 
-        Quad item = statements.get(1);
-        assertThat(item.getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items/45IC4D9G>"));
-        assertThat(item.getPredicate(), is(HAS_VERSION));
-        assertTrue(RefNodeFactory.isBlankOrSkolemizedBlank(item.getObject()));
-
-        Quad itemAttachment = statements.get(2);
+        Quad itemAttachment = statements.get(1);
         assertThat(itemAttachment.getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items/I5ED2F3N/file/view>"));
         assertThat(itemAttachment.getPredicate(), is(HAS_VERSION));
         assertTrue(RefNodeFactory.isBlankOrSkolemizedBlank(itemAttachment.getObject()));
 
-        Quad item1 = statements.get(4);
-        assertThat(item1.getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items/C2P2IBEI>"));
-        assertThat(item1.getPredicate(), is(HAS_VERSION));
-        assertTrue(RefNodeFactory.isBlankOrSkolemizedBlank(item1.getObject()));
-
-        Quad item1Attachment = statements.get(5);
+        Quad item1Attachment = statements.get(2);
         assertThat(item1Attachment.getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items/Z3L7EK3H/file/view>"));
-        assertThat(item1Attachment.getPredicate(), is(HAS_VERSION));
-        assertTrue(RefNodeFactory.isBlankOrSkolemizedBlank(item1Attachment.getObject()));
+        assertThat(item1Attachment.getPredicate(), is(HAS_FORMAT));
+        assertThat(itemFormat.getObject(), is(RefNodeFactory.toLiteral("application/pdf")));
 
     }
 

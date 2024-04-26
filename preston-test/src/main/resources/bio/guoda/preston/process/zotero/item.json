@@ -1,0 +1,94 @@
+{
+    "key": "2V36MBDR",
+    "version": 7513,
+    "library": {
+        "type": "group",
+        "id": 5435545,
+        "name": "Bat Literature Project",
+        "links": {
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project",
+                "type": "text/html"
+            }
+        }
+    },
+    "links": {
+        "self": {
+            "href": "https://api.zotero.org/groups/5435545/items/2V36MBDR",
+            "type": "application/json"
+        },
+        "alternate": {
+            "href": "https://www.zotero.org/groups/bat_literature_project/items/2V36MBDR",
+            "type": "text/html"
+        },
+        "attachment": {
+            "href": "https://api.zotero.org/groups/5435545/items/REYQJNPD",
+            "type": "application/json",
+            "attachmentType": "application/pdf",
+            "attachmentSize": 730597
+        }
+    },
+    "meta": {
+        "createdByUser": {
+            "id": 13229919,
+            "username": "acsherman",
+            "name": "",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/acsherman",
+                    "type": "text/html"
+                }
+            }
+        },
+        "creatorSummary": "Fenton and Barclay",
+        "parsedDate": "1980",
+        "numChildren": 1
+    },
+    "data": {
+        "key": "2V36MBDR",
+        "version": 7513,
+        "itemType": "journalArticle",
+        "title": "Myotis lucifugus",
+        "creators": [
+            {
+                "creatorType": "author",
+                "firstName": "Brock",
+                "lastName": "Fenton"
+            },
+            {
+                "creatorType": "author",
+                "firstName": "Robert M. R.",
+                "lastName": "Barclay"
+            }
+        ],
+        "abstractNote": "",
+        "publicationTitle": "Mammalian Species",
+        "volume": "142",
+        "issue": "",
+        "pages": "1-8",
+        "date": "1980",
+        "series": "",
+        "seriesTitle": "",
+        "seriesText": "",
+        "journalAbbreviation": "",
+        "language": "en",
+        "DOI": "",
+        "ISSN": "",
+        "shortTitle": "",
+        "url": "",
+        "accessDate": "",
+        "archive": "",
+        "archiveLocation": "",
+        "libraryCatalog": "Zotero",
+        "callNumber": "",
+        "rights": "",
+        "extra": "",
+        "tags": [],
+        "collections": [
+            "UAWY6DNP"
+        ],
+        "relations": {},
+        "dateAdded": "2024-04-18T22:11:43Z",
+        "dateModified": "2024-04-25T18:27:09Z"
+    }
+}

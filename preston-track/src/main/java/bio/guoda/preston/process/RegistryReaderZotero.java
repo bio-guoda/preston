@@ -25,7 +25,7 @@ import static bio.guoda.preston.RefNodeFactory.getVersionSource;
 public class RegistryReaderZotero extends ProcessorReadOnly {
     public static final Pattern URL_PATTERN_ZOTERO_GROUP_HTML = Pattern.compile("http[s]{0,1}://(www\\.){0,1}(zotero\\.org/groups/)(?<groupIdOrName>[^/]+)(/.*){0,1}");
     public static final Pattern URL_PATTERN_ZOTERO_GROUP_API = Pattern.compile("https://api\\.zotero\\.org/groups/(?<groupId>[0-9]+)");
-    public static final Pattern URL_PATTERN_ZOTERO_GROUP_ITEMS_API = Pattern.compile("https://api\\.zotero\\.org/groups/[^/]+/items.*");
+    public static final Pattern URL_PATTERN_ZOTERO_GROUP_ITEMS_API = Pattern.compile("https://api\\.zotero\\.org/groups/[^/]+/items[^/]*");
     private static final Logger LOG = LoggerFactory.getLogger(RegistryReaderZotero.class);
 
     public RegistryReaderZotero(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
@@ -50,7 +50,7 @@ public class RegistryReaderZotero extends ProcessorReadOnly {
             }
 
             Matcher matcher2 = URL_PATTERN_ZOTERO_GROUP_ITEMS_API.matcher(sourceIri);
-            if (matcher2.matches()) {
+            if (matcher2.matches() && !StringUtils.endsWith(sourceIri, "file/view")) {
                 try {
                     requestItemAttachments(get((IRI) getVersion(statement)), this);
                 } catch (IOException e) {
@@ -67,21 +67,17 @@ public class RegistryReaderZotero extends ProcessorReadOnly {
                 JsonNode attachmentUrl = item.at("/links/attachment/href");
                 if (attachmentUrl != null && StringUtils.isNotBlank(attachmentUrl.asText())) {
                     JsonNode attachmentType = item.at("/links/attachment/attachmentType");
+
+                    String attachementUrl = attachmentUrl.asText() + "/file/view";
+
                     if (attachmentType != null && StringUtils.isNotBlank(attachmentType.asText())) {
                         emitter.emit(RefNodeFactory.toStatement(
-                                RefNodeFactory.toIRI(itemUrl.asText()),
+                                RefNodeFactory.toIRI(attachementUrl),
                                 HAS_FORMAT,
                                 RefNodeFactory.toLiteral("application/pdf"))
                         );
                     }
 
-                    emitter.emit(RefNodeFactory.toStatement(
-                            RefNodeFactory.toIRI(itemUrl.asText()),
-                            HAS_VERSION,
-                            RefNodeFactory.toBlank())
-                    );
-
-                    String attachementUrl = attachmentUrl.asText() + "/file/view";
                     emitter.emit(RefNodeFactory.toStatement(
                             RefNodeFactory.toIRI(attachementUrl),
                             HAS_VERSION,
