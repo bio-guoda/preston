@@ -8,6 +8,7 @@ import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -88,7 +89,8 @@ public class RegistryReaderZoteroTest {
         //
         // https://api.zotero.org/groups/5435545?key=[SUPER SECRET]
         //
-        JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("/bio/guoda/preston/process/zotero/group.json"));
+        InputStream is = getClass().getResourceAsStream("/bio/guoda/preston/process/zotero/group.json");
+        JsonNode jsonNode = new ObjectMapper().readTree(is);
         JsonNode groupIdString = jsonNode.at("/id");
         JsonNode numItems = jsonNode.at("/meta/numItems");
         long numberOfItems = numItems.longValue();
