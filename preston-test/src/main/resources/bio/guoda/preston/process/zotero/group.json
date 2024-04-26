@@ -1,0 +1,40 @@
+{
+    "id": 5435545,
+    "version": 11,
+    "links": {
+        "self": {
+            "href": "https://api.zotero.org/groups/5435545",
+            "type": "application/json"
+        },
+        "alternate": {
+            "href": "https://www.zotero.org/groups/bat_literature_project",
+            "type": "text/html"
+        }
+    },
+    "meta": {
+        "created": "2024-03-06T16:55:37Z",
+        "lastModified": "2024-04-23T15:19:51Z",
+        "numItems": 12574
+    },
+    "data": {
+        "id": 5435545,
+        "version": 11,
+        "name": "Bat Literature Project",
+        "owner": 13229919,
+        "type": "PublicClosed",
+        "description": "",
+        "url": "",
+        "libraryEditing": "members",
+        "libraryReading": "members",
+        "fileEditing": "members",
+        "admins": [
+            6296343,
+            13264774
+        ],
+        "members": [
+            1759978,
+            4163804,
+            7623835
+        ]
+    }
+}

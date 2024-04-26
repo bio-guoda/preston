@@ -3,6 +3,7 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.RefNodeFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
@@ -10,6 +11,9 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static junit.framework.TestCase.assertTrue;
@@ -23,7 +27,7 @@ public class RegistryReaderZoteroTest {
         //
         // retrieved from address below on 2024-04-23
         //
-        // https://api.zotero.org/groups/5435545?key=[SUPER SECRET]
+        // https://api.zotero.org/groups/5435545/items?key=[SUPER SECRET]
         //
         JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("/bio/guoda/preston/process/zotero/group-items.json"));
         List<Quad> statements = new ArrayList<>();
@@ -70,6 +74,39 @@ public class RegistryReaderZoteroTest {
         assertThat(item1Attachment.getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items/Z3L7EK3H/file/view>"));
         assertThat(item1Attachment.getPredicate(), is(HAS_VERSION));
         assertTrue(RefNodeFactory.isBlankOrSkolemizedBlank(item1Attachment.getObject()));
+
+    }
+
+    @Test
+    public void onGroup() throws IOException {
+        //
+        // retrieved from address below on 2024-04-26
+        //
+        // https://api.zotero.org/groups/5435545?key=[SUPER SECRET]
+        //
+        JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("/bio/guoda/preston/process/zotero/group.json"));
+        JsonNode groupIdString = jsonNode.at("/id");
+        JsonNode numItems = jsonNode.at("/meta/numItems");
+        long numberOfItems = numItems.longValue();
+        assertThat(numberOfItems, is(12574L));
+        long groupId = groupIdString.longValue();
+        assertThat(groupId, is(5435545L));
+
+        int pageSize = 100;
+        Stream<Quad> statements = LongStream.rangeClosed(0, numberOfItems / pageSize)
+                .mapToObj(page -> "https://api.zotero.org/groups/" + groupId + "/items?start=" + page * pageSize + "&limit=100")
+                .map(url ->
+                        RefNodeFactory.toStatement(
+                                RefNodeFactory.toIRI(url),
+                                HAS_VERSION,
+                                RefNodeFactory.toBlank()));
+
+        List<Quad> list = statements.collect(Collectors.toList());
+
+        assertThat(list.size(), is(126));
+        assertThat(list.get(0).getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items?start=0&limit=100>"));
+
+        assertThat(list.get(list.size()-1).getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items?start=12500&limit=100>"));
 
     }
 
