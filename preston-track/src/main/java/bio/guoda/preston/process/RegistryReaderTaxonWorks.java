@@ -41,6 +41,7 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
+    public static final String FIELD_NAME_PROJECT_TOKEN = "project_token";
     private final Logger LOG = LoggerFactory.getLogger(RegistryReaderTaxonWorks.class);
     public static final String TAXONWORKS_API_ENDPOINT = "https://sfg.taxonworks.org/api/v1";
     private static final String TAXONWORKS_CITATIONS = TAXONWORKS_API_ENDPOINT + "/citations";
@@ -230,18 +231,30 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
 
         if (jsonNode.has("open_projects")) {
             for (JsonNode projectNode : jsonNode.get("open_projects")) {
+                String projectToken = getProjectToken(projectNode);
+                IRI citations = toIRI(TAXONWORKS_API_ENDPOINT + "/citations/?citation_object_type=BiologicalAssociation&project_token=" + projectToken);
+                emitRequestForJSON(emitter, versionSource, citations);
 
-                if (projectNode.isObject() && projectNode.size() > 0) {
-                    Iterator<String> fieldNames = projectNode.fieldNames();
-                    if (fieldNames.hasNext()) {
-                        String projectToken = fieldNames.next();
-                        IRI citations = toIRI(TAXONWORKS_API_ENDPOINT + "/citations/?citation_object_type=BiologicalAssociation&project_token=" + projectToken);
-                        emitRequestForJSON(emitter, versionSource, citations);
-                    }
-                }
             }
         }
 
+    }
+
+    private static String getProjectToken(JsonNode projectNode) {
+        String projectToken = null;
+        if (isPost2023API(projectNode)) {
+            projectToken = projectNode.get(FIELD_NAME_PROJECT_TOKEN).asText();
+        } else if (projectNode.isObject() && projectNode.size() > 0) {
+            Iterator<String> fieldNames = projectNode.fieldNames();
+            if (fieldNames.hasNext()) {
+                projectToken = fieldNames.next();
+            }
+        }
+        return projectToken;
+    }
+
+    private static boolean isPost2023API(JsonNode projectNode) {
+        return projectNode.has(FIELD_NAME_PROJECT_TOKEN);
     }
 
     private static void emitRequestForJSON(StatementsEmitter emitter, IRI versionSource, IRI object) {
@@ -300,7 +313,7 @@ public class RegistryReaderTaxonWorks extends ProcessorReadOnly {
 
                 String url = appendProjectTokenIfAvailable(versionSource, associationsUrl);
                 String queryDelimiter = StringUtils.contains(url, "?") ? "&" : "?";
-                IRI associationQuery = toIRI(url + queryDelimiter +"extend[]=biological_relationship");
+                IRI associationQuery = toIRI(url + queryDelimiter + "extend[]=biological_relationship");
                 emitter.emit(toStatement(associationQuery, WAS_DERIVED_FROM, sourceQuery));
                 emitter.emit(toStatement(associationQuery, HAS_VERSION, toBlank()));
             }

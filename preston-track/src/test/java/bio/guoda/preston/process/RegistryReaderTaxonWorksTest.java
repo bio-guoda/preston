@@ -419,6 +419,61 @@ public class RegistryReaderTaxonWorksTest {
 
     }
 
+    @Test
+    public void parseProjectIndex2024() throws IOException {
+        List<Quad> statements = new ArrayList<>();
+        RegistryReaderTaxonWorks.parseProjectIndex(new StatementsEmitterAdapter() {
+                                                       @Override
+                                                       public void emit(Quad statement) {
+                                                           statements.add(statement);
+                                                       }
+                                                   }, IOUtils.toInputStream("{\n" +
+                        "  \"success\": true,\n" +
+                        "  \"open_projects\": [\n" +
+                        "    {\n" +
+                        "      \"name\": \"Terrestrial Parasite Tracker (TPT)\",\n" +
+                        "      \"project_token\": \"UndtpSwdHsSRw8K3ddsTNQ\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"name\": \"Universal Chalcidoidea Database (UCD)\",\n" +
+                        "      \"project_token\": \"adhBi59dc13U7RxbgNE5HQ\"\n" +
+                        "    }]}", StandardCharsets.UTF_8),
+                RefNodeFactory.toIRI("https://example.org"));
+
+        assertThat(statements.size(), Is.is(6));
+
+        Quad first = statements.get(0);
+        assertThat(first.getSubject().toString(), Is.is("<https://example.org>"));
+        assertThat(first.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#hadMember>"));
+        assertThat(first.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/citations/?citation_object_type=BiologicalAssociation&project_token=UndtpSwdHsSRw8K3ddsTNQ>"));
+
+        Quad second = statements.get(1);
+        assertThat(second.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/citations/?citation_object_type=BiologicalAssociation&project_token=UndtpSwdHsSRw8K3ddsTNQ>"));
+        assertThat(second.getPredicate().toString(), Is.is("<http://purl.org/dc/elements/1.1/format>"));
+        assertThat(second.getObject().toString(), Is.is("\"application/json\""));
+
+        Quad third = statements.get(2);
+        assertThat(third.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/citations/?citation_object_type=BiologicalAssociation&project_token=UndtpSwdHsSRw8K3ddsTNQ>"));
+        assertThat(third.getPredicate().toString(), Is.is("<http://purl.org/pav/hasVersion>"));
+        assertThat(third.getObject() instanceof BlankNode, Is.is(true));
+
+        Quad fourth = statements.get(3);
+        assertThat(fourth.getSubject().toString(), Is.is("<https://example.org>"));
+        assertThat(fourth.getPredicate().toString(), Is.is("<http://www.w3.org/ns/prov#hadMember>"));
+        assertThat(fourth.getObject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/citations/?citation_object_type=BiologicalAssociation&project_token=adhBi59dc13U7RxbgNE5HQ>"));
+
+        Quad fifth = statements.get(4);
+        assertThat(fifth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/citations/?citation_object_type=BiologicalAssociation&project_token=adhBi59dc13U7RxbgNE5HQ>"));
+        assertThat(fifth.getPredicate().toString(), Is.is("<http://purl.org/dc/elements/1.1/format>"));
+        assertThat(fifth.getObject().toString(), Is.is("\"application/json\""));
+
+        Quad sixth = statements.get(5);
+        assertThat(sixth.getSubject().toString(), Is.is("<https://sfg.taxonworks.org/api/v1/citations/?citation_object_type=BiologicalAssociation&project_token=adhBi59dc13U7RxbgNE5HQ>"));
+        assertThat(sixth.getPredicate().toString(), Is.is("<http://purl.org/pav/hasVersion>"));
+        assertThat(sixth.getObject() instanceof BlankNode, Is.is(true));
+
+    }
+
 
     @Test
     public void paging() {
