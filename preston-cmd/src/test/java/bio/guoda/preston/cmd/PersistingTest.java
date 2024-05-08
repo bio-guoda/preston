@@ -44,6 +44,20 @@ public class PersistingTest {
     }
 
     @Test
+    public void localFileInTarGzShort() throws URISyntaxException, IOException {
+        Persisting persisting = new Persisting();
+        URL resource = getClass().getResource("/preston-a.tar.gz");
+        assertThat(resource, is(not(nullValue())));
+        URI baseURI = new File(resource.toURI()).getParentFile().toURI();
+        persisting.setRemotes(Collections.singletonList(baseURI));
+
+        KeyValueStore keyValueStore = persisting.getKeyValueStore(getAlwaysAccepting());
+        InputStream inputStream = keyValueStore.get(RefNodeFactory.toIRI("hash://sha256/a12dd6335e7803027da3007e26926c5c946fea9803a5eb07908d978998d933da"));
+        String evolutionOfMan = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        assertThat(evolutionOfMan, startsWith("THE EVOLUTION OF MAN"));
+    }
+
+    @Test
     public void defaultRemotes() {
         Persisting persisting = new Persisting();
         List<URI> remotes = persisting.getRemotes();

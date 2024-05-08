@@ -20,6 +20,8 @@ import bio.guoda.preston.store.KeyTo1LevelZenodoBucket;
 import bio.guoda.preston.store.KeyTo1LevelZenodoPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelTarGzPath;
+import bio.guoda.preston.store.KeyTo3LevelTarGzPathShort;
+import bio.guoda.preston.store.KeyTo3LevelTarGzPathShorter;
 import bio.guoda.preston.store.KeyToHashURI;
 import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
@@ -186,10 +188,19 @@ public class Persisting extends PersistingLocal {
     }
 
     private Stream<KeyValueStoreReadOnly> tarGzRemotePathSupport() {
-        return getRemotes().stream().map(uri ->
-                isCacheEnabled()
-                        ? this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()))
-                        : this.remoteWithTarGz(uri));
+        return getRemotes().stream().flatMap(uri -> Stream.of(
+                getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPathShorter(uri, this.getHashType())),
+                getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPathShort(uri, this.getHashType())),
+                getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPath(uri, this.getHashType()))
+        ));
+    }
+
+    private KeyValueStoreReadOnly getKeyValueStoreReadOnly(URI uri, KeyToPath keyToPath) {
+        if (isCacheEnabled()) {
+            return this.remoteWithTarGzCacheAll(uri, super.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), keyToPath);
+        } else {
+            return this.remoteWithTarGz(uri, keyToPath);
+        }
     }
 
     private KeyValueStoreReadOnly withStoreAt(URI baseURI, KeyToPath keyToPath) {
@@ -239,18 +250,23 @@ public class Persisting extends PersistingLocal {
         return uri -> ResourcesHTTP.asInputStreamIgnore40x50x(uri, listener);
     }
 
-    private KeyValueStoreReadOnly remoteWithTarGz(URI baseURI) {
-        return withStoreAt(new KeyTo3LevelTarGzPath(baseURI, getHashType()),
+    private KeyValueStoreReadOnly remoteWithTarGz(
+            URI baseURI,
+            KeyToPath keyToPath) {
+        return withStoreAt(keyToPath,
                 new DereferencerContentAddressedTarGZ(getDerefStream(baseURI, getProgressListener())));
     }
 
-    private KeyValueStoreReadOnly remoteWithTarGzCacheAll(URI baseURI, KeyValueStore keyValueStore) {
+    private KeyValueStoreReadOnly remoteWithTarGzCacheAll(
+            URI baseURI,
+            KeyValueStore keyValueStore,
+            KeyToPath keyToPath) {
         DereferencerContentAddressedTarGZ dereferencer =
                 new DereferencerContentAddressedTarGZ(getDerefStream(baseURI,
                         getProgressListener()),
                         new BlobStoreAppendOnly(keyValueStore, false, getHashType()));
 
-        return withStoreAt(new KeyTo3LevelTarGzPath(baseURI, getHashType()), dereferencer);
+        return withStoreAt(keyToPath, dereferencer);
     }
 
     protected BlobStoreReadOnly resolvingBlobStore(Dereferencer<InputStream> blobStore) {

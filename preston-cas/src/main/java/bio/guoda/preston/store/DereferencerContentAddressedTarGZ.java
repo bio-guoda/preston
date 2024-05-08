@@ -42,7 +42,7 @@ public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStre
                     if (data != null) {
                         TarArchiveInputStream tarInputStream = new TarArchiveInputStream(new GZIPInputStream(data));
                         TarArchiveEntry entry;
-                        while ((entry = tarInputStream.getNextTarEntry()) != null) {
+                        while ((entry = tarInputStream.getNextEntry()) != null) {
                             if (entry.isFile()) {
                                 if (blobStore == null) {
                                     IRI foundHashIRI = extractHashURI(entry.getName());
