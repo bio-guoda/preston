@@ -91,7 +91,7 @@ public class HasherTest {
 
             @Override
             public String hash(InputStream is) throws IOException {
-                return hash(is, NullOutputStream.NULL_OUTPUT_STREAM);
+                return hash(is, NullOutputStream.INSTANCE);
             }
 
             @Override

@@ -31,7 +31,7 @@ public class CmdDwcRecordStream extends LoggingPersisting implements Runnable {
     public void run(BlobStoreReadOnly blobStoreReadOnly) {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
-                NullPrintStream.NULL_PRINT_STREAM,
+                NullPrintStream.INSTANCE,
                 LogErrorHandlerExitOnError.EXIT_ON_ERROR);
 
         DwcRecordExtractor textMatcher = new DwcRecordExtractor(

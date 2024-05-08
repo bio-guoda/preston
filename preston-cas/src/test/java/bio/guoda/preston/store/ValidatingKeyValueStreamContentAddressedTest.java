@@ -19,7 +19,7 @@ public class ValidatingKeyValueStreamContentAddressedTest {
     public void matchingHash() throws IOException {
         InputStream is = IOUtils.toInputStream("some value", StandardCharsets.UTF_8);
         ValidatingKeyValueStreamContentAddressed validating = new ValidatingKeyValueStreamContentAddressed(is, HashType.sha256);
-        IOUtils.copy(validating.getValueStream(), NullOutputStream.NULL_OUTPUT_STREAM);
+        IOUtils.copy(validating.getValueStream(), NullOutputStream.INSTANCE);
         assertFalse(validating.acceptValueStreamForKey(RefNodeFactory.toIRI("bla")));
         assertTrue(validating.acceptValueStreamForKey(RefNodeFactory.toIRI("hash://sha256/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")));
     }
@@ -28,7 +28,7 @@ public class ValidatingKeyValueStreamContentAddressedTest {
     public void mismatchingHash() throws IOException {
         InputStream is = IOUtils.toInputStream("some other value", StandardCharsets.UTF_8);
         ValidatingKeyValueStreamContentAddressed validating = new ValidatingKeyValueStreamContentAddressed(is, HashType.sha256);
-        IOUtils.copy(validating.getValueStream(), NullOutputStream.NULL_OUTPUT_STREAM);
+        IOUtils.copy(validating.getValueStream(), NullOutputStream.INSTANCE);
         assertFalse(validating.acceptValueStreamForKey(RefNodeFactory.toIRI("hash://sha256/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")));
     }
 

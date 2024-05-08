@@ -27,7 +27,7 @@ public class DerferencingEntity extends AbstractHttpEntity {
     @Override
     public long getContentLength() {
         try (InputStream inputStream = dereferencer.get(resource)) {
-            return IOUtils.copy(inputStream, NullOutputStream.NULL_OUTPUT_STREAM);
+            return IOUtils.copy(inputStream, NullOutputStream.INSTANCE);
         } catch (IOException e) {
             return -1;
         }

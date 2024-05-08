@@ -107,7 +107,7 @@ public class ContentHashDereferencerTest {
         BlobStoreReadOnly blobStore = getTestBlobStoreForResource("/bio/guoda/preston/process/nodc.tar.gz");
 
         InputStream content = new ContentHashDereferencer(blobStore).get(toIRI(query));
-        IRI iri = Hasher.calcHashIRI(content, NullOutputStream.NULL_OUTPUT_STREAM, HashType.sha256);
+        IRI iri = Hasher.calcHashIRI(content, NullOutputStream.INSTANCE, HashType.sha256);
 
         assertThat(iri.getIRIString(), is("hash://sha256/a908d1b21a86d95df40168df4795ad7c33ab668a383cb5944e6f4557e5186255"));
     }

@@ -72,7 +72,7 @@ public class HashVerifier extends StatementsListenerAdapter {
                     URI uri = keyToPath.toPath(iri);
                     fileSize = new File(uri).length();
                     if (fileSize == 0) {
-                        try (CountingOutputStream counting = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM)) {
+                        try (CountingOutputStream counting = new CountingOutputStream(NullOutputStream.INSTANCE)) {
                             IOUtils.copy(is, counting);
                             fileSize = counting.getByteCount();
                         }
@@ -80,7 +80,7 @@ public class HashVerifier extends StatementsListenerAdapter {
                     state = VerificationState.CONTENT_PRESENT_HASH_NOT_VERIFIED;
 
                 } else {
-                    try (CountingOutputStream counting = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM)) {
+                    try (CountingOutputStream counting = new CountingOutputStream(NullOutputStream.INSTANCE)) {
                         calculatedHashIRI = hashGenerator.hash(is, counting);
                         state = calculatedHashIRI.equals(iri)
                                 ? VerificationState.CONTENT_PRESENT_VALID_HASH

@@ -103,7 +103,7 @@ public class CmdAliasTest {
     public void showTrackedAlias() {
         String dataDir = tmpFolder.getRoot().getAbsolutePath();
         CmdTrack track = new CmdTrack();
-        track.setOutputStream(NullOutputStream.NULL_OUTPUT_STREAM);
+        track.setOutputStream(NullOutputStream.INSTANCE);
         track.setLocalDataDir(dataDir);
         track.setIRIs(Arrays.asList(RefNodeFactory.toIRI("https://example.org")));
         track.run();
@@ -124,7 +124,7 @@ public class CmdAliasTest {
     public void showUUIDAlias() {
         String dataDir = tmpFolder.getRoot().getAbsolutePath();
         CmdTrack track = new CmdTrack();
-        track.setOutputStream(NullOutputStream.NULL_OUTPUT_STREAM);
+        track.setOutputStream(NullOutputStream.INSTANCE);
         track.setLocalDataDir(dataDir);
         track.setIRIs(Arrays.asList(RefNodeFactory.toIRI("https://example.org")));
         track.run();

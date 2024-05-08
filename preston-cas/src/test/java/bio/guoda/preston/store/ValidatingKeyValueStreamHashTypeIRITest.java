@@ -23,7 +23,7 @@ public class ValidatingKeyValueStreamHashTypeIRITest {
         InputStream is = IOUtils.toInputStream(iri.getIRIString(), StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
         ValidatingKeyValueStreamHashTypeIRI someiri = new ValidatingKeyValueStreamHashTypeIRI(is, HashType.sha256);
-        IOUtils.copy(someiri.getValueStream(), NullOutputStream.NULL_OUTPUT_STREAM);
+        IOUtils.copy(someiri.getValueStream(), NullOutputStream.INSTANCE);
 
         assertThat(someiri.acceptValueStreamForKey(somekey), Is.is(true));
     }
@@ -36,7 +36,7 @@ public class ValidatingKeyValueStreamHashTypeIRITest {
         IRI somekey = RefNodeFactory.toIRI("somekey");
         ValidatingKeyValueStreamHashTypeIRI someiri
                 = new ValidatingKeyValueStreamHashTypeIRI(is, type);
-        IOUtils.copy(someiri.getValueStream(), NullOutputStream.NULL_OUTPUT_STREAM);
+        IOUtils.copy(someiri.getValueStream(), NullOutputStream.INSTANCE);
 
         assertThat(someiri.acceptValueStreamForKey(somekey), Is.is(true));
     }
@@ -46,7 +46,7 @@ public class ValidatingKeyValueStreamHashTypeIRITest {
         InputStream is = IOUtils.toInputStream("short", StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
         ValidatingKeyValueStreamHashTypeIRI someiri = new ValidatingKeyValueStreamHashTypeIRI(is, HashType.sha256);
-        IOUtils.copy(someiri.getValueStream(), NullOutputStream.NULL_OUTPUT_STREAM);
+        IOUtils.copy(someiri.getValueStream(), NullOutputStream.INSTANCE);
 
         assertThat(someiri.acceptValueStreamForKey(somekey), Is.is(false));
     }
@@ -57,7 +57,7 @@ public class ValidatingKeyValueStreamHashTypeIRITest {
         InputStream is = IOUtils.toInputStream(iri.getIRIString() + "toolong", StandardCharsets.UTF_8);
         IRI somekey = RefNodeFactory.toIRI("somekey");
         ValidatingKeyValueStreamHashTypeIRI someiri = new ValidatingKeyValueStreamHashTypeIRI(is, HashType.sha256);
-        IOUtils.copy(someiri.getValueStream(), NullOutputStream.NULL_OUTPUT_STREAM);
+        IOUtils.copy(someiri.getValueStream(), NullOutputStream.INSTANCE);
 
         assertThat(someiri.acceptValueStreamForKey(somekey), Is.is(false));
     }

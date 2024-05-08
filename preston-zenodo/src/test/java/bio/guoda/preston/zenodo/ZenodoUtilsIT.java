@@ -141,7 +141,7 @@ public class ZenodoUtilsIT {
     }
 
     private String expectedContentId() throws IOException {
-        return Hasher.calcHashIRI(getInputStream(), NullOutputStream.NULL_OUTPUT_STREAM, HashType.md5).getIRIString();
+        return Hasher.calcHashIRI(getInputStream(), NullOutputStream.INSTANCE, HashType.md5).getIRIString();
     }
 
 
@@ -174,7 +174,7 @@ public class ZenodoUtilsIT {
     }
 
     private String contentIdZeroLengthContent() throws IOException {
-        return Hasher.calcHashIRI(IOUtils.toInputStream("", StandardCharsets.UTF_8), NullOutputStream.NULL_OUTPUT_STREAM, HashType.md5).getIRIString();
+        return Hasher.calcHashIRI(IOUtils.toInputStream("", StandardCharsets.UTF_8), NullOutputStream.INSTANCE, HashType.md5).getIRIString();
     }
 
     private void assertUpload(HttpEntity entity, String expectedChecksum, String filename) throws IOException {
@@ -190,7 +190,7 @@ public class ZenodoUtilsIT {
 
 
     private long getContentLength() {
-        return new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM).getByteCount();
+        return new CountingOutputStream(NullOutputStream.INSTANCE).getByteCount();
     }
 
     private InputStream getInputStream() {
