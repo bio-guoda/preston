@@ -43,7 +43,10 @@ public class RegistryReaderGoogleDriveTest {
                         RefNodeFactory.toIRI("foo:bar"))
         );
 
-        assertThat(statements.size(), Is.is(18));
+        assertThat(statements.size(), Is.is(21));
+
+        Quad quad = statements.get(statements.size() - 1);
+        assertThat(quad.getSubject(), Is.is(RefNodeFactory.toIRI("https://docs.google.com/document/u/0/export?id=1jzb54GbAkB_TOFIjWof5BW6gn1ujSnXXJQu6aZgFAB4&format=html")));
     }
 
     @Test

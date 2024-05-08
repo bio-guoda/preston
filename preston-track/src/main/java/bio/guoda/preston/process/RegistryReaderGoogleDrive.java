@@ -26,6 +26,7 @@ import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.odt;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.pdf;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.pptx;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.rtf;
+import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.html;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.tsv;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.txt;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.xlsx;
@@ -40,9 +41,9 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
             = new GoogleResourceId(null, null, null);
 
     private static final TreeMap<String, List<Type>> TYPES_FOR_TYPES = new TreeMap<String, List<Type>>() {{
-        put("document", Arrays.asList(pdf, docx, txt, odt, rtf, epub));
-        put("presentation", Arrays.asList(pdf, pptx, odp, txt));
-        put("spreadsheets", Arrays.asList(xlsx, ods, pdf, csv, tsv));
+        put("document", Arrays.asList(pdf, docx, txt, odt, rtf, epub, html));
+        put("presentation", Arrays.asList(pdf, pptx, odp, txt, html));
+        put("spreadsheets", Arrays.asList(xlsx, ods, pdf, csv, tsv, html));
     }};
 
     public RegistryReaderGoogleDrive(KeyValueStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
@@ -58,7 +59,7 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
             if (likelyGoogleResource(googleResourceId)) {
                 exportTypesFor(googleResourceId)
                         .forEach(idType -> emitExportStatements(
-                                idType.getKey(),
+                                idType.getLeft(),
                                 idType.getRight(),
                                 versionSourceString,
                                 this)
@@ -80,6 +81,7 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         txt("txt", "text/plain"),
         csv("csv", "text/csv"),
         tsv("tsv", "text/tab-separated-values"),
+        html("html", "application/zip"),
         pdf("pdf", "application/pdf"),
         docx("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
         xlsx("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
@@ -156,24 +158,24 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         if (likelyGoogleResource(id)) {
             Stream.of(
                     toStatement(
-                            toExportIRI(id),
+                            toExportIRI(id, type),
                             RefNodeConstants.WAS_DERIVED_FROM,
                             RefNodeFactory.toIRI(originalUrl)),
                     toStatement(
-                            toExportIRI(id),
+                            toExportIRI(id, type),
                             RefNodeConstants.HAS_FORMAT,
                             RefNodeFactory.toLiteral(type.mimeType)),
                     toStatement(
-                            toExportIRI(id),
+                            toExportIRI(id, type),
                             RefNodeConstants.HAS_VERSION,
                             RefNodeFactory.toBlank())
             ).forEach(emitter::emit);
         }
     }
 
-    private static IRI toExportIRI(GoogleResourceId id) {
+    private static IRI toExportIRI(GoogleResourceId id, Type type) {
         String exportUrlPrefix = "https://docs.google.com/document/u/0/export?id=";
-        return RefNodeFactory.toIRI(exportUrlPrefix + id.getId() + "&format=" + id.getType());
+        return RefNodeFactory.toIRI(exportUrlPrefix + id.getId() + "&format=" + type.type);
     }
 
 }
