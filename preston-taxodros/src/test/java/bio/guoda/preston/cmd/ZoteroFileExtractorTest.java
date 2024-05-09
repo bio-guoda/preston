@@ -73,9 +73,11 @@ public class ZoteroFileExtractorTest {
 
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(1));
+        assertThat(identifiers.size(), is(2));
         assertThat(identifiers.get(0).get("relation").asText(), is("isAlternateIdentifier"));
-        assertThat(identifiers.get(0).get("identifier").asText(), is("https://api.zotero.org/groups/5435545/items/P4LGETPS"));
+        assertThat(identifiers.get(0).get("identifier").asText(), is("https://api.zotero.org/groups/5435545/items/P4LGETPS/file/view"));
+        assertThat(identifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(1).get("identifier").asText(), is("hash://md5/45799372d92d29739588a8b8e5e35a8c"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Biodiversity"));
@@ -101,6 +103,8 @@ public class ZoteroFileExtractorTest {
                     } catch (FileNotFoundException e) {
                         throw new RuntimeException(e);
                     }
+                } else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/P4LGETPS/file/view", key.getIRIString())) {
+                    return IOUtils.toInputStream("this is a scientific article about bats", StandardCharsets.UTF_8);
                 }
                 return null;
             }

@@ -1,11 +1,17 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
+import bio.guoda.preston.Hasher;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.ZoteroUtil;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
@@ -21,13 +27,16 @@ import java.util.stream.Stream;
 public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
 
+    private final Dereferencer<InputStream> dereferencer;
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
 
     public ZoteroFileStreamHandler(ContentStreamHandler contentStreamHandler,
-                                   OutputStream os) {
+                                   OutputStream os,
+                                   Dereferencer<InputStream> dereferencer) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
+        this.dereferencer = dereferencer;
     }
 
     @Override
@@ -73,8 +82,26 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.DOI, jsonNode.at("/data/DOI").asText());
 
-                ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, jsonNode.at("/links/attachment/href").asText());
+                String value = jsonNode.at("/links/attachment/href").asText();
+                if (StringUtils.isNoneBlank(value)) {
+                    String zoteroAttachmentDownloadUrl = ZoteroUtil.getZoteroAttachmentDownloadUrl(jsonNode);
+                    ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, zoteroAttachmentDownloadUrl);
+                    try {
+                        InputStream attachementInputStream = dereferencer.get(RefNodeFactory.toIRI(zoteroAttachmentDownloadUrl));
+                        if (attachementInputStream == null) {
+                            throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]");
+                        }
+                        IRI contentId = Hasher.calcHashIRI(
+                                attachementInputStream,
+                                NullOutputStream.INSTANCE,
+                                HashType.md5
+                        );
+                        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, contentId.getIRIString());
+                    } catch (IOException e) {
+                        throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]", e);
+                    }
 
+                }
 
                 ZenodoMetaUtil.addKeyword(objectNode, "Biodiversity");
                 ZenodoMetaUtil.addKeyword(objectNode, "Mammalia");

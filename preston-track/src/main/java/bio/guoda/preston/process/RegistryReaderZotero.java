@@ -64,22 +64,20 @@ public class RegistryReaderZotero extends ProcessorReadOnly {
         for (JsonNode item : new ObjectMapper().readTree(is)) {
             JsonNode itemUrl = item.at("/links/self/href");
             if (itemUrl != null) {
-                JsonNode attachmentUrl = item.at("/links/attachment/href");
-                if (attachmentUrl != null && StringUtils.isNotBlank(attachmentUrl.asText())) {
+                String attachmentDownloadUrlString = ZoteroUtil.getZoteroAttachmentDownloadUrl(item);
+
+                if (StringUtils.isNoneBlank(attachmentDownloadUrlString)) {
                     JsonNode attachmentType = item.at("/links/attachment/attachmentType");
-
-                    String attachementUrl = attachmentUrl.asText() + "/file/view";
-
                     if (attachmentType != null && StringUtils.isNotBlank(attachmentType.asText())) {
                         emitter.emit(RefNodeFactory.toStatement(
-                                RefNodeFactory.toIRI(attachementUrl),
+                                RefNodeFactory.toIRI(attachmentDownloadUrlString),
                                 HAS_FORMAT,
                                 RefNodeFactory.toLiteral("application/pdf"))
                         );
                     }
 
                     emitter.emit(RefNodeFactory.toStatement(
-                            RefNodeFactory.toIRI(attachementUrl),
+                            RefNodeFactory.toIRI(attachmentDownloadUrlString),
                             HAS_VERSION,
                             RefNodeFactory.toBlank())
                     );

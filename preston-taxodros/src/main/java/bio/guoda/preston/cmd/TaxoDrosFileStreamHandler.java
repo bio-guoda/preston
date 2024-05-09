@@ -163,7 +163,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         appendIdentifier(textCapture, line, PREFIX_PUBLISHER);
                     } else if (StringUtils.startsWith(line, PREFIX_JOURNAL)) {
                         setTypeDROS5(objectNode);
-                        ZenodoMetaUtil.setValue(objectNode, "title", getAndResetCapture(textCapture));
+                        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, getAndResetCapture(textCapture));
                         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_ARTICLE);
                         appendIdentifier(textCapture, line, PREFIX_JOURNAL);
                     } else if (StringUtils.startsWith(line, PREFIX_METHOD_DIGITIZATION)) {
