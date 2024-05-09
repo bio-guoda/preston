@@ -4,12 +4,14 @@ import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.ZoteroUtil;
+import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import jdk.internal.util.xml.impl.Input;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
@@ -27,15 +29,18 @@ import java.util.stream.Stream;
 public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
 
+    private final Persisting persisting;
     private final Dereferencer<InputStream> dereferencer;
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
 
     public ZoteroFileStreamHandler(ContentStreamHandler contentStreamHandler,
                                    OutputStream os,
+                                   Persisting persisting,
                                    Dereferencer<InputStream> dereferencer) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
+        this.persisting = persisting;
         this.dereferencer = dereferencer;
     }
 
@@ -102,7 +107,8 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                 String zoteroAttachmentDownloadUrl = ZoteroUtil.getZoteroAttachmentDownloadUrl(jsonNode);
                 ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, zoteroAttachmentDownloadUrl);
                 try {
-                    InputStream attachementInputStream = dereferencer.get(RefNodeFactory.toIRI(zoteroAttachmentDownloadUrl));
+                    IRI downloadIRI = RefNodeFactory.toIRI(zoteroAttachmentDownloadUrl);
+                    InputStream attachementInputStream = ContentQueryUtil.getContent(dereferencer, downloadIRI, persisting);
                     if (attachementInputStream == null) {
                         throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]");
                     }

@@ -3,6 +3,7 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.process.StopProcessingException;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -23,7 +24,7 @@ public class ContentQueryUtil {
     }
 
     public static void copyContent(
-            BlobStoreReadOnly blobStore,
+            Dereferencer<InputStream> blobStore,
             IRI queryIRI,
             Persisting persisting,
             CopyShop copyShop
@@ -39,7 +40,7 @@ public class ContentQueryUtil {
     }
 
     public static InputStream getContent(
-            BlobStoreReadOnly blobStore,
+            Dereferencer<InputStream> blobStore,
             IRI queryIRI,
             Persisting persisting) throws IOException {
         InputStream contentStream;

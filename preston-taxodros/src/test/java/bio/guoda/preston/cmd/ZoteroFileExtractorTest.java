@@ -32,8 +32,6 @@ import static org.hamcrest.core.Is.is;
 
 public class ZoteroFileExtractorTest {
 
-    public static final String NON_JOURNAL_TITLE = "title";
-
     @Test
     public void streamZoteroArticleToZenodoLineJson() throws IOException {
         String[] jsonObjects = getResource("ZoteroArticle.json");
@@ -85,7 +83,7 @@ public class ZoteroFileExtractorTest {
         assertThat(identifiers.get(0).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(0).get("identifier").asText(), is("https://api.zotero.org/groups/5435545/items/P4LGETPS/file/view"));
         assertThat(identifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
-        assertThat(identifiers.get(1).get("identifier").asText(), is("hash://md5/45799372d92d29739588a8b8e5e35a8c"));
+        assertThat(identifiers.get(1).get("identifier").asText(), is("hash://md5/a51c3c32b083b50d00f34bd72fcd3a19"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Biodiversity"));
@@ -111,8 +109,8 @@ public class ZoteroFileExtractorTest {
                     } catch (FileNotFoundException e) {
                         throw new RuntimeException(e);
                     }
-                } else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/P4LGETPS/file/view", key.getIRIString())) {
-                    return IOUtils.toInputStream("this is a scientific article about bats", StandardCharsets.UTF_8);
+                } else if (StringUtils.equals("hash://sha256/9e088b29db63c9c6f41cf6bc183cb61554f317656f8f34638a07398342da2b1a", key.getIRIString())) {
+                    return IOUtils.toInputStream("this is a scientific article about bats associated with https://api.zotero.org/groups/5435545/items/P4LGETPS/file/view", StandardCharsets.UTF_8);
                 }
                 return null;
             }
@@ -125,8 +123,12 @@ public class ZoteroFileExtractorTest {
         );
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        Persisting processorState = new Persisting();
+        URL resource = getClass().getResource("/bio/guoda/preston/cmd/zoterodatadir/2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a");
+        File dataDir = new File(resource.getFile()).getParentFile().getParentFile().getParentFile();
+        processorState.setLocalDataDir(dataDir.getAbsolutePath());
         StatementsListener extractor = new ZoteroFileExtractor(
-                new ProcessorStateAlwaysContinue(),
+                processorState,
                 blobStore,
                 byteArrayOutputStream
         );

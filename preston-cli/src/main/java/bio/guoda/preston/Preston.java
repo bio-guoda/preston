@@ -30,6 +30,7 @@ import bio.guoda.preston.cmd.CmdTaxonWorksStream;
 import bio.guoda.preston.cmd.CmdUpdate;
 import bio.guoda.preston.cmd.CmdVerify;
 import bio.guoda.preston.cmd.CmdVersion;
+import bio.guoda.preston.cmd.CmdZoteroStream;
 import bio.guoda.preston.cmd.TypeConverterIRI;
 import bio.guoda.preston.dbase.CmdDBaseRecordStream;
 import bio.guoda.preston.excel.CmdExcelRecordStream;
@@ -68,6 +69,7 @@ import static java.lang.System.exit;
                 CmdParadoxRecordStream.class,
                 CmdPlazi.class,
                 CmdZenodo.class,
+                CmdZoteroStream.class,
                 CmdGenBankStream.class,
                 CmdTaxoDrosStream.class,
                 CmdMBDStream.class,

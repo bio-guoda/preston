@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsListener;
@@ -22,10 +21,10 @@ import java.util.List;
 public class ZoteroFileExtractor extends ProcessorExtracting {
     private final Logger LOG = LoggerFactory.getLogger(ZoteroFileExtractor.class);
 
-    private final ProcessorState processorState;
+    private final Persisting processorState;
     private final OutputStream outputStream;
 
-    public ZoteroFileExtractor(ProcessorState processorState,
+    public ZoteroFileExtractor(Persisting processorState,
                                BlobStoreReadOnly blobStoreReadOnly,
                                OutputStream out,
                                StatementsListener... listeners) {
@@ -51,7 +50,12 @@ public class ZoteroFileExtractor extends ProcessorExtracting {
             this.handler = new ContentStreamHandlerImpl(
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
-                    new ZoteroFileStreamHandler(this, outputStream, ZoteroFileExtractor.this)
+                    new ZoteroFileStreamHandler(
+                            this,
+                            outputStream,
+                            processorState,
+                            ZoteroFileExtractor.this
+                    )
             );
         }
 
