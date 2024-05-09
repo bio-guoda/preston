@@ -71,11 +71,16 @@ public class ZoteroFileExtractorTest {
         assertThat(taxonNode.get("publication_type").textValue(), is("article"));
         assertThat(taxonNode.get("doi").textValue(), is("10.1093/gbe/evac018"));
 
+
+        JsonNode identifiers = taxonNode.at("/related_identifiers");
+        assertThat(identifiers.size(), is(1));
+        assertThat(identifiers.get(0).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(0).get("identifier").asText(), is("https://api.zotero.org/groups/5435545/items/P4LGETPS"));
+
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Biodiversity"));
         JsonNode custom = taxonNode.at("/custom");
         assertThat(custom.toString(), is("{\"dwc:kingdom\":[\"Animalia\"],\"dwc:phylum\":[\"Chordata\"],\"dwc:class\":[\"Mammalia\"],\"dwc:order\":[\"Chiroptera\"]}"));
-        assertThat(taxonNode.get("attachmentId").asText(), is("https://api.zotero.org/groups/5435545/items/P4LGETPS"));
     }
 
     private JsonNode unwrapMetadata(String jsonObject) throws JsonProcessingException {

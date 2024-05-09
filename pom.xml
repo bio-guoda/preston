@@ -23,7 +23,6 @@
         <module>preston-genbank</module>
         <module>preston-zenodo</module>
         <module>preston-taxodros</module>
-        <module>preston-zotero</module>
         <module>preston-mbd</module>
         <module>preston-github</module>
         <module>preston-index</module>

@@ -66,7 +66,6 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String TAXODROS_DATA_VERSION_SHA256 = "hash://sha256/ca86d74b318a334bddbc7c6a387a09530a083b8617718f5369ad548744c602d3";
     public static final String TAXODROS_DATA_VERSION_MD5 = "hash://md5/26a67012dde325cf2a3a058cc2f9c1b8";
     public static final String LSID_PREFIX = "urn:lsid:taxodros.uzh.ch";
-    public static final String IS_ALTERNATE_IDENTIFIER = "isAlternateIdentifier";
     public static final String PARTOF_PAGES = "partof_pages";
     public static final String PARTOF_TITLE = "partof_title";
 
@@ -102,10 +101,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
                                     String filename = getAndResetCapture(textCapture);
                                     ZenodoMetaUtil.setValue(objectNode, "filename", filename);
-                                    ZenodoMetaUtil.appendIdentifier(objectNode, "isAlternateIdentifier", LSID_PREFIX + ":filename:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename));
-                                    ZenodoMetaUtil.setValue(objectNode, "upload_type", "publication");
-                                    Stream<String> communities = Stream.of("taxodros", "biosyslit");
-                                    ZenodoMetaUtil.setCommunities(objectNode, communities);
+                                    ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":filename:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename));
+                                    ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
+                                    ZenodoMetaUtil.setCommunities(objectNode, Stream.of("taxodros", "biosyslit"));
                                     setType(objectNode, DROS_5);
                                 } else if (isType(objectNode, DROS_3)) {
                                     lineFinish = lineNumber - 1;
@@ -126,7 +124,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         setKeywords(objectNode);
                         String referenceId = getAndResetCapture(textCapture);
                         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, referenceId);
-                        ZenodoMetaUtil.appendIdentifier(objectNode, IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":id:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(referenceId));
+                        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":id:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(referenceId));
                         appendIdentifier(textCapture, line, PREFIX_AUTHOR);
                     } else if (StringUtils.startsWith(line, PREFIX_YEAR)) {
                         setTypeDROS5(objectNode);

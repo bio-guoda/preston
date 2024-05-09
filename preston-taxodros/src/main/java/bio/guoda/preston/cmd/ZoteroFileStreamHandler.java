@@ -72,7 +72,9 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                 }
 
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.DOI, jsonNode.at("/data/DOI").asText());
-                ZenodoMetaUtil.setValue(objectNode, "attachmentId", jsonNode.at("/links/attachment/href").asText());
+
+                ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, jsonNode.at("/links/attachment/href").asText());
+
 
                 ZenodoMetaUtil.addKeyword(objectNode, "Biodiversity");
                 ZenodoMetaUtil.addKeyword(objectNode, "Mammalia");

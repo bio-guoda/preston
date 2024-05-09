@@ -31,6 +31,9 @@ public class ZenodoMetaUtil {
     public static final String FIELD_CUSTOM_DWC_CLASS = "dwc:class";
     public static final String FIELD_CUSTOM_DWC_ORDER = "dwc:order";
     public static final String DOI = "doi";
+    public static final String IS_ALTERNATE_IDENTIFIER = "isAlternateIdentifier";
+    public static final String UPLOAD_TYPE = "upload_type";
+    public static final String UPLOAD_TYPE_PUBLICATION = "publication";
     static final String KEYWORDS = "keywords";
     static final String CUSTOM = "custom";
 
