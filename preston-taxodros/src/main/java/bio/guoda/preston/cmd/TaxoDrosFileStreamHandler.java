@@ -5,7 +5,6 @@ import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -19,6 +18,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -55,19 +56,11 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     private static final String PREFIX_JOURNAL = ".Z ";
     private static final String PREFIX_FILENAME = ".P ";
     public static final String LOCATIONS = "locations";
-    public static final String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
     public static final String DROS_5 = "taxodros-dros5";
     public static final String DROS_3 = "taxodros-dros3";
     public static final String SYS = "taxodros-syst";
     private static final String PREFIX_PUBLISHER = ".Z.";
-    public static final String REFERENCE_ID = "referenceId";
-    public static final String JOURNAL_ISSUE = "journal_issue";
-    public static final String JOURNAL_PAGES = "journal_pages";
-    public static final String JOURNAL_VOLUME = "journal_volume";
-    public static final String JOURNAL_TITLE = "journal_title";
-    public static final String PUBLICATION_TYPE = "publication_type";
     public static final String IMPRINT_PUBLISHER = "imprint_publisher";
-    public static final String PUBLICATION_DATE = "publication_date";
 
     public static final String TAXODROS_DATA_DOI = "10.5281/zenodo.10723540";
     public static final String TAXODROS_DATA_VERSION_SHA256 = "hash://sha256/ca86d74b318a334bddbc7c6a387a09530a083b8617718f5369ad548744c602d3";
@@ -76,12 +69,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String IS_ALTERNATE_IDENTIFIER = "isAlternateIdentifier";
     public static final String PARTOF_PAGES = "partof_pages";
     public static final String PARTOF_TITLE = "partof_title";
-    private static final String KEYWORDS = "keywords";
-    private static final String CUSTOM = "custom";
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
-    public static final String RELATED_IDENTIFIERS = "related_identifiers";
 
     public TaxoDrosFileStreamHandler(ContentStreamHandler contentStreamHandler,
                                      OutputStream os) {
@@ -111,20 +101,11 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                 if (isType(objectNode, DROS_5)) {
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
                                     String filename = getAndResetCapture(textCapture);
-                                    setValue(objectNode, "filename", filename);
-                                    appendIdentifier(objectNode, "isAlternateIdentifier", LSID_PREFIX + ":filename:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename));
-                                    setValue(objectNode, "upload_type", "publication");
-                                    ArrayNode communitiesArray = Stream.of("taxodros", "biosyslit")
-                                            .map(id -> {
-                                                ObjectNode objectNode1 = new ObjectMapper().createObjectNode();
-                                                objectNode1.put("identifier", id);
-                                                return objectNode1;
-                                            })
-                                            .reduce(new ObjectMapper().createArrayNode(),
-                                                    ArrayNode::add,
-                                                    ArrayNode::add
-                                            );
-                                    objectNode.set("communities", communitiesArray);
+                                    ZenodoMetaUtil.setValue(objectNode, "filename", filename);
+                                    ZenodoMetaUtil.appendIdentifier(objectNode, "isAlternateIdentifier", LSID_PREFIX + ":filename:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename));
+                                    ZenodoMetaUtil.setValue(objectNode, "upload_type", "publication");
+                                    Stream<String> communities = Stream.of("taxodros", "biosyslit");
+                                    ZenodoMetaUtil.setCommunities(objectNode, communities);
                                     setType(objectNode, DROS_5);
                                 } else if (isType(objectNode, DROS_3)) {
                                     lineFinish = lineNumber - 1;
@@ -144,73 +125,48 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         setTypeDROS5(objectNode);
                         setKeywords(objectNode);
                         String referenceId = getAndResetCapture(textCapture);
-                        setValue(objectNode, REFERENCE_ID, referenceId);
-                        appendIdentifier(objectNode, IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":id:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(referenceId));
+                        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, referenceId);
+                        ZenodoMetaUtil.appendIdentifier(objectNode, IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":id:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(referenceId));
                         appendIdentifier(textCapture, line, PREFIX_AUTHOR);
                     } else if (StringUtils.startsWith(line, PREFIX_YEAR)) {
                         setTypeDROS5(objectNode);
-                        String andResetCapture = getAndResetCapture(textCapture);
-                        ArrayNode creators = new ObjectMapper().createArrayNode();
+                        String authorStrings = getAndResetCapture(textCapture);
 
-                        String[] authorsFirstSplit = StringUtils.split(andResetCapture, "&");
+                        List<String> creatorList = collectCreators(authorStrings);
 
-                        for (String s : authorsFirstSplit) {
-                            String[] authors = StringUtils.split(s, ",");
-                            ObjectNode creator = null;
-                            StringBuilder creatorName = new StringBuilder();
-                            for (int i = 0; i < authors.length; i++) {
-                                String author = StringUtils.trim(StringUtils.replace(authors[i], "&", ""));
-                                if (i % 2 == 0) {
-                                    creatorName.append(author);
-                                } else {
-                                    creatorName.append(", ");
-                                    creatorName.append(author);
-                                    creator = new ObjectMapper().createObjectNode();
-                                    creator.put("name", creatorName.toString());
-                                    creators.add(creator);
-                                    creatorName = new StringBuilder();
-                                }
-                            }
-
-                        }
-                        objectNode.set("creators", creators);
+                        ZenodoMetaUtil.setCreators(objectNode, creatorList);
                         appendIdentifier(textCapture, line, PREFIX_YEAR);
+
                     } else if (StringUtils.startsWith(line, PREFIX_TITLE)) {
                         setTypeDROS5(objectNode);
                         String publicationYear = getAndResetCapture(textCapture);
-                        if (StringUtils.isNumeric(publicationYear)) {
-                            if (publicationYear.startsWith("2") || publicationYear.length() < 4) {
-                                setValue(objectNode, "access_right", "restricted");
-                            }
-                            setValue(objectNode, PUBLICATION_DATE, publicationYear);
-                        }
-
+                        ZenodoMetaUtil.setPublicationDate(objectNode, publicationYear);
                         appendIdentifier(textCapture, line, PREFIX_TITLE);
                     } else if (StringUtils.startsWith(line, PREFIX_PUBLISHER)) {
                         setTypeDROS5(objectNode);
                         String title = getAndResetCapture(textCapture);
-                        setValue(objectNode, "title", title);
-                        if (objectNode.has(REFERENCE_ID)
-                                && StringUtils.containsIgnoreCase(objectNode.get(REFERENCE_ID).asText(), "collection")) {
-                            setValue(objectNode, PUBLICATION_TYPE, "other");
-                            setValue(objectNode, "collection", objectNode.get(REFERENCE_ID).asText());
+                        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, title);
+                        if (objectNode.has(ZenodoMetaUtil.REFERENCE_ID)
+                                && StringUtils.containsIgnoreCase(objectNode.get(ZenodoMetaUtil.REFERENCE_ID).asText(), "collection")) {
+                            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, "other");
+                            ZenodoMetaUtil.setValue(objectNode, "collection", objectNode.get(ZenodoMetaUtil.REFERENCE_ID).asText());
                         } else {
                             Pattern pageNumberPattern = Pattern.compile("(?<title>.*)[, ]+(?<pagesSignature>[ ][p]{1,2}\\.)[ ]+(?<pages>[0-9 -]+).*");
                             Matcher matcher = pageNumberPattern.matcher(title);
                             if (matcher.matches()) {
-                                setValue(objectNode, PARTOF_PAGES, matcher.group("pages"));
-                                setValue(objectNode, PARTOF_TITLE, matcher.group("title"));
-                                setValue(objectNode, PUBLICATION_TYPE, "section");
+                                ZenodoMetaUtil.setValue(objectNode, PARTOF_PAGES, matcher.group("pages"));
+                                ZenodoMetaUtil.setValue(objectNode, PARTOF_TITLE, matcher.group("title"));
+                                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, "section");
                             } else {
-                                setValue(objectNode, PARTOF_TITLE, title);
-                                setValue(objectNode, PUBLICATION_TYPE, "book");
+                                ZenodoMetaUtil.setValue(objectNode, PARTOF_TITLE, title);
+                                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, "book");
                             }
                         }
                         appendIdentifier(textCapture, line, PREFIX_PUBLISHER);
                     } else if (StringUtils.startsWith(line, PREFIX_JOURNAL)) {
                         setTypeDROS5(objectNode);
-                        setValue(objectNode, "title", getAndResetCapture(textCapture));
-                        setValue(objectNode, PUBLICATION_TYPE, "article");
+                        ZenodoMetaUtil.setValue(objectNode, "title", getAndResetCapture(textCapture));
+                        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_ARTICLE);
                         appendIdentifier(textCapture, line, PREFIX_JOURNAL);
                     } else if (StringUtils.startsWith(line, PREFIX_METHOD_DIGITIZATION)) {
                         setTypeDROS5(objectNode);
@@ -226,7 +182,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                             setJournalTitle(objectNode, journalTitle);
                             enrichWithJournalInfo(objectNode, remainder);
                         } else {
-                            setValue(objectNode, IMPRINT_PUBLISHER, getAndResetCapture(textCapture));
+                            ZenodoMetaUtil.setValue(objectNode, IMPRINT_PUBLISHER, getAndResetCapture(textCapture));
                         }
                         appendIdentifier(textCapture, line, PREFIX_METHOD_DIGITIZATION);
                     } else if (StringUtils.startsWith(line, PREFIX_FILENAME)) {
@@ -234,9 +190,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         String methodText = getAndResetCapture(textCapture);
                         Matcher matcher = Pattern.compile("(.*)(10[.])(?<doiPrefix>[0-9]+)/(?<doiSuffix>[^ ]+)(.*)").matcher(methodText);
                         if (matcher.matches()) {
-                            setValue(objectNode, "doi", "10." + matcher.group("doiPrefix") + "/" + matcher.group("doiSuffix"));
+                            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.DOI, "10." + matcher.group("doiPrefix") + "/" + matcher.group("doiSuffix"));
                         }
-                        setValue(objectNode, "taxodros:method", methodText);
+                        ZenodoMetaUtil.setValue(objectNode, "taxodros:method", methodText);
                         appendIdentifier(textCapture, line, PREFIX_FILENAME);
                         lineFinish = lineNumber;
                     } else if (StringUtils.startsWith(line, ".DESC;")) {
@@ -250,7 +206,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         handleTaxonRecord(foundAtLeastOne, iriString, objectNode, lineNumber, line);
                     } else if (lineStart > lineFinish) {
                         if (isType(objectNode, DROS_3)) {
-                            append(objectNode, "keywords", line);
+                            ZenodoMetaUtil.append(objectNode, "keywords", line);
                         } else {
                             appendIdentifier(textCapture, line);
                         }
@@ -264,8 +220,30 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         return foundAtLeastOne.get();
     }
 
+    private List<String> collectCreators(String authorStrings) {
+        String[] authorsFirstSplit = StringUtils.split(authorStrings, "&");
+        List<String> creatorList = new ArrayList<>();
+
+        for (String s : authorsFirstSplit) {
+            String[] authors = StringUtils.split(s, ",");
+            StringBuilder creatorName = new StringBuilder();
+            for (int i = 0; i < authors.length; i++) {
+                String author = StringUtils.trim(StringUtils.replace(authors[i], "&", ""));
+                if (i % 2 == 0) {
+                    creatorName.append(author);
+                } else {
+                    creatorName.append(", ");
+                    creatorName.append(author);
+                    creatorList.add(creatorName.toString());
+                    creatorName = new StringBuilder();
+                }
+            }
+        }
+        return creatorList;
+    }
+
     private void setJournalTitle(ObjectNode objectNode, String value) {
-        setValue(objectNode, JOURNAL_TITLE, value);
+        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_TITLE, value);
     }
 
     private void handleTaxonRecord(AtomicBoolean foundAtLeastOne, String iriString, ObjectNode objectNode, int lineNumber, String line) throws IOException {
@@ -278,14 +256,14 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                 String key = StringUtils.substring(cell, 0, 3);
                 String value = StringUtils.trim(StringUtils.substring(cell, 4, cell.length()));
                 value = StringUtils.equals(value, ".") ? "" : value;
-                setValue(objectNode, key, value);
+                ZenodoMetaUtil.setValue(objectNode, key, value);
                 if (TRANSLATION_MAP.containsKey(key)) {
-                    setValue(objectNode, TRANSLATION_MAP.get(key), value);
+                    ZenodoMetaUtil.setValue(objectNode, TRANSLATION_MAP.get(key), value);
                 }
                 if (StringUtils.equals(key, ".KF")) {
-                    setValue(objectNode, "taxonId", LSID_PREFIX + ":taxon:" + StringUtils.replace(value, " ", "_"));
+                    ZenodoMetaUtil.setValue(objectNode, "taxonId", LSID_PREFIX + ":taxon:" + StringUtils.replace(value, " ", "_"));
                 } else if (StringUtils.equals(key, ".AU")) {
-                    setValue(objectNode, REFERENCE_ID, value);
+                    ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, value);
                 }
             }
         }
@@ -303,18 +281,18 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     }
 
     private boolean isArticle(ObjectNode objectNode) {
-        return objectNode.has(PUBLICATION_TYPE) && StringUtils.equals("article", objectNode.get(PUBLICATION_TYPE).textValue());
+        return objectNode.has(ZenodoMetaUtil.PUBLICATION_TYPE) && StringUtils.equals("article", objectNode.get(ZenodoMetaUtil.PUBLICATION_TYPE).textValue());
     }
 
     public static void enrichWithJournalInfo(ObjectNode objectNode, String remainder) {
         Pattern articleCoordinates = Pattern.compile("(?<volume>[^\\(:]+){0,1}(?<issue>\\([^)]*\\)){0,1}:(?<pages>[^.]*){0,1}([ .]*)$");
         Matcher matcher = articleCoordinates.matcher(remainder);
         if (matcher.matches()) {
-            setValue(objectNode, JOURNAL_VOLUME, StringUtils.trim(matcher.group("volume")));
-            setValue(objectNode, JOURNAL_PAGES, matcher.group("pages"));
+            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_VOLUME, StringUtils.trim(matcher.group("volume")));
+            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_PAGES, matcher.group("pages"));
             String issue = matcher.group("issue");
             if (StringUtils.isNotBlank(issue)) {
-                setValue(objectNode, JOURNAL_ISSUE, StringUtils.substring(issue, 1, issue.length() - 1));
+                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_ISSUE, StringUtils.substring(issue, 1, issue.length() - 1));
             }
         }
     }
@@ -337,82 +315,47 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         objectNode.set(key, locations);
     }
 
-    private void append(ObjectNode objectNode, String key, String value) {
-        ArrayNode keywords = objectNode.has(key)
-                ? (ArrayNode) objectNode.get(key)
-                : new ObjectMapper().createArrayNode();
-        keywords.add(value);
-        objectNode.set(key, keywords);
-    }
-
     private void setOriginReference(String iriString, int lineStart, int lineFinish, ObjectNode objectNode) {
         String suffix = lineFinish > lineStart
                 ? "-" + "L" + lineFinish
                 : "";
         String value = "line:" + iriString + "!/L" + lineStart + suffix;
-        setValue(objectNode, "http://www.w3.org/ns/prov#wasDerivedFrom", value);
-        appendIdentifier(objectNode, "isDerivedFrom", "https://linker.bio/" + value);
-        appendIdentifier(objectNode, "isDerivedFrom", TAXODROS_DATA_DOI);
-        appendIdentifier(objectNode, "isPartOf", "https://www.taxodros.uzh.ch");
-        append(objectNode, "references", "Bächli, G. (2024). TaxoDros - The Database on Taxonomy of Drosophilidae " + TAXODROS_DATA_VERSION_MD5 + " " + TAXODROS_DATA_VERSION_SHA256 + " [Data set]. Zenodo. " + "https://doi.org/" + TAXODROS_DATA_DOI);
+        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, value);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, "https://linker.bio/" + value);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, TAXODROS_DATA_DOI);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, "https://www.taxodros.uzh.ch");
+        ZenodoMetaUtil.append(objectNode, ZenodoMetaUtil.REFERENCES, "Bächli, G. (2024). TaxoDros - The Database on Taxonomy of Drosophilidae " + TAXODROS_DATA_VERSION_MD5 + " " + TAXODROS_DATA_VERSION_SHA256 + " [Data set]. Zenodo. " + "https://doi.org/" + TAXODROS_DATA_DOI);
 
     }
 
     private void setKeywords(ObjectNode objectNode) {
-        addKeyword(objectNode, "Biodiversity");
-        addKeyword(objectNode, "Taxonomy");
-        addKeyword(objectNode, "fruit flies");
-        addKeyword(objectNode, "flies");
-        addKeyword(objectNode, "Animalia");
-        addKeyword(objectNode, "Arthropoda");
-        addKeyword(objectNode, "Insecta");
-        addKeyword(objectNode, "Diptera");
+        ZenodoMetaUtil.addKeyword(objectNode, "Biodiversity");
+        ZenodoMetaUtil.addKeyword(objectNode, "Taxonomy");
+        ZenodoMetaUtil.addKeyword(objectNode, "fruit flies");
+        ZenodoMetaUtil.addKeyword(objectNode, "flies");
+        ZenodoMetaUtil.addKeyword(objectNode, "Animalia");
+        ZenodoMetaUtil.addKeyword(objectNode, "Arthropoda");
+        ZenodoMetaUtil.addKeyword(objectNode, "Insecta");
+        ZenodoMetaUtil.addKeyword(objectNode, "Diptera");
 
-        addCustomField(objectNode, "dwc:kingdom", "Animalia");
-        addCustomField(objectNode, "dwc:phylum", "Arthropoda");
-        addCustomField(objectNode, "dwc:class", "Insecta");
-        addCustomField(objectNode, "dwc:order", "Diptera");
-    }
-
-    private void addCustomField(ObjectNode objectNode, String fieldName, String fieldValue) {
-        ObjectNode relatedIdentifiers = objectNode.has(TaxoDrosFileStreamHandler.CUSTOM) && objectNode.get(TaxoDrosFileStreamHandler.CUSTOM).isObject()
-                ? (ObjectNode) objectNode.get(TaxoDrosFileStreamHandler.CUSTOM)
-                : new ObjectMapper().createObjectNode();
-        relatedIdentifiers.set(fieldName, new ObjectMapper().createArrayNode().add(fieldValue));
-        objectNode.set(TaxoDrosFileStreamHandler.CUSTOM, relatedIdentifiers);
-    }
-
-    private void addKeyword(ObjectNode objectNode, String biodiversity) {
-        ArrayNode relatedIdentifiers = objectNode.has(TaxoDrosFileStreamHandler.KEYWORDS) && objectNode.get(TaxoDrosFileStreamHandler.KEYWORDS).isArray()
-                ? (ArrayNode) objectNode.get(TaxoDrosFileStreamHandler.KEYWORDS)
-                : new ObjectMapper().createArrayNode();
-        relatedIdentifiers.add(biodiversity);
-        objectNode.set(TaxoDrosFileStreamHandler.KEYWORDS, relatedIdentifiers);
-    }
-
-    private void appendIdentifier(ObjectNode objectNode, String relationType, String value) {
-        ArrayNode relatedIdentifiers = objectNode.has(TaxoDrosFileStreamHandler.RELATED_IDENTIFIERS) && objectNode.get(TaxoDrosFileStreamHandler.RELATED_IDENTIFIERS).isArray()
-                ? (ArrayNode) objectNode.get(TaxoDrosFileStreamHandler.RELATED_IDENTIFIERS)
-                : new ObjectMapper().createArrayNode();
-        relatedIdentifiers.add(new ObjectMapper().createObjectNode()
-                .put("relation", relationType)
-                .put("identifier", value)
-        );
-        objectNode.set(TaxoDrosFileStreamHandler.RELATED_IDENTIFIERS, relatedIdentifiers);
+        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_KINGDOM, "Animalia");
+        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_PHYLUM, "Arthropoda");
+        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CLASS, "Insecta");
+        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_ORDER, "Diptera");
     }
 
     private void setType(ObjectNode objectNode, String type) {
-        setValue(objectNode, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", type);
+        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TYPE, type);
     }
 
     private boolean isType(ObjectNode objectNode, String typeValue) {
-        return objectNode.has(TYPE)
-                && StringUtils.equals(typeValue, objectNode.get(TYPE).asText());
+        return objectNode.has(ZenodoMetaUtil.TYPE)
+                && StringUtils.equals(typeValue, objectNode.get(ZenodoMetaUtil.TYPE).asText());
     }
 
     private void setIdIfMissing(AtomicReference<StringBuilder> textCapture, ObjectNode objectNode) {
-        if (!objectNode.has(REFERENCE_ID)) {
-            setValue(objectNode, REFERENCE_ID, getAndResetCapture(textCapture));
+        if (!objectNode.has(ZenodoMetaUtil.REFERENCE_ID)) {
+            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, getAndResetCapture(textCapture));
         }
     }
 
@@ -432,12 +375,6 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         return StringUtils.trim(captured.toString());
     }
 
-
-    private static void setValue(ObjectNode objectNode, String key, String value) {
-        if (value != null) {
-            objectNode.set(key, TextNode.valueOf(value));
-        }
-    }
 
     private static String getValueWithLinePrefix(String line, CharSequence prefix) {
         int start = prefix.length();
