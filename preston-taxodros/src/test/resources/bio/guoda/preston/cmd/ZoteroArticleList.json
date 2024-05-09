@@ -1,0 +1,147 @@
+[ {
+  "key": "DP629R8S",
+  "version": 8066,
+  "library": {
+    "type": "group",
+    "id": 5435545,
+    "name": "Bat Literature Project",
+    "links": {
+      "alternate": {
+        "href": "https://www.zotero.org/groups/bat_literature_project",
+        "type": "text/html"
+      }
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://api.zotero.org/groups/5435545/items/DP629R8S",
+      "type": "application/json"
+    },
+    "alternate": {
+      "href": "https://www.zotero.org/groups/bat_literature_project/items/DP629R8S",
+      "type": "text/html"
+    },
+    "attachment": {
+      "href": "https://api.zotero.org/groups/5435545/items/P4LGETPS",
+      "type": "application/json",
+      "attachmentType": "application/pdf",
+      "attachmentSize": 1117285
+    }
+  },
+  "meta": {
+    "createdByUser": {
+      "id": 6296343,
+      "username": "deeannreeder",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/deeannreeder",
+          "type": "text/html"
+        }
+      }
+    },
+    "lastModifiedByUser": {
+      "id": 13229919,
+      "username": "acsherman",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/acsherman",
+          "type": "text/html"
+        }
+      }
+    },
+    "creatorSummary": "Lytras et al.",
+    "parsedDate": "2022",
+    "numChildren": 2
+  },
+  "data": {
+    "key": "DP629R8S",
+    "version": 8066,
+    "itemType": "journalArticle",
+    "title": "Exploring the natural origins of SARS-CoV-2",
+    "creators": [
+      {
+        "creatorType": "author",
+        "firstName": "Spyros",
+        "lastName": "Lytras"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Joseph",
+        "lastName": "Hughes"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Darren",
+        "lastName": "Martin"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Phillip",
+        "lastName": "Swanepoel"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Arne",
+        "lastName": "de Klerk"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Rentia",
+        "lastName": "Lourens"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Sergei L.",
+        "lastName": "Kosakovsky Pond"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Wei",
+        "lastName": "Xia"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Xiaowei",
+        "lastName": "Jiang"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "David L.",
+        "lastName": "Robertson"
+      }
+    ],
+    "abstractNote": "Exploring the natural origins of SARS-CoV-2 Spyros Lytras1, Joseph Hughes1, Xiaowei Jiang2, David L Robertson1  1MRC-University of Glasgow Centre for Virus Research (CVR), Glasgow, UK.  2Department of Biological Sciences, Xi’an Jiaotong-Liverpool University (XJTLU), Suzhou, China.  The lack of an identifiable intermediate host species for the proximal animal ancestor of SARS-CoV-2 and the distance (~1500 km) from Wuhan to Yunnan province, where the closest evolutionary related coronaviruses circ...",
+    "publicationTitle": "Genome Biology and Evolution",
+    "volume": "14",
+    "issue": "2",
+    "pages": "1-14",
+    "date": "2022",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "language": "en-US",
+    "DOI": "10.1093/gbe/evac018",
+    "ISSN": "",
+    "shortTitle": "",
+    "url": "https://virological.org/t/exploring-the-natural-origins-of-sars-cov-2/595",
+    "accessDate": "2021-01-17T18:26:08Z",
+    "archive": "",
+    "archiveLocation": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "Downloaded from https://academic.oup.com/gbe/article/14/2/evac018/6524630 by guest on 26 April 2024",
+    "tags": [],
+    "collections": [
+      "DZKBQXJR"
+    ],
+    "relations": {
+      "owl:sameAs": "http://zotero.org/groups/2446996/items/I75HHU4L"
+    },
+    "dateAdded": "2024-03-06T17:24:38Z",
+    "dateModified": "2024-04-26T20:19:35Z"
+  }
+}]

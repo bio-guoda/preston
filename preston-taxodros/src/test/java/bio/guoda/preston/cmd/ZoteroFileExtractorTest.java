@@ -35,8 +35,18 @@ public class ZoteroFileExtractorTest {
     public static final String NON_JOURNAL_TITLE = "title";
 
     @Test
-    public void streamZoteroToZenodoLineJson() throws IOException {
+    public void streamZoteroArticleToZenodoLineJson() throws IOException {
         String[] jsonObjects = getResource("ZoteroArticle.json");
+        assertArticleItem(jsonObjects);
+    }
+
+    @Test
+    public void streamZoteroArticleListToZenodoLineJson() throws IOException {
+        String[] jsonObjects = getResource("ZoteroArticleList.json");
+        assertArticleItem(jsonObjects);
+    }
+
+    private void assertArticleItem(String[] jsonObjects) throws JsonProcessingException {
         assertThat(jsonObjects.length, is(1));
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
@@ -48,8 +58,6 @@ public class ZoteroFileExtractorTest {
         assertThat(communities.size(), is(2));
         assertThat(communities.get(0).get("identifier").asText(), is("batlit"));
         assertThat(communities.get(1).get("identifier").asText(), is("biosyslit"));
-
-
 
 
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
