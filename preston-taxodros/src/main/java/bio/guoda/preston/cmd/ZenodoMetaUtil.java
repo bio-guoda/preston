@@ -34,6 +34,7 @@ public class ZenodoMetaUtil {
     public static final String IS_ALTERNATE_IDENTIFIER = "isAlternateIdentifier";
     public static final String UPLOAD_TYPE = "upload_type";
     public static final String UPLOAD_TYPE_PUBLICATION = "publication";
+    public static final String HAS_VERSION = "hasVersion";
     static final String KEYWORDS = "keywords";
     static final String CUSTOM = "custom";
 
@@ -109,5 +110,9 @@ public class ZenodoMetaUtil {
                 : new ObjectMapper().createObjectNode();
         relatedIdentifiers.set(fieldName, new ObjectMapper().createArrayNode().add(fieldValue));
         objectNode.set(CUSTOM, relatedIdentifiers);
+    }
+
+    public static void setType(ObjectNode objectNode, String type) {
+        setValue(objectNode, TYPE, type);
     }
 }

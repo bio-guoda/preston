@@ -104,7 +104,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                     ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":filename:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename));
                                     ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
                                     ZenodoMetaUtil.setCommunities(objectNode, Stream.of("taxodros", "biosyslit"));
-                                    setType(objectNode, DROS_5);
+                                    ZenodoMetaUtil.setType(objectNode, DROS_5);
                                 } else if (isType(objectNode, DROS_3)) {
                                     lineFinish = lineNumber - 1;
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
@@ -246,7 +246,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
 
     private void handleTaxonRecord(AtomicBoolean foundAtLeastOne, String iriString, ObjectNode objectNode, int lineNumber, String line) throws IOException {
         setOriginReference(iriString, lineNumber, lineNumber, objectNode);
-        setType(objectNode, SYS);
+        ZenodoMetaUtil.setType(objectNode, SYS);
         String[] row = StringUtils.split(line, '\t');
         for (String cellRaw : row) {
             String cell = StringUtils.trim(cellRaw);
@@ -296,11 +296,11 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     }
 
     private void setTypeDROS3(ObjectNode objectNode) {
-        setType(objectNode, DROS_3);
+        ZenodoMetaUtil.setType(objectNode, DROS_3);
     }
 
     private void setTypeDROS5(ObjectNode objectNode) {
-        setType(objectNode, "taxodros-dros5");
+        ZenodoMetaUtil.setType(objectNode, "taxodros-dros5");
     }
 
     private void appendLocation(ObjectNode objectNode, String key, String value) {
@@ -340,10 +340,6 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_PHYLUM, "Arthropoda");
         ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CLASS, "Insecta");
         ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_ORDER, "Diptera");
-    }
-
-    private void setType(ObjectNode objectNode, String type) {
-        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TYPE, type);
     }
 
     private boolean isType(ObjectNode objectNode, String typeValue) {

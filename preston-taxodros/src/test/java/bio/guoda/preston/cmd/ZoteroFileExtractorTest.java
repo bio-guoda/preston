@@ -72,15 +72,22 @@ public class ZoteroFileExtractorTest {
         assertThat(taxonNode.get("publication_date").asText(), is("2022"));
         assertThat(taxonNode.get("access_right").asText(), is("restricted"));
         assertThat(taxonNode.get("publication_type").textValue(), is("article"));
+        assertThat(taxonNode.get("upload_type").textValue(), is("publication"));
         assertThat(taxonNode.get("doi").textValue(), is("10.1093/gbe/evac018"));
 
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(2));
+        assertThat(identifiers.size(), is(5));
         assertThat(identifiers.get(0).get("relation").asText(), is("isAlternateIdentifier"));
-        assertThat(identifiers.get(0).get("identifier").asText(), is("https://api.zotero.org/groups/5435545/items/P4LGETPS/file/view"));
-        assertThat(identifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(0).get("identifier").asText(), is("urn:lsid:zotero.org:groups:5435545:items:DP629R8S"));
+        assertThat(identifiers.get(1).get("relation").asText(), is("hasVersion"));
         assertThat(identifiers.get(1).get("identifier").asText(), is("hash://md5/a51c3c32b083b50d00f34bd72fcd3a19"));
+        assertThat(identifiers.get(2).get("relation").asText(), is("hasVersion"));
+        assertThat(identifiers.get(2).get("identifier").asText(), is("hash://sha256/4448f9919eb64bdd320eb9076430c84f792d8ebfe9c15ed7e020f439131eba5f"));
+        assertThat(identifiers.get(3).get("relation").asText(), is("isDerivedFrom"));
+        assertThat(identifiers.get(3).get("identifier").asText(), is("zotero://select/groups/5435545/items/DP629R8S"));
+        assertThat(identifiers.get(4).get("relation").asText(), is("isDerivedFrom"));
+        assertThat(identifiers.get(4).get("identifier").asText(), is("https://zotero.org/groups/5435545/items/DP629R8S"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Biodiversity"));

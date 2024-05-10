@@ -23,7 +23,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -79,7 +78,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
     private void attemptToHandleJSON(String line, IRI coordinate) throws IOException {
         JsonNode zenodoMetadata = getObjectMapper().readTree(line);
         if (maybeContainsPrestonEnabledZenodoMetadata(zenodoMetadata)) {
-            List<String> lsids = new ArrayList<>();
+            List<String> recordIds = new ArrayList<>();
             List<String> contentIds = new ArrayList<>();
             List<String> origins = new ArrayList<>();
             origins.add(coordinate.getIRIString());
@@ -92,7 +91,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                         if (StringUtils.equals(relation.asText(), "isAlternateIdentifier")) {
                             String identiferText = identifier.asText();
                             if (StringUtils.startsWith(identiferText, "urn:lsid")) {
-                                lsids.add(identiferText);
+                                recordIds.add(identiferText);
                             } else if (StringUtils.startsWith(identiferText, "hash:")) {
                                 contentIds.add(identiferText);
                             }
@@ -101,12 +100,17 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                             if (StringUtils.isNotBlank(identiferText)) {
                                 origins.add(identiferText);
                             }
+                        } else if (StringUtils.equals(relation.asText(), "hasVersion")) {
+                            String identiferText = identifier.asText();
+                            if (StringUtils.startsWith(identiferText, "hash:")) {
+                                contentIds.add(identiferText);
+                            }
                         }
                     }
                 }
             }
-            if (!lsids.isEmpty()) {
-                Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, lsids);
+            if (!recordIds.isEmpty()) {
+                Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, recordIds);
                 List<Long> existingIds = foundDeposits
                         .stream()
                         .filter(x -> !StringUtils.equals(x.getValue(), "unsubmitted"))
@@ -119,14 +123,14 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     if (existingIds.size() == 0) {
                         ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
                         uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
-                        emitRelations(lsids, contentIds, origins, ctxLocal);
+                        emitRelations(recordIds, contentIds, origins, ctxLocal);
                     } else if (existingIds.size() == 1) {
                         ctxLocal.setDepositId(existingIds.get(0));
                         ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
                         String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
                         ZenodoUtils.update(ctxLocal, input);
                         uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
-                        emitRelations(lsids, contentIds, origins, ctxLocal);
+                        emitRelations(recordIds, contentIds, origins, ctxLocal);
                     } else {
                         emitPossibleDuplicateRecords(coordinate, existingIds, ctxLocal);
                     }
@@ -201,18 +205,31 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         ZenodoUtils.publish(ctx);
     }
 
-    private void uploadAttempt(JsonNode taxodrosMetadata, List<String> ids, ZenodoContext ctx) throws IOException {
-        JsonNode filename = taxodrosMetadata.at("/metadata/filename");
-        if (filename != null) {
-            Optional<IRI> contentIdCandidate = ids.stream()
-                    .map(RefNodeFactory::toIRI)
-                    .filter(HashKeyUtil::isValidHashKey)
-                    .findFirst();
-            if (contentIdCandidate.isPresent()) {
+    private void uploadAttempt(JsonNode metdata, List<String> ids, ZenodoContext ctx) throws IOException {
+        JsonNode filename = metdata.at("/metadata/filename");
+        if (filename.isMissingNode()) {
+            throw new IOException("no filename specified for [" + metdata.toString() + "]");
+        }
+
+        List<IRI> contentIdCandidate = ids.stream()
+                .map(RefNodeFactory::toIRI)
+                .filter(HashKeyUtil::isValidHashKey)
+                .collect(Collectors.toList());
+
+        IOException lastException = null;
+        for (IRI iri : contentIdCandidate) {
+            try {
                 ZenodoUtils.upload(ctx,
                         filename.asText(),
-                        new DerferencingEntity(dereferencer, contentIdCandidate.get()));
+                        new DerferencingEntity(dereferencer, iri));
+                lastException = null;
+                break;
+            } catch (IOException e) {
+                lastException = e;
             }
+        }
+        if (lastException != null) {
+            throw lastException;
         }
     }
 

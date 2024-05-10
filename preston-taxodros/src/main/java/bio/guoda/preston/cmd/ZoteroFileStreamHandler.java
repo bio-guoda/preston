@@ -18,6 +18,7 @@ import org.apache.commons.rdf.api.IRI;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,8 +76,10 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             ZenodoMetaUtil.setCommunities(objectNode, Stream.of("batlit", "biosyslit"));
 
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, iriString);
-            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TYPE, "application/json+zotero");
+            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
+            ZenodoMetaUtil.setType(objectNode, "application/json+zotero");
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, reference.asText());
+            ZenodoMetaUtil.setValue(objectNode, "filename", "doc.pdf");
 
             List<String> creatorList = new ArrayList<>();
             if (creators.isArray()) {
@@ -100,25 +103,15 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.DOI, jsonNode.at("/data/DOI").asText());
 
-            String value = jsonNode.at("/links/attachment/href").asText();
-            if (StringUtils.isNoneBlank(value)) {
+            String attachementUrl = jsonNode.at("/links/attachment/href").asText();
+            if (StringUtils.isNoneBlank(attachementUrl)) {
                 String zoteroAttachmentDownloadUrl = ZoteroUtil.getZoteroAttachmentDownloadUrl(jsonNode);
-                ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, zoteroAttachmentDownloadUrl);
-                try {
-                    IRI downloadIRI = RefNodeFactory.toIRI(zoteroAttachmentDownloadUrl);
-                    InputStream attachementInputStream = ContentQueryUtil.getContent(dereferencer, downloadIRI, persisting);
-                    if (attachementInputStream == null) {
-                        throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]");
-                    }
-                    IRI contentId = Hasher.calcHashIRI(
-                            attachementInputStream,
-                            NullOutputStream.INSTANCE,
-                            HashType.md5
-                    );
-                    ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, contentId.getIRIString());
-                } catch (IOException e) {
-                    throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]", e);
-                }
+                String zoteroItemUrl = jsonNode.at("/links/self/href").asText();
+                ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, getZoteroLSID(zoteroItemUrl));
+                appendContentId(objectNode, zoteroAttachmentDownloadUrl, HashType.md5);
+                appendContentId(objectNode, zoteroAttachmentDownloadUrl, HashType.sha256);
+                ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, getZoteroSelector(zoteroItemUrl));
+                ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, getZoteroHtmlPage(zoteroItemUrl));
 
             }
 
@@ -136,6 +129,36 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             foundAtLeastOne.set(true);
             writeRecord(foundAtLeastOne, objectNode);
         }
+    }
+
+    private void appendContentId(ObjectNode objectNode, String zoteroAttachmentDownloadUrl, HashType hashType) throws ContentStreamException {
+        try {
+            IRI downloadIRI = RefNodeFactory.toIRI(zoteroAttachmentDownloadUrl);
+            InputStream attachementInputStream = ContentQueryUtil.getContent(dereferencer, downloadIRI, persisting);
+            if (attachementInputStream == null) {
+                throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]");
+            }
+            IRI contentId = Hasher.calcHashIRI(
+                    attachementInputStream,
+                    NullOutputStream.INSTANCE,
+                    hashType
+            );
+            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.HAS_VERSION, contentId.getIRIString());
+        } catch (IOException e) {
+            throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]", e);
+        }
+    }
+
+    private String getZoteroSelector(String href) {
+        return "zotero://select" + URI.create(href).getPath();
+    }
+
+    private String getZoteroHtmlPage(String href) {
+        return "https://zotero.org" + URI.create(href).getPath();
+    }
+
+    private String getZoteroLSID(String href) {
+        return "urn:lsid:zotero.org" + StringUtils.replace(URI.create(href).getPath(), "/", ":");
     }
 
 
