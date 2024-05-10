@@ -19,9 +19,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RegistryReaderGoogleDriveTest {
 
-
     @Test
     public void handleVersionForGoogleResource() {
+        assertExports("https://docs.google.com/document/d/1jzb54GbAkB_TOFIjWof5BW6gn1ujSnXXJQu6aZgFAB4/edit#heading=h.s91o7eupvwg7");
+    }
+
+    @Test
+    public void handleVersionForGoogleResourceBareUrl() {
+        assertExports("https://docs.google.com/document/d/1jzb54GbAkB_TOFIjWof5BW6gn1ujSnXXJQu6aZgFAB4");
+    }
+
+    private void assertExports(String urlString) {
         List<Quad> statements = new ArrayList<>();
         RegistryReaderGoogleDrive registryReaderGoogleDrive = new RegistryReaderGoogleDrive(new KeyValueStoreReadOnly() {
             @Override
@@ -38,7 +46,7 @@ public class RegistryReaderGoogleDriveTest {
 
         registryReaderGoogleDrive.on(
                 RefNodeFactory.toStatement(
-                        RefNodeFactory.toIRI("https://docs.google.com/document/d/1jzb54GbAkB_TOFIjWof5BW6gn1ujSnXXJQu6aZgFAB4/edit#heading=h.s91o7eupvwg7"),
+                        RefNodeFactory.toIRI(urlString),
                         RefNodeConstants.HAS_VERSION,
                         RefNodeFactory.toIRI("foo:bar"))
         );

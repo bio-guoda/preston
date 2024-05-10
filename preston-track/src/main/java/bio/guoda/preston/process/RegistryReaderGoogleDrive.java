@@ -34,7 +34,7 @@ import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.xlsx;
 public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
 
     private static final Pattern GOOGLE_DRIVE_URL_PATTERN
-            = Pattern.compile("https://.*google.com/(?<type>[a-z]+)/d/(?<id>[a-zA-Z0-9-_]+)/.*");
+            = Pattern.compile("https://.*google.com/(?<type>[a-z]+)/d/(?<id>[a-zA-Z0-9-_]+)/{0,1}.*");
     private static final Pattern GID_PATTERN
             = Pattern.compile(".*gid=(?<gid>[0-9]+).*");
     private static final GoogleResourceId NOT_A_GOOGLE_RESOURCE_ID
