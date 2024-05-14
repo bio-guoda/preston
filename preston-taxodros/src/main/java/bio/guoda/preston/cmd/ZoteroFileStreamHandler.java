@@ -14,6 +14,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,9 +25,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class ZoteroFileStreamHandler implements ContentStreamHandler {
+    private final Logger LOG = LoggerFactory.getLogger(ZoteroFileStreamHandler.class);
 
 
     private final Persisting persisting;
@@ -102,7 +107,11 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
             if (StringUtils.equals(jsonNode.at("/data/itemType").asText(), "journalArticle")) {
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_ARTICLE);
-                ZenodoMetaUtil.setPublicationDate(objectNode, jsonNode.at("/data/date").asText());
+                String dateString = jsonNode.at("/data/date").asText();
+                String dateStringParsed = parseDate(dateString);
+                if (!StringUtils.isBlank(dateStringParsed)) {
+                    ZenodoMetaUtil.setPublicationDate(objectNode, dateStringParsed);
+                }
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_TITLE, jsonNode.at("/data/publicationTitle").asText());
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, jsonNode.at("/data/title").asText());
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_VOLUME, jsonNode.at("/data/volume").asText());
@@ -138,6 +147,19 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             foundAtLeastOne.set(true);
             writeRecord(foundAtLeastOne, objectNode);
         }
+    }
+
+    static String parseDate(String publicationDate) {
+        String publicationDate8601 = null;
+        Pattern iso8601 = Pattern.compile(".*(?<year>[0-9]{4})(?<month>[-][01][0-9]){0,1}(?<day>[-][0123][0-9]){0,1}.*");
+        Matcher matcher = iso8601.matcher(publicationDate);
+        if (matcher.matches()) {
+            publicationDate8601 =
+                    matcher.group("year")
+                            + StringUtils.defaultIfBlank(matcher.group("month"), "")
+                            + StringUtils.defaultIfBlank(matcher.group("day"), "");
+        }
+        return publicationDate8601;
     }
 
     private void appendContentId(ObjectNode objectNode, String zoteroAttachmentDownloadUrl, HashType hashType) throws ContentStreamException {
