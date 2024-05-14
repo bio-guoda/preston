@@ -1,0 +1,140 @@
+{
+  "key": "6ZGWHFEC",
+  "version": 1460,
+  "library": {
+    "type": "group",
+    "id": 5435545,
+    "name": "Bat Literature Project",
+    "links": {
+      "alternate": {
+        "href": "https://www.zotero.org/groups/bat_literature_project",
+        "type": "text/html"
+      }
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://api.zotero.org/groups/5435545/items/6ZGWHFEC",
+      "type": "application/json"
+    },
+    "alternate": {
+      "href": "https://www.zotero.org/groups/bat_literature_project/items/6ZGWHFEC",
+      "type": "text/html"
+    },
+    "attachment": {
+      "href": "https://api.zotero.org/groups/5435545/items/P4LGETPS",
+      "type": "application/json",
+      "attachmentType": "application/pdf",
+      "attachmentSize": 3755778
+    }
+  },
+  "meta": {
+    "createdByUser": {
+      "id": 6296343,
+      "username": "deeannreeder",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/deeannreeder",
+          "type": "text/html"
+        }
+      }
+    },
+    "lastModifiedByUser": {
+      "id": 13229919,
+      "username": "acsherman",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/acsherman",
+          "type": "text/html"
+        }
+      }
+    },
+    "creatorSummary": "Almeida et al.",
+    "parsedDate": "2014-08-01",
+    "numChildren": 3
+  },
+  "data": {
+    "key": "6ZGWHFEC",
+    "version": 1460,
+    "itemType": "journalArticle",
+    "title": "Each flying fox on its own branch: A phylogenetic tree for Pteropus and related genera (Chiroptera: Pteropodidae)",
+    "creators": [
+      {
+        "creatorType": "author",
+        "firstName": "Francisca C.",
+        "lastName": "Almeida"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Norberto P.",
+        "lastName": "Giannini"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Nancy B.",
+        "lastName": "Simmons"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Kristofer M.",
+        "lastName": "Helgen"
+      }
+    ],
+    "abstractNote": "Pteropodidae is a diverse Old World family of non-echolocating, frugivorous and nectarivorous bats that includes the flying foxes (genus Pteropus) and allied genera. The subfamily Pteropodinae includes the largest living bats and is distributed across an immense geographic range from islands in East Africa to the Cook Islands of Polynesia. These bats are keystone species in their ecosystems and some carry zoonotic diseases that are increasingly a focus of interest in biomedical research. Here we present a comprehensive phylogeny for pteropodines focused on Pteropus. The analyses included 50 of the ∼63 species of Pteropus and 11 species from 7 related genera. We obtained sequences of the cytochrome b and the 12S rRNA mitochondrial genes for all species and sequences of the nuclear RAG1, vWF, and BRCA1 genes for a subsample of taxa. Some of the sequences of Pteropus were obtained from skin biopsies of museum specimens including that of an extinct species, P. tokudae. The resulting trees recovered Pteropus as monophyletic, although further work is needed to determine whether P. personatus belongs in the genus. Monophyly of the majority of traditionally-recognized Pteropus species groups was rejected, but statistical support was strong for several clades on which we based a new classification of the Pteropus species into 13 species groups. Other noteworthy results emerged regarding species status of several problematic taxa, including recognition of P. capistratus and P. ennisae as distinct species, paraphyly of the P. hypomelanus complex, and conspecific status of P. pelewensis pelewensis and P. p. yapensis. Relationships among the pteropodine genera were not completely resolved with the current dataset. Divergence time analysis suggests that Pteropus originated in the Miocene and that two independent bursts of diversification occurred in the Pleistocene in different regions of the Indo-Pacific realm.",
+    "publicationTitle": "Molecular Phylogenetics and Evolution",
+    "volume": "77",
+    "issue": "",
+    "pages": "83-95",
+    "date": "August 1, 2014",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "Molecular Phylogenetics and Evolution",
+    "language": "",
+    "DOI": "10.1016/j.ympev.2014.03.009",
+    "ISSN": "1055-7903",
+    "shortTitle": "Each flying fox on its own branch",
+    "url": "http://www.sciencedirect.com/science/article/pii/S1055790314001092",
+    "accessDate": "2019-10-16T14:50:07Z",
+    "archive": "",
+    "archiveLocation": "",
+    "libraryCatalog": "ScienceDirect",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+      {
+        "tag": "Chiroptera",
+        "type": 1
+      },
+      {
+        "tag": "Island taxa",
+        "type": 1
+      },
+      {
+        "tag": "Molecular phylogeny",
+        "type": 1
+      },
+      {
+        "tag": "Pteropodidae",
+        "type": 1
+      },
+      {
+        "tag": "Sequencing of museum specimens",
+        "type": 1
+      }
+    ],
+    "collections": [
+      "DZKBQXJR",
+      "2L6I2S6Q"
+    ],
+    "relations": {
+      "owl:sameAs": "http://zotero.org/groups/2446996/items/EUESFZIN",
+      "dc:replaces": "http://zotero.org/groups/5435545/items/72MJF2SA"
+    },
+    "dateAdded": "2024-03-06T17:24:21Z",
+    "dateModified": "2024-04-16T14:55:34Z"
+  }
+}

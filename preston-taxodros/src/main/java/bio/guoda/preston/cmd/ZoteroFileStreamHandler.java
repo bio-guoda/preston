@@ -91,6 +91,15 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             }
             ZenodoMetaUtil.setCreators(objectNode, creatorList);
 
+            JsonNode tags = jsonNode.at("/data/tags");
+            if (!tags.isMissingNode() && tags.isArray()) {
+                tags.forEach(t -> {
+                    if (t.has("tag")) {
+                        ZenodoMetaUtil.addKeyword(objectNode, t.get("tag").asText());
+                    }
+                });
+            }
+
             if (StringUtils.equals(jsonNode.at("/data/itemType").asText(), "journalArticle")) {
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_ARTICLE);
                 ZenodoMetaUtil.setPublicationDate(objectNode, jsonNode.at("/data/date").asText());

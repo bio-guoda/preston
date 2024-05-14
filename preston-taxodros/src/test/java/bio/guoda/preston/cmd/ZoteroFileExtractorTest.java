@@ -20,10 +20,13 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -33,6 +36,18 @@ public class ZoteroFileExtractorTest {
     public void streamZoteroArticleToZenodoLineJson() throws IOException {
         String[] jsonObjects = getResource("ZoteroArticle.json");
         assertArticleItem(jsonObjects);
+    }
+
+    @Test
+    public void streamZoteroArticleToZenodoLineJsonWithTags() throws IOException {
+        String[] jsonObjects = getResource("ZoteroArticleWithTags.json");
+
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+        JsonNode keywords = taxonNode.at("/keywords");
+        List<String> keywordList = new ArrayList<>();
+        keywords.forEach(k -> keywordList.add(k.asText()));
+        assertThat(keywordList, hasItem("Molecular phylogeny"));
+
     }
 
     @Test
@@ -91,6 +106,7 @@ public class ZoteroFileExtractorTest {
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Biodiversity"));
+
         JsonNode custom = taxonNode.at("/custom");
         assertThat(custom.toString(), is("{\"dwc:kingdom\":[\"Animalia\"],\"dwc:phylum\":[\"Chordata\"],\"dwc:class\":[\"Mammalia\"],\"dwc:order\":[\"Chiroptera\"]}"));
     }

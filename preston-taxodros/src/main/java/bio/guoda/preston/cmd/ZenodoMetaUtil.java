@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -96,12 +97,12 @@ public class ZenodoMetaUtil {
         }
     }
 
-    public static void addKeyword(ObjectNode objectNode, String biodiversity) {
-        ArrayNode relatedIdentifiers = objectNode.has(KEYWORDS) && objectNode.get(KEYWORDS).isArray()
+    public static void addKeyword(ObjectNode objectNode, String keyword) {
+        ArrayNode keywords = objectNode.has(KEYWORDS) && objectNode.get(KEYWORDS).isArray()
                 ? (ArrayNode) objectNode.get(KEYWORDS)
                 : new ObjectMapper().createArrayNode();
-        relatedIdentifiers.add(biodiversity);
-        objectNode.set(KEYWORDS, relatedIdentifiers);
+        keywords.add(keyword);
+        objectNode.set(KEYWORDS, keywords);
     }
 
     public static void addCustomField(ObjectNode objectNode, String fieldName, String fieldValue) {
