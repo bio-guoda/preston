@@ -2,6 +2,9 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementListener;
+import com.github.jsonldjava.core.JsonLdError;
+import com.github.jsonldjava.core.RDFDataset;
+import com.github.jsonldjava.core.RDFDatasetUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;

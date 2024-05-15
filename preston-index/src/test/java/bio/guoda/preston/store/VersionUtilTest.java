@@ -35,6 +35,36 @@ public class VersionUtilTest {
     }
 
     @Test
+    public void getVersionWithCut() throws IOException {
+
+        Quad versionStatement = RefNodeFactory.toStatement(toIRI("http://some"), RefNodeConstants.HAS_VERSION, toIRI("cut:hash://sha256/a54fbd3bc1eba272cdba5ba4f4c121c1ee45eee62252f8b1a7afda75c1545c7c!/b2987-7188"));
+        IRI mostRecentVersion = VersionUtil.mostRecentVersion(versionStatement);
+
+        assertThat(mostRecentVersion.toString(), is("<cut:hash://sha256/a54fbd3bc1eba272cdba5ba4f4c121c1ee45eee62252f8b1a7afda75c1545c7c!/b2987-7188>"));
+    }
+
+    @Test
+    public void getVersionWithCutFromString() throws IOException {
+
+        Quad versionStatement = RefNodeFactory.toStatement(toIRI("cut:hash://sha256/a54fbd3bc1eba272cdba5ba4f4c121c1ee45eee62252f8b1a7afda75c1545c7c!/b2987-7188"), RefNodeConstants.HAS_VERSION, toIRI("cut:hash://sha256/a54fbd3bc1eba272cdba5ba4f4c121c1ee45eee62252f8b1a7afda75c1545c7c!/b2987-7188"));
+        IRI mostRecentVersion = VersionUtil.mostRecentVersion(versionStatement.toString());
+
+        assertThat(mostRecentVersion.toString(), is("<cut:hash://sha256/a54fbd3bc1eba272cdba5ba4f4c121c1ee45eee62252f8b1a7afda75c1545c7c!/b2987-7188>"));
+    }
+
+    @Test
+    public void getVersionWithCutFromStringWithGraphName() throws IOException {
+
+        IRI mostRecentVersion = VersionUtil.mostRecentVersion(
+                "<https://example.org>" +
+                        " <http://purl.org/pav/hasVersion>" +
+                        " <cut:hash://sha1/398ab74e3da160d52705bb2477eb0f2f2cde5f15!/b1-2>" +
+                        " .");
+
+        assertThat(mostRecentVersion.toString(), is("<cut:hash://sha1/398ab74e3da160d52705bb2477eb0f2f2cde5f15!/b1-2>"));
+    }
+
+    @Test
     public void getTwoVersions() throws IOException {
         KeyValueStore testKeyValueStore = TestUtil.getTestPersistence();
 

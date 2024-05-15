@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.KeyTo1LevelOCIPath;
+import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,6 +35,34 @@ public class CmdGetIT {
         cmdGet.run();
 
         assertThat(outputStream.size(), Is.is(3392786));
+    }
+
+    @Test
+    public void getDataOneSHA1TwoBytes() {
+        CmdGet cmdGet = new CmdGet();
+        cmdGet.setLocalDataDir(folder.getRoot().getAbsolutePath());
+        cmdGet.setRemotes(Arrays.asList(URI.create("https://dataone.org")));
+        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("cut:hash://sha1/398ab74e3da160d52705bb2477eb0f2f2cde5f15!/b1-2")));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmdGet.setOutputStream(outputStream);
+        cmdGet.run();
+
+        assertThat(outputStream.size(), Is.is(2));
+        assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is("bla"));
+    }
+
+    @Test
+    public void getDataOneSHA1TwoBytesStdin() {
+        CmdGet cmdGet = new CmdGet();
+        cmdGet.setLocalDataDir(folder.getRoot().getAbsolutePath());
+        cmdGet.setRemotes(Arrays.asList(URI.create("https://dataone.org")));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmdGet.setInputStream(IOUtils.toInputStream("<https://example.org> <http://purl.org/pav/hasVersion> <cut:hash://sha1/398ab74e3da160d52705bb2477eb0f2f2cde5f15!/b1-2> .", StandardCharsets.UTF_8));
+        cmdGet.setOutputStream(outputStream);
+        cmdGet.run();
+
+        assertThat(outputStream.size(), Is.is(2));
+        assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is("bla"));
     }
 
     @Test

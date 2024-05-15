@@ -16,15 +16,16 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 public class HashKeyUtil {
 
     public static final String PREFIX_SCHEMA = "([a-zA-Z0-9]{2,}:)";
+    public static final String SUFFIX_SCHEMA = "(!/.*){0,1}";
 
     public static final Pattern URI_PATTERN_HASH_URI_COMPOSITE_SHA256 = Pattern
-            .compile(PREFIX_SCHEMA + "*(" + HashType.sha256.getIRIPatternString() + "){1}(!/.*){0,1}");
+            .compile(PREFIX_SCHEMA + "*(" + HashType.sha256.getIRIPatternString() + "){1}" + SUFFIX_SCHEMA);
 
     public static final Pattern URI_PATTERN_HASH_URI_COMPOSITE_MD5 = Pattern
-            .compile(PREFIX_SCHEMA + "*(" + HashType.md5.getIRIPatternString() + "){1}(!/.*){0,1}");
+            .compile(PREFIX_SCHEMA + "*(" + HashType.md5.getIRIPatternString() + "){1}" + SUFFIX_SCHEMA);
 
     public static final Pattern URI_PATTERN_HASH_URI_COMPOSITE_SHA1 = Pattern
-            .compile(PREFIX_SCHEMA + "*(" + HashType.sha1.getIRIPatternString() + "){1}(!/.*){0,1}");
+            .compile(PREFIX_SCHEMA + "*(" + HashType.sha1.getIRIPatternString() + "){1}" + SUFFIX_SCHEMA);
 
     public static final Pattern URI_PATTERN_URI_COMPOSITE = Pattern
             .compile(PREFIX_SCHEMA + "+([^!:]*)(!/.*){0,1}");
@@ -58,12 +59,16 @@ public class HashKeyUtil {
     public static HashType hashTypeFor(String iriString) {
         HashType type = null;
 
-        if (StringUtils.startsWith(iriString, HashType.sha256.getPrefix())) {
-            type = HashType.sha256;
-        } else if (StringUtils.startsWith(iriString, HashType.md5.getPrefix())) {
-            type = HashType.md5;
-        } else if (StringUtils.startsWith(iriString, HashType.sha1.getPrefix())) {
-            type = HashType.sha1;
+        try {
+            if (HashType.sha256.getIRIPattern().matcher(iriString).matches()) {
+                type = HashType.sha256;
+            } else if (HashType.md5.getIRIPattern().matcher(iriString).matches()) {
+                type = HashType.md5;
+            } else if (HashType.sha1.getIRIPattern().matcher(iriString).matches()) {
+                type = HashType.sha1;
+            }
+        } catch (IllegalArgumentException ex) {
+            // ignore parsing error
         }
         return type;
     }
@@ -120,7 +125,7 @@ public class HashKeyUtil {
             Matcher contentHashMatcher = contentHashPattern.matcher(iri.getIRIString());
 
             contentHash = (contentHashMatcher.find())
-                    ? toIRI(contentHashMatcher.group())
+                    ? toIRI(contentHashMatcher.group("contentId"))
                     : null;
 
             if (contentHash != null) {

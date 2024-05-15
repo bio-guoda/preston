@@ -24,6 +24,13 @@ public class HashKeyUtilTest {
     }
 
     @Test
+    public void validHashURIWithCut() {
+        String hashURIString = "cut:hash://sha256/e0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e57b84f51f22ca!/b1-2";
+        assertTrue(HashKeyUtil
+                .isValidHashKey(RefNodeFactory.toIRI(hashURIString)));
+    }
+
+    @Test
     public void invalidHashURI() {
         String hashURIString = "hash://sha256/e0c131ebf6ad2dce";
         assertFalse(HashKeyUtil
