@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
 
 public class ZoteroFileExtractor extends ProcessorExtracting {
@@ -23,14 +24,24 @@ public class ZoteroFileExtractor extends ProcessorExtracting {
 
     private final Persisting processorState;
     private final OutputStream outputStream;
+    private final List<String> communities;
 
     public ZoteroFileExtractor(Persisting processorState,
                                BlobStoreReadOnly blobStoreReadOnly,
                                OutputStream out,
                                StatementsListener... listeners) {
+        this(processorState, blobStoreReadOnly, out, Collections.emptyList(), listeners);
+    }
+
+    public ZoteroFileExtractor(Persisting processorState,
+                               BlobStoreReadOnly blobStoreReadOnly,
+                               OutputStream out,
+                               List<String> communities,
+                               StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
+        this.communities = communities;
     }
 
 
@@ -54,7 +65,8 @@ public class ZoteroFileExtractor extends ProcessorExtracting {
                             this,
                             outputStream,
                             processorState,
-                            ZoteroFileExtractor.this
+                            ZoteroFileExtractor.this,
+                            communities
                     )
             );
         }

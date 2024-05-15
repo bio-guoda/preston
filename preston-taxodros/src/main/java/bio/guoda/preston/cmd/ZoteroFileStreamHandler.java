@@ -25,9 +25,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class ZoteroFileStreamHandler implements ContentStreamHandler {
     private final Logger LOG = LoggerFactory.getLogger(ZoteroFileStreamHandler.class);
@@ -37,15 +34,18 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
     private final Dereferencer<InputStream> dereferencer;
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
+    private final List<String> communities;
 
     public ZoteroFileStreamHandler(ContentStreamHandler contentStreamHandler,
                                    OutputStream os,
                                    Persisting persisting,
-                                   Dereferencer<InputStream> dereferencer) {
+                                   Dereferencer<InputStream> dereferencer,
+                                   List<String> communities) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
         this.persisting = persisting;
         this.dereferencer = dereferencer;
+        this.communities = communities;
     }
 
     @Override
@@ -73,11 +73,11 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
         if (likelyZoteroRecord) {
             ObjectNode objectNode = new ObjectMapper().createObjectNode();
 
-            ZenodoMetaUtil.setCommunities(objectNode, Stream.of("batlit", "biosyslit"));
+            ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
 
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, iriString);
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
-            ZenodoMetaUtil.setType(objectNode, "application/json+zotero");
+            ZenodoMetaUtil.setType(objectNode, "application/json");
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, reference.asText());
             ZenodoMetaUtil.setValue(objectNode, "filename", "doc.pdf");
 
@@ -127,16 +127,18 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
             }
 
-            ZenodoMetaUtil.addKeyword(objectNode, "Biodiversity");
-            ZenodoMetaUtil.addKeyword(objectNode, "Mammalia");
-            ZenodoMetaUtil.addKeyword(objectNode, "Chiroptera");
-            ZenodoMetaUtil.addKeyword(objectNode, "Chordata");
-            ZenodoMetaUtil.addKeyword(objectNode, "Animalia");
+            if (communities.contains("batlit")) {
+                ZenodoMetaUtil.addKeyword(objectNode, "Biodiversity");
+                ZenodoMetaUtil.addKeyword(objectNode, "Mammalia");
+                ZenodoMetaUtil.addKeyword(objectNode, "Chiroptera");
+                ZenodoMetaUtil.addKeyword(objectNode, "Chordata");
+                ZenodoMetaUtil.addKeyword(objectNode, "Animalia");
 
-            ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_KINGDOM, "Animalia");
-            ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_PHYLUM, "Chordata");
-            ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CLASS, "Mammalia");
-            ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_ORDER, "Chiroptera");
+                ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_KINGDOM, "Animalia");
+                ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_PHYLUM, "Chordata");
+                ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CLASS, "Mammalia");
+                ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_ORDER, "Chiroptera");
+            }
 
             foundAtLeastOne.set(true);
             writeRecord(foundAtLeastOne, objectNode);

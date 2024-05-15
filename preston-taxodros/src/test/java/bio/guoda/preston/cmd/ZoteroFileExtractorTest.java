@@ -11,6 +11,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.hamcrest.core.Is;
 import org.junit.Test;
+import org.mockito.internal.util.ArrayUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -22,6 +23,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
@@ -72,7 +74,7 @@ public class ZoteroFileExtractorTest {
 
 
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
-        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("application/json+zotero"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("application/json"));
         assertThat(taxonNode.get("referenceId").asText(), is("https://api.zotero.org/groups/5435545/items/DP629R8S"));
 
         JsonNode creators = taxonNode.get("creators");
@@ -151,7 +153,8 @@ public class ZoteroFileExtractorTest {
         StatementsListener extractor = new ZoteroFileExtractor(
                 processorState,
                 blobStore,
-                byteArrayOutputStream
+                byteArrayOutputStream,
+                Arrays.asList("batlit", "biosyslit")
         );
 
         extractor.on(statement);
