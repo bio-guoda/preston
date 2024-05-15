@@ -75,7 +75,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
             ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
 
-            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, iriString);
+            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, "https://linker.bio/" + iriString);
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
             ZenodoMetaUtil.setType(objectNode, "application/json");
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, reference.asText());

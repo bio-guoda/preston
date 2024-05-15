@@ -29,13 +29,6 @@ public class ZoteroFileExtractor extends ProcessorExtracting {
     public ZoteroFileExtractor(Persisting processorState,
                                BlobStoreReadOnly blobStoreReadOnly,
                                OutputStream out,
-                               StatementsListener... listeners) {
-        this(processorState, blobStoreReadOnly, out, Collections.emptyList(), listeners);
-    }
-
-    public ZoteroFileExtractor(Persisting processorState,
-                               BlobStoreReadOnly blobStoreReadOnly,
-                               OutputStream out,
                                List<String> communities,
                                StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
