@@ -127,6 +127,8 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
             }
 
+            StringBuilder description = new StringBuilder();
+
             if (communities.contains("batlit")) {
                 ZenodoMetaUtil.addKeyword(objectNode, "Biodiversity");
                 ZenodoMetaUtil.addKeyword(objectNode, "Mammalia");
@@ -138,7 +140,23 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                 ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_PHYLUM, "Chordata");
                 ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CLASS, "Mammalia");
                 ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_ORDER, "Chiroptera");
+
+                description.append("(Uploaded by Plazi for Bat Literature Project) ");
             }
+
+            JsonNode abstractNote = jsonNode.at("/data/abstractNote");
+
+            String abstractString = abstractNote.isMissingNode()
+                    ? " We do not have abstracts."
+                    : abstractNote.asText();
+            description.append(abstractString);
+
+            String descriptionString = description.toString();
+            objectNode.put("description",
+                    StringUtils.isBlank(descriptionString) ? "No description." : descriptionString
+            );
+
+
 
             foundAtLeastOne.set(true);
             writeRecord(foundAtLeastOne, objectNode);
@@ -177,7 +195,6 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
 
     private void writeRecord(AtomicBoolean foundAtLeastOne, ObjectNode objectNode) throws IOException {
-        objectNode.put("description", "Uploaded by Plazi for Bat Literature Project. We do not have abstracts.");
         ObjectNode metadata = new ObjectMapper().createObjectNode();
         metadata.set("metadata", objectNode);
         IOUtils.copy(IOUtils.toInputStream(metadata.toString(), StandardCharsets.UTF_8), outputStream);
