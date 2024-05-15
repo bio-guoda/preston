@@ -3,6 +3,7 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.TestUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.rdf.api.IRI;
@@ -78,7 +79,7 @@ public class RegistryReaderZoteroTest {
         RegistryReaderZotero registryReaderZotero = new RegistryReaderZotero(new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI uri) throws IOException {
-                return getClass().getResourceAsStream("/bio/guoda/preston/process/zotero/group-items.json");
+                return TestUtil.filterLineFeedFromTextInputStream(getClass().getResourceAsStream("/bio/guoda/preston/process/zotero/group-items.json"));
             }
         }, new StatementsListenerAdapter() {
             @Override
