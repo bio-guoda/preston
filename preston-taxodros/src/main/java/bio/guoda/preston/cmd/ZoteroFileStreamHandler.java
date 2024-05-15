@@ -54,14 +54,9 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
         String iriString = version.getIRIString();
         try {
             JsonNode candidateContent = new ObjectMapper().readTree(is);
-            if (candidateContent.isArray()) {
-                for (JsonNode candidateArticleItem : candidateContent) {
-                    handleZoteroItem(foundAtLeastOne, iriString, candidateArticleItem);
-                }
-            } else {
+            if (candidateContent.isObject()) {
                 handleZoteroItem(foundAtLeastOne, iriString, candidateContent);
             }
-
         } catch (IOException e) {
             // opportunistic parsing, so ignore exceptions
         }

@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -53,7 +54,7 @@ public class ZoteroFileExtractorTest {
     @Test
     public void streamZoteroArticleListToZenodoLineJson() throws IOException {
         String[] jsonObjects = getResource("ZoteroArticleList.json");
-        assertArticleItem(jsonObjects);
+        assertThat(jsonObjects.length, Is.is(0));
     }
 
     private void assertArticleItem(String[] jsonObjects) throws JsonProcessingException {
