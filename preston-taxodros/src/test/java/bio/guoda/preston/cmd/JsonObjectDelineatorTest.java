@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hamcrest.core.Is;
 import org.junit.Test;
@@ -16,7 +17,8 @@ public class JsonObjectDelineatorTest {
 
     @Test
     public void streamSingleZoteroArticle() throws IOException {
-        InputStream is = getClass().getResourceAsStream("ZoteroArticle.json");
+        String resourceName = "ZoteroArticle.json";
+        InputStream is = getResource(resourceName);
 
         List<Pair<Long, Long>> locations = new ArrayList<>();
 
@@ -39,9 +41,13 @@ public class JsonObjectDelineatorTest {
 
     }
 
+    private InputStream getResource(String resourceName) throws IOException {
+        return TestUtil.filterLineFeedFromTextInputStream(getClass().getResourceAsStream(resourceName));
+    }
+
     @Test
     public void streamZoteroArticleToZenodoLineJson() throws IOException {
-        InputStream resourceAsStream = getClass().getResourceAsStream("ZoteroArticleList.json");
+        InputStream resourceAsStream = getResource("ZoteroArticleList.json");
 
         List<Pair<Long, Long>> locations = new ArrayList<>();
 
@@ -66,7 +72,7 @@ public class JsonObjectDelineatorTest {
 
     @Test
     public void streamZoteroArticles() throws IOException {
-        InputStream resourceAsStream = getClass().getResourceAsStream("ZoteroArticleListWithMany.json");
+        InputStream resourceAsStream = getResource("ZoteroArticleListWithMany.json");
 
         List<Pair<Long, Long>> locations = new ArrayList<>();
 
