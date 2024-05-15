@@ -78,7 +78,7 @@ public class RegistryReaderZotero extends ProcessorReadOnly {
                         RefNodeFactory.toStatement(
                                 jsonObjectContentId,
                                 HAS_FORMAT,
-                                RefNodeFactory.toLiteral("application/json+zotero")
+                                RefNodeFactory.toLiteral("application/json")
                         ),
                         RefNodeFactory.toStatement(
                                 itemsPage,

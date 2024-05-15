@@ -100,7 +100,7 @@ public class RegistryReaderZoteroTest {
                 is(RefNodeFactory.toStatement(
                         RefNodeFactory.toIRI("cut:hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab!/b66726-69016"),
                         HAS_FORMAT,
-                        RefNodeFactory.toLiteral("application/json+zotero")))
+                        RefNodeFactory.toLiteral("application/json")))
         );
 
         assertThat(statements.get(97),
