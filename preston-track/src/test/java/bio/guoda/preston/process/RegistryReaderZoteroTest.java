@@ -108,14 +108,13 @@ public class RegistryReaderZoteroTest {
                         RefNodeConstants.HAD_MEMBER,
                         RefNodeFactory.toIRI("cut:hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab!/b66726-69016")))
         );
-        assertThat(statements.get(98).getSubject(),
-                Is.is(RefNodeFactory.toIRI("cut:hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab!/b66726-69016")));
 
-        assertThat(statements.get(98).getPredicate(),
-                Is.is(HAS_VERSION));
-        assertThat(RefNodeFactory.isBlankOrSkolemizedBlank(statements.get(98).getObject()),
-                Is.is(true));
-
+        assertThat(statements.get(98),
+                is(RefNodeFactory.toStatement(
+                        RefNodeFactory.toIRI("cut:hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab!/b66726-69016"),
+                        HAS_VERSION,
+                        RefNodeFactory.toIRI("cut:hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab!/b66726-69016")))
+        );
     }
 
     @Test
