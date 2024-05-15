@@ -107,10 +107,9 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
             if (StringUtils.equals(jsonNode.at("/data/itemType").asText(), "journalArticle")) {
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_ARTICLE);
-                String dateString = jsonNode.at("/data/date").asText();
-                String dateStringParsed = parseDate(dateString);
-                if (!StringUtils.isBlank(dateStringParsed)) {
-                    ZenodoMetaUtil.setPublicationDate(objectNode, dateStringParsed);
+                String dateString = jsonNode.at("/meta/parsedDate").asText();
+                if (!StringUtils.isBlank(dateString)) {
+                    ZenodoMetaUtil.setPublicationDate(objectNode, dateString);
                 }
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_TITLE, jsonNode.at("/data/publicationTitle").asText());
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, jsonNode.at("/data/title").asText());
@@ -147,19 +146,6 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             foundAtLeastOne.set(true);
             writeRecord(foundAtLeastOne, objectNode);
         }
-    }
-
-    static String parseDate(String publicationDate) {
-        String publicationDate8601 = null;
-        Pattern iso8601 = Pattern.compile(".*(?<year>[0-9]{4})(?<month>[-][01][0-9]){0,1}(?<day>[-][0123][0-9]){0,1}.*");
-        Matcher matcher = iso8601.matcher(publicationDate);
-        if (matcher.matches()) {
-            publicationDate8601 =
-                    matcher.group("year")
-                            + StringUtils.defaultIfBlank(matcher.group("month"), "")
-                            + StringUtils.defaultIfBlank(matcher.group("day"), "");
-        }
-        return publicationDate8601;
     }
 
     private void appendContentId(ObjectNode objectNode, String zoteroAttachmentDownloadUrl, HashType hashType) throws ContentStreamException {
