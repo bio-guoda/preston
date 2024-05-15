@@ -1,11 +1,13 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -24,7 +26,7 @@ public class RegistryReaderZoteroTest {
 
     @Test
     public void on() {
-        List<Quad> statements= new ArrayList<>();
+        List<Quad> statements = new ArrayList<>();
         RegistryReaderZotero registryReaderZotero = new RegistryReaderZotero(new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI uri) throws IOException {
@@ -48,7 +50,7 @@ public class RegistryReaderZoteroTest {
 
     @Test
     public void onAttachment() {
-        List<Quad> statements= new ArrayList<>();
+        List<Quad> statements = new ArrayList<>();
         RegistryReaderZotero registryReaderZotero = new RegistryReaderZotero(new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI uri) throws IOException {
@@ -72,7 +74,7 @@ public class RegistryReaderZoteroTest {
 
     @Test
     public void onItemsVersion() {
-        List<Quad> statements= new ArrayList<>();
+        List<Quad> statements = new ArrayList<>();
         RegistryReaderZotero registryReaderZotero = new RegistryReaderZotero(new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI uri) throws IOException {
@@ -91,7 +93,29 @@ public class RegistryReaderZoteroTest {
                 RefNodeFactory.toIRI("hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab"))
         );
 
-        assertThat(statements.size(), is(24));
+        assertThat(statements.size(), is(99));
+
+        assertThat(statements.get(96),
+                is(RefNodeFactory.toStatement(
+                        RefNodeFactory.toIRI("cut:hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab!/b66726-69016"),
+                        HAS_FORMAT,
+                        RefNodeFactory.toLiteral("application/json+zotero")))
+        );
+
+        assertThat(statements.get(97),
+                is(RefNodeFactory.toStatement(
+                        RefNodeFactory.toIRI("hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab"),
+                        RefNodeConstants.HAD_MEMBER,
+                        RefNodeFactory.toIRI("cut:hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab!/b66726-69016")))
+        );
+        assertThat(statements.get(98).getSubject(),
+                Is.is(RefNodeFactory.toIRI("cut:hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab!/b66726-69016")));
+
+        assertThat(statements.get(98).getPredicate(),
+                Is.is(HAS_VERSION));
+        assertThat(RefNodeFactory.isBlankOrSkolemizedBlank(statements.get(98).getObject()),
+                Is.is(true));
+
     }
 
     @Test
