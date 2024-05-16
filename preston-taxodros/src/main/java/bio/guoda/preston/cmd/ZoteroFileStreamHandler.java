@@ -182,14 +182,14 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                 ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CLASS, "Mammalia");
                 ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_ORDER, "Chiroptera");
 
-                description.append("(Uploaded by Plazi for Bat Literature Project) ");
+                description.append("(Uploaded by Plazi for the Bat Literature Project) ");
             }
 
-            JsonNode abstractNote = jsonNode.at("/data/abstractNote");
+            String abstractNote = jsonNode.at("/data/abstractNote").textValue();
 
-            String abstractString = abstractNote.isMissingNode()
-                    ? " We do not have abstracts."
-                    : abstractNote.asText();
+            String abstractString = StringUtils.isBlank(abstractNote)
+                    ? " No abstract provided."
+                    : abstractNote;
             description.append(abstractString);
 
             String descriptionString = description.toString();
