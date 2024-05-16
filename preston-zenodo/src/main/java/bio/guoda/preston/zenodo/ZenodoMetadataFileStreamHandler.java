@@ -63,7 +63,6 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     try {
                         attemptToHandleJSON(line, coordinate);
                     } catch (IOException ex) {
-                        LOG.warn("failed to handle json [" + line + "]", ex);
                         // ignore
                     }
                 }
@@ -218,13 +217,17 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
         IOException lastException = null;
         for (IRI iri : contentIdCandidate) {
+            String msg = "upload [" + iri + "] as [" + filename.asText() + "]";
             try {
+                LOG.info(msg + " started...");
                 ZenodoUtils.upload(ctx,
                         filename.asText(),
                         new DerferencingEntity(dereferencer, iri));
+                LOG.info(msg + " finished.");
                 lastException = null;
                 break;
             } catch (IOException e) {
+                LOG.info(msg + " failed.");
                 lastException = e;
             }
         }

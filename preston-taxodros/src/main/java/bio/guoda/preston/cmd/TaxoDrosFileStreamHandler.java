@@ -100,7 +100,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                 if (isType(objectNode, DROS_5)) {
                                     setOriginReference(iriString, lineStart, lineFinish, objectNode);
                                     String filename = getAndResetCapture(textCapture);
-                                    ZenodoMetaUtil.setValue(objectNode, "filename", filename);
+                                    ZenodoMetaUtil.setFilename(objectNode, filename);
                                     ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":filename:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename));
                                     ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
                                     ZenodoMetaUtil.setCommunities(objectNode, Stream.of("taxodros", "biosyslit"));

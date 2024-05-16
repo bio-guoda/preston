@@ -40,7 +40,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-public class ZenodoUtilsIT {
+public class ZenodoUtilsTaxoDrosIT {
 
     public static final String CONTENT_ID_PDF = "hash://md5/639988a4074ded5208a575b760a5dc5e";
     public static final String TAXODROS_ID = "urn:lsid:taxodros.uzh.ch:id:abd%20el-halim%20et%20al.,%202005";
@@ -73,7 +73,7 @@ public class ZenodoUtilsIT {
     }
 
     private void cleanupPreExisting() throws IOException {
-        Collection<Pair<Long, String>> byAlternateIds = ZenodoUtils.findByAlternateIds(ctx, Arrays.asList(CONTENT_ID_PDF, TAXODROS_ID));
+        Collection<Pair<Long, String>> byAlternateIds = ZenodoUtils.findByAlternateIds(ctx, Arrays.asList(getContentId(), getLsid()));
         byAlternateIds
                 .stream()
                 .filter(d -> StringUtils.equals(d.getValue(), "unsubmitted"))
@@ -89,20 +89,28 @@ public class ZenodoUtilsIT {
                 });
     }
 
+    private String getContentId() {
+        return CONTENT_ID_PDF;
+    }
+
 
     @Test
     public void findDepositByHash() throws IOException {
-        assertOneRecordWithMatchingId(Arrays.asList(CONTENT_ID_PDF));
+        assertOneRecordWithMatchingId(Arrays.asList(getContentId()));
     }
 
     @Test
     public void findDepositByTaxoDrosId() throws IOException {
-        assertOneRecordWithMatchingId(Arrays.asList(TAXODROS_ID));
+        assertOneRecordWithMatchingId(Arrays.asList(getLsid()));
+    }
+
+    private String getLsid() {
+        return TAXODROS_ID;
     }
 
     @Test
     public void findDepositByBothContentIdAndTaxoDrosId() throws IOException {
-        assertOneRecordWithMatchingId(Arrays.asList(CONTENT_ID_PDF, TAXODROS_ID));
+        assertOneRecordWithMatchingId(Arrays.asList(getContentId(), getLsid()));
     }
 
     private void assertOneRecordWithMatchingId(List<String> contentId) throws IOException {

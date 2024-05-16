@@ -30,7 +30,7 @@ public class CmdZenodoIT {
     public TemporaryFolder folder = new TemporaryFolder();
 
     @Test
-    public void createOrUpdate() throws URISyntaxException, IOException {
+    public void createOrUpdateTaxoDros() throws URISyntaxException, IOException {
         CmdZenodo cmdZenodo = new CmdZenodo();
         String resourceURI = "taxodros-data/6e/f3/6ef3b8e326cd52972da1c00de60dc222";
 
@@ -60,5 +60,6 @@ public class CmdZenodoIT {
         assertThat(split[split.length-1], startsWith("<https://sandbox.zenodo.org/records/"));
         assertThat(split[split.length-1], containsString("> <http://www.w3.org/ns/prov#wasDerivedFrom> <line:hash://md5/7e5ae7ff14d66bff5224b21c80cdb87d!/L1> <urn:uuid:"));
     }
+
 
 }

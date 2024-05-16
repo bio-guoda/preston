@@ -4,13 +4,26 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
 
 public class ZoteroUtil {
-    public static String getZoteroAttachmentDownloadUrl(JsonNode zoteroArticleRecord) {
-        String attachmentUrlString = null;
-        JsonNode attachmentUrl = zoteroArticleRecord.at("/links/attachment/href");
-        if (!attachmentUrl.isMissingNode() && StringUtils.isNotBlank(attachmentUrl.asText())) {
 
-            attachmentUrlString = attachmentUrl.asText() + "/file/view";
+    public static String appendAttachmentDownloadPath(String attachmentUrl) {
+        return StringUtils.isBlank(attachmentUrl) ? null : (attachmentUrl + "/file/view");
+    }
+
+    public static String getAttachmentDownloadUrl(JsonNode zoteroRecord) {
+        return getAttachmentProperty(zoteroRecord, "/links/enclosure/href");
+    }
+
+    public static String getAttachmentProperty(JsonNode zoteroRecord, String jsonPtrExpr) {
+        String zoteroAttachmentDownloadUrl = null;
+        String itemType = zoteroRecord.at("/data/itemType").asText();
+        if (StringUtils.equals(itemType, "attachment")) {
+            zoteroAttachmentDownloadUrl = zoteroRecord.at(jsonPtrExpr).asText();
         }
-        return attachmentUrlString;
+        return zoteroAttachmentDownloadUrl;
+    }
+
+    public static String getAttachmentType(JsonNode zoteroRecord) {
+        return getAttachmentProperty(zoteroRecord, "/data/contentType");
+
     }
 }

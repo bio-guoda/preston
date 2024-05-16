@@ -1,0 +1,88 @@
+{
+  "metadata": {
+    "filename": "Elliott et al. - 2023 - Signing data citations enables data verification a.pdf",
+    "related_identifiers": [
+      {
+        "relation": "isAlternateIdentifier",
+        "identifier": "hash://md5/b20758f5702c5a24b31075f48ac3826c"
+      },
+      {
+        "relation": "isAlternateIdentifier",
+        "identifier": "urn:lsid:zotero.org:groups:5532807:items:6QUSSFMU"
+      },
+      {
+        "relation": "hasVersion",
+        "identifier": "hash://md5/b20758f5702c5a24b31075f48ac3826c"
+      },
+      {
+        "relation": "hasVersion",
+        "identifier": "hash://sha256/f849c870565f608899f183ca261365dce9c9f1c5441b1c779e0db49df9c2a19d"
+      },
+      {
+        "relation": "isDerivedFrom",
+        "identifier": "zotero://select/groups/5532807/items/6QUSSFMU"
+      },
+      {
+        "relation": "isDerivedFrom",
+        "identifier": "https://zotero.org/groups/5532807/items/6QUSSFMU"
+      },
+      {
+        "relation": "isAlternateIdentifier",
+        "identifier": "10.1038/s41597-023-02230-y"
+      }
+    ],
+    "communities": [
+      {
+        "identifier": "batlit"
+      },
+      {
+        "identifier": "biosyslit"
+      }
+    ],
+    "http://www.w3.org/ns/prov#wasDerivedFrom": "https://linker.bio/cut:hash://md5/9812b34ff986c8aae009b77f3fd61f45!/b7-2420",
+    "upload_type": "publication",
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": "application/json",
+    "referenceId": "https://api.zotero.org/groups/5532807/items/6QUSSFMU",
+    "creators": [
+      {
+        "name": "Elliott, Michael J."
+      },
+      {
+        "name": "Poelen, Jorrit H."
+      },
+      {
+        "name": "Fortes, José A. B."
+      }
+    ],
+    "publication_type": "article",
+    "access_right": "restricted",
+    "publication_date": "2023-06-27",
+    "journal_title": "Scientific Data",
+    "title": "Signing data citations enables data verification and citation persistence",
+    "journal_volume": "10",
+    "journal_issue": "1",
+    "journal_pages": "419",
+    "keywords": [
+      "Biodiversity",
+      "Mammalia",
+      "Chiroptera",
+      "Chordata",
+      "Animalia"
+    ],
+    "custom": {
+      "dwc:kingdom": [
+        "Animalia"
+      ],
+      "dwc:phylum": [
+        "Chordata"
+      ],
+      "dwc:class": [
+        "Mammalia"
+      ],
+      "dwc:order": [
+        "Chiroptera"
+      ]
+    },
+    "description": "(Uploaded by Plazi for Bat Literature Project) Abstract \n            Commonly used data citation practices rely on unverifiable retrieval methods which are susceptible to content drift, which occurs when the data associated with an identifier have been allowed to change. Based on our earlier work on reliable dataset identifiers, we propose signed citations, i.e., customary data citations extended to also include a standards-based, verifiable, unique, and fixed-length digital content signature. We show that content signatures enable independent verification of the cited content and can improve the persistence of the citation. Because content signatures are location- and storage-medium-agnostic, cited data can be copied to new locations to ensure their persistence across current and future storage media and data networks. As a result, content signatures can be leveraged to help scalably store, locate, access, and independently verify content across new and existing data infrastructures. Content signatures can also be embedded inside content to create robust, distributed knowledge graphs that can be cited using a single signed citation. We describe applications of signed citations to solve real-world data collection, identification, and citation challenges."
+  }
+}
