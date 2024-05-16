@@ -64,7 +64,7 @@ public class ZoteroFileExtractorTest {
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
 
-        assertThat(taxonNode.get("description").asText(), is("(Uploaded by Plazi for Bat Literature Project) Exploring the natural origins of SARS-CoV-2 Spyros Lytras1, Joseph Hughes1, Xiaowei Jiang2, David L Robertson1  1MRC-University of Glasgow Centre for Virus Research (CVR), Glasgow, UK.  2Department of Biological Sciences, Xi’an Jiaotong-Liverpool University (XJTLU), Suzhou, China.  The lack of an identifiable intermediate host species for the proximal animal ancestor of SARS-CoV-2 and the distance (~1500 km) from Wuhan to Yunnan province, where the closest evolutionary related coronaviruses circ..."));
+        assertThat(taxonNode.get("description").asText(), is("(Uploaded by Plazi for the Bat Literature Project) Exploring the natural origins of SARS-CoV-2 Spyros Lytras1, Joseph Hughes1, Xiaowei Jiang2, David L Robertson1  1MRC-University of Glasgow Centre for Virus Research (CVR), Glasgow, UK.  2Department of Biological Sciences, Xi’an Jiaotong-Liverpool University (XJTLU), Suzhou, China.  The lack of an identifiable intermediate host species for the proximal animal ancestor of SARS-CoV-2 and the distance (~1500 km) from Wuhan to Yunnan province, where the closest evolutionary related coronaviruses circ..."));
 
         JsonNode communities = taxonNode.get("communities");
         assertThat(communities.isArray(), is(true));
