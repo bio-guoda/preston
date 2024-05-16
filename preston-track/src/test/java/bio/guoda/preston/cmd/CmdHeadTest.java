@@ -43,7 +43,8 @@ public class CmdHeadTest {
     }
 
     private void populateDataDir() throws IOException {
-        try (ZipFile zipFile = new ZipFile(getClass().getResource("data-with-foo-update.zip").getFile())) {
+        String file = getClass().getResource("data-with-foo-update.zip").getFile();
+        try (ZipFile zipFile = ZipFile.builder().setFile(file).get()) {
 
             Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
 
