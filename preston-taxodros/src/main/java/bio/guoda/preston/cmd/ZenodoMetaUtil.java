@@ -80,7 +80,7 @@ public class ZenodoMetaUtil {
         ObjectNode identifierRelation = new ObjectMapper().createObjectNode()
                 .put("relation", relationType)
                 .put("identifier", value);
-        if (StringUtils.isNotBlank(relationType)) {
+        if (StringUtils.isNotBlank(resourceType)) {
             identifierRelation.put("resource_type", resourceType);
         }
         relatedIdentifiers.add(identifierRelation);
