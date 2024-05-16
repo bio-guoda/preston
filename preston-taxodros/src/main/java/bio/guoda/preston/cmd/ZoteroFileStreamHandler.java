@@ -188,7 +188,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             String abstractNote = jsonNode.at("/data/abstractNote").textValue();
 
             String abstractString = StringUtils.isBlank(abstractNote)
-                    ? " No abstract provided."
+                    ? "No abstract provided."
                     : abstractNote;
             description.append(abstractString);
 
