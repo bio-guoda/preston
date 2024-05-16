@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.Version;
 import bio.guoda.preston.process.ActivityUtil;
@@ -32,8 +33,6 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public abstract class CmdActivity extends LoggingPersisting implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(CmdActivity.class);
-
-    public static final IRI PRESTON_DOI_IRI = toIRI("https://doi.org/10.5281/zenodo.1410543");
 
 
     @Override
@@ -157,7 +156,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     static List<Quad> findActivityInfo(ActivityContext activity) {
         String version = Version.getVersionString(null);
         String softwareAgentVersion = version == null ? "" : (" (Version " + Version.getVersionString() + ")");
-        return ActivityUtil.generateSoftwareAgentProcessDescription(activity, PRESTON, PRESTON_DOI_IRI, "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2021. Preston: a biodiversity dataset tracker" + softwareAgentVersion + " [Software]. Zenodo. " + PRESTON_DOI_IRI.getIRIString(), "Preston is a software program that finds, archives and provides access to biodiversity datasets.");
+        return ActivityUtil.generateSoftwareAgentProcessDescription(activity, PRESTON, RefNodeConstants.PRESTON_DOI_URL_IRI, "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2021. Preston: a biodiversity dataset tracker" + softwareAgentVersion + " [Software]. Zenodo. " + RefNodeConstants.PRESTON_DOI_URL_IRI.getIRIString(), "Preston is a software program that finds, archives and provides access to biodiversity datasets.");
     }
 
     abstract String getActivityDescription();

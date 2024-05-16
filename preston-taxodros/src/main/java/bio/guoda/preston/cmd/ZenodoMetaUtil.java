@@ -36,6 +36,8 @@ public class ZenodoMetaUtil {
     public static final String UPLOAD_TYPE = "upload_type";
     public static final String UPLOAD_TYPE_PUBLICATION = "publication";
     public static final String HAS_VERSION = "hasVersion";
+    public static final String IS_COMPILED_BY = "isCompiledBy";
+    public static final String RESOURCE_TYPE_SOFTWARE = "software";
     static final String KEYWORDS = "keywords";
     static final String CUSTOM = "custom";
 
@@ -68,13 +70,20 @@ public class ZenodoMetaUtil {
     }
 
     public static void appendIdentifier(ObjectNode objectNode, String relationType, String value) {
+        appendIdentifier(objectNode, relationType, value, null);
+    }
+
+    public static void appendIdentifier(ObjectNode objectNode, String relationType, String value, String resourceType) {
         ArrayNode relatedIdentifiers = objectNode.has(RELATED_IDENTIFIERS) && objectNode.get(RELATED_IDENTIFIERS).isArray()
                 ? (ArrayNode) objectNode.get(RELATED_IDENTIFIERS)
                 : new ObjectMapper().createArrayNode();
-        relatedIdentifiers.add(new ObjectMapper().createObjectNode()
+        ObjectNode identifierRelation = new ObjectMapper().createObjectNode()
                 .put("relation", relationType)
-                .put("identifier", value)
-        );
+                .put("identifier", value);
+        if (StringUtils.isNotBlank(relationType)) {
+            identifierRelation.put("resource_type", resourceType);
+        }
+        relatedIdentifiers.add(identifierRelation);
         objectNode.set(RELATED_IDENTIFIERS, relatedIdentifiers);
     }
 

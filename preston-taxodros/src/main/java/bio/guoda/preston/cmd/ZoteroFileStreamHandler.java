@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.ZoteroUtil;
 import bio.guoda.preston.store.Dereferencer;
@@ -90,6 +91,8 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                             new ObjectMapper().readTree(itemInputStream),
                             zenodoRecord
                     );
+
+                    ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_COMPILED_BY, RefNodeConstants.PRESTON_DOI, ZenodoMetaUtil.RESOURCE_TYPE_SOFTWARE);
 
                     if (isLikelyZoteroRecord) {
                         foundAtLeastOne.set(true);

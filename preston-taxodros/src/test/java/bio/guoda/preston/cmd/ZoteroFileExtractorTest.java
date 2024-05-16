@@ -96,17 +96,20 @@ public class ZoteroFileExtractorTest {
 
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(8));
+        assertThat(identifiers.size(), is(9));
         // provided by Zoteros
         assertThat(identifiers.get(0).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(0).get("identifier").asText(), is("hash://md5/00335a95492b82cc0862e6bcc88497c4"));
         assertThat(identifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(1).get("identifier").asText(), is("urn:lsid:zotero.org:groups:5435545:items:DP629R8S"));
+
         // calculated on the fly
         assertThat(identifiers.get(2).get("relation").asText(), is("hasVersion"));
         assertThat(identifiers.get(2).get("identifier").asText(), is("https://linker.bio/hash://md5/a51c3c32b083b50d00f34bd72fcd3a19"));
         assertThat(identifiers.get(3).get("relation").asText(), is("hasVersion"));
         assertThat(identifiers.get(3).get("identifier").asText(), is("https://linker.bio/hash://sha256/4448f9919eb64bdd320eb9076430c84f792d8ebfe9c15ed7e020f439131eba5f"));
+
+        // html landing pages
         assertThat(identifiers.get(4).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(4).get("identifier").asText(), is("zotero://select/groups/5435545/items/DP629R8S"));
         assertThat(identifiers.get(5).get("relation").asText(), is("isDerivedFrom"));
@@ -115,6 +118,9 @@ public class ZoteroFileExtractorTest {
         assertThat(identifiers.get(6).get("identifier").asText(), is("https://linker.bio/hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
         assertThat(identifiers.get(7).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(7).get("identifier").asText(), is("10.1093/gbe/evac018"));
+        assertThat(identifiers.get(8).get("relation").asText(), is("isCompiledBy"));
+        assertThat(identifiers.get(8).get("identifier").asText(), is("10.5281/zenodo.1410543"));
+        assertThat(identifiers.get(8).get("resource_type").asText(), is("software"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Biodiversity"));
