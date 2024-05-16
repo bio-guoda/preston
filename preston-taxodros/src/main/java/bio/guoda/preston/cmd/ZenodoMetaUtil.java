@@ -74,17 +74,19 @@ public class ZenodoMetaUtil {
     }
 
     public static void appendIdentifier(ObjectNode objectNode, String relationType, String value, String resourceType) {
-        ArrayNode relatedIdentifiers = objectNode.has(RELATED_IDENTIFIERS) && objectNode.get(RELATED_IDENTIFIERS).isArray()
-                ? (ArrayNode) objectNode.get(RELATED_IDENTIFIERS)
-                : new ObjectMapper().createArrayNode();
-        ObjectNode identifierRelation = new ObjectMapper().createObjectNode()
-                .put("relation", relationType)
-                .put("identifier", value);
-        if (StringUtils.isNotBlank(resourceType)) {
-            identifierRelation.put("resource_type", resourceType);
+        if (StringUtils.isNotBlank(value)) {
+            ArrayNode relatedIdentifiers = objectNode.has(RELATED_IDENTIFIERS) && objectNode.get(RELATED_IDENTIFIERS).isArray()
+                    ? (ArrayNode) objectNode.get(RELATED_IDENTIFIERS)
+                    : new ObjectMapper().createArrayNode();
+            ObjectNode identifierRelation = new ObjectMapper().createObjectNode()
+                    .put("relation", relationType)
+                    .put("identifier", value);
+            if (StringUtils.isNotBlank(resourceType)) {
+                identifierRelation.put("resource_type", resourceType);
+            }
+            relatedIdentifiers.add(identifierRelation);
+            objectNode.set(RELATED_IDENTIFIERS, relatedIdentifiers);
         }
-        relatedIdentifiers.add(identifierRelation);
-        objectNode.set(RELATED_IDENTIFIERS, relatedIdentifiers);
     }
 
     public static void setCreators(ObjectNode objectNode, List<String> creatorList) {
