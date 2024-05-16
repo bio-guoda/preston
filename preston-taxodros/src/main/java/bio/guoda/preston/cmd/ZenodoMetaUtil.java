@@ -89,12 +89,14 @@ public class ZenodoMetaUtil {
     }
 
     public static void setPublicationDate(ObjectNode objectNode, String publicationYear) {
-        if (StringUtils.isNumeric(publicationYear)) {
-            if (publicationYear.startsWith("2") || publicationYear.length() < 4) {
-                setValue(objectNode, "access_right", "restricted");
-            }
-            setValue(objectNode, PUBLICATION_DATE, publicationYear);
+        if (publicationYear.startsWith("2")) {
+            setRestricted(objectNode);
         }
+        setValue(objectNode, PUBLICATION_DATE, publicationYear);
+    }
+
+    private static void setRestricted(ObjectNode objectNode) {
+        setValue(objectNode, "access_right", "restricted");
     }
 
     public static void addKeyword(ObjectNode objectNode, String keyword) {
@@ -115,5 +117,9 @@ public class ZenodoMetaUtil {
 
     public static void setType(ObjectNode objectNode, String type) {
         setValue(objectNode, TYPE, type);
+    }
+
+    public static void setFilename(ObjectNode objectNode, String filename) {
+        setValue(objectNode, "filename", filename);
     }
 }

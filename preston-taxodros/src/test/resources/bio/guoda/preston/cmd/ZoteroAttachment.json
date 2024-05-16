@@ -1,0 +1,69 @@
+{
+  "key": "P4LGETPS",
+  "version": 8038,
+  "library": {
+    "type": "group",
+    "id": 5435545,
+    "name": "Bat Literature Project",
+    "links": {
+      "alternate": {
+        "href": "https://www.zotero.org/groups/bat_literature_project",
+        "type": "text/html"
+      }
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://api.zotero.org/groups/5435545/items/P4LGETPS",
+      "type": "application/json"
+    },
+    "alternate": {
+      "href": "https://www.zotero.org/groups/bat_literature_project/items/P4LGETPS",
+      "type": "text/html"
+    },
+    "up": {
+      "href": "https://api.zotero.org/groups/5435545/items/DP629R8S",
+      "type": "application/json"
+    },
+    "enclosure": {
+      "type": "application/pdf",
+      "href": "https://api.zotero.org/groups/5435545/items/P4LGETPS/file/view",
+      "title": "evac018.pdf",
+      "length": 1117285
+    }
+  },
+  "meta": {
+    "createdByUser": {
+      "id": 13229919,
+      "username": "acsherman",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/acsherman",
+          "type": "text/html"
+        }
+      }
+    },
+    "numChildren": 0
+  },
+  "data": {
+    "key": "P4LGETPS",
+    "version": 8038,
+    "parentItem": "DP629R8S",
+    "itemType": "attachment",
+    "linkMode": "imported_file",
+    "title": "evac018.pdf",
+    "accessDate": "",
+    "url": "",
+    "note": "",
+    "contentType": "application/pdf",
+    "charset": "",
+    "filename": "evac018.pdf",
+    "md5": "00335a95492b82cc0862e6bcc88497c4",
+    "mtime": 1714162396491,
+    "tags": [],
+    "relations": {},
+    "dateAdded": "2024-04-26T20:13:51Z",
+    "dateModified": "2024-04-26T20:13:51Z"
+  }
+}

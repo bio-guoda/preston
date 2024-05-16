@@ -6,6 +6,8 @@ import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.hamcrest.core.Is;
@@ -13,6 +15,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -79,7 +82,20 @@ public class RegistryReaderZoteroTest {
         RegistryReaderZotero registryReaderZotero = new RegistryReaderZotero(new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI uri) throws IOException {
-                return TestUtil.filterLineFeedFromTextInputStream(getClass().getResourceAsStream("/bio/guoda/preston/process/zotero/group-items.json"));
+                if (StringUtils.startsWith(uri.getIRIString(), "cut")) {
+                    return IOUtils.toInputStream(
+                            "{ " +
+                                    "\"links\": {\n" +
+                                    "    \"self\": {\n" +
+                                    "      \"href\": \"https://api.zotero.org/groups/XXXXXXX/items/YYYYYYY\",\n" +
+                                    "      \"type\": \"application/json\"\n" +
+                                    "    }" +
+                                    "  }" +
+                                    "}"
+                            , StandardCharsets.UTF_8);
+                } else {
+                    return TestUtil.filterLineFeedFromTextInputStream(getClass().getResourceAsStream("/bio/guoda/preston/process/zotero/group-items.json"));
+                }
             }
         }, new StatementsListenerAdapter() {
             @Override
@@ -94,25 +110,26 @@ public class RegistryReaderZoteroTest {
                 RefNodeFactory.toIRI("hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab"))
         );
 
-        assertThat(statements.size(), is(99));
+        int expectedNumberOfStatements = 101;
+        assertThat(statements.size(), is(expectedNumberOfStatements));
 
-        assertThat(statements.get(96),
+        assertThat(statements.get(expectedNumberOfStatements - 3),
                 is(RefNodeFactory.toStatement(
                         RefNodeFactory.toIRI("cut:hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab!/b66726-69016"),
                         HAS_FORMAT,
                         RefNodeFactory.toLiteral("application/json")))
         );
 
-        assertThat(statements.get(97),
+        assertThat(statements.get(expectedNumberOfStatements - 2),
                 is(RefNodeFactory.toStatement(
                         RefNodeFactory.toIRI("hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab"),
                         RefNodeConstants.HAD_MEMBER,
                         RefNodeFactory.toIRI("cut:hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab!/b66726-69016")))
         );
 
-        assertThat(statements.get(98),
+        assertThat(statements.get(expectedNumberOfStatements - 1),
                 is(RefNodeFactory.toStatement(
-                        RefNodeFactory.toIRI("cut:hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab!/b66726-69016"),
+                        RefNodeFactory.toIRI("https://api.zotero.org/groups/XXXXXXX/items/YYYYYYY"),
                         HAS_VERSION,
                         RefNodeFactory.toIRI("cut:hash://sha256/8db70f1d4eada90e06851ef6d7552e91ec11a7af99f2e30b53635abf462391ab!/b66726-69016")))
         );
@@ -137,8 +154,7 @@ public class RegistryReaderZoteroTest {
 
         RegistryReaderZotero.requestItemAttachments(is, emitter);
 
-        assertThat(statements.size(), is(24));
-
+        assertThat(statements.size(), is(26));
 
         Quad itemFormat = statements.get(0);
         assertThat(itemFormat.getSubject().ntriplesString(), is("<https://api.zotero.org/groups/5435545/items/I5ED2F3N/file/view>"));

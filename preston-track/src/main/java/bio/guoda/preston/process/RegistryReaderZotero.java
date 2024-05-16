@@ -26,7 +26,6 @@ import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.getVersion;
 import static bio.guoda.preston.RefNodeFactory.getVersionSource;
-import static bio.guoda.preston.RefNodeFactory.toBlank;
 
 public class RegistryReaderZotero extends ProcessorReadOnly {
     public static final Pattern URL_PATTERN_ZOTERO_GROUP_HTML = Pattern.compile("http[s]{0,1}://(www\\.){0,1}(zotero\\.org/groups/)(?<groupIdOrName>[^/]+)(/.*){0,1}");
@@ -74,6 +73,7 @@ public class RegistryReaderZotero extends ProcessorReadOnly {
             public void accept(Pair<Long, Long> objectStartFinishRange) {
                 IRI jsonObjectContentId
                         = RefNodeFactory.toIRI("cut:" + itemsPage.getIRIString() + "!/b" + objectStartFinishRange.getLeft() + "-" + objectStartFinishRange.getRight());
+
                 emitter.emit(Arrays.asList(
                         RefNodeFactory.toStatement(
                                 jsonObjectContentId,
@@ -84,42 +84,60 @@ public class RegistryReaderZotero extends ProcessorReadOnly {
                                 itemsPage,
                                 HAD_MEMBER,
                                 jsonObjectContentId
-                        ),
-                        RefNodeFactory.toStatement(
-                                jsonObjectContentId,
-                                HAS_VERSION,
-                                jsonObjectContentId
                         )
                 ));
+
+                emitSelfReferenceVersionIfAvailable(jsonObjectContentId, emitter);
+
             }
         });
 
+    }
+
+    private void emitSelfReferenceVersionIfAvailable(IRI jsonObjectContentId, StatementsEmitter emitter) {
+        try {
+            InputStream inputStream = get(jsonObjectContentId);
+            JsonNode jsonNode = new ObjectMapper().readTree(inputStream);
+            String selfUrl = jsonNode.at("/links/self/href").asText();
+            if (StringUtils.isNoneBlank(selfUrl)) {
+                emitter.emit(RefNodeFactory.toStatement(
+                        RefNodeFactory.toIRI(selfUrl),
+                        HAS_VERSION,
+                        jsonObjectContentId
+                        )
+                );
+            }
+        } catch (IOException e) {
+            emitter.emit(RefNodeFactory.toStatement(
+                    jsonObjectContentId,
+                    HAS_VERSION,
+                    jsonObjectContentId
+            ));
+        }
     }
 
     public static void requestItemAttachments(InputStream is, StatementEmitter emitter) throws IOException {
         for (JsonNode item : new ObjectMapper().readTree(is)) {
             JsonNode itemUrl = item.at("/links/self/href");
             if (itemUrl != null) {
-                String attachmentDownloadUrlString = ZoteroUtil.getZoteroAttachmentDownloadUrl(item);
+                String attachmentDownloadUrlString = ZoteroUtil.getAttachmentDownloadUrl(item);
 
                 if (StringUtils.isNoneBlank(attachmentDownloadUrlString)) {
-                    JsonNode attachmentType = item.at("/links/attachment/attachmentType");
-                    if (attachmentType != null && StringUtils.isNotBlank(attachmentType.asText())) {
-                        emitter.emit(RefNodeFactory.toStatement(
-                                RefNodeFactory.toIRI(attachmentDownloadUrlString),
-                                HAS_FORMAT,
-                                RefNodeFactory.toLiteral("application/pdf"))
-                        );
-                    }
-
+                    String attachmentType = ZoteroUtil.getAttachmentType(item);
+                    emitter.emit(RefNodeFactory.toStatement(
+                            RefNodeFactory.toIRI(attachmentDownloadUrlString),
+                            HAS_FORMAT,
+                            RefNodeFactory.toLiteral(StringUtils.defaultString(attachmentType, "application/pdf"))
+                    ));
                     emitter.emit(RefNodeFactory.toStatement(
                             RefNodeFactory.toIRI(attachmentDownloadUrlString),
                             HAS_VERSION,
                             RefNodeFactory.toBlank())
                     );
 
-
                 }
+
+
             }
         }
     }
