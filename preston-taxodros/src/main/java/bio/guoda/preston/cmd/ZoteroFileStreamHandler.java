@@ -68,7 +68,8 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                     }
                     String md5 = zoteroRecord.at("/data/md5").asText();
                     if (StringUtils.isNoneBlank(md5)) {
-                        ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, HashType.md5.getPrefix() + md5);
+                        String providedContentId = HashType.md5.getPrefix() + md5;
+                        ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, providedContentId);
 
                     }
                     String zoteroItemUrl = zoteroRecord.at("/links/up/href").asText();
@@ -106,6 +107,10 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
         return foundAtLeastOne.get();
     }
 
+    private String makeActionable(String providedContentId) {
+        return "https://linker.bio/" + providedContentId;
+    }
+
     private boolean appendJournalArticleMetaData(String iriString, JsonNode jsonNode, ObjectNode objectNode) {
         JsonNode reference = jsonNode.at("/links/self/href");
         JsonNode creators = jsonNode.at("/data/creators");
@@ -116,7 +121,8 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
             ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
 
-            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, "https://linker.bio/" + iriString);
+            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, makeActionable(iriString));
+            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, makeActionable(iriString));
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
             ZenodoMetaUtil.setType(objectNode, "application/json");
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, reference.asText());
@@ -225,7 +231,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                     NullOutputStream.INSTANCE,
                     hashType
             );
-            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.HAS_VERSION, contentId.getIRIString());
+            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.HAS_VERSION, makeActionable(contentId.getIRIString()));
         } catch (IOException e) {
             throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]", e);
         }
