@@ -206,9 +206,9 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             }
 
             if (Arrays.asList(ZOTERO_BOOK, ZOTERO_BOOK_SECTION).contains(itemType)) {
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.IMPRINT_PUBLISHER, jsonNode.at("data/publisher").asText());
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PARTOF_PAGES, jsonNode.at("data/pages").asText());
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PARTOF_TITLE, jsonNode.at("data/bookTitle").asText());
+                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.IMPRINT_PUBLISHER, jsonNode.at("/data/publisher").asText());
+                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PARTOF_PAGES, jsonNode.at("/data/pages").asText());
+                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PARTOF_TITLE, jsonNode.at("/data/bookTitle").asText());
             }
 
             ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, jsonNode.at("/data/DOI").asText());

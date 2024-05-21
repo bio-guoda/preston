@@ -32,6 +32,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.number.OrderingComparison.greaterThan;
 
 public class ZoteroFileExtractorTest {
 
@@ -52,7 +53,22 @@ public class ZoteroFileExtractorTest {
         assertThat(keywordList, hasItem("Molecular phylogeny"));
 
     }
-    
+
+    @Test
+    public void streamZoteroBook() throws IOException {
+        String[] jsonObjects = getResource("ZoteroBookAttachment.json", "ZoteroBook.json");
+
+        assertThat(jsonObjects.length, is(greaterThan(0)));
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+        JsonNode keywords = taxonNode.at("/keywords");
+        List<String> keywordList = new ArrayList<>();
+        keywords.forEach(k -> keywordList.add(k.asText()));
+        assertThat(keywordList, hasItem("Biodiversity"));
+
+        assertThat(taxonNode.at("/publication_type").asText(), is("book"));
+
+    }
+
     @Test
     public void streamZoteroArticleListToZenodoLineJson() throws IOException {
         String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleList.json");
