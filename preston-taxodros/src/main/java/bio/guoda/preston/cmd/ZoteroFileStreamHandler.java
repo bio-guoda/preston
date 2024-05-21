@@ -199,16 +199,16 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
 
             if (StringUtils.equals(itemType, ZOTERO_JOURNAL_ARTICLE)) {
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_TITLE, jsonNode.at("/data/publicationTitle").asText());
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_VOLUME, jsonNode.at("/data/volume").asText());
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_ISSUE, jsonNode.at("/data/issue").asText());
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_PAGES, jsonNode.at("/data/pages").asText());
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_TITLE, jsonNode.at("/data/publicationTitle").asText());
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_VOLUME, jsonNode.at("/data/volume").asText());
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_ISSUE, jsonNode.at("/data/issue").asText());
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_PAGES, jsonNode.at("/data/pages").asText());
             }
 
             if (Arrays.asList(ZOTERO_BOOK, ZOTERO_BOOK_SECTION).contains(itemType)) {
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.IMPRINT_PUBLISHER, jsonNode.at("/data/publisher").asText());
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PARTOF_PAGES, jsonNode.at("/data/pages").asText());
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PARTOF_TITLE, jsonNode.at("/data/bookTitle").asText());
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.IMPRINT_PUBLISHER, jsonNode.at("/data/publisher").asText());
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.PARTOF_PAGES, jsonNode.at("/data/pages").asText());
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.PARTOF_TITLE, jsonNode.at("/data/bookTitle").asText());
             }
 
             ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, jsonNode.at("/data/DOI").asText());
