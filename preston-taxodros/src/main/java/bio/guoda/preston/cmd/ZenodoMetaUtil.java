@@ -74,7 +74,7 @@ public class ZenodoMetaUtil {
     }
 
     public static void setValue(ObjectNode objectNode, String key, String value) {
-        if (value != null) {
+        if (StringUtils.isNotBlank(value)) {
             objectNode.set(key, TextNode.valueOf(value));
         }
     }
