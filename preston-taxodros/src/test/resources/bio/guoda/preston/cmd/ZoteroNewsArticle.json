@@ -1,0 +1,103 @@
+{
+  "key": "TMSDEKSQ",
+  "version": 11354,
+  "library": {
+    "type": "group",
+    "id": 5435545,
+    "name": "Bat Literature Project",
+    "links": {
+      "alternate": {
+        "href": "https://www.zotero.org/groups/bat_literature_project",
+        "type": "text/html"
+      }
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://api.zotero.org/groups/5435545/items/TMSDEKSQ",
+      "type": "application/json"
+    },
+    "alternate": {
+      "href": "https://www.zotero.org/groups/bat_literature_project/items/TMSDEKSQ",
+      "type": "text/html"
+    },
+    "attachment": {
+      "href": "https://api.zotero.org/groups/5435545/items/AJAULP6T",
+      "type": "application/json",
+      "attachmentType": "application/pdf",
+      "attachmentSize": 531958
+    }
+  },
+  "meta": {
+    "createdByUser": {
+      "id": 6296343,
+      "username": "deeannreeder",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/deeannreeder",
+          "type": "text/html"
+        }
+      }
+    },
+    "lastModifiedByUser": {
+      "id": 13229919,
+      "username": "acsherman",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/acsherman",
+          "type": "text/html"
+        }
+      }
+    },
+    "creatorSummary": "Van Cakenberghe and Seamark",
+    "parsedDate": "2021",
+    "numChildren": 1
+  },
+  "data": {
+    "key": "TMSDEKSQ",
+    "version": 11354,
+    "itemType": "newspaperArticle",
+    "title": "African Chiroptera Report 2014",
+    "creators": [
+      {
+        "creatorType": "author",
+        "firstName": "Victor",
+        "lastName": "Van Cakenberghe"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Ernest CJ",
+        "lastName": "Seamark"
+      }
+    ],
+    "abstractNote": "",
+    "publicationTitle": "African Bat Conservation News",
+    "place": "",
+    "edition": "",
+    "date": "2021",
+    "section": "",
+    "pages": "",
+    "language": "",
+    "shortTitle": "",
+    "ISSN": "1812-1268",
+    "url": "PDF: www.africanbats.org/Documents/ACR/2014/ ACR 2014 Appendix 1.pdf",
+    "accessDate": "",
+    "archive": "",
+    "archiveLocation": "",
+    "libraryCatalog": "",
+    "callNumber": "",
+    "rights": "",
+    "extra": "Publisher: AfricanBats NPC\ndoi 10.13140/2.1.1480.0004",
+    "tags": [],
+    "collections": [
+      "DZKBQXJR"
+    ],
+    "relations": {
+      "owl:sameAs": "http://zotero.org/groups/2719577/items/I9BUY2WA"
+    },
+    "dateAdded": "2024-03-07T00:46:10Z",
+    "dateModified": "2024-05-03T14:39:58Z"
+  }
+}

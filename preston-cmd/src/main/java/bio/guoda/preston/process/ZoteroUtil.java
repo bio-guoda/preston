@@ -5,10 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 
 public class ZoteroUtil {
 
-    public static String appendAttachmentDownloadPath(String attachmentUrl) {
-        return StringUtils.isBlank(attachmentUrl) ? null : (attachmentUrl + "/file/view");
-    }
-
     public static String getAttachmentDownloadUrl(JsonNode zoteroRecord) {
         return getAttachmentProperty(zoteroRecord, "/links/enclosure/href");
     }

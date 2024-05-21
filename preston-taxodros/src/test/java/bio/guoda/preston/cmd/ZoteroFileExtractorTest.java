@@ -70,6 +70,21 @@ public class ZoteroFileExtractorTest {
     }
 
     @Test
+    public void zoteroNewsArticle() throws IOException {
+        String[] jsonObjects = getResource("ZoteroNewsArticleAttachment.json", "ZoteroNewsArticle.json");
+
+        assertThat(jsonObjects.length, is(greaterThan(0)));
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+        JsonNode keywords = taxonNode.at("/keywords");
+        List<String> keywordList = new ArrayList<>();
+        keywords.forEach(k -> keywordList.add(k.asText()));
+        assertThat(keywordList, hasItem("Biodiversity"));
+
+        assertThat(taxonNode.at("/publication_type").asText(), is("other"));
+
+    }
+
+    @Test
     public void streamZoteroArticleListToZenodoLineJson() throws IOException {
         String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleList.json");
         assertThat(jsonObjects.length, Is.is(0));

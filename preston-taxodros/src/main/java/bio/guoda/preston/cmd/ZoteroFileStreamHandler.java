@@ -188,15 +188,15 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                 put(ZOTERO_CONFERENCE_PAPER, ZenodoMetaUtil.PUBLICATION_TYPE_CONFERENCE_PAPER);
             }};
 
-            if (typeTranslationTable.containsKey(itemType)) {
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, typeTranslationTable.get(itemType));
-                String dateString = jsonNode.at("/data/date").asText();
-                String dateStringParsed = parseDate(dateString);
-                if (StringUtils.isNotBlank(dateStringParsed)) {
-                    ZenodoMetaUtil.setPublicationDate(objectNode, dateStringParsed);
-                }
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, jsonNode.at("/data/title").asText());
+            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, typeTranslationTable.getOrDefault(itemType, "other"));
+            String dateString = jsonNode.at("/data/date").asText();
+            String dateStringParsed = parseDate(dateString);
+            if (StringUtils.isNotBlank(dateStringParsed)) {
+                ZenodoMetaUtil.setPublicationDate(objectNode, dateStringParsed);
             }
+            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, jsonNode.at("/data/title").asText());
+
+
 
             if (StringUtils.equals(itemType, ZOTERO_JOURNAL_ARTICLE)) {
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_TITLE, jsonNode.at("/data/publicationTitle").asText());
