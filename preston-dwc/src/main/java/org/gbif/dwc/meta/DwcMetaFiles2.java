@@ -57,7 +57,7 @@ public class DwcMetaFiles2 {
      */
     public static Archive fromMetaDescriptor(InputStream metaDescriptor) throws SAXException, IOException, UnsupportedArchiveException {
         Archive archive = new Archive();
-        try (BOMInputStream bomInputStream = new BOMInputStream(metaDescriptor)) {
+        try (BOMInputStream bomInputStream = BOMInputStream.builder().setInputStream(metaDescriptor).get()) {
             SAXParser p = SAX_FACTORY.newSAXParser();
             MetaXMLSaxHandler2 mh = new MetaXMLSaxHandler2(archive);
             p.parse(bomInputStream, mh);
