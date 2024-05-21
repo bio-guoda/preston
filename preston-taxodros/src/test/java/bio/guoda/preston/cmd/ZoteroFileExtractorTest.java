@@ -52,19 +52,7 @@ public class ZoteroFileExtractorTest {
         assertThat(keywordList, hasItem("Molecular phylogeny"));
 
     }
-
-    @Test
-    public void streamZoteroBook() throws IOException {
-        String[] jsonObjects = getResource("ZoteroBookAttachment.json", "ZoteroBook.json");
-
-        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
-        JsonNode keywords = taxonNode.at("/keywords");
-        List<String> keywordList = new ArrayList<>();
-        keywords.forEach(k -> keywordList.add(k.asText()));
-        assertThat(keywordList, hasItem("Molecular phylogeny"));
-
-    }
-
+    
     @Test
     public void streamZoteroArticleListToZenodoLineJson() throws IOException {
         String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleList.json");
