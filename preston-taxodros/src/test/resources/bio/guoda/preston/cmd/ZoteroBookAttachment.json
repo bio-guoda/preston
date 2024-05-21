@@ -1,0 +1,69 @@
+{
+  "key": "8PZ5M3FX",
+  "version": 11334,
+  "library": {
+    "type": "group",
+    "id": 5435545,
+    "name": "Bat Literature Project",
+    "links": {
+      "alternate": {
+        "href": "https://www.zotero.org/groups/bat_literature_project",
+        "type": "text/html"
+      }
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://api.zotero.org/groups/5435545/items/8PZ5M3FX",
+      "type": "application/json"
+    },
+    "alternate": {
+      "href": "https://www.zotero.org/groups/bat_literature_project/items/8PZ5M3FX",
+      "type": "text/html"
+    },
+    "up": {
+      "href": "https://api.zotero.org/groups/5435545/items/UPBFKSQJ",
+      "type": "application/json"
+    },
+    "enclosure": {
+      "type": "application/pdf",
+      "href": "https://api.zotero.org/groups/5435545/items/8PZ5M3FX/file/view",
+      "title": "functional_and_evolutionary_ecology_of_b (1).pdf",
+      "length": 5762856
+    }
+  },
+  "meta": {
+    "createdByUser": {
+      "id": 13229919,
+      "username": "acsherman",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/acsherman",
+          "type": "text/html"
+        }
+      }
+    },
+    "numChildren": 0
+  },
+  "data": {
+    "key": "8PZ5M3FX",
+    "version": 11334,
+    "parentItem": "UPBFKSQJ",
+    "itemType": "attachment",
+    "linkMode": "imported_file",
+    "title": "functional_and_evolutionary_ecology_of_b (1).pdf",
+    "accessDate": "",
+    "url": "",
+    "note": "",
+    "contentType": "application/pdf",
+    "charset": "",
+    "filename": "functional_and_evolutionary_ecology_of_b (1).pdf",
+    "md5": "1ffc3d79f67156dd7b4aa5e963a95345",
+    "mtime": 1714681061029,
+    "tags": [],
+    "relations": {},
+    "dateAdded": "2024-05-02T20:17:56Z",
+    "dateModified": "2024-05-03T14:33:21Z"
+  }
+}

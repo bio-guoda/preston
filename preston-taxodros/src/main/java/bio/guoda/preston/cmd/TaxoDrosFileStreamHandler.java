@@ -60,14 +60,11 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String DROS_3 = "taxodros-dros3";
     public static final String SYS = "taxodros-syst";
     private static final String PREFIX_PUBLISHER = ".Z.";
-    public static final String IMPRINT_PUBLISHER = "imprint_publisher";
 
     public static final String TAXODROS_DATA_DOI = "10.5281/zenodo.10723540";
     public static final String TAXODROS_DATA_VERSION_SHA256 = "hash://sha256/ca86d74b318a334bddbc7c6a387a09530a083b8617718f5369ad548744c602d3";
     public static final String TAXODROS_DATA_VERSION_MD5 = "hash://md5/26a67012dde325cf2a3a058cc2f9c1b8";
     public static final String LSID_PREFIX = "urn:lsid:taxodros.uzh.ch";
-    public static final String PARTOF_PAGES = "partof_pages";
-    public static final String PARTOF_TITLE = "partof_title";
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
@@ -146,18 +143,18 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, title);
                         if (objectNode.has(ZenodoMetaUtil.REFERENCE_ID)
                                 && StringUtils.containsIgnoreCase(objectNode.get(ZenodoMetaUtil.REFERENCE_ID).asText(), "collection")) {
-                            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, "other");
+                            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_OTHER);
                             ZenodoMetaUtil.setValue(objectNode, "collection", objectNode.get(ZenodoMetaUtil.REFERENCE_ID).asText());
                         } else {
                             Pattern pageNumberPattern = Pattern.compile("(?<title>.*)[, ]+(?<pagesSignature>[ ][p]{1,2}\\.)[ ]+(?<pages>[0-9 -]+).*");
                             Matcher matcher = pageNumberPattern.matcher(title);
                             if (matcher.matches()) {
-                                ZenodoMetaUtil.setValue(objectNode, PARTOF_PAGES, matcher.group("pages"));
-                                ZenodoMetaUtil.setValue(objectNode, PARTOF_TITLE, matcher.group("title"));
-                                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, "section");
+                                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PARTOF_PAGES, matcher.group("pages"));
+                                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PARTOF_TITLE, matcher.group("title"));
+                                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_BOOK_SECTION);
                             } else {
-                                ZenodoMetaUtil.setValue(objectNode, PARTOF_TITLE, title);
-                                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, "book");
+                                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PARTOF_TITLE, title);
+                                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_BOOK);
                             }
                         }
                         appendIdentifier(textCapture, line, PREFIX_PUBLISHER);
@@ -180,7 +177,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                             setJournalTitle(objectNode, journalTitle);
                             enrichWithJournalInfo(objectNode, remainder);
                         } else {
-                            ZenodoMetaUtil.setValue(objectNode, IMPRINT_PUBLISHER, getAndResetCapture(textCapture));
+                            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.IMPRINT_PUBLISHER, getAndResetCapture(textCapture));
                         }
                         appendIdentifier(textCapture, line, PREFIX_METHOD_DIGITIZATION);
                     } else if (StringUtils.startsWith(line, PREFIX_FILENAME)) {

@@ -24,12 +24,22 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ZoteroFileStreamHandler implements ContentStreamHandler {
+    public static final String ZOTERO_JOURNAL_ARTICLE = "journalArticle";
+    public static final String ZOTERO_BOOK = "book";
+    public static final String ZOTERO_BOOK_SECTION = "bookSection";
+    public static final String ZOTERO_PREPRINT = "preprint";
+    public static final String ZOTERO_REPORT = "report";
+    public static final String ZOTERO_THESIS = "thesis";
+    public static final String ZOTERO_CONFERENCE_PAPER = "conferencePaper";
     private final Logger LOG = LoggerFactory.getLogger(ZoteroFileStreamHandler.class);
 
 
@@ -62,7 +72,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
                 String zoteroAttachmentDownloadUrl = ZoteroUtil.getAttachmentDownloadUrl(zoteroRecord);
 
-                if (StringUtils.isNoneBlank(zoteroAttachmentDownloadUrl)) {
+                if (hasPdfAttachment(zoteroRecord, zoteroAttachmentDownloadUrl)) {
                     String filename = zoteroRecord.at("/data/filename").asText();
                     if (StringUtils.isNoneBlank(filename)) {
                         ZenodoMetaUtil.setFilename(zenodoRecord, filename);
@@ -86,19 +96,21 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                         throw new ContentStreamException("cannot generate Zenodo record due to unresolved Zotero record [" + zoteroItemUrl + "]");
                     }
 
-                    boolean isLikelyZoteroRecord = appendJournalArticleMetaData(
-                            iriString,
-                            new ObjectMapper().readTree(itemInputStream),
-                            zenodoRecord
-                    );
+                    JsonNode itemData = new ObjectMapper().readTree(itemInputStream);
+                    if (isPrimaryAttachmentOf(zoteroAttachmentDownloadUrl, itemData)) {
+                        boolean isLikelyZoteroRecord = appendJournalArticleMetaData(
+                                iriString,
+                                itemData,
+                                zenodoRecord
+                        );
 
-                    ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_COMPILED_BY, RefNodeConstants.PRESTON_DOI, ZenodoMetaUtil.RESOURCE_TYPE_SOFTWARE);
+                        ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_COMPILED_BY, RefNodeConstants.PRESTON_DOI, ZenodoMetaUtil.RESOURCE_TYPE_SOFTWARE);
 
-                    if (isLikelyZoteroRecord) {
-                        foundAtLeastOne.set(true);
-                        writeRecord(foundAtLeastOne, zenodoRecord);
+                        if (isLikelyZoteroRecord) {
+                            foundAtLeastOne.set(true);
+                            writeRecord(foundAtLeastOne, zenodoRecord);
+                        }
                     }
-
 
                 }
 
@@ -108,6 +120,22 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             // opportunistic parsing, so ignore exceptions
         }
         return foundAtLeastOne.get();
+    }
+
+    private boolean isPrimaryAttachmentOf(String zoteroAttachmentDownloadUrl, JsonNode itemData) {
+        String primaryAttachment = itemData.at("/links/attachment/href").asText();
+        return StringUtils.isNotBlank(primaryAttachment) && StringUtils.startsWith(zoteroAttachmentDownloadUrl, primaryAttachment);
+    }
+
+    private boolean hasPdfAttachment(JsonNode zoteroRecord, String zoteroAttachmentDownloadUrl) {
+        boolean hasPdfAttachment = false;
+        if (StringUtils.isNoneBlank(zoteroAttachmentDownloadUrl)) {
+            String contentType = zoteroRecord.at("/data/contentType").asText();
+            if (StringUtils.equals(contentType, "application/pdf")) {
+                hasPdfAttachment = true;
+            }
+        }
+        return hasPdfAttachment;
     }
 
     private String makeActionable(String providedContentId) {
@@ -150,19 +178,37 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             }
 
             String itemType = jsonNode.at("/data/itemType").asText();
-            if (StringUtils.equals(itemType, "journalArticle")) {
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_ARTICLE);
+            Map<String, String> typeTranslationTable = new TreeMap<String, String>() {{
+                put(ZOTERO_JOURNAL_ARTICLE, ZenodoMetaUtil.PUBLICATION_TYPE_ARTICLE);
+                put(ZOTERO_BOOK, ZenodoMetaUtil.PUBLICATION_TYPE_BOOK);
+                put(ZOTERO_BOOK_SECTION, ZenodoMetaUtil.PUBLICATION_TYPE_BOOK_SECTION);
+                put(ZOTERO_PREPRINT, ZenodoMetaUtil.PUBLICATION_TYPE_PREPRINT);
+                put(ZOTERO_REPORT, ZenodoMetaUtil.PUBLICATION_TYPE_REPORT);
+                put(ZOTERO_THESIS, ZenodoMetaUtil.PUBLICATION_TYPE_THESIS);
+                put(ZOTERO_CONFERENCE_PAPER, ZenodoMetaUtil.PUBLICATION_TYPE_CONFERENCE_PAPER);
+            }};
 
+            if (typeTranslationTable.containsKey(itemType)) {
+                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, typeTranslationTable.get(itemType));
                 String dateString = jsonNode.at("/data/date").asText();
                 String dateStringParsed = parseDate(dateString);
                 if (StringUtils.isNotBlank(dateStringParsed)) {
                     ZenodoMetaUtil.setPublicationDate(objectNode, dateStringParsed);
                 }
-                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_TITLE, jsonNode.at("/data/publicationTitle").asText());
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, jsonNode.at("/data/title").asText());
+            }
+
+            if (StringUtils.equals(itemType, ZOTERO_JOURNAL_ARTICLE)) {
+                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_TITLE, jsonNode.at("/data/publicationTitle").asText());
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_VOLUME, jsonNode.at("/data/volume").asText());
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_ISSUE, jsonNode.at("/data/issue").asText());
                 ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.JOURNAL_PAGES, jsonNode.at("/data/pages").asText());
+            }
+
+            if (Arrays.asList(ZOTERO_BOOK, ZOTERO_BOOK_SECTION).contains(itemType)) {
+                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.IMPRINT_PUBLISHER, jsonNode.at("data/publisher").asText());
+                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PARTOF_PAGES, jsonNode.at("data/pages").asText());
+                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PARTOF_TITLE, jsonNode.at("data/bookTitle").asText());
             }
 
             ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, jsonNode.at("/data/DOI").asText());

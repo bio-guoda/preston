@@ -1,0 +1,102 @@
+{
+  "key": "UPBFKSQJ",
+  "version": 11334,
+  "library": {
+    "type": "group",
+    "id": 5435545,
+    "name": "Bat Literature Project",
+    "links": {
+      "alternate": {
+        "href": "https://www.zotero.org/groups/bat_literature_project",
+        "type": "text/html"
+      }
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://api.zotero.org/groups/5435545/items/UPBFKSQJ",
+      "type": "application/json"
+    },
+    "alternate": {
+      "href": "https://www.zotero.org/groups/bat_literature_project/items/UPBFKSQJ",
+      "type": "text/html"
+    },
+    "attachment": {
+      "href": "https://api.zotero.org/groups/5435545/items/8PZ5M3FX",
+      "type": "application/json",
+      "attachmentType": "application/pdf",
+      "attachmentSize": 5762856
+    }
+  },
+  "meta": {
+    "createdByUser": {
+      "id": 13229919,
+      "username": "acsherman",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/acsherman",
+          "type": "text/html"
+        }
+      }
+    },
+    "creatorSummary": "Zubaid et al.",
+    "parsedDate": "2006",
+    "numChildren": 1
+  },
+  "data": {
+    "key": "UPBFKSQJ",
+    "version": 11334,
+    "itemType": "book",
+    "title": "Functional and evolutionary ecology of bats",
+    "creators": [
+      {
+        "creatorType": "author",
+        "firstName": "Akbar",
+        "lastName": "Zubaid"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Gary F.",
+        "lastName": "McCracken"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Thomas H.",
+        "lastName": "Kunz"
+      },
+      {
+        "creatorType": "contributor",
+        "name": "International bat research conference"
+      }
+    ],
+    "abstractNote": "",
+    "series": "",
+    "seriesNumber": "",
+    "volume": "",
+    "numberOfVolumes": "",
+    "edition": "",
+    "place": "New York",
+    "publisher": "Oxford university press",
+    "date": "2006",
+    "numPages": "",
+    "language": "eng",
+    "ISBN": "978-0-19-515472-6",
+    "shortTitle": "",
+    "url": "",
+    "accessDate": "",
+    "archive": "",
+    "archiveLocation": "",
+    "libraryCatalog": "BnF ISBN",
+    "callNumber": "599.417",
+    "rights": "",
+    "extra": "",
+    "tags": [],
+    "collections": [
+      "DZKBQXJR"
+    ],
+    "relations": {},
+    "dateAdded": "2024-05-03T14:33:21Z",
+    "dateModified": "2024-05-03T14:33:21Z"
+  }
+}
