@@ -156,7 +156,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     static List<Quad> findActivityInfo(ActivityContext activity) {
         String version = Version.getVersionString(null);
         String softwareAgentVersion = version == null ? "" : (" (Version " + Version.getVersionString() + ")");
-        return ActivityUtil.generateSoftwareAgentProcessDescription(activity, PRESTON, RefNodeConstants.PRESTON_DOI_URL_IRI, "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2021. Preston: a biodiversity dataset tracker" + softwareAgentVersion + " [Software]. Zenodo. " + RefNodeConstants.PRESTON_DOI_URL_IRI.getIRIString(), "Preston is a software program that finds, archives and provides access to biodiversity datasets.");
+        return ActivityUtil.generateSoftwareAgentProcessDescription(activity, PRESTON, RefNodeConstants.PRESTON_DOI_URL_IRI, "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2018-2024. Preston: a biodiversity dataset tracker" + softwareAgentVersion + " [Software]. Zenodo. " + RefNodeConstants.PRESTON_DOI_URL_IRI.getIRIString(), "Preston is a software program that finds, archives and provides access to biodiversity datasets.");
     }
 
     abstract String getActivityDescription();
