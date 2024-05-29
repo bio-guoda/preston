@@ -1,6 +1,9 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.DerefProgressListener;
+import bio.guoda.preston.DerefState;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamWithViolations;
@@ -135,6 +138,37 @@ public class PersistingTest {
         assertThat(org.apache.commons.io.IOUtils.toString(inputStream, StandardCharsets.UTF_8),
                 StringStartsWith.startsWith("{\"key\":\"e10cb8d7-cf2d-4b2f-9758-76dbead48965\""));
 
+    }
+
+    @Test
+    public void fileDereferencer() throws IOException, URISyntaxException {
+
+        Dereferencer<InputStream> deref = Persisting.getInputStreamDereferencerFile(new DerefProgressListener() {
+            @Override
+            public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
+
+            }
+        });
+
+        URL resource = getClass().getResource("test.txt");
+        InputStream inputStream = deref.get(RefNodeFactory.toIRI(resource.toURI()));
+
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), is("this is a test"));
+
+    }
+
+    @Test
+    public void fileDereferencerNonFileURL() throws IOException, URISyntaxException {
+
+        Dereferencer<InputStream> deref = Persisting.getInputStreamDereferencerFile(new DerefProgressListener() {
+            @Override
+            public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
+
+            }
+        });
+
+        InputStream inputStream = deref.get(RefNodeFactory.toIRI("https://example.org"));
+        assertNull(inputStream);
     }
 
     private static ValidatingKeyValueStreamFactory getAlwaysAccepting() {

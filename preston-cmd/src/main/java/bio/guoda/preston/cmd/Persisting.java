@@ -232,13 +232,18 @@ public class Persisting extends PersistingLocal {
         return dereferencer;
     }
 
-    private static Dereferencer<InputStream> getInputStreamDereferencerFile(DerefProgressListener listener) {
+    public static Dereferencer<InputStream> getInputStreamDereferencerFile(DerefProgressListener listener) {
         return uri -> {
-            URI uri1 = URI.create(uri.getIRIString());
-            File file = new File(uri1);
-            return file.exists()
-                    ? getInputStreamForFile(uri, file, listener)
-                    : null;
+            try {
+                File file = new File(URI.create(uri.getIRIString()));
+                return file.exists()
+                        ? getInputStreamForFile(uri, file, listener)
+                        : null;
+            } catch (IllegalArgumentException ex) {
+                // will not dereference malformed or non-file URI
+                // see https://github.com/bio-guoda/preston/issues/291
+                return null;
+            }
         };
     }
 
