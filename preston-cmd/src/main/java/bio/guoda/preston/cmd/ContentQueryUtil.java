@@ -55,7 +55,7 @@ public class ContentQueryUtil {
             if (contentStream == null) {
                 throw new IOException("[" + queryIRI.getIRIString() + "] not found.");
             }
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
             throw new IOException("problem retrieving [" + queryIRI.getIRIString() + "]", e);
         }
         return contentStream;
