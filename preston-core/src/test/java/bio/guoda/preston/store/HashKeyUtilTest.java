@@ -2,7 +2,6 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.rdf.api.IRI;
-import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.util.regex.Matcher;
@@ -104,14 +103,19 @@ public class HashKeyUtilTest {
     @Test
     public void parseCompositeURI() {
         String uriString = "gz:file:foo.txt.gz!/foo.txt";
-        assertThat(HashKeyUtil.extractInnerURI(uriString), is("file:foo.txt.gz"));
+        assertThat(HashKeyUtil.extractInnerURI(RefNodeFactory.toIRI(uriString)).getIRIString(), is("file:foo.txt.gz"));
+    }
+
+    @Test
+    public void parseURN() {
+        HashKeyUtil.extractInnerURI(RefNodeFactory.toIRI("urn:example:")).getIRIString();
     }
 
     @Test
     public void parseCompositeURI2() {
         String uriString = "tar:gz:file:foo.txt.tar.gz!/foo.txt";
         assertThat(
-                HashKeyUtil.extractInnerURI(uriString),
+                HashKeyUtil.extractInnerURI(RefNodeFactory.toIRI(uriString)).getIRIString(),
                 is("file:foo.txt.tar.gz")
         );
     }
@@ -119,14 +123,14 @@ public class HashKeyUtilTest {
     @Test
     public void parseCompositeURI3() {
         assertThat(
-                HashKeyUtil.extractInnerURI("gz:https://example.org/foo.txt.gz!/foo.txt"),
+                HashKeyUtil.extractInnerURI(RefNodeFactory.toIRI("gz:https://example.org/foo.txt.gz!/foo.txt")).getIRIString(),
                 is("https://example.org/foo.txt.gz")
         );
     }
 
     @Test
     public void parseNonCompositeURI3() {
-        String innerURIString = HashKeyUtil.extractInnerURI("foo:bar");
+        String innerURIString = HashKeyUtil.extractInnerURI(RefNodeFactory.toIRI("foo:bar")).getIRIString();
         assertThat(innerURIString, is("foo:bar"));
     }
 

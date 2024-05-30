@@ -101,17 +101,15 @@ public class HashKeyUtil {
         return COMPOSITE_URI.matcher(uriString);
     }
 
-    public static String extractInnerURI(String iriString) {
-        return extractInnerURI(RefNodeFactory.toIRI(iriString)).getIRIString();
-    }
-
     public static IRI extractInnerURI(IRI uriString) {
         Matcher matcher = getMatcher(uriString.getIRIString());
         String innerURIString = null;
         if (matcher.matches()) {
             String innerScheme = matcher.group(1);
             String innerPath = matcher.group(2);
-            innerURIString = innerScheme + innerPath;
+            if (StringUtils.isNotBlank(innerPath)) {
+                innerURIString = innerScheme + innerPath;
+            }
         }
         return StringUtils.isBlank(innerURIString)
                 ? uriString
