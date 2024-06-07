@@ -803,3 +803,8 @@ https://discourse.gbif.org/t/searching-on-catalogue-number/3202/4?u=jhpoelen
 https://github.com/ArctosDB/arctos/issues/3950 (re: internet no-fly list - internet addresses blacklisted from image retrieval) 
 
 Response to NSF 20-015, Dear Colleague Letter:Request for Information on Data-Focused Cyberinfrastructure Needed to Support Future Data-Intensive Science and Engineering Research - https://www.nsf.gov/cise/oac/datacirfi/pdf/11202805209_Poelen.pdf
+
+## Related works
+
+Vines, T. H., Albert, A. Y. K., Andrew, R. L., Débarre, F., Bock, D. G., Franklin, M. T., Gilbert, K. J., Moore, J.-S., Renaut, S., & Rennison, D. J. (2014). The Availability of Research Data Declines Rapidly with Article Age. Current Biology, 24(1), 94–97. https://doi.org/10.1016/j.cub.2013.11.014
+
