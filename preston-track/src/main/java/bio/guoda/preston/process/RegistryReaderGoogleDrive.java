@@ -196,24 +196,16 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         StringBuilder exportUrl = new StringBuilder();
         exportUrl.append("https://docs.google.com/");
         exportUrl.append(id.getType());
+
+            exportUrl.append("/u/0/export?id=");
+            exportUrl.append(id.getId());
         if (PRESENTATION.equals(id.getType())) {
-            exportUrl.append("/d/");
-            exportUrl.append(id.getId());
-            exportUrl.append("/export/");
-            exportUrl.append(type.type);
-
-            exportUrl.append("?id=");
-            exportUrl.append(id.getId());
-
             if (StringUtils.isNotBlank(id.getGid())
                     && Arrays.asList(png, jpg, svg).contains(type)) {
                 exportUrl.append("&pageid=");
                 exportUrl.append(id.getGid());
             }
-
-        } else {
-            exportUrl.append("/u/0/export?id=");
-            exportUrl.append(id.getId());
+        } else
             if (StringUtils.isNotBlank(id.getGid())
                     && TYPES_SINGLE_TABLE.contains(type)) {
                 exportUrl.append("&gid=");
@@ -222,7 +214,6 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
             exportUrl.append("&format=");
             exportUrl.append(type.type);
 
-        }
         return RefNodeFactory.toIRI(exportUrl.toString());
     }
 

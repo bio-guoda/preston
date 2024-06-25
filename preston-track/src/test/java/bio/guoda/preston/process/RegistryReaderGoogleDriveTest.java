@@ -245,7 +245,7 @@ public class RegistryReaderGoogleDriveTest {
 
         IRI iri = RegistryReaderGoogleDrive.toExportIRI(gid, png);
 
-        assertThat(iri.getIRIString(), Is.is("https://docs.google.com/presentation/d/1kV0tVscrYO6WxZYRupnzjVQecmmky27Oc7YeePZjBXg/export/png?id=1kV0tVscrYO6WxZYRupnzjVQecmmky27Oc7YeePZjBXg"));
+        assertThat(iri.getIRIString(), Is.is("https://docs.google.com/presentation/u/0/export?id=1kV0tVscrYO6WxZYRupnzjVQecmmky27Oc7YeePZjBXg&format=png"));
     }
 
     @Test
@@ -259,14 +259,8 @@ public class RegistryReaderGoogleDriveTest {
 
         IRI iri = RegistryReaderGoogleDrive.toExportIRI(gid, png);
 
-        assertThat(iri.getIRIString(),
-                Is.is("https://docs.google.com/presentation/d/" +
-                        "1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk" +
-                        "/export/" +
-                        "png" +
-                        "?id=1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk" +
-                        "&pageid=g274abf48da0_0_10")
-        );
+        assertThat(iri.getIRIString(), Is.is("https://docs.google.com/presentation/u/0/export?id=1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk&pageid=g274abf48da0_0_10&format=png"));
+
     }
 
     @Test
@@ -276,7 +270,7 @@ public class RegistryReaderGoogleDriveTest {
         assertThat(googleResourceId.getId(), Is.is("1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk"));
         assertThat(googleResourceId.getType(), Is.is("presentation"));
         assertThat(RegistryReaderGoogleDrive.toExportIRI(googleResourceId, RegistryReaderGoogleDrive.Type.txt).getIRIString(),
-                Is.is("https://docs.google.com/presentation/d/1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk/export/txt?id=1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk"));
+                Is.is("https://docs.google.com/presentation/u/0/export?id=1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk&format=txt"));
     }
 
 }
