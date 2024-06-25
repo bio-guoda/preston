@@ -46,6 +46,7 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         put("presentation", Arrays.asList(pdf, pptx, odp, txt, html));
         put("spreadsheets", Arrays.asList(xlsx, ods, pdf, csv, tsv, zip));
     }};
+    public static final List<Type> TYPES_SINGLE_TABLE = Arrays.asList(Type.tsv, Type.csv);
 
     public RegistryReaderGoogleDrive(KeyValueStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
         super(blobStoreReadOnly, listeners);
@@ -182,7 +183,7 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         exportUrl.append("/u/0/export?id=");
         exportUrl.append(id.getId());
         if (StringUtils.isNotBlank(id.getGid())
-                && Arrays.asList(Type.tsv, Type.csv).contains(type.type)) {
+                && TYPES_SINGLE_TABLE.contains(type)) {
             exportUrl.append("&gid=");
             exportUrl.append(id.getGid());
         }
