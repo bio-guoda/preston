@@ -176,7 +176,6 @@ public class RegistryReaderGoogleDriveTest {
         assertThat(googleResourceId.getId(), Is.is("1wFuJ4RRlNirnrPfuY_d57I9_pnaNibw4nltNTkruSp0"));
         assertThat(googleResourceId.getType(), Is.is("spreadsheets"));
         assertThat(googleResourceId.getGid(), Is.is("1784126572"));
-
     }
 
     @Test
@@ -186,6 +185,18 @@ public class RegistryReaderGoogleDriveTest {
         RegistryReaderGoogleDrive.GoogleResourceId googleResourceId = RegistryReaderGoogleDrive.getGoogleResourceId(url);
         assertThat(googleResourceId.getId(), Is.is("1kV0tVscrYO6WxZYRupnzjVQecmmky27Oc7YeePZjBXg"));
         assertThat(googleResourceId.getType(), Is.is("presentation"));
+
+
+    }
+
+    @Test
+    public void detectPresentationSheetsURL2() {
+        String url = "https://docs.google.com/presentation/d/1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk/edit#slide=id.g274abf48da0_0_10";
+        RegistryReaderGoogleDrive.GoogleResourceId googleResourceId = RegistryReaderGoogleDrive.getGoogleResourceId(url);
+        assertThat(googleResourceId.getId(), Is.is("1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk"));
+        assertThat(googleResourceId.getType(), Is.is("presentation"));
+        assertThat(RegistryReaderGoogleDrive.toExportIRI(googleResourceId, RegistryReaderGoogleDrive.Type.txt).getIRIString(),
+                Is.is("https://docs.google.com/presentation/u/0/export?id=1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk&format=txt"));
     }
 
 }
