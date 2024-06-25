@@ -173,7 +173,7 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         }
     }
 
-    public static IRI toExportIRI(GoogleResourceId id, Type type) {
+    static IRI toExportIRI(GoogleResourceId id, Type type) {
         StringBuilder exportUrl = new StringBuilder();
         exportUrl.append("https://docs.google.com/");
         exportUrl.append(id.getType());
