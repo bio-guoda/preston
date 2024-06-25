@@ -15,6 +15,7 @@ import java.util.List;
 
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.docx;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.pdf;
+import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.png;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RegistryReaderGoogleDriveTest {
@@ -216,8 +217,56 @@ public class RegistryReaderGoogleDriveTest {
         RegistryReaderGoogleDrive.GoogleResourceId googleResourceId = RegistryReaderGoogleDrive.getGoogleResourceId(url);
         assertThat(googleResourceId.getId(), Is.is("1kV0tVscrYO6WxZYRupnzjVQecmmky27Oc7YeePZjBXg"));
         assertThat(googleResourceId.getType(), Is.is("presentation"));
+        assertThat(googleResourceId.getGid(), Is.is("p"));
 
 
+    }
+
+    @Test
+    public void detectPresentationSheetsURLToPng() {
+        String url = "https://docs.google.com/presentation/d/1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk/edit#slide=id.p";
+
+        RegistryReaderGoogleDrive.GoogleResourceId googleResourceId = RegistryReaderGoogleDrive.getGoogleResourceId(url);
+        assertThat(googleResourceId.getId(), Is.is("1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk"));
+        assertThat(googleResourceId.getType(), Is.is("presentation"));
+        assertThat(googleResourceId.getGid(), Is.is("p"));
+
+
+    }
+
+    @Test
+    public void generateExportUrl() {
+        RegistryReaderGoogleDrive.GoogleResourceId gid
+                = new RegistryReaderGoogleDrive.GoogleResourceId(
+                "1kV0tVscrYO6WxZYRupnzjVQecmmky27Oc7YeePZjBXg",
+                "presentation",
+                null
+        );
+
+        IRI iri = RegistryReaderGoogleDrive.toExportIRI(gid, png);
+
+        assertThat(iri.getIRIString(), Is.is("https://docs.google.com/presentation/d/1kV0tVscrYO6WxZYRupnzjVQecmmky27Oc7YeePZjBXg/export/png?id=1kV0tVscrYO6WxZYRupnzjVQecmmky27Oc7YeePZjBXg"));
+    }
+
+    @Test
+    public void generateExportUrlSpecificSheet() {
+        RegistryReaderGoogleDrive.GoogleResourceId gid
+                = new RegistryReaderGoogleDrive.GoogleResourceId(
+                "1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk",
+                "presentation",
+                "g274abf48da0_0_10"
+        );
+
+        IRI iri = RegistryReaderGoogleDrive.toExportIRI(gid, png);
+
+        assertThat(iri.getIRIString(),
+                Is.is("https://docs.google.com/presentation/d/" +
+                        "1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk" +
+                        "/export/" +
+                        "png" +
+                        "?id=1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk" +
+                        "&pageid=g274abf48da0_0_10")
+        );
     }
 
     @Test
@@ -227,7 +276,7 @@ public class RegistryReaderGoogleDriveTest {
         assertThat(googleResourceId.getId(), Is.is("1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk"));
         assertThat(googleResourceId.getType(), Is.is("presentation"));
         assertThat(RegistryReaderGoogleDrive.toExportIRI(googleResourceId, RegistryReaderGoogleDrive.Type.txt).getIRIString(),
-                Is.is("https://docs.google.com/presentation/u/0/export?id=1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk&format=txt"));
+                Is.is("https://docs.google.com/presentation/d/1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk/export/txt?id=1VknOvxzuUVPKMOlo8wj7w9NOmyHf6P7YpN6eF1dMrlk"));
     }
 
 }

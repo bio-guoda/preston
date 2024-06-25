@@ -21,12 +21,15 @@ import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.csv;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.docx;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.epub;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.html;
+import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.jpg;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.odp;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.ods;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.odt;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.pdf;
+import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.png;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.pptx;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.rtf;
+import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.svg;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.tsv;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.txt;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.xlsx;
@@ -35,16 +38,21 @@ import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.zip;
 public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
 
     private static final Pattern GOOGLE_DRIVE_URL_PATTERN
-            = Pattern.compile("https://.*google.com/(?<type>[a-z]+)/d/(?<id>[a-zA-Z0-9-_]+)/{0,1}.*");
+            = Pattern.compile("https://.*google.com/(?<type>[a-z]+)/d/(?<id>[a-zA-Z0-9-_]+)/{0,1}.*(?<slideId>#slide=id[.][a-z0-9_]+){0,1}");
     private static final Pattern GID_PATTERN
             = Pattern.compile(".*gid=(?<gid>[0-9]+).*");
+    private static final Pattern SLIDE_PATTERN
+            = Pattern.compile(".*#slide=id[.](?<slideId>[a-z0-9_]+).*");
     private static final GoogleResourceId NOT_A_GOOGLE_RESOURCE_ID
             = new GoogleResourceId(null, null, null);
 
+    public static final String PRESENTATION = "presentation";
+    public static final String SPREADSHEETS = "spreadsheets";
+
     private static final TreeMap<String, List<Type>> TYPES_FOR_TYPES = new TreeMap<String, List<Type>>() {{
         put("document", Arrays.asList(pdf, docx, txt, odt, rtf, epub, html));
-        put("presentation", Arrays.asList(pdf, pptx, odp, txt, html));
-        put("spreadsheets", Arrays.asList(xlsx, ods, pdf, csv, tsv, zip));
+        put(PRESENTATION, Arrays.asList(pdf, pptx, odp, txt, html, png, jpg, svg));
+        put(SPREADSHEETS, Arrays.asList(xlsx, ods, pdf, csv, tsv, zip));
     }};
     public static final List<Type> TYPES_SINGLE_TABLE = Arrays.asList(Type.tsv, Type.csv);
 
@@ -90,6 +98,9 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         xlsx("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
         pptx("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
         epub("epub", "application/epub+zip"),
+        png("png", "image/png"),
+        jpg("jpg", "image/jpeg"),
+        svg("svg", "image/svg+xml"),
         odt("odt", "application/vnd.oasis.opendocument.text"),
         ods("ods", "application/vnd.oasis.opendocument.spreadsheet"),
         odp("odp", "application/vnd.oasis.opendocument.presentation"),
@@ -147,10 +158,15 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         Matcher matcher = GOOGLE_DRIVE_URL_PATTERN.matcher(url);
         if (matcher.matches()) {
             grid = new GoogleResourceId(matcher.group("id"), matcher.group("type"));
-            if (StringUtils.equals("spreadsheets", matcher.group("type"))) {
+            if (StringUtils.equals(SPREADSHEETS, matcher.group("type"))) {
                 Matcher matcher1 = GID_PATTERN.matcher(url);
                 if (matcher1.matches()) {
                     grid = new GoogleResourceId(matcher.group("id"), matcher.group("type"), matcher1.group("gid"));
+                }
+            } else if (StringUtils.equals(PRESENTATION, matcher.group("type"))) {
+                Matcher matcher1 = SLIDE_PATTERN.matcher(url);
+                if (matcher1.matches()) {
+                    grid = new GoogleResourceId(matcher.group("id"), matcher.group("type"), matcher1.group("slideId"));
                 }
             }
         }
@@ -180,16 +196,33 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         StringBuilder exportUrl = new StringBuilder();
         exportUrl.append("https://docs.google.com/");
         exportUrl.append(id.getType());
-        exportUrl.append("/u/0/export?id=");
-        exportUrl.append(id.getId());
-        if (StringUtils.isNotBlank(id.getGid())
-                && TYPES_SINGLE_TABLE.contains(type)) {
-            exportUrl.append("&gid=");
-            exportUrl.append(id.getGid());
-        }
-        exportUrl.append("&format=");
-        exportUrl.append(type.type);
+        if (PRESENTATION.equals(id.getType())) {
+            exportUrl.append("/d/");
+            exportUrl.append(id.getId());
+            exportUrl.append("/export/");
+            exportUrl.append(type.type);
 
+            exportUrl.append("?id=");
+            exportUrl.append(id.getId());
+
+            if (StringUtils.isNotBlank(id.getGid())
+                    && Arrays.asList(png, jpg, svg).contains(type)) {
+                exportUrl.append("&pageid=");
+                exportUrl.append(id.getGid());
+            }
+
+        } else {
+            exportUrl.append("/u/0/export?id=");
+            exportUrl.append(id.getId());
+            if (StringUtils.isNotBlank(id.getGid())
+                    && TYPES_SINGLE_TABLE.contains(type)) {
+                exportUrl.append("&gid=");
+                exportUrl.append(id.getGid());
+            }
+            exportUrl.append("&format=");
+            exportUrl.append(type.type);
+
+        }
         return RefNodeFactory.toIRI(exportUrl.toString());
     }
 
