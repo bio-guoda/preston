@@ -29,6 +29,35 @@ public class RegistryReaderGoogleDriveTest {
         assertExports("https://docs.google.com/document/d/1jzb54GbAkB_TOFIjWof5BW6gn1ujSnXXJQu6aZgFAB4");
     }
 
+    @Test
+    public void handleVersionForGoogleResourceBareUrlSpreadsheet() {
+        List<Quad> statements = new ArrayList<>();
+        RegistryReaderGoogleDrive registryReaderGoogleDrive = new RegistryReaderGoogleDrive(new KeyValueStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                throw new IOException("kaboom!");
+            }
+        }, new StatementsListenerAdapter() {
+
+            @Override
+            public void on(Quad statement) {
+                statements.add(statement);
+            }
+        });
+
+        registryReaderGoogleDrive.on(
+                RefNodeFactory.toStatement(
+                        RefNodeFactory.toIRI("https://docs.google.com/spreadsheets/d/1wFuJ4RRlNirnrPfuY_d57I9_pnaNibw4nltNTkruSp0/edit?gid=1784126572#gid=1784126572"),
+                        RefNodeConstants.HAS_VERSION,
+                        RefNodeFactory.toIRI("foo:bar"))
+        );
+
+        assertThat(statements.size(), Is.is(18));
+
+        Quad quad = statements.get(statements.size() - 1);
+        assertThat(quad.getSubject(), Is.is(RefNodeFactory.toIRI("https://docs.google.com/spreadsheets/u/0/export?id=1wFuJ4RRlNirnrPfuY_d57I9_pnaNibw4nltNTkruSp0&format=zip")));
+    }
+
     private void assertExports(String urlString) {
         List<Quad> statements = new ArrayList<>();
         RegistryReaderGoogleDrive registryReaderGoogleDrive = new RegistryReaderGoogleDrive(new KeyValueStoreReadOnly() {

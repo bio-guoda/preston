@@ -20,16 +20,17 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.csv;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.docx;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.epub;
+import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.html;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.odp;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.ods;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.odt;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.pdf;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.pptx;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.rtf;
-import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.html;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.tsv;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.txt;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.xlsx;
+import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.zip;
 
 public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
 
@@ -43,7 +44,7 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
     private static final TreeMap<String, List<Type>> TYPES_FOR_TYPES = new TreeMap<String, List<Type>>() {{
         put("document", Arrays.asList(pdf, docx, txt, odt, rtf, epub, html));
         put("presentation", Arrays.asList(pdf, pptx, odp, txt, html));
-        put("spreadsheets", Arrays.asList(xlsx, ods, pdf, csv, tsv, html));
+        put("spreadsheets", Arrays.asList(xlsx, ods, pdf, csv, tsv, zip));
     }};
 
     public RegistryReaderGoogleDrive(KeyValueStoreReadOnly blobStoreReadOnly, StatementsListener... listeners) {
@@ -81,6 +82,7 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         txt("txt", "text/plain"),
         csv("csv", "text/csv"),
         tsv("tsv", "text/tab-separated-values"),
+        zip("zip", "application/zip"),
         html("html", "application/zip"),
         pdf("pdf", "application/pdf"),
         docx("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
@@ -179,7 +181,8 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         exportUrl.append(id.getType());
         exportUrl.append("/u/0/export?id=");
         exportUrl.append(id.getId());
-        if (StringUtils.isNotBlank(id.getGid())) {
+        if (StringUtils.isNotBlank(id.getGid())
+                && Arrays.asList(Type.tsv, Type.csv).contains(type.type)) {
             exportUrl.append("&gid=");
             exportUrl.append(id.getGid());
         }
