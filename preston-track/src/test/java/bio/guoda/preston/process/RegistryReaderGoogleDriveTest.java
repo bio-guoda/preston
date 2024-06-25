@@ -176,6 +176,8 @@ public class RegistryReaderGoogleDriveTest {
         assertThat(googleResourceId.getId(), Is.is("1wFuJ4RRlNirnrPfuY_d57I9_pnaNibw4nltNTkruSp0"));
         assertThat(googleResourceId.getType(), Is.is("spreadsheets"));
         assertThat(googleResourceId.getGid(), Is.is("1784126572"));
+        assertThat(RegistryReaderGoogleDrive.toExportIRI(googleResourceId, RegistryReaderGoogleDrive.Type.tsv).getIRIString(),
+                Is.is("https://docs.google.com/spreadsheets/u/0/export?id=1wFuJ4RRlNirnrPfuY_d57I9_pnaNibw4nltNTkruSp0&gid=1784126572&format=tsv"));
     }
 
     @Test
