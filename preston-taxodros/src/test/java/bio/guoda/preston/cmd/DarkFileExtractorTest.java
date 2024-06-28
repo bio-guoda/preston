@@ -108,7 +108,7 @@ public class DarkFileExtractorTest {
 
 
     private void assertDescription(JsonNode taxonNode) {
-        assertThat(taxonNode.get("description").asText(), is("Uploaded by Plazi for TaxoDros. We do not have abstracts."));
+        assertThat(taxonNode.get("description").asText(), is("Uploaded by Plazi for the Museum für Naturkunde Berlin."));
     }
 
     private JsonNode unwrapMetadata(String jsonObject) throws JsonProcessingException {

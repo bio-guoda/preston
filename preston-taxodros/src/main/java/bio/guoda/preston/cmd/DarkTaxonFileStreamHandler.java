@@ -177,7 +177,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
     }
 
     private void writeRecord(AtomicBoolean foundAtLeastOne, ObjectNode objectNode) throws IOException {
-        objectNode.put("description", "Uploaded by Plazi for Museum für Naturkunde Berlin.");
+        objectNode.put("description", "Uploaded by Plazi for the Museum für Naturkunde Berlin.");
         ObjectNode metadata = new ObjectMapper().createObjectNode();
         metadata.set("metadata", objectNode);
         IOUtils.copy(IOUtils.toInputStream(metadata.toString(), StandardCharsets.UTF_8), outputStream);
