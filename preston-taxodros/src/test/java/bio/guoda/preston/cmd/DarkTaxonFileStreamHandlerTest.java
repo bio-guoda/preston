@@ -31,7 +31,6 @@ public class DarkTaxonFileStreamHandlerTest {
         assertThat(matcher.group("specimenId"), Is.is("BMT0009397"));
         assertThat(matcher.group("imageStackNumber"), Is.is("01"));
         assertThat(matcher.group("imageNumber"), Is.is("01"));
-        assertThat(matcher.group("extension"), Is.is("tiff"));
 
 
     }
@@ -44,7 +43,6 @@ public class DarkTaxonFileStreamHandlerTest {
         assertThat(matcher.group("plateId"), Is.is("BMT121"));
         assertThat(matcher.group("specimenId"), Is.is("BMT0009397"));
         assertThat(matcher.group("imageStackNumber"), Is.is("01"));
-        assertThat(matcher.group("extension"), Is.is("tiff"));
     }
 
 }

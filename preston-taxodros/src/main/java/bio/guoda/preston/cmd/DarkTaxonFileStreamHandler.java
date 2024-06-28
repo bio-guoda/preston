@@ -207,9 +207,9 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
         String value = "line:" + iriString + "!/L" + lineStart + suffix;
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, value);
         ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, "https://linker.bio/" + value);
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, TAXODROS_DATA_DOI);
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, "https://www.taxodros.uzh.ch");
-        ZenodoMetaUtil.append(objectNode, ZenodoMetaUtil.REFERENCES, "Bächli, G. (2024). TaxoDros - The Database on Taxonomy of Drosophilidae " + TAXODROS_DATA_VERSION_MD5 + " " + TAXODROS_DATA_VERSION_SHA256 + " [Data set]. Zenodo. " + "https://doi.org/" + TAXODROS_DATA_DOI);
+        ZenodoMetaUtil.append(objectNode, ZenodoMetaUtil.REFERENCES, "Hartop E, Srivathsan A, Ronquist F, Meier R (2022) Towards Large-Scale Integrative Taxonomy (LIT): resolving the data conundrum for dark taxa. Syst Biol 71:1404–1422. https://doi.org/10.1093/sysbio/syac033 " +
+                "\n" +
+                "Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14");
 
     }
 
