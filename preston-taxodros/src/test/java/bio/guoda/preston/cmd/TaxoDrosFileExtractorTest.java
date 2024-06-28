@@ -240,7 +240,7 @@ public class TaxoDrosFileExtractorTest {
     @Test
     public void parseJournalInfoWithNumber() {
         ObjectNode ref = new ObjectMapper().createObjectNode();
-        TaxoDrosFileStreamHandler.enrichWithJournalInfo(ref, "32(1981):107");
+        DarkTaxonFileStreamHandler.enrichWithJournalInfo(ref, "32(1981):107");
 
         assertThat(ref.get("journal_pages").asText(), is("107"));
         assertThat(ref.get("journal_volume").asText(), is("32"));
@@ -250,7 +250,7 @@ public class TaxoDrosFileExtractorTest {
     @Test
     public void parseJournalInfo2() {
         ObjectNode ref = new ObjectMapper().createObjectNode();
-        TaxoDrosFileStreamHandler.enrichWithJournalInfo(ref, "32:107");
+        DarkTaxonFileStreamHandler.enrichWithJournalInfo(ref, "32:107");
 
         assertThat(ref.get("journal_pages").asText(), is("107"));
         assertThat(ref.get("journal_volume").asText(), is("32"));
@@ -259,7 +259,7 @@ public class TaxoDrosFileExtractorTest {
     @Test
     public void parseJournalInfo3() {
         ObjectNode ref = new ObjectMapper().createObjectNode();
-        TaxoDrosFileStreamHandler.enrichWithJournalInfo(ref, "35:351-362.");
+        DarkTaxonFileStreamHandler.enrichWithJournalInfo(ref, "35:351-362.");
 
         assertThat(ref.get("journal_pages").asText(), is("351-362"));
         assertThat(ref.get("journal_volume").asText(), is("35"));

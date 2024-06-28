@@ -10,6 +10,7 @@ import bio.guoda.preston.cmd.CmdBash;
 import bio.guoda.preston.cmd.CmdCite;
 import bio.guoda.preston.cmd.CmdClone;
 import bio.guoda.preston.cmd.CmdCopyTo;
+import bio.guoda.preston.cmd.CmdDarkTaxonStream;
 import bio.guoda.preston.cmd.CmdDwcRecordStream;
 import bio.guoda.preston.cmd.CmdGenBankStream;
 import bio.guoda.preston.cmd.CmdGenerateQRCode;
@@ -72,6 +73,7 @@ import static java.lang.System.exit;
                 CmdZoteroStream.class,
                 CmdGenBankStream.class,
                 CmdTaxoDrosStream.class,
+                CmdDarkTaxonStream.class,
                 CmdMBDStream.class,
                 CmdGitHubStream.class,
                 CmdTaxonWorksStream.class,
