@@ -44,7 +44,7 @@ public class CmdZoteroStream extends LoggingPersisting implements Runnable {
                 NullPrintStream.INSTANCE,
                 LogErrorHandlerExitOnError.EXIT_ON_ERROR);
 
-        ZoteroFileExtractor textMatcher = new ZoteroFileExtractor(
+        StatementsListener textMatcher = new ZoteroFileExtractor(
                 this,
                 blobStoreReadOnly,
                 getOutputStream(),
