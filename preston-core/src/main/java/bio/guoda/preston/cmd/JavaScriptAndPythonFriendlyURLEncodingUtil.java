@@ -1,5 +1,7 @@
 package bio.guoda.preston.cmd;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -9,7 +11,8 @@ public final class JavaScriptAndPythonFriendlyURLEncodingUtil {
         try {
             ScriptEngineManager manager = new ScriptEngineManager();
             ScriptEngine engine = manager.getEngineByName("JavaScript");
-            return  (String) engine.eval("encodeURIComponent('" + str + "')");
+            String quoteEscaped = StringUtils.replace(str, "'", "&quot;");
+            return  (String) engine.eval("encodeURIComponent('" + quoteEscaped + "')");
         } catch (ScriptException e) {
             return str;
         }

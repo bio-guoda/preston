@@ -4,6 +4,7 @@ import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
 
 public class JavaScriptAndPythonFriendlyURLEncodingUtilTest {
 
@@ -31,6 +32,20 @@ public class JavaScriptAndPythonFriendlyURLEncodingUtilTest {
         assertThat(
                 JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(unreservedCharacters),
                 Is.is(unreservedCharacters)
+        );
+    }
+
+    @Test
+    public void handleSingleQuote() {
+        String filename = "O'Leary et al. - 2013 - The Placental Mammal Ancestor and the Post–K-Pg Ra.pdf";
+        String encoded = JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename);
+        assertThat(
+                encoded,
+                not(Is.is(filename))
+        );
+        assertThat(
+                encoded,
+                Is.is("O%26quot%3BLeary%20et%20al.%20-%202013%20-%20The%20Placental%20Mammal%20Ancestor%20and%20the%20Post%E2%80%93K-Pg%20Ra.pdf")
         );
     }
 
