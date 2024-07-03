@@ -15,6 +15,7 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 
@@ -171,6 +172,15 @@ public class VersionUtilTest {
         assertThat(iri.getIRIString(), is(getNewer()));
 
     }
+
+    @Test
+    public void getMostVersionWithMalformedStatement() throws IOException {
+
+        IRI mostRecentVersion = VersionUtil.mostRecentVersion("<https://archive.org/download/studyofleaves00denn/studyofleaves00denn_djvu.txt> <http://purl.org/pav/hasVersion> <hash://sha256/8aaed7911f9fc<urn:uuid:cec9d97d-d0d0-47d3-8367-dfbb41e31ecf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Generation> <urn:uuid:cec9d97d-d0d0-47d3-8367-dfbb41e31ecf> .");
+
+        assertThat(mostRecentVersion, is(nullValue()));
+    }
+
 
     @Test
     public void newerVersionStatementDerivedFrom() {
