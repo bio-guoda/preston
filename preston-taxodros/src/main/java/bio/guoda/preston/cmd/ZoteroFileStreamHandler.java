@@ -223,6 +223,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                 ZenodoMetaUtil.addKeyword(objectNode, "Chordata");
                 ZenodoMetaUtil.addKeyword(objectNode, "Animalia");
                 ZenodoMetaUtil.addKeyword(objectNode, "bats");
+                ZenodoMetaUtil.addKeyword(objectNode, "bat");
 
                 ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_KINGDOM, "Animalia");
                 ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_PHYLUM, "Chordata");
