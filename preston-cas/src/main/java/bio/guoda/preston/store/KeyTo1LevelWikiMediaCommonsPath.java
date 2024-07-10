@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +21,7 @@ public class KeyTo1LevelWikiMediaCommonsPath implements KeyToPath {
 
     public static final String WIKIMEDIA_COMMONS_ENDPOINT = "https://commons.wikimedia.org/w/api.php?action=query&list=allimages&format=json&aisha1=";
     private final URI baseURI;
+    private static final Logger LOG = LoggerFactory.getLogger(KeyTo1LevelWikiMediaCommonsPath.class);
     private final Dereferencer<InputStream> deref;
 
     public KeyTo1LevelWikiMediaCommonsPath(URI baseURI, Dereferencer<InputStream> deref) {
@@ -44,15 +47,18 @@ public class KeyTo1LevelWikiMediaCommonsPath implements KeyToPath {
                 ? URI.create(path)
                 : HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
 
-        return resolveFirstCandidateURI(query);
-    }
+        try {
+            return resolveFirstCandidateURI(query);
+        } catch (IOException | URISyntaxException e) {
+            LOG.warn("failed to lookup [" + key.getIRIString() + "]", e);
+            return null;
+        }
+    };
 
-    private URI resolveFirstCandidateURI(URI query) {
+    private URI resolveFirstCandidateURI(URI query) throws IOException, URISyntaxException {
         try (InputStream inputStream = deref.get(RefNodeFactory.toIRI(query))) {
             List<URI> uris = parseResponse(inputStream);
             return (uris != null && uris.size() > 0) ? uris.get(0) : null;
-        } catch (IOException | URISyntaxException e) {
-            return null;
         }
     }
 
