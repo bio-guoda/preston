@@ -9,6 +9,7 @@ import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 public class RegistryReaderGitHubIssuesTest {
 
@@ -139,6 +141,26 @@ public class RegistryReaderGitHubIssuesTest {
                 toIRI("http://something")));
 
         assertThat(nodes.size(), is(0));
+    }
+
+    @Test
+    public void onProcessOnceGithubAttachmentsOnly() throws IOException {
+        InputStream resourceAsStream = getClass().getResourceAsStream("/bio/guoda/preston/process/github/293_issue_comments.json");
+        assertNotNull(resourceAsStream);
+        JsonNode jsonNode = new ObjectMapper().readTree(resourceAsStream);
+        List<Pair<URI, URI>> uris = new ArrayList<>();
+        RegistryReaderGitHubIssues.appendURIs(jsonNode, uris);
+        assertThat(uris,
+                containsInAnyOrder(
+                        Pair.of(
+                                URI.create("https://github.com/bio-guoda/preston/assets/1084872/49bec286-8df8-464e-94f1-2fe86445a8b0"),
+                                URI.create("https://api.github.com/repos/bio-guoda/preston/issues/comments/2220967907")),
+                        Pair.of(
+                                URI.create("https://github.com/bio-guoda/preston/assets/1084872/b4be13d4-4e3a-46fd-bbe6-eb998cb0ef99"),
+                                URI.create("https://api.github.com/repos/bio-guoda/preston/issues/comments/2220987009"))
+                ));
+
+
     }
 
     @Test

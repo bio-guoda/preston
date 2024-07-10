@@ -54,6 +54,7 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
     private static final String MOST_RECENT_ISSUE_QUERY = "/issues?per_page=1&state=all";
     private static final String API_PREFIX = "https://api.github.com/repos/";
     public static final String COMMENTS_REQUEST_SUFFIX = "/comments?per_page=100";
+    public static final Pattern PATTERN_GITHUB_ASSET_URL = Pattern.compile("https://github.com/.*/(assets|files)/.*");
 
     private Map<IRI, IRI> processedIRIs = new LRUMap<>(4096);
 
@@ -277,7 +278,10 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
             document.accept(new AbstractVisitor() {
                 @Override
                 public void visit(Link link) {
-                    appendDestination(link.getDestination(), url, referencesInIssueComment);
+                    String destination = link.getDestination();
+                    if (PATTERN_GITHUB_ASSET_URL.matcher(destination).matches()) {
+                        appendDestination(destination, url, referencesInIssueComment);
+                    }
                     super.visit(link);
                 }
 
