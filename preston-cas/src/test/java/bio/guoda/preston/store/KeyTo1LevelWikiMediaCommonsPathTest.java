@@ -41,7 +41,7 @@ public class KeyTo1LevelWikiMediaCommonsPathTest {
     public void toPath2() {
         IRI hash = RefNodeFactory.toIRI("hash://sha1/86fa30f32d9c557ea5d2a768e9c3595d3abb17a2");
 
-        URI actualPath = new KeyTo1LevelWikiMediaCommonsPath(URI.create("https://wikimedia.org"), getDeref())
+        URI actualPath = new KeyTo1LevelWikiMediaCommonsPath(URI.create("https://wikimedia.org"), getDeref2())
                 .toPath(hash);
         assertThat(actualPath.toString(),
                 Is.is("https://upload.wikimedia.org/wikipedia/commons/1/1f/Oryctolagus_cuniculus_Rcdo.jpg"));
