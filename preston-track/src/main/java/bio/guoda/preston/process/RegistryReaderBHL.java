@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +27,7 @@ import static bio.guoda.preston.RefNodeConstants.IS_A;
 import static bio.guoda.preston.RefNodeConstants.ORGANIZATION;
 import static bio.guoda.preston.RefNodeConstants.SEE_ALSO;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
 import static bio.guoda.preston.RefNodeFactory.getVersion;
 import static bio.guoda.preston.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
@@ -93,26 +95,33 @@ public class RegistryReaderBHL extends ProcessorReadOnly {
 
     private static void handleBarCodes(BufferedReader bufferedReader, int barCodeIndex, StatementsEmitter emitter, IRI versionSource) throws IOException {
         String line;
+        long lineNumber = 1;
         while ((line = bufferedReader.readLine()) != null) {
+            lineNumber++;
             String[] values = StringUtils.split(line, '\t');
             if (barCodeIndex < values.length - 1) {
                 String barCode = StringUtils.trim(values[barCodeIndex]);
                 if (StringUtils.isNotBlank(barCode)) {
-                    submit(emitter, versionSource, barCode, ".txt", MimeTypes.TEXT_UTF8);
-                    // submit(emitter, versionSource, barCode, ".xml", MimeTypes.XML);
+                    Stream.of(
+                            toStatement(toIRI(barCode),
+                                    WAS_DERIVED_FROM,
+                                    RefNodeFactory.toIRI("line:" + versionSource.getIRIString() + "!/L" + lineNumber)))
+
+                            .forEach(emitter::emit);
+                    submit(emitter, barCode, "_meta.xml", MimeTypes.XML);
+                    submit(emitter, barCode, "_djvu.txt", MimeTypes.TEXT_UTF8);
                 }
             }
 
         }
     }
 
-    private static void submit(StatementsEmitter emitter, IRI versionSource, String barCode, String ext, String fileFormat) {
-        IRI ocrText = toIRI("https://archive.org/download/" + barCode + "/" + barCode + "_djvu" + ext);
+    private static void submit(StatementsEmitter emitter, String barCode, String ext, String fileFormat) {
+        IRI resource = toIRI("https://archive.org/download/" + barCode + "/" + barCode + ext);
         Stream.of(
-                toStatement(versionSource, HAD_MEMBER, toIRI(barCode)),
-                toStatement(toIRI(barCode), SEE_ALSO, ocrText),
-                toStatement(ocrText, HAS_FORMAT, toContentType(fileFormat)),
-                toStatement(ocrText, HAS_VERSION, toBlank()))
+                toStatement(toIRI(barCode), SEE_ALSO, resource),
+                toStatement(resource, HAS_FORMAT, toContentType(fileFormat)),
+                toStatement(resource, HAS_VERSION, toBlank()))
                 .forEach(emitter::emit);
     }
 
