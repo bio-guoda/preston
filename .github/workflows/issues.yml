@@ -21,7 +21,7 @@ jobs:
         distribution: 'temurin' 
         java-version: '8'   
     - name: Download Preston
-      run: curl -L https://github.com/bio-guoda/preston/releases/download/0.8.5/preston.deb > preston.deb
+      run: curl -L https://github.com/bio-guoda/preston/releases/download/0.8.6/preston.deb > preston.deb
     - name: Install Preston
       run: sudo apt -y install ./preston.deb 
     - name: Track Issues
