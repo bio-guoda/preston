@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class ZenodoMetaUtil {
@@ -116,10 +118,19 @@ public class ZenodoMetaUtil {
     }
 
     public static void setPublicationDate(ObjectNode objectNode, String publicationYear) {
-        if (publicationYear.startsWith("2")) {
+        Pattern compile = Pattern.compile(".*(?<year>[12][0-9]{3}).*");
+        Matcher matcher = compile.matcher(publicationYear);
+
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("cannot parse publication year [" + publicationYear + "]");
+        }
+
+        String year = matcher.group("year");
+        if (StringUtils.startsWith(year, "2")) {
             setRestricted(objectNode);
         }
-        setValue(objectNode, PUBLICATION_DATE, publicationYear);
+
+        setValue(objectNode, PUBLICATION_DATE, year);
     }
 
     private static void setRestricted(ObjectNode objectNode) {

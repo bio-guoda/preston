@@ -60,12 +60,23 @@ public class TaxoDrosFileExtractorTest {
     }
 
     @Test
+    public void streamTaxoDrosToLineJsonYear() throws IOException {
+        String[] jsonObjects = getResource("DROS5.TEXT.year.txt");
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+
+        assertThat(taxonNode.has("doi"), is(true));
+        assertThat(taxonNode.get("doi").textValue(), is("10.11646/zootaxa.4161.2.4"));
+        assertThat(taxonNode.get("publication_date").textValue(), is("2016"));
+    }
+
+    @Test
     public void streamTaxoDrosToLineJsonAuthorsWithAmpersand() throws IOException {
         String[] jsonObjects = getResource("DROS5.TEXT.authors.ampersand.txt");
         assertThat(jsonObjects.length, is(1));
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
-
 
         assertThat(taxonNode.has("doi"), is(true));
         assertThat(taxonNode.get("doi").textValue(), is("10.1016/j.tpb.2006.05.001"));
