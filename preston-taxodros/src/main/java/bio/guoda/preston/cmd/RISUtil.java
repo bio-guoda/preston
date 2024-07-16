@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,15 +70,12 @@ public class RISUtil {
         }
     }
 
-    public static ObjectNode translateRISToZenodo(JsonNode jsonNode) {
+    public static ObjectNode translateRISToZenodo(JsonNode jsonNode, List<String> communities) {
         ObjectNode metadata = new ObjectMapper().createObjectNode();
         ArrayNode relatedIdentifiers = new ObjectMapper().createArrayNode();
         metadata.put("description", "(Uploaded by Plazi from the Biodiversity Heritage Library) No abstract provided.");
-        metadata.set("communities",
-                new ObjectMapper()
-                        .createArrayNode()
-                        .add(new ObjectMapper().createObjectNode().put("identifier", "biosyslit"))
-        );
+
+        ZenodoMetaUtil.setCommunities(metadata, communities.stream());
         if (jsonNode.has(RefNodeConstants.WAS_DERIVED_FROM.getIRIString())) {
             String recordLocation = jsonNode.get(RefNodeConstants.WAS_DERIVED_FROM.getIRIString()).asText();
             String actionableLocation = StreamHandlerUtil.makeActionable(recordLocation);

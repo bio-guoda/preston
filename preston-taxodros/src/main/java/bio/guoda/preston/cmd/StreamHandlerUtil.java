@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
@@ -32,21 +33,23 @@ public class StreamHandlerUtil {
         return "https://linker.bio/" + providedContentId;
     }
 
-    public static void appendContentId(ObjectNode objectNode, String zoteroAttachmentDownloadUrl, HashType hashType, Dereferencer<InputStream> dereferencer, Persisting persisting) throws ContentStreamException {
-        try {
-            IRI downloadIRI = RefNodeFactory.toIRI(zoteroAttachmentDownloadUrl);
-            InputStream attachementInputStream = ContentQueryUtil.getContent(dereferencer, downloadIRI, persisting);
-            if (attachementInputStream == null) {
-                throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]");
+    public static void appendContentId(ObjectNode objectNode, String downloadUrl, HashType hashType, Dereferencer<InputStream> dereferencer, Persisting persisting) throws ContentStreamException {
+        if (StringUtils.isNotBlank(downloadUrl)) {
+            try {
+                IRI downloadIRI = RefNodeFactory.toIRI(downloadUrl);
+                InputStream attachementInputStream = ContentQueryUtil.getContent(dereferencer, downloadIRI, persisting);
+                if (attachementInputStream == null) {
+                    throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + downloadUrl + "]");
+                }
+                IRI contentId = Hasher.calcHashIRI(
+                        attachementInputStream,
+                        NullOutputStream.INSTANCE,
+                        hashType
+                );
+                ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.HAS_VERSION, makeActionable(contentId.getIRIString()));
+            } catch (IOException e) {
+                throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + downloadUrl + "]", e);
             }
-            IRI contentId = Hasher.calcHashIRI(
-                    attachementInputStream,
-                    NullOutputStream.INSTANCE,
-                    hashType
-            );
-            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.HAS_VERSION, makeActionable(contentId.getIRIString()));
-        } catch (IOException e) {
-            throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]", e);
         }
     }
 }

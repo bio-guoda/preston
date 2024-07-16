@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -28,7 +29,7 @@ public class RISUtilTest {
         Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
             @Override
             public void accept(ObjectNode jsonNode) {
-                jsonObjects.add(translateRISToZenodo(jsonNode));
+                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("community-foo")));
             }
         };
 
@@ -48,7 +49,7 @@ public class RISUtilTest {
         JsonNode communities = taxonNode.get("communities");
         assertThat(communities.isArray(), is(true));
         assertThat(communities.size(), is(1));
-        assertThat(communities.get(0).get("identifier").asText(), is("biosyslit"));
+        assertThat(communities.get(0).get("identifier").asText(), is("community-foo"));
 
 
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("https://linker.bio/line:foo:bar!/L23-L44"));
@@ -106,7 +107,7 @@ public class RISUtilTest {
         Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
             @Override
             public void accept(ObjectNode jsonNode) {
-                jsonObjects.add(translateRISToZenodo(jsonNode));
+                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
             }
         };
 
@@ -128,7 +129,7 @@ public class RISUtilTest {
         Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
             @Override
             public void accept(ObjectNode jsonNode) {
-                jsonObjects.add(translateRISToZenodo(jsonNode));
+                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("community-foo")));
             }
         };
 

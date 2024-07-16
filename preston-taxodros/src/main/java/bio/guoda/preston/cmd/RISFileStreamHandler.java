@@ -49,15 +49,16 @@ public class RISFileStreamHandler implements ContentStreamHandler {
                 @Override
                 public void accept(ObjectNode jsonNode) {
                     try {
-                        ObjectNode zenodoObject = RISUtil.translateRISToZenodo(jsonNode);
+                        ObjectNode zenodoObject = RISUtil.translateRISToZenodo(jsonNode, communities);
 
                         Stream.of(HashType.md5, HashType.sha256)
                                 .forEach(type ->
                                 {
                                     try {
+                                        String bhlPartPDFUrl = RISUtil.getBHLPartPDFUrl(zenodoObject);
                                         StreamHandlerUtil.appendContentId(
                                                 zenodoObject,
-                                                RISUtil.getBHLPartPDFUrl(zenodoObject),
+                                                bhlPartPDFUrl,
                                                 type,
                                                 dereferencer,
                                                 persisting);
