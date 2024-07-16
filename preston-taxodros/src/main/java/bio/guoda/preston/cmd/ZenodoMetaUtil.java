@@ -52,6 +52,7 @@ public class ZenodoMetaUtil {
     public static final String PARTOF_TITLE = "partof_title";
     static final String KEYWORDS = "keywords";
     static final String CUSTOM = "custom";
+    public static final Pattern YEAR_PATTERN = Pattern.compile(".*(?<year>[12][0-9]{3}).*");
 
     public static void setCommunities(ObjectNode objectNode, Stream<String> communities) {
         ArrayNode communitiesArray = communities
@@ -118,8 +119,7 @@ public class ZenodoMetaUtil {
     }
 
     public static void setPublicationDate(ObjectNode objectNode, String publicationYear) {
-        Pattern compile = Pattern.compile(".*(?<year>[12][0-9]{3}).*");
-        Matcher matcher = compile.matcher(publicationYear);
+        Matcher matcher = YEAR_PATTERN.matcher(publicationYear);
 
         if (!matcher.matches()) {
             throw new IllegalArgumentException("cannot parse publication year [" + publicationYear + "]");
