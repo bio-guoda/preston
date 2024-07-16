@@ -51,7 +51,7 @@ public class RISUtilTest {
         assertThat(communities.get(0).get("identifier").asText(), is("biosyslit"));
 
 
-        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:foo:bar!/L23-L44"));
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("https://linker.bio/line:foo:bar!/L23-L44"));
         assertThat(taxonNode.get(TYPE).asText(), is("application/x-research-info-systems"));
         assertThat(taxonNode.get("referenceId").asText(), is("https://www.biodiversitylibrary.org/part/337600"));
 
@@ -80,15 +80,15 @@ public class RISUtilTest {
         JsonNode identifiers = taxonNode.at("/related_identifiers");
         assertThat(identifiers.size(), is(4));
         // provided by Zoteros
-        assertThat(identifiers.get(0).get("relation").asText(), is("wasDerivedFrom"));
-        assertThat(identifiers.get(0).get("identifier").asText(), is("line:foo:bar!/L23-L44"));
+        assertThat(identifiers.get(0).get("relation").asText(), is("isDerivedFrom"));
+        assertThat(identifiers.get(0).get("identifier").asText(), is("https://linker.bio/line:foo:bar!/L23-L44"));
         assertThat(identifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(1).get("identifier").asText(), is("10.3897/subtbiol.43.85804"));
 
         // calculated on the fly
-        assertThat(identifiers.get(2).get("relation").asText(), is("wasDerivedFrom"));
+        assertThat(identifiers.get(2).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(2).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/337600"));
-        assertThat(identifiers.get(3).get("relation").asText(), is("wasDerivedFrom"));
+        assertThat(identifiers.get(3).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(3).get("identifier").asText(), is("https://www.biodiversitylibrary.org/partpdf/337600"));
         assertThat(identifiers.get(3).has("resource_type"), is(false));
     }
