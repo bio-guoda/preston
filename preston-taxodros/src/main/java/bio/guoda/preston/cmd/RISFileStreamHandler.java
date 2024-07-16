@@ -69,7 +69,7 @@ public class RISFileStreamHandler implements ContentStreamHandler {
 
                         StreamHandlerUtil.writeRecord(foundAtLeastOne, zenodoObject, outputStream);
                     } catch (IOException e) {
-                        //
+                        e.printStackTrace();
                     }
                 }
             }, iriString);

@@ -142,6 +142,8 @@ public class RISUtil {
             ArrayNode creators = new ObjectMapper().createArrayNode();
             if (authors.isArray()) {
                 authors.forEach(value -> creators.add(new ObjectMapper().createObjectNode().put("name", value.asText())));
+            } else {
+                creators.add(authors.asText());
             }
             metadata.set("creators", creators);
         }

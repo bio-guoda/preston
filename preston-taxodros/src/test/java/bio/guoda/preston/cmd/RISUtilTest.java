@@ -122,6 +122,30 @@ public class RISUtilTest {
     }
 
     @Test
+    public void streamSinglePart3743() throws IOException {
+
+        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+
+        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
+            @Override
+            public void accept(ObjectNode jsonNode) {
+                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
+            }
+        };
+
+        InputStream recordStream = getClass().getResourceAsStream("ris/bhlpart-3743.ris");
+
+        assertNotNull(recordStream);
+
+        parseRIS(recordStream, listener, "foo:bar");
+
+
+        assertThat(jsonObjects.size(), is(1));
+        assertThat(jsonObjects.get(0).get("creators").size(), is(1));
+        assertThat(jsonObjects.get(0).get("creators").get(0).asText(), is("Pictet, Camille"));
+    }
+
+    @Test
     public void streamPartialRIS() throws IOException {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
