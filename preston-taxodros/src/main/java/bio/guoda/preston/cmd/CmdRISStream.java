@@ -11,15 +11,15 @@ import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 @CommandLine.Command(
-        name = "zotero-stream",
-        description = "Stream Zotero records into line-json with Zenodo metadata"
+        name = "ris-stream",
+        hidden = true,
+        description = "Stream RIS records into line-json with Zenodo metadata"
 )
-public class CmdZoteroStream extends LoggingPersisting implements Runnable {
+public class CmdRISStream extends LoggingPersisting implements Runnable {
 
     @CommandLine.Option(
             names = {"--community", "--communities"},
@@ -44,7 +44,7 @@ public class CmdZoteroStream extends LoggingPersisting implements Runnable {
                 NullPrintStream.INSTANCE,
                 LogErrorHandlerExitOnError.EXIT_ON_ERROR);
 
-        StatementsListener textMatcher = new ZoteroFileExtractor(
+        StatementsListener textMatcher = new RISFileExtractor(
                 this,
                 blobStoreReadOnly,
                 getOutputStream(),

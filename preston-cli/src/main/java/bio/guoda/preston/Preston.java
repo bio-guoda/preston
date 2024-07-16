@@ -25,6 +25,7 @@ import bio.guoda.preston.cmd.CmdList;
 import bio.guoda.preston.cmd.CmdMBDStream;
 import bio.guoda.preston.cmd.CmdMerge;
 import bio.guoda.preston.cmd.CmdPlazi;
+import bio.guoda.preston.cmd.CmdRISStream;
 import bio.guoda.preston.cmd.CmdSeeds;
 import bio.guoda.preston.cmd.CmdTaxoDrosStream;
 import bio.guoda.preston.cmd.CmdTaxonWorksStream;
@@ -71,6 +72,7 @@ import static java.lang.System.exit;
                 CmdPlazi.class,
                 CmdZenodo.class,
                 CmdZoteroStream.class,
+                CmdRISStream.class,
                 CmdGenBankStream.class,
                 CmdTaxoDrosStream.class,
                 CmdDarkTaxonStream.class,
