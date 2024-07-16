@@ -24,7 +24,7 @@ public class RISUtil {
     static final String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
 
-    public static void parseRIS(InputStream inputStream, Consumer<JsonNode> listener) throws IOException {
+    public static void parseRIS(InputStream inputStream, Consumer<ObjectNode> listener, String sourceIRIString) throws IOException {
         BufferedReader bufferedReader = IOUtils.toBufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 
         String line = null;
@@ -44,7 +44,7 @@ public class RISUtil {
                     recordStart = lineNumber;
                 } else if (record != null && recordStart > -1) {
                     if ("ER".equals(key)) {
-                        record.put(RefNodeConstants.WAS_DERIVED_FROM.getIRIString(), "line:foo:bar!/L" + recordStart + "-L" + lineNumber);
+                        record.put(RefNodeConstants.WAS_DERIVED_FROM.getIRIString(), "line:" + sourceIRIString + "!/L" + recordStart + "-L" + lineNumber);
                         record.put(TYPE, "application/x-research-info-systems");
                         listener.accept(record);
                         record = null;
@@ -81,8 +81,9 @@ public class RISUtil {
         );
         if (jsonNode.has(RefNodeConstants.WAS_DERIVED_FROM.getIRIString())) {
             String recordLocation = jsonNode.get(RefNodeConstants.WAS_DERIVED_FROM.getIRIString()).asText();
-            addDerivedFrom(relatedIdentifiers, recordLocation);
-            metadata.put(RefNodeConstants.WAS_DERIVED_FROM.getIRIString(), recordLocation);
+            String actionableLocation = StreamHandlerUtil.makeActionable(recordLocation);
+            addDerivedFrom(relatedIdentifiers, actionableLocation);
+            metadata.put(RefNodeConstants.WAS_DERIVED_FROM.getIRIString(), actionableLocation);
         }
 
         if (jsonNode.has(TYPE)) {
@@ -149,12 +150,11 @@ public class RISUtil {
         }
 
         metadata.set("related_identifiers", relatedIdentifiers);
-        zenodoObject.set("metadata", metadata);
-        return zenodoObject;
+        return metadata;
     }
 
     private static ArrayNode addDerivedFrom(ArrayNode relatedIdentifiers, String s) {
-        return addRelation(relatedIdentifiers, s, "wasDerivedFrom");
+        return addRelation(relatedIdentifiers, s, "isDerivedFrom");
     }
 
     private static ArrayNode addAlternateIdentifier(ArrayNode relatedIdentifiers, String s) {

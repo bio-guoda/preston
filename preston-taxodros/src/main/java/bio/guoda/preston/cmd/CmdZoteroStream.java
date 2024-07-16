@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @CommandLine.Command(
-        name = "zotero-stream",
-        description = "Stream Zotero records into line-json with Zenodo metadata"
+        name = "ris-stream",
+        description = "Stream RIS records into line-json with Zenodo metadata"
 )
 public class CmdZoteroStream extends LoggingPersisting implements Runnable {
 

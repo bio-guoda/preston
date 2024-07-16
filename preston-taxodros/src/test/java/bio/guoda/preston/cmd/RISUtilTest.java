@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -24,9 +25,9 @@ public class RISUtilTest {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
 
-        Consumer<JsonNode> listener = new Consumer<JsonNode>() {
+        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
             @Override
-            public void accept(JsonNode jsonNode) {
+            public void accept(ObjectNode jsonNode) {
                 jsonObjects.add(translateRISToZenodo(jsonNode));
             }
         };
@@ -35,13 +36,12 @@ public class RISUtilTest {
 
         assertNotNull(bibTex);
 
-        parseRIS(bibTex, listener);
+        parseRIS(bibTex, listener, "foo:bar");
 
 
         assertThat(jsonObjects.size(), is(5));
 
-        JsonNode rootNode = jsonObjects.get(1);
-        JsonNode taxonNode = rootNode.get("metadata");
+        JsonNode taxonNode = jsonObjects.get(1);
 
         assertThat(taxonNode.get("description").asText(), is("(Uploaded by Plazi from the Biodiversity Heritage Library) No abstract provided."));
 
@@ -98,9 +98,9 @@ public class RISUtilTest {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
 
-        Consumer<JsonNode> listener = new Consumer<JsonNode>() {
+        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
             @Override
-            public void accept(JsonNode jsonNode) {
+            public void accept(ObjectNode jsonNode) {
                 jsonObjects.add(translateRISToZenodo(jsonNode));
             }
         };
@@ -109,7 +109,7 @@ public class RISUtilTest {
 
         assertNotNull(bibTex);
 
-        parseRIS(bibTex, listener);
+        parseRIS(bibTex, listener, "foo:bar");
 
 
         assertThat(jsonObjects.size(), is(1));
@@ -120,9 +120,9 @@ public class RISUtilTest {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
 
-        Consumer<JsonNode> listener = new Consumer<JsonNode>() {
+        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
             @Override
-            public void accept(JsonNode jsonNode) {
+            public void accept(ObjectNode jsonNode) {
                 jsonObjects.add(translateRISToZenodo(jsonNode));
             }
         };
@@ -131,7 +131,7 @@ public class RISUtilTest {
 
         assertNotNull(bibTex);
 
-        parseRIS(bibTex, listener);
+        parseRIS(bibTex, listener, "foo:bar");
 
 
         assertThat(jsonObjects.size(), is(1));

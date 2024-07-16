@@ -11,7 +11,6 @@ import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -22,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -302,12 +300,8 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
 
     private void writeRecord(AtomicBoolean foundAtLeastOne, ObjectNode objectNode) throws IOException {
-        ObjectNode metadata = new ObjectMapper().createObjectNode();
-        metadata.set("metadata", objectNode);
-        IOUtils.copy(IOUtils.toInputStream(metadata.toString(), StandardCharsets.UTF_8), outputStream);
-        IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
-        objectNode.removeAll();
-        foundAtLeastOne.set(true);
+        OutputStream outputStream = this.outputStream;
+        StreamHandlerUtil.writeRecord(foundAtLeastOne, objectNode, outputStream);
     }
 
 
