@@ -44,7 +44,7 @@ public class RISExtractorTest {
                 ObjectNode zenodoObject = new ObjectMapper().createObjectNode();
                 ObjectNode metadata = new ObjectMapper().createObjectNode();
                 ArrayNode relatedIdentifiers = new ObjectMapper().createArrayNode();
-                metadata.put("description", "(Uploaded by Plazi from the Biodiversity Heritage Library)");
+                metadata.put("description", "(Uploaded by Plazi from the Biodiversity Heritage Library) No abstract provided.");
                 metadata.set("communities",
                         new ObjectMapper()
                                 .createArrayNode()
@@ -178,7 +178,7 @@ public class RISExtractorTest {
         JsonNode rootNode = jsonObjects.get(1);
         JsonNode taxonNode = rootNode.get("metadata");
 
-        assertThat(taxonNode.get("description").asText(), is("(Uploaded by Plazi from the Biodiversity Heritage Library)"));
+        assertThat(taxonNode.get("description").asText(), is("(Uploaded by Plazi from the Biodiversity Heritage Library) No abstract provided."));
 
         JsonNode communities = taxonNode.get("communities");
         assertThat(communities.isArray(), is(true));
