@@ -170,7 +170,7 @@ public class RISUtil {
     private static String getBHLPartLSID(ObjectNode metadata) {
         Matcher matcher = getBHLPartIdMatcher(metadata);
         return matcher.matches()
-                ? "urn:biodiversitylibrary.org:part:" + matcher.group("part")
+                ? "urn:lsid:biodiversitylibrary.org:part:" + matcher.group("part")
                 : null;
     }
 

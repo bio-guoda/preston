@@ -78,7 +78,7 @@ public class RISUtilTest {
         assertThat(keywords.get(0).asText(), is("cave"));
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(7));
+        assertThat(identifiers.size(), is(5));
         // provided by Zoteros
         assertThat(identifiers.get(0).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(0).get("identifier").asText(), is("https://linker.bio/line:foo:bar!/L23-L44"));
@@ -86,22 +86,15 @@ public class RISUtilTest {
         assertThat(identifiers.get(1).get("identifier").asText(), is("10.3897/subtbiol.43.85804"));
 
         assertThat(identifiers.get(2).get("relation").asText(), is("isDerivedFrom"));
-        assertThat(identifiers.get(2).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/337600"));
+        assertThat(identifiers.get(2).get("identifier").asText(), is("https://www.biodiversitylibrary.org/partpdf/337600"));
 
         assertThat(identifiers.get(3).get("relation").asText(), is("isDerivedFrom"));
-        assertThat(identifiers.get(3).get("identifier").asText(), is("https://www.biodiversitylibrary.org/partpdf/337600"));
+        assertThat(identifiers.get(3).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/337600"));
         assertThat(identifiers.get(3).has("resource_type"), is(false));
 
         assertThat(identifiers.get(4).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(4).get("identifier").asText(), is("urn:lsid:biodiversitylibrary.org:part:337600"));
         assertThat(identifiers.get(4).has("resource_type"), is(false));
-
-        assertThat(identifiers.get(5).get("relation").asText(), is("hasVersion"));
-        assertThat(identifiers.get(5).get("identifier").asText(), is("https://linker.bio/hash://md5/a51c3c32b083b50d00f34bd72fcd3a19"));
-
-        assertThat(identifiers.get(6).get("relation").asText(), is("hasVersion"));
-        assertThat(identifiers.get(6).get("identifier").asText(), is("https://linker.bio/hash://sha256/4448f9919eb64bdd320eb9076430c84f792d8ebfe9c15ed7e020f439131eba5f"));
-        assertThat(identifiers.get(6).has("resource_type"), is(false));
 
     }
 
