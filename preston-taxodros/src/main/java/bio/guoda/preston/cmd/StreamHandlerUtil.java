@@ -1,10 +1,18 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
+import bio.guoda.preston.Hasher;
+import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.store.Dereferencer;
+import bio.guoda.preston.stream.ContentStreamException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
+import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -22,5 +30,23 @@ public class StreamHandlerUtil {
 
     public static String makeActionable(String providedContentId) {
         return "https://linker.bio/" + providedContentId;
+    }
+
+    public static void appendContentId(ObjectNode objectNode, String zoteroAttachmentDownloadUrl, HashType hashType, Dereferencer<InputStream> dereferencer, Persisting persisting) throws ContentStreamException {
+        try {
+            IRI downloadIRI = RefNodeFactory.toIRI(zoteroAttachmentDownloadUrl);
+            InputStream attachementInputStream = ContentQueryUtil.getContent(dereferencer, downloadIRI, persisting);
+            if (attachementInputStream == null) {
+                throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]");
+            }
+            IRI contentId = Hasher.calcHashIRI(
+                    attachementInputStream,
+                    NullOutputStream.INSTANCE,
+                    hashType
+            );
+            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.HAS_VERSION, makeActionable(contentId.getIRIString()));
+        } catch (IOException e) {
+            throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]", e);
+        }
     }
 }

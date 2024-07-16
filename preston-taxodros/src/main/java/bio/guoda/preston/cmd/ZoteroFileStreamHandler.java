@@ -1,7 +1,6 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.HashType;
-import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.ZoteroUtil;
@@ -11,7 +10,6 @@ import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.slf4j.Logger;
@@ -136,10 +134,6 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
         return hasPdfAttachment;
     }
 
-    private String makeActionable(String providedContentId) {
-        return "https://linker.bio/" + providedContentId;
-    }
-
     private boolean appendJournalArticleMetaData(String iriString, JsonNode jsonNode, ObjectNode objectNode) {
         JsonNode reference = jsonNode.at("/links/self/href");
         JsonNode creators = jsonNode.at("/data/creators");
@@ -150,8 +144,8 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
             ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
 
-            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, makeActionable(iriString));
-            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, makeActionable(iriString));
+            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, StreamHandlerUtil.makeActionable(iriString));
+            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, StreamHandlerUtil.makeActionable(iriString));
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
             ZenodoMetaUtil.setType(objectNode, "application/json");
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, reference.asText());
@@ -269,21 +263,9 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
     }
 
     private void appendContentId(ObjectNode objectNode, String zoteroAttachmentDownloadUrl, HashType hashType) throws ContentStreamException {
-        try {
-            IRI downloadIRI = RefNodeFactory.toIRI(zoteroAttachmentDownloadUrl);
-            InputStream attachementInputStream = ContentQueryUtil.getContent(dereferencer, downloadIRI, persisting);
-            if (attachementInputStream == null) {
-                throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]");
-            }
-            IRI contentId = Hasher.calcHashIRI(
-                    attachementInputStream,
-                    NullOutputStream.INSTANCE,
-                    hashType
-            );
-            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.HAS_VERSION, makeActionable(contentId.getIRIString()));
-        } catch (IOException e) {
-            throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + zoteroAttachmentDownloadUrl + "]", e);
-        }
+        Dereferencer<InputStream> dereferencer = this.dereferencer;
+        Persisting persisting = this.persisting;
+        StreamHandlerUtil.appendContentId(objectNode, zoteroAttachmentDownloadUrl, hashType, dereferencer, persisting);
     }
 
     private String getZoteroSelector(String href) {

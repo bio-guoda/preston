@@ -9,7 +9,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -21,9 +20,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
@@ -32,14 +29,43 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.number.OrderingComparison.greaterThan;
 
 public class RISFileExtractorTest {
 
     @Test
-    public void streamZoteroAttachmentToZenodoLineJson() throws IOException {
+    public void streamBHLPartsToZenodoLineJson() throws IOException {
         String[] jsonObjects = getResource("ris/bhlpart-multiple.ris");
         assertArticleItem(jsonObjects);
+    }
+
+
+    @Test
+    public void streamBHLPartToZenodoLineJsonMissingAttachment() throws IOException {
+        String[] jsonObjects = getResource("ris/bhlpart-multiple.ris");
+        assertThat(jsonObjects.length, is(5));
+
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[1]);
+
+        JsonNode identifiers = taxonNode.at("/related_identifiers");
+        assertThat(identifiers.size(), is(5));
+        // provided by Zoteros
+        assertThat(identifiers.get(0).get("relation").asText(), is("isDerivedFrom"));
+        assertThat(identifiers.get(0).get("identifier").asText(), is("https://linker.bio/line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L23-L44"));
+        assertThat(identifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(1).get("identifier").asText(), is("10.3897/subtbiol.43.85804"));
+
+        assertThat(identifiers.get(2).get("relation").asText(), is("isDerivedFrom"));
+        assertThat(identifiers.get(2).get("identifier").asText(), is("https://www.biodiversitylibrary.org/partpdf/337600"));
+        assertThat(identifiers.get(2).has("resource_type"), is(false));
+
+        assertThat(identifiers.get(3).get("relation").asText(), is("isDerivedFrom"));
+        assertThat(identifiers.get(3).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/337600"));
+
+        assertThat(identifiers.get(4).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(4).get("identifier").asText(), is("urn:biodiversitylibrary.org:part:337600"));
+
+        JsonNode keywords = taxonNode.at("/keywords");
+        assertThat(keywords.get(0).asText(), is("cave"));
     }
 
     private void assertArticleItem(String[] jsonObjects) throws JsonProcessingException {
@@ -74,23 +100,33 @@ public class RISFileExtractorTest {
         assertThat(taxonNode.get("publication_type").textValue(), is("article"));
         assertThat(taxonNode.get("upload_type").textValue(), is("publication"));
         assertThat(taxonNode.get("doi").textValue(), is("10.3897/mycokeys.85.73405"));
-        assertThat(taxonNode.get("filename").textValue(), is("https://www.biodiversitylibrary.org/partpdf/332157"));
+        assertThat(taxonNode.get("filename").textValue(), is("bhlpart332157.pdf"));
 
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(4));
+        assertThat(identifiers.size(), is(7));
         // provided by Zoteros
         assertThat(identifiers.get(0).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(0).get("identifier").asText(), is("https://linker.bio/line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L22"));
         assertThat(identifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(1).get("identifier").asText(), is("10.3897/mycokeys.85.73405"));
 
-        // calculated on the fly
         assertThat(identifiers.get(2).get("relation").asText(), is("isDerivedFrom"));
-        assertThat(identifiers.get(2).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/332157"));
+        assertThat(identifiers.get(2).get("identifier").asText(), is("https://www.biodiversitylibrary.org/partpdf/332157"));
+        assertThat(identifiers.get(2).has("resource_type"), is(false));
+
         assertThat(identifiers.get(3).get("relation").asText(), is("isDerivedFrom"));
-        assertThat(identifiers.get(3).get("identifier").asText(), is("https://www.biodiversitylibrary.org/partpdf/332157"));
-        assertThat(identifiers.get(3).has("resource_type"), is(false));
+        assertThat(identifiers.get(3).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/332157"));
+
+        assertThat(identifiers.get(4).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(4).get("identifier").asText(), is("urn:biodiversitylibrary.org:part:332157"));
+
+        // calculated on the fly
+        assertThat(identifiers.get(5).get("relation").asText(), is("hasVersion"));
+        assertThat(identifiers.get(5).get("identifier").asText(), is("https://linker.bio/hash://md5/f3452e34cc97208fdac0d1375c94c7a2"));
+
+        assertThat(identifiers.get(6).get("relation").asText(), is("hasVersion"));
+        assertThat(identifiers.get(6).get("identifier").asText(), is("https://linker.bio/hash://sha256/da8e8a1b2579542779408c410edb110f9a44f4206db2df66ec46391bcba78015"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Entomophthorales"));
@@ -114,6 +150,8 @@ public class RISFileExtractorTest {
                     } catch (FileNotFoundException e) {
                         throw new RuntimeException(e);
                     }
+                } else if (StringUtils.equals("hash://sha256/9e088b29db63c9c6f41cf6bc183cb61554f317656f8f34638a07398342da2b1a", key.getIRIString())) {
+                    return IOUtils.toInputStream("hello! I am supposed to be a pdf...", StandardCharsets.UTF_8);
                 }
                 throw new RuntimeException("unresolved [" + key + "]");
             }
@@ -127,7 +165,7 @@ public class RISFileExtractorTest {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Persisting processorState = new Persisting();
-        URL resource = getClass().getResource("/bio/guoda/preston/cmd/zoterodatadir/2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a");
+        URL resource = getClass().getResource("/bio/guoda/preston/cmd/bhldatadir/2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a");
         File dataDir = new File(resource.getFile()).getParentFile().getParentFile().getParentFile();
         processorState.setLocalDataDir(dataDir.getAbsolutePath());
 

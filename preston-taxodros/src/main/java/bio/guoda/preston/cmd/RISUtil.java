@@ -70,7 +70,6 @@ public class RISUtil {
     }
 
     public static ObjectNode translateRISToZenodo(JsonNode jsonNode) {
-        ObjectNode zenodoObject = new ObjectMapper().createObjectNode();
         ObjectNode metadata = new ObjectMapper().createObjectNode();
         ArrayNode relatedIdentifiers = new ObjectMapper().createArrayNode();
         metadata.put("description", "(Uploaded by Plazi from the Biodiversity Heritage Library) No abstract provided.");
@@ -119,16 +118,24 @@ public class RISUtil {
             addAlternateIdentifier(relatedIdentifiers, doiString);
         }
 
-
         if (jsonNode.has("UR")) {
             String url = jsonNode.get("UR").asText();
             metadata.put("referenceId", url);
+
+            String downloadUrl = getBHLPartPDFUrl(metadata);
+            if (StringUtils.isNotBlank(downloadUrl)) {
+                addDerivedFrom(relatedIdentifiers, downloadUrl);
+            }
+
+            String filename = getBHLPartPdfFilename(metadata);
+            if (StringUtils.isNotBlank(filename)) {
+                metadata.put("filename", filename);
+            }
+
             addDerivedFrom(relatedIdentifiers, url);
-            Matcher matcher = BHL_PART_URL.matcher(url);
-            if (matcher.matches()) {
-                String s = "https://www.biodiversitylibrary.org/partpdf/" + matcher.group("part");
-                metadata.put("filename", s);
-                addDerivedFrom(relatedIdentifiers, s);
+            String lsid = getBHLPartLSID(metadata);
+            if (StringUtils.isNotBlank(lsid)) {
+                addAlternateIdentifier(relatedIdentifiers, lsid);
             }
         }
 
@@ -152,6 +159,37 @@ public class RISUtil {
         metadata.set("related_identifiers", relatedIdentifiers);
         return metadata;
     }
+
+    public static String getBHLPartPDFUrl(ObjectNode metadata) {
+        Matcher matcher = getBHLPartIdMatcher(metadata);
+        return matcher.matches()
+                ? "https://www.biodiversitylibrary.org/partpdf/" + matcher.group("part")
+                : null;
+    }
+
+    private static String getBHLPartLSID(ObjectNode metadata) {
+        Matcher matcher = getBHLPartIdMatcher(metadata);
+        return matcher.matches()
+                ? "urn:biodiversitylibrary.org:part:" + matcher.group("part")
+                : null;
+    }
+
+    private static String getBHLPartPdfFilename(ObjectNode metadata) {
+        Matcher matcher = getBHLPartIdMatcher(metadata);
+        return matcher.matches()
+                ? "bhlpart" + matcher.group("part") + ".pdf"
+                : null;
+    }
+
+    private static Matcher getBHLPartIdMatcher(ObjectNode metadata) {
+        String url = "";
+        if (metadata.has("referenceId")) {
+            url = metadata.get("referenceId").asText();
+        }
+
+        return BHL_PART_URL.matcher(url);
+    }
+
 
     private static ArrayNode addDerivedFrom(ArrayNode relatedIdentifiers, String s) {
         return addRelation(relatedIdentifiers, s, "isDerivedFrom");
