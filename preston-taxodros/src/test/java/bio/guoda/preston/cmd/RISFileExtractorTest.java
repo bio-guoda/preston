@@ -62,7 +62,7 @@ public class RISFileExtractorTest {
         assertThat(identifiers.get(3).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/337600"));
 
         assertThat(identifiers.get(4).get("relation").asText(), is("isAlternateIdentifier"));
-        assertThat(identifiers.get(4).get("identifier").asText(), is("urn:biodiversitylibrary.org:part:337600"));
+        assertThat(identifiers.get(4).get("identifier").asText(), is("urn:lsid:biodiversitylibrary.org:part:337600"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("cave"));
@@ -119,7 +119,7 @@ public class RISFileExtractorTest {
         assertThat(identifiers.get(3).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/332157"));
 
         assertThat(identifiers.get(4).get("relation").asText(), is("isAlternateIdentifier"));
-        assertThat(identifiers.get(4).get("identifier").asText(), is("urn:biodiversitylibrary.org:part:332157"));
+        assertThat(identifiers.get(4).get("identifier").asText(), is("urn:lsid:biodiversitylibrary.org:part:332157"));
 
         // calculated on the fly
         assertThat(identifiers.get(5).get("relation").asText(), is("hasVersion"));
