@@ -1,5 +1,6 @@
 package bio.guoda.preston.zenodo;
 
+import bio.guoda.preston.EnvUtil;
 import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.cmd.LogErrorHandlerExitOnError;
 import bio.guoda.preston.cmd.LoggingPersisting;
@@ -25,13 +26,13 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
             names = {"--access-token"},
             description = "Zenodo Access Token"
     )
-    private String accessToken;
+    private String accessToken = EnvUtil.getEnvironmentVariable("ZENODO_TOKEN");
 
     @CommandLine.Option(
             names = {"--endpoint"},
             description = "Zenodo api endpoint"
     )
-    private String apiEndpoint = "https://zenodo.org";
+    private String apiEndpoint = EnvUtil.getEnvironmentVariable("ZENODO_ENDPOINT", "https://zenodo.org");
 
     @CommandLine.Option(
             names = {"--communities"},
