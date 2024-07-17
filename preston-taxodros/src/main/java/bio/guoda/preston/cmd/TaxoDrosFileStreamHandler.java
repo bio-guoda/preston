@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -26,7 +27,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
 
@@ -68,11 +68,13 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
+    private List<String> communities;
 
     public TaxoDrosFileStreamHandler(ContentStreamHandler contentStreamHandler,
-                                     OutputStream os) {
+                                     OutputStream os, List<String> communities) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
+        this.communities = communities;
     }
 
     @Override
@@ -100,7 +102,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                                     ZenodoMetaUtil.setFilename(objectNode, filename);
                                     ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":filename:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename));
                                     ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
-                                    ZenodoMetaUtil.setCommunities(objectNode, Stream.of("taxodros", "biosyslit"));
+                                    ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
                                     ZenodoMetaUtil.setType(objectNode, DROS_5);
                                 } else if (isType(objectNode, DROS_3)) {
                                     lineFinish = lineNumber - 1;

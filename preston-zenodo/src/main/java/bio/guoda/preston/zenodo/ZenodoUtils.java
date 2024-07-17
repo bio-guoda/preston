@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.json.JsonWriteFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
@@ -195,9 +196,32 @@ public class ZenodoUtils {
 
     public static Collection<Pair<Long, String>> findByAlternateIds(ZenodoConfig ctx, List<String> contentIds) throws IOException {
         Collection<Pair<Long, String>> foundIds = new TreeSet<>();
-        appendIds(foundIds, ctx.getEndpoint(), "communities=taxodros&all_versions=false&q=" + getQueryForIds(contentIds) + "&access_token=" + ctx.getAccessToken(), "/api/records" );
-        appendIds(foundIds, ctx.getEndpoint(), "q=" + getQueryForIds(contentIds) + "&access_token=" + ctx.getAccessToken(), "/api/deposit/depositions");
+        findExistingRecords(ctx, contentIds, foundIds);
+        findExistingDepositions(ctx, contentIds, foundIds);
         return foundIds;
+    }
+
+    private static void findExistingDepositions(ZenodoConfig ctx, List<String> contentIds, Collection<Pair<Long, String>> foundIds) throws IOException {
+        IRI query1 = getQueryForExistingDepositions(ctx, contentIds);
+        executeQueryAndCollectIds(foundIds, query1);
+    }
+
+    public static IRI getQueryForExistingDepositions(ZenodoConfig ctx, List<String> contentIds) {
+        String query = "q=" + getQueryForIds(contentIds) + "&access_token=" + ctx.getAccessToken();
+        return getQuery(ctx.getEndpoint(), query, "/api/deposit/depositions");
+    }
+
+    private static void findExistingRecords(ZenodoConfig ctx, List<String> contentIds, Collection<Pair<Long, String>> foundIds) throws IOException {
+        IRI query = getQueryForExistingRecords(ctx, contentIds);
+        executeQueryAndCollectIds(foundIds, query);
+    }
+
+    public static IRI getQueryForExistingRecords(ZenodoConfig ctx, List<String> contentIds) {
+        String prefix = ctx.getCommunities().size() == 0
+                ? ""
+                : "communities=" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(StringUtils.join(ctx.getCommunities(), ",")) + "&";
+        String queryPath = prefix + "all_versions=false&q=" + getQueryForIds(contentIds) + "&access_token=" + ctx.getAccessToken();
+        return getQuery(ctx.getEndpoint(), queryPath, "/api/records");
     }
 
     private static String getQueryForIds(List<String> ids) {
@@ -207,8 +231,7 @@ public class ZenodoUtils {
                 .collect(Collectors.joining("%20AND%20"));
     }
 
-    private static void appendIds(Collection<Pair<Long, String>> foundIds, String apiEndpoint, String filter, String method) throws IOException {
-        IRI query = RefNodeFactory.toIRI((apiEndpoint + method) + "?" + filter);
+    private static void executeQueryAndCollectIds(Collection<Pair<Long, String>> foundIds, IRI query) throws IOException {
         try (InputStream is = ResourcesHTTP.asInputStream(query)) {
             JsonNode jsonNode = getObjectMapper().readTree(is);
             JsonNode hits = jsonNode.has("hits")
@@ -221,5 +244,9 @@ public class ZenodoUtils {
                 }
             }
         }
+    }
+
+    private static IRI getQuery(String apiEndpoint, String filter, String method) {
+        return RefNodeFactory.toIRI((apiEndpoint + method) + "?" + filter);
     }
 }

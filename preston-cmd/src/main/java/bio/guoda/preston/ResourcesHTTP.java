@@ -91,24 +91,14 @@ public class ResourcesHTTP {
     }
 
     private static void appendAuthTokenIfAvailable(HttpMessage msg) {
-        String githubToken = StringUtils.defaultIfBlank(
-                StringUtils.defaultIfBlank(
-                        System.getenv("secrets.GITHUB_TOKEN"),
-                        System.getenv("GITHUB_TOKEN")
-                ),
-                System.getProperty("GITHUB_TOKEN"));
+        String githubToken = EnvUtil.getEnvironmentVariable("GITHUB_TOKEN");
         if (StringUtils.isNotBlank(githubToken)) {
             msg.addHeader("Authorization", "token " + githubToken);
         }
     }
 
     private static void appendAuthBearerIfAvailable(HttpMessage msg) {
-        String zoteroToken = StringUtils.defaultIfBlank(
-                StringUtils.defaultIfBlank(
-                        System.getenv("secrets.ZOTERO_TOKEN"),
-                        System.getenv("ZOTERO_TOKEN")
-                ),
-                System.getProperty("ZOTERO_TOKEN"));
+        String zoteroToken = EnvUtil.getEnvironmentVariable("ZOTERO_TOKEN");
         if (StringUtils.isNotBlank(zoteroToken)) {
             msg.addHeader("Authorization", "Bearer " + zoteroToken);
         }

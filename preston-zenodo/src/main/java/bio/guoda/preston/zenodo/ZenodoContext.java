@@ -2,11 +2,14 @@ package bio.guoda.preston.zenodo;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 public class ZenodoContext implements ZenodoConfig {
 
     private final String endpoint;
+    private final List<String> communities;
     private Long depositId;
     private UUID bucketId;
     private final String accessToken;
@@ -17,13 +20,19 @@ public class ZenodoContext implements ZenodoConfig {
     }
 
     public ZenodoContext(String accessToken, String endpoint) {
+        this(accessToken, endpoint, Collections.emptyList());
+    }
+
+    public ZenodoContext(String accessToken, String endpoint, List<String> communities) {
         this.accessToken = accessToken;
         this.endpoint = endpoint;
+        this.communities = communities;
     }
 
     public ZenodoContext(ZenodoConfig config) {
         this.accessToken = config.getAccessToken();
         this.endpoint = config.getEndpoint();
+        this.communities = Collections.emptyList();
     }
 
 
@@ -51,6 +60,11 @@ public class ZenodoContext implements ZenodoConfig {
     @Override
     public String getEndpoint() {
         return endpoint;
+    }
+
+    @Override
+    public List<String> getCommunities() {
+        return this.communities;
     }
 
     public void setMetadata(JsonNode metadata) {

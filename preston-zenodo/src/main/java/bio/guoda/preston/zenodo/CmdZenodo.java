@@ -12,6 +12,9 @@ import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
+import java.util.Collections;
+import java.util.List;
+
 @CommandLine.Command(
         name = "zenodo",
         description = "create/update associated Zenodo records"
@@ -30,6 +33,12 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
     )
     private String apiEndpoint = "https://zenodo.org";
 
+    @CommandLine.Option(
+            names = {"--communities"},
+            description = "associated Zenodo communities"
+    )
+    private List<String> communities = Collections.emptyList();
+
 
     @Override
     public void run() {
@@ -46,10 +55,10 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
                 getOutputStream(),
                 LogErrorHandlerExitOnError.EXIT_ON_ERROR);
 
-        ZenodoMetadataFileExtractor textMatcher = new ZenodoMetadataFileExtractor(
+        StatementsListener textMatcher = new ZenodoMetadataFileExtractor(
                 this,
                 blobStoreReadOnly,
-                new ZenodoContext(getAccessToken(), getApiEndpoint()),
+                new ZenodoContext(getAccessToken(), getApiEndpoint(), getCommunities()),
                 listener
         );
 
@@ -81,5 +90,9 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public List<String> getCommunities() {
+        return communities;
     }
 }

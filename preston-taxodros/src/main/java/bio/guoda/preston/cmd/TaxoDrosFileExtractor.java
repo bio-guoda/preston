@@ -24,14 +24,17 @@ public class TaxoDrosFileExtractor extends ProcessorExtracting {
 
     private final ProcessorState processorState;
     private final OutputStream outputStream;
+    private final List<String> communities;
 
     public TaxoDrosFileExtractor(ProcessorState processorState,
                                  BlobStoreReadOnly blobStoreReadOnly,
                                  OutputStream out,
+                                 List<String> communities,
                                  StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
+        this.communities = communities;
     }
 
 
@@ -51,7 +54,7 @@ public class TaxoDrosFileExtractor extends ProcessorExtracting {
             this.handler = new ContentStreamHandlerImpl(
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
-                    new TaxoDrosFileStreamHandler(this, outputStream)
+                    new TaxoDrosFileStreamHandler(this, outputStream, communities)
             );
         }
 

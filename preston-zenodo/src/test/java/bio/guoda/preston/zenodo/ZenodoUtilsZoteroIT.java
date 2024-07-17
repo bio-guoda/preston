@@ -114,7 +114,6 @@ public class ZenodoUtilsZoteroIT {
     }
 
     private void assertOneRecordWithMatchingId(List<String> contentId) throws IOException {
-
         Collection<Pair<Long, String>> ids = ZenodoUtils.findByAlternateIds(ctx, contentId);
         assertThat(ids, not(nullValue()));
         List<Long> filteredIds = ids
@@ -124,7 +123,6 @@ public class ZenodoUtilsZoteroIT {
                 .collect(Collectors.toList());
         assertThat(filteredIds.size(), is(1));
         assertThat(filteredIds.get(0), is(ctx.getDepositId()));
-
     }
 
 

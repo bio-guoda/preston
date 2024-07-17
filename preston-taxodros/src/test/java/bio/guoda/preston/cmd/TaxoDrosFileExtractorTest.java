@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
@@ -345,7 +346,8 @@ public class TaxoDrosFileExtractorTest {
         TaxoDrosFileExtractor extractor = new TaxoDrosFileExtractor(
                 new ProcessorStateAlwaysContinue(),
                 blobStore,
-                byteArrayOutputStream
+                byteArrayOutputStream,
+                Arrays.asList("taxodros", "biosyslit")
         );
 
         extractor.on(statement);
