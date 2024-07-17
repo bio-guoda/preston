@@ -123,10 +123,10 @@ public class RISFileExtractorTest {
 
         // calculated on the fly
         assertThat(identifiers.get(5).get("relation").asText(), is("hasVersion"));
-        assertThat(identifiers.get(5).get("identifier").asText(), is("https://linker.bio/hash://md5/f3452e34cc97208fdac0d1375c94c7a2"));
+        assertThat(identifiers.get(5).get("identifier").asText(), is("hash://md5/f3452e34cc97208fdac0d1375c94c7a2"));
 
         assertThat(identifiers.get(6).get("relation").asText(), is("hasVersion"));
-        assertThat(identifiers.get(6).get("identifier").asText(), is("https://linker.bio/hash://sha256/da8e8a1b2579542779408c410edb110f9a44f4206db2df66ec46391bcba78015"));
+        assertThat(identifiers.get(6).get("identifier").asText(), is("hash://sha256/da8e8a1b2579542779408c410edb110f9a44f4206db2df66ec46391bcba78015"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Entomophthorales"));

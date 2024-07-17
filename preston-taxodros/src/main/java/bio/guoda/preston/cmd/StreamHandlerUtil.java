@@ -46,7 +46,7 @@ public class StreamHandlerUtil {
                         NullOutputStream.INSTANCE,
                         hashType
                 );
-                ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.HAS_VERSION, makeActionable(contentId.getIRIString()));
+                ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.HAS_VERSION, contentId.getIRIString());
             } catch (IOException e) {
                 throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + downloadUrl + "]", e);
             }
