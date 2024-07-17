@@ -112,7 +112,6 @@ public class RISUtil {
         }
         if (jsonNode.has("DO")) {
             String doiString = jsonNode.get("DO").asText();
-            metadata.put("doi", doiString);
             addAlternateIdentifier(relatedIdentifiers, doiString);
         }
 

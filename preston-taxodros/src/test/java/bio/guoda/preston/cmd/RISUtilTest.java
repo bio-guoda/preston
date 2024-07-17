@@ -72,7 +72,7 @@ public class RISUtilTest {
         assertThat(taxonNode.get("access_right"), is(nullValue()));
         assertThat(taxonNode.get("publication_type").textValue(), is("article"));
         assertThat(taxonNode.get("upload_type").textValue(), is("publication"));
-        assertThat(taxonNode.get("doi").textValue(), is("10.3897/subtbiol.43.85804"));
+        assertThat(taxonNode.get("doi"), is(nullValue()));
         assertThat(taxonNode.get("filename").textValue(), is("bhlpart337600.pdf"));
 
         JsonNode keywords = taxonNode.at("/keywords");
