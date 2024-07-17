@@ -142,7 +142,7 @@ public class RISUtilTest {
 
         assertThat(jsonObjects.size(), is(1));
         assertThat(jsonObjects.get(0).get("creators").size(), is(1));
-        assertThat(jsonObjects.get(0).get("creators").get(0).asText(), is("Pictet, Camille"));
+        assertThat(jsonObjects.get(0).get("creators").get(0).get("name").asText(), is("Pictet, Camille"));
     }
 
     @Test

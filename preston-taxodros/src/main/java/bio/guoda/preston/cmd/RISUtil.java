@@ -142,17 +142,19 @@ public class RISUtil {
             if (authors.isArray()) {
                 authors.forEach(value -> creators.add(new ObjectMapper().createObjectNode().put("name", value.asText())));
             } else {
-                creators.add(authors.asText());
+                creators.add(new ObjectMapper().createObjectNode().put("name", authors.asText()));
             }
             metadata.set("creators", creators);
         }
         JsonNode keywords = jsonNode.get("KW");
         if (keywords != null) {
-            ArrayNode creators = new ObjectMapper().createArrayNode();
+            ArrayNode keywordsList = new ObjectMapper().createArrayNode();
             if (keywords.isArray()) {
-                keywords.forEach(value -> creators.add(value.asText()));
+                keywords.forEach(value -> keywordsList.add(value.asText()));
+            } else {
+                keywordsList.add(keywords.asText());
             }
-            metadata.set("keywords", creators);
+            metadata.set("keywords", keywordsList);
         }
 
         metadata.set("related_identifiers", relatedIdentifiers);
