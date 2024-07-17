@@ -37,7 +37,7 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
     private String apiEndpoint = EnvUtil.getEnvironmentVariable(ZENODO_ENDPOINT, "https://zenodo.org");
 
     @CommandLine.Option(
-            names = {"--communities"},
+            names = {"--communities", "--community"},
             description = "associated Zenodo communities"
     )
     private List<String> communities = Collections.emptyList();
