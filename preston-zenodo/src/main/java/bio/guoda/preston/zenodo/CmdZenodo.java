@@ -22,17 +22,19 @@ import java.util.List;
 )
 public class CmdZenodo extends LoggingPersisting implements Runnable {
 
+    public static final String ZENODO_ENDPOINT = "ZENODO_ENDPOINT";
+    public static final String ZENODO_TOKEN = "ZENODO_TOKEN";
     @CommandLine.Option(
             names = {"--access-token"},
-            description = "Zenodo Access Token"
+            description = "Zenodo Access Token. Uses [ " + ZENODO_TOKEN + "] environment variable by default."
     )
-    private String accessToken = EnvUtil.getEnvironmentVariable("ZENODO_TOKEN");
+    private String accessToken = EnvUtil.getEnvironmentVariable(ZENODO_TOKEN);
 
     @CommandLine.Option(
             names = {"--endpoint"},
-            description = "Zenodo api endpoint"
+            description = "Zenodo api endpoint. Uses [ " + ZENODO_ENDPOINT + "] environment variable by default."
     )
-    private String apiEndpoint = EnvUtil.getEnvironmentVariable("ZENODO_ENDPOINT", "https://zenodo.org");
+    private String apiEndpoint = EnvUtil.getEnvironmentVariable(ZENODO_ENDPOINT, "https://zenodo.org");
 
     @CommandLine.Option(
             names = {"--communities"},
