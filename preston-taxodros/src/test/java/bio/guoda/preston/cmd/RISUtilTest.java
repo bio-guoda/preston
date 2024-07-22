@@ -26,12 +26,7 @@ public class RISUtilTest {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
 
-        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
-            @Override
-            public void accept(ObjectNode jsonNode) {
-                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("community-foo")));
-            }
-        };
+        Consumer<ObjectNode> listener = jsonNode -> jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("community-foo")));
 
         InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-multiple.ris");
 
@@ -104,12 +99,7 @@ public class RISUtilTest {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
 
-        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
-            @Override
-            public void accept(ObjectNode jsonNode) {
-                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
-            }
-        };
+        Consumer<ObjectNode> listener = jsonNode -> jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
 
         InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-single.ris");
 
@@ -126,12 +116,7 @@ public class RISUtilTest {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
 
-        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
-            @Override
-            public void accept(ObjectNode jsonNode) {
-                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
-            }
-        };
+        Consumer<ObjectNode> listener = jsonNode -> jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
 
         InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-issn-article.ris");
 
@@ -154,12 +139,7 @@ public class RISUtilTest {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
 
-        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
-            @Override
-            public void accept(ObjectNode jsonNode) {
-                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
-            }
-        };
+        Consumer<ObjectNode> listener = jsonNode -> jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
 
         InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-issn-chapter.ris");
 
@@ -187,14 +167,9 @@ public class RISUtilTest {
     @Test
     public void streamSingleBookNoPublisher() throws IOException {
 
-        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+        List<JsonNode> jsonObjects = new ArrayList<>();
 
-        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
-            @Override
-            public void accept(ObjectNode jsonNode) {
-                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
-            }
-        };
+        Consumer<ObjectNode> listener = jsonNode -> jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
 
         InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-book.ris");
 
@@ -216,12 +191,7 @@ public class RISUtilTest {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
 
-        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
-            @Override
-            public void accept(ObjectNode jsonNode) {
-                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
-            }
-        };
+        Consumer<ObjectNode> listener = jsonNode -> jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
 
         InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-book-publisher.ris");
 
@@ -242,14 +212,9 @@ public class RISUtilTest {
     @Test
     public void streamSingleBookWithCPaper() throws IOException {
 
-        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+        List<JsonNode> jsonObjects = new ArrayList<>();
 
-        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
-            @Override
-            public void accept(ObjectNode jsonNode) {
-                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
-            }
-        };
+        Consumer<ObjectNode> listener = jsonNode -> jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
 
         InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-cpaper.ris");
 
@@ -272,12 +237,7 @@ public class RISUtilTest {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
 
-        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
-            @Override
-            public void accept(ObjectNode jsonNode) {
-                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
-            }
-        };
+        Consumer<ObjectNode> listener = jsonNode -> jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
 
         InputStream recordStream = getClass().getResourceAsStream("ris/bhlpart-3743.ris");
 
