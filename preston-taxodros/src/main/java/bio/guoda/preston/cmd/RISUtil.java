@@ -101,7 +101,6 @@ public class RISUtil {
         }
         if (jsonNode.has("PY")) {
             metadata.put("publication_date", jsonNode.get("PY").asText());
-
         }
         if (jsonNode.has("TY")) {
             if (StringUtils.equals(jsonNode.get("TY").asText(), "JOUR")) {
@@ -113,6 +112,14 @@ public class RISUtil {
         if (jsonNode.has("DO")) {
             String doiString = jsonNode.get("DO").asText();
             addAlternateIdentifier(relatedIdentifiers, doiString);
+        }
+
+        if (jsonNode.has("SN")) {
+            String issn = jsonNode.get("SN").asText();
+            Matcher matcher = Pattern.compile("^[0-9]{4}-[0-9]{3}[0-9X]$").matcher(issn);
+            if (matcher.matches()) {
+                addAlternateIdentifier(relatedIdentifiers, issn, "issn");
+            }
         }
 
         if (jsonNode.has("UR")) {
@@ -192,16 +199,36 @@ public class RISUtil {
     }
 
 
-    private static ArrayNode addDerivedFrom(ArrayNode relatedIdentifiers, String s) {
-        return addRelation(relatedIdentifiers, s, "isDerivedFrom");
+    private static ArrayNode addDerivedFrom(ArrayNode relatedIdentifiers, String id) {
+        return addRelation(relatedIdentifiers, id, "isDerivedFrom");
     }
 
-    private static ArrayNode addAlternateIdentifier(ArrayNode relatedIdentifiers, String s) {
-        return addRelation(relatedIdentifiers, s, "isAlternateIdentifier");
+    private static ArrayNode addAlternateIdentifier(ArrayNode relatedIdentifiers, String id) {
+        return addRelation(relatedIdentifiers, id, "isAlternateIdentifier");
     }
 
-    private static ArrayNode addRelation(ArrayNode relatedIdentifiers, String s, String relationType) {
-        return relatedIdentifiers.add(new ObjectMapper().createObjectNode().put("relation", relationType).put("identifier", s));
+    private static ArrayNode addAlternateIdentifier(ArrayNode relatedIdentifiers, String id, String scheme) {
+        return addRelation(relatedIdentifiers, id, "isAlternateIdentifier", scheme);
+    }
+
+    private static ArrayNode addRelation(ArrayNode relatedIdentifiers, String id, String relationType) {
+        return relatedIdentifiers.add(
+                createRelationNode(id, relationType)
+        );
+    }
+
+    private static ObjectNode createRelationNode(String id, String relationType) {
+        return new ObjectMapper()
+                .createObjectNode()
+                .put("relation", relationType)
+                .put("identifier", id);
+    }
+
+    private static ArrayNode addRelation(ArrayNode relatedIdentifiers, String id, String relationType, String scheme) {
+        return relatedIdentifiers.add(
+                createRelationNode(id, relationType)
+                        .put("scheme", scheme)
+        );
     }
 
 }

@@ -122,6 +122,84 @@ public class RISUtilTest {
     }
 
     @Test
+    public void streamSingleSSNArticle() throws IOException {
+
+        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+
+        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
+            @Override
+            public void accept(ObjectNode jsonNode) {
+                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
+            }
+        };
+
+        InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-issn-article.ris");
+
+        assertNotNull(bibTex);
+
+        parseRIS(bibTex, listener, "foo:bar");
+
+
+        assertThat(jsonObjects.size(), is(1));
+        JsonNode relatedIdentifiers = jsonObjects.get(0).get("related_identifiers");
+        assertThat(relatedIdentifiers.size(), is(5));
+
+        assertThat(relatedIdentifiers.get(1).get("identifier").asText(), is("0196-0768"));
+        assertThat(relatedIdentifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(relatedIdentifiers.get(1).get("scheme").asText(), is("issn"));
+    }
+
+    @Test
+    public void streamSingleSSNChapter() throws IOException {
+
+        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+
+        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
+            @Override
+            public void accept(ObjectNode jsonNode) {
+                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
+            }
+        };
+
+        InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-issn-chapter.ris");
+
+        assertNotNull(bibTex);
+
+        parseRIS(bibTex, listener, "foo:bar");
+
+
+        assertThat(jsonObjects.size(), is(1));
+        JsonNode relatedIdentifiers = jsonObjects.get(0).get("related_identifiers");
+        assertThat(relatedIdentifiers.size(), is(5));
+
+        assertThat(relatedIdentifiers.get(1).get("identifier").asText(), is("0081-0266"));
+        assertThat(relatedIdentifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(relatedIdentifiers.get(1).get("scheme").asText(), is("issn"));
+    }
+
+    @Test
+    public void streamSingleSSNBook() throws IOException {
+
+        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+
+        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
+            @Override
+            public void accept(ObjectNode jsonNode) {
+                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
+            }
+        };
+
+        InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-issn-book.ris");
+
+        assertNotNull(bibTex);
+
+        parseRIS(bibTex, listener, "foo:bar");
+
+
+        assertThat(jsonObjects.size(), is(1));
+    }
+
+    @Test
     public void streamSinglePart3743() throws IOException {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
