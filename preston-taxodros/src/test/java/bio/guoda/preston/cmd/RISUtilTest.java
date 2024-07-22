@@ -169,7 +169,14 @@ public class RISUtilTest {
 
 
         assertThat(jsonObjects.size(), is(1));
-        JsonNode relatedIdentifiers = jsonObjects.get(0).get("related_identifiers");
+        JsonNode citationRecord = jsonObjects.get(0);
+
+        assertThat(citationRecord.get("upload_type").textValue(), is("publication"));
+        assertThat(citationRecord.get("publication_type").textValue(), is("section"));
+        assertThat(citationRecord.get("imprint_publisher").textValue(), is("Smithsonian Institution Press"));
+
+        JsonNode relatedIdentifiers = citationRecord.get("related_identifiers");
+
         assertThat(relatedIdentifiers.size(), is(5));
 
         assertThat(relatedIdentifiers.get(1).get("identifier").asText(), is("0081-0266"));
@@ -178,7 +185,7 @@ public class RISUtilTest {
     }
 
     @Test
-    public void streamSingleSSNBook() throws IOException {
+    public void streamSingleBookNoPublisher() throws IOException {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
 
@@ -189,7 +196,7 @@ public class RISUtilTest {
             }
         };
 
-        InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-issn-book.ris");
+        InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-book.ris");
 
         assertNotNull(bibTex);
 
@@ -197,6 +204,67 @@ public class RISUtilTest {
 
 
         assertThat(jsonObjects.size(), is(1));
+
+        JsonNode citationRecord = jsonObjects.get(0);
+        assertThat(citationRecord.get("upload_type").textValue(), is("publication"));
+        assertThat(citationRecord.get("publication_type").textValue(), is("other"));
+        assertThat(citationRecord.get("imprint_publisher"), is(nullValue()));
+
+    }
+    @Test
+    public void streamSingleBookWithPublisher() throws IOException {
+
+        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+
+        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
+            @Override
+            public void accept(ObjectNode jsonNode) {
+                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
+            }
+        };
+
+        InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-book-publisher.ris");
+
+        assertNotNull(bibTex);
+
+        parseRIS(bibTex, listener, "foo:bar");
+
+
+        assertThat(jsonObjects.size(), is(1));
+
+        JsonNode citationRecord = jsonObjects.get(0);
+        assertThat(citationRecord.get("upload_type").textValue(), is("publication"));
+        assertThat(citationRecord.get("publication_type").textValue(), is("book"));
+        assertThat(citationRecord.get("imprint_publisher").textValue(), is("Field Naturalists Club of Victoria"));
+
+    }
+
+    @Test
+    public void streamSingleBookWithCPaper() throws IOException {
+
+        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+
+        Consumer<ObjectNode> listener = new Consumer<ObjectNode>() {
+            @Override
+            public void accept(ObjectNode jsonNode) {
+                jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
+            }
+        };
+
+        InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-cpaper.ris");
+
+        assertNotNull(bibTex);
+
+        parseRIS(bibTex, listener, "foo:bar");
+
+
+        assertThat(jsonObjects.size(), is(1));
+
+        JsonNode citationRecord = jsonObjects.get(0);
+        assertThat(citationRecord.get("upload_type").textValue(), is("publication"));
+        assertThat(citationRecord.get("publication_type").textValue(), is("book"));
+        assertThat(citationRecord.get("imprint_publisher").textValue(), is("British Ornithologists' Club"));
+
     }
 
     @Test

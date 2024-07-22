@@ -86,12 +86,35 @@ public class RISUtil {
         if (jsonNode.has(TYPE)) {
             metadata.put(TYPE, jsonNode.get(TYPE).asText());
         }
+
         if (jsonNode.has("TI")) {
             metadata.put("title", jsonNode.get("TI").asText());
+        }
+
+        if (jsonNode.has("TY")) {
+            String value = jsonNode.get("TY").asText();
+            metadata.put("title", value);
+            if (StringUtils.equals("BOOK", value) || StringUtils.equals("CPAPER", value)) {
+                metadata.put(ZenodoMetaUtil.UPLOAD_TYPE, "publication");
+                if (jsonNode.has("PB") && StringUtils.isNotBlank(jsonNode.get("PB").asText())) {
+                    metadata.put(ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_BOOK);
+                } else {
+                    metadata.put(ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_OTHER);
+                }
+
+            } else if (StringUtils.equals("CHAP", value)) {
+                metadata.put(ZenodoMetaUtil.UPLOAD_TYPE, "publication");
+                metadata.put(ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_BOOK_SECTION);
+            } else if (StringUtils.equals("JOUR", value)) {
+                metadata.put(ZenodoMetaUtil.UPLOAD_TYPE, "publication");
+                metadata.put(ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_ARTICLE);
+            }
+
         }
         if (jsonNode.has("T2")) {
             metadata.put("journal_title", jsonNode.get("T2").asText());
         }
+
 
         if (jsonNode.has(("VL"))) {
             metadata.put("journal_volume", jsonNode.get("VL").asText());
@@ -101,6 +124,9 @@ public class RISUtil {
         }
         if (jsonNode.has("PY")) {
             metadata.put("publication_date", jsonNode.get("PY").asText());
+        }
+        if (jsonNode.has("PB")) {
+            metadata.put("imprint_publisher", jsonNode.get("PB").asText());
         }
         if (jsonNode.has("TY")) {
             if (StringUtils.equals(jsonNode.get("TY").asText(), "JOUR")) {
