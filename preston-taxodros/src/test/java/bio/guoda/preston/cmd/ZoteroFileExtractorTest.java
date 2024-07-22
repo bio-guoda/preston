@@ -136,9 +136,9 @@ public class ZoteroFileExtractorTest {
 
         // calculated on the fly
         assertThat(identifiers.get(2).get("relation").asText(), is("hasVersion"));
-        assertThat(identifiers.get(2).get("identifier").asText(), is("https://linker.bio/hash://md5/a51c3c32b083b50d00f34bd72fcd3a19"));
+        assertThat(identifiers.get(2).get("identifier").asText(), is("hash://md5/a51c3c32b083b50d00f34bd72fcd3a19"));
         assertThat(identifiers.get(3).get("relation").asText(), is("hasVersion"));
-        assertThat(identifiers.get(3).get("identifier").asText(), is("https://linker.bio/hash://sha256/4448f9919eb64bdd320eb9076430c84f792d8ebfe9c15ed7e020f439131eba5f"));
+        assertThat(identifiers.get(3).get("identifier").asText(), is("hash://sha256/4448f9919eb64bdd320eb9076430c84f792d8ebfe9c15ed7e020f439131eba5f"));
         assertThat(identifiers.get(3).has("resource_type"), is(false));
 
         // html landing pages
