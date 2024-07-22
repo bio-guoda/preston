@@ -141,10 +141,15 @@ public class RISUtil {
         }
 
         if (jsonNode.has("SN")) {
-            String issn = jsonNode.get("SN").asText();
-            Matcher matcher = Pattern.compile("^[0-9]{4}-[0-9]{3}[0-9X]$").matcher(issn);
+            String sn = jsonNode.get("SN").asText();
+            Matcher matcher = Pattern.compile("^[0-9]{4}-[0-9]{3}[0-9X]$").matcher(sn);
             if (matcher.matches()) {
-                addAlternateIdentifier(relatedIdentifiers, issn, "issn");
+                addAlternateIdentifier(relatedIdentifiers, sn, "issn");
+            } else {
+                Matcher isbn = Pattern.compile("^([0-9]{10}|[0-9]{13})$").matcher(sn);
+                if (isbn.matches()) {
+                    addAlternateIdentifier(relatedIdentifiers, sn, "isbn");
+                }
             }
         }
 

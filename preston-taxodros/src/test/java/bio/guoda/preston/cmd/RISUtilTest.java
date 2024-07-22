@@ -163,6 +163,36 @@ public class RISUtilTest {
         assertThat(relatedIdentifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(relatedIdentifiers.get(1).get("scheme").asText(), is("issn"));
     }
+    @Test
+
+    public void streamSingleISBNChapter() throws IOException {
+
+        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+
+        Consumer<ObjectNode> listener = jsonNode -> jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
+
+        InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-isbn-chapter.ris");
+
+        assertNotNull(bibTex);
+
+        parseRIS(bibTex, listener, "foo:bar");
+
+
+        assertThat(jsonObjects.size(), is(1));
+        JsonNode citationRecord = jsonObjects.get(0);
+
+        assertThat(citationRecord.get("upload_type").textValue(), is("publication"));
+        assertThat(citationRecord.get("publication_type").textValue(), is("section"));
+        assertThat(citationRecord.get("imprint_publisher").textValue(), is("The Field Museum, Science and Education"));
+
+        JsonNode relatedIdentifiers = citationRecord.get("related_identifiers");
+
+        assertThat(relatedIdentifiers.size(), is(5));
+
+        assertThat(relatedIdentifiers.get(1).get("identifier").asText(), is("9780982841945"));
+        assertThat(relatedIdentifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(relatedIdentifiers.get(1).get("scheme").asText(), is("isbn"));
+    }
 
     @Test
     public void streamSingleBookNoPublisher() throws IOException {
