@@ -170,7 +170,7 @@ public class ZoteroFileExtractorTest {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) {
-                URL resource = getClass().getResource(testAttachment);
+                URL resource = getClass().getResource("zotero/" + testAttachment);
                 IRI iri = toIRI(resource.toExternalForm());
 
                 if (StringUtils.equals("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1", key.getIRIString())) {
@@ -182,7 +182,7 @@ public class ZoteroFileExtractorTest {
                 } else if (StringUtils.equals("hash://sha256/9e088b29db63c9c6f41cf6bc183cb61554f317656f8f34638a07398342da2b1a", key.getIRIString())) {
                     return IOUtils.toInputStream("this is a scientific article about bats associated with https://api.zotero.org/groups/5435545/items/P4LGETPS/file/view", StandardCharsets.UTF_8);
                 } else if (StringUtils.equals("hash://sha256/9f088b29db63c9c6f41cf6bc183cb61554f317656f8f34638a07398342da2b1a", key.getIRIString())) {
-                    return getClass().getResourceAsStream(testArticle);
+                    return getClass().getResourceAsStream("zotero/" + testArticle);
                 }
                 throw new RuntimeException("unresolved [" + key + "]");
             }

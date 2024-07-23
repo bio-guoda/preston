@@ -31,9 +31,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 
-public class DarkFileExtractorTest {
-
-    public static final String NON_JOURNAL_TITLE = "title";
+public class DarkTaxonFileExtractorTest {
 
     @Test
     public void readmeToLineJSON() throws IOException {
