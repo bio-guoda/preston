@@ -66,13 +66,17 @@ public class XLSHandler {
                         objectNode.put(fieldName, getCellValue(formatter, c));
                     }
 
-                    if (objectNode.size() > 0) {
-                        IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), out);
-                        IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), out);
-                    }
+                    writeObjectNode(out, objectNode);
                 }
                 rowNumber++;
             }
+        }
+    }
+
+    private static void writeObjectNode(OutputStream out, ObjectNode objectNode) throws IOException {
+        if (objectNode.size() > 0) {
+            IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), out);
+            IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), out);
         }
     }
 

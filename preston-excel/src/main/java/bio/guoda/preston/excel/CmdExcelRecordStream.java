@@ -4,15 +4,18 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.cmd.LoggingPersisting;
 import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
+import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @CommandLine.Command(
         name = "excel-stream",
@@ -32,7 +35,6 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
             description = "skip specified number of lines before processing the xlsx worksheet"
     )
     private Integer skipLines = 0;
-
 
 
     @Override
@@ -80,6 +82,21 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
                         blobStoreReadOnly,
                         skipLines,
                         headerless);
+
+                XLSXHandler.emitPictureStatementsForXLSX(
+                        getHashType(),
+                        version,
+                        new StatementsListenerAdapter() {
+                            @Override
+                            public void on(Quad statement) {
+                                try {
+                                    IOUtils.write(statement.toString() + "\n", getOutputStream(), StandardCharsets.UTF_8);
+                                } catch (IOException e) {
+                                    //
+                                }
+                            }
+                        },
+                        blobStoreReadOnly);
             }
         };
 
