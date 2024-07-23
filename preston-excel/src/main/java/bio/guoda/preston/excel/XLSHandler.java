@@ -27,6 +27,8 @@ public class XLSHandler {
 
 
     public static final String APPLICATION_VND_MS_EXCEL = "application/vnd.ms-excel";
+    public static final String WAS_DERIVED_FROM = "http://www.w3.org/ns/prov#wasDerivedFrom";
+    public static final String HAS_FORMAT = "http://purl.org/dc/elements/1.1/format";
 
     public static void asJsonStream(OutputStream out, IRI resourceIRI, KeyValueStoreReadOnly contentStore, Integer skipLines, Boolean headerless) throws IOException {
         try (HSSFWorkbook workbook = new HSSFWorkbook(contentStore.get(resourceIRI))) {
@@ -73,7 +75,7 @@ public class XLSHandler {
         }
     }
 
-    private static void writeObjectNode(OutputStream out, ObjectNode objectNode) throws IOException {
+    public static void writeObjectNode(OutputStream out, ObjectNode objectNode) throws IOException {
         if (objectNode.size() > 0) {
             IOUtils.copy(IOUtils.toInputStream(objectNode.toString(), StandardCharsets.UTF_8), out);
             IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), out);
@@ -112,7 +114,7 @@ public class XLSHandler {
         int rowNumberWithOffsetOne = r.getRowNum() + 1;
         URI resourceAddress = URI.create(prefix + resourceIRI.getIRIString() + "!/" + sheetName + "!/L" + rowNumberWithOffsetOne);
         TextNode resourceAddressIRI = TextNode.valueOf(RefNodeFactory.toIRI(resourceAddress).getIRIString());
-        objectNode.set("http://www.w3.org/ns/prov#wasDerivedFrom", resourceAddressIRI);
-        objectNode.set("http://purl.org/dc/elements/1.1/format", TextNode.valueOf(mimeType));
+        objectNode.set(WAS_DERIVED_FROM, resourceAddressIRI);
+        objectNode.set(HAS_FORMAT, TextNode.valueOf(mimeType));
     }
 }

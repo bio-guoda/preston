@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static bio.guoda.preston.excel.XLSXHandler.asJsonStream;
+import static bio.guoda.preston.excel.XLSXHandler.rowsAsJsonStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class XLSXHandlerTest {
@@ -44,7 +44,7 @@ public class XLSXHandlerTest {
             }
         };
 
-        XLSXHandler.asJsonStream(out, resourceIRI, contentStore, 0, false);
+        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false);
 
         String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "msw3-03.xlsx.json");
 
@@ -77,7 +77,7 @@ public class XLSXHandlerTest {
             }
         };
 
-        XLSXHandler.asJsonStream(out, resourceIRI, contentStore, 0, true);
+        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, true);
 
         String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "msw3-03.xlsx.headerless.json");
 
@@ -106,7 +106,7 @@ public class XLSXHandlerTest {
             }
         };
 
-        XLSXHandler.asJsonStream(out, resourceIRI, contentStore, 1, true);
+        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 1, true);
 
         String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "msw3-03.xlsx.headerless.skip.json");
 
@@ -133,7 +133,7 @@ public class XLSXHandlerTest {
             }
         };
 
-        XLSXHandler.asJsonStream(out, resourceIRI, contentStore, 0, false);
+        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false);
 
         String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "ictv.xlsx.json");
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
@@ -163,7 +163,7 @@ public class XLSXHandlerTest {
             }
         };
 
-        asJsonStream(out, resourceIRI, contentStore, 0, false);
+        rowsAsJsonStream(out, resourceIRI, contentStore, 0, false);
 
         assertThat(out.size(), Is.is(0));
     }
@@ -182,7 +182,7 @@ public class XLSXHandlerTest {
         };
 
 
-        asJsonStream(out, resourceIRI, contentStore, 0, false);
+        rowsAsJsonStream(out, resourceIRI, contentStore, 0, false);
     }
 
     @Test
@@ -231,9 +231,7 @@ public class XLSXHandlerTest {
 
     @Test
     public void dumpImagesForDMT121InTable() throws IOException {
-        HashType hashType = HashType.sha256;
-        InputStream resourceAsStream = getBMT121DemFile();
-        IRI archiveContentId = Hasher.calcHashIRI(resourceAsStream, NullOutputStream.INSTANCE, hashType);
+        IRI archiveContentId = Hasher.calcHashIRI(getBMT121DemFile(), NullOutputStream.INSTANCE, HashType.sha256);
 
         List<Quad> statements = new ArrayList<>();
         StatementsListener listener = new StatementsListenerAdapter() {
@@ -252,7 +250,7 @@ public class XLSXHandlerTest {
             }
         };
 
-        XLSXHandler.emitPictureStatementsForXLSX(hashType, archiveContentId, listener, contentStore);
+        XLSXHandler.emitPictureStatementsForXLSX(HashType.sha256, archiveContentId, listener, contentStore);
 
 
         StringBuilder stringBuilder = new StringBuilder();

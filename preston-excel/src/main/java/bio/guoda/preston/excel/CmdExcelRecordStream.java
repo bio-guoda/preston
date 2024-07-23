@@ -76,27 +76,15 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
             }
 
             void readXLSX(IRI version, Integer skipLines, Boolean headerless) throws IOException {
-                XLSXHandler.asJsonStream(
+                XLSXHandler.rowsAsJsonStream(
                         getOutputStream(),
                         version,
                         blobStoreReadOnly,
                         skipLines,
                         headerless);
 
-                XLSXHandler.emitPictureStatementsForXLSX(
-                        getHashType(),
-                        version,
-                        new StatementsListenerAdapter() {
-                            @Override
-                            public void on(Quad statement) {
-                                try {
-                                    IOUtils.write(statement.toString() + "\n", getOutputStream(), StandardCharsets.UTF_8);
-                                } catch (IOException e) {
-                                    //
-                                }
-                            }
-                        },
-                        blobStoreReadOnly);
+                XLSXHandler.picturesAsJsonStream(getHashType(), version, getOutputStream(), blobStoreReadOnly);
+
             }
         };
 
