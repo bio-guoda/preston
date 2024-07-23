@@ -8,8 +8,10 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import com.monitorjbl.xlsx.StreamingReader;
+import com.monitorjbl.xlsx.exceptions.ReadException;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.poi.ooxml.POIXMLException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.apache.poi.openxml4j.opc.PackagePartName;
@@ -38,12 +40,21 @@ public class XLSXHandler {
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     skipLines,
                     headerless);
-        } catch (NotOfficeXmlFileException | InvalidOperationException ex) {
+        } catch (NotOfficeXmlFileException | InvalidOperationException | ReadException | POIXMLException ex) {
             // ignore runtime exception to implement opportunistic handling
         }
     }
 
     public static void emitPictureStatementsForXLSX(HashType hashType, IRI archiveContentId, StatementsListener listener, Dereferencer<InputStream> contentStore) throws IOException {
+
+        try {
+            emitPictureStatements(hashType, archiveContentId, listener, contentStore);
+        } catch (NotOfficeXmlFileException | InvalidOperationException | ReadException | POIXMLException ex) {
+            // ignore runtime exception to implement opportunistic handling
+        }
+    }
+
+    private static void emitPictureStatements(HashType hashType, IRI archiveContentId, StatementsListener listener, Dereferencer<InputStream> contentStore) throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook(contentStore.get(archiveContentId));
 
         List<XSSFPictureData> pictures = workbook.getAllPictures();
