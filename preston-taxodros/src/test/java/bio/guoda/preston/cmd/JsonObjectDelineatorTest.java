@@ -42,7 +42,7 @@ public class JsonObjectDelineatorTest {
     }
 
     private InputStream getResource(String resourceName) throws IOException {
-        return TestUtil.filterLineFeedFromTextInputStream(getClass().getResourceAsStream(resourceName));
+        return TestUtil.filterLineFeedFromTextInputStream(getClass().getResourceAsStream("zotero/" + resourceName));
     }
 
     @Test
