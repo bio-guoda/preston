@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.process.ProcessorState;
+import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;

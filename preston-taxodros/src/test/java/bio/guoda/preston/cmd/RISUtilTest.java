@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.Test;
@@ -12,7 +13,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static bio.guoda.preston.cmd.RISUtil.TYPE;
-import static bio.guoda.preston.cmd.RISUtil.parseRIS;
 import static bio.guoda.preston.cmd.RISUtil.translateRISToZenodo;
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -20,6 +20,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class RISUtilTest {
+
+    public static void parseRIS(InputStream inputStream, Consumer<ObjectNode> listener, String sourceIRIString) throws IOException {
+        RISUtil.parseRIS(inputStream, listener, sourceIRIString, new ProcessorStateAlwaysContinue());
+    }
 
     @Test
     public void streamRISToZenodoLineJson() throws IOException {

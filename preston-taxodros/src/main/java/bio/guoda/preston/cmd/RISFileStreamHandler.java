@@ -18,7 +18,6 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class RISFileStreamHandler implements ContentStreamHandler {
-    public static final String ZOTERO_BOOK = "book";
     private final Logger LOG = LoggerFactory.getLogger(RISFileStreamHandler.class);
 
 
