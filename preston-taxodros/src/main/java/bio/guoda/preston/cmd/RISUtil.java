@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -40,7 +41,7 @@ public class RISUtil {
             Matcher matcher = RIS_KEY_VALUE.matcher(line);
             if (matcher.matches()) {
                 String key = matcher.group("key");
-                String value = StringUtils.trim(matcher.group("value"));
+                String value = trim(matcher.group("value"));
                 if ("TY".equals(key)) {
                     record = new ObjectMapper().createObjectNode();
                     record.put(key, value);
@@ -95,7 +96,6 @@ public class RISUtil {
 
         if (jsonNode.has("TY")) {
             String value = jsonNode.get("TY").asText();
-            metadata.put("title", value);
             if (StringUtils.equals("BOOK", value) || StringUtils.equals("CPAPER", value)) {
                 metadata.put(ZenodoMetaUtil.UPLOAD_TYPE, "publication");
                 if (jsonNode.has("PB") && StringUtils.isNotBlank(jsonNode.get("PB").asText())) {
@@ -199,6 +199,11 @@ public class RISUtil {
 
         metadata.set("related_identifiers", relatedIdentifiers);
         return metadata;
+    }
+
+    private static String trim(String str) {
+        String s = StringUtils.replaceChars(str, ByteOrderMark.UTF_BOM, ' ');
+        return StringUtils.trim(s);
     }
 
     public static String getBHLPartPDFUrl(ObjectNode metadata) {

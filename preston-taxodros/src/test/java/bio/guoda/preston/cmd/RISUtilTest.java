@@ -93,6 +93,7 @@ public class RISUtilTest {
         assertThat(creators.get(2).get("name").asText(), is("Hoch, Hannelore"));
         assertThat(creators.get(3).get("name").asText(), is("Luo, Yang"));
         assertThat(creators.get(4).get("name").asText(), is("Zhang, Yalin"));
+        assertThat(taxonNode.get("title").asText(), is("Coframalaxius bletteryi gen. et sp. nov. from subterranean habitat in Southern France (Hemiptera, Fulgoromorpha, Cixiidae, Oecleini)"));
         assertThat(taxonNode.get("journal_title").asText(), is("Subterranean Biology"));
         assertThat(taxonNode.get("journal_volume").asText(), is("43"));
         assertThat(taxonNode.get("journal_issue"), is(nullValue()));
