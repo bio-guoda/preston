@@ -14,6 +14,7 @@ import com.monitorjbl.xlsx.exceptions.ReadException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.poi.EmptyFileException;
 import org.apache.poi.ooxml.POIXMLException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
@@ -43,7 +44,7 @@ public class XLSXHandler {
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     skipLines,
                     headerless);
-        } catch (NotOfficeXmlFileException | InvalidOperationException | ReadException | POIXMLException ex) {
+        } catch (NotOfficeXmlFileException | InvalidOperationException | ReadException | POIXMLException | EmptyFileException ex) {
             // ignore runtime exception to implement opportunistic handling
         }
     }
@@ -52,7 +53,7 @@ public class XLSXHandler {
 
         try {
             emitPictureStatements(hashType, archiveContentId, listener, contentStore);
-        } catch (NotOfficeXmlFileException | InvalidOperationException | ReadException | POIXMLException ex) {
+        } catch (NotOfficeXmlFileException | InvalidOperationException | ReadException | POIXMLException | EmptyFileException ex) {
             // ignore runtime exception to implement opportunistic handling
         }
     }
@@ -98,7 +99,7 @@ public class XLSXHandler {
                 );
 
             }
-        } catch (NotOfficeXmlFileException | InvalidOperationException | ReadException | POIXMLException ex) {
+        } catch (NotOfficeXmlFileException | InvalidOperationException | ReadException | POIXMLException | EmptyFileException ex) {
             // ignore runtime exception to implement opportunistic handling
         }
     }

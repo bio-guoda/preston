@@ -69,10 +69,10 @@ public class RISFileStreamHandler implements ContentStreamHandler {
 
                         StreamHandlerUtil.writeRecord(foundAtLeastOne, zenodoObject, outputStream);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        LOG.warn("failed to process [" + jsonNode.toPrettyString() + "]", e);
                     }
                 }
-            }, iriString);
+            }, iriString, persisting);
 
         } catch (IOException e) {
             // opportunistic parsing, so ignore exceptions

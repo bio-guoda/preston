@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.process.ProcessorState;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -25,7 +26,7 @@ public class RISUtil {
     static final String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
 
-    public static void parseRIS(InputStream inputStream, Consumer<ObjectNode> listener, String sourceIRIString) throws IOException {
+    public static void parseRIS(InputStream inputStream, Consumer<ObjectNode> listener, String sourceIRIString, ProcessorState state) throws IOException {
         BufferedReader bufferedReader = IOUtils.toBufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 
         String line = null;
@@ -33,7 +34,7 @@ public class RISUtil {
         long recordStart = -1;
 
         long lineNumber = 0;
-        while ((line = bufferedReader.readLine()) != null) {
+        while ((line = bufferedReader.readLine()) != null && state.shouldKeepProcessing()) {
             lineNumber++;
             Matcher matcher = RIS_KEY_VALUE.matcher(line);
             if (matcher.matches()) {
