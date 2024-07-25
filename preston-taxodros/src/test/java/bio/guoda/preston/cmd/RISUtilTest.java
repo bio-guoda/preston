@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -23,6 +24,35 @@ public class RISUtilTest {
 
     public static void parseRIS(InputStream inputStream, Consumer<ObjectNode> listener, String sourceIRIString) throws IOException {
         RISUtil.parseRIS(inputStream, listener, sourceIRIString, new ProcessorStateAlwaysContinue());
+    }
+
+
+    @Test
+    public void streamRISStopProcessing() throws IOException {
+
+        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+
+        Consumer<ObjectNode> listener = jsonNode -> jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("community-foo")));
+
+        InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-multiple.ris");
+
+        assertNotNull(bibTex);
+
+        RISUtil.parseRIS(bibTex, listener, "foo:bar", new ProcessorState() {
+
+            @Override
+            public boolean shouldKeepProcessing() {
+                return false;
+            }
+
+            @Override
+            public void stopProcessing() {
+
+            }
+        });
+
+        assertThat(jsonObjects.size(), is(0));
+
     }
 
     @Test
@@ -167,6 +197,7 @@ public class RISUtilTest {
         assertThat(relatedIdentifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(relatedIdentifiers.get(1).get("scheme").asText(), is("issn"));
     }
+
     @Test
 
     public void streamSingleISBNChapter() throws IOException {
@@ -220,6 +251,7 @@ public class RISUtilTest {
         assertThat(citationRecord.get("imprint_publisher"), is(nullValue()));
 
     }
+
     @Test
     public void streamSingleBookWithPublisher() throws IOException {
 
