@@ -99,6 +99,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                     String imageContentId = idForStack.get(entry.getKey());
                     linkRecords.put(IMAGE_CONTENT_ID, imageContentId);
                     ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
+                    ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.HAS_VERSION, imageContentId);
                     ArrayNode arrayNode = new ObjectMapper().createArrayNode();
                     entry.getValue().forEach(arrayNode::add);
                     linkRecords.set(ZenodoMetaUtil.IS_DERIVED_FROM, arrayNode);
