@@ -6,6 +6,7 @@ import bio.guoda.preston.stream.ContentStreamException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,14 +23,19 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 public class DarkTaxonFileExtractorTest {
 
@@ -73,14 +79,14 @@ public class DarkTaxonFileExtractorTest {
         );
 
         String[] jsonObjects = StringUtils.split(actual, "\n");
-        assertThat(jsonObjects.length, is(70));
+        assertThat(jsonObjects.length, is(80));
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
 
 
         assertDescription(taxonNode);
 
-        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L9"));
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasInformedBy").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L9"));
         assertThat(taxonNode.get("darktaxon:plateId").asText(), is("BMT121"));
         assertThat(taxonNode.get("darktaxon:specimenId").asText(), is("BMT0009397"));
         assertThat(taxonNode.get("darktaxon:imageFilePath").asText(), is("BMT121/BMT0009397/BMT121_BMT0009397_RAW_Data_01/BMT121_BMT0009397_RAW_01_01.tiff"));
@@ -90,12 +96,12 @@ public class DarkTaxonFileExtractorTest {
         assertThat(taxonNode.get("darktaxon:mimeType").asText(), is("image/tiff"));
 
 
-        taxonNode = unwrapMetadata(jsonObjects[jsonObjects.length - 1]);
+        taxonNode = unwrapMetadata(jsonObjects[jsonObjects.length - 1 - 10]);
 
 
         assertDescription(taxonNode);
 
-        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L78"));
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasInformedBy").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L78"));
         assertThat(taxonNode.get("darktaxon:plateId").asText(), is("BMT121"));
         assertThat(taxonNode.get("darktaxon:specimenId").asText(), is("BMT0009392"));
         assertThat(taxonNode.get("darktaxon:imageFilePath").asText(), is("BMT121/BMT0009392/BMT121_BMT0009392_stacked_04.tiff"));
@@ -104,6 +110,30 @@ public class DarkTaxonFileExtractorTest {
         assertThat(taxonNode.get("darktaxon:imageAcquisitionMethod").asText(), is("stacked"));
         assertThat(taxonNode.get("darktaxon:mimeType").asText(), is("image/tiff"));
 
+        taxonNode = unwrapMetadata(jsonObjects[jsonObjects.length - 1]);
+
+
+        assertDescription(taxonNode);
+
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasInformedBy").asText(), is("hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
+
+        JsonNode jsonNode = taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom");
+        assertThat(jsonNode.isArray(), is(true));
+
+        ArrayNode arrayNode = (ArrayNode) jsonNode;
+        List<String> contentIds = new ArrayList<>();
+        arrayNode.forEach(id -> contentIds.add(id.asText()));
+
+        assertThat(taxonNode.get("imageContentId").asText(), is("hash://sha256/0ef95afa1cb5b7a343a49da4222b57d87f9a7afa20f37b91e4924dfc490db646"));
+
+        assertThat(contentIds.size(), is(6));
+
+        assertThat(contentIds, hasItem("hash://sha256/72a63d47805f78e4529ec282e3e8e8412beb456e571c1e2276a107b3f0fa9822"));
+        assertThat(contentIds, hasItem("hash://sha256/ec550e7b16986b8ca2957478560001c22072c5f7c350fb3de7c90ec21f848d99"));
+        assertThat(contentIds, hasItem("hash://sha256/0bb85801fba1dd60365e481c92e7dedbf5d13af00e922f2af2cd1761b144822b"));
+        assertThat(contentIds, hasItem("hash://sha256/e207b334d0132c9f734de5948bd58cf864a8c325055fd0498fc0fee3d54af65e"));
+        assertThat(contentIds, hasItem("hash://sha256/1ff3fd9a4d4d66189f59c27dcbd86e1909ce0c45ed2df04a209109af1e40a4a6"));
+        assertThat(contentIds, hasItem("hash://sha256/fa2655a77e1167a1b568f24b1fc4c12d9f1431b9fa1033a56d24e73d235e4128"));
     }
 
 

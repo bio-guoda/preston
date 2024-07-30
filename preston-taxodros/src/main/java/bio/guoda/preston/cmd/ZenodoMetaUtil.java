@@ -17,6 +17,7 @@ public class ZenodoMetaUtil {
     public static final String REFERENCES = "references";
     public static final String RELATED_IDENTIFIERS = "related_identifiers";
     public static final String WAS_DERIVED_FROM = "http://www.w3.org/ns/prov#wasDerivedFrom";
+    public static final String WAS_INFORMED_BY = "http://www.w3.org/ns/prov#wasInformedBy";
     public static final String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
     public static final String REFERENCE_ID = "referenceId";
     public static final String JOURNAL_ISSUE = "journal_issue";

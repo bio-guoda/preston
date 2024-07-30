@@ -5,10 +5,9 @@ import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
@@ -21,14 +20,10 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -55,9 +50,8 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
         try {
             Charset charset = new UniversalEncodingDetector().detect(is, new Metadata());
             if (charset != null) {
-                int lineStart = -1;
-                int lineFinish = -1;
-                AtomicReference<StringBuilder> textCapture = new AtomicReference<>(new StringBuilder());
+                TreeMap<String, List<String>> rawImagesByStack = new TreeMap<>();
+                TreeMap<String, String> idForStack = new TreeMap<>();
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is, charset));
 
@@ -84,7 +78,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                                 .forEach(p -> {
                                     Matcher matcher = p.matcher(imageFilePath);
                                     if (matcher.matches()) {
-                                        populateFileObject(objectNode, hash, imageFilePath, matcher);
+                                        populateFileObject(objectNode, hash, imageFilePath, matcher, rawImagesByStack, idForStack);
                                         try {
                                             writeRecord(foundAtLeastOne, objectNode);
                                         } catch (IOException e) {
@@ -97,18 +91,37 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
 
                 }
+                for (Map.Entry<String, List<String>> entry : rawImagesByStack.entrySet()) {
+                    ObjectNode linkRecords = new ObjectMapper().createObjectNode();
+                    setOriginReference(iriString, linkRecords);
+                    linkRecords.put("imageContentId", idForStack.get(entry.getKey()));
+                    ArrayNode arrayNode = new ObjectMapper().createArrayNode();
+                    entry.getValue().forEach(arrayNode::add);
+                    linkRecords.set(ZenodoMetaUtil.WAS_DERIVED_FROM, arrayNode);
+                    writeRecord(foundAtLeastOne, linkRecords);
+                }
             }
         } catch (IOException e) {
             throw new ContentStreamException("no charset detected");
         }
 
+
         return foundAtLeastOne.get();
     }
 
-    private void populateFileObject(ObjectNode objectNode, String hash, String imageFilePath, Matcher matcher) {
-        objectNode.put("darktaxon:plateId", matcher.group("plateId"));
-        objectNode.put("darktaxon:specimenId", matcher.group("specimenId"));
-        objectNode.put("darktaxon:imageStackNumber", matcher.group("imageStackNumber"));
+    private void populateFileObject(ObjectNode objectNode,
+                                    String hash,
+                                    String imageFilePath,
+                                    Matcher matcher,
+                                    Map<String, List<String>> rawImagesByStack,
+                                    Map<String, String> idForStack) {
+        String plateId = matcher.group("plateId");
+        String specimenId = matcher.group("specimenId");
+        String imageStackNumber = matcher.group("imageStackNumber");
+
+        objectNode.put("darktaxon:plateId", plateId);
+        objectNode.put("darktaxon:specimenId", specimenId);
+        objectNode.put("darktaxon:imageStackNumber", imageStackNumber);
         String acquisitionMethod = matcher.group("imageAcquisitionMethod");
         objectNode.put("darktaxon:imageAcquisitionMethod", acquisitionMethod);
         if (StringUtils.equalsIgnoreCase("raw", acquisitionMethod)) {
@@ -117,9 +130,23 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                 objectNode.put("darktaxon:imageNumber", matcher.group("imageNumber"));
             }
         }
-        objectNode.put("darktaxon:hash", "hash://sha256/" + hash);
+        String imageContentId = "hash://sha256/" + hash;
+        objectNode.put("darktaxon:imageContentId", imageContentId);
         objectNode.put("darktaxon:imageFilePath", imageFilePath);
         objectNode.put("darktaxon:mimeType", "image/tiff");
+
+        String imageStackId = plateId + "_" + specimenId + "_stacked_" + imageStackNumber;
+        if (StringUtils.equals("RAW", matcher.group("imageAcquisitionMethod"))) {
+            rawImagesByStack.putIfAbsent(imageStackId, new TreeList<>());
+            List<String> rawImages = rawImagesByStack.getOrDefault(imageStackId, new ArrayList<>());
+            rawImages.add(imageContentId);
+            rawImagesByStack.put(imageStackId, rawImages);
+        }
+
+        if (StringUtils.equals("stacked", matcher.group("imageAcquisitionMethod"))) {
+            idForStack.put(imageStackId, imageContentId);
+        }
+
     }
 
     private void writeRecord(AtomicBoolean foundAtLeastOne, ObjectNode objectNode) throws IOException {
@@ -133,13 +160,17 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
     }
 
 
+    private void setOriginReference(String iriString, ObjectNode objectNode) {
+        setOriginReference(iriString, -1, -1, objectNode);
+    }
+
     private void setOriginReference(String iriString, int lineStart, int lineFinish, ObjectNode objectNode) {
         String suffix = lineFinish > lineStart
                 ? "-" + "L" + lineFinish
                 : "";
-        String value = "line:" + iriString + "!/L" + lineStart + suffix;
-        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, value);
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, "https://linker.bio/" + value);
+        String value = (StringUtils.isBlank(suffix) && lineStart == -1) ? iriString : ("line:" + iriString + "!/L" + lineStart + suffix);
+        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_INFORMED_BY, value);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.WAS_INFORMED_BY, "https://linker.bio/" + value);
         ZenodoMetaUtil.append(objectNode, ZenodoMetaUtil.REFERENCES, "Hartop E, Srivathsan A, Ronquist F, Meier R (2022) Towards Large-Scale Integrative Taxonomy (LIT): resolving the data conundrum for dark taxa. Syst Biol 71:1404–1422. https://doi.org/10.1093/sysbio/syac033 " +
                 "\n" +
                 "Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14");
