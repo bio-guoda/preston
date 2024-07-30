@@ -101,11 +101,11 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                     ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
                     ArrayNode arrayNode = new ObjectMapper().createArrayNode();
                     entry.getValue().forEach(arrayNode::add);
-                    linkRecords.set(ZenodoMetaUtil.WAS_DERIVED_FROM, arrayNode);
+                    linkRecords.set(ZenodoMetaUtil.IS_DERIVED_FROM, arrayNode);
 
                     List<String> rawImages = entry.getValue();
                     for (String rawImage : rawImages) {
-                        ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.WAS_DERIVED_FROM, rawImage);
+                        ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.IS_DERIVED_FROM, rawImage);
                     }
                     setDescription(linkRecords);
                     writeZenodoMetadata(foundAtLeastOne, linkRecords);
@@ -196,8 +196,8 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                 ? "-" + "L" + lineFinish
                 : "";
         String value = (StringUtils.isBlank(suffix) && lineStart == -1) ? iriString : ("line:" + iriString + "!/L" + lineStart + suffix);
-        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_INFORMED_BY, value);
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.WAS_INFORMED_BY, "https://linker.bio/" + value);
+        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, value);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, "https://linker.bio/" + value);
         ZenodoMetaUtil.append(objectNode, ZenodoMetaUtil.REFERENCES, "Hartop E, Srivathsan A, Ronquist F, Meier R (2022) Towards Large-Scale Integrative Taxonomy (LIT): resolving the data conundrum for dark taxa. Syst Biol 71:1404–1422. https://doi.org/10.1093/sysbio/syac033 " +
                 "Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14");
 
