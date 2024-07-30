@@ -98,7 +98,7 @@ public class DarkTaxonFileExtractorTest {
 
         assertThat(taxonNode.at("/publication_date").asText(), is("2022-01-02"));
         assertThat(taxonNode.at("/creators/0/name").asText(), is("Museum für Naturkunde"));
-        assertThat(taxonNode.at("/communities/0/identifier").asText(), is("test-community"));
+        assertThat(taxonNode.at("/communities/0/identifier").asText(), is("my-community"));
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
         assertThat(identifiers.size(), is(4));
