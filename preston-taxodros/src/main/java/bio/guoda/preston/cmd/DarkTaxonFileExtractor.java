@@ -26,23 +26,27 @@ public class DarkTaxonFileExtractor extends ProcessorExtracting {
     private final ProcessorState processorState;
     private final OutputStream outputStream;
     private final PublicationDateFactory publicationDateFactory;
+    private final List<String> communities;
 
 
     public DarkTaxonFileExtractor(ProcessorState processorState,
                                   BlobStoreReadOnly blobStoreReadOnly,
                                   OutputStream out,
+                                  List<String> communities,
                                   StatementsListener... listeners) {
-        this(processorState, blobStoreReadOnly, out, DateUtil::nowDate, listeners);
+        this(processorState, blobStoreReadOnly, out, communities, DateUtil::nowDate, listeners);
     }
 
     public DarkTaxonFileExtractor(ProcessorState processorState,
                                   BlobStoreReadOnly blobStoreReadOnly,
                                   OutputStream out,
+                                  List<String> communities,
                                   PublicationDateFactory factory,
                                   StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
+        this.communities = communities;
         this.publicationDateFactory = factory;
 
     }
@@ -64,7 +68,7 @@ public class DarkTaxonFileExtractor extends ProcessorExtracting {
             this.handler = new ContentStreamHandlerImpl(
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
-                    new DarkTaxonFileStreamHandler(this, outputStream, publicationDateFactory)
+                    new DarkTaxonFileStreamHandler(this, outputStream, communities, publicationDateFactory)
             );
         }
 

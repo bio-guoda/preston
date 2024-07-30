@@ -38,22 +38,20 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
     public static final Pattern STACKED_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>stacked)_(?<imageStackNumber>[0-9]+)[.]tiff$");
     public static final String IMAGE_CONTENT_ID = "darktaxon:imageContentId";
     public static final String LSID_PREFIX = "urn:lsid:github.com:darktaxon:";
-
-    private PublicationDateFactory publicationDateFactory = new PublicationDateFactory() {
-        @Override
-        public String getPublicationDate() {
-            return DateUtil.nowDate();
-        }
-    };
+    private final List<String> communities;
+    private PublicationDateFactory publicationDateFactory;
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
     public static final Pattern HASH_AND_FILEPATH_PATTERN = Pattern.compile("(?<sha256hash>[a-f0-9]{64})\\s+(?<imageFilepath>.*)/(?<imageFilename>[^/]+$)");
 
     public DarkTaxonFileStreamHandler(ContentStreamHandler contentStreamHandler,
-                                      OutputStream os, PublicationDateFactory publicationDateFactory) {
+                                      OutputStream os,
+                                      List<String> communities,
+                                      PublicationDateFactory publicationDateFactory) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
+        this.communities = communities;
         this.publicationDateFactory = publicationDateFactory;
     }
 
@@ -192,8 +190,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_PHOTO);
         ZenodoMetaUtil.setCreators(objectNode, Arrays.asList("Museum für Naturkunde"));
         ZenodoMetaUtil.setValue(objectNode, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
-
-
+        ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
     }
 
     private void setDescription(ObjectNode objectNode) {

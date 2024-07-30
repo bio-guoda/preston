@@ -24,6 +24,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
@@ -69,6 +70,7 @@ public class DarkTaxonFileExtractorTest {
                 new ProcessorStateAlwaysContinue(),
                 blobStore,
                 byteArrayOutputStream,
+                Arrays.asList("my-community"),
                 new PublicationDateFactory() {
                     @Override
                     public String getPublicationDate() {
@@ -96,6 +98,7 @@ public class DarkTaxonFileExtractorTest {
 
         assertThat(taxonNode.at("/publication_date").asText(), is("2022-01-02"));
         assertThat(taxonNode.at("/creators/0/name").asText(), is("Museum für Naturkunde"));
+        assertThat(taxonNode.at("/communities/0/identifier").asText(), is("test-community"));
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
         assertThat(identifiers.size(), is(4));

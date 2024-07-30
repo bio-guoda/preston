@@ -11,12 +11,24 @@ import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @CommandLine.Command(
         name = "darktaxon-stream",
         description = "Stream DarkTaxon records into line-json with Zenodo metadata",
         hidden = true
 )
 public class CmdDarkTaxonStream extends LoggingPersisting implements Runnable {
+
+    @CommandLine.Option(
+            names = {"--community", "--communities"},
+            split = ",",
+            description = "select which Zenodo communities to submit to. If community is known (e.g., batlit, taxodros, mfn), default metadata is included."
+    )
+
+    private List<String> communities = new ArrayList<>();
+
 
     @Override
     public void run() {
@@ -36,6 +48,7 @@ public class CmdDarkTaxonStream extends LoggingPersisting implements Runnable {
                 this,
                 blobStoreReadOnly,
                 getOutputStream(),
+                communities,
                 listener);
 
         StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {
