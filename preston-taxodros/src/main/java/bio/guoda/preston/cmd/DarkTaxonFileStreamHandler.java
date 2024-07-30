@@ -36,7 +36,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
-    public static final Pattern HASH_AND_FILEPATH_PATTERN = Pattern.compile("(?<sha256hash>[a-f0-9]{64})\\s+(?<imageFilePath>.*)");
+    public static final Pattern HASH_AND_FILEPATH_PATTERN = Pattern.compile("(?<sha256hash>[a-f0-9]{64})\\s+(?<imageFilepath>.*)/(?<imageFilename>[^/]+$)");
 
     public DarkTaxonFileStreamHandler(ContentStreamHandler contentStreamHandler,
                                       OutputStream os) {
@@ -71,15 +71,16 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
                     if (matcher1.matches()) {
                         String hash = matcher1.group("sha256hash");
-                        String imageFilePath = matcher1.group("imageFilePath");
+                        String imageFilename = matcher1.group("imageFilename");
+                        String imageFilepath = matcher1.group("imageFilepath") + "/" + imageFilename;
 
                         setOriginReference(iriString, lineNumber, lineNumber, objectNode);
 
                         Stream.of(RAW_IMAGEFILE_PATTERN, STACKED_IMAGEFILE_PATTERN)
                                 .forEach(p -> {
-                                    Matcher matcher = p.matcher(imageFilePath);
+                                    Matcher matcher = p.matcher(imageFilepath);
                                     if (matcher.matches()) {
-                                        populateFileObject(objectNode, hash, imageFilePath, matcher, rawImagesByStack, idForStack);
+                                        populateFileObject(objectNode, hash, imageFilepath, matcher, rawImagesByStack, idForStack, imageFilename);
                                         try {
                                             writeZenodoMetadata(foundAtLeastOne, objectNode);
                                         } catch (IOException e) {
@@ -120,10 +121,11 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
     private void populateFileObject(ObjectNode objectNode,
                                     String hash,
-                                    String imageFilePath,
+                                    String imageFilepath,
                                     Matcher matcher,
                                     Map<String, List<String>> rawImagesByStack,
-                                    Map<String, String> idForStack) {
+                                    Map<String, String> idForStack,
+                                    String imageFilename) {
         String plateId = matcher.group("plateId");
         String specimenId = matcher.group("specimenId");
         String imageStackNumber = matcher.group("imageStackNumber");
@@ -143,13 +145,13 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
         objectNode.put(IMAGE_CONTENT_ID, imageContentId);
 
         String imageStackId = plateId + "_" + specimenId + "_stacked_" + imageStackNumber;
+        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CAPTURE_DEVICE, "digital camera");
         if (StringUtils.equals("stacked", matcher.group("imageAcquisitionMethod"))) {
             idForStack.put(imageStackId, imageContentId);
             ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE, "focus stacking");
         }
 
         if (StringUtils.equals("RAW", acquisitionMethod)) {
-            ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CAPTURE_DEVICE, "digital camera");
             String imageNumber = matcher.group("imageNumber");
             if (StringUtils.isNotBlank(imageNumber)) {
                 objectNode.put("darktaxon:imageNumber", matcher.group("imageNumber"));
@@ -160,8 +162,8 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
             rawImagesByStack.put(imageStackId, rawImages);
         }
 
-        ZenodoMetaUtil.setFilename(objectNode, imageFilePath);
-        objectNode.put("darktaxon:imageFilePath", imageFilePath);
+        objectNode.put("darktaxon:imageFilepath", imageFilepath);
+        ZenodoMetaUtil.setFilename(objectNode, imageFilename);
         String mimeType = "image/tiff";
         objectNode.put("darktaxon:mimeType", mimeType);
         ZenodoMetaUtil.setType(objectNode, mimeType);

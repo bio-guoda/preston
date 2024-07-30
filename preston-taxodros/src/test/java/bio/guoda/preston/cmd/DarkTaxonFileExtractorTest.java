@@ -89,7 +89,7 @@ public class DarkTaxonFileExtractorTest {
         assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasInformedBy").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L9"));
         assertThat(taxonNode.get("darktaxon:plateId").asText(), is("BMT121"));
         assertThat(taxonNode.get("darktaxon:specimenId").asText(), is("BMT0009397"));
-        assertThat(taxonNode.get("darktaxon:imageFilePath").asText(), is("BMT121/BMT0009397/BMT121_BMT0009397_RAW_Data_01/BMT121_BMT0009397_RAW_01_01.tiff"));
+        assertThat(taxonNode.get("darktaxon:imageFilepath").asText(), is("BMT121/BMT0009397/BMT121_BMT0009397_RAW_Data_01/BMT121_BMT0009397_RAW_01_01.tiff"));
         assertThat(taxonNode.get("darktaxon:imageStackNumber").asText(), is("01"));
         assertThat(taxonNode.get("darktaxon:imageAcquisitionMethod").asText(), is("RAW"));
         assertThat(taxonNode.get("darktaxon:imageNumber").asText(), is("01"));
@@ -106,8 +106,8 @@ public class DarkTaxonFileExtractorTest {
         assertThat(taxonNode.get("title").asText(), is("Photo of Specimen BMT0009392"));
         assertThat(taxonNode.get("darktaxon:plateId").asText(), is("BMT121"));
         assertThat(taxonNode.get("darktaxon:specimenId").asText(), is("BMT0009392"));
-        assertThat(taxonNode.get("filename").asText(), is("BMT121/BMT0009392/BMT121_BMT0009392_stacked_04.tiff"));
-        assertThat(taxonNode.get("darktaxon:imageFilePath").asText(), is("BMT121/BMT0009392/BMT121_BMT0009392_stacked_04.tiff"));
+        assertThat(taxonNode.get("filename").asText(), is("BMT121_BMT0009392_stacked_04.tiff"));
+        assertThat(taxonNode.get("darktaxon:imageFilepath").asText(), is("BMT121/BMT0009392/BMT121_BMT0009392_stacked_04.tiff"));
         assertThat(taxonNode.get("darktaxon:imageStackNumber").asText(), is("04"));
         assertThat(taxonNode.get("darktaxon:imageNumber"), is(nullValue()));
         assertThat(taxonNode.get("darktaxon:imageAcquisitionMethod").asText(), is("stacked"));
