@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.DateUtil;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementsEmitter;
@@ -24,14 +25,26 @@ public class DarkTaxonFileExtractor extends ProcessorExtracting {
 
     private final ProcessorState processorState;
     private final OutputStream outputStream;
+    private final PublicationDateFactory publicationDateFactory;
+
 
     public DarkTaxonFileExtractor(ProcessorState processorState,
                                   BlobStoreReadOnly blobStoreReadOnly,
                                   OutputStream out,
                                   StatementsListener... listeners) {
+        this(processorState, blobStoreReadOnly, out, DateUtil::nowDate, listeners);
+    }
+
+    public DarkTaxonFileExtractor(ProcessorState processorState,
+                                  BlobStoreReadOnly blobStoreReadOnly,
+                                  OutputStream out,
+                                  PublicationDateFactory factory,
+                                  StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
+        this.publicationDateFactory = factory;
+
     }
 
 
@@ -51,7 +64,7 @@ public class DarkTaxonFileExtractor extends ProcessorExtracting {
             this.handler = new ContentStreamHandlerImpl(
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
-                    new DarkTaxonFileStreamHandler(this, outputStream)
+                    new DarkTaxonFileStreamHandler(this, outputStream, publicationDateFactory)
             );
         }
 

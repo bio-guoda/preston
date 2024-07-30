@@ -68,7 +68,13 @@ public class DarkTaxonFileExtractorTest {
         DarkTaxonFileExtractor extractor = new DarkTaxonFileExtractor(
                 new ProcessorStateAlwaysContinue(),
                 blobStore,
-                byteArrayOutputStream
+                byteArrayOutputStream,
+                new PublicationDateFactory() {
+                    @Override
+                    public String getPublicationDate() {
+                        return "2022-01-02";
+                    }
+                }
         );
 
         extractor.on(statement);
@@ -87,6 +93,9 @@ public class DarkTaxonFileExtractorTest {
         assertDescription(taxonNode);
 
         assertThat(taxonNode.get("isDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L9"));
+
+        assertThat(taxonNode.at("/publication_date").asText(), is("2022-01-02"));
+        assertThat(taxonNode.at("/creators/0/name").asText(), is("Museum für Naturkunde"));
         assertThat(taxonNode.get("darktaxon:plateId").asText(), is("BMT121"));
         assertThat(taxonNode.get("darktaxon:specimenId").asText(), is("BMT0009397"));
         assertThat(taxonNode.get("darktaxon:imageFilepath").asText(), is("BMT121/BMT0009397/BMT121_BMT0009397_RAW_Data_01/BMT121_BMT0009397_RAW_01_01.tiff"));

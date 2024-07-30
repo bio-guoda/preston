@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.DateUtil;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,7 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -28,20 +30,30 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import static bio.guoda.preston.cmd.ZenodoMetaUtil.PUBLICATION_DATE;
+
 public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
     public static final Pattern RAW_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>RAW)_(?<imageStackNumber>[0-9]+)_(?<imageNumber>[0-9]+)[.]tiff$");
     public static final Pattern STACKED_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>stacked)_(?<imageStackNumber>[0-9]+)[.]tiff$");
     public static final String IMAGE_CONTENT_ID = "darktaxon:imageContentId";
 
+    private PublicationDateFactory publicationDateFactory = new PublicationDateFactory() {
+        @Override
+        public String getPublicationDate() {
+            return DateUtil.nowDate();
+        }
+    };
+
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
     public static final Pattern HASH_AND_FILEPATH_PATTERN = Pattern.compile("(?<sha256hash>[a-f0-9]{64})\\s+(?<imageFilepath>.*)/(?<imageFilename>[^/]+$)");
 
     public DarkTaxonFileStreamHandler(ContentStreamHandler contentStreamHandler,
-                                      OutputStream os) {
+                                      OutputStream os, PublicationDateFactory publicationDateFactory) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
+        this.publicationDateFactory = publicationDateFactory;
     }
 
     @Override
@@ -175,6 +187,9 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
         ZenodoMetaUtil.setType(objectNode, mimeType);
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_IMAGE);
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_PHOTO);
+        ZenodoMetaUtil.setCreators(objectNode, Arrays.asList("Museum für Naturkunde"));
+        ZenodoMetaUtil.setValue(objectNode, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
+
 
 
     }
@@ -215,4 +230,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
     }
 
 
+    public void setPublicationDateFactory(PublicationDateFactory publicationDateFactory) {
+        this.publicationDateFactory = publicationDateFactory;
+    }
 }
