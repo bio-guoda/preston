@@ -30,14 +30,19 @@ public class ZenodoMetaUtil {
     public static final String PUBLICATION_TYPE_BOOK = "book";
     public static final String TITLE = "title";
 
+    public static final String FIELD_CUSTOM_DWC_CATALOG_NUMBER = "dwc:catalogNumber";
     public static final String FIELD_CUSTOM_DWC_KINGDOM = "dwc:kingdom";
     public static final String FIELD_CUSTOM_DWC_PHYLUM = "dwc:phylum";
     public static final String FIELD_CUSTOM_DWC_CLASS = "dwc:class";
     public static final String FIELD_CUSTOM_DWC_ORDER = "dwc:order";
+    public static final String FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE = "ac:resourceCreationTechnique";
+    public static final String FIELD_CUSTOM_AC_RESOURCE_CAPTURE_DEVICE = "ac:captureDevice";
     public static final String DOI = "doi";
     public static final String IS_ALTERNATE_IDENTIFIER = "isAlternateIdentifier";
     public static final String UPLOAD_TYPE = "upload_type";
     public static final String UPLOAD_TYPE_PUBLICATION = "publication";
+    public static final String UPLOAD_TYPE_IMAGE = "image";
+    public static final String PUBLICATION_TYPE_PHOTO = "photo";
     public static final String HAS_VERSION = "hasVersion";
     public static final String IS_COMPILED_BY = "isCompiledBy";
     public static final String RESOURCE_TYPE_SOFTWARE = "software";

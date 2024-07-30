@@ -81,7 +81,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                                     if (matcher.matches()) {
                                         populateFileObject(objectNode, hash, imageFilePath, matcher, rawImagesByStack, idForStack);
                                         try {
-                                            writeRecord(foundAtLeastOne, objectNode);
+                                            writeZenodoMetadata(foundAtLeastOne, objectNode);
                                         } catch (IOException e) {
                                             //
                                         }
@@ -95,11 +95,19 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                 for (Map.Entry<String, List<String>> entry : rawImagesByStack.entrySet()) {
                     ObjectNode linkRecords = new ObjectMapper().createObjectNode();
                     setOriginReference(iriString, linkRecords);
-                    linkRecords.put(IMAGE_CONTENT_ID, idForStack.get(entry.getKey()));
+                    String imageContentId = idForStack.get(entry.getKey());
+                    linkRecords.put(IMAGE_CONTENT_ID, imageContentId);
+                    ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
                     ArrayNode arrayNode = new ObjectMapper().createArrayNode();
                     entry.getValue().forEach(arrayNode::add);
                     linkRecords.set(ZenodoMetaUtil.WAS_DERIVED_FROM, arrayNode);
-                    writeRecord(foundAtLeastOne, linkRecords);
+
+                    List<String> rawImages = entry.getValue();
+                    for (String rawImage : rawImages) {
+                        ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.WAS_DERIVED_FROM, rawImage);
+                    }
+                    setDescription(linkRecords);
+                    writeZenodoMetadata(foundAtLeastOne, linkRecords);
                 }
             }
         } catch (IOException e) {
@@ -122,36 +130,52 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
         objectNode.put("darktaxon:plateId", plateId);
         objectNode.put("darktaxon:specimenId", specimenId);
+        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, specimenId);
+        objectNode.put(ZenodoMetaUtil.TITLE, "Photo of Specimen " + specimenId);
+        setDescription(objectNode);
+
         objectNode.put("darktaxon:imageStackNumber", imageStackNumber);
         String acquisitionMethod = matcher.group("imageAcquisitionMethod");
         objectNode.put("darktaxon:imageAcquisitionMethod", acquisitionMethod);
-        if (StringUtils.equalsIgnoreCase("raw", acquisitionMethod)) {
+
+        String imageContentId = "hash://sha256/" + hash;
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
+        objectNode.put(IMAGE_CONTENT_ID, imageContentId);
+
+        String imageStackId = plateId + "_" + specimenId + "_stacked_" + imageStackNumber;
+        if (StringUtils.equals("stacked", matcher.group("imageAcquisitionMethod"))) {
+            idForStack.put(imageStackId, imageContentId);
+            ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE, "focus stacking");
+        }
+
+        if (StringUtils.equals("RAW", acquisitionMethod)) {
+            ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CAPTURE_DEVICE, "digital camera");
             String imageNumber = matcher.group("imageNumber");
             if (StringUtils.isNotBlank(imageNumber)) {
                 objectNode.put("darktaxon:imageNumber", matcher.group("imageNumber"));
             }
-        }
-        String imageContentId = "hash://sha256/" + hash;
-        objectNode.put(IMAGE_CONTENT_ID, imageContentId);
-        objectNode.put("darktaxon:imageFilePath", imageFilePath);
-        objectNode.put("darktaxon:mimeType", "image/tiff");
-
-        String imageStackId = plateId + "_" + specimenId + "_stacked_" + imageStackNumber;
-        if (StringUtils.equals("RAW", matcher.group("imageAcquisitionMethod"))) {
             rawImagesByStack.putIfAbsent(imageStackId, new TreeList<>());
             List<String> rawImages = rawImagesByStack.getOrDefault(imageStackId, new ArrayList<>());
             rawImages.add(imageContentId);
             rawImagesByStack.put(imageStackId, rawImages);
         }
 
-        if (StringUtils.equals("stacked", matcher.group("imageAcquisitionMethod"))) {
-            idForStack.put(imageStackId, imageContentId);
-        }
+        ZenodoMetaUtil.setFilename(objectNode, imageFilePath);
+        objectNode.put("darktaxon:imageFilePath", imageFilePath);
+        String mimeType = "image/tiff";
+        objectNode.put("darktaxon:mimeType", mimeType);
+        ZenodoMetaUtil.setType(objectNode, mimeType);
+        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_IMAGE);
+        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_PHOTO);
+
 
     }
 
-    private void writeRecord(AtomicBoolean foundAtLeastOne, ObjectNode objectNode) throws IOException {
+    private void setDescription(ObjectNode objectNode) {
         objectNode.put("description", "Uploaded by Plazi for the Museum für Naturkunde Berlin.");
+    }
+
+    private void writeZenodoMetadata(AtomicBoolean foundAtLeastOne, ObjectNode objectNode) throws IOException {
         ObjectNode metadata = new ObjectMapper().createObjectNode();
         metadata.set("metadata", objectNode);
         IOUtils.copy(IOUtils.toInputStream(metadata.toString(), StandardCharsets.UTF_8), outputStream);
@@ -173,7 +197,6 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_INFORMED_BY, value);
         ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.WAS_INFORMED_BY, "https://linker.bio/" + value);
         ZenodoMetaUtil.append(objectNode, ZenodoMetaUtil.REFERENCES, "Hartop E, Srivathsan A, Ronquist F, Meier R (2022) Towards Large-Scale Integrative Taxonomy (LIT): resolving the data conundrum for dark taxa. Syst Biol 71:1404–1422. https://doi.org/10.1093/sysbio/syac033 " +
-                "\n" +
                 "Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14");
 
     }
