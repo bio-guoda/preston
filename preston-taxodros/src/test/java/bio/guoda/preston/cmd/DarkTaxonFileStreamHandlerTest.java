@@ -19,7 +19,7 @@ public class DarkTaxonFileStreamHandlerTest {
         assertTrue(matcher.matches());
 
         assertThat(matcher.group("sha256hash"), Is.is("72a63d47805f78e4529ec282e3e8e8412beb456e571c1e2276a107b3f0fa9822"));
-        assertThat(matcher.group("filepath"), Is.is("BMT121/BMT0009397/BMT121_BMT0009397_RAW_Data_01/BMT121_BMT0009397_RAW_01_01.tiff"));
+        assertThat(matcher.group("imageFilePath"), Is.is("BMT121/BMT0009397/BMT121_BMT0009397_RAW_Data_01/BMT121_BMT0009397_RAW_01_01.tiff"));
     }
 
     @Test
