@@ -98,8 +98,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                     setOriginReference(iriString, linkRecords);
                     String imageContentId = idForStack.get(entry.getKey());
                     linkRecords.put(IMAGE_CONTENT_ID, imageContentId);
-                    ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
-                    ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.HAS_VERSION, imageContentId);
+                    appendAlternateIdentifiers(linkRecords, imageContentId);
                     ArrayNode arrayNode = new ObjectMapper().createArrayNode();
                     entry.getValue().forEach(arrayNode::add);
                     linkRecords.set(ZenodoMetaUtil.IS_DERIVED_FROM, arrayNode);
@@ -118,6 +117,11 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
 
         return foundAtLeastOne.get();
+    }
+
+    private void appendAlternateIdentifiers(ObjectNode linkRecords, String imageContentId) {
+        ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
+        ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.HAS_VERSION, imageContentId);
     }
 
     private void populateFileObject(ObjectNode objectNode,
@@ -142,7 +146,8 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
         objectNode.put("darktaxon:imageAcquisitionMethod", acquisitionMethod);
 
         String imageContentId = "hash://sha256/" + hash;
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
+        appendAlternateIdentifiers(objectNode, imageContentId);
+
         objectNode.put(IMAGE_CONTENT_ID, imageContentId);
 
         String imageStackId = plateId + "_" + specimenId + "_stacked_" + imageStackNumber;
