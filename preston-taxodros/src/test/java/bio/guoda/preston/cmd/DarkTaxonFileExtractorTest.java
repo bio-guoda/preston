@@ -105,12 +105,20 @@ public class DarkTaxonFileExtractorTest {
         // constructed from institution code (mfn)
         assertThat(identifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(1).get("identifier").asText(), is("hash://sha256/72a63d47805f78e4529ec282e3e8e8412beb456e571c1e2276a107b3f0fa9822"));
-        // constructed from institution code (mfn)
-        assertThat(identifiers.get(3).get("relation").asText(), is("isAlternateIdentifier"));
-        assertThat(identifiers.get(3).get("identifier").asText(), is("urn:lsid:github.com:darktaxon:BMT0009397"));
 
         assertThat(identifiers.get(2).get("relation").asText(), is("hasVersion"));
         assertThat(identifiers.get(2).get("identifier").asText(), is("hash://sha256/72a63d47805f78e4529ec282e3e8e8412beb456e571c1e2276a107b3f0fa9822"));
+
+        // lsid to disambiguate records
+        assertThat(identifiers.get(3).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(3).get("identifier").asText(), is("urn:lsid:github.com:darktaxon:BMT0009397"));
+
+
+        JsonNode references = taxonNode.at("/references");
+        assertThat(references.size(), is(2));
+        assertThat(references.get(0).asText(), is("Hartop E, Srivathsan A, Ronquist F, Meier R (2022) Towards Large-Scale Integrative Taxonomy (LIT): resolving the data conundrum for dark taxa. Syst Biol 71:1404–1422. https://doi.org/10.1093/sysbio/syac033"));
+        assertThat(references.get(1).asText(), is("Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14"));
+
 
 
         assertThat(taxonNode.get("darktaxon:plateId").asText(), is("BMT121"));
