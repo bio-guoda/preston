@@ -35,12 +35,12 @@ import java.util.stream.Stream;
 
 public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
-    public static final Pattern RAW_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<type>RAW)_(?<imageStackNumber>[0-9]+)_(?<imageNumber>[0-9]+)[.]tiff$");
-    public static final Pattern STACKED_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<type>stacked)_(?<imageStackNumber>[0-9]+)[.]tiff$");
+    public static final Pattern RAW_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>RAW)_(?<imageStackNumber>[0-9]+)_(?<imageNumber>[0-9]+)[.]tiff$");
+    public static final Pattern STACKED_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>stacked)_(?<imageStackNumber>[0-9]+)[.]tiff$");
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
-    public static final Pattern HASH_AND_FILEPATH_PATTERN = Pattern.compile("(?<sha256hash>[a-f0-9]{64})\\s+(?<filepath>.*)");
+    public static final Pattern HASH_AND_FILEPATH_PATTERN = Pattern.compile("(?<sha256hash>[a-f0-9]{64})\\s+(?<imageFilePath>.*)");
 
     public DarkTaxonFileStreamHandler(ContentStreamHandler contentStreamHandler,
                                       OutputStream os) {
@@ -76,15 +76,15 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
                     if (matcher1.matches()) {
                         String hash = matcher1.group("sha256hash");
-                        String filepath = matcher1.group("filepath");
+                        String imageFilePath = matcher1.group("imageFilePath");
 
                         setOriginReference(iriString, lineNumber, lineNumber, objectNode);
 
                         Stream.of(RAW_IMAGEFILE_PATTERN, STACKED_IMAGEFILE_PATTERN)
                                 .forEach(p -> {
-                                    Matcher matcher = p.matcher(filepath);
+                                    Matcher matcher = p.matcher(imageFilePath);
                                     if (matcher.matches()) {
-                                        populateFileObject(objectNode, hash, filepath, matcher);
+                                        populateFileObject(objectNode, hash, imageFilePath, matcher);
                                         try {
                                             writeRecord(foundAtLeastOne, objectNode);
                                         } catch (IOException e) {
@@ -105,20 +105,20 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
         return foundAtLeastOne.get();
     }
 
-    private void populateFileObject(ObjectNode objectNode, String hash, String filepath, Matcher matcher) {
+    private void populateFileObject(ObjectNode objectNode, String hash, String imageFilePath, Matcher matcher) {
         objectNode.put("darktaxon:plateId", matcher.group("plateId"));
         objectNode.put("darktaxon:specimenId", matcher.group("specimenId"));
         objectNode.put("darktaxon:imageStackNumber", matcher.group("imageStackNumber"));
-        String type = matcher.group("type");
-        objectNode.put("darktaxon:type", type);
-        if (StringUtils.equalsIgnoreCase("raw", type)) {
+        String acquisitionMethod = matcher.group("imageAcquisitionMethod");
+        objectNode.put("darktaxon:imageAcquisitionMethod", acquisitionMethod);
+        if (StringUtils.equalsIgnoreCase("raw", acquisitionMethod)) {
             String imageNumber = matcher.group("imageNumber");
             if (StringUtils.isNotBlank(imageNumber)) {
                 objectNode.put("darktaxon:imageNumber", matcher.group("imageNumber"));
             }
         }
         objectNode.put("darktaxon:hash", "hash://sha256/" + hash);
-        objectNode.put("darktaxon:path", filepath);
+        objectNode.put("darktaxon:imageFilePath", imageFilePath);
         objectNode.put("darktaxon:mimeType", "image/tiff");
     }
 
