@@ -93,6 +93,7 @@ public class DarkTaxonFileExtractorTest {
         assertThat(taxonNode.get("darktaxon:imageStackNumber").asText(), is("01"));
         assertThat(taxonNode.get("darktaxon:imageAcquisitionMethod").asText(), is("RAW"));
         assertThat(taxonNode.get("darktaxon:imageNumber").asText(), is("01"));
+        assertThat(taxonNode.get("darktaxon:imageContentId").asText(), is("hash://sha256/72a63d47805f78e4529ec282e3e8e8412beb456e571c1e2276a107b3f0fa9822"));
         assertThat(taxonNode.get("darktaxon:mimeType").asText(), is("image/tiff"));
 
 
@@ -124,7 +125,7 @@ public class DarkTaxonFileExtractorTest {
         List<String> contentIds = new ArrayList<>();
         arrayNode.forEach(id -> contentIds.add(id.asText()));
 
-        assertThat(taxonNode.get("imageContentId").asText(), is("hash://sha256/0ef95afa1cb5b7a343a49da4222b57d87f9a7afa20f37b91e4924dfc490db646"));
+        assertThat(taxonNode.get("darktaxon:imageContentId").asText(), is("hash://sha256/0ef95afa1cb5b7a343a49da4222b57d87f9a7afa20f37b91e4924dfc490db646"));
 
         assertThat(contentIds.size(), is(6));
 

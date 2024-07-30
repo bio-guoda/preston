@@ -32,6 +32,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
     public static final Pattern RAW_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>RAW)_(?<imageStackNumber>[0-9]+)_(?<imageNumber>[0-9]+)[.]tiff$");
     public static final Pattern STACKED_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>stacked)_(?<imageStackNumber>[0-9]+)[.]tiff$");
+    public static final String IMAGE_CONTENT_ID = "darktaxon:imageContentId";
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
@@ -94,7 +95,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                 for (Map.Entry<String, List<String>> entry : rawImagesByStack.entrySet()) {
                     ObjectNode linkRecords = new ObjectMapper().createObjectNode();
                     setOriginReference(iriString, linkRecords);
-                    linkRecords.put("imageContentId", idForStack.get(entry.getKey()));
+                    linkRecords.put(IMAGE_CONTENT_ID, idForStack.get(entry.getKey()));
                     ArrayNode arrayNode = new ObjectMapper().createArrayNode();
                     entry.getValue().forEach(arrayNode::add);
                     linkRecords.set(ZenodoMetaUtil.WAS_DERIVED_FROM, arrayNode);
@@ -131,7 +132,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
             }
         }
         String imageContentId = "hash://sha256/" + hash;
-        objectNode.put("darktaxon:imageContentId", imageContentId);
+        objectNode.put(IMAGE_CONTENT_ID, imageContentId);
         objectNode.put("darktaxon:imageFilePath", imageFilePath);
         objectNode.put("darktaxon:mimeType", "image/tiff");
 
