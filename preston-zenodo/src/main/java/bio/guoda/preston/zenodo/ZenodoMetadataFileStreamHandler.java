@@ -108,42 +108,43 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     }
                 }
             }
-            if (!recordIds.isEmpty()) {
-                Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, recordIds);
-                List<Long> existingIds = foundDeposits
-                        .stream()
-                        .filter(x -> !StringUtils.equals(x.getValue(), "unsubmitted"))
-                        .map(Pair::getKey)
-                        .distinct()
-                        .collect(Collectors.toList());
+            if (recordIds.isEmpty()) {
+                throw new IOException("cannot publish zenodo record: no lsid found in [" + coordinate.getIRIString() + "]");
+            }
 
-                ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
-                try {
-                    if (existingIds.size() == 0) {
-                        ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
-                        uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
-                        emitRelations(recordIds, contentIds, origins, ctxLocal);
-                    } else if (existingIds.size() == 1) {
-                        ctxLocal.setDepositId(existingIds.get(0));
-                        ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
-                        String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
-                        ZenodoUtils.update(ctxLocal, input);
-                        uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
-                        emitRelations(recordIds, contentIds, origins, ctxLocal);
-                    } else {
-                        emitPossibleDuplicateRecords(coordinate, existingIds, ctxLocal);
-                    }
-                    emitter.emit(
-                            RefNodeFactory.toStatement(
-                                    getRecordUrl(ctxLocal),
-                                    RefNodeConstants.LAST_REFRESHED_ON,
-                                    RefNodeFactory.toDateTime(DateUtil.now())
-                            )
-                    );
-                } catch (IOException e) {
-                    attemptCleanupAndRethrow(ctxLocal, e);
+            Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, recordIds);
+            List<Long> existingIds = foundDeposits
+                    .stream()
+                    .filter(x -> !StringUtils.equals(x.getValue(), "unsubmitted"))
+                    .map(Pair::getKey)
+                    .distinct()
+                    .collect(Collectors.toList());
+
+            ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
+            try {
+                if (existingIds.size() == 0) {
+                    ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
+                    uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
+                    emitRelations(recordIds, contentIds, origins, ctxLocal);
+                } else if (existingIds.size() == 1) {
+                    ctxLocal.setDepositId(existingIds.get(0));
+                    ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
+                    String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
+                    ZenodoUtils.update(ctxLocal, input);
+                    uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
+                    emitRelations(recordIds, contentIds, origins, ctxLocal);
+                } else {
+                    emitPossibleDuplicateRecords(coordinate, existingIds, ctxLocal);
                 }
-
+                emitter.emit(
+                        RefNodeFactory.toStatement(
+                                getRecordUrl(ctxLocal),
+                                RefNodeConstants.LAST_REFRESHED_ON,
+                                RefNodeFactory.toDateTime(DateUtil.now())
+                        )
+                );
+            } catch (IOException e) {
+                attemptCleanupAndRethrow(ctxLocal, e);
             }
 
         }
@@ -199,21 +200,25 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         return getRecordUrl(ctxLocal, ctxLocal.getDepositId());
     }
 
-    private void uploadContentAndPublish(JsonNode taxodrosMetadata, List<String> ids, ZenodoContext ctx) throws IOException {
-        uploadAttempt(taxodrosMetadata, ids, ctx);
+    private void uploadContentAndPublish(JsonNode zenodoMetadata, List<String> ids, ZenodoContext ctx) throws IOException {
+        uploadAttempt(zenodoMetadata, ids, ctx);
         ZenodoUtils.publish(ctx);
     }
 
-    private void uploadAttempt(JsonNode metdata, List<String> ids, ZenodoContext ctx) throws IOException {
-        JsonNode filename = metdata.at("/metadata/filename");
+    private void uploadAttempt(JsonNode metadata, List<String> ids, ZenodoContext ctx) throws IOException {
+        JsonNode filename = metadata.at("/metadata/filename");
         if (filename.isMissingNode()) {
-            throw new IOException("no filename specified for [" + metdata.toString() + "]");
+            throw new IOException("no filename specified for [" + metadata.toString() + "]");
         }
 
         List<IRI> contentIdCandidate = ids.stream()
                 .map(RefNodeFactory::toIRI)
                 .filter(HashKeyUtil::isValidHashKey)
                 .collect(Collectors.toList());
+
+        if (contentIdCandidate.size() == 0) {
+            LOG.info("no content found for [" + filename +"]");
+        }
 
         IOException lastException = null;
         for (IRI iri : contentIdCandidate) {

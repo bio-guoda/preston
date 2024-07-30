@@ -31,6 +31,7 @@ public class ZenodoMetaUtil {
     public static final String TITLE = "title";
 
     public static final String FIELD_CUSTOM_DWC_CATALOG_NUMBER = "dwc:catalogNumber";
+    public static final String FIELD_CUSTOM_DWC_INSTITUTION_CODE = "dwc:institutionCode";
     public static final String FIELD_CUSTOM_DWC_KINGDOM = "dwc:kingdom";
     public static final String FIELD_CUSTOM_DWC_PHYLUM = "dwc:phylum";
     public static final String FIELD_CUSTOM_DWC_CLASS = "dwc:class";

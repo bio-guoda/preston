@@ -37,6 +37,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
     public static final Pattern RAW_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>RAW)_(?<imageStackNumber>[0-9]+)_(?<imageNumber>[0-9]+)[.]tiff$");
     public static final Pattern STACKED_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>stacked)_(?<imageStackNumber>[0-9]+)[.]tiff$");
     public static final String IMAGE_CONTENT_ID = "darktaxon:imageContentId";
+    public static final String LSID_PREFIX = "urn:lsid:github.com:darktaxon:";
 
     private PublicationDateFactory publicationDateFactory = new PublicationDateFactory() {
         @Override
@@ -150,6 +151,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
         objectNode.put("darktaxon:plateId", plateId);
         objectNode.put("darktaxon:specimenId", specimenId);
         ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, specimenId);
+        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
         objectNode.put(ZenodoMetaUtil.TITLE, "Photo of Specimen " + specimenId);
         setDescription(objectNode);
 
@@ -159,6 +161,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
         String imageContentId = "hash://sha256/" + hash;
         appendAlternateIdentifiers(objectNode, imageContentId);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + specimenId);
 
         objectNode.put(IMAGE_CONTENT_ID, imageContentId);
 
