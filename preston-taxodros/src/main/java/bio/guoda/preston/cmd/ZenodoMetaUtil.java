@@ -25,6 +25,7 @@ public class ZenodoMetaUtil {
     public static final String JOURNAL_VOLUME = "journal_volume";
     public static final String JOURNAL_TITLE = "journal_title";
     public static final String PUBLICATION_TYPE = "publication_type";
+    public static final String IMAGE_TYPE = "image_type";
     public static final String PUBLICATION_DATE = "publication_date";
     public static final String PUBLICATION_TYPE_ARTICLE = "article";
     public static final String PUBLICATION_TYPE_BOOK = "book";
@@ -43,7 +44,7 @@ public class ZenodoMetaUtil {
     public static final String UPLOAD_TYPE = "upload_type";
     public static final String UPLOAD_TYPE_PUBLICATION = "publication";
     public static final String UPLOAD_TYPE_IMAGE = "image";
-    public static final String PUBLICATION_TYPE_PHOTO = "photo";
+    public static final String IMAGE_TYPE_PHOTO = "photo";
     public static final String HAS_VERSION = "hasVersion";
     public static final String IS_COMPILED_BY = "isCompiledBy";
     public static final String RESOURCE_TYPE_SOFTWARE = "software";

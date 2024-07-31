@@ -150,6 +150,8 @@ public class DarkTaxonFileExtractorTest {
         assertThat(taxonNode.get("darktaxon:imageAcquisitionMethod").asText(), is("stacked"));
         assertThat(taxonNode.get("darktaxon:mimeType").asText(), is("image/tiff"));
         assertThat(taxonNode.get("description").asText(), is("Uploaded by Plazi for the Museum für Naturkunde Berlin."));
+        assertThat(taxonNode.get("upload_type").asText(), is("image"));
+        assertThat(taxonNode.get("image_type").asText(), is("photo"));
 
         taxonNode = unwrapMetadata(jsonObjects[jsonObjects.length - 1]);
 

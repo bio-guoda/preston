@@ -1,6 +1,5 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.DateUtil;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -187,7 +186,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
         objectNode.put("darktaxon:mimeType", mimeType);
         ZenodoMetaUtil.setType(objectNode, mimeType);
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_IMAGE);
-        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_PHOTO);
+        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.IMAGE_TYPE, ZenodoMetaUtil.IMAGE_TYPE_PHOTO);
         ZenodoMetaUtil.setCreators(objectNode, Arrays.asList("Museum für Naturkunde"));
         ZenodoMetaUtil.setValue(objectNode, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
         ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
