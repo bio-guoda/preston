@@ -97,7 +97,7 @@ public class DarkTaxonFileExtractorTest {
         assertThat(taxonNode.get("isDerivedFrom").asText(), is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L9"));
 
         assertThat(taxonNode.at("/publication_date").asText(), is("2022-01-02"));
-        assertThat(taxonNode.at("/creators/0/name").asText(), is("Museum für Naturkunde"));
+        assertThat(taxonNode.at("/creators/0/name").asText(), is("Museum für Naturkunde Berlin"));
         assertThat(taxonNode.at("/communities/0/identifier").asText(), is("my-community"));
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");

@@ -187,7 +187,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
         ZenodoMetaUtil.setType(objectNode, mimeType);
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_IMAGE);
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.IMAGE_TYPE, ZenodoMetaUtil.IMAGE_TYPE_PHOTO);
-        ZenodoMetaUtil.setCreators(objectNode, Arrays.asList("Museum für Naturkunde"));
+        ZenodoMetaUtil.setCreators(objectNode, Arrays.asList("Museum für Naturkunde Berlin"));
         ZenodoMetaUtil.setValue(objectNode, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
         ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
     }
