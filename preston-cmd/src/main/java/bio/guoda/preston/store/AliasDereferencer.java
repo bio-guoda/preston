@@ -95,27 +95,4 @@ public class AliasDereferencer implements BlobStoreReadOnly {
         }
     }
 
-    private class AliasFindingState implements ProcessorState {
-
-        private final ProcessorState state;
-        private boolean foundAlias = false;
-
-        AliasFindingState(ProcessorState state) {
-            this.state = state;
-        }
-
-        void foundAlias() {
-            foundAlias = true;
-        }
-
-        @Override
-        public void stopProcessing() {
-            state.stopProcessing();
-        }
-
-        @Override
-        public boolean shouldKeepProcessing() {
-            return !foundAlias && state.shouldKeepProcessing();
-        }
-    }
 }
