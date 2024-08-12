@@ -208,7 +208,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
             StringBuilder description = new StringBuilder();
 
-            if (communities.contains("batlit")) {
+            if (communities.stream().anyMatch(name -> StringUtils.contains(name, "batlit"))) {
                 ZenodoMetaUtil.addKeyword(objectNode, "Biodiversity");
                 ZenodoMetaUtil.addKeyword(objectNode, "Mammalia");
                 ZenodoMetaUtil.addKeyword(objectNode, "Chiroptera");
