@@ -204,6 +204,22 @@ public class ContentStreamFactoryTest {
         assertThat(actualThumbnail.getWidth(), Is.is(171));
     }
 
+    @Test
+    public void createThumbnailFromTIFFImage() throws IOException {
+        ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("thumbnail:hash://sha256/75812248fb10b8254890141752ae21341af94a8a7bedeeb0b0dd0a58a304c201"));
+        InputStream inputStream = factory.create(getClass().getResourceAsStream("Peponapis-pruinosa-UCSB-IZC00040452.tif"));
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IOUtils.copyLarge(inputStream, out);
+
+        BufferedImage actualThumbnail = ImageIO.read(new ByteArrayInputStream(out.toByteArray()));
+
+        assertNotNull(actualThumbnail);
+
+        assertThat(actualThumbnail.getHeight(), Is.is(205));
+        assertThat(actualThumbnail.getWidth(), Is.is(256));
+    }
+
     @Test(expected = IOException.class)
     public void createThumbnailFromNonImage() throws IOException {
         ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("thumbnail:hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f"));
