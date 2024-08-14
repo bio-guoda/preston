@@ -63,7 +63,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     try {
                         attemptToHandleJSON(line, coordinate);
                     } catch (IOException ex) {
-                        // ignore
+                        LOG.warn("failed to handle [" + line + "] in [" + coordinate + "]", ex);
                     }
                 }
             }
@@ -217,7 +217,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 .collect(Collectors.toList());
 
         if (contentIdCandidate.size() == 0) {
-            LOG.info("no content found for [" + filename +"]");
+            LOG.info("no content id found for [" + filename +"] in candidate ids [" + StringUtils.join(ids) + "] for [" + metadata.toPrettyString() + "]");
         }
 
         IOException lastException = null;

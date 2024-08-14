@@ -62,6 +62,7 @@ public class RISFileStreamHandler implements ContentStreamHandler {
                                                 dereferencer,
                                                 persisting);
                                     } catch (ContentStreamException e) {
+                                        LOG.warn("failed to find [" + type.name() + "] content id related to metadata for [" + jsonNode.toPrettyString() + "]", e);
                                         // no hash, no content
                                     }
                                 });
