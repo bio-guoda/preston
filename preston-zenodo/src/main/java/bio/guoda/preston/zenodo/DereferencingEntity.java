@@ -62,7 +62,7 @@ public class DereferencingEntity extends AbstractHttpEntity {
         LOG.info("attempting to dereference [" + resource.getIRIString() + "]");
 
         try (InputStream is = dereferencer.get(resource)) {
-            DerefProgressLogger outgoing = new DerefProgressLogger(System.err, "upload: ");
+            DerefProgressLogger outgoing = new DerefProgressLogger(System.err, "uploading: ");
             OutputStream outputStreamWithLogger = ContentStreamUtil.getOutputStreamWithProgressLogger(resource, outgoing, getContentLength(), outStream);
             IOUtils.copy(is, outputStreamWithLogger);
             outputStreamWithLogger.flush();
