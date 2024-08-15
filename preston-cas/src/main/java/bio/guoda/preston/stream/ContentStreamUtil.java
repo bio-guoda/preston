@@ -6,6 +6,7 @@ import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.io.input.CountingInputStream;
+import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
@@ -13,6 +14,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
@@ -54,6 +56,29 @@ public class ContentStreamUtil {
             @Override
             protected synchronized void afterRead(int n) {
                 super.afterRead(n);
+                listener.onProgress(dataURI, DerefState.BUSY, getByteCount(), contentLength);
+            }
+
+            @Override
+            public void close() throws IOException {
+                super.close();
+                if (!isDone.get()) {
+                    listener.onProgress(dataURI, DerefState.DONE, getByteCount(), contentLength);
+                    isDone.set(true);
+                }
+            }
+        };
+    }
+
+    public static OutputStream getOutputStreamWithProgressLogger(IRI dataURI, DerefProgressListener listener, long contentLength, OutputStream contentStream) {
+        listener.onProgress(dataURI, DerefState.START, 0, contentLength);
+
+        return new CountingOutputStream(contentStream) {
+            AtomicBoolean isDone = new AtomicBoolean(false);
+
+            @Override
+            protected synchronized void afterWrite(int n) throws IOException {
+                super.afterWrite(n);
                 listener.onProgress(dataURI, DerefState.BUSY, getByteCount(), contentLength);
             }
 

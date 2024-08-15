@@ -88,10 +88,6 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
         this.apiEndpoint = apiEndpoint;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
     public List<String> getCommunities() {
         return communities;
     }

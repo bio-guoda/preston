@@ -165,7 +165,7 @@ public class ZenodoUtilsZoteroIT {
             }
         };
 
-        HttpEntity entity = new DerferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"));
+        HttpEntity entity = new DereferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"));
         assertTrue(entity.isRepeatable());
         assertTrue(entity.isStreaming());
         assertFalse(entity.isChunked());
@@ -176,7 +176,7 @@ public class ZenodoUtilsZoteroIT {
     public void uploadDataUsingDereferencingEntityWithAmpersandAndComma() throws IOException {
         Dereferencer<InputStream> dereferencer = uri -> getClass().getResourceAsStream(getMetadataResourceName());
 
-        HttpEntity entity = new DerferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"));
+        HttpEntity entity = new DereferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"));
         assertTrue(entity.isRepeatable());
         assertTrue(entity.isStreaming());
         assertFalse(entity.isChunked());
@@ -234,7 +234,7 @@ public class ZenodoUtilsZoteroIT {
 
         ZenodoUtils.upload(this.ctx,
                 "some spacey & name.json",
-                new DerferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"))
+                new DereferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"))
         );
 
         ZenodoUtils.publish(this.ctx);

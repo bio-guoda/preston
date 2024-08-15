@@ -11,6 +11,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ZenodoUtilsTest {
 
     @Test
+    public void queryForSpecificDeposition() {
+        ZenodoContext ctx = new ZenodoContext("secret");
+        IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingDepositions(ctx, Arrays.asList("urn:lsid:biodiversitylibrary.org:part:79807"));
+
+        assertThat(
+                queryForExistingDepositions.getIRIString(),
+                is("https://sandbox.zenodo.org/api/deposit/depositions?q=alternate.identifier:%22urn%3Alsid%3Abiodiversitylibrary.org%3Apart%3A79807%22")
+        );
+    }
+
+    @Test
     public void queryForExistingDepositions() {
         ZenodoContext ctx = new ZenodoContext("secret");
         IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingDepositions(ctx, Arrays.asList("foo:bar", "foo:bar"));

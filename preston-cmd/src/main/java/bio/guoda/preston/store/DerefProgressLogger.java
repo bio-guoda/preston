@@ -14,6 +14,7 @@ public class DerefProgressLogger implements DerefProgressListener {
     private final PrintStream out;
     private AtomicLong updateStepBytes = new AtomicLong(10 * 4096L);
     private StopWatch stopWatch = new StopWatch();
+    private String prefix = "";
 
     public DerefProgressLogger() {
         this(System.err);
@@ -21,6 +22,10 @@ public class DerefProgressLogger implements DerefProgressListener {
 
     public DerefProgressLogger(PrintStream out) {
         this.out = out;
+    }
+    public DerefProgressLogger(PrintStream out, String prefix) {
+        this.out = out;
+        this.prefix = prefix;
     }
 
     @Override
@@ -56,7 +61,9 @@ public class DerefProgressLogger implements DerefProgressListener {
 
     public void logProgress(IRI dataURI, DerefState derefState, long read, long total) {
         StringBuilder builder = new StringBuilder();
-        builder.append("\r[");
+        builder.append("\r");
+        builder.append(prefix);
+        builder.append("[");
         builder.append(StringUtils.abbreviateMiddle(dataURI.getIRIString(), "...", 50));
         builder.append("] ");
         if (total > 0) {

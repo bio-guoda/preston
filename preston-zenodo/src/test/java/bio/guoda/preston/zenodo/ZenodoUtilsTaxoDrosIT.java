@@ -163,7 +163,7 @@ public class ZenodoUtilsTaxoDrosIT {
             }
         };
 
-        HttpEntity entity = new DerferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"));
+        HttpEntity entity = new DereferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"));
         assertTrue(entity.isRepeatable());
         assertTrue(entity.isStreaming());
         assertFalse(entity.isChunked());
@@ -174,7 +174,7 @@ public class ZenodoUtilsTaxoDrosIT {
     public void uploadDataUsingDereferencingEntityWithAmpersandAndComma() throws IOException {
         Dereferencer<InputStream> dereferencer = uri -> getClass().getResourceAsStream("zenodo-metadata.json");
 
-        HttpEntity entity = new DerferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"));
+        HttpEntity entity = new DereferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"));
         assertTrue(entity.isRepeatable());
         assertTrue(entity.isStreaming());
         assertFalse(entity.isChunked());
@@ -232,7 +232,7 @@ public class ZenodoUtilsTaxoDrosIT {
 
         ZenodoUtils.upload(this.ctx,
                 "some spacey & name.json",
-                new DerferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"))
+                new DereferencingEntity(dereferencer, RefNodeFactory.toIRI("foo:bar"))
         );
 
         ZenodoUtils.publish(this.ctx);

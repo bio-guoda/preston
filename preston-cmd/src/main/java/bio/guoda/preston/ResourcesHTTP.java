@@ -65,8 +65,8 @@ public class ResourcesHTTP {
         return asInputStream(dataURI, derefProgressListener, SHOULD_IGNORE_40x_50x);
     }
 
-    public static InputStream asInputStream(IRI dataURI, DerefProgressListener nullDerefProgressListener) throws IOException {
-        return asInputStream(dataURI, nullDerefProgressListener, NEVER_IGNORE);
+    public static InputStream asInputStream(IRI dataURI, DerefProgressListener progressListener) throws IOException {
+        return asInputStream(dataURI, progressListener, NEVER_IGNORE);
     }
 
     public static InputStream asInputStream(IRI dataURI) throws IOException {

@@ -113,42 +113,70 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             }
 
             Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, recordIds);
-            List<Long> existingIds = foundDeposits
-                    .stream()
-                    .filter(x -> !StringUtils.equals(x.getValue(), "unsubmitted"))
-                    .map(Pair::getKey)
-                    .distinct()
-                    .collect(Collectors.toList());
-
-            ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
-            try {
-                if (existingIds.size() == 0) {
-                    ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
-                    uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
-                    emitRelations(recordIds, contentIds, origins, ctxLocal);
-                } else if (existingIds.size() == 1) {
-                    ctxLocal.setDepositId(existingIds.get(0));
-                    ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
-                    String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
-                    ZenodoUtils.update(ctxLocal, input);
-                    uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
-                    emitRelations(recordIds, contentIds, origins, ctxLocal);
-                } else {
-                    emitPossibleDuplicateRecords(coordinate, existingIds, ctxLocal);
-                }
-                emitter.emit(
-                        RefNodeFactory.toStatement(
-                                getRecordUrl(ctxLocal),
-                                RefNodeConstants.LAST_REFRESHED_ON,
-                                RefNodeFactory.toDateTime(DateUtil.now())
-                        )
-                );
-            } catch (IOException e) {
-                attemptCleanupAndRethrow(ctxLocal, e);
-            }
+            deleteDraftsIfPresent(foundDeposits, recordIds);
+            createNewVersion(coordinate, zenodoMetadata, recordIds, contentIds, origins, foundDeposits);
 
         }
 
+    }
+
+    private void deleteDraftsIfPresent(Collection<Pair<Long, String>> foundDeposits, List<String> recordIds) throws IOException {
+        List<Long> draftIds = foundDeposits
+                .stream()
+                .filter(x -> StringUtils.equals(x.getValue(), "unsubmitted"))
+                .map(Pair::getKey)
+                .distinct()
+                .collect(Collectors.toList());
+
+        ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
+        for (Long draftId : draftIds) {
+            ctxLocal.setDepositId(draftId);
+            try {
+                String msg = "deleting draft deposit [" + ctxLocal.getDepositId() + "] associated with [{" + StringUtils.join(recordIds, "\"}, {\"") + "}]";
+                LOG.info(msg + " ...");
+                ZenodoUtils.delete(ctxLocal);
+                LOG.info(msg + " done.");
+            } catch (IOException ex) {
+                throw new IOException("failed to delete draft/unsubmitted deposit id [" + draftId + "]");
+            }
+
+        }
+    }
+
+    private void createNewVersion(IRI coordinate, JsonNode zenodoMetadata, List<String> recordIds, List<String> contentIds, List<String> origins, Collection<Pair<Long, String>> foundDeposits) throws IOException {
+        List<Long> existingIds = foundDeposits
+                .stream()
+                .filter(x -> !StringUtils.equals(x.getValue(), "unsubmitted"))
+                .map(Pair::getKey)
+                .distinct()
+                .collect(Collectors.toList());
+
+        ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
+        try {
+            if (existingIds.size() == 0) {
+                ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
+                uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
+                emitRelations(recordIds, contentIds, origins, ctxLocal);
+            } else if (existingIds.size() == 1) {
+                ctxLocal.setDepositId(existingIds.get(0));
+                ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
+                String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
+                ZenodoUtils.update(ctxLocal, input);
+                uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
+                emitRelations(recordIds, contentIds, origins, ctxLocal);
+            } else {
+                emitPossibleDuplicateRecords(coordinate, existingIds, ctxLocal);
+            }
+            emitter.emit(
+                    RefNodeFactory.toStatement(
+                            getRecordUrl(ctxLocal),
+                            RefNodeConstants.LAST_REFRESHED_ON,
+                            RefNodeFactory.toDateTime(DateUtil.now())
+                    )
+            );
+        } catch (IOException e) {
+            attemptCleanupAndRethrow(ctxLocal, e);
+        }
     }
 
     private void emitRelations(List<String> lsids, List<String> contentIds, List<String> origins, ZenodoContext ctxLocal) {
@@ -217,7 +245,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 .collect(Collectors.toList());
 
         if (contentIdCandidate.size() == 0) {
-            LOG.info("no content id found for [" + filename +"] in candidate ids [" + StringUtils.join(ids) + "] for [" + metadata.toPrettyString() + "]");
+            LOG.info("no content id found for [" + filename + "] in candidate ids [" + StringUtils.join(ids) + "] for [" + metadata.toPrettyString() + "]");
         }
 
         IOException lastException = null;
@@ -227,7 +255,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 LOG.info(msg + " started...");
                 ZenodoUtils.upload(ctx,
                         filename.asText(),
-                        new DerferencingEntity(dereferencer, iri));
+                        new DereferencingEntity(dereferencer, iri));
                 LOG.info(msg + " finished.");
                 lastException = null;
                 break;
