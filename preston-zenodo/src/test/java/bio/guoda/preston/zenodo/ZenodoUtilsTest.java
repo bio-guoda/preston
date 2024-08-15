@@ -17,7 +17,7 @@ public class ZenodoUtilsTest {
 
         assertThat(
                 queryForExistingDepositions.getIRIString(),
-                is("https://sandbox.zenodo.org/api/deposit/depositions?q=alternate.identifier:%22foo%3Abar%22%20AND%20alternate.identifier:%22foo%3Abar%22&access_token=secret")
+                is("https://sandbox.zenodo.org/api/deposit/depositions?q=alternate.identifier:%22foo%3Abar%22%20AND%20alternate.identifier:%22foo%3Abar%22")
         );
     }
 
@@ -32,7 +32,7 @@ public class ZenodoUtilsTest {
 
         assertThat(
                 queryForExistingDepositions.getIRIString(),
-                is("https://sandbox.zenodo.org/api/records?communities=community%201%2Ccommunity%202&all_versions=false&q=alternate.identifier:%22foo%3Abar%22%20AND%20alternate.identifier:%22foo%3Abar%22&access_token=secret")
+                is("https://sandbox.zenodo.org/api/records?communities=community%201%2Ccommunity%202&all_versions=false&q=alternate.identifier:%22foo%3Abar%22%20AND%20alternate.identifier:%22foo%3Abar%22")
         );
     }
 

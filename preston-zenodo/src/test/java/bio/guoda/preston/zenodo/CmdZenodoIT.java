@@ -30,14 +30,15 @@ public class CmdZenodoIT {
     public TemporaryFolder folder = new TemporaryFolder();
 
     @Test
-    public void createOrUpdateTaxoDros() throws URISyntaxException, IOException {
+    public void createOrUpdateZenodo() throws URISyntaxException, IOException {
         CmdZenodo cmdZenodo = new CmdZenodo();
         String resourceURI = "taxodros-data/6e/f3/6ef3b8e326cd52972da1c00de60dc222";
 
         File dataDir = folder.newFolder("zenodo-test");
         cmdZenodo.setLocalDataDir(dataDir.getAbsolutePath());
         cmdZenodo.setApiEndpoint("https://sandbox.zenodo.org");
-        cmdZenodo.setAccessToken(ZenodoTestUtil.getAccessToken());
+
+        System.setProperty("ZENODO_TOKEN", ZenodoTestUtil.getAccessToken());
 
         cmdZenodo.setInputStream(getClass().getResourceAsStream(resourceURI));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

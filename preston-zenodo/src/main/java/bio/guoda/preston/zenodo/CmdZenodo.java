@@ -24,10 +24,7 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
 
     public static final String ZENODO_ENDPOINT = "ZENODO_ENDPOINT";
     public static final String ZENODO_TOKEN = "ZENODO_TOKEN";
-    @CommandLine.Option(
-            names = {"--access-token"},
-            description = "Zenodo Access Token. Uses [ " + ZENODO_TOKEN + "] environment variable by default."
-    )
+
     private String accessToken = EnvUtil.getEnvironmentVariable(ZENODO_TOKEN);
 
     @CommandLine.Option(
