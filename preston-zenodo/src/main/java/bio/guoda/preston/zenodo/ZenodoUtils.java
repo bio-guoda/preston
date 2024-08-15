@@ -181,6 +181,8 @@ public class ZenodoUtils {
             if (HttpStatus.SC_BAD_REQUEST == ex.getStatusCode()) {
                 String metadata = ctx.getMetadata() == null ? "" : ": [" + ctx.getMetadata().toPrettyString() + "]";
                 throw new IOException("publication rejected. Please review possibly malformed or incomplete record metadata" + metadata + ".", ex);
+            } else {
+                throw ex;
             }
         }
     }
