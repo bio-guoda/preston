@@ -15,6 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -175,6 +177,11 @@ public class ZenodoUtils {
                 ignoreNone()
         )) {
             return updateContext(ctx, inputStream);
+        } catch (HttpResponseException ex) {
+            if (HttpStatus.SC_BAD_REQUEST == ex.getStatusCode()) {
+                String metadata = ctx.getMetadata() == null ? "" : ": [" + ctx.getMetadata().toPrettyString() + "]";
+                throw new IOException("publication rejected. Please review possibly malformed or incomplete record metadata" + metadata + ".", ex);
+            }
         }
     }
 
