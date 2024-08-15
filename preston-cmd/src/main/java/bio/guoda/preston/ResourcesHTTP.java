@@ -34,6 +34,10 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class ResourcesHTTP {
+    public static final String ZENODO_AUTH_TOKEN = "ZENODO_TOKEN";
+    public static final String ZOTERO_AUTH_TOKEN = "ZOTERO_TOKEN";
+    public static final String GITHUB_AUTH_TOKEN = "GITHUB_TOKEN";
+
     private static final List<Integer> REDIRECT_CODES = Arrays.asList(301, 302, 303);
     public static final String MIMETYPE_GITHUB_JSON = "application/vnd.github+json";
     public static final Predicate<Integer> SHOULD_IGNORE_40x_50x
@@ -75,7 +79,6 @@ public class ResourcesHTTP {
                                             Predicate<Integer> shouldIgnore) throws IOException {
         HttpGet get = new HttpGet(URI.create(dataURI.getIRIString()));
         get.addHeader("Accept", "*/*");
-        injectAuthorizationIfPossible(dataURI, get);
         return asInputStream(dataURI, get, listener, shouldIgnore);
     }
 
@@ -84,23 +87,26 @@ public class ResourcesHTTP {
             msg.addHeader("Authorization", "Bearer QQ==");
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.github.com/")) {
             msg.addHeader("Accept", MIMETYPE_GITHUB_JSON);
-            appendAuthTokenIfAvailable(msg);
-        }else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.zotero.org/")) {
-            appendAuthBearerIfAvailable(msg);
+            appendGitHubAuthTokenIfAvailable(msg);
+        } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.zotero.org/")) {
+            appendAuthBearerIfAvailable(msg, ZOTERO_AUTH_TOKEN);
+        } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://zenodo.org/api")
+                || StringUtils.startsWith(dataURI.getIRIString(), "https://sandbox.zenodo.org/api")) {
+            appendAuthBearerIfAvailable(msg, ZENODO_AUTH_TOKEN);
         }
     }
 
-    private static void appendAuthTokenIfAvailable(HttpMessage msg) {
-        String githubToken = EnvUtil.getEnvironmentVariable("GITHUB_TOKEN");
+    private static void appendGitHubAuthTokenIfAvailable(HttpMessage msg) {
+        String githubToken = EnvUtil.getEnvironmentVariable(GITHUB_AUTH_TOKEN);
         if (StringUtils.isNotBlank(githubToken)) {
             msg.addHeader("Authorization", "token " + githubToken);
         }
     }
 
-    private static void appendAuthBearerIfAvailable(HttpMessage msg) {
-        String zoteroToken = EnvUtil.getEnvironmentVariable("ZOTERO_TOKEN");
-        if (StringUtils.isNotBlank(zoteroToken)) {
-            msg.addHeader("Authorization", "Bearer " + zoteroToken);
+    private static void appendAuthBearerIfAvailable(HttpMessage msg, String authTokenEnvironmentVariableName) {
+        String authToken = EnvUtil.getEnvironmentVariable(authTokenEnvironmentVariableName);
+        if (StringUtils.isNotBlank(authToken)) {
+            msg.addHeader("Authorization", "Bearer " + authToken);
         }
     }
 
@@ -114,6 +120,8 @@ public class ResourcesHTTP {
             CloseableHttpClient client = shouldRedirect(dataURI)
                     ? getRedirectingHttpClient()
                     : getHttpClient();
+
+            injectAuthorizationIfPossible(dataURI, request);
 
             CloseableHttpResponse response = client.execute(request);
             StatusLine statusLine = response.getStatusLine();

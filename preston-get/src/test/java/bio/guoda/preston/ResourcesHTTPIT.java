@@ -110,4 +110,18 @@ public class ResourcesHTTPIT {
 
     }
 
+    @Test
+    public void zenodoAuth() throws IOException {
+        //System.setProperty("ZENODO_TOKEN", "[insert token here]");
+        try (InputStream is
+                     = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://sandbox.zenodo.org/api/deposit/depositions")))) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            IOUtils.copy(is, outputStream);
+            JsonNode jsonNode = new ObjectMapper().readTree(outputStream.toByteArray());
+
+            assertThat(jsonNode.isArray(), Is.is(true));
+        }
+
+    }
+
 }
