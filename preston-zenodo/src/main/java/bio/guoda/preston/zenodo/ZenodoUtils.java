@@ -180,7 +180,7 @@ public class ZenodoUtils {
         } catch (HttpResponseException ex) {
             if (HttpStatus.SC_BAD_REQUEST == ex.getStatusCode()) {
                 String metadata = ctx.getMetadata() == null ? "" : ": [" + ctx.getMetadata().toPrettyString() + "]";
-                throw new IOException("publication rejected. Please review possibly malformed or incomplete record metadata" + metadata + ".", ex);
+                throw new IOException("Zenodo deposition publication request was rejected. Please review possibly malformed or incomplete record metadata" + metadata + ".", ex);
             } else {
                 throw ex;
             }
