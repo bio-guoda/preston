@@ -147,6 +147,32 @@ public class RISUtilTest {
     }
 
     @Test
+    public void streamSingleRISNoAuthor() throws IOException {
+
+        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+
+        Consumer<ObjectNode> listener = jsonNode -> jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("biosyslit")));
+
+        InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-single-no-author.ris");
+
+        assertNotNull(bibTex);
+
+        parseRIS(bibTex, listener, "foo:bar");
+
+        assertThat(jsonObjects.size(), is(1));
+
+
+        JsonNode jsonNode = jsonObjects.get(0);
+
+        JsonNode creators = jsonNode.at("/creators");
+
+        assertThat(creators.isArray(), is(true));
+
+        assertThat(creators.size(), is(1));
+        assertThat(creators.at("/0/name").asText(), is("NA"));
+    }
+
+    @Test
     public void streamSingleSSNArticle() throws IOException {
 
         List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
@@ -314,8 +340,8 @@ public class RISUtilTest {
 
 
         assertThat(jsonObjects.size(), is(1));
-        assertThat(jsonObjects.get(0).get("creators").size(), is(1));
-        assertThat(jsonObjects.get(0).get("creators").get(0).get("name").asText(), is("Pictet, Camille"));
+        assertThat(jsonObjects.get(0).at("/creators").size(), is(1));
+        assertThat(jsonObjects.get(0).at("/creators/0/name").asText(), is("Pictet, Camille"));
     }
 
     @Test

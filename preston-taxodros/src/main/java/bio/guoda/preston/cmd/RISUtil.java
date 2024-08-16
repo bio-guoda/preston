@@ -198,7 +198,18 @@ public class RISUtil {
         }
 
         metadata.set("related_identifiers", relatedIdentifiers);
+
+        // see https://github.com/bio-guoda/preston/issues/299
+        // Zenodo rejects records without creators (aka authors)
+        addDefaultAuthorIfNoneAvailable(metadata);
+
         return metadata;
+    }
+
+    private static void addDefaultAuthorIfNoneAvailable(ObjectNode metadata) {
+        if (metadata.at("/creators/0/name").isMissingNode()) {
+            metadata.set("creators", new ObjectMapper().createArrayNode().add(new ObjectMapper().createObjectNode().put("name", "NA")));
+        }
     }
 
     private static String trim(String str) {
