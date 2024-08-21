@@ -1,7 +1,10 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
+import bio.guoda.preston.Hasher;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.HashKeyUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,6 +38,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
 
 public class ZoteroFileExtractorTest {
+
+    public static final String CONTENT_OF_MD5_0033 = "a pdf associated with https://api.zotero.org/groups/5435545/items/P4LGETPS/file/view";
 
     @Test
     public void streamZoteroAttachmentToZenodoLineJson() throws IOException {
@@ -136,9 +141,9 @@ public class ZoteroFileExtractorTest {
 
         // calculated on the fly
         assertThat(identifiers.get(2).get("relation").asText(), is("hasVersion"));
-        assertThat(identifiers.get(2).get("identifier").asText(), is("hash://md5/a51c3c32b083b50d00f34bd72fcd3a19"));
+        assertThat(identifiers.get(2).get("identifier").asText(), is(Hasher.calcHashIRI(CONTENT_OF_MD5_0033, HashType.md5).getIRIString()));
         assertThat(identifiers.get(3).get("relation").asText(), is("hasVersion"));
-        assertThat(identifiers.get(3).get("identifier").asText(), is("hash://sha256/4448f9919eb64bdd320eb9076430c84f792d8ebfe9c15ed7e020f439131eba5f"));
+        assertThat(identifiers.get(3).get("identifier").asText(), is(Hasher.calcHashIRI(CONTENT_OF_MD5_0033, HashType.sha256).getIRIString()));
         assertThat(identifiers.get(3).has("resource_type"), is(false));
 
         // html landing pages
@@ -183,6 +188,12 @@ public class ZoteroFileExtractorTest {
                     return IOUtils.toInputStream("this is a scientific article about bats associated with https://api.zotero.org/groups/5435545/items/P4LGETPS/file/view", StandardCharsets.UTF_8);
                 } else if (StringUtils.equals("hash://sha256/9f088b29db63c9c6f41cf6bc183cb61554f317656f8f34638a07398342da2b1a", key.getIRIString())) {
                     return getClass().getResourceAsStream("zotero/" + testArticle);
+                } else if (StringUtils.equals("hash://md5/1ffc3d79f67156dd7b4aa5e963a95345", key.getIRIString())) {
+                    return IOUtils.toInputStream("a pdf associated with https://api.zotero.org/groups/5435545/items/8PZ5M3FX/file/view", StandardCharsets.UTF_8);
+                } else if (StringUtils.equals("hash://md5/48226913783fbc2af44fb5cd2ac460d5", key.getIRIString())) {
+                    return IOUtils.toInputStream("a pdf associated with https://api.zotero.org/groups/5435545/items/AJAULP6T/file/view", StandardCharsets.UTF_8);
+                }else if (StringUtils.equals("hash://md5/00335a95492b82cc0862e6bcc88497c4", key.getIRIString())) {
+                    return IOUtils.toInputStream(CONTENT_OF_MD5_0033, StandardCharsets.UTF_8);
                 }
                 throw new RuntimeException("unresolved [" + key + "]");
             }

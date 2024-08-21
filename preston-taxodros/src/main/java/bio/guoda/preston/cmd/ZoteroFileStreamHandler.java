@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.commons.rdf.api.IRI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,7 +42,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
 
     private final Persisting persisting;
-    private final Dereferencer<InputStream> dereferencer;
+    private final Dereferencer<InputStream> timedDereferencer;
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
     private final List<String> communities;
@@ -48,12 +50,24 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
     public ZoteroFileStreamHandler(ContentStreamHandler contentStreamHandler,
                                    OutputStream os,
                                    Persisting persisting,
-                                   Dereferencer<InputStream> dereferencer,
+                                   Dereferencer<InputStream> deref,
                                    List<String> communities) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
         this.persisting = persisting;
-        this.dereferencer = dereferencer;
+        this.timedDereferencer = new Dereferencer<InputStream>() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                StopWatch stopWatch = new StopWatch();
+                stopWatch.start();
+                try {
+                    return deref.get(uri);
+                } finally {
+                    stopWatch.stop();
+                    LOG.info("|" + uri.getIRIString() + "|resolved in|" + stopWatch.getTime(TimeUnit.SECONDS) + "|s|");
+                }
+            }
+        };
         this.communities = communities;
     }
 
@@ -67,6 +81,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                 ObjectNode zenodoRecord = new ObjectMapper().createObjectNode();
 
                 String zoteroAttachmentDownloadUrl = ZoteroUtil.getAttachmentDownloadUrl(zoteroRecord);
+                String providedContentId = null;
 
                 if (hasPdfAttachment(zoteroRecord, zoteroAttachmentDownloadUrl)) {
                     String filename = zoteroRecord.at("/data/filename").asText();
@@ -75,19 +90,29 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                     }
                     String md5 = zoteroRecord.at("/data/md5").asText();
                     if (StringUtils.isNoneBlank(md5)) {
-                        String providedContentId = HashType.md5.getPrefix() + md5;
+                        providedContentId = HashType.md5.getPrefix() + md5;
                         ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, providedContentId);
-
-                    }
+                                  }
                     String zoteroItemUrl = zoteroRecord.at("/links/up/href").asText();
                     appendAttachmentInfo(
                             zenodoRecord,
-                            zoteroAttachmentDownloadUrl,
+                            StringUtils.isBlank(providedContentId) ? zoteroAttachmentDownloadUrl : providedContentId,
                             zoteroItemUrl
                     );
 
                     IRI zoteroItemIRI = RefNodeFactory.toIRI(zoteroItemUrl);
-                    InputStream itemInputStream = ContentQueryUtil.getContent(dereferencer, zoteroItemIRI, persisting);
+
+                    StopWatch stopWatch = new StopWatch();
+                    stopWatch.start();
+
+                    InputStream itemInputStream;
+
+                    try {
+                        itemInputStream = ContentQueryUtil.getContent(timedDereferencer, zoteroItemIRI, persisting);
+                    } finally {
+                        stopWatch.stop();
+                        LOG.info("|" + zoteroItemIRI.getIRIString() + "|resolved in|" + stopWatch.getTime(TimeUnit.SECONDS) + "|s|");
+                    }
                     if (itemInputStream == null) {
                         throw new ContentStreamException("cannot generate Zenodo record due to unresolved Zotero record [" + zoteroItemUrl + "]");
                     }
@@ -189,7 +214,6 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, jsonNode.at("/data/title").asText());
 
 
-
             if (StringUtils.equals(itemType, ZOTERO_JOURNAL_ARTICLE)) {
                 ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_TITLE, jsonNode.at("/data/publicationTitle").asText());
                 ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_VOLUME, jsonNode.at("/data/volume").asText());
@@ -263,9 +287,22 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
     }
 
     private void appendContentId(ObjectNode objectNode, String zoteroAttachmentDownloadUrl, HashType hashType) throws ContentStreamException {
-        Dereferencer<InputStream> dereferencer = this.dereferencer;
-        Persisting persisting = this.persisting;
-        StreamHandlerUtil.appendContentId(objectNode, zoteroAttachmentDownloadUrl, hashType, dereferencer, persisting);
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        try {
+            StreamHandlerUtil.appendContentId(
+                    objectNode,
+                    zoteroAttachmentDownloadUrl,
+                    hashType,
+                    this.timedDereferencer,
+                    this.persisting
+            );
+        } finally {
+            stopWatch.stop();
+            LOG.info("|" + zoteroAttachmentDownloadUrl + "|contentid calculated in|" + stopWatch.getTime(TimeUnit.SECONDS) + "|s|");
+        }
+
     }
 
     private String getZoteroSelector(String href) {

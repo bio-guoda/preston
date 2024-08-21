@@ -33,13 +33,13 @@ public class StreamHandlerUtil {
         return "https://linker.bio/" + providedContentId;
     }
 
-    public static void appendContentId(ObjectNode objectNode, String downloadUrl, HashType hashType, Dereferencer<InputStream> dereferencer, Persisting persisting) throws ContentStreamException {
-        if (StringUtils.isNotBlank(downloadUrl)) {
+    public static void appendContentId(ObjectNode objectNode, String downloadUrlOrContentId, HashType hashType, Dereferencer<InputStream> dereferencer, Persisting persisting) throws ContentStreamException {
+        if (StringUtils.isNotBlank(downloadUrlOrContentId)) {
             try {
-                IRI downloadIRI = RefNodeFactory.toIRI(downloadUrl);
-                InputStream attachementInputStream = ContentQueryUtil.getContent(dereferencer, downloadIRI, persisting);
+                IRI downloadUrlOrContentIdIRI = RefNodeFactory.toIRI(downloadUrlOrContentId);
+                InputStream attachementInputStream = ContentQueryUtil.getContent(dereferencer, downloadUrlOrContentIdIRI, persisting);
                 if (attachementInputStream == null) {
-                    throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + downloadUrl + "]");
+                    throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + downloadUrlOrContentId + "]");
                 }
                 IRI contentId = Hasher.calcHashIRI(
                         attachementInputStream,
@@ -48,7 +48,7 @@ public class StreamHandlerUtil {
                 );
                 ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.HAS_VERSION, contentId.getIRIString());
             } catch (IOException e) {
-                throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + downloadUrl + "]", e);
+                throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + downloadUrlOrContentId + "]", e);
             }
         }
     }
