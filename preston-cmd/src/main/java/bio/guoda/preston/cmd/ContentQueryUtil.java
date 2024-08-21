@@ -43,9 +43,22 @@ public class ContentQueryUtil {
             Dereferencer<InputStream> blobStore,
             IRI queryIRI,
             Persisting persisting) throws IOException {
+
+        DerferencerFactory factory = new DerferencerFactory() {
+
+            @Override
+            public BlobStoreReadOnly create() {
+                return Persisting.resolvingBlobStore(blobStore, persisting);
+            }
+        };
+
+        return getContent(queryIRI, factory);
+    }
+
+    public static InputStream getContent(IRI queryIRI, DerferencerFactory factory) throws IOException {
         InputStream contentStream;
 
-        BlobStoreReadOnly store = Persisting.resolvingBlobStore(blobStore, persisting);
+        Dereferencer<InputStream> store = factory.create();
 
         try {
             contentStream = store.get(

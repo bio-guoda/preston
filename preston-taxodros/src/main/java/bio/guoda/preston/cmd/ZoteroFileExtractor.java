@@ -4,6 +4,7 @@ import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ArchiveStreamHandler;
 import bio.guoda.preston.stream.CompressedStreamHandler;
 import bio.guoda.preston.stream.ContentStreamException;
@@ -16,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collections;
 import java.util.List;
 
 public class ZoteroFileExtractor extends ProcessorExtracting {
@@ -39,7 +39,7 @@ public class ZoteroFileExtractor extends ProcessorExtracting {
 
 
     public ContentStreamHandler getStreamHandler(BatchingEmitter batchingStatementEmitter) {
-        return new ZoteroStreamHandlerImpl(batchingStatementEmitter);
+        return new ZoteroStreamHandlerImpl(batchingStatementEmitter, this);
     }
 
 
@@ -48,7 +48,7 @@ public class ZoteroFileExtractor extends ProcessorExtracting {
         private final ContentStreamHandler handler;
         private final StatementEmitter emitter;
 
-        public ZoteroStreamHandlerImpl(StatementEmitter emitter) {
+        public ZoteroStreamHandlerImpl(StatementEmitter emitter, Dereferencer<InputStream> deref) {
             this.emitter = emitter;
 
             this.handler = new ContentStreamHandlerImpl(
@@ -58,7 +58,7 @@ public class ZoteroFileExtractor extends ProcessorExtracting {
                             this,
                             outputStream,
                             processorState,
-                            ZoteroFileExtractor.this,
+                            deref,
                             communities
                     )
             );

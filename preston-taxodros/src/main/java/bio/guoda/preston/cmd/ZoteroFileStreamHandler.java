@@ -64,7 +64,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                     return deref.get(uri);
                 } finally {
                     stopWatch.stop();
-                    LOG.info("|" + uri.getIRIString() + "|resolved in|" + stopWatch.getTime(TimeUnit.SECONDS) + "|s|");
+                    logReponseTime(stopWatch, uri.getIRIString(), "resolved in");
                 }
             }
         };
@@ -92,7 +92,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                     if (StringUtils.isNoneBlank(md5)) {
                         providedContentId = HashType.md5.getPrefix() + md5;
                         ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, providedContentId);
-                                  }
+                    }
                     String zoteroItemUrl = zoteroRecord.at("/links/up/href").asText();
                     appendAttachmentInfo(
                             zenodoRecord,
@@ -105,13 +105,13 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                     StopWatch stopWatch = new StopWatch();
                     stopWatch.start();
 
-                    InputStream itemInputStream;
+                    InputStream itemInputStream = null;
 
                     try {
-                        itemInputStream = ContentQueryUtil.getContent(timedDereferencer, zoteroItemIRI, persisting);
+                        itemInputStream = ContentQueryUtil.getContent(zoteroItemIRI, () -> timedDereferencer);
                     } finally {
                         stopWatch.stop();
-                        LOG.info("|" + zoteroItemIRI.getIRIString() + "|resolved in|" + stopWatch.getTime(TimeUnit.SECONDS) + "|s|");
+                        logReponseTime(stopWatch, zoteroItemIRI.getIRIString(), itemInputStream == null ? "failed to resolve in in" : "resolved in ");
                     }
                     if (itemInputStream == null) {
                         throw new ContentStreamException("cannot generate Zenodo record due to unresolved Zotero record [" + zoteroItemUrl + "]");
@@ -141,6 +141,10 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             // opportunistic parsing, so ignore exceptions
         }
         return foundAtLeastOne.get();
+    }
+
+    private void logReponseTime(StopWatch stopWatch, String iriString, String msg) {
+        LOG.info("|" + iriString + "|" + msg + "|" + stopWatch.getTime(TimeUnit.MILLISECONDS) + "|ms|");
     }
 
     private boolean isPrimaryAttachmentOf(String zoteroAttachmentDownloadUrl, JsonNode itemData) {
@@ -300,7 +304,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             );
         } finally {
             stopWatch.stop();
-            LOG.info("|" + zoteroAttachmentDownloadUrl + "|contentid calculated in|" + stopWatch.getTime(TimeUnit.SECONDS) + "|s|");
+            logReponseTime(stopWatch, zoteroAttachmentDownloadUrl, "contentid calculated in ");
         }
 
     }
