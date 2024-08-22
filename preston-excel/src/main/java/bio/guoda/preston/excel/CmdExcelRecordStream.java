@@ -1,21 +1,19 @@
 package bio.guoda.preston.excel;
 
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.cmd.BlobStoreUtil;
 import bio.guoda.preston.cmd.LoggingPersisting;
 import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
-import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @CommandLine.Command(
         name = "excel-stream",
@@ -41,7 +39,7 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
                 = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), true, getHashType());
-        run(resolvingBlobStore(blobStoreAppendOnly));
+        run(BlobStoreUtil.createResolvingBlobStoreFor(blobStoreAppendOnly, this));
 
     }
 

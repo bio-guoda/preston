@@ -1,6 +1,7 @@
 package bio.guoda.preston.paradox;
 
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.cmd.BlobStoreUtil;
 import bio.guoda.preston.cmd.LoggingPersisting;
 import bio.guoda.preston.process.EmittingStreamOfAnyQuad;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
@@ -28,7 +29,7 @@ public class CmdParadoxRecordStream extends LoggingPersisting implements Runnabl
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
                 = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), true, getHashType());
-        run(resolvingBlobStore(blobStoreAppendOnly));
+        run(BlobStoreUtil.createResolvingBlobStoreFor(blobStoreAppendOnly, this));
 
     }
 

@@ -12,7 +12,6 @@ import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @CommandLine.Command(
@@ -31,7 +30,7 @@ public class CmdTaxoDrosStream extends LoggingPersisting implements Runnable {
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
                 = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), true, getHashType());
-        run(resolvingBlobStore(blobStoreAppendOnly));
+        run(BlobStoreUtil.createResolvingBlobStoreFor(blobStoreAppendOnly, this));
 
     }
 

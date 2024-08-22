@@ -48,7 +48,7 @@ public class ContentQueryUtil {
 
             @Override
             public BlobStoreReadOnly create() {
-                return Persisting.resolvingBlobStore(blobStore, persisting);
+                return BlobStoreUtil.createResolvingBlobStoreFor(blobStore, persisting);
             }
         };
 

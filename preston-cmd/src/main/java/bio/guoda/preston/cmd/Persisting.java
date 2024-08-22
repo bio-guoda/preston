@@ -2,10 +2,8 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.ResourcesHTTP;
-import bio.guoda.preston.store.AliasDereferencer;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.ContentHashDereferencer;
 import bio.guoda.preston.store.DerefProgressLogger;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.DereferencerContentAddressedTarGZ;
@@ -272,18 +270,6 @@ public class Persisting extends PersistingLocal {
                         new BlobStoreAppendOnly(keyValueStore, false, getHashType()));
 
         return withStoreAt(keyToPath, dereferencer);
-    }
-
-    protected BlobStoreReadOnly resolvingBlobStore(Dereferencer<InputStream> blobStore) {
-        return resolvingBlobStore(blobStore, this);
-    }
-
-    public static BlobStoreReadOnly resolvingBlobStore(Dereferencer<InputStream> blobStore, Persisting persisting) {
-        return new AliasDereferencer(
-                new ContentHashDereferencer(blobStore),
-                persisting,
-                persisting.getProvenanceTracer()
-        );
     }
 
 

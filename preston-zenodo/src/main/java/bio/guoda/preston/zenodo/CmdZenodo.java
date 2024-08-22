@@ -2,6 +2,7 @@ package bio.guoda.preston.zenodo;
 
 import bio.guoda.preston.EnvUtil;
 import bio.guoda.preston.StatementLogFactory;
+import bio.guoda.preston.cmd.BlobStoreUtil;
 import bio.guoda.preston.cmd.LogErrorHandlerExitOnError;
 import bio.guoda.preston.cmd.LoggingPersisting;
 import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
@@ -45,7 +46,7 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
         BlobStoreReadOnly blobStoreAppendOnly
                 = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()),
                 true, getHashType());
-        run(resolvingBlobStore(blobStoreAppendOnly));
+        run(BlobStoreUtil.createResolvingBlobStoreFor(blobStoreAppendOnly, this));
 
     }
 

@@ -34,7 +34,7 @@ public class CmdRISStream extends LoggingPersisting implements Runnable {
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
                 = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), true, getHashType());
-        run(resolvingBlobStore(blobStoreAppendOnly));
+        run(BlobStoreUtil.createResolvingBlobStoreFor(blobStoreAppendOnly, this));
 
     }
 

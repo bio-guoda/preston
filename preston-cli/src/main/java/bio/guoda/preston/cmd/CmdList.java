@@ -1,16 +1,11 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.StatementLogFactory;
 import bio.guoda.preston.process.LogErrorHandler;
-import bio.guoda.preston.process.StatementsListener;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @CommandLine.Command(
@@ -43,7 +38,7 @@ public class CmdList extends LoggingPersisting implements Runnable {
                                 foundHistory.set(true);
                                 try {
                                     ContentQueryUtil.copyMostRecentContent(
-                                            resolvingBlobStore(ReplayUtil.getBlobStore(this)),
+                                            BlobStoreUtil.createResolvingBlobStoreFor(ReplayUtil.getBlobStore(this), this),
                                             statement,
                                             this,
                                             copyShop);

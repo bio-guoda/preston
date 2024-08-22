@@ -1,6 +1,7 @@
 package bio.guoda.preston.dbase;
 
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.cmd.BlobStoreUtil;
 import bio.guoda.preston.cmd.LoggingPersisting;
 import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
@@ -25,7 +26,7 @@ public class CmdDBaseRecordStream extends LoggingPersisting implements Runnable 
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
                 = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), true, getHashType());
-        run(resolvingBlobStore(blobStoreAppendOnly));
+        run(BlobStoreUtil.createResolvingBlobStoreFor(blobStoreAppendOnly, this));
 
     }
 
