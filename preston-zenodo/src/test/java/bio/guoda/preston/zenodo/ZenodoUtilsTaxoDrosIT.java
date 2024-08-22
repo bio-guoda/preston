@@ -49,7 +49,7 @@ public class ZenodoUtilsTaxoDrosIT {
 
     @Before
     public void create() throws IOException {
-        ctx = new ZenodoContext(RefNodeFactory.toIRI("some:anchor"), ZenodoTestUtil.getAccessToken(), "https://sandbox.zenodo.org");
+        ctx = new ZenodoContext(ZenodoTestUtil.getAccessToken(), "https://sandbox.zenodo.org");
         InputStream request = getInputStream();
         assertNotNull(request);
         ObjectMapper objectMapper = ZenodoUtils.getObjectMapper();
@@ -79,7 +79,7 @@ public class ZenodoUtilsTaxoDrosIT {
                 .filter(d -> StringUtils.equals(d.getValue(), "unsubmitted"))
                 .map(Pair::getKey)
                 .forEach(depositId -> {
-                    ZenodoContext ctx = new ZenodoContext(RefNodeFactory.toIRI("some:anchor"), this.ctx.getAccessToken(), this.ctx.getEndpoint());
+                    ZenodoContext ctx = new ZenodoContext(this.ctx.getAccessToken(), this.ctx.getEndpoint());
                     ctx.setDepositId(depositId);
                     try {
                         ZenodoUtils.delete(ctx);

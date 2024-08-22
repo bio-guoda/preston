@@ -19,25 +19,22 @@ public class ZenodoContext implements ZenodoConfig {
 
 
     private boolean skipOnExisting = false;
-    private final IRI provenanceAnchor;
 
-    public ZenodoContext(IRI provenanceAnchor, String accessToken) {
-        this(provenanceAnchor, accessToken, "https://sandbox.zenodo.org");
+    public ZenodoContext(String accessToken) {
+        this(accessToken, "https://sandbox.zenodo.org");
     }
 
-    public ZenodoContext(IRI provenanceAnchor, String accessToken, String endpoint) {
-        this(provenanceAnchor, accessToken, endpoint, Collections.emptyList());
+    public ZenodoContext(String accessToken, String endpoint) {
+        this(accessToken, endpoint, Collections.emptyList());
     }
 
-    public ZenodoContext(IRI provenanceAnchor, String accessToken, String endpoint, List<String> communities) {
-        this.provenanceAnchor = provenanceAnchor;
+    public ZenodoContext(String accessToken, String endpoint, List<String> communities) {
         this.accessToken = accessToken;
         this.endpoint = endpoint;
         this.communities = communities;
     }
 
     public ZenodoContext(ZenodoConfig config) {
-        this.provenanceAnchor = config.getProvenanceAnchor();
         this.accessToken = config.getAccessToken();
         this.endpoint = config.getEndpoint();
         this.communities = new ArrayList<>(config.getCommunities());
@@ -92,11 +89,6 @@ public class ZenodoContext implements ZenodoConfig {
     @Override
     public boolean shouldSkipOnExisting() {
         return skipOnExisting;
-    }
-
-    @Override
-    public IRI getProvenanceAnchor() {
-        return provenanceAnchor;
     }
 
 

@@ -64,7 +64,6 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
                 LogErrorHandlerExitOnError.EXIT_ON_ERROR);
 
         ZenodoContext zenodoContext = new ZenodoContext(
-                AnchorUtil.findHeadOrThrow(this),
                 getAccessToken(),
                 getApiEndpoint(),
                 getCommunities()

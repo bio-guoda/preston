@@ -14,6 +14,4 @@ public interface ZenodoConfig {
     void setSkipOnExisting(Boolean skipOnExisting);
 
     boolean shouldSkipOnExisting();
-
-    IRI getProvenanceAnchor();
 }
