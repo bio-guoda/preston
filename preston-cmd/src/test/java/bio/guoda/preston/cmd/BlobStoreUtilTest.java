@@ -26,18 +26,44 @@ public class BlobStoreUtilTest {
     public TemporaryFolder folder = new TemporaryFolder();
 
     @Test
-    public void blobStore() throws IOException, URISyntaxException {
-        URL resource = getClass().getResource("index/data/27/f5/27f552c25bc733d05a5cc67e9ba63850");
-        File root = new File(resource.toURI());
-        File dataDir = root.getParentFile().getParentFile().getParentFile();
+    public void indexedBlobStore() throws IOException, URISyntaxException {
+        File dataDir = getDataDir();
 
-        Persisting persisting = new Persisting();
-        persisting.setHashType(HashType.md5);
+        Persisting persisting = getPersisting(dataDir);
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(getBlobStore(), persisting);
 
-        persisting.setLocalDataDir(dataDir.getAbsolutePath());
-        persisting.setLocalTmpDir(folder.newFolder("tmp").getAbsolutePath());
-        persisting.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/ec998a9c63a64ac7bfef04c91ee84f16"));
-        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(new BlobStoreReadOnly() {
+        InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.org"));
+
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("foo"));
+    }
+
+    @Test
+    public void resolvingBlobStoreWithProvenanceAnchor() throws IOException, URISyntaxException {
+        File dataDir = getDataDir();
+
+        Persisting persisting = getPersisting(dataDir);
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createResolvingBlobStoreFor(getBlobStore(), persisting);
+
+        InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.org"));
+
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("foo"));
+    }
+
+    @Test
+    public void resolvingBlobStoreWithProvenanceAnchorDefault() throws IOException, URISyntaxException {
+        File dataDir = getDataDir();
+
+        Persisting persisting = getPersisting(dataDir);
+        persisting.setProvenanceArchor(CmdWithProvenance.PROVENANCE_ANCHOR_DEFAULT);
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createResolvingBlobStoreFor(getBlobStore(), persisting);
+
+        InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.org"));
+
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("foo"));
+    }
+
+    private BlobStoreReadOnly getBlobStore() {
+        return new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI uri) throws IOException {
                 IRI iri = Hasher.calcHashIRI("foo\n", HashType.md5);
@@ -46,11 +72,24 @@ public class BlobStoreUtilTest {
                 }
                 return IOUtils.toInputStream("foo", StandardCharsets.UTF_8);
             }
-        }, persisting);
+        };
+    }
 
-        InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.org"));
+    private Persisting getPersisting(File dataDir) throws IOException {
+        Persisting persisting = new Persisting();
+        persisting.setHashType(HashType.md5);
 
-        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("foo"));
+        persisting.setLocalDataDir(dataDir.getAbsolutePath());
+        persisting.setLocalTmpDir(folder.newFolder("tmp").getAbsolutePath());
+        persisting.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/ec998a9c63a64ac7bfef04c91ee84f16"));
+        return persisting;
+    }
+
+
+    private File getDataDir() throws URISyntaxException {
+        URL resource = getClass().getResource("index/data/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+        File root = new File(resource.toURI());
+        return root.getParentFile().getParentFile().getParentFile();
     }
 
 }
