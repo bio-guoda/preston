@@ -87,7 +87,7 @@ public class BlobStoreUtilTest {
 
 
     private File getDataDir() throws URISyntaxException {
-        URL resource = getClass().getResource("index/data/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+        URL resource = getClass().getResource("index-data/27/f5/27f552c25bc733d05a5cc67e9ba63850");
         File root = new File(resource.toURI());
         return root.getParentFile().getParentFile().getParentFile();
     }
