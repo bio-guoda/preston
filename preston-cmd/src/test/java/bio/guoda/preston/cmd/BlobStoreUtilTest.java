@@ -38,6 +38,34 @@ public class BlobStoreUtilTest {
     }
 
     @Test
+    public void indexedBlobStoreWithoutProvenanceAnchor() throws IOException, URISyntaxException {
+        File dataDir = getDataDir();
+
+        Persisting persisting = getPersisting(dataDir);
+        persisting.setProvenanceArchor(CmdWithProvenance.PROVENANCE_ANCHOR_DEFAULT);
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(getBlobStore(), persisting);
+
+        InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.org"));
+
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("foo"));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void indexedBlobStoreWithoutProvenanceAnchorNoProvenanceIndex() throws IOException, URISyntaxException {
+        File dataDir = getDataDir("index-data-no-provenance/d3/b0/d3b07384d113edec49eaa6238ad5ff00");
+
+        Persisting persisting = getPersisting(dataDir);
+        persisting.setProvenanceArchor(CmdWithProvenance.PROVENANCE_ANCHOR_DEFAULT);
+
+        try {
+            BlobStoreUtil.createIndexedBlobStoreFor(getBlobStore(), persisting);
+        } catch(RuntimeException ex) {
+            assertThat(ex.getMessage(), Is.is("Cannot find most recent version: no provenance logs found."));
+            throw ex;
+        }
+    }
+
+    @Test
     public void resolvingBlobStoreWithProvenanceAnchor() throws IOException, URISyntaxException {
         File dataDir = getDataDir();
 
@@ -87,7 +115,12 @@ public class BlobStoreUtilTest {
 
 
     private File getDataDir() throws URISyntaxException {
-        URL resource = getClass().getResource("index-data/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+        String s = "index-data/27/f5/27f552c25bc733d05a5cc67e9ba63850";
+        return getDataDir(s);
+    }
+
+    private File getDataDir(String s) throws URISyntaxException {
+        URL resource = getClass().getResource(s);
         File root = new File(resource.toURI());
         return root.getParentFile().getParentFile().getParentFile();
     }

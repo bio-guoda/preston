@@ -54,14 +54,14 @@ public class AnchorUtil {
         }
     }
 
-    public static AtomicReference<IRI> findHeadOrThrow(Persisting persisting) {
+    public static IRI findHeadOrThrow(Persisting persisting) {
         AtomicReference<IRI> head = findHead(persisting);
 
         if (head.get() == null) {
             throw new RuntimeException("Cannot find most recent version: no provenance logs found.");
         }
 
-        return head;
+        return head.get();
     }
 
 }
