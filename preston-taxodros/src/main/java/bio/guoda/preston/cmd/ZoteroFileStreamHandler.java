@@ -139,6 +139,8 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             }
         } catch (IOException e) {
             // opportunistic parsing, so ignore exceptions
+        } catch (IllegalArgumentException ex) {
+            LOG.warn("possible marformed Zotero records in [" + version + "]", ex);
         }
         return foundAtLeastOne.get();
     }

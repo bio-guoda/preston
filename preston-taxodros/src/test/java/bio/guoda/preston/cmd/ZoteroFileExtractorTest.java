@@ -47,6 +47,13 @@ public class ZoteroFileExtractorTest {
         assertArticleItem(jsonObjects);
     }
 
+
+    @Test
+    public void skipZoteroRecordWithSuspiciousDate() throws IOException {
+        String[] jsonObjects = getResource("ZoteroArticleSuspiciousDateAttachment.json", "ZoteroArticleSuspiciousDate.json");
+        assertThat(jsonObjects.length, is(0));
+    }
+
     @Test
     public void streamZoteroArticleToZenodoLineJsonWithTags() throws IOException {
         String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleWithTags.json");
@@ -192,8 +199,18 @@ public class ZoteroFileExtractorTest {
                     return IOUtils.toInputStream("a pdf associated with https://api.zotero.org/groups/5435545/items/8PZ5M3FX/file/view", StandardCharsets.UTF_8);
                 } else if (StringUtils.equals("hash://md5/48226913783fbc2af44fb5cd2ac460d5", key.getIRIString())) {
                     return IOUtils.toInputStream("a pdf associated with https://api.zotero.org/groups/5435545/items/AJAULP6T/file/view", StandardCharsets.UTF_8);
-                }else if (StringUtils.equals("hash://md5/00335a95492b82cc0862e6bcc88497c4", key.getIRIString())) {
+                } else if (StringUtils.equals("hash://md5/00335a95492b82cc0862e6bcc88497c4", key.getIRIString())) {
                     return IOUtils.toInputStream(CONTENT_OF_MD5_0033, StandardCharsets.UTF_8);
+                } else if (StringUtils.equals("hash://md5/d0c82eeff5a972dadadc58afea509601", key.getIRIString())) {
+                    return IOUtils.toInputStream("content of some pdf", StandardCharsets.UTF_8);
+                } else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/C9PK97YL", key.getIRIString())) {
+                    return getClass().getResourceAsStream("zotero/" + testArticle);
+                }else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/UPBFKSQJ", key.getIRIString())) {
+                    return getClass().getResourceAsStream("zotero/" + testArticle);
+                }else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/TMSDEKSQ", key.getIRIString())) {
+                    return getClass().getResourceAsStream("zotero/" + testArticle);
+                }else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/DP629R8S", key.getIRIString())) {
+                    return getClass().getResourceAsStream("zotero/" + testArticle);
                 }
                 throw new RuntimeException("unresolved [" + key + "]");
             }

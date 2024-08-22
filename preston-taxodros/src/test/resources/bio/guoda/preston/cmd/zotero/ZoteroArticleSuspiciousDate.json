@@ -1,0 +1,88 @@
+{
+        "key": "C9PK97YL",
+        "version": 17664,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/C9PK97YL",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/C9PK97YL",
+                "type": "text/html"
+            },
+            "attachment": {
+                "href": "https://api.zotero.org/groups/5435545/items/64CERBS7",
+                "type": "application/json",
+                "attachmentType": "application/pdf",
+                "attachmentSize": 46655
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "Attila",
+            "numChildren": 1
+        },
+        "data": {
+            "key": "C9PK97YL",
+            "version": 17664,
+            "itemType": "journalArticle",
+            "title": "Három ritka denevérfaj (Chiroptera) az Aggteleki Nemzeti Parkból",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Bankovics",
+                    "lastName": "Attila"
+                }
+            ],
+            "abstractNote": "Three rare bat species (Myotis mystacinus, Myotis bechsteini, Plecotus auritus) was caught by mistnets in the Aggtelek National Park in 1989. Their habitat characters: semiopen scrub, woodland with pastures in the Tohonya-valley at Jósvafô. The measurements, morphological characters of the four specimens are given.",
+            "publicationTitle": "FOLIA HISTORICO NATURALIA MUSEI MATRAENSIS",
+            "volume": "22",
+            "issue": "",
+            "pages": "341–344",
+            "date": "0199-00-00 199",
+            "series": "",
+            "seriesTitle": "",
+            "seriesText": "",
+            "journalAbbreviation": "",
+            "language": "hu",
+            "DOI": "",
+            "ISSN": "",
+            "shortTitle": "",
+            "url": "",
+            "accessDate": "",
+            "archive": "",
+            "archiveLocation": "",
+            "libraryCatalog": "Zotero",
+            "callNumber": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [
+                "UAWY6DNP"
+            ],
+            "relations": {},
+            "dateAdded": "2024-07-08T02:35:07Z",
+            "dateModified": "2024-07-08T02:35:07Z"
+        }
+    }

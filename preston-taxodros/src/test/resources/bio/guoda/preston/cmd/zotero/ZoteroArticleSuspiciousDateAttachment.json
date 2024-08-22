@@ -1,0 +1,69 @@
+{
+        "key": "64CERBS7",
+        "version": 19591,
+        "library": {
+            "type": "group",
+            "id": 5435545,
+            "name": "Bat Literature Project",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/bat_literature_project",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/5435545/items/64CERBS7",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/bat_literature_project/items/64CERBS7",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/5435545/items/C9PK97YL",
+                "type": "application/json"
+            },
+            "enclosure": {
+                "type": "application/pdf",
+                "href": "https://api.zotero.org/groups/5435545/items/64CERBS7/file/view",
+                "title": "Attila - Három ritka denevérfaj (Chiroptera) az Aggteleki N.pdf",
+                "length": 46655
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 13229919,
+                "username": "acsherman",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/acsherman",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "64CERBS7",
+            "version": 19591,
+            "parentItem": "C9PK97YL",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "Attila - Három ritka denevérfaj (Chiroptera) az Aggteleki N.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "Attila - Három ritka denevérfaj (Chiroptera) az Aggteleki N.pdf",
+            "md5": "d0c82eeff5a972dadadc58afea509601",
+            "mtime": 1719587842789,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2024-07-08T02:35:07Z",
+            "dateModified": "2024-07-08T02:35:07Z"
+        }
+    }
