@@ -1,5 +1,6 @@
 package bio.guoda.preston.zenodo;
 
+import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
@@ -12,7 +13,7 @@ public class ZenodoUtilsTest {
 
     @Test
     public void queryForSpecificDeposition() {
-        ZenodoContext ctx = new ZenodoContext("secret");
+        ZenodoContext ctx = new ZenodoContext(RefNodeFactory.toIRI("some:anchor"), "secret");
         IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingDepositions(ctx, Arrays.asList("urn:lsid:biodiversitylibrary.org:part:79807"));
 
         assertThat(
@@ -23,7 +24,7 @@ public class ZenodoUtilsTest {
 
     @Test
     public void queryForExistingDepositions() {
-        ZenodoContext ctx = new ZenodoContext("secret");
+        ZenodoContext ctx = new ZenodoContext(RefNodeFactory.toIRI("some:anchor"), "secret");
         IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingDepositions(ctx, Arrays.asList("foo:bar", "foo:bar"));
 
         assertThat(
@@ -35,7 +36,7 @@ public class ZenodoUtilsTest {
 
     @Test
     public void queryForExistingRecords() {
-        ZenodoContext ctx = new ZenodoContext("secret", "https://sandbox.zenodo.org", Arrays.asList("community 1", "community 2"));
+        ZenodoContext ctx = new ZenodoContext(RefNodeFactory.toIRI("some:anchor"), "secret", "https://sandbox.zenodo.org", Arrays.asList("community 1", "community 2"));
         IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingRecords(
                 ctx,
                 Arrays.asList("foo:bar", "foo:bar")

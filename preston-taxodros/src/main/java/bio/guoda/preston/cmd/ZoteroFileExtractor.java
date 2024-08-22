@@ -25,15 +25,17 @@ public class ZoteroFileExtractor extends ProcessorExtracting {
     private final Persisting processorState;
     private final OutputStream outputStream;
     private final List<String> communities;
+    private final IRI provenanceAnchor;
 
     public ZoteroFileExtractor(Persisting processorState,
                                BlobStoreReadOnly blobStoreReadOnly,
                                OutputStream out,
                                List<String> communities,
-                               StatementsListener... listeners) {
+                               IRI provenanceAnchor, StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
+        this.provenanceAnchor = provenanceAnchor;
         this.communities = communities;
     }
 
@@ -59,7 +61,8 @@ public class ZoteroFileExtractor extends ProcessorExtracting {
                             outputStream,
                             processorState,
                             deref,
-                            communities
+                            communities,
+                            provenanceAnchor
                     )
             );
         }

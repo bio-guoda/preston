@@ -42,7 +42,7 @@ public class ZenodoUtils {
     private final static String APPLICATION_JSON = ContentType.APPLICATION_JSON.getMimeType();
 
     private static ZenodoContext updateContext(ZenodoContext ctx, InputStream is) throws IOException {
-        ZenodoContext copy = new ZenodoContext(ctx.getAccessToken(), ctx.getEndpoint());
+        ZenodoContext copy = new ZenodoContext(ctx);
         JsonNode response = new ObjectMapper().readTree(is);
         copy.setMetadata(response);
         JsonNode deposit = response.at("/id");

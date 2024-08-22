@@ -157,7 +157,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
                 uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
                 emitRelations(recordIds, contentIds, origins, ctxLocal);
-            } else if (existingIds.size() == 1) {
+            } else if (existingIds.size() == 1 && !ctx.shouldSkipOnExisting()) {
                 ctxLocal.setDepositId(existingIds.get(0));
                 ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
                 String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
@@ -165,7 +165,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
                 emitRelations(recordIds, contentIds, origins, ctxLocal);
             } else {
-                emitPossibleDuplicateRecords(coordinate, existingIds, ctxLocal);
+                emitRelatedExistingRecords(coordinate, existingIds, ctxLocal);
             }
             emitter.emit(
                     RefNodeFactory.toStatement(
@@ -185,7 +185,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         emitRelations(ctxLocal, RefNodeConstants.ALTERNATE_OF, lsids);
     }
 
-    private void emitPossibleDuplicateRecords(IRI coordinate, List<Long> existingIds, ZenodoContext ctxLocal) {
+    private void emitRelatedExistingRecords(IRI coordinate, List<Long> existingIds, ZenodoContext ctxLocal) {
         for (Long existingId : existingIds) {
             emitter.emit(
                     RefNodeFactory.toStatement(

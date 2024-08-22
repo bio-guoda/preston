@@ -2,9 +2,9 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.HashKeyUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -139,7 +139,7 @@ public class ZoteroFileExtractorTest {
 
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(9));
+        assertThat(identifiers.size(), is(10));
         // provided by Zoteros
         assertThat(identifiers.get(0).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(0).get("identifier").asText(), is("hash://md5/00335a95492b82cc0862e6bcc88497c4"));
@@ -160,11 +160,13 @@ public class ZoteroFileExtractorTest {
         assertThat(identifiers.get(5).get("identifier").asText(), is("https://zotero.org/groups/5435545/items/DP629R8S"));
         assertThat(identifiers.get(6).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(6).get("identifier").asText(), is("https://linker.bio/hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
-        assertThat(identifiers.get(7).get("relation").asText(), is("isAlternateIdentifier"));
-        assertThat(identifiers.get(7).get("identifier").asText(), is("10.1093/gbe/evac018"));
-        assertThat(identifiers.get(8).get("relation").asText(), is("isCompiledBy"));
-        assertThat(identifiers.get(8).get("identifier").asText(), is("10.5281/zenodo.1410543"));
-        assertThat(identifiers.get(8).get("resource_type").asText(), is("software"));
+        assertThat(identifiers.get(7).get("relation").asText(), is("isPartOf"));
+        assertThat(identifiers.get(7).get("identifier").asText(), is("some:anchor"));
+        assertThat(identifiers.get(8).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(8).get("identifier").asText(), is("10.1093/gbe/evac018"));
+        assertThat(identifiers.get(9).get("relation").asText(), is("isCompiledBy"));
+        assertThat(identifiers.get(9).get("identifier").asText(), is("10.5281/zenodo.1410543"));
+        assertThat(identifiers.get(9).get("resource_type").asText(), is("software"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Biodiversity"));
@@ -205,11 +207,11 @@ public class ZoteroFileExtractorTest {
                     return IOUtils.toInputStream("content of some pdf", StandardCharsets.UTF_8);
                 } else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/C9PK97YL", key.getIRIString())) {
                     return getClass().getResourceAsStream("zotero/" + testArticle);
-                }else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/UPBFKSQJ", key.getIRIString())) {
+                } else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/UPBFKSQJ", key.getIRIString())) {
                     return getClass().getResourceAsStream("zotero/" + testArticle);
-                }else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/TMSDEKSQ", key.getIRIString())) {
+                } else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/TMSDEKSQ", key.getIRIString())) {
                     return getClass().getResourceAsStream("zotero/" + testArticle);
-                }else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/DP629R8S", key.getIRIString())) {
+                } else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/DP629R8S", key.getIRIString())) {
                     return getClass().getResourceAsStream("zotero/" + testArticle);
                 }
                 throw new RuntimeException("unresolved [" + key + "]");
@@ -232,7 +234,8 @@ public class ZoteroFileExtractorTest {
                 processorState,
                 blobStore,
                 byteArrayOutputStream,
-                Arrays.asList("batlit", "biosyslit")
+                Arrays.asList("batlit", "biosyslit"),
+                RefNodeFactory.toIRI("some:anchor")
         );
 
         extractor.on(statement);

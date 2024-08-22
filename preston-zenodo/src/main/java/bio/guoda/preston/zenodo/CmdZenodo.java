@@ -2,6 +2,7 @@ package bio.guoda.preston.zenodo;
 
 import bio.guoda.preston.EnvUtil;
 import bio.guoda.preston.StatementLogFactory;
+import bio.guoda.preston.cmd.AnchorUtil;
 import bio.guoda.preston.cmd.BlobStoreUtil;
 import bio.guoda.preston.cmd.LogErrorHandlerExitOnError;
 import bio.guoda.preston.cmd.LoggingPersisting;
@@ -35,6 +36,12 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
     private String apiEndpoint = EnvUtil.getEnvironmentVariable(ZENODO_ENDPOINT, "https://zenodo.org");
 
     @CommandLine.Option(
+            names = {"--skip-on-existing"},
+            description = "skip submission of a Zenodo deposit with matching identifiers already exists"
+    )
+    private Boolean skipOnExisting = true;
+
+    @CommandLine.Option(
             names = {"--communities", "--community"},
             description = "associated Zenodo communities"
     )
@@ -56,10 +63,17 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
                 getOutputStream(),
                 LogErrorHandlerExitOnError.EXIT_ON_ERROR);
 
+        ZenodoContext zenodoContext = new ZenodoContext(
+                AnchorUtil.findHeadOrThrow(this),
+                getAccessToken(),
+                getApiEndpoint(),
+                getCommunities()
+        );
+        zenodoContext.setSkipOnExisting(skipOnExisting);
         StatementsListener textMatcher = new ZenodoMetadataFileExtractor(
                 this,
                 blobStoreReadOnly,
-                new ZenodoContext(getAccessToken(), getApiEndpoint(), getCommunities()),
+                zenodoContext,
                 listener
         );
 

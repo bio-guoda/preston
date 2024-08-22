@@ -43,7 +43,8 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
     private final Persisting persisting;
     private final Dereferencer<InputStream> timedDereferencer;
-    private ContentStreamHandler contentStreamHandler;
+    private final IRI provenanceAnchor;
+    private final ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
     private final List<String> communities;
 
@@ -51,7 +52,8 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                                    OutputStream os,
                                    Persisting persisting,
                                    Dereferencer<InputStream> deref,
-                                   List<String> communities) {
+                                   List<String> communities,
+                                   IRI provenanceAnchor) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
         this.persisting = persisting;
@@ -69,6 +71,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             }
         };
         this.communities = communities;
+        this.provenanceAnchor = provenanceAnchor;
     }
 
     @Override
@@ -179,6 +182,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, StreamHandlerUtil.makeActionable(iriString));
             ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, StreamHandlerUtil.makeActionable(iriString));
+            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, provenanceAnchor.getIRIString());
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
             ZenodoMetaUtil.setType(objectNode, "application/json");
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, reference.asText());
