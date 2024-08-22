@@ -11,7 +11,7 @@ public interface ZenodoConfig {
 
     List<String> getCommunities();
 
-    void setSkipOnExisting(Boolean skipOnExisting);
+    void setCreateNewVersionForExisting(Boolean skipOnExisting);
 
-    boolean shouldSkipOnExisting();
+    boolean createNewVersionForExisting();
 }

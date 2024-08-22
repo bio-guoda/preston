@@ -1,6 +1,5 @@
 package bio.guoda.preston.zenodo;
 
-import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 

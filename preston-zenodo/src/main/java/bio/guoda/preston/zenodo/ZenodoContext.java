@@ -1,7 +1,6 @@
 package bio.guoda.preston.zenodo;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.commons.rdf.api.IRI;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +17,7 @@ public class ZenodoContext implements ZenodoConfig {
     private JsonNode metadata;
 
 
-    private boolean skipOnExisting = false;
+    private boolean createNewVersionForExisting = false;
 
     public ZenodoContext(String accessToken) {
         this(accessToken, "https://sandbox.zenodo.org");
@@ -38,7 +37,7 @@ public class ZenodoContext implements ZenodoConfig {
         this.accessToken = config.getAccessToken();
         this.endpoint = config.getEndpoint();
         this.communities = new ArrayList<>(config.getCommunities());
-        this.skipOnExisting = config.shouldSkipOnExisting();
+        this.createNewVersionForExisting = config.createNewVersionForExisting();
     }
 
 
@@ -82,13 +81,13 @@ public class ZenodoContext implements ZenodoConfig {
     }
 
     @Override
-    public void setSkipOnExisting(Boolean skipOnExisting) {
-        this.skipOnExisting = skipOnExisting;
+    public void setCreateNewVersionForExisting(Boolean skipOnExisting) {
+        this.createNewVersionForExisting = skipOnExisting;
     }
 
     @Override
-    public boolean shouldSkipOnExisting() {
-        return skipOnExisting;
+    public boolean createNewVersionForExisting() {
+        return createNewVersionForExisting;
     }
 
 

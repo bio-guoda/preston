@@ -157,7 +157,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
                 uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
                 emitRelations(recordIds, contentIds, origins, ctxLocal);
-            } else if (existingIds.size() == 1 && !ctx.shouldSkipOnExisting()) {
+            } else if (existingIds.size() == 1 && ctx.createNewVersionForExisting()) {
                 ctxLocal.setDepositId(existingIds.get(0));
                 ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
                 String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
