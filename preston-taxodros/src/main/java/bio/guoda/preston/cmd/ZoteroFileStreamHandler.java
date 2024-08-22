@@ -111,7 +111,9 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                         itemInputStream = ContentQueryUtil.getContent(zoteroItemIRI, () -> timedDereferencer);
                     } finally {
                         stopWatch.stop();
-                        logReponseTime(stopWatch, zoteroItemIRI.getIRIString(), itemInputStream == null ? "failed to resolve in in" : "resolved in ");
+                        if (itemInputStream == null) {
+                            logReponseTime(stopWatch, zoteroItemIRI.getIRIString(), "failed to resolve in");
+                        }
                     }
                     if (itemInputStream == null) {
                         throw new ContentStreamException("cannot generate Zenodo record due to unresolved Zotero record [" + zoteroItemUrl + "]");
