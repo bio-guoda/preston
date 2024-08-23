@@ -17,6 +17,7 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import picocli.CommandLine;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -33,6 +34,14 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public abstract class CmdActivity extends LoggingPersisting implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(CmdActivity.class);
+
+    @CommandLine.Option(
+            names = {"-m", "--message"},
+            description = "Custom description of this tracking activity or command."
+    )
+    private String description = getDescriptionDefault();
+
+    public abstract String getDescriptionDefault();
 
 
     @Override
@@ -159,7 +168,9 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
         return ActivityUtil.generateSoftwareAgentProcessDescription(activity, PRESTON, RefNodeConstants.PRESTON_DOI_URL_IRI, "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2018-2024. Preston: a biodiversity dataset tracker" + softwareAgentVersion + " [Software]. Zenodo. " + RefNodeConstants.PRESTON_DOI_URL_IRI.getIRIString(), "Preston is a software program that finds, archives and provides access to biodiversity datasets.");
     }
 
-    abstract String getActivityDescription();
+    public String getActivityDescription() {
+        return description;
+    }
 
     private static class LoggerExitHook extends Thread {
 

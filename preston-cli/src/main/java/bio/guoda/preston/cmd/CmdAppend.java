@@ -62,7 +62,7 @@ public class CmdAppend extends CmdActivity {
     }
 
     @Override
-    String getActivityDescription() {
+    public String getDescriptionDefault() {
         return "An event that (re-) processes existing biodiversity datasets graphs and their provenance.";
     }
 

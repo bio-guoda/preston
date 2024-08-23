@@ -95,7 +95,7 @@ public class CmdUpdate extends CmdTrack {
     }
 
     @Override
-    String getActivityDescription() {
+    public String getDescriptionDefault() {
         return "A crawl event that discovers biodiversity archives.";
     }
 

@@ -37,6 +37,7 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 public class CmdTrack extends CmdActivity {
     private static final Logger LOG = LoggerFactory.getLogger(CmdTrack.class);
     public static final Pattern PREFIX_SCHEMA_PATTERN = Pattern.compile(HashKeyUtil.PREFIX_SCHEMA + ".*");
+    public static final String DESCRIPTION_DEFAULT = "A crawl event that tracks digital content.";
 
     private Dereferencer<InputStream> dereferencer = ResourcesHTTP::asInputStream;
 
@@ -50,6 +51,12 @@ public class CmdTrack extends CmdActivity {
             description = "Read URLs to be tracked from file."
     )
     private String filename = null;
+
+
+    @Override
+    public String getDescriptionDefault() {
+        return DESCRIPTION_DEFAULT;
+    }
 
     @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
@@ -94,11 +101,6 @@ public class CmdTrack extends CmdActivity {
         return locationCandidate -> PREFIX_SCHEMA_PATTERN.matcher(locationCandidate).matches()
                 ? locationCandidate
                 : new File(locationCandidate).toPath().toUri().toString();
-    }
-
-    @Override
-    String getActivityDescription() {
-        return "A crawl event that tracks digital content.";
     }
 
     private StatementsListener createActivityProcessor(

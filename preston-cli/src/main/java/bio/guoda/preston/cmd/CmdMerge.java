@@ -52,7 +52,7 @@ public class CmdMerge extends CmdActivity {
     }
 
     @Override
-    String getActivityDescription() {
+    public String getDescriptionDefault() {
         return "An event that merges biodiversity archives.";
     }
 

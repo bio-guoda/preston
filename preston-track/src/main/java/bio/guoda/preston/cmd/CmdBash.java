@@ -44,6 +44,11 @@ public class CmdBash extends CmdActivity {
     private File source = new File("/dev/stdin");
 
     @Override
+    public String getDescriptionDefault() {
+        return "Executes script and captures stdout";
+    }
+
+    @Override
     void initQueue(Queue<List<Quad>> statementQueue, ActivityContext ctx) {
 
     }
@@ -79,11 +84,6 @@ public class CmdBash extends CmdActivity {
 
     public void setCommandsContentId(IRI commandsContentId) {
         this.commandsContentId = commandsContentId;
-    }
-
-    @Override
-    String getActivityDescription() {
-        return "Executes script and captures stdout";
     }
 
     private StatementsListener createActivityProcessor(

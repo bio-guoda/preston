@@ -110,7 +110,7 @@ public class CmdAlias extends CmdAppend implements Runnable {
 
 
     @Override
-    String getActivityDescription() {
+    public String getDescriptionDefault() {
         return "An activity that assigns an alias to a content hash";
     }
 
