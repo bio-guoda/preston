@@ -13,6 +13,7 @@ import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
@@ -37,9 +39,10 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
     @CommandLine.Option(
             names = {"-m", "--message"},
-            description = "Custom description of this tracking activity or command."
+            split = " ",
+            description = "Custom description of this tracking activity or command. (default: \"${DEFAULT-VALUE}\")"
     )
-    private String description = getDescriptionDefault();
+    private List<String> description = Arrays.asList(getDescriptionDefault());
 
     public abstract String getDescriptionDefault();
 
@@ -169,7 +172,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     }
 
     public String getActivityDescription() {
-        return description;
+        return StringUtils.join(description, " ");
     }
 
     private static class LoggerExitHook extends Thread {
