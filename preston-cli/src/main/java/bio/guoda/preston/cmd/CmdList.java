@@ -38,7 +38,7 @@ public class CmdList extends LoggingPersisting implements Runnable {
                                 foundHistory.set(true);
                                 try {
                                     ContentQueryUtil.copyMostRecentContent(
-                                            BlobStoreUtil.createResolvingBlobStoreFor(ReplayUtil.getBlobStore(this), this),
+                                            BlobStoreUtil.createIndexedBlobStoreFor(ReplayUtil.getBlobStore(this), this),
                                             statement,
                                             this,
                                             copyShop);
