@@ -9,7 +9,9 @@ import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
+import bio.guoda.preston.store.AliasDereferencer;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.ContentHashDereferencer;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.HashKeyUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -27,11 +29,12 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BlobStoreUtil {
     private static final Logger LOG = LoggerFactory.getLogger(BlobStoreUtil.class);
 
-    public static BlobStoreReadOnly createIndexedBlobStoreFor(Dereferencer<InputStream> blobStoreReadOnly, Persisting persisting) {
+    public static BlobStoreReadOnly createIndexedBlobStoreFor(BlobStoreReadOnly blobStoreReadOnly, Persisting persisting) {
         Map<String, String> treeMap = buildIndexedBlobStore(persisting);
 
         return new BlobStoreReadOnly() {
@@ -53,6 +56,14 @@ public class BlobStoreUtil {
                 return blobStoreReadOnly.get(iriForLookup);
             }
         };
+    }
+
+    public static BlobStoreReadOnly createResolvingBlobStoreFor(Dereferencer<InputStream> blobStore, Persisting persisting) {
+        return new AliasDereferencer(
+                new ContentHashDereferencer(blobStore),
+                persisting,
+                persisting.getProvenanceTracer()
+        );
     }
 
 

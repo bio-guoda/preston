@@ -70,7 +70,7 @@ public class BlobStoreUtilTest {
         File dataDir = getDataDir();
 
         Persisting persisting = getPersisting(dataDir);
-        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(getBlobStore(), persisting);
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createResolvingBlobStoreFor(getBlobStore(), persisting);
 
         InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.org"));
 
@@ -83,7 +83,7 @@ public class BlobStoreUtilTest {
 
         Persisting persisting = getPersisting(dataDir);
         persisting.setProvenanceArchor(CmdWithProvenance.PROVENANCE_ANCHOR_DEFAULT);
-        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(getBlobStore(), persisting);
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createResolvingBlobStoreFor(getBlobStore(), persisting);
 
         InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.org"));
 

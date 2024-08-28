@@ -39,7 +39,7 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
                 = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), true, getHashType());
-        run(BlobStoreUtil.createIndexedBlobStoreFor(blobStoreAppendOnly, this));
+        run(BlobStoreUtil.createResolvingBlobStoreFor(blobStoreAppendOnly, this));
 
     }
 

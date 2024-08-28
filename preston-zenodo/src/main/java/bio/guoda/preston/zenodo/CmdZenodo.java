@@ -52,7 +52,7 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
         BlobStoreReadOnly blobStoreAppendOnly
                 = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()),
                 true, getHashType());
-        run(BlobStoreUtil.createIndexedBlobStoreFor(blobStoreAppendOnly, this));
+        run(BlobStoreUtil.createResolvingBlobStoreFor(blobStoreAppendOnly, this));
 
     }
 

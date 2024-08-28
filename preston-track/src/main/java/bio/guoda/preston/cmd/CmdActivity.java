@@ -116,7 +116,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
                                                  Queue<List<Quad>> statementQueue) {
 
         return createStatementListeners(
-                BlobStoreUtil.createIndexedBlobStoreFor(blobStore, this),
+                BlobStoreUtil.createResolvingBlobStoreFor(blobStore, this),
                 archivingLogger,
                 statementQueue
         );
