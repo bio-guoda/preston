@@ -64,4 +64,11 @@ public class AnchorUtil {
         return head.get();
     }
 
+    public static IRI findAnchorOrThrow(Persisting persisting) {
+        IRI provenanceAnchor = persisting.getProvenanceAnchor();
+        if (CmdWithProvenance.PROVENANCE_ANCHOR_DEFAULT.equals(provenanceAnchor)) {
+            provenanceAnchor = findHeadOrThrow(persisting);
+        }
+        return provenanceAnchor;
+    }
 }

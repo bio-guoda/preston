@@ -38,7 +38,7 @@ public class RISFileStreamHandler implements ContentStreamHandler {
         this.persisting = persisting;
         this.dereferencer = dereferencer;
         this.communities = communities;
-        this.provenanceAnchor = AnchorUtil.findHeadOrThrow(persisting);
+        this.provenanceAnchor = AnchorUtil.findAnchorOrThrow(persisting);
     }
 
     @Override

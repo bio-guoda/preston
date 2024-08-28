@@ -68,7 +68,7 @@ public class CmdZoteroStream extends LoggingPersisting implements Runnable {
                 blobStoreWithIndexedVersions,
                 getOutputStream(),
                 communities,
-                AnchorUtil.findHeadOrThrow(this),
+                AnchorUtil.findAnchorOrThrow(this),
                 listener);
 
         StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {

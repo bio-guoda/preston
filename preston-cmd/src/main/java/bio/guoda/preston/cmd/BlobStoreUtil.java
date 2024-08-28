@@ -29,7 +29,6 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class BlobStoreUtil {
     private static final Logger LOG = LoggerFactory.getLogger(BlobStoreUtil.class);
@@ -70,10 +69,7 @@ public class BlobStoreUtil {
     private static Map<String, String> buildIndexedBlobStore(Persisting persisting) {
 
         File tmpDir = persisting.getTmpDir();
-        IRI provenanceAnchor = persisting.getProvenanceAnchor();
-        if (CmdWithProvenance.PROVENANCE_ANCHOR_DEFAULT.equals(provenanceAnchor)) {
-            provenanceAnchor = AnchorUtil.findHeadOrThrow(persisting);
-        }
+        IRI provenanceAnchor = AnchorUtil.findAnchorOrThrow(persisting);
 
         // indexing
         DBMaker maker = newTmpFileDB(tmpDir);
