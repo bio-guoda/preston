@@ -65,6 +65,31 @@ public class BlobStoreUtilTest {
         }
     }
 
+    @Test
+    public void resolvingBlobStoreWithProvenanceAnchor() throws IOException, URISyntaxException {
+        File dataDir = getDataDir();
+
+        Persisting persisting = getPersisting(dataDir);
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(getBlobStore(), persisting);
+
+        InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.org"));
+
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("foo"));
+    }
+
+    @Test
+    public void resolvingBlobStoreWithProvenanceAnchorDefault() throws IOException, URISyntaxException {
+        File dataDir = getDataDir();
+
+        Persisting persisting = getPersisting(dataDir);
+        persisting.setProvenanceArchor(CmdWithProvenance.PROVENANCE_ANCHOR_DEFAULT);
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(getBlobStore(), persisting);
+
+        InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.org"));
+
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("foo"));
+    }
+
     private BlobStoreReadOnly getBlobStore() {
         return new BlobStoreReadOnly() {
             @Override
