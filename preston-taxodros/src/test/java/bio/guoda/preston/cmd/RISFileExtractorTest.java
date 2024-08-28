@@ -47,7 +47,7 @@ public class RISFileExtractorTest {
         JsonNode taxonNode = unwrapMetadata(jsonObjects[1]);
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(5));
+        assertThat(identifiers.size(), is(6));
         // provided by Zoteros
         assertThat(identifiers.get(0).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(0).get("identifier").asText(), is("https://linker.bio/line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L23-L44"));
@@ -63,6 +63,9 @@ public class RISFileExtractorTest {
 
         assertThat(identifiers.get(4).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(4).get("identifier").asText(), is("urn:lsid:biodiversitylibrary.org:part:337600"));
+
+        assertThat(identifiers.get(5).get("relation").asText(), is("isPartOf"));
+        assertThat(identifiers.get(5).get("identifier").asText(), is("hash://sha256/37171f648818b1286f7df81bca57c9b8c43d2e22d64c8520f7d2464e282cd6e0"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("cave"));
@@ -104,7 +107,7 @@ public class RISFileExtractorTest {
 
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(7));
+        assertThat(identifiers.size(), is(8));
         // provided by Zoteros
         assertThat(identifiers.get(0).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(0).get("identifier").asText(), is("https://linker.bio/line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L22"));
@@ -121,12 +124,16 @@ public class RISFileExtractorTest {
         assertThat(identifiers.get(4).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(4).get("identifier").asText(), is("urn:lsid:biodiversitylibrary.org:part:332157"));
 
-        // calculated on the fly
-        assertThat(identifiers.get(5).get("relation").asText(), is("hasVersion"));
-        assertThat(identifiers.get(5).get("identifier").asText(), is("hash://md5/f3452e34cc97208fdac0d1375c94c7a2"));
+        assertThat(identifiers.get(5).get("relation").asText(), is("isPartOf"));
+        assertThat(identifiers.get(5).get("identifier").asText(), is("hash://sha256/37171f648818b1286f7df81bca57c9b8c43d2e22d64c8520f7d2464e282cd6e0"));
 
+        // calculated on the fly
         assertThat(identifiers.get(6).get("relation").asText(), is("hasVersion"));
-        assertThat(identifiers.get(6).get("identifier").asText(), is("hash://sha256/da8e8a1b2579542779408c410edb110f9a44f4206db2df66ec46391bcba78015"));
+        assertThat(identifiers.get(6).get("identifier").asText(), is("hash://md5/f3452e34cc97208fdac0d1375c94c7a2"));
+
+        assertThat(identifiers.get(7).get("relation").asText(), is("hasVersion"));
+        assertThat(identifiers.get(7).get("identifier").asText(), is("hash://sha256/da8e8a1b2579542779408c410edb110f9a44f4206db2df66ec46391bcba78015"));
+
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Entomophthorales"));
