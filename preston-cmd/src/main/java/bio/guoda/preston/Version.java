@@ -13,20 +13,33 @@ import java.util.Properties;
 
 public final class Version implements CommandLine.IVersionProvider {
     public static String getVersionString(String defaultVersion) {
-        String version = null;
+        String propertyName = "version";
+        return getPropertyValue(propertyName, defaultVersion);
+    }
+
+    private static String getPropertyValue(String propertyName, String defaultVersion) {
+        String propertyValue = null;
         try (InputStream file = Version.class.getResourceAsStream("/preston.properties")) {
             Properties prop = new Properties();
             prop.load(file);
-            version = prop.getProperty("version");
+            propertyValue = prop.getProperty(propertyName);
         } catch (IOException e) {
             //
         }
 
-        return StringUtils.isBlank(version) ? defaultVersion : version;
+        return StringUtils.isBlank(propertyValue) ? defaultVersion : propertyValue;
     }
 
     public static String getVersionString() {
         return getVersionString("dev");
+    }
+
+    public static String getGitCommitHash() {
+        return getPropertyValue("git.commit.hash", "dev");
+    }
+
+    public static String getGitCommitDate() {
+        return getPropertyValue("git.commit.date", "dev");
     }
 
     @Override
