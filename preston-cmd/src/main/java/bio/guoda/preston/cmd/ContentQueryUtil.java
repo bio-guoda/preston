@@ -5,11 +5,15 @@ import bio.guoda.preston.process.StopProcessingException;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.VersionUtil;
+import bio.guoda.preston.stream.ContentStreamException;
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 public class ContentQueryUtil {
 
@@ -72,5 +76,30 @@ public class ContentQueryUtil {
             throw new IOException("problem retrieving [" + queryIRI.getIRIString() + "]", e);
         }
         return contentStream;
+    }
+
+    public static InputStream getContent(IRI zoteroItemIRI, DerferencerFactory derferencerFactory, Logger log) throws IOException, ContentStreamException {
+        InputStream itemInputStream = null;
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        try {
+            itemInputStream = getContent(zoteroItemIRI, derferencerFactory);
+        } finally {
+            stopWatch.stop();
+            if (itemInputStream == null) {
+                logReponseTime(stopWatch, zoteroItemIRI.getIRIString(), "failed to resolve in", log);
+            } else {
+                logReponseTime(stopWatch, zoteroItemIRI.getIRIString(), "resolved in", log);
+            }
+        }
+        if (itemInputStream == null) {
+            throw new ContentStreamException("cannot generate Zenodo record due to unresolved content [" + zoteroItemIRI.getIRIString() + "]");
+        }
+        return itemInputStream;
+    }
+
+    static void logReponseTime(StopWatch stopWatch, String iriString, String msg, Logger log) {
+        log.info("|" + iriString + "|" + msg + "|" + stopWatch.getTime(TimeUnit.MILLISECONDS) + "|ms|");
     }
 }

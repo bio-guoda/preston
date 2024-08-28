@@ -11,6 +11,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +21,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StreamHandlerUtil {
+
+    private static final Logger LOG = LoggerFactory.getLogger(StreamHandlerUtil.class);
 
     public static void writeRecord(AtomicBoolean foundAtLeastOne, ObjectNode objectNode, OutputStream outputStream) throws IOException {
         ObjectNode metadata = new ObjectMapper().createObjectNode();
@@ -37,7 +41,7 @@ public class StreamHandlerUtil {
         if (StringUtils.isNotBlank(downloadUrlOrContentId)) {
             try {
                 IRI downloadUrlOrContentIdIRI = RefNodeFactory.toIRI(downloadUrlOrContentId);
-                InputStream attachementInputStream = ContentQueryUtil.getContent(dereferencer, downloadUrlOrContentIdIRI, persisting);
+                InputStream attachementInputStream = ContentQueryUtil.getContent(downloadUrlOrContentIdIRI, () -> dereferencer, LOG);
                 if (attachementInputStream == null) {
                     throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + downloadUrlOrContentId + "]");
                 }

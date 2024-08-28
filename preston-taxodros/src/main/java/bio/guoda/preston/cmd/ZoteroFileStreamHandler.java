@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,7 +65,6 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                     return deref.get(uri);
                 } finally {
                     stopWatch.stop();
-                    logReponseTime(stopWatch, uri.getIRIString(), "resolved in");
                 }
             }
         };
@@ -105,22 +103,10 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
                     IRI zoteroItemIRI = RefNodeFactory.toIRI(zoteroItemUrl);
 
-                    StopWatch stopWatch = new StopWatch();
-                    stopWatch.start();
+                    DerferencerFactory derferencerFactory = () -> timedDereferencer;
+                    Logger log = LOG;
 
-                    InputStream itemInputStream = null;
-
-                    try {
-                        itemInputStream = ContentQueryUtil.getContent(zoteroItemIRI, () -> timedDereferencer);
-                    } finally {
-                        stopWatch.stop();
-                        if (itemInputStream == null) {
-                            logReponseTime(stopWatch, zoteroItemIRI.getIRIString(), "failed to resolve in");
-                        }
-                    }
-                    if (itemInputStream == null) {
-                        throw new ContentStreamException("cannot generate Zenodo record due to unresolved Zotero record [" + zoteroItemUrl + "]");
-                    }
+                    InputStream itemInputStream = ContentQueryUtil.getContent(zoteroItemIRI, derferencerFactory, log);
 
                     JsonNode itemData = new ObjectMapper().readTree(itemInputStream);
                     if (isPrimaryAttachmentOf(zoteroAttachmentDownloadUrl, itemData)) {
@@ -148,10 +134,6 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             LOG.warn("possible marformed Zotero records in [" + version + "]", ex);
         }
         return foundAtLeastOne.get();
-    }
-
-    private void logReponseTime(StopWatch stopWatch, String iriString, String msg) {
-        LOG.info("|" + iriString + "|" + msg + "|" + stopWatch.getTime(TimeUnit.MILLISECONDS) + "|ms|");
     }
 
     private boolean isPrimaryAttachmentOf(String zoteroAttachmentDownloadUrl, JsonNode itemData) {
@@ -312,7 +294,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             );
         } finally {
             stopWatch.stop();
-            logReponseTime(stopWatch, zoteroAttachmentDownloadUrl, "contentid calculated in ");
+            ContentQueryUtil.logReponseTime(stopWatch, zoteroAttachmentDownloadUrl, "contentid calculated in ", LOG);
         }
 
     }
