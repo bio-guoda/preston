@@ -147,7 +147,7 @@ public class RISFileExtractorTest {
     private String[] getResource(String records) throws IOException {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
-            public InputStream get(IRI key) {
+            public InputStream get(IRI key) throws IOException {
                 URL resource = getClass().getResource(records);
                 IRI iri = toIRI(resource.toExternalForm());
 
@@ -157,10 +157,10 @@ public class RISFileExtractorTest {
                     } catch (FileNotFoundException e) {
                         throw new RuntimeException(e);
                     }
-                } else if (StringUtils.equals("hash://sha256/9e088b29db63c9c6f41cf6bc183cb61554f317656f8f34638a07398342da2b1a", key.getIRIString())) {
+                } else if (StringUtils.equals("https://www.biodiversitylibrary.org/partpdf/332157", key.getIRIString())) {
                     return IOUtils.toInputStream("hello! I am supposed to be a pdf...", StandardCharsets.UTF_8);
                 }
-                throw new RuntimeException("unresolved [" + key + "]");
+                return null;
             }
         };
 
