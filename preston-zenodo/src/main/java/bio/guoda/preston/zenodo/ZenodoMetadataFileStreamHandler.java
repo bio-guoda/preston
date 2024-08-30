@@ -169,7 +169,8 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             } else {
                 emitRelatedExistingRecords(coordinate, existingIds, ctxLocal);
             }
-        } catch (IOException e) {
+        } catch (Throwable e) {
+            LOG.warn("unexpected error while handling [" + coordinate.getIRIString() + "]", e);
             attemptCleanupAndRethrow(ctxLocal, e);
         }
     }
@@ -211,13 +212,13 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         return RefNodeFactory.toIRI(ctxLocal.getEndpoint() + "/records/" + existingId);
     }
 
-    private void attemptCleanupAndRethrow(ZenodoContext ctxLocal, IOException e) throws IOException {
+    private void attemptCleanupAndRethrow(ZenodoContext ctxLocal, Throwable e) throws IOException {
         try {
             ZenodoUtils.delete(ctxLocal);
         } catch (IOException ex) {
             // ignore
         }
-        throw e;
+        throw new IOException(e);
     }
 
     private void emitRelations(ZenodoContext ctxLocal, IRI relationType, List<String> orgins) {
