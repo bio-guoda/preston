@@ -157,6 +157,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
                 uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
                 emitRelations(recordIds, contentIds, origins, ctxLocal);
+                emitRefreshed(ctxLocal);
             } else if (existingIds.size() == 1 && ctx.createNewVersionForExisting()) {
                 ctxLocal.setDepositId(existingIds.get(0));
                 ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
@@ -164,19 +165,23 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 ZenodoUtils.update(ctxLocal, input);
                 uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
                 emitRelations(recordIds, contentIds, origins, ctxLocal);
+                emitRefreshed(ctxLocal);
             } else {
                 emitRelatedExistingRecords(coordinate, existingIds, ctxLocal);
             }
-            emitter.emit(
-                    RefNodeFactory.toStatement(
-                            getRecordUrl(ctxLocal),
-                            RefNodeConstants.LAST_REFRESHED_ON,
-                            RefNodeFactory.toDateTime(DateUtil.now())
-                    )
-            );
         } catch (IOException e) {
             attemptCleanupAndRethrow(ctxLocal, e);
         }
+    }
+
+    private void emitRefreshed(ZenodoContext ctxLocal) {
+        emitter.emit(
+                RefNodeFactory.toStatement(
+                        getRecordUrl(ctxLocal),
+                        RefNodeConstants.LAST_REFRESHED_ON,
+                        RefNodeFactory.toDateTime(DateUtil.now())
+                )
+        );
     }
 
     private void emitRelations(List<String> lsids, List<String> contentIds, List<String> origins, ZenodoContext ctxLocal) {
