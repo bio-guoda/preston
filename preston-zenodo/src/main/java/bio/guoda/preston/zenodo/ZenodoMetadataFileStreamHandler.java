@@ -195,6 +195,12 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             emitter.emit(
                     RefNodeFactory.toStatement(
                             getRecordUrl(ctxLocal, existingId),
+                            RefNodeConstants.LAST_ACCESSED_ON,
+                            RefNodeFactory.toDateTime(DateUtil.now()))
+            );
+            emitter.emit(
+                    RefNodeFactory.toStatement(
+                            getRecordUrl(ctxLocal, existingId),
                             RefNodeConstants.SEE_ALSO,
                             coordinate)
             );
