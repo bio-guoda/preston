@@ -202,9 +202,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.PUBLICATION_TYPE, typeTranslationTable.getOrDefault(itemType, "other"));
             String dateString = jsonNode.at("/data/date").asText();
             String dateStringParsed = parseDate(dateString);
-            if (StringUtils.isNotBlank(dateStringParsed)) {
-                ZenodoMetaUtil.setPublicationDate(objectNode, dateStringParsed);
-            }
+            ZenodoMetaUtil.setPublicationDate(objectNode, dateStringParsed);
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, jsonNode.at("/data/title").asText());
 
 

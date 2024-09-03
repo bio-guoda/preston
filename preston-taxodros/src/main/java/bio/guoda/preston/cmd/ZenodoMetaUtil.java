@@ -126,8 +126,11 @@ public class ZenodoMetaUtil {
     }
 
     public static void setPublicationDate(ObjectNode objectNode, String publicationYear) {
-        Matcher matcher = YEAR_PATTERN.matcher(publicationYear);
+        if (StringUtils.isBlank(publicationYear)) {
+            throw new IllegalArgumentException("missing publication year in: [" + objectNode.toPrettyString() + "]");
+        }
 
+        Matcher matcher = YEAR_PATTERN.matcher(publicationYear);
         if (!matcher.matches()) {
             throw new IllegalArgumentException("cannot parse publication year [" + publicationYear + "]");
         }
