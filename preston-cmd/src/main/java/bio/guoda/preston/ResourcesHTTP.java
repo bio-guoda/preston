@@ -192,6 +192,7 @@ public class ResourcesHTTP {
                     // see https://github.com/bio-guoda/preston/issues/25
                     .setSSLHostnameVerifier(new NoopHostnameVerifier())
                     .setSSLContext(build)
+                    .setServiceUnavailableRetryStrategy(new RateLimitedRetryStrategy())
                     .setRetryHandler(new DefaultHttpRequestRetryHandler(3, true))
                     .setUserAgent("globalbioticinteractions/" + Version.getVersionString() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)")
                     .setDefaultRequestConfig(config)
