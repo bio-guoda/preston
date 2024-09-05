@@ -47,8 +47,8 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
     private List<String> communities = Collections.emptyList();
 
     @CommandLine.Option(
-            names = {"--publish-restricted-only"},
-            description = "always set access_right to [restricted] to restrict access to deposit."
+            names = {"--restricted-only"},
+            description = "always set [access_right] to [restricted]"
     )
     private boolean publishRestrictedOnly = false;
 
