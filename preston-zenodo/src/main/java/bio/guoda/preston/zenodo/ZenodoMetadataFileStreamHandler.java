@@ -155,7 +155,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
         ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
 
-        if (hasAllowedPublicationDate(zenodoMetadata, ctx)) {
+        if (!hasAllowedPublicationDate(zenodoMetadata, ctx)) {
             throw new IOException("missing publication date for [" + zenodoMetadata.toPrettyString() + "]");
         }
 
