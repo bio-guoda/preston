@@ -126,6 +126,19 @@ public class ZenodoUtils {
         }
     }
 
+    public static ZenodoContext editExistingVersion(ZenodoContext ctx) throws IOException {
+        String requestURI = ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId() + "/actions/edit";
+        IRI dataURI = RefNodeFactory.toIRI(requestURI);
+        try (InputStream is = ResourcesHTTP.asInputStream(
+                dataURI,
+                new HttpPost(URI.create(dataURI.getIRIString())),
+                ignoreProgress(),
+                ignoreNone()
+        )) {
+            return updateContext(ctx, is);
+        }
+    }
+
     static DerefProgressListener ignoreProgress() {
         return new DerefProgressListener() {
             @Override

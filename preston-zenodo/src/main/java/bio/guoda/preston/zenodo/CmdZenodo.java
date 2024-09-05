@@ -46,6 +46,18 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
     )
     private List<String> communities = Collections.emptyList();
 
+    @CommandLine.Option(
+            names = {"--publish-restricted-only"},
+            description = "always set access_right to [restricted] to restrict access to deposit."
+    )
+    private boolean publishRestrictedOnly = false;
+
+    @CommandLine.Option(
+            names = {"--update-metadata-only"},
+            description = "update metadata of existing record(s) only: if no associated record exists do nothing."
+    )
+    private boolean updateMetadataOnly;
+
 
     @Override
     public void run() {
@@ -68,6 +80,8 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
                 getCommunities()
         );
         zenodoContext.setCreateNewVersionForExisting(createNewVersionForExisting);
+        zenodoContext.setPublishRestrictedOnly(publishRestrictedOnly);
+        zenodoContext.setUpdateMetadataOnly(updateMetadataOnly);
         StatementsListener textMatcher = new ZenodoMetadataFileExtractor(
                 this,
                 blobStoreReadOnly,
@@ -103,5 +117,21 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
 
     public List<String> getCommunities() {
         return communities;
+    }
+
+    public void setPublishRestrictedOnly(boolean publishedRestrictedOnly) {
+        this.publishRestrictedOnly = publishedRestrictedOnly;
+    }
+
+    public boolean shouldPublishRestrictedOnly() {
+        return publishRestrictedOnly;
+    }
+
+    public void setUpdateMetadataOnly(boolean updateMetadataOnly) {
+        this.updateMetadataOnly = updateMetadataOnly;
+    }
+
+    public boolean shouldUpdateMetadataOnly() {
+        return updateMetadataOnly;
     }
 }

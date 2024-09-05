@@ -18,6 +18,8 @@ public class ZenodoContext implements ZenodoConfig {
 
 
     private boolean createNewVersionForExisting = false;
+    private boolean restrictedOnly;
+    private boolean updateMetadataOnly;
 
     public ZenodoContext(String accessToken) {
         this(accessToken, "https://sandbox.zenodo.org");
@@ -91,4 +93,22 @@ public class ZenodoContext implements ZenodoConfig {
     }
 
 
+    @Override
+    public void setPublishRestrictedOnly(boolean restrictedOnly) {
+        this.restrictedOnly = restrictedOnly;
+    }
+
+    @Override
+    public boolean shouldPublishRestrictedOnly() {
+        return restrictedOnly;
+    }
+
+    @Override
+    public void setUpdateMetadataOnly(boolean updateMetadataOnly) {
+        this.updateMetadataOnly = updateMetadataOnly;
+    }
+    @Override
+    public boolean shouldUpdateMetadataOnly() {
+        return updateMetadataOnly;
+    }
 }

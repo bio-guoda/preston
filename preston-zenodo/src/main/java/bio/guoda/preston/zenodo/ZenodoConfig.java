@@ -14,4 +14,12 @@ public interface ZenodoConfig {
     void setCreateNewVersionForExisting(Boolean skipOnExisting);
 
     boolean createNewVersionForExisting();
+
+    void setPublishRestrictedOnly(boolean restrictedOnly);
+
+    boolean shouldPublishRestrictedOnly();
+
+    void setUpdateMetadataOnly(boolean updateMetadataOnly);
+
+    boolean shouldUpdateMetadataOnly();
 }

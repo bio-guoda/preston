@@ -3,12 +3,14 @@ package bio.guoda.preston.zenodo;
 import bio.guoda.preston.DateUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.cmd.ZenodoMetaUtil;
 import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.HashKeyUtil;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -152,8 +154,16 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 .collect(Collectors.toList());
 
         ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
+
+        if (ctx.shouldPublishRestrictedOnly()) {
+            JsonNode at = zenodoMetadata.at("/metadata");
+            if (at.isObject()) {
+                ZenodoMetaUtil.setRestricted((ObjectNode) at);
+            }
+        }
+
         try {
-            if (existingIds.size() == 0) {
+            if (existingIds.size() == 0 && !ctx.shouldUpdateMetadataOnly()) {
                 ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
                 uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
                 emitRelations(recordIds, contentIds, origins, ctxLocal);
@@ -164,6 +174,14 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
                 ZenodoUtils.update(ctxLocal, input);
                 uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
+                emitRelations(recordIds, contentIds, origins, ctxLocal);
+                emitRefreshed(ctxLocal);
+            } else if (existingIds.size() == 1 && ctx.shouldUpdateMetadataOnly()) {
+                ctxLocal.setDepositId(existingIds.get(0));
+                ctxLocal = ZenodoUtils.editExistingVersion(ctxLocal);
+                String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
+                ZenodoUtils.update(ctxLocal, input);
+                ZenodoUtils.publish(ctxLocal);
                 emitRelations(recordIds, contentIds, origins, ctxLocal);
                 emitRefreshed(ctxLocal);
             } else {

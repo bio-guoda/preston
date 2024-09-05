@@ -60,6 +60,7 @@ public class ZenodoMetaUtil {
     static final String KEYWORDS = "keywords";
     static final String CUSTOM = "custom";
     public static final Pattern YEAR_PATTERN = Pattern.compile(".*(?<year>[12][0-9]{3}).*");
+    public static final String ACCESS_RIGHT = "access_right";
 
     public static void setCommunities(ObjectNode objectNode, Stream<String> communities) {
         ArrayNode communitiesArray = communities
@@ -143,8 +144,8 @@ public class ZenodoMetaUtil {
         setValue(objectNode, PUBLICATION_DATE, year);
     }
 
-    private static void setRestricted(ObjectNode objectNode) {
-        setValue(objectNode, "access_right", "restricted");
+    public static void setRestricted(ObjectNode objectNode) {
+        setValue(objectNode, ACCESS_RIGHT, "restricted");
     }
 
     public static void addKeyword(ObjectNode objectNode, String keyword) {
