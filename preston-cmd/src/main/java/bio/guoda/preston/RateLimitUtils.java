@@ -37,10 +37,8 @@ public class RateLimitUtils {
     }
 
     public static Duration retryAfter(HttpMessage msg, Duration defaultRetryDuration) {
-        Map<String, Long> rateLimits;
-        rateLimits = parseRateLimits(msg);
-        return rateLimits.containsKey(HttpHeaders.RETRY_AFTER)
-                ? Duration.ofSeconds(rateLimits.get(HttpHeaders.RETRY_AFTER))
-                : defaultRetryDuration;
+        Map<String, Long> rateLimits = parseRateLimits(msg);
+        Long retryAfterInSeconds = rateLimits.get(HttpHeaders.RETRY_AFTER);
+        return retryAfterInSeconds == null ? defaultRetryDuration : Duration.ofSeconds(retryAfterInSeconds + 1L);
     }
 }
