@@ -147,18 +147,12 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
         objectNode.put("darktaxon:plateId", plateId);
         objectNode.put("darktaxon:specimenId", specimenId);
-        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, specimenId);
-        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
-        objectNode.put(ZenodoMetaUtil.TITLE, "Photo of Specimen " + specimenId);
-        setDescription(objectNode);
 
         objectNode.put("darktaxon:imageStackNumber", imageStackNumber);
         String acquisitionMethod = matcher.group("imageAcquisitionMethod");
         objectNode.put("darktaxon:imageAcquisitionMethod", acquisitionMethod);
 
         String imageContentId = "hash://sha256/" + hash;
-        appendAlternateIdentifiers(objectNode, imageContentId);
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + specimenId);
 
         objectNode.put(IMAGE_CONTENT_ID, imageContentId);
 
@@ -168,6 +162,22 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
             idForStack.put(imageStackId, imageContentId);
             ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE, "focus stacking");
         }
+
+
+        String mimeType = "image/tiff";
+        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, specimenId);
+        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
+        objectNode.put(ZenodoMetaUtil.TITLE, "Photo of Specimen " + specimenId);
+        setDescription(objectNode);
+        ZenodoMetaUtil.setFilename(objectNode, imageFilename);
+        appendAlternateIdentifiers(objectNode, imageContentId);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + specimenId);
+        ZenodoMetaUtil.setType(objectNode, mimeType);
+        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_IMAGE);
+        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.IMAGE_TYPE, ZenodoMetaUtil.IMAGE_TYPE_PHOTO);
+        ZenodoMetaUtil.setCreators(objectNode, Arrays.asList("Museum für Naturkunde Berlin"));
+        ZenodoMetaUtil.setValue(objectNode, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
+        ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
 
         if (StringUtils.equals("RAW", acquisitionMethod)) {
             String imageNumber = matcher.group("imageNumber");
@@ -179,20 +189,12 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
             rawImages.add(imageContentId);
             rawImagesByStack.put(imageStackId, rawImages);
         }
-
         objectNode.put("darktaxon:imageFilepath", imageFilepath);
-        ZenodoMetaUtil.setFilename(objectNode, imageFilename);
-        String mimeType = "image/tiff";
         objectNode.put("darktaxon:mimeType", mimeType);
-        ZenodoMetaUtil.setType(objectNode, mimeType);
-        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_IMAGE);
-        ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.IMAGE_TYPE, ZenodoMetaUtil.IMAGE_TYPE_PHOTO);
-        ZenodoMetaUtil.setCreators(objectNode, Arrays.asList("Museum für Naturkunde Berlin"));
-        ZenodoMetaUtil.setValue(objectNode, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
-        ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
+
     }
 
-    private void setDescription(ObjectNode objectNode) {
+    public static void setDescription(ObjectNode objectNode) {
         objectNode.put("description", "Uploaded by Plazi for the Museum für Naturkunde Berlin.");
     }
 
