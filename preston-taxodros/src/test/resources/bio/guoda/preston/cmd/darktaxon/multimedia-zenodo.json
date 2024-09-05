@@ -1,0 +1,35 @@
+{
+  "metadata" : {
+    "custom" : {
+      "dwc:catalogNumber" : [ "BMT0009388" ],
+      "dwc:institutionCode" : [ "MfN" ],
+      "dwc:materialSampleID" : [ "urn:lsid:MfN:Ento:BMT0009388" ],
+      "ac:associatedSpecimenReference" : [ "urn:lsid:MfN:Ento:BMT0009388" ],
+      "ac:captureDevice" : [ "CAMERA MAKE AND MODEL" ],
+      "ac:resourceCreationTechnique" : [ "Focal Stacking" ]
+    },
+    "title" : "Photo of Specimen BMT0009388",
+    "description" : "Photo of Specimen BMT0009388. Uploaded by Plazi for the Museum für Naturkunde Berlin.  ",
+    "filename" : "BMT121_BMT0009388_stacked_01.tiff",
+    "related_identifiers" : [ {
+      "relation" : "isAlternateIdentifier",
+      "identifier" : "hash://md5/f052cbac398bf340a620c421bfefa16d"
+    }, {
+      "relation" : "hasVersion",
+      "identifier" : "hash://md5/f052cbac398bf340a620c421bfefa16d"
+    }, {
+      "relation" : "isDerivedFrom",
+      "identifier" : "urn:lsid:MfN:Ento:BMT0009388"
+    } ],
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" : "image/tiff",
+    "upload_type" : "image",
+    "image_type" : "photo",
+    "creators" : [ {
+      "name" : "Museum für Naturkunde Berlin"
+    } ],
+    "publication_date" : "1999-12-31",
+    "communities" : [ {
+      "identifier" : "mfn-test"
+    } ]
+  }
+}

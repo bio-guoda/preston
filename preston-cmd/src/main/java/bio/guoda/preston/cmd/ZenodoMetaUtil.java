@@ -57,6 +57,8 @@ public class ZenodoMetaUtil {
     public static final String IMPRINT_PUBLISHER = "imprint_publisher";
     public static final String PARTOF_PAGES = "partof_pages";
     public static final String PARTOF_TITLE = "partof_title";
+    public static final String FIELD_CUSTOM_DWC_MATERIAL_SAMPLE_ID = "dwc:materialSampleID";
+    public static final String FIELD_CUSTOM_AC_ASSOCIATED_SPECIMEN = "ac:associatedSpecimenReference";
     static final String KEYWORDS = "keywords";
     static final String CUSTOM = "custom";
     public static final Pattern YEAR_PATTERN = Pattern.compile(".*(?<year>[12][0-9]{3}).*");
@@ -170,5 +172,11 @@ public class ZenodoMetaUtil {
 
     public static void setFilename(ObjectNode objectNode, String filename) {
         setValue(objectNode, "filename", filename);
+    }
+
+    public static ObjectNode wrap(ObjectNode objectNode) {
+        ObjectNode metadata = new ObjectMapper().createObjectNode();
+        metadata.set("metadata", objectNode);
+        return metadata;
     }
 }
