@@ -7,6 +7,7 @@
   "http://rs.tdwg.org/dwc/terms/datasetID": "SBG",
   "http://rs.tdwg.org/dwc/terms/countryCode": "DE",
   "http://rs.tdwg.org/dwc/terms/recordedBy": "Donat Agosti",
+  "http://rs.tdwg.org/dwc/terms/recordedByID": "https://orcid.org/0000-0001-9286-1200",
   "http://rs.tdwg.org/dwc/terms/collectionCode": null,
   "http://rs.tdwg.org/dwc/terms/samplingProtocol": "Malaise trap",
   "http://rs.tdwg.org/dwc/terms/eventDate": "2024-05-04/2024-05-08",

@@ -33,6 +33,9 @@ public class ZenodoMetaUtil {
 
     public static final String FIELD_CUSTOM_DWC_CATALOG_NUMBER = "dwc:catalogNumber";
     public static final String FIELD_CUSTOM_DWC_INSTITUTION_CODE = "dwc:institutionCode";
+    public static final String FIELD_CUSTOM_DWC_EVENT_DATE = "dwc:eventDate";
+    public static final String FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE = "dwc:verbatimEventDate";
+    public static final String FIELD_CUSTOM_DWC_LOCALITY = "dwc:locality";
     public static final String FIELD_CUSTOM_DWC_KINGDOM = "dwc:kingdom";
     public static final String FIELD_CUSTOM_DWC_PHYLUM = "dwc:phylum";
     public static final String FIELD_CUSTOM_DWC_CLASS = "dwc:class";
@@ -44,6 +47,7 @@ public class ZenodoMetaUtil {
     public static final String UPLOAD_TYPE = "upload_type";
     public static final String UPLOAD_TYPE_PUBLICATION = "publication";
     public static final String UPLOAD_TYPE_IMAGE = "image";
+    public static final String UPLOAD_TYPE_EVENT = "event";
     public static final String IMAGE_TYPE_PHOTO = "photo";
     public static final String HAS_VERSION = "hasVersion";
     public static final String IS_COMPILED_BY = "isCompiledBy";
@@ -59,6 +63,9 @@ public class ZenodoMetaUtil {
     public static final String PARTOF_TITLE = "partof_title";
     public static final String FIELD_CUSTOM_DWC_MATERIAL_SAMPLE_ID = "dwc:materialSampleID";
     public static final String FIELD_CUSTOM_AC_ASSOCIATED_SPECIMEN = "ac:associatedSpecimenReference";
+    public static final String FIELD_CUSTOM_DWC_RECORDED_BY = "dwc:recordedBy";
+    public static final String FIELD_CUSTOM_DWC_RECORDED_BY_ID = "dwc:recordedByID";
+    public static final String FIELD_CUSTOM_GBIF_DWC_RECORDED_BY_ID = "gbif-dwc:recordedByID";
     static final String KEYWORDS = "keywords";
     static final String CUSTOM = "custom";
     public static final Pattern YEAR_PATTERN = Pattern.compile(".*(?<year>[12][0-9]{3}).*");

@@ -1,6 +1,8 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.DateUtil;
 import bio.guoda.preston.HashType;
+import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.HashKeyUtil;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -13,9 +15,11 @@ import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+import static bio.guoda.preston.cmd.ZenodoMetaUtil.PUBLICATION_DATE;
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -80,8 +84,59 @@ public class DarkTaxonRecordTranslatorTest {
 
     @Test
     public void eventDeposit() throws IOException {
-        JsonNode event = new ObjectMapper().readTree(getClass().getResourceAsStream("darktaxon/event.json"));
-        assertNotNull(event);
+        InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/event.json");
+        String jsonString = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+        JsonNode multimedia = new ObjectMapper().readTree(jsonString);
+        assertNotNull(multimedia);
+
+        ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
+
+
+        String eventId = multimedia.get("http://rs.tdwg.org/dwc/terms/eventID").asText();
+        String protocol = multimedia.get("http://rs.tdwg.org/dwc/terms/samplingProtocol").asText();
+        String locality = multimedia.get("http://rs.tdwg.org/dwc/terms/locality").asText();
+        String eventDate = multimedia.get("http://rs.tdwg.org/dwc/terms/eventDate").asText();
+        String title = "Sample event at " + locality + " on " + eventDate + " using " + protocol;
+        zenodoMetadata.put(ZenodoMetaUtil.TITLE, title);
+
+        DarkTaxonUtil.setDescription(zenodoMetadata, title);
+
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
+
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_EVENT_DATE, StringUtils.split(eventDate, "/")[0]);
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE, eventDate);
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_LOCALITY, locality);
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY, multimedia.get("http://rs.tdwg.org/dwc/terms/recordedBy").asText());
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY_ID, multimedia.get("http://rs.tdwg.org/dwc/terms/recordedByID").asText());
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_GBIF_DWC_RECORDED_BY_ID, multimedia.get("http://rs.tdwg.org/dwc/terms/recordedByID").asText());
+        ZenodoMetaUtil.setFilename(zenodoMetadata, "event.json");
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, eventId);
+
+        DarkTaxonUtil.appendAlternateIdentifiers(zenodoMetadata, Hasher.calcHashIRI(jsonString, HashType.md5).getIRIString());
+        ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_EVENT);
+        ZenodoMetaUtil.setCreators(zenodoMetadata, Arrays.asList("Museum für Naturkunde Berlin"));
+        ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, new PublicationDateFactory() {
+                    @Override
+                    public String getPublicationDate() {
+                        return "1999-12-31";
+                    }
+                }.getPublicationDate());
+        ZenodoMetaUtil.setCommunities(zenodoMetadata, Arrays.asList("mfn-test").stream());
+        addReferences(zenodoMetadata);
+
+
+        String actual = ZenodoMetaUtil.wrap(zenodoMetadata).toPrettyString();
+
+        System.out.println(actual);
+
+        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/event-zenodo.json"), StandardCharsets.UTF_8)));
+
+
+    }
+
+    private void addReferences(ObjectNode zenodoMetadata) {
+        ZenodoMetaUtil.append(zenodoMetadata, ZenodoMetaUtil.REFERENCES, "Hartop E, Srivathsan A, Ronquist F, Meier R (2022) Towards Large-Scale Integrative Taxonomy (LIT): resolving the data conundrum for dark taxa. Syst Biol 71:1404–1422. https://doi.org/10.1093/sysbio/syac033");
+        ZenodoMetaUtil.append(zenodoMetadata, ZenodoMetaUtil.REFERENCES, "Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14");
     }
 
     @Test
