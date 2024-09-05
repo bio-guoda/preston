@@ -18,8 +18,9 @@ public class ZenodoContext implements ZenodoConfig {
 
 
     private boolean createNewVersionForExisting = false;
-    private boolean restrictedOnly;
-    private boolean updateMetadataOnly;
+    private boolean restrictedOnly = false;
+    private boolean updateMetadataOnly = false;
+    private boolean allowEmptyPublicationDate = false;
 
     public ZenodoContext(String accessToken) {
         this(accessToken, "https://sandbox.zenodo.org");
@@ -110,5 +111,15 @@ public class ZenodoContext implements ZenodoConfig {
     @Override
     public boolean shouldUpdateMetadataOnly() {
         return updateMetadataOnly;
+    }
+
+    @Override
+    public void setAllowEmptyPublicationDate(boolean allowEmptyPublicationDate) {
+        this.allowEmptyPublicationDate = allowEmptyPublicationDate;
+    }
+
+    @Override
+    public boolean shouldAllowEmptyPublicationDate() {
+        return allowEmptyPublicationDate;
     }
 }

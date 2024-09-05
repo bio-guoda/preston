@@ -155,6 +155,10 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
         ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
 
+        if (hasAllowedPublicationDate(zenodoMetadata, ctx)) {
+            throw new IOException("missing publication date for [" + zenodoMetadata.toPrettyString() + "]");
+        }
+
         if (ctx.shouldPublishRestrictedOnly()) {
             JsonNode at = zenodoMetadata.at("/metadata");
             if (at.isObject()) {
@@ -191,6 +195,11 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             LOG.warn("unexpected error while handling [" + coordinate.getIRIString() + "]", e);
             attemptCleanupAndRethrow(ctxLocal, e);
         }
+    }
+
+    public static boolean hasAllowedPublicationDate(JsonNode zenodoMetadata, ZenodoConfig ctx) {
+        return !zenodoMetadata.at("/metadata/publication_date").isMissingNode()
+                || ctx.shouldAllowEmptyPublicationDate();
     }
 
     private void emitRefreshed(ZenodoContext ctxLocal) {

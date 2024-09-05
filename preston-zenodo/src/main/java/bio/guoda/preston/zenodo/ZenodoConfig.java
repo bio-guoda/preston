@@ -22,4 +22,8 @@ public interface ZenodoConfig {
     void setUpdateMetadataOnly(boolean updateMetadataOnly);
 
     boolean shouldUpdateMetadataOnly();
+
+    void setAllowEmptyPublicationDate(boolean allowEmptyPublicationDate);
+
+    boolean shouldAllowEmptyPublicationDate();
 }

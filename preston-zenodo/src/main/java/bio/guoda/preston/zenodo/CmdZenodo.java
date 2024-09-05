@@ -47,7 +47,7 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
     private List<String> communities = Collections.emptyList();
 
     @CommandLine.Option(
-            names = {"--restricted-only"},
+            names = {"--restricted-access-only"},
             description = "always set [access_right] to [restricted]"
     )
     private boolean publishRestrictedOnly = false;
@@ -57,6 +57,12 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
             description = "update metadata of existing record(s) only: if no associated record exists do nothing."
     )
     private boolean updateMetadataOnly;
+
+    @CommandLine.Option(
+            names = {"--allow-empty-publication-date"},
+            description = "Zenodo accepts deposits with empty publication dates. On accepting a deposit without publication date, Zenodo sets the publication date to current date/time by default."
+    )
+    private boolean allowEmptyPublicationDate;
 
 
     @Override
@@ -82,6 +88,7 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
         zenodoContext.setCreateNewVersionForExisting(createNewVersionForExisting);
         zenodoContext.setPublishRestrictedOnly(publishRestrictedOnly);
         zenodoContext.setUpdateMetadataOnly(updateMetadataOnly);
+        zenodoContext.setAllowEmptyPublicationDate(allowEmptyPublicationDate);
         StatementsListener textMatcher = new ZenodoMetadataFileExtractor(
                 this,
                 blobStoreReadOnly,
