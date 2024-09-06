@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 public class ZenodoMetaUtil {
     public static final String IS_DERIVED_FROM = "isDerivedFrom";
     public static final String IS_DOCUMENTED_BY = "isDocumentedBy";
+    public static final String IS_VERSION_OF = "isVersionOf";
     public static final String IS_PART_OF = "isPartOf";
     public static final String REFERENCES = "references";
     public static final String RELATED_IDENTIFIERS = "related_identifiers";

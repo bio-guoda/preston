@@ -74,7 +74,7 @@ public class DarkTaxonUtilTest {
     }
 
     private ZenodoContext getTestConfig() {
-        return new ZenodoContext("SECRET", "https://example.org", Arrays.asList("mfn-test"));
+        return new ZenodoContext("SECRET", "https://sandbox.zenodo.org", Arrays.asList("mfn-test"));
     }
 
     @Test
@@ -107,7 +107,7 @@ public class DarkTaxonUtilTest {
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
         ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory(), getTestConfig());
         String actual = zenodoDeposit.toPrettyString();
-        
+
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-with-key-image-zenodo.json"), StandardCharsets.UTF_8)));
     }
 

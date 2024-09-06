@@ -229,8 +229,16 @@ public class ZenodoUtils {
     }
 
     public static IRI getQueryForExistingDepositions(ZenodoConfig ctx, List<String> contentIds) {
+        return getQueryForExistingDepositions(ctx, contentIds, "/api/deposit/depositions");
+    }
+
+    private static IRI getQueryForExistingDepositions(ZenodoConfig ctx, List<String> contentIds, String method) {
         String query = "q=" + getQueryForIds(contentIds);
-        return getQuery(ctx.getEndpoint(), query, "/api/deposit/depositions");
+        return getQuery(ctx.getEndpoint(), query, method);
+    }
+
+    public static IRI getSearchPageForExistingDepositions(ZenodoConfig ctx, List<String> contentIds) {
+        return getQueryForExistingDepositions(ctx, contentIds, "/search");
     }
 
     private static void findExistingRecords(ZenodoConfig ctx, List<String> contentIds, Collection<Pair<Long, String>> foundIds) throws IOException {
