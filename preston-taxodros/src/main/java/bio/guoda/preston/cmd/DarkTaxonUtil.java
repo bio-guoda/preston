@@ -26,6 +26,9 @@ public class DarkTaxonUtil {
     public static final String LSID_PREFIX = "urn:lsid:github.com:darktaxon:";
     public static final String DC_TERMS_DYNAMIC_PROPERTIES = "http://rs.tdwg.org/dwc/terms/dynamicProperties";
     public static final String DWC_TERMS_RECORDED_BY_ID = "http://rs.tdwg.org/dwc/terms/recordedByID";
+    public static final String EVENT = "event";
+    public static final String PHYSICAL_OBJECT = "physicalobject";
+    public static final String PHOTO = "image%2Binner%3Aimage-photo";
 
     static void appendAlternateIdentifiers(ObjectNode linkRecords, String imageContentId) {
         ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
@@ -104,8 +107,11 @@ public class DarkTaxonUtil {
                 creators
         );
         String serviceAccessPoint = getValueOrThrow(multimediaRecord, "http://rs.tdwg.org/ac/terms/hasServiceAccessPoint");
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getSearchPageForExistingDepositions(ctx, Arrays.asList(specimenId)).getIRIString());
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(specimenId)).getIRIString());
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(imageContentId.getIRIString()), PHOTO).getIRIString());
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(imageContentId.getIRIString()), PHOTO).getIRIString());
+
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(specimenId), PHYSICAL_OBJECT).getIRIString());
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(specimenId), PHYSICAL_OBJECT).getIRIString());
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DOCUMENTED_BY, serviceAccessPoint);
         addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_SUBJECT_PART, "http://rs.tdwg.org/ac/terms/subjectPart");
         addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_CAPTURE_DEVICE, "http://rs.tdwg.org/ac/terms/captureDevice");
@@ -151,8 +157,8 @@ public class DarkTaxonUtil {
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_GBIF_DWC_RECORDED_BY_ID, getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/recordedByID"));
         ZenodoMetaUtil.setFilename(zenodoMetadata, "event.json");
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, eventId);
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingDepositions(ctx, Arrays.asList(eventId)).getIRIString());
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(eventId)).getIRIString());
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString());
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString());
 
         appendAlternateIdentifiers(zenodoMetadata, Hasher.calcHashIRI(jsonString, HashType.md5).getIRIString());
         ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_EVENT);
@@ -222,11 +228,11 @@ public class DarkTaxonUtil {
 
         ZenodoMetaUtil.setFilename(zenodoMetadata, filename);
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, occurrenceId);
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingDepositions(ctx, Arrays.asList(occurrenceId)).getIRIString());
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(occurrenceId)).getIRIString());
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(occurrenceId), PHYSICAL_OBJECT).getIRIString());
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(occurrenceId), PHYSICAL_OBJECT).getIRIString());
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, eventId);
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getSearchPageForExistingDepositions(ctx, Arrays.asList(eventId)).getIRIString());
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(eventId)).getIRIString());
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString());
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString());
 
         appendAlternateIdentifiers(zenodoMetadata, contentId);
         ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PHYSICAL_OBJECT);

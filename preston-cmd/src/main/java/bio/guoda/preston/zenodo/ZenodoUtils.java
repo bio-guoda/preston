@@ -218,40 +218,48 @@ public class ZenodoUtils {
 
     public static Collection<Pair<Long, String>> findByAlternateIds(ZenodoConfig ctx, List<String> contentIds) throws IOException {
         Collection<Pair<Long, String>> foundIds = new TreeSet<>();
-        findExistingRecords(ctx, contentIds, foundIds);
+        findExistingRecords(ctx, contentIds, foundIds, "");
         findExistingDepositions(ctx, contentIds, foundIds);
         return foundIds;
     }
 
     private static void findExistingDepositions(ZenodoConfig ctx, List<String> contentIds, Collection<Pair<Long, String>> foundIds) throws IOException {
-        IRI query1 = getQueryForExistingDepositions(ctx, contentIds);
+        IRI query1 = getQueryForExistingDepositions(ctx, contentIds, "");
         executeQueryAndCollectIds(foundIds, query1);
     }
 
-    public static IRI getQueryForExistingDepositions(ZenodoConfig ctx, List<String> contentIds) {
-        return getQueryForExistingDepositions(ctx, contentIds, "/api/deposit/depositions");
+    public static IRI getQueryForExistingDepositions(ZenodoConfig ctx, List<String> contentIds, String type) {
+        return getQueryForExistingDepositions(ctx, contentIds, "/api/deposit/depositions", type);
     }
 
-    private static IRI getQueryForExistingDepositions(ZenodoConfig ctx, List<String> contentIds, String method) {
+    public static IRI getQueryForExistingDepositions(ZenodoConfig ctx, List<String> contentIds, String method, String type) {
         String query = "q=" + getQueryForIds(contentIds);
+        query = appendTypeClause(type, query);
         return getQuery(ctx.getEndpoint(), query, method);
     }
 
-    public static IRI getSearchPageForExistingDepositions(ZenodoConfig ctx, List<String> contentIds) {
-        return getQueryForExistingDepositions(ctx, contentIds, "/search");
+    private static String appendTypeClause(String type, String query) {
+        if (StringUtils.isNotBlank(type)) {
+            query = query + "&f=resource_type%3A" + type;
+        }
+        return query;
     }
 
-    private static void findExistingRecords(ZenodoConfig ctx, List<String> contentIds, Collection<Pair<Long, String>> foundIds) throws IOException {
-        IRI query = getQueryForExistingRecords(ctx, contentIds);
+    public static IRI getSearchPageForExistingRecords(ZenodoConfig ctx, List<String> contentIds, String type) {
+        return getQueryForExistingDepositions(ctx, contentIds, "/search", type);
+    }
+
+    private static void findExistingRecords(ZenodoConfig ctx, List<String> contentIds, Collection<Pair<Long, String>> foundIds, String type) throws IOException {
+        IRI query = getQueryForExistingRecords(ctx, contentIds, type);
         executeQueryAndCollectIds(foundIds, query);
     }
 
-    public static IRI getQueryForExistingRecords(ZenodoConfig ctx, List<String> contentIds) {
+    public static IRI getQueryForExistingRecords(ZenodoConfig ctx, List<String> contentIds, String type) {
         String prefix = ctx.getCommunities().size() == 0
                 ? ""
                 : "communities=" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(StringUtils.join(ctx.getCommunities(), ",")) + "&";
         String queryPath = prefix + "all_versions=false&q=" + getQueryForIds(contentIds);
-        return getQuery(ctx.getEndpoint(), queryPath, "/api/records");
+        return getQuery(ctx.getEndpoint(), appendTypeClause(type, queryPath), "/api/records");
     }
 
     private static String getQueryForIds(List<String> ids) {

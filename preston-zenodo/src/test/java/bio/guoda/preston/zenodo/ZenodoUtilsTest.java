@@ -13,7 +13,7 @@ public class ZenodoUtilsTest {
     @Test
     public void queryForSpecificDeposition() {
         ZenodoContext ctx = new ZenodoContext("secret");
-        IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingDepositions(ctx, Arrays.asList("urn:lsid:biodiversitylibrary.org:part:79807"));
+        IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingDepositions(ctx, Arrays.asList("urn:lsid:biodiversitylibrary.org:part:79807"), "");
 
         assertThat(
                 queryForExistingDepositions.getIRIString(),
@@ -24,7 +24,7 @@ public class ZenodoUtilsTest {
     @Test
     public void htmlSearchResultPageForSpecificDeposition() {
         ZenodoContext ctx = new ZenodoContext("secret");
-        IRI queryForExistingDepositions = ZenodoUtils.getSearchPageForExistingDepositions(ctx, Arrays.asList("urn:lsid:biodiversitylibrary.org:part:79807"));
+        IRI queryForExistingDepositions = ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList("urn:lsid:biodiversitylibrary.org:part:79807"), "");
 
         assertThat(
                 queryForExistingDepositions.getIRIString(),
@@ -35,7 +35,7 @@ public class ZenodoUtilsTest {
     @Test
     public void queryForExistingDepositions() {
         ZenodoContext ctx = new ZenodoContext("secret");
-        IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingDepositions(ctx, Arrays.asList("foo:bar", "foo:bar"));
+        IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingDepositions(ctx, Arrays.asList("foo:bar", "foo:bar"), "");
 
         assertThat(
                 queryForExistingDepositions.getIRIString(),
@@ -49,7 +49,7 @@ public class ZenodoUtilsTest {
         ZenodoContext ctx = new ZenodoContext("secret", "https://sandbox.zenodo.org", Arrays.asList("community 1", "community 2"));
         IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingRecords(
                 ctx,
-                Arrays.asList("foo:bar", "foo:bar")
+                Arrays.asList("foo:bar", "foo:bar"), ""
         );
 
         assertThat(
