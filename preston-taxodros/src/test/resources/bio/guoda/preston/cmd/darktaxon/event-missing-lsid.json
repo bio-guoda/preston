@@ -1,0 +1,20 @@
+{
+  "http://www.w3.org/ns/prov#wasDerivedFrom": "line:zip:hash://md5/dea6050d9347477cf5892ab238470c5f!/event.txt!/L2",
+  "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": "http://rs.tdwg.org/dwc/terms/Event",
+  "http://rs.tdwg.org/dwc/text/id": "urn:lsid:MfN:Ento:SchweiBo1",
+  "http://rs.tdwg.org/dwc/terms/habitat": "Garden",
+  "MISSINGhttp://rs.tdwg.org/dwc/terms/eventID": "urn:lsid:MfN:Ento:SchweiBo1",
+  "http://rs.tdwg.org/dwc/terms/datasetID": "SBG",
+  "http://rs.tdwg.org/dwc/terms/countryCode": "DE",
+  "http://rs.tdwg.org/dwc/terms/recordedBy": "Donat Agosti",
+  "http://rs.tdwg.org/dwc/terms/recordedByID": "https://orcid.org/0000-0001-9286-1200",
+  "http://rs.tdwg.org/dwc/terms/collectionCode": null,
+  "http://rs.tdwg.org/dwc/terms/samplingProtocol": "Malaise trap",
+  "http://rs.tdwg.org/dwc/terms/eventDate": "2024-05-04/2024-05-08",
+  "http://rs.tdwg.org/dwc/terms/decimalLongitude": "13.370959",
+  "http://rs.tdwg.org/dwc/terms/locality": "Berlin, Swiss Embassy",
+  "http://rs.tdwg.org/dwc/terms/institutionCode": "MfN",
+  "http://rs.tdwg.org/dwc/terms/locationID": "SchweiBo",
+  "http://rs.tdwg.org/dwc/terms/geodeticDatum": "WGS84",
+  "http://rs.tdwg.org/dwc/terms/decimalLatitude": "52.521245"
+}

@@ -19,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class DarkTaxonUtilTest {
 
     @Test
-    public void photoDeposit() throws IOException {
+    public void photoDeposit() throws IOException, MissingMetadataFieldException {
         JsonNode multimedia = new ObjectMapper().readTree(getClass().getResourceAsStream("darktaxon/multimedia.json"));
         assertNotNull(multimedia);
 
@@ -31,8 +31,17 @@ public class DarkTaxonUtilTest {
 
     }
 
+    @Test(expected = MissingMetadataFieldException.class)
+    public void photoDepositMissingData() throws IOException, MissingMetadataFieldException {
+        JsonNode multimedia = new ObjectMapper().readTree(getClass().getResourceAsStream("darktaxon/multimedia-missing-lsid.json"));
+        assertNotNull(multimedia);
+
+        DarkTaxonUtil.toPhotoDeposit(multimedia, getPublicationDateFactory(), Arrays.asList("mfn-test"));
+
+    }
+
     @Test
-    public void eventDeposit() throws IOException {
+    public void eventDeposit() throws IOException, MissingMetadataFieldException {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/event.json");
         assertNotNull(resourceAsStream);
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
@@ -49,9 +58,22 @@ public class DarkTaxonUtilTest {
 
 
     }
+    @Test(expected = MissingMetadataFieldException.class)
+    public void eventDepositMissingData() throws IOException, MissingMetadataFieldException {
+        InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/event-missing-lsid.json");
+        assertNotNull(resourceAsStream);
+        String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
+
+        DarkTaxonUtil.toEventDeposit(jsonString, new PublicationDateFactory() {
+            @Override
+            public String getPublicationDate() {
+                return "1999-12-31";
+            }
+        }, Arrays.asList("mfn-test"));
+    }
 
     @Test
-    public void physicalObjectDeposit() throws IOException {
+    public void physicalObjectDeposit() throws IOException, MissingMetadataFieldException {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/occurrence.json");
         assertNotNull(resourceAsStream);
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
@@ -61,8 +83,20 @@ public class DarkTaxonUtilTest {
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-zenodo.json"), StandardCharsets.UTF_8)));
     }
 
+
+    @Test(expected = MissingMetadataFieldException.class)
+    public void physicalObjectDepositMissingData() throws IOException, MissingMetadataFieldException {
+        InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/occurrence-missing-lsid.json");
+        assertNotNull(resourceAsStream);
+        String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
+        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory(), Arrays.asList("mfn-test"));
+        String actual = zenodoDeposit.toPrettyString();
+
+        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-zenodo.json"), StandardCharsets.UTF_8)));
+    }
+
     @Test
-    public void physicalObjectDepositWithKeyImage() throws IOException {
+    public void physicalObjectDepositWithKeyImage() throws IOException, MissingMetadataFieldException {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/occurrence-with-key-image.json");
         assertNotNull(resourceAsStream);
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
