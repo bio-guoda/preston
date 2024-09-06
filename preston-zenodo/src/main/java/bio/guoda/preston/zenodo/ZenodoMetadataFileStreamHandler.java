@@ -77,49 +77,60 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
     }
 
     private void attemptToHandleJSON(String line, IRI coordinate) throws IOException {
+        String resourceType = "";
         JsonNode zenodoMetadata = getObjectMapper().readTree(line);
         if (maybeContainsPrestonEnabledZenodoMetadata(zenodoMetadata)) {
             List<String> recordIds = new ArrayList<>();
             List<String> contentIds = new ArrayList<>();
             List<String> origins = new ArrayList<>();
             origins.add(coordinate.getIRIString());
-            JsonNode alternateIdentifiers = zenodoMetadata.at("/metadata/related_identifiers");
-            if (alternateIdentifiers != null && alternateIdentifiers.isArray()) {
-                for (JsonNode alternateIdentifier : alternateIdentifiers) {
-                    JsonNode relation = alternateIdentifier.at("/relation");
-                    JsonNode identifier = alternateIdentifier.at("/identifier");
-                    if (relation != null && identifier != null) {
-                        if (StringUtils.equals(relation.asText(), "isAlternateIdentifier")) {
-                            String identiferText = identifier.asText();
-                            if (StringUtils.startsWith(identiferText, "urn:lsid")) {
-                                recordIds.add(identiferText);
-                            } else if (StringUtils.startsWith(identiferText, "hash:")) {
-                                contentIds.add(identiferText);
-                            }
-                        } else if (StringUtils.equals(relation.asText(), "isDerivedFrom")) {
-                            String identiferText = identifier.asText();
-                            if (StringUtils.isNotBlank(identiferText)) {
-                                origins.add(identiferText);
-                            }
-                        } else if (StringUtils.equals(relation.asText(), "hasVersion")) {
-                            String identiferText = identifier.asText();
-                            if (StringUtils.startsWith(identiferText, "hash:")) {
-                                contentIds.add(identiferText);
-                            }
-                        }
-                    }
-                }
-            }
+
+            collectIds(zenodoMetadata, recordIds, contentIds, origins);
             if (recordIds.isEmpty()) {
                 throw new IOException("cannot publish zenodo record: no lsid found in [" + coordinate.getIRIString() + "]");
             }
 
-            Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, recordIds);
+            JsonNode uploadType = zenodoMetadata.at("/metadata/upload_type");
+            if (!uploadType.isMissingNode()) {
+                resourceType = uploadType.asText();
+            }
+
+            Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, recordIds, resourceType);
             deleteDraftsIfPresent(foundDeposits, recordIds);
             createNewVersion(coordinate, zenodoMetadata, recordIds, contentIds, origins, foundDeposits);
 
         }
 
+    }
+
+    private void collectIds(JsonNode zenodoMetadata, List<String> recordIds, List<String> contentIds, List<String> origins) {
+        JsonNode alternateIdentifiers = zenodoMetadata.at("/metadata/related_identifiers");
+        if (alternateIdentifiers != null && alternateIdentifiers.isArray()) {
+            for (JsonNode alternateIdentifier : alternateIdentifiers) {
+                JsonNode relation = alternateIdentifier.at("/relation");
+                JsonNode identifier = alternateIdentifier.at("/identifier");
+                if (relation != null && identifier != null) {
+                    if (StringUtils.equals(relation.asText(), "isAlternateIdentifier")) {
+                        String identiferText = identifier.asText();
+                        if (StringUtils.startsWith(identiferText, "urn:lsid")) {
+                            recordIds.add(identiferText);
+                        } else if (StringUtils.startsWith(identiferText, "hash:")) {
+                            contentIds.add(identiferText);
+                        }
+                    } else if (StringUtils.equals(relation.asText(), "isDerivedFrom")) {
+                        String identiferText = identifier.asText();
+                        if (StringUtils.isNotBlank(identiferText)) {
+                            origins.add(identiferText);
+                        }
+                    } else if (StringUtils.equals(relation.asText(), "hasVersion")) {
+                        String identiferText = identifier.asText();
+                        if (StringUtils.startsWith(identiferText, "hash:")) {
+                            contentIds.add(identiferText);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void deleteDraftsIfPresent(Collection<Pair<Long, String>> foundDeposits, List<String> recordIds) throws IOException {

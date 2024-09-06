@@ -73,7 +73,7 @@ public class ZenodoUtilsTaxoDrosIT {
     }
 
     private void cleanupPreExisting() throws IOException {
-        Collection<Pair<Long, String>> byAlternateIds = ZenodoUtils.findByAlternateIds(ctx, Arrays.asList(getContentId(), getLsid()));
+        Collection<Pair<Long, String>> byAlternateIds = ZenodoUtils.findByAlternateIds(ctx, Arrays.asList(getContentId(), getLsid()), "");
         byAlternateIds
                 .stream()
                 .filter(d -> StringUtils.equals(d.getValue(), "unsubmitted"))
@@ -115,7 +115,7 @@ public class ZenodoUtilsTaxoDrosIT {
 
     private void assertOneRecordWithMatchingId(List<String> contentId) throws IOException {
 
-        Collection<Pair<Long, String>> ids = ZenodoUtils.findByAlternateIds(ctx, contentId);
+        Collection<Pair<Long, String>> ids = ZenodoUtils.findByAlternateIds(ctx, contentId, "");
         assertThat(ids, not(nullValue()));
         List<Long> filteredIds = ids
                 .stream()
@@ -252,7 +252,7 @@ public class ZenodoUtilsTaxoDrosIT {
         List<String> contentIds = Arrays.asList(
                 "hash://md5/8ec637e349f8bbce57cd0054d20d9d8f",
                 "urn:lsid:taxodros.uzh.ch:id:aboul-nasr,%201954b");
-        Collection<Pair<Long, String>> ids = ZenodoUtils.findByAlternateIds(ctx, contentIds);
+        Collection<Pair<Long, String>> ids = ZenodoUtils.findByAlternateIds(ctx, contentIds, "");
         assertThat(ids, not(nullValue()));
         List<Long> filteredIds = ids
                 .stream()

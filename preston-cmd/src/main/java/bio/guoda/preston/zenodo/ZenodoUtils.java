@@ -216,9 +216,9 @@ public class ZenodoUtils {
         }
     }
 
-    public static Collection<Pair<Long, String>> findByAlternateIds(ZenodoConfig ctx, List<String> contentIds) throws IOException {
+    public static Collection<Pair<Long, String>> findByAlternateIds(ZenodoConfig ctx, List<String> contentIds, String type) throws IOException {
         Collection<Pair<Long, String>> foundIds = new TreeSet<>();
-        findExistingRecords(ctx, contentIds, foundIds, "");
+        findExistingRecords(ctx, contentIds, foundIds, type);
         findExistingDepositions(ctx, contentIds, foundIds);
         return foundIds;
     }
