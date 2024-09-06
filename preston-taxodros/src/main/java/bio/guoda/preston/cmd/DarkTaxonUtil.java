@@ -25,6 +25,7 @@ public class DarkTaxonUtil {
     private static final Logger LOG = LoggerFactory.getLogger(DarkTaxonUtil.class);
     public static final String LSID_PREFIX = "urn:lsid:github.com:darktaxon:";
     public static final String DC_TERMS_DYNAMIC_PROPERTIES = "http://rs.tdwg.org/dwc/terms/dynamicProperties";
+    public static final String DWC_TERMS_RECORDED_BY_ID = "http://rs.tdwg.org/dwc/terms/recordedByID";
 
     static void appendAlternateIdentifiers(ObjectNode linkRecords, String imageContentId) {
         ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
@@ -144,7 +145,9 @@ public class DarkTaxonUtil {
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE, eventDate);
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_LOCALITY, locality);
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY, getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/recordedBy"));
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY_ID, getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/recordedByID"));
+        if (multimedia.has(DWC_TERMS_RECORDED_BY_ID) && StringUtils.isNotBlank(multimedia.get(DWC_TERMS_RECORDED_BY_ID).asText())) {
+            addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY_ID, getValueOrThrow(multimedia, DWC_TERMS_RECORDED_BY_ID));
+        }
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_GBIF_DWC_RECORDED_BY_ID, getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/recordedByID"));
         ZenodoMetaUtil.setFilename(zenodoMetadata, "event.json");
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, eventId);
