@@ -5,6 +5,7 @@ import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.HashKeyUtil;
+import bio.guoda.preston.store.TestUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -142,7 +143,7 @@ public class DarkTaxonRecordTranslatorTest {
     @Test
     public void physicalObjectDeposit() throws IOException {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/occurrence.json");
-        String jsonString = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+        String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
         JsonNode multimedia = new ObjectMapper().readTree(jsonString);
         assertNotNull(multimedia);
 
