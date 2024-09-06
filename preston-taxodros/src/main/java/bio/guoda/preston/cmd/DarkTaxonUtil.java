@@ -103,6 +103,7 @@ public class DarkTaxonUtil {
                 creators
         );
         String serviceAccessPoint = getValueOrThrow(multimediaRecord, "http://rs.tdwg.org/ac/terms/hasServiceAccessPoint");
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getSearchPageForExistingDepositions(ctx, Arrays.asList(specimenId)).getIRIString());
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DOCUMENTED_BY, serviceAccessPoint);
         addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_SUBJECT_PART, "http://rs.tdwg.org/ac/terms/subjectPart");
         addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_CAPTURE_DEVICE, "http://rs.tdwg.org/ac/terms/captureDevice");

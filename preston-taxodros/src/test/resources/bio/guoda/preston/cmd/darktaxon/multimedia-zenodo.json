@@ -25,6 +25,9 @@
       "relation" : "isDerivedFrom",
       "identifier" : "urn:lsid:MfN:Ento:BMT0009388"
     }, {
+      "relation" : "isDerivedFrom",
+      "identifier" : "https://sandbox.zenodo.org/search?q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0009388%22"
+    }, {
       "relation" : "isDocumentedBy",
       "identifier" : "https://zenodo.org/search?q=_files.checksum%3A%22md5%3Af052cbac398bf340a620c421bfefa16d%22&f=allversions%3Atrue"
     } ],
