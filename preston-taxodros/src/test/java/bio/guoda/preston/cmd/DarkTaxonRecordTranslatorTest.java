@@ -86,7 +86,7 @@ public class DarkTaxonRecordTranslatorTest {
     @Test
     public void eventDeposit() throws IOException {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/event.json");
-        String jsonString = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+        String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
         JsonNode multimedia = new ObjectMapper().readTree(jsonString);
         assertNotNull(multimedia);
 
@@ -148,7 +148,6 @@ public class DarkTaxonRecordTranslatorTest {
         assertNotNull(multimedia);
 
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
-
 
         String eventId = multimedia.get("http://rs.tdwg.org/dwc/terms/eventID").asText();
         String occurrenceId = multimedia.get("http://rs.tdwg.org/dwc/terms/occurrenceID").asText();
