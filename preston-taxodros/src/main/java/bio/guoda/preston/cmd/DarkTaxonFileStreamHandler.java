@@ -172,7 +172,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
         objectNode.put(IMAGE_CONTENT_ID, imageContentId);
 
         String imageStackId = plateId + "_" + specimenId + "_stacked_" + imageStackNumber;
-        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CAPTURE_DEVICE, "digital camera");
+        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_AC_CAPTURE_DEVICE, "digital camera");
         if (StringUtils.equals("stacked", matcher.group("imageAcquisitionMethod"))) {
             idForStack.put(imageStackId, imageContentId);
             ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE, "focus stacking");
@@ -180,7 +180,8 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
 
         String mimeType = "image/tiff";
-        DarkTaxonUtil.populatePhotoDepositMetadata(objectNode, imageFilename, specimenId, imageContentId, mimeType, publicationDateFactory, communities, "Photo of Specimen " + specimenId, "Uploaded by Plazi for the Museum für Naturkunde Berlin.");
+        List<String> creators = Arrays.asList("Museum für Naturkunde Berlin");
+        DarkTaxonUtil.populatePhotoDepositMetadata(objectNode, imageFilename, specimenId, imageContentId, mimeType, publicationDateFactory, communities, "Photo of Specimen " + specimenId, "Uploaded by Plazi for the Museum für Naturkunde Berlin.", creators);
 
         if (StringUtils.equals("RAW", acquisitionMethod)) {
             String imageNumber = matcher.group("imageNumber");

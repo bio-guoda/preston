@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 
 public class ZenodoMetaUtil {
     public static final String IS_DERIVED_FROM = "isDerivedFrom";
+    public static final String IS_DOCUMENTED_BY = "isDocumentedBy";
     public static final String IS_PART_OF = "isPartOf";
     public static final String REFERENCES = "references";
     public static final String RELATED_IDENTIFIERS = "related_identifiers";
@@ -42,7 +43,8 @@ public class ZenodoMetaUtil {
     public static final String FIELD_CUSTOM_DWC_CLASS = "dwc:class";
     public static final String FIELD_CUSTOM_DWC_ORDER = "dwc:order";
     public static final String FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE = "ac:resourceCreationTechnique";
-    public static final String FIELD_CUSTOM_AC_RESOURCE_CAPTURE_DEVICE = "ac:captureDevice";
+    public static final String FIELD_CUSTOM_AC_CAPTURE_DEVICE = "ac:captureDevice";
+    public static final String FIELD_CUSTOM_AC_SUBJECT_PART = "ac:subjectPart";
     public static final String DOI = "doi";
     public static final String IS_ALTERNATE_IDENTIFIER = "isAlternateIdentifier";
     public static final String UPLOAD_TYPE = "upload_type";

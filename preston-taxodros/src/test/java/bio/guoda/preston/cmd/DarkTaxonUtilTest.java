@@ -16,7 +16,7 @@ import java.util.Arrays;
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class DarkTaxonRecordTranslatorTest {
+public class DarkTaxonUtilTest {
 
     @Test
     public void photoDeposit() throws IOException {

@@ -13,6 +13,7 @@ import org.apache.commons.rdf.api.IRI;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static bio.guoda.preston.cmd.ZenodoMetaUtil.PUBLICATION_DATE;
 
@@ -24,7 +25,7 @@ public class DarkTaxonUtil {
         ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.HAS_VERSION, imageContentId);
     }
 
-    public static void populatePhotoDepositMetadata(ObjectNode objectNode, String imageFilename, String specimenId, String imageContentId, String mimeType, PublicationDateFactory publicationDateFactory, List<String> communities, String title, String description) {
+    public static void populatePhotoDepositMetadata(ObjectNode objectNode, String imageFilename, String specimenId, String imageContentId, String mimeType, PublicationDateFactory publicationDateFactory, List<String> communities, String title, String description, List<String> creators) {
         ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, specimenId);
         ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
         ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_MATERIAL_SAMPLE_ID, specimenId);
@@ -33,11 +34,13 @@ public class DarkTaxonUtil {
         setDescription(objectNode, description);
         ZenodoMetaUtil.setFilename(objectNode, imageFilename);
         appendAlternateIdentifiers(objectNode, imageContentId);
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, StringUtils.startsWith(specimenId, "urn:lsid:") ? specimenId : LSID_PREFIX + specimenId);
+        String specimenLSID = StringUtils.startsWith(specimenId, "urn:lsid:") ? specimenId : LSID_PREFIX + specimenId;
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, specimenLSID + ":" + imageFilename);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, specimenLSID);
         ZenodoMetaUtil.setType(objectNode, mimeType);
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_IMAGE);
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.IMAGE_TYPE, ZenodoMetaUtil.IMAGE_TYPE_PHOTO);
-        ZenodoMetaUtil.setCreators(objectNode, Arrays.asList("Museum für Naturkunde Berlin"));
+        ZenodoMetaUtil.setCreators(objectNode, creators);
         ZenodoMetaUtil.setValue(objectNode, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
         ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
     }
@@ -47,8 +50,13 @@ public class DarkTaxonUtil {
     }
 
     public static ObjectNode toPhotoDeposit(JsonNode multimediaRecord, PublicationDateFactory publicationDateFactory, List<String> communities) {
+        JsonNode format = multimediaRecord.get("http://purl.org/dc/elements/1.1/format");
         JsonNode jsonNode = multimediaRecord.get("http://purl.org/dc/terms/identifier");
         String filename = jsonNode.asText();
+        if (!filename.contains(".")) {
+            filename = filename + "." + StringUtils.lowerCase(format.asText());
+        }
+
         JsonNode specimenReference = multimediaRecord.get("http://rs.tdwg.org/ac/terms/associatedSpecimenReference");
         String specimenId = specimenReference.asText();
         JsonNode hashValue = multimediaRecord.get("http://rs.tdwg.org/ac/terms/hashValue");
@@ -59,13 +67,18 @@ public class DarkTaxonUtil {
             throw new IllegalArgumentException("unsupported content id [" + imageContentId + "]");
         }
 
-        JsonNode format = multimediaRecord.get("http://purl.org/dc/elements/1.1/format");
-
-
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
+
+        JsonNode tagNode = multimediaRecord.get("http://rs.tdwg.org/ac/terms/tag");
+        if (tagNode != null) {
+            String[] tags = StringUtils.split(tagNode.asText(), "|");
+            Stream.of(tags).forEach(tag -> ZenodoMetaUtil.addKeyword(zenodoMetadata, StringUtils.trim(tag)));
+        }
 
         String title = multimediaRecord.get("http://purl.org/dc/terms/title").asText();
         String description = multimediaRecord.get("http://purl.org/dc/terms/description").asText();
+        JsonNode creatorNode = multimediaRecord.get("http://purl.org/dc/elements/1.1/creator");
+        List<String> creators = Arrays.asList(creatorNode == null ? "Museum für Naturkunde Berlin" : creatorNode.asText());
         populatePhotoDepositMetadata(
                 zenodoMetadata,
                 filename,
@@ -75,12 +88,14 @@ public class DarkTaxonUtil {
                 publicationDateFactory,
                 communities,
                 title,
-                description
+                description, creators
         );
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CAPTURE_DEVICE, multimediaRecord.get("http://rs.tdwg.org/ac/terms/captureDevice").asText());
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DOCUMENTED_BY, multimediaRecord.get("http://rs.tdwg.org/ac/terms/hasServiceAccessPoint").asText());
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_SUBJECT_PART, multimediaRecord.get("http://rs.tdwg.org/ac/terms/subjectPart").asText());
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_CAPTURE_DEVICE, multimediaRecord.get("http://rs.tdwg.org/ac/terms/captureDevice").asText());
         ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE, multimediaRecord.get("http://rs.tdwg.org/ac/terms/resourceCreationTechnique").asText());
         String[] split = StringUtils.split(specimenId, ":");
-        String catalogNumber = split.length > 0 ? split[split.length-1] : specimenId;
+        String catalogNumber = split.length > 0 ? split[split.length - 1] : specimenId;
         ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, catalogNumber);
 
         return ZenodoMetaUtil.wrap(zenodoMetadata);

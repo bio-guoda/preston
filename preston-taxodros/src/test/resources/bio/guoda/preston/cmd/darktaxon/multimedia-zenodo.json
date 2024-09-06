@@ -1,10 +1,12 @@
 {
   "metadata" : {
+    "keywords" : [ "MfN", "DarkTaxon" ],
     "custom" : {
       "dwc:catalogNumber" : [ "BMT0009388" ],
       "dwc:institutionCode" : [ "MfN" ],
       "dwc:materialSampleID" : [ "urn:lsid:MfN:Ento:BMT0009388" ],
       "ac:associatedSpecimenReference" : [ "urn:lsid:MfN:Ento:BMT0009388" ],
+      "ac:subjectPart" : [ "whole specimen" ],
       "ac:captureDevice" : [ "CAMERA MAKE AND MODEL" ],
       "ac:resourceCreationTechnique" : [ "Focal Stacking" ]
     },
@@ -18,14 +20,20 @@
       "relation" : "hasVersion",
       "identifier" : "hash://md5/f052cbac398bf340a620c421bfefa16d"
     }, {
+      "relation" : "isAlternateIdentifier",
+      "identifier" : "urn:lsid:MfN:Ento:BMT0009388:BMT121_BMT0009388_stacked_01.tiff"
+    }, {
       "relation" : "isDerivedFrom",
       "identifier" : "urn:lsid:MfN:Ento:BMT0009388"
+    }, {
+      "relation" : "isDocumentedBy",
+      "identifier" : "https://zenodo.org/search?q=_files.checksum%3A%22md5%3Af052cbac398bf340a620c421bfefa16d%22&f=allversions%3Atrue"
     } ],
     "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" : "image/tiff",
     "upload_type" : "image",
     "image_type" : "photo",
     "creators" : [ {
-      "name" : "Museum für Naturkunde Berlin"
+      "name" : "null"
     } ],
     "publication_date" : "1999-12-31",
     "communities" : [ {
