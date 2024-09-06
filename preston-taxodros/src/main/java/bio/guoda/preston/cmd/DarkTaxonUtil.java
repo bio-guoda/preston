@@ -83,7 +83,7 @@ public class DarkTaxonUtil {
         }
 
         JsonNode creatorNode = multimediaRecord.get("http://purl.org/dc/elements/1.1/creator");
-        List<String> creators = Arrays.asList(creatorNode == null ? "Museum für Naturkunde Berlin" : creatorNode.asText());
+        List<String> creators = Arrays.asList(creatorNode == null || creatorNode.isNull() ? "Museum für Naturkunde Berlin" : creatorNode.asText());
         populatePhotoDepositMetadata(
                 zenodoMetadata,
                 filename,
