@@ -4,6 +4,7 @@ import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.HashKeyUtil;
+import bio.guoda.preston.zenodo.ZenodoConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,7 +53,8 @@ public class DarkTaxonUtil {
         objectNode.put("description", description);
     }
 
-    public static ObjectNode toPhotoDeposit(JsonNode multimediaRecord, PublicationDateFactory publicationDateFactory, List<String> communities) throws MissingMetadataFieldException {
+    public static ObjectNode toPhotoDeposit(JsonNode multimediaRecord, PublicationDateFactory publicationDateFactory, ZenodoConfig ctx) throws MissingMetadataFieldException {
+
         String formatText = getValueOrThrow(multimediaRecord, "http://purl.org/dc/elements/1.1/format");
 
         String filename = getValueOrThrow(multimediaRecord, "http://purl.org/dc/terms/identifier");
@@ -94,7 +96,7 @@ public class DarkTaxonUtil {
                 imageContentId.getIRIString(),
                 "image/" + formatText,
                 publicationDateFactory,
-                communities,
+                ctx.getCommunities(),
                 title,
                 description,
                 creators
@@ -119,7 +121,7 @@ public class DarkTaxonUtil {
         return StringUtils.trim(node.asText());
     }
 
-    static ObjectNode toEventDeposit(String jsonString, PublicationDateFactory publicationDateFactory, List<String> communities) throws JsonProcessingException, MissingMetadataFieldException {
+    static ObjectNode toEventDeposit(String jsonString, PublicationDateFactory publicationDateFactory, ZenodoConfig ctx) throws JsonProcessingException, MissingMetadataFieldException {
         JsonNode multimedia = new ObjectMapper().readTree(jsonString);
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
 
@@ -148,7 +150,7 @@ public class DarkTaxonUtil {
         ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_EVENT);
         ZenodoMetaUtil.setCreators(zenodoMetadata, Arrays.asList("Museum für Naturkunde Berlin"));
         ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
-        ZenodoMetaUtil.setCommunities(zenodoMetadata, communities.stream());
+        ZenodoMetaUtil.setCommunities(zenodoMetadata, ctx.getCommunities().stream());
         addReferences(zenodoMetadata);
 
 
@@ -160,7 +162,7 @@ public class DarkTaxonUtil {
         ZenodoMetaUtil.append(zenodoMetadata, ZenodoMetaUtil.REFERENCES, "Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14");
     }
 
-    public static ObjectNode toPhysicalObjectDeposit(String jsonString, PublicationDateFactory publicationDateFactory, List<String> communities) throws JsonProcessingException, MissingMetadataFieldException {
+    public static ObjectNode toPhysicalObjectDeposit(String jsonString, PublicationDateFactory publicationDateFactory, ZenodoConfig ctx) throws JsonProcessingException, MissingMetadataFieldException {
         JsonNode multimedia = new ObjectMapper().readTree(jsonString);
 
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
@@ -218,7 +220,7 @@ public class DarkTaxonUtil {
         ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PHYSICAL_OBJECT);
         ZenodoMetaUtil.setCreators(zenodoMetadata, Arrays.asList("Museum für Naturkunde Berlin"));
         ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
-        ZenodoMetaUtil.setCommunities(zenodoMetadata, communities.stream());
+        ZenodoMetaUtil.setCommunities(zenodoMetadata, ctx.getCommunities().stream());
         addReferences(zenodoMetadata);
 
         return ZenodoMetaUtil.wrap(zenodoMetadata);

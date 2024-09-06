@@ -1,6 +1,7 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.store.TestUtil;
+import bio.guoda.preston.zenodo.ZenodoContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -23,7 +24,7 @@ public class DarkTaxonUtilTest {
         JsonNode multimedia = new ObjectMapper().readTree(getClass().getResourceAsStream("darktaxon/multimedia.json"));
         assertNotNull(multimedia);
 
-        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhotoDeposit(multimedia, getPublicationDateFactory(), Arrays.asList("mfn-test"));
+        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhotoDeposit(multimedia, getPublicationDateFactory(), getTestConfig());
 
         String actual = zenodoDeposit.toPrettyString();
 
@@ -36,7 +37,7 @@ public class DarkTaxonUtilTest {
         JsonNode multimedia = new ObjectMapper().readTree(getClass().getResourceAsStream("darktaxon/multimedia-missing-lsid.json"));
         assertNotNull(multimedia);
 
-        DarkTaxonUtil.toPhotoDeposit(multimedia, getPublicationDateFactory(), Arrays.asList("mfn-test"));
+        DarkTaxonUtil.toPhotoDeposit(multimedia, getPublicationDateFactory(), getTestConfig());
 
     }
 
@@ -51,7 +52,7 @@ public class DarkTaxonUtilTest {
             public String getPublicationDate() {
                 return "1999-12-31";
             }
-        }, Arrays.asList("mfn-test"));
+        }, getTestConfig());
         String actual = zenodoDeposit.toPrettyString();
 
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/event-zenodo.json"), StandardCharsets.UTF_8)));
@@ -69,7 +70,11 @@ public class DarkTaxonUtilTest {
             public String getPublicationDate() {
                 return "1999-12-31";
             }
-        }, Arrays.asList("mfn-test"));
+        }, getTestConfig());
+    }
+
+    private ZenodoContext getTestConfig() {
+        return new ZenodoContext("SECRET", "https://example.org", Arrays.asList("mfn-test"));
     }
 
     @Test
@@ -77,7 +82,7 @@ public class DarkTaxonUtilTest {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/occurrence.json");
         assertNotNull(resourceAsStream);
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
-        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory(), Arrays.asList("mfn-test"));
+        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory(), getTestConfig());
         String actual = zenodoDeposit.toPrettyString();
 
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-zenodo.json"), StandardCharsets.UTF_8)));
@@ -89,7 +94,7 @@ public class DarkTaxonUtilTest {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/occurrence-missing-lsid.json");
         assertNotNull(resourceAsStream);
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
-        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory(), Arrays.asList("mfn-test"));
+        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory(), getTestConfig());
         String actual = zenodoDeposit.toPrettyString();
 
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-zenodo.json"), StandardCharsets.UTF_8)));
@@ -100,7 +105,7 @@ public class DarkTaxonUtilTest {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/occurrence-with-key-image.json");
         assertNotNull(resourceAsStream);
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
-        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory(), Arrays.asList("mfn-test"));
+        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory(), getTestConfig());
         String actual = zenodoDeposit.toPrettyString();
         
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-with-key-image-zenodo.json"), StandardCharsets.UTF_8)));

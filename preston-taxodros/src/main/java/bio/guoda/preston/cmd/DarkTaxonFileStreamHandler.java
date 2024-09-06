@@ -84,11 +84,11 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                         if (jsonNode.has(fieldName)) {
                             String type = jsonNode.get(fieldName).asText();
                             if ("http://rs.tdwg.org/ac/terms/Multimedia".equals(type)) {
-                                writeDeposit(DarkTaxonUtil.toPhotoDeposit(jsonNode, publicationDateFactory, communities));
+                                writeDeposit(DarkTaxonUtil.toPhotoDeposit(jsonNode, publicationDateFactory, ctx));
                             } else if ("http://rs.tdwg.org/dwc/terms/Occurrence".equals(type)) {
-                                writeDeposit(DarkTaxonUtil.toPhysicalObjectDeposit(withNewline(line), publicationDateFactory, communities));
+                                writeDeposit(DarkTaxonUtil.toPhysicalObjectDeposit(withNewline(line), publicationDateFactory, ctx));
                             } else if ("http://rs.tdwg.org/dwc/terms/Event".equals(type)) {
-                                writeDeposit(DarkTaxonUtil.toEventDeposit(withNewline(line), publicationDateFactory, communities));
+                                writeDeposit(DarkTaxonUtil.toEventDeposit(withNewline(line), publicationDateFactory, ctx));
                             }
                          }
                     } catch (IOException e) {
