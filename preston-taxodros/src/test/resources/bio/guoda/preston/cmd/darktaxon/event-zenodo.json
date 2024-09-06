@@ -19,6 +19,9 @@
       "relation" : "isVersionOf",
       "identifier" : "https://sandbox.zenodo.org/search?q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ASchweiBo1%22"
     }, {
+      "relation" : "isVersionOf",
+      "identifier" : "https://sandbox.zenodo.org/api/records?communities=mfn-test&all_versions=false&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ASchweiBo1%22"
+    }, {
       "relation" : "isAlternateIdentifier",
       "identifier" : "hash://md5/672a403a43a9f8575ad5feeffc21bdc2"
     }, {

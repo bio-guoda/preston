@@ -28,6 +28,9 @@
       "relation" : "isDerivedFrom",
       "identifier" : "https://sandbox.zenodo.org/search?q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0009388%22"
     }, {
+      "relation" : "isDerivedFrom",
+      "identifier" : "https://sandbox.zenodo.org/api/records?communities=mfn-test&all_versions=false&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0009388%22"
+    }, {
       "relation" : "isDocumentedBy",
       "identifier" : "https://zenodo.org/search?q=_files.checksum%3A%22md5%3Af052cbac398bf340a620c421bfefa16d%22&f=allversions%3Atrue"
     } ],

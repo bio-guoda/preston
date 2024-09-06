@@ -27,6 +27,7 @@ public class DarkTaxonUtilTest {
         ObjectNode zenodoDeposit = DarkTaxonUtil.toPhotoDeposit(multimedia, getPublicationDateFactory(), getTestConfig());
 
         String actual = zenodoDeposit.toPrettyString();
+        System.out.println(actual);
 
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/multimedia-zenodo.json"), StandardCharsets.UTF_8)));
 
@@ -54,6 +55,8 @@ public class DarkTaxonUtilTest {
             }
         }, getTestConfig());
         String actual = zenodoDeposit.toPrettyString();
+
+        System.out.println(actual);
 
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/event-zenodo.json"), StandardCharsets.UTF_8)));
 
@@ -84,6 +87,7 @@ public class DarkTaxonUtilTest {
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
         ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory(), getTestConfig());
         String actual = zenodoDeposit.toPrettyString();
+        System.out.println(actual);
 
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-zenodo.json"), StandardCharsets.UTF_8)));
     }
@@ -107,6 +111,7 @@ public class DarkTaxonUtilTest {
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
         ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory(), getTestConfig());
         String actual = zenodoDeposit.toPrettyString();
+        System.out.println(actual);
 
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-with-key-image-zenodo.json"), StandardCharsets.UTF_8)));
     }
