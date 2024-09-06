@@ -101,7 +101,7 @@ public class DarkTaxonFileExtractorTest {
         assertThat(taxonNode.at("/communities/0/identifier").asText(), is("my-community"));
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(4));
+        assertThat(identifiers.size(), is(5));
         // provided by README
         assertThat(identifiers.get(0).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(0).get("identifier").asText(), is("https://linker.bio/line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L9"));
@@ -113,9 +113,12 @@ public class DarkTaxonFileExtractorTest {
         assertThat(identifiers.get(2).get("identifier").asText(), is("hash://sha256/72a63d47805f78e4529ec282e3e8e8412beb456e571c1e2276a107b3f0fa9822"));
 
         // lsid to disambiguate records
-        assertThat(identifiers.get(3).get("relation").asText(), is("isDerivedFrom"));
-        assertThat(identifiers.get(3).get("identifier").asText(), is("urn:lsid:github.com:darktaxon:BMT0009397"));
+        assertThat(identifiers.get(3).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(3).get("identifier").asText(), is("urn:lsid:github.com:darktaxon:BMT0009397:BMT121_BMT0009397_RAW_01_01.tiff"));
 
+        // lsid to disambiguate records
+        assertThat(identifiers.get(4).get("relation").asText(), is("isDerivedFrom"));
+        assertThat(identifiers.get(4).get("identifier").asText(), is("urn:lsid:github.com:darktaxon:BMT0009397"));
 
         JsonNode references = taxonNode.at("/references");
         assertThat(references.size(), is(2));

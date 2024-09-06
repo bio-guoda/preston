@@ -35,7 +35,7 @@ public class CmdZenodo extends LoggingPersisting implements Runnable {
     private String apiEndpoint = EnvUtil.getEnvironmentVariable(ZENODO_ENDPOINT, "https://zenodo.org");
 
     @CommandLine.Option(
-            names = {"--create-new-version-for-existing"},
+            names = {"--new-version"},
             description = "create new version if a Zenodo deposit with matching identifiers already exists"
     )
     private Boolean createNewVersionForExisting = false;
