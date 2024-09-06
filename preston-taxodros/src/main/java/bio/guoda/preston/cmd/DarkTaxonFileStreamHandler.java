@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -68,6 +69,24 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                     if (line == null) {
                         break;
                     }
+
+                    try {
+                        JsonNode jsonNode = new ObjectMapper().readTree(line);
+                        String fieldName = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+                        if (jsonNode.has(fieldName)) {
+                            String type = jsonNode.get(fieldName).asText();
+                            if ("http://rs.tdwg.org/ac/terms/Multimedia".equals(type)) {
+                                writeDeposit(DarkTaxonUtil.toPhotoDeposit(jsonNode, publicationDateFactory));
+                            } else if ("http://rs.tdwg.org/dwc/terms/Occurrence".equals(type)) {
+                                writeDeposit(DarkTaxonUtil.toPhysicalObjectDeposit(line, publicationDateFactory));
+                            } else if ("http://rs.tdwg.org/dwc/terms/Event".equals(type)) {
+                                writeDeposit(DarkTaxonUtil.toEventDeposit(line, publicationDateFactory));
+                            }
+                         }
+                    } catch (IOException e) {
+                        // opportunistic parsing
+                    }
+
 
                     // example of matching line:
                     //
@@ -175,10 +194,14 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
     private void writeZenodoMetadata(AtomicBoolean foundAtLeastOne, ObjectNode objectNode) throws IOException {
         ObjectNode metadata = ZenodoMetaUtil.wrap(objectNode);
-        IOUtils.copy(IOUtils.toInputStream(metadata.toString(), StandardCharsets.UTF_8), outputStream);
-        IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
+        writeDeposit(metadata);
         objectNode.removeAll();
         foundAtLeastOne.set(true);
+    }
+
+    private void writeDeposit(ObjectNode metadata) throws IOException {
+        IOUtils.copy(IOUtils.toInputStream(metadata.toString(), StandardCharsets.UTF_8), outputStream);
+        IOUtils.copy(IOUtils.toInputStream("\n", StandardCharsets.UTF_8), outputStream);
     }
 
 
