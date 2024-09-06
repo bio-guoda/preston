@@ -216,15 +216,15 @@ public class ZenodoUtils {
         }
     }
 
-    public static Collection<Pair<Long, String>> findByAlternateIds(ZenodoConfig ctx, List<String> contentIds, String type) throws IOException {
+    public static Collection<Pair<Long, String>> findByAlternateIds(ZenodoConfig ctx, List<String> ids, String type) throws IOException {
         Collection<Pair<Long, String>> foundIds = new TreeSet<>();
-        findExistingRecords(ctx, contentIds, foundIds, type);
-        findExistingDepositions(ctx, contentIds, foundIds);
+        findExistingRecords(ctx, ids, foundIds, type);
+        findExistingDepositions(ctx, ids, foundIds, type);
         return foundIds;
     }
 
-    private static void findExistingDepositions(ZenodoConfig ctx, List<String> contentIds, Collection<Pair<Long, String>> foundIds) throws IOException {
-        IRI query1 = getQueryForExistingDepositions(ctx, contentIds, "");
+    private static void findExistingDepositions(ZenodoConfig ctx, List<String> ids, Collection<Pair<Long, String>> foundIds, String type) throws IOException {
+        IRI query1 = getQueryForExistingDepositions(ctx, ids, type);
         executeQueryAndCollectIds(foundIds, query1);
     }
 
@@ -249,16 +249,16 @@ public class ZenodoUtils {
         return getQueryForExistingDepositions(ctx, contentIds, "/search", type);
     }
 
-    private static void findExistingRecords(ZenodoConfig ctx, List<String> contentIds, Collection<Pair<Long, String>> foundIds, String type) throws IOException {
-        IRI query = getQueryForExistingRecords(ctx, contentIds, type);
+    private static void findExistingRecords(ZenodoConfig ctx, List<String> ids, Collection<Pair<Long, String>> foundIds, String type) throws IOException {
+        IRI query = getQueryForExistingRecords(ctx, ids, type);
         executeQueryAndCollectIds(foundIds, query);
     }
 
-    public static IRI getQueryForExistingRecords(ZenodoConfig ctx, List<String> contentIds, String type) {
+    public static IRI getQueryForExistingRecords(ZenodoConfig ctx, List<String> ids, String type) {
         String prefix = ctx.getCommunities().size() == 0
                 ? ""
                 : "communities=" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(StringUtils.join(ctx.getCommunities(), ",")) + "&";
-        String queryPath = prefix + "all_versions=false&q=" + getQueryForIds(contentIds);
+        String queryPath = prefix + "all_versions=false&q=" + getQueryForIds(ids);
         return getQuery(ctx.getEndpoint(), appendTypeClause(type, queryPath), "/api/records");
     }
 
