@@ -61,6 +61,17 @@ public class DarkTaxonUtilTest {
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-zenodo.json"), StandardCharsets.UTF_8)));
     }
 
+    @Test
+    public void physicalObjectDepositWithKeyImage() throws IOException {
+        InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/occurrence-with-key-image.json");
+        assertNotNull(resourceAsStream);
+        String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
+        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory(), Arrays.asList("mfn-test"));
+        String actual = zenodoDeposit.toPrettyString();
+        
+        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-with-key-image-zenodo.json"), StandardCharsets.UTF_8)));
+    }
+
     private PublicationDateFactory getPublicationDateFactory() {
         return new PublicationDateFactory() {
             @Override

@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +20,9 @@ import java.util.stream.Stream;
 import static bio.guoda.preston.cmd.ZenodoMetaUtil.PUBLICATION_DATE;
 
 public class DarkTaxonUtil {
+    private static final Logger LOG = LoggerFactory.getLogger(DarkTaxonUtil.class);
     public static final String LSID_PREFIX = "urn:lsid:github.com:darktaxon:";
+    public static final String DC_TERMS_DYNAMIC_PROPERTIES = "http://rs.tdwg.org/dwc/terms/dynamicProperties";
 
     static void appendAlternateIdentifiers(ObjectNode linkRecords, String imageContentId) {
         ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
@@ -50,6 +54,7 @@ public class DarkTaxonUtil {
 
     public static ObjectNode toPhotoDeposit(JsonNode multimediaRecord, PublicationDateFactory publicationDateFactory, List<String> communities) {
         JsonNode format = multimediaRecord.get("http://purl.org/dc/elements/1.1/format");
+
         JsonNode jsonNode = multimediaRecord.get("http://purl.org/dc/terms/identifier");
         String filename = jsonNode.asText();
         if (!filename.contains(".")) {
@@ -171,11 +176,38 @@ public class DarkTaxonUtil {
         ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_BASIS_OF_RECORD, multimedia.get("http://rs.tdwg.org/dwc/terms/basisOfRecord").asText());
         ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_SCIENTIFIC_NAME, multimedia.get("http://rs.tdwg.org/dwc/terms/scientificName").asText());
         ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_MATERIAL_SAMPLE_ID, occurrenceId);
-        ZenodoMetaUtil.setFilename(zenodoMetadata, "event.json");
+        String filename = "event.json";
+        String contentId = null;
+
+        if (multimedia.has(DC_TERMS_DYNAMIC_PROPERTIES)) {
+            String dynamicProperties = multimedia.get(DC_TERMS_DYNAMIC_PROPERTIES).asText();
+            try {
+                JsonNode properties = new ObjectMapper().readTree(dynamicProperties);
+                JsonNode at = properties.at("/keyImageFilename");
+                if (!at.isMissingNode()) {
+                    filename = at.asText();
+                }
+                JsonNode id = properties.at("/keyImageId");
+                if (!id.isMissingNode()) {
+                    String contentIdCandidate = id.asText();
+                    if (HashKeyUtil.hashTypeFor(contentIdCandidate) != null) {
+                        contentId = HashKeyUtil.extractContentHash(RefNodeFactory.toIRI(contentIdCandidate)).getIRIString();
+                    }
+                }
+            } catch (JsonProcessingException e) {
+                LOG.warn("found dynamic properties, but failed to process [" + dynamicProperties + "]", e);
+            }
+        }
+
+        if (StringUtils.isBlank(contentId)) {
+            contentId = Hasher.calcHashIRI(jsonString, HashType.md5).getIRIString();
+        }
+
+        ZenodoMetaUtil.setFilename(zenodoMetadata, filename);
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, occurrenceId);
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, eventId);
 
-        appendAlternateIdentifiers(zenodoMetadata, Hasher.calcHashIRI(jsonString, HashType.md5).getIRIString());
+        appendAlternateIdentifiers(zenodoMetadata, contentId);
         ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PHYSICAL_OBJECT);
         ZenodoMetaUtil.setCreators(zenodoMetadata, Arrays.asList("Museum für Naturkunde Berlin"));
         ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());

@@ -1,0 +1,39 @@
+{
+  "metadata" : {
+    "title" : "Physical object urn:lsid:MfN:Ento:BMT0009388 sampled through event urn:lsid:MfN:Ento:SchweiBo1 on 2019-07-04",
+    "description" : "Physical object urn:lsid:MfN:Ento:BMT0009388 sampled through event urn:lsid:MfN:Ento:SchweiBo1 on 2019-07-04",
+    "custom" : {
+      "dwc:institutionCode" : [ "MfN" ],
+      "dwc:eventDate" : [ "2019-07-04" ],
+      "dwc:verbatimEventDate" : [ "2019-07-04" ],
+      "dwc:country" : [ "Germany" ],
+      "dwc:catalogNumber" : [ "BMT0009388" ],
+      "dwc:basisOfRecord" : [ "PreservedSpecimen" ],
+      "dwc:scientificName" : [ "incertae sedis" ],
+      "dwc:materialSampleID" : [ "urn:lsid:MfN:Ento:BMT0009388" ]
+    },
+    "filename" : "BMT121_BMT0009388_stacked_01.tiff",
+    "related_identifiers" : [ {
+      "relation" : "isAlternateIdentifier",
+      "identifier" : "urn:lsid:MfN:Ento:BMT0009388"
+    }, {
+      "relation" : "isDerivedFrom",
+      "identifier" : "urn:lsid:MfN:Ento:SchweiBo1"
+    }, {
+      "relation" : "isAlternateIdentifier",
+      "identifier" : "hash://md5/f052cbac398bf340a620c421bfefa16d"
+    }, {
+      "relation" : "hasVersion",
+      "identifier" : "hash://md5/f052cbac398bf340a620c421bfefa16d"
+    } ],
+    "upload_type" : "physicalobject",
+    "creators" : [ {
+      "name" : "Museum für Naturkunde Berlin"
+    } ],
+    "publication_date" : "1999-12-31",
+    "communities" : [ {
+      "identifier" : "mfn-test"
+    } ],
+    "references" : [ "Hartop E, Srivathsan A, Ronquist F, Meier R (2022) Towards Large-Scale Integrative Taxonomy (LIT): resolving the data conundrum for dark taxa. Syst Biol 71:1404–1422. https://doi.org/10.1093/sysbio/syac033", "Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14" ]
+  }
+}
