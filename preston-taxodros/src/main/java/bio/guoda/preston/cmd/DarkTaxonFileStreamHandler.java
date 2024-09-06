@@ -2,6 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
+import bio.guoda.preston.zenodo.ZenodoConfig;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -40,6 +41,7 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
     public static final Pattern STACKED_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>stacked)_(?<imageStackNumber>[0-9]+)[.]tiff$");
     public static final String IMAGE_CONTENT_ID = "darktaxon:imageContentId";
     private final List<String> communities;
+    private final ZenodoConfig ctx;
     private PublicationDateFactory publicationDateFactory;
 
     private ContentStreamHandler contentStreamHandler;
@@ -48,11 +50,12 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
     public DarkTaxonFileStreamHandler(ContentStreamHandler contentStreamHandler,
                                       OutputStream os,
-                                      List<String> communities,
+                                      ZenodoConfig ctx,
                                       PublicationDateFactory publicationDateFactory) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
-        this.communities = communities;
+        this.ctx = ctx;
+        this.communities = ctx.getCommunities();
         this.publicationDateFactory = publicationDateFactory;
     }
 
