@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,7 +23,7 @@ public class DarkTaxonRecordTranslatorTest {
         JsonNode multimedia = new ObjectMapper().readTree(getClass().getResourceAsStream("darktaxon/multimedia.json"));
         assertNotNull(multimedia);
 
-        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhotoDeposit(multimedia, getPublicationDateFactory());
+        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhotoDeposit(multimedia, getPublicationDateFactory(), Arrays.asList("mfn-test"));
 
         String actual = zenodoDeposit.toPrettyString();
 
@@ -41,7 +42,7 @@ public class DarkTaxonRecordTranslatorTest {
             public String getPublicationDate() {
                 return "1999-12-31";
             }
-        });
+        }, Arrays.asList("mfn-test"));
         String actual = zenodoDeposit.toPrettyString();
 
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/event-zenodo.json"), StandardCharsets.UTF_8)));
@@ -54,7 +55,7 @@ public class DarkTaxonRecordTranslatorTest {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/occurrence.json");
         assertNotNull(resourceAsStream);
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
-        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory());
+        ObjectNode zenodoDeposit = DarkTaxonUtil.toPhysicalObjectDeposit(jsonString, getPublicationDateFactory(), Arrays.asList("mfn-test"));
         String actual = zenodoDeposit.toPrettyString();
 
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-zenodo.json"), StandardCharsets.UTF_8)));

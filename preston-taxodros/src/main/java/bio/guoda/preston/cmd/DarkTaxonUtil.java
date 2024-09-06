@@ -46,7 +46,7 @@ public class DarkTaxonUtil {
         objectNode.put("description", description);
     }
 
-    public static ObjectNode toPhotoDeposit(JsonNode multimediaRecord, PublicationDateFactory publicationDateFactory) {
+    public static ObjectNode toPhotoDeposit(JsonNode multimediaRecord, PublicationDateFactory publicationDateFactory, List<String> communities) {
         JsonNode jsonNode = multimediaRecord.get("http://purl.org/dc/terms/identifier");
         String filename = jsonNode.asText();
         JsonNode specimenReference = multimediaRecord.get("http://rs.tdwg.org/ac/terms/associatedSpecimenReference");
@@ -73,7 +73,7 @@ public class DarkTaxonUtil {
                 imageContentId.getIRIString(),
                 "image/" + format.asText(),
                 publicationDateFactory,
-                Arrays.asList("mfn-test"),
+                communities,
                 title,
                 description
         );
@@ -86,7 +86,7 @@ public class DarkTaxonUtil {
         return ZenodoMetaUtil.wrap(zenodoMetadata);
     }
 
-    static ObjectNode toEventDeposit(String jsonString, PublicationDateFactory publicationDateFactory) throws JsonProcessingException {
+    static ObjectNode toEventDeposit(String jsonString, PublicationDateFactory publicationDateFactory, List<String> communities) throws JsonProcessingException {
         JsonNode multimedia = new ObjectMapper().readTree(jsonString);
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
 
@@ -115,7 +115,7 @@ public class DarkTaxonUtil {
         ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_EVENT);
         ZenodoMetaUtil.setCreators(zenodoMetadata, Arrays.asList("Museum für Naturkunde Berlin"));
         ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
-        ZenodoMetaUtil.setCommunities(zenodoMetadata, Arrays.asList("mfn-test").stream());
+        ZenodoMetaUtil.setCommunities(zenodoMetadata, communities.stream());
         addReferences(zenodoMetadata);
 
 
@@ -127,7 +127,7 @@ public class DarkTaxonUtil {
         ZenodoMetaUtil.append(zenodoMetadata, ZenodoMetaUtil.REFERENCES, "Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14");
     }
 
-    public static ObjectNode toPhysicalObjectDeposit(String jsonString, PublicationDateFactory publicationDateFactory) throws JsonProcessingException {
+    public static ObjectNode toPhysicalObjectDeposit(String jsonString, PublicationDateFactory publicationDateFactory, List<String> communities) throws JsonProcessingException {
         JsonNode multimedia = new ObjectMapper().readTree(jsonString);
 
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
@@ -158,7 +158,7 @@ public class DarkTaxonUtil {
         ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PHYSICAL_OBJECT);
         ZenodoMetaUtil.setCreators(zenodoMetadata, Arrays.asList("Museum für Naturkunde Berlin"));
         ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
-        ZenodoMetaUtil.setCommunities(zenodoMetadata, Arrays.asList("mfn-test").stream());
+        ZenodoMetaUtil.setCommunities(zenodoMetadata, communities.stream());
         addReferences(zenodoMetadata);
 
         return ZenodoMetaUtil.wrap(zenodoMetadata);

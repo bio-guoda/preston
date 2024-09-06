@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -76,11 +77,11 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                         if (jsonNode.has(fieldName)) {
                             String type = jsonNode.get(fieldName).asText();
                             if ("http://rs.tdwg.org/ac/terms/Multimedia".equals(type)) {
-                                writeDeposit(DarkTaxonUtil.toPhotoDeposit(jsonNode, publicationDateFactory));
+                                writeDeposit(DarkTaxonUtil.toPhotoDeposit(jsonNode, publicationDateFactory, communities));
                             } else if ("http://rs.tdwg.org/dwc/terms/Occurrence".equals(type)) {
-                                writeDeposit(DarkTaxonUtil.toPhysicalObjectDeposit(line, publicationDateFactory));
+                                writeDeposit(DarkTaxonUtil.toPhysicalObjectDeposit(withNewline(line), publicationDateFactory, communities));
                             } else if ("http://rs.tdwg.org/dwc/terms/Event".equals(type)) {
-                                writeDeposit(DarkTaxonUtil.toEventDeposit(line, publicationDateFactory));
+                                writeDeposit(DarkTaxonUtil.toEventDeposit(withNewline(line), publicationDateFactory, communities));
                             }
                          }
                     } catch (IOException e) {
@@ -142,6 +143,10 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
 
 
         return foundAtLeastOne.get();
+    }
+
+    private String withNewline(String line) {
+        return line + "\n";
     }
 
     private void populateFileObject(ObjectNode objectNode,
