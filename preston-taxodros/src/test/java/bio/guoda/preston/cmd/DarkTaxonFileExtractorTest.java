@@ -113,7 +113,7 @@ public class DarkTaxonFileExtractorTest {
         assertThat(identifiers.get(2).get("identifier").asText(), is("hash://sha256/72a63d47805f78e4529ec282e3e8e8412beb456e571c1e2276a107b3f0fa9822"));
 
         // lsid to disambiguate records
-        assertThat(identifiers.get(3).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(3).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(3).get("identifier").asText(), is("urn:lsid:github.com:darktaxon:BMT0009397"));
 
 
