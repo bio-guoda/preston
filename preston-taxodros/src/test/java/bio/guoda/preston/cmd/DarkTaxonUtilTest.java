@@ -27,6 +27,8 @@ public class DarkTaxonUtilTest {
 
         String actual = zenodoDeposit.toPrettyString();
 
+        System.out.println(actual);
+
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/multimedia-zenodo.json"), StandardCharsets.UTF_8)));
 
     }

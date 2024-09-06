@@ -27,7 +27,6 @@ public class DarkTaxonUtil {
 
     public static void populatePhotoDepositMetadata(ObjectNode objectNode, String imageFilename, String specimenId, String imageContentId, String mimeType, PublicationDateFactory publicationDateFactory, List<String> communities, String title, String description, List<String> creators) {
         ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, specimenId);
-        ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
         ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_MATERIAL_SAMPLE_ID, specimenId);
         ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_AC_ASSOCIATED_SPECIMEN, specimenId);
         objectNode.put(ZenodoMetaUtil.TITLE, title);
@@ -77,6 +76,12 @@ public class DarkTaxonUtil {
 
         String title = multimediaRecord.get("http://purl.org/dc/terms/title").asText();
         String description = multimediaRecord.get("http://purl.org/dc/terms/description").asText();
+
+        JsonNode creditNode = multimediaRecord.get("http://ns.adobe.com/photoshop/1.0/Credit");
+        if (creditNode != null) {
+            description = description + "\n\n" + creditNode.asText();
+        }
+
         JsonNode creatorNode = multimediaRecord.get("http://purl.org/dc/elements/1.1/creator");
         List<String> creators = Arrays.asList(creatorNode == null ? "Museum für Naturkunde Berlin" : creatorNode.asText());
         populatePhotoDepositMetadata(
@@ -88,7 +93,8 @@ public class DarkTaxonUtil {
                 publicationDateFactory,
                 communities,
                 title,
-                description, creators
+                description,
+                creators
         );
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DOCUMENTED_BY, multimediaRecord.get("http://rs.tdwg.org/ac/terms/hasServiceAccessPoint").asText());
         ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_SUBJECT_PART, multimediaRecord.get("http://rs.tdwg.org/ac/terms/subjectPart").asText());

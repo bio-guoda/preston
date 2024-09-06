@@ -3,7 +3,6 @@
     "keywords" : [ "MfN", "DarkTaxon" ],
     "custom" : {
       "dwc:catalogNumber" : [ "BMT0009388" ],
-      "dwc:institutionCode" : [ "MfN" ],
       "dwc:materialSampleID" : [ "urn:lsid:MfN:Ento:BMT0009388" ],
       "ac:associatedSpecimenReference" : [ "urn:lsid:MfN:Ento:BMT0009388" ],
       "ac:subjectPart" : [ "whole specimen" ],
@@ -11,7 +10,7 @@
       "ac:resourceCreationTechnique" : [ "Focal Stacking" ]
     },
     "title" : "Photo of Specimen BMT0009388",
-    "description" : "Photo of Specimen BMT0009388. Uploaded by Plazi for the Museum für Naturkunde Berlin.  ",
+    "description" : "Photo of Specimen BMT0009388. Uploaded by Plazi for the Museum für Naturkunde Berlin.  \n\nnull",
     "filename" : "BMT121_BMT0009388_stacked_01.tiff",
     "related_identifiers" : [ {
       "relation" : "isAlternateIdentifier",
