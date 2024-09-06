@@ -36,6 +36,7 @@ public class ZenodoMetaUtil {
     public static final String FIELD_CUSTOM_DWC_EVENT_DATE = "dwc:eventDate";
     public static final String FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE = "dwc:verbatimEventDate";
     public static final String FIELD_CUSTOM_DWC_LOCALITY = "dwc:locality";
+    public static final String FIELD_CUSTOM_DWC_COUNTRY = "dwc:country";
     public static final String FIELD_CUSTOM_DWC_KINGDOM = "dwc:kingdom";
     public static final String FIELD_CUSTOM_DWC_PHYLUM = "dwc:phylum";
     public static final String FIELD_CUSTOM_DWC_CLASS = "dwc:class";
@@ -48,6 +49,7 @@ public class ZenodoMetaUtil {
     public static final String UPLOAD_TYPE_PUBLICATION = "publication";
     public static final String UPLOAD_TYPE_IMAGE = "image";
     public static final String UPLOAD_TYPE_EVENT = "event";
+    public static final String UPLOAD_TYPE_PHYSICAL_OBJECT = "physicalobject";
     public static final String IMAGE_TYPE_PHOTO = "photo";
     public static final String HAS_VERSION = "hasVersion";
     public static final String IS_COMPILED_BY = "isCompiledBy";
@@ -66,6 +68,8 @@ public class ZenodoMetaUtil {
     public static final String FIELD_CUSTOM_DWC_RECORDED_BY = "dwc:recordedBy";
     public static final String FIELD_CUSTOM_DWC_RECORDED_BY_ID = "dwc:recordedByID";
     public static final String FIELD_CUSTOM_GBIF_DWC_RECORDED_BY_ID = "gbif-dwc:recordedByID";
+    public static final String FIELD_CUSTOM_DWC_BASIS_OF_RECORD = "dwc:basisOfRecord";
+    public static final String FIELD_CUSTOM_DWC_SCIENTIFIC_NAME = "dwc:scientificName";
     static final String KEYWORDS = "keywords";
     static final String CUSTOM = "custom";
     public static final Pattern YEAR_PATTERN = Pattern.compile(".*(?<year>[12][0-9]{3}).*");

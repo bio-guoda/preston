@@ -141,8 +141,54 @@ public class DarkTaxonRecordTranslatorTest {
 
     @Test
     public void physicalObjectDeposit() throws IOException {
-        JsonNode physicalObject = new ObjectMapper().readTree(getClass().getResourceAsStream("darktaxon/occurrence.json"));
-        assertNotNull(physicalObject);
+        InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/occurrence.json");
+        String jsonString = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+        JsonNode multimedia = new ObjectMapper().readTree(jsonString);
+        assertNotNull(multimedia);
+
+        ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
+
+
+        String eventId = multimedia.get("http://rs.tdwg.org/dwc/terms/eventID").asText();
+        String occurrenceId = multimedia.get("http://rs.tdwg.org/dwc/terms/occurrenceID").asText();
+        String country = multimedia.get("http://rs.tdwg.org/dwc/terms/country").asText();
+        String eventDate = multimedia.get("http://rs.tdwg.org/dwc/terms/eventDate").asText();
+        String title = "Physical object " + occurrenceId + " sampled through event " + eventId + " on " + eventDate;
+        zenodoMetadata.put(ZenodoMetaUtil.TITLE, title);
+
+        DarkTaxonUtil.setDescription(zenodoMetadata, title);
+
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
+
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_EVENT_DATE, StringUtils.split(eventDate, "/")[0]);
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE, eventDate);
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_COUNTRY, country);
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, multimedia.get("http://rs.tdwg.org/dwc/terms/catalogNumber").asText());
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_BASIS_OF_RECORD, multimedia.get("http://rs.tdwg.org/dwc/terms/basisOfRecord").asText());
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_SCIENTIFIC_NAME, multimedia.get("http://rs.tdwg.org/dwc/terms/scientificName").asText());
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_MATERIAL_SAMPLE_ID, occurrenceId);
+        ZenodoMetaUtil.setFilename(zenodoMetadata, "event.json");
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, occurrenceId);
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, eventId);
+
+        DarkTaxonUtil.appendAlternateIdentifiers(zenodoMetadata, Hasher.calcHashIRI(jsonString, HashType.md5).getIRIString());
+        ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PHYSICAL_OBJECT);
+        ZenodoMetaUtil.setCreators(zenodoMetadata, Arrays.asList("Museum für Naturkunde Berlin"));
+        ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, new PublicationDateFactory() {
+            @Override
+            public String getPublicationDate() {
+                return "1999-12-31";
+            }
+        }.getPublicationDate());
+        ZenodoMetaUtil.setCommunities(zenodoMetadata, Arrays.asList("mfn-test").stream());
+        addReferences(zenodoMetadata);
+
+
+        String actual = ZenodoMetaUtil.wrap(zenodoMetadata).toPrettyString();
+
+        System.out.println(actual);
+
+        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-zenodo.json"), StandardCharsets.UTF_8)));
     }
 
 }
