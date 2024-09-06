@@ -26,7 +26,7 @@ public class DarkTaxonUtilTest {
         ObjectNode zenodoDeposit = DarkTaxonUtil.toPhotoDeposit(multimedia, getPublicationDateFactory(), Arrays.asList("mfn-test"));
 
         String actual = zenodoDeposit.toPrettyString();
-        
+
         assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/multimedia-zenodo.json"), StandardCharsets.UTF_8)));
 
     }

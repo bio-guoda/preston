@@ -75,10 +75,10 @@ public class DarkTaxonUtil {
         }
 
         String title = multimediaRecord.get("http://purl.org/dc/terms/title").asText();
-        String description = multimediaRecord.get("http://purl.org/dc/terms/description").asText();
+        String description = StringUtils.trim(multimediaRecord.get("http://purl.org/dc/terms/description").asText());
 
         JsonNode creditNode = multimediaRecord.get("http://ns.adobe.com/photoshop/1.0/Credit");
-        if (creditNode != null) {
+        if (creditNode != null && !creditNode.isNull()) {
             description = description + "\n\n" + creditNode.asText();
         }
 
