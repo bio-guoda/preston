@@ -52,21 +52,19 @@ public class DarkTaxonUtil {
         objectNode.put("description", description);
     }
 
-    public static ObjectNode toPhotoDeposit(JsonNode multimediaRecord, PublicationDateFactory publicationDateFactory, List<String> communities) {
-        JsonNode format = multimediaRecord.get("http://purl.org/dc/elements/1.1/format");
+    public static ObjectNode toPhotoDeposit(JsonNode multimediaRecord, PublicationDateFactory publicationDateFactory, List<String> communities) throws MissingMetadataFieldException {
+        String formatText = getValueOrThrow(multimediaRecord, "http://purl.org/dc/elements/1.1/format");
 
-        JsonNode jsonNode = multimediaRecord.get("http://purl.org/dc/terms/identifier");
-        String filename = jsonNode.asText();
+        String filename = getValueOrThrow(multimediaRecord, "http://purl.org/dc/terms/identifier");
         if (!filename.contains(".")) {
-            filename = filename + "." + StringUtils.lowerCase(format.asText());
+            filename = filename + "." + StringUtils.lowerCase(formatText);
         }
 
-        JsonNode specimenReference = multimediaRecord.get("http://rs.tdwg.org/ac/terms/associatedSpecimenReference");
-        String specimenId = specimenReference.asText();
-        JsonNode hashValue = multimediaRecord.get("http://rs.tdwg.org/ac/terms/hashValue");
-        JsonNode hashAlgo = multimediaRecord.get("http://rs.tdwg.org/ac/terms/hashFunction");
-        HashType hashType = HashType.valueOf(StringUtils.lowerCase(hashAlgo.asText()));
-        IRI imageContentId = RefNodeFactory.toIRI(hashType.getPrefix() + hashValue.asText());
+        String specimenId = getValueOrThrow(multimediaRecord, "http://rs.tdwg.org/ac/terms/associatedSpecimenReference");
+        String hash = getValueOrThrow(multimediaRecord, "http://rs.tdwg.org/ac/terms/hashValue");
+        String hashAlgoText = getValueOrThrow(multimediaRecord, "http://rs.tdwg.org/ac/terms/hashFunction");
+        HashType hashType = HashType.valueOf(StringUtils.lowerCase(hashAlgoText));
+        IRI imageContentId = RefNodeFactory.toIRI(hashType.getPrefix() + hash);
         if (!HashKeyUtil.isValidHashKey(imageContentId)) {
             throw new IllegalArgumentException("unsupported content id [" + imageContentId + "]");
         }
@@ -79,8 +77,8 @@ public class DarkTaxonUtil {
             Stream.of(tags).forEach(tag -> ZenodoMetaUtil.addKeyword(zenodoMetadata, StringUtils.trim(tag)));
         }
 
-        String title = multimediaRecord.get("http://purl.org/dc/terms/title").asText();
-        String description = StringUtils.trim(multimediaRecord.get("http://purl.org/dc/terms/description").asText());
+        String title = getValueOrThrow(multimediaRecord, "http://purl.org/dc/terms/title");
+        String description = getValueOrThrow(multimediaRecord, "http://purl.org/dc/terms/description");
 
         JsonNode creditNode = multimediaRecord.get("http://ns.adobe.com/photoshop/1.0/Credit");
         if (creditNode != null && !creditNode.isNull()) {
@@ -94,14 +92,15 @@ public class DarkTaxonUtil {
                 filename,
                 specimenId,
                 imageContentId.getIRIString(),
-                "image/" + format.asText(),
+                "image/" + formatText,
                 publicationDateFactory,
                 communities,
                 title,
                 description,
                 creators
         );
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DOCUMENTED_BY, multimediaRecord.get("http://rs.tdwg.org/ac/terms/hasServiceAccessPoint").asText());
+        String serviceAccessPoint = getValueOrThrow(multimediaRecord, "http://rs.tdwg.org/ac/terms/hasServiceAccessPoint");
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DOCUMENTED_BY, serviceAccessPoint);
         addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_SUBJECT_PART, "http://rs.tdwg.org/ac/terms/subjectPart");
         addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_CAPTURE_DEVICE, "http://rs.tdwg.org/ac/terms/captureDevice");
         addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE, "http://rs.tdwg.org/ac/terms/resourceCreationTechnique");
@@ -112,15 +111,23 @@ public class DarkTaxonUtil {
         return ZenodoMetaUtil.wrap(zenodoMetadata);
     }
 
-    static ObjectNode toEventDeposit(String jsonString, PublicationDateFactory publicationDateFactory, List<String> communities) throws JsonProcessingException {
+    private static String getValueOrThrow(JsonNode multimediaRecord, String fieldName) throws MissingMetadataFieldException {
+        JsonNode node = multimediaRecord.get(fieldName);
+        if (node == null || node.isNull() || StringUtils.isBlank(node.asText())) {
+            throw new MissingMetadataFieldException("no value specified for [" + fieldName + "] in [" + multimediaRecord.toPrettyString() + "]");
+        }
+        return StringUtils.trim(node.asText());
+    }
+
+    static ObjectNode toEventDeposit(String jsonString, PublicationDateFactory publicationDateFactory, List<String> communities) throws JsonProcessingException, MissingMetadataFieldException {
         JsonNode multimedia = new ObjectMapper().readTree(jsonString);
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
 
 
-        String eventId = multimedia.get("http://rs.tdwg.org/dwc/terms/eventID").asText();
-        String protocol = multimedia.get("http://rs.tdwg.org/dwc/terms/samplingProtocol").asText();
-        String locality = multimedia.get("http://rs.tdwg.org/dwc/terms/locality").asText();
-        String eventDate = multimedia.get("http://rs.tdwg.org/dwc/terms/eventDate").asText();
+        String eventId = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/eventID");
+        String protocol = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/samplingProtocol");
+        String locality = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/locality");
+        String eventDate = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/eventDate");
         String title = "Sample event at " + locality + " on " + eventDate + " using " + protocol;
         zenodoMetadata.put(ZenodoMetaUtil.TITLE, title);
 
@@ -131,9 +138,9 @@ public class DarkTaxonUtil {
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_EVENT_DATE, StringUtils.split(eventDate, "/")[0]);
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE, eventDate);
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_LOCALITY, locality);
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY, multimedia.get("http://rs.tdwg.org/dwc/terms/recordedBy").asText());
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY_ID, multimedia.get("http://rs.tdwg.org/dwc/terms/recordedByID").asText());
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_GBIF_DWC_RECORDED_BY_ID, multimedia.get("http://rs.tdwg.org/dwc/terms/recordedByID").asText());
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY, getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/recordedBy"));
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY_ID, getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/recordedByID"));
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_GBIF_DWC_RECORDED_BY_ID, getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/recordedByID"));
         ZenodoMetaUtil.setFilename(zenodoMetadata, "event.json");
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, eventId);
 
@@ -153,15 +160,15 @@ public class DarkTaxonUtil {
         ZenodoMetaUtil.append(zenodoMetadata, ZenodoMetaUtil.REFERENCES, "Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14");
     }
 
-    public static ObjectNode toPhysicalObjectDeposit(String jsonString, PublicationDateFactory publicationDateFactory, List<String> communities) throws JsonProcessingException {
+    public static ObjectNode toPhysicalObjectDeposit(String jsonString, PublicationDateFactory publicationDateFactory, List<String> communities) throws JsonProcessingException, MissingMetadataFieldException {
         JsonNode multimedia = new ObjectMapper().readTree(jsonString);
 
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
 
-        String eventId = multimedia.get("http://rs.tdwg.org/dwc/terms/eventID").asText();
-        String occurrenceId = multimedia.get("http://rs.tdwg.org/dwc/terms/occurrenceID").asText();
-        String country = multimedia.get("http://rs.tdwg.org/dwc/terms/country").asText();
-        String eventDate = multimedia.get("http://rs.tdwg.org/dwc/terms/eventDate").asText();
+        String eventId = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/eventID");
+        String occurrenceId = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/occurrenceID");
+        String country = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/country");
+        String eventDate = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/eventDate");
         String title = "Physical object " + occurrenceId + " sampled through event " + eventId + " on " + eventDate;
         zenodoMetadata.put(ZenodoMetaUtil.TITLE, title);
 

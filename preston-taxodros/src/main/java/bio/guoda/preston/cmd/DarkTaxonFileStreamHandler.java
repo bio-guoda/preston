@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,6 +33,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DarkTaxonFileStreamHandler.class);
 
     public static final Pattern RAW_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>RAW)_(?<imageStackNumber>[0-9]+)_(?<imageNumber>[0-9]+)[.]tiff$");
     public static final Pattern STACKED_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>stacked)_(?<imageStackNumber>[0-9]+)[.]tiff$");
@@ -86,6 +90,8 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                          }
                     } catch (IOException e) {
                         // opportunistic parsing
+                    } catch (MissingMetadataFieldException e) {
+                        LOG.warn("not processing following line because of missing data: [" + line + "]", e);
                     }
 
 
