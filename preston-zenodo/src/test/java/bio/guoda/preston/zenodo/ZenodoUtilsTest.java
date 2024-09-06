@@ -24,7 +24,7 @@ public class ZenodoUtilsTest {
     @Test
     public void htmlSearchResultPageForSpecificDeposition() {
         ZenodoContext ctx = new ZenodoContext("secret");
-        IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingDepositions(ctx, Arrays.asList("urn:lsid:biodiversitylibrary.org:part:79807"));
+        IRI queryForExistingDepositions = ZenodoUtils.getSearchPageForExistingDepositions(ctx, Arrays.asList("urn:lsid:biodiversitylibrary.org:part:79807"));
 
         assertThat(
                 queryForExistingDepositions.getIRIString(),
