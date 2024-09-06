@@ -102,12 +102,12 @@ public class DarkTaxonUtil {
                 creators
         );
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DOCUMENTED_BY, multimediaRecord.get("http://rs.tdwg.org/ac/terms/hasServiceAccessPoint").asText());
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_SUBJECT_PART, multimediaRecord.get("http://rs.tdwg.org/ac/terms/subjectPart").asText());
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_CAPTURE_DEVICE, multimediaRecord.get("http://rs.tdwg.org/ac/terms/captureDevice").asText());
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE, multimediaRecord.get("http://rs.tdwg.org/ac/terms/resourceCreationTechnique").asText());
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_SUBJECT_PART, "http://rs.tdwg.org/ac/terms/subjectPart");
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_CAPTURE_DEVICE, "http://rs.tdwg.org/ac/terms/captureDevice");
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE, "http://rs.tdwg.org/ac/terms/resourceCreationTechnique");
         String[] split = StringUtils.split(specimenId, ":");
         String catalogNumber = split.length > 0 ? split[split.length - 1] : specimenId;
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, catalogNumber);
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, catalogNumber);
 
         return ZenodoMetaUtil.wrap(zenodoMetadata);
     }
@@ -126,14 +126,14 @@ public class DarkTaxonUtil {
 
         setDescription(zenodoMetadata, title);
 
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
 
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_EVENT_DATE, StringUtils.split(eventDate, "/")[0]);
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE, eventDate);
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_LOCALITY, locality);
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY, multimedia.get("http://rs.tdwg.org/dwc/terms/recordedBy").asText());
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY_ID, multimedia.get("http://rs.tdwg.org/dwc/terms/recordedByID").asText());
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_GBIF_DWC_RECORDED_BY_ID, multimedia.get("http://rs.tdwg.org/dwc/terms/recordedByID").asText());
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_EVENT_DATE, StringUtils.split(eventDate, "/")[0]);
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE, eventDate);
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_LOCALITY, locality);
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY, multimedia.get("http://rs.tdwg.org/dwc/terms/recordedBy").asText());
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY_ID, multimedia.get("http://rs.tdwg.org/dwc/terms/recordedByID").asText());
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_GBIF_DWC_RECORDED_BY_ID, multimedia.get("http://rs.tdwg.org/dwc/terms/recordedByID").asText());
         ZenodoMetaUtil.setFilename(zenodoMetadata, "event.json");
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, eventId);
 
@@ -167,15 +167,15 @@ public class DarkTaxonUtil {
 
         setDescription(zenodoMetadata, title);
 
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
 
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_EVENT_DATE, StringUtils.split(eventDate, "/")[0]);
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE, eventDate);
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_COUNTRY, country);
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, multimedia.get("http://rs.tdwg.org/dwc/terms/catalogNumber").asText());
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_BASIS_OF_RECORD, multimedia.get("http://rs.tdwg.org/dwc/terms/basisOfRecord").asText());
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_SCIENTIFIC_NAME, multimedia.get("http://rs.tdwg.org/dwc/terms/scientificName").asText());
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_MATERIAL_SAMPLE_ID, occurrenceId);
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_EVENT_DATE, StringUtils.split(eventDate, "/")[0]);
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE, eventDate);
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_COUNTRY, country);
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, "http://rs.tdwg.org/dwc/terms/catalogNumber");
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_BASIS_OF_RECORD, "http://rs.tdwg.org/dwc/terms/basisOfRecord");
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_SCIENTIFIC_NAME, "http://rs.tdwg.org/dwc/terms/scientificName");
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_MATERIAL_SAMPLE_ID, occurrenceId);
         String filename = "event.json";
         String contentId = null;
 
@@ -215,5 +215,20 @@ public class DarkTaxonUtil {
         addReferences(zenodoMetadata);
 
         return ZenodoMetaUtil.wrap(zenodoMetadata);
+    }
+
+    private static void addValueAsCustomFieldIfAvailable(ObjectNode zenodoMetadata, String customField, String value) {
+        if (StringUtils.isNotBlank(value)) {
+            ZenodoMetaUtil.addCustomField(zenodoMetadata, customField, value);
+        }
+    }
+
+    private static void addFieldValueAsZenodoCustomFieldIfAvailable(JsonNode multimedia, ObjectNode zenodoMetadata, String customField, String fieldName) {
+        if (multimedia.has(fieldName)) {
+            JsonNode valueNode = multimedia.get(fieldName);
+            if (!valueNode.isNull() && StringUtils.isNotBlank(valueNode.asText())) {
+                ZenodoMetaUtil.addCustomField(zenodoMetadata, customField, valueNode.asText());
+            }
+        }
     }
 }
