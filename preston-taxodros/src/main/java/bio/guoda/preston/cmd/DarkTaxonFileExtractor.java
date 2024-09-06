@@ -11,6 +11,7 @@ import bio.guoda.preston.stream.CompressedStreamHandler;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import bio.guoda.preston.stream.ContentStreamHandlerImpl;
+import bio.guoda.preston.zenodo.ZenodoConfig;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
@@ -27,26 +28,28 @@ public class DarkTaxonFileExtractor extends ProcessorExtracting {
     private final OutputStream outputStream;
     private final PublicationDateFactory publicationDateFactory;
     private final List<String> communities;
+    private final ZenodoConfig ctx;
 
 
     public DarkTaxonFileExtractor(ProcessorState processorState,
                                   BlobStoreReadOnly blobStoreReadOnly,
                                   OutputStream out,
-                                  List<String> communities,
+                                  ZenodoConfig zenodoConfig,
                                   StatementsListener... listeners) {
-        this(processorState, blobStoreReadOnly, out, communities, DateUtil::nowDate, listeners);
+        this(processorState, blobStoreReadOnly, out, zenodoConfig, DateUtil::nowDate, listeners);
     }
 
     public DarkTaxonFileExtractor(ProcessorState processorState,
                                   BlobStoreReadOnly blobStoreReadOnly,
                                   OutputStream out,
-                                  List<String> communities,
+                                  ZenodoConfig zenodoConfig,
                                   PublicationDateFactory factory,
                                   StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
-        this.communities = communities;
+        this.ctx = zenodoConfig;
+        this.communities = ctx.getCommunities();
         this.publicationDateFactory = factory;
 
     }

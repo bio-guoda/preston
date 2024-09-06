@@ -3,6 +3,7 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.stream.ContentStreamException;
+import bio.guoda.preston.zenodo.ZenodoConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,7 +71,7 @@ public class DarkTaxonFileExtractorTest {
                 new ProcessorStateAlwaysContinue(),
                 blobStore,
                 byteArrayOutputStream,
-                Arrays.asList("my-community"),
+                testConfig(),
                 new PublicationDateFactory() {
                     @Override
                     public String getPublicationDate() {
@@ -178,6 +179,66 @@ public class DarkTaxonFileExtractorTest {
         assertThat(contentIds, hasItem("hash://sha256/e207b334d0132c9f734de5948bd58cf864a8c325055fd0498fc0fee3d54af65e"));
         assertThat(contentIds, hasItem("hash://sha256/1ff3fd9a4d4d66189f59c27dcbd86e1909ce0c45ed2df04a209109af1e40a4a6"));
         assertThat(contentIds, hasItem("hash://sha256/fa2655a77e1167a1b568f24b1fc4c12d9f1431b9fa1033a56d24e73d235e4128"));
+    }
+
+    private ZenodoConfig testConfig() {
+        return new ZenodoConfig() {
+
+            @Override
+            public String getAccessToken() {
+                return null;
+            }
+
+            @Override
+            public String getEndpoint() {
+                return null;
+            }
+
+            @Override
+            public List<String> getCommunities() {
+                return Arrays.asList("my-community");
+            }
+
+            @Override
+            public void setCreateNewVersionForExisting(Boolean skipOnExisting) {
+
+            }
+
+            @Override
+            public boolean createNewVersionForExisting() {
+                return false;
+            }
+
+            @Override
+            public void setPublishRestrictedOnly(boolean restrictedOnly) {
+
+            }
+
+            @Override
+            public boolean shouldPublishRestrictedOnly() {
+                return false;
+            }
+
+            @Override
+            public void setUpdateMetadataOnly(boolean updateMetadataOnly) {
+
+            }
+
+            @Override
+            public boolean shouldUpdateMetadataOnly() {
+                return false;
+            }
+
+            @Override
+            public void setAllowEmptyPublicationDate(boolean allowEmptyPublicationDate) {
+
+            }
+
+            @Override
+            public boolean shouldAllowEmptyPublicationDate() {
+                return false;
+            }
+        };
     }
 
 

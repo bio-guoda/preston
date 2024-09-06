@@ -24,11 +24,11 @@ public class ZenodoMetadataFileExtractor extends ProcessorExtracting {
     private final Logger LOG = LoggerFactory.getLogger(ZenodoMetadataFileExtractor.class);
 
     private final ProcessorState processorState;
-    private final ZenodoContext zenodoContext;
+    private final ZenodoConfig zenodoContext;
 
     public ZenodoMetadataFileExtractor(CmdZenodo processorState,
                                        BlobStoreReadOnly blobStoreReadOnly,
-                                       ZenodoContext zenodoContext,
+                                       ZenodoConfig zenodoContext,
                                        StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;

@@ -7,6 +7,7 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
+import bio.guoda.preston.zenodo.CmdZenodoEnabled;
 import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
@@ -19,16 +20,7 @@ import java.util.List;
         description = "Stream DarkTaxon records into line-json with Zenodo metadata",
         hidden = true
 )
-public class CmdDarkTaxonStream extends LoggingPersisting implements Runnable {
-
-    @CommandLine.Option(
-            names = {"--community", "--communities"},
-            split = ",",
-            description = "select which Zenodo communities to submit to. If community is known (e.g., batlit, taxodros, mfn), default metadata is included."
-    )
-
-    private List<String> communities = new ArrayList<>();
-
+public class CmdDarkTaxonStream extends CmdZenodoEnabled implements Runnable {
 
     @Override
     public void run() {
@@ -48,7 +40,7 @@ public class CmdDarkTaxonStream extends LoggingPersisting implements Runnable {
                 this,
                 blobStoreReadOnly,
                 getOutputStream(),
-                communities,
+                getZenodoContext(),
                 listener);
 
         StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {
