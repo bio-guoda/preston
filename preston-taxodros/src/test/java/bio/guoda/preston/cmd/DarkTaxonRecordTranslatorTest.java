@@ -1,11 +1,11 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.DateUtil;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.HashKeyUtil;
 import bio.guoda.preston.store.TestUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -31,65 +31,75 @@ public class DarkTaxonRecordTranslatorTest {
         JsonNode multimedia = new ObjectMapper().readTree(getClass().getResourceAsStream("darktaxon/multimedia.json"));
         assertNotNull(multimedia);
 
-        JsonNode jsonNode = multimedia.get("http://purl.org/dc/terms/identifier");
+        ObjectNode zenodoDeposit = toPhotoDeposit(multimedia, getPublicationDateFactory());
+
+        String actual = zenodoDeposit.toPrettyString();
+
+        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/multimedia-zenodo.json"), StandardCharsets.UTF_8)));
+
+    }
+
+    private static ObjectNode toPhotoDeposit(JsonNode multimediaRecord, PublicationDateFactory publicationDateFactory) {
+        JsonNode jsonNode = multimediaRecord.get("http://purl.org/dc/terms/identifier");
         String filename = jsonNode.asText();
-        JsonNode specimenReference = multimedia.get("http://rs.tdwg.org/ac/terms/associatedSpecimenReference");
+        JsonNode specimenReference = multimediaRecord.get("http://rs.tdwg.org/ac/terms/associatedSpecimenReference");
         String specimenId = specimenReference.asText();
-        JsonNode hashValue = multimedia.get("http://rs.tdwg.org/ac/terms/hashValue");
-        JsonNode hashAlgo = multimedia.get("http://rs.tdwg.org/ac/terms/hashFunction");
+        JsonNode hashValue = multimediaRecord.get("http://rs.tdwg.org/ac/terms/hashValue");
+        JsonNode hashAlgo = multimediaRecord.get("http://rs.tdwg.org/ac/terms/hashFunction");
         HashType hashType = HashType.valueOf(StringUtils.lowerCase(hashAlgo.asText()));
         IRI imageContentId = RefNodeFactory.toIRI(hashType.getPrefix() + hashValue.asText());
         if (!HashKeyUtil.isValidHashKey(imageContentId)) {
             throw new IllegalArgumentException("unsupported content id [" + imageContentId + "]");
         }
 
-        JsonNode format = multimedia.get("http://purl.org/dc/elements/1.1/format");
+        JsonNode format = multimediaRecord.get("http://purl.org/dc/elements/1.1/format");
 
 
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
 
-        String title = multimedia.get("http://purl.org/dc/terms/title").asText();
-        String description = multimedia.get("http://purl.org/dc/terms/description").asText();
+        String title = multimediaRecord.get("http://purl.org/dc/terms/title").asText();
+        String description = multimediaRecord.get("http://purl.org/dc/terms/description").asText();
         DarkTaxonUtil.populatePhotoDepositMetadata(
                 zenodoMetadata,
                 filename,
                 specimenId,
                 imageContentId.getIRIString(),
                 "image/" + format.asText(),
-                new PublicationDateFactory() {
-                    @Override
-                    public String getPublicationDate() {
-                        return "1999-12-31";
-                    }
-                },
+                publicationDateFactory,
                 Arrays.asList("mfn-test"),
                 title,
                 description
         );
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CAPTURE_DEVICE, multimedia.get("http://rs.tdwg.org/ac/terms/captureDevice").asText());
-        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE, multimedia.get("http://rs.tdwg.org/ac/terms/resourceCreationTechnique").asText());
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CAPTURE_DEVICE, multimediaRecord.get("http://rs.tdwg.org/ac/terms/captureDevice").asText());
+        ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE, multimediaRecord.get("http://rs.tdwg.org/ac/terms/resourceCreationTechnique").asText());
         String[] split = StringUtils.split(specimenId, ":");
         String catalogNumber = split.length > 0 ? split[split.length-1] : specimenId;
         ZenodoMetaUtil.addCustomField(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, catalogNumber);
 
-
-
-
-        String actual = ZenodoMetaUtil.wrap(zenodoMetadata).toPrettyString();
-
-        System.out.println(actual);
-
-        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/multimedia-zenodo.json"), StandardCharsets.UTF_8)));
-
+        return ZenodoMetaUtil.wrap(zenodoMetadata);
     }
 
     @Test
     public void eventDeposit() throws IOException {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/event.json");
+        assertNotNull(resourceAsStream);
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
-        JsonNode multimedia = new ObjectMapper().readTree(jsonString);
-        assertNotNull(multimedia);
 
+        ObjectNode zenodoDeposit = toEventDeposit(jsonString, new PublicationDateFactory() {
+            @Override
+            public String getPublicationDate() {
+                return "1999-12-31";
+            }
+        });
+        String actual = zenodoDeposit.toPrettyString();
+
+        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/event-zenodo.json"), StandardCharsets.UTF_8)));
+
+
+    }
+
+    private static ObjectNode toEventDeposit(String jsonString, PublicationDateFactory publicationDateFactory) throws JsonProcessingException {
+        JsonNode multimedia = new ObjectMapper().readTree(jsonString);
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
 
 
@@ -116,26 +126,15 @@ public class DarkTaxonRecordTranslatorTest {
         DarkTaxonUtil.appendAlternateIdentifiers(zenodoMetadata, Hasher.calcHashIRI(jsonString, HashType.md5).getIRIString());
         ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_EVENT);
         ZenodoMetaUtil.setCreators(zenodoMetadata, Arrays.asList("Museum für Naturkunde Berlin"));
-        ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, new PublicationDateFactory() {
-                    @Override
-                    public String getPublicationDate() {
-                        return "1999-12-31";
-                    }
-                }.getPublicationDate());
+        ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
         ZenodoMetaUtil.setCommunities(zenodoMetadata, Arrays.asList("mfn-test").stream());
         addReferences(zenodoMetadata);
 
 
-        String actual = ZenodoMetaUtil.wrap(zenodoMetadata).toPrettyString();
-
-        System.out.println(actual);
-
-        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/event-zenodo.json"), StandardCharsets.UTF_8)));
-
-
+        return ZenodoMetaUtil.wrap(zenodoMetadata);
     }
 
-    private void addReferences(ObjectNode zenodoMetadata) {
+    private static void addReferences(ObjectNode zenodoMetadata) {
         ZenodoMetaUtil.append(zenodoMetadata, ZenodoMetaUtil.REFERENCES, "Hartop E, Srivathsan A, Ronquist F, Meier R (2022) Towards Large-Scale Integrative Taxonomy (LIT): resolving the data conundrum for dark taxa. Syst Biol 71:1404–1422. https://doi.org/10.1093/sysbio/syac033");
         ZenodoMetaUtil.append(zenodoMetadata, ZenodoMetaUtil.REFERENCES, "Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14");
     }
@@ -143,9 +142,16 @@ public class DarkTaxonRecordTranslatorTest {
     @Test
     public void physicalObjectDeposit() throws IOException {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/occurrence.json");
+        assertNotNull(resourceAsStream);
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
+        ObjectNode zenodoDeposit = toPhysicalObjectDeposit(jsonString, getPublicationDateFactory());
+        String actual = zenodoDeposit.toPrettyString();
+
+        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-zenodo.json"), StandardCharsets.UTF_8)));
+    }
+
+    private static ObjectNode toPhysicalObjectDeposit(String jsonString, PublicationDateFactory publicationDateFactory) throws JsonProcessingException {
         JsonNode multimedia = new ObjectMapper().readTree(jsonString);
-        assertNotNull(multimedia);
 
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
 
@@ -174,21 +180,20 @@ public class DarkTaxonRecordTranslatorTest {
         DarkTaxonUtil.appendAlternateIdentifiers(zenodoMetadata, Hasher.calcHashIRI(jsonString, HashType.md5).getIRIString());
         ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PHYSICAL_OBJECT);
         ZenodoMetaUtil.setCreators(zenodoMetadata, Arrays.asList("Museum für Naturkunde Berlin"));
-        ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, new PublicationDateFactory() {
+        ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
+        ZenodoMetaUtil.setCommunities(zenodoMetadata, Arrays.asList("mfn-test").stream());
+        addReferences(zenodoMetadata);
+
+        return ZenodoMetaUtil.wrap(zenodoMetadata);
+    }
+
+    private PublicationDateFactory getPublicationDateFactory() {
+        return new PublicationDateFactory() {
             @Override
             public String getPublicationDate() {
                 return "1999-12-31";
             }
-        }.getPublicationDate());
-        ZenodoMetaUtil.setCommunities(zenodoMetadata, Arrays.asList("mfn-test").stream());
-        addReferences(zenodoMetadata);
-
-
-        String actual = ZenodoMetaUtil.wrap(zenodoMetadata).toPrettyString();
-
-        System.out.println(actual);
-
-        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/occurrence-zenodo.json"), StandardCharsets.UTF_8)));
+        };
     }
 
 }
