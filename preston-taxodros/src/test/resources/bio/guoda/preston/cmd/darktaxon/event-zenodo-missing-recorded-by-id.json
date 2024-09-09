@@ -12,10 +12,10 @@
     "filename" : "event.json",
     "related_identifiers" : [ {
       "relation" : "isAlternateIdentifier",
-      "identifier" : "hash://md5/82bcff1af27e65c0395c18924ffe5fb2"
+      "identifier" : "hash://md5/8247b9f84e497c5e5112ddabaef5b42f"
     }, {
       "relation" : "hasVersion",
-      "identifier" : "hash://md5/82bcff1af27e65c0395c18924ffe5fb2"
+      "identifier" : "hash://md5/8247b9f84e497c5e5112ddabaef5b42f"
     }, {
       "relation" : "isAlternateIdentifier",
       "identifier" : "urn:lsid:MfN:Ento:SchweiBo1",
