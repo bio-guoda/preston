@@ -29,7 +29,6 @@ public class DarkTaxonUtil {
     public static final String DWC_TERMS_RECORDED_BY_ID = "http://rs.tdwg.org/dwc/terms/recordedByID";
     public static final String EVENT = "event";
     public static final String PHYSICAL_OBJECT = "physicalobject";
-    public static final String PHOTO = "image+inner:image-photo";
     public static final String GBIF_RECORDED_BY_ID = "http://rs.gbif.org/terms/1.0/recordedByID";
     public static final String DWC_TERMS_EVENT_ID = "http://rs.tdwg.org/dwc/terms/eventID";
     public static final String DWC_TERMS_OCCURRENCE_ID = "http://rs.tdwg.org/dwc/terms/occurrenceID";
@@ -44,6 +43,12 @@ public class DarkTaxonUtil {
     public static final String AC_TERMS_SUBJECT_PART = "http://rs.tdwg.org/ac/terms/subjectPart";
     public static final String AC_TERMS_CAPTURE_DEVICE = "http://rs.tdwg.org/ac/terms/captureDevice";
     public static final String AC_TERMS_RESOURCE_CREATION_TECHNIQUE = "http://rs.tdwg.org/ac/terms/resourceCreationTechnique";
+    public static final String AC_TERMS_ASSOCIATED_SPECIMEN_REFERENCE = "http://rs.tdwg.org/ac/terms/associatedSpecimenReference";
+    public static final String AC_TERMS_HASH_VALUE = "http://rs.tdwg.org/ac/terms/hashValue";
+    public static final String AC_TERMS_HASH_FUNCTION = "http://rs.tdwg.org/ac/terms/hashFunction";
+    public static final String DC_TERMS_IDENTIFIER = "http://purl.org/dc/terms/identifier";
+    public static final String DC_ELEMENTS_1_1_FORMAT = "http://purl.org/dc/elements/1.1/format";
+    public static final String DWC_TEXT_COREID = "http://rs.tdwg.org/dwc/text/coreid";
 
     static void appendAlternateIdentifiers(ObjectNode linkRecords, String imageContentId) {
         ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
@@ -75,16 +80,16 @@ public class DarkTaxonUtil {
 
     public static ObjectNode toPhotoDeposit(JsonNode multimediaRecord, PublicationDateFactory publicationDateFactory, ZenodoConfig ctx) throws MissingMetadataFieldException {
 
-        String formatText = getValueOrThrow(multimediaRecord, "http://purl.org/dc/elements/1.1/format");
+        String formatText = getValueOrThrow(multimediaRecord, DC_ELEMENTS_1_1_FORMAT);
 
-        String filename = getValueOrThrow(multimediaRecord, "http://purl.org/dc/terms/identifier");
+        String filename = getValueOrThrow(multimediaRecord, DC_TERMS_IDENTIFIER);
         if (!filename.contains(".")) {
             filename = filename + "." + StringUtils.lowerCase(formatText);
         }
 
-        String specimenId = getValueOrThrow(multimediaRecord, "http://rs.tdwg.org/ac/terms/associatedSpecimenReference");
-        String hash = getValueOrThrow(multimediaRecord, "http://rs.tdwg.org/ac/terms/hashValue");
-        String hashAlgoText = getValueOrThrow(multimediaRecord, "http://rs.tdwg.org/ac/terms/hashFunction");
+        String specimenId = getValueOrThrow(multimediaRecord, AC_TERMS_ASSOCIATED_SPECIMEN_REFERENCE);
+        String hash = getValueOrThrow(multimediaRecord, AC_TERMS_HASH_VALUE);
+        String hashAlgoText = getValueOrThrow(multimediaRecord, AC_TERMS_HASH_FUNCTION);
         HashType hashType = HashType.valueOf(StringUtils.lowerCase(hashAlgoText));
         IRI imageContentId = RefNodeFactory.toIRI(hashType.getPrefix() + hash);
         if (!HashKeyUtil.isValidHashKey(imageContentId)) {
@@ -123,10 +128,13 @@ public class DarkTaxonUtil {
         );
 
         addCustomFieldsIfAvailable(multimediaRecord, zenodoMetadata);
-        String serviceAccessPoint = getValueOrThrow(multimediaRecord, "http://rs.tdwg.org/ac/terms/hasServiceAccessPoint");
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(imageContentId.getIRIString()), RESOURCE_TYPE_PHOTO).getIRIString(), RESOURCE_TYPE_PHOTO);
 
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.DOCUMENTS, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(specimenId), PHYSICAL_OBJECT).getIRIString(), PHYSICAL_OBJECT);
+        if (multimediaRecord.has(DWC_TEXT_COREID)) {
+            String eventId = multimediaRecord.get(DWC_TEXT_COREID).asText();
+            ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.WAS_DERIVED_FROM, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString(), EVENT);
+        }
         String[] split = StringUtils.split(specimenId, ":");
         String catalogNumber = split.length > 0 ? split[split.length - 1] : specimenId;
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, catalogNumber);
@@ -135,17 +143,17 @@ public class DarkTaxonUtil {
     }
 
     private static String getValueOrThrow(JsonNode multimediaRecord, String fieldName) throws MissingMetadataFieldException {
-        JsonNode node = multimediaRecord.get(fieldName);
-        if (node == null || node.isNull() || StringUtils.isBlank(node.asText())) {
+        if (!hasFieldValue(multimediaRecord, fieldName)) {
             throw new MissingMetadataFieldException("no value specified for [" + fieldName + "] in [" + multimediaRecord.toPrettyString() + "]");
         }
+
+        JsonNode node = multimediaRecord.get(fieldName);
         return StringUtils.trim(node.asText());
     }
 
     static ObjectNode toEventDeposit(String jsonString, PublicationDateFactory publicationDateFactory, ZenodoConfig ctx) throws JsonProcessingException, MissingMetadataFieldException {
         JsonNode multimedia = new ObjectMapper().readTree(jsonString);
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
-
 
         String eventId = getValueOrThrow(multimedia, DWC_TERMS_EVENT_ID);
         String protocol = getValueOrThrow(multimedia, DWC_TERMS_SAMPLING_PROTOCOL);
@@ -172,9 +180,15 @@ public class DarkTaxonUtil {
     }
 
     private static void addRecordedByIfAvailable(JsonNode multimedia, ObjectNode zenodoMetadata, String fieldName) throws MissingMetadataFieldException {
-        if (multimedia.has(fieldName) && StringUtils.isNotBlank(multimedia.get(fieldName).asText())) {
+        if (hasFieldValue(multimedia, fieldName)) {
             addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY_ID, getValueOrThrow(multimedia, fieldName));
         }
+    }
+
+    private static boolean hasFieldValue(JsonNode multimedia, String fieldName) {
+        return multimedia != null && multimedia.has(fieldName)
+                && !multimedia.get(fieldName).isNull()
+                && StringUtils.isNotBlank(multimedia.get(fieldName).asText());
     }
 
     private static void addReferences(ObjectNode zenodoMetadata) {

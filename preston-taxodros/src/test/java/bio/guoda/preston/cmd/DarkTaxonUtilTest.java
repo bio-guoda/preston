@@ -43,6 +43,21 @@ public class DarkTaxonUtilTest {
     }
 
     @Test
+    public void photoDepositMissingRecordedById() throws IOException, MissingMetadataFieldException {
+        JsonNode multimedia = new ObjectMapper().readTree(getClass().getResourceAsStream("darktaxon/event-missing-recorded-by-id.json"));
+        assertNotNull(multimedia);
+
+        ObjectNode eventDeposit = DarkTaxonUtil.toEventDeposit(multimedia.toPrettyString(), getPublicationDateFactory(), getTestConfig());
+
+        String actual = eventDeposit.toPrettyString();
+
+        System.out.println(actual);
+
+        assertThat(actual, Is.is(IOUtils.toString(getClass().getResourceAsStream("darktaxon/event-zenodo-missing-recorded-by-id.json"), StandardCharsets.UTF_8)));
+
+    }
+
+    @Test
     public void eventDeposit() throws IOException, MissingMetadataFieldException {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/event.json");
         assertNotNull(resourceAsStream);

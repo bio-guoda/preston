@@ -1,0 +1,38 @@
+{
+  "metadata" : {
+    "title" : "Sample event at Berlin, Swiss Embassy on 2024-05-04/2024-05-08 using Malaise trap",
+    "description" : "Sample event at Berlin, Swiss Embassy on 2024-05-04/2024-05-08 using Malaise trap",
+    "custom" : {
+      "dwc:institutionCode" : [ "MfN" ],
+      "dwc:eventDate" : [ "2024-05-04" ],
+      "dwc:verbatimEventDate" : [ "2024-05-04/2024-05-08" ],
+      "dwc:locality" : [ "Berlin, Swiss Embassy" ],
+      "dwc:recordedBy" : [ "Donat Agosti" ]
+    },
+    "filename" : "event.json",
+    "related_identifiers" : [ {
+      "relation" : "isAlternateIdentifier",
+      "identifier" : "hash://md5/82bcff1af27e65c0395c18924ffe5fb2"
+    }, {
+      "relation" : "hasVersion",
+      "identifier" : "hash://md5/82bcff1af27e65c0395c18924ffe5fb2"
+    }, {
+      "relation" : "isAlternateIdentifier",
+      "identifier" : "urn:lsid:MfN:Ento:SchweiBo1",
+      "resource_type" : "event"
+    }, {
+      "relation" : "isVersionOf",
+      "identifier" : "https://sandbox.zenodo.org/search?communities=mfn-test&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ASchweiBo1%22&f=resource_type%3Aevent",
+      "resource_type" : "event"
+    } ],
+    "upload_type" : "event",
+    "creators" : [ {
+      "name" : "Museum für Naturkunde Berlin"
+    } ],
+    "publication_date" : "1999-12-31",
+    "communities" : [ {
+      "identifier" : "mfn-test"
+    } ],
+    "references" : [ "Hartop E, Srivathsan A, Ronquist F, Meier R (2022) Towards Large-Scale Integrative Taxonomy (LIT): resolving the data conundrum for dark taxa. Syst Biol 71:1404–1422. https://doi.org/10.1093/sysbio/syac033", "Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14" ]
+  }
+}
