@@ -36,7 +36,7 @@
     }, {
       "relation" : "isDocumentedBy",
       "identifier" : "https://sandbox.zenodo.org/search?communities=mfn-test&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0009388%22&f=resource_type%3Aimage%2Binner%3Aimage-photo",
-      "resource_type" : "image+inner:image-photo"
+      "resource_type" : "image-photo"
     } ],
     "title" : "Physical object urn:lsid:MfN:Ento:BMT0009388 sampled through event urn:lsid:MfN:Ento:SchweiBo1 on 2019-07-04",
     "description" : "Physical object urn:lsid:MfN:Ento:BMT0009388 sampled through event urn:lsid:MfN:Ento:SchweiBo1 on 2019-07-04",

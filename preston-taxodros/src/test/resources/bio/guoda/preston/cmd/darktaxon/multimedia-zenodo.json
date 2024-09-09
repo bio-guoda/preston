@@ -22,7 +22,7 @@
     }, {
       "relation" : "isAlternateIdentifier",
       "identifier" : "urn:lsid:MfN:Ento:BMT0009388:BMT121_BMT0009388_stacked_01.tiff",
-      "resource_type" : "image+inner:image-photo"
+      "resource_type" : "image-photo"
     }, {
       "relation" : "documents",
       "identifier" : "urn:lsid:MfN:Ento:BMT0009388",
@@ -30,7 +30,7 @@
     }, {
       "relation" : "isVersionOf",
       "identifier" : "https://sandbox.zenodo.org/search?communities=mfn-test&q=alternate.identifier:%22hash%3A%2F%2Fmd5%2Ff052cbac398bf340a620c421bfefa16d%22&f=resource_type%3Aimage%2Binner%3Aimage-photo",
-      "resource_type" : "image+inner:image-photo"
+      "resource_type" : "image-photo"
     }, {
       "relation" : "documents",
       "identifier" : "https://sandbox.zenodo.org/search?communities=mfn-test&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0009388%22&f=resource_type%3Aphysicalobject",

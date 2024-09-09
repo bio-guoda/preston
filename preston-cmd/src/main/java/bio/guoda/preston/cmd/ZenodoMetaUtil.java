@@ -127,7 +127,8 @@ public class ZenodoMetaUtil {
                     .put("relation", relationType)
                     .put("identifier", value);
             if (StringUtils.isNotBlank(resourceType)) {
-                identifierRelation.put("resource_type", resourceType);
+                String encodedResourceType = RESOURCE_TYPE_PHOTO.equals(resourceType) ? "image-photo" : resourceType;
+                identifierRelation.put("resource_type", encodedResourceType);
             }
             relatedIdentifiers.add(identifierRelation);
             objectNode.set(RELATED_IDENTIFIERS, relatedIdentifiers);
