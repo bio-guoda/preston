@@ -133,7 +133,7 @@ public class DarkTaxonUtil {
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.DOCUMENTS, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(specimenId), PHYSICAL_OBJECT).getIRIString(), PHYSICAL_OBJECT);
         if (multimediaRecord.has(DWC_TEXT_COREID)) {
             String eventId = multimediaRecord.get(DWC_TEXT_COREID).asText();
-            ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.WAS_DERIVED_FROM, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString(), EVENT);
+            ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString(), EVENT);
         }
         String[] split = StringUtils.split(specimenId, ":");
         String catalogNumber = split.length > 0 ? split[split.length - 1] : specimenId;

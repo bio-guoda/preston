@@ -36,7 +36,7 @@
       "identifier" : "https://sandbox.zenodo.org/search?communities=mfn-test&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0009388%22&f=resource_type%3Aphysicalobject",
       "resource_type" : "physicalobject"
     }, {
-      "relation" : "http://www.w3.org/ns/prov#wasDerivedFrom",
+      "relation" : "isDerivedFrom",
       "identifier" : "https://sandbox.zenodo.org/search?communities=mfn-test&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ASchweiBo1%22&f=resource_type%3Aevent",
       "resource_type" : "event"
     } ],
