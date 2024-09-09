@@ -118,7 +118,7 @@ public class DarkTaxonFileExtractorTest {
         assertThat(identifiers.get(3).get("identifier").asText(), is("urn:lsid:github.com:darktaxon:BMT0009397:BMT121_BMT0009397_RAW_01_01.tiff"));
 
         // lsid to disambiguate records
-        assertThat(identifiers.get(4).get("relation").asText(), is("isDerivedFrom"));
+        assertThat(identifiers.get(4).get("relation").asText(), is("documents"));
         assertThat(identifiers.get(4).get("identifier").asText(), is("urn:lsid:github.com:darktaxon:BMT0009397"));
 
         JsonNode references = taxonNode.at("/references");
