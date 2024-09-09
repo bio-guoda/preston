@@ -43,7 +43,7 @@ public class DarkTaxonUtilTest {
     }
 
     @Test
-    public void photoDepositMissingRecordedById() throws IOException, MissingMetadataFieldException {
+    public void eventDepositMissingRecordedById() throws IOException, MissingMetadataFieldException {
         InputStream resourceAsStream = getClass().getResourceAsStream("darktaxon/event-missing-recorded-by-id.json");
         assertNotNull(resourceAsStream);
         String jsonString = TestUtil.removeCarriageReturn(IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8));
