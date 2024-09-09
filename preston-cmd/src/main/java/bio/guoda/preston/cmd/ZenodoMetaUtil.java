@@ -54,6 +54,7 @@ public class ZenodoMetaUtil {
     public static final String UPLOAD_TYPE_EVENT = "event";
     public static final String UPLOAD_TYPE_PHYSICAL_OBJECT = "physicalobject";
     public static final String IMAGE_TYPE_PHOTO = "photo";
+    public static final String RESOURCE_TYPE_PHOTO = "image+inner:image-photo";
     public static final String HAS_VERSION = "hasVersion";
     public static final String IS_COMPILED_BY = "isCompiledBy";
     public static final String RESOURCE_TYPE_SOFTWARE = "software";
@@ -73,6 +74,7 @@ public class ZenodoMetaUtil {
     public static final String FIELD_CUSTOM_GBIF_DWC_RECORDED_BY_ID = "gbif-dwc:recordedByID";
     public static final String FIELD_CUSTOM_DWC_BASIS_OF_RECORD = "dwc:basisOfRecord";
     public static final String FIELD_CUSTOM_DWC_SCIENTIFIC_NAME = "dwc:scientificName";
+    public static final String DOCUMENTS = "documents";
     static final String KEYWORDS = "keywords";
     static final String CUSTOM = "custom";
     public static final Pattern YEAR_PATTERN = Pattern.compile(".*(?<year>[12][0-9]{3}).*");

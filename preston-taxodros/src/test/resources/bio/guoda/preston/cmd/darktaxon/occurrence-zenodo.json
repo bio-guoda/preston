@@ -1,7 +1,5 @@
 {
   "metadata" : {
-    "title" : "Physical object urn:lsid:MfN:Ento:BMT0009388 sampled through event urn:lsid:MfN:Ento:SchweiBo1 on 2019-07-04",
-    "description" : "Physical object urn:lsid:MfN:Ento:BMT0009388 sampled through event urn:lsid:MfN:Ento:SchweiBo1 on 2019-07-04",
     "custom" : {
       "dwc:institutionCode" : [ "MfN" ],
       "dwc:eventDate" : [ "2019-07-04" ],
@@ -12,32 +10,36 @@
       "dwc:scientificName" : [ "incertae sedis" ],
       "dwc:materialSampleID" : [ "urn:lsid:MfN:Ento:BMT0009388" ]
     },
-    "filename" : "event.json",
+    "filename" : "occurrence.json",
     "related_identifiers" : [ {
-      "relation" : "isAlternateIdentifier",
-      "identifier" : "urn:lsid:MfN:Ento:BMT0009388"
-    }, {
-      "relation" : "isVersionOf",
-      "identifier" : "https://sandbox.zenodo.org/search?q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0009388%22&f=resource_type%3Aphysicalobject"
-    }, {
-      "relation" : "isVersionOf",
-      "identifier" : "https://sandbox.zenodo.org/api/records?communities=mfn-test&all_versions=false&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0009388%22&f=resource_type%3Aphysicalobject"
-    }, {
-      "relation" : "isDerivedFrom",
-      "identifier" : "urn:lsid:MfN:Ento:SchweiBo1"
-    }, {
-      "relation" : "isDerivedFrom",
-      "identifier" : "https://sandbox.zenodo.org/search?q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ASchweiBo1%22&f=resource_type%3Aevent"
-    }, {
-      "relation" : "isDerivedFrom",
-      "identifier" : "https://sandbox.zenodo.org/api/records?communities=mfn-test&all_versions=false&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ASchweiBo1%22&f=resource_type%3Aevent"
-    }, {
       "relation" : "isAlternateIdentifier",
       "identifier" : "hash://md5/70fa5b4dbb0e09282c907a859b019547"
     }, {
       "relation" : "hasVersion",
       "identifier" : "hash://md5/70fa5b4dbb0e09282c907a859b019547"
+    }, {
+      "relation" : "isAlternateIdentifier",
+      "identifier" : "urn:lsid:MfN:Ento:BMT0009388",
+      "resource_type" : "physicalobject"
+    }, {
+      "relation" : "isVersionOf",
+      "identifier" : "https://sandbox.zenodo.org/search?communities=mfn-test&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0009388%22&f=resource_type%3Aphysicalobject",
+      "resource_type" : "physicalobject"
+    }, {
+      "relation" : "isDerivedFrom",
+      "identifier" : "urn:lsid:MfN:Ento:SchweiBo1",
+      "resource_type" : "event"
+    }, {
+      "relation" : "isDerivedFrom",
+      "identifier" : "https://sandbox.zenodo.org/search?communities=mfn-test&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ASchweiBo1%22&f=resource_type%3Aevent",
+      "resource_type" : "event"
+    }, {
+      "relation" : "isDocumentedBy",
+      "identifier" : "https://sandbox.zenodo.org/search?communities=mfn-test&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0009388%22&f=resource_type%3Aimage%2Binner%3Aimage-photo",
+      "resource_type" : "image+inner:image-photo"
     } ],
+    "title" : "Physical object urn:lsid:MfN:Ento:BMT0009388 sampled through event urn:lsid:MfN:Ento:SchweiBo1 on 2019-07-04",
+    "description" : "Physical object urn:lsid:MfN:Ento:BMT0009388 sampled through event urn:lsid:MfN:Ento:SchweiBo1 on 2019-07-04",
     "upload_type" : "physicalobject",
     "creators" : [ {
       "name" : "Museum für Naturkunde Berlin"

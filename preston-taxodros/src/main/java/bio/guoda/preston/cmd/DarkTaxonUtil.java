@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static bio.guoda.preston.cmd.ZenodoMetaUtil.PUBLICATION_DATE;
+import static bio.guoda.preston.cmd.ZenodoMetaUtil.RESOURCE_TYPE_PHOTO;
 
 public class DarkTaxonUtil {
     private static final Logger LOG = LoggerFactory.getLogger(DarkTaxonUtil.class);
@@ -28,8 +29,21 @@ public class DarkTaxonUtil {
     public static final String DWC_TERMS_RECORDED_BY_ID = "http://rs.tdwg.org/dwc/terms/recordedByID";
     public static final String EVENT = "event";
     public static final String PHYSICAL_OBJECT = "physicalobject";
-    public static final String PHOTO = "image%2Binner%3Aimage-photo";
+    public static final String PHOTO = "image+inner:image-photo";
     public static final String GBIF_RECORDED_BY_ID = "http://rs.gbif.org/terms/1.0/recordedByID";
+    public static final String DWC_TERMS_EVENT_ID = "http://rs.tdwg.org/dwc/terms/eventID";
+    public static final String DWC_TERMS_OCCURRENCE_ID = "http://rs.tdwg.org/dwc/terms/occurrenceID";
+    public static final String DWC_TERMS_COUNTRY = "http://rs.tdwg.org/dwc/terms/country";
+    public static final String DWC_TERMS_EVENT_DATE = "http://rs.tdwg.org/dwc/terms/eventDate";
+    public static final String DWC_TERMS_SCIENTIFIC_NAME = "http://rs.tdwg.org/dwc/terms/scientificName";
+    public static final String DWC_TERMS_BASIS_OF_RECORD = "http://rs.tdwg.org/dwc/terms/basisOfRecord";
+    public static final String TERMS_CATALOG_NUMBER = "http://rs.tdwg.org/dwc/terms/catalogNumber";
+    public static final String DWC_TERMS_LOCALITY = "http://rs.tdwg.org/dwc/terms/locality";
+    public static final String DWC_TERMS_RECORDED_BY = "http://rs.tdwg.org/dwc/terms/recordedBy";
+    public static final String DWC_TERMS_SAMPLING_PROTOCOL = "http://rs.tdwg.org/dwc/terms/samplingProtocol";
+    public static final String AC_TERMS_SUBJECT_PART = "http://rs.tdwg.org/ac/terms/subjectPart";
+    public static final String AC_TERMS_CAPTURE_DEVICE = "http://rs.tdwg.org/ac/terms/captureDevice";
+    public static final String AC_TERMS_RESOURCE_CREATION_TECHNIQUE = "http://rs.tdwg.org/ac/terms/resourceCreationTechnique";
 
     static void appendAlternateIdentifiers(ObjectNode linkRecords, String imageContentId) {
         ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
@@ -45,8 +59,8 @@ public class DarkTaxonUtil {
         ZenodoMetaUtil.setFilename(objectNode, imageFilename);
         appendAlternateIdentifiers(objectNode, imageContentId);
         String specimenLSID = StringUtils.startsWith(specimenId, "urn:lsid:") ? specimenId : LSID_PREFIX + specimenId;
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, specimenLSID + ":" + imageFilename);
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, specimenLSID);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, specimenLSID + ":" + imageFilename, RESOURCE_TYPE_PHOTO);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.DOCUMENTS, specimenLSID, PHYSICAL_OBJECT);
         ZenodoMetaUtil.setType(objectNode, mimeType);
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_IMAGE);
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.IMAGE_TYPE, ZenodoMetaUtil.IMAGE_TYPE_PHOTO);
@@ -107,16 +121,12 @@ public class DarkTaxonUtil {
                 description,
                 creators
         );
-        String serviceAccessPoint = getValueOrThrow(multimediaRecord, "http://rs.tdwg.org/ac/terms/hasServiceAccessPoint");
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(imageContentId.getIRIString()), PHOTO).getIRIString());
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(imageContentId.getIRIString()), PHOTO).getIRIString());
 
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(specimenId), PHYSICAL_OBJECT).getIRIString());
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(specimenId), PHYSICAL_OBJECT).getIRIString());
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DOCUMENTED_BY, serviceAccessPoint);
-        addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_SUBJECT_PART, "http://rs.tdwg.org/ac/terms/subjectPart");
-        addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_CAPTURE_DEVICE, "http://rs.tdwg.org/ac/terms/captureDevice");
-        addFieldValueAsZenodoCustomFieldIfAvailable(multimediaRecord, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE, "http://rs.tdwg.org/ac/terms/resourceCreationTechnique");
+        addCustomFieldsIfAvailable(multimediaRecord, zenodoMetadata);
+        String serviceAccessPoint = getValueOrThrow(multimediaRecord, "http://rs.tdwg.org/ac/terms/hasServiceAccessPoint");
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(imageContentId.getIRIString()), RESOURCE_TYPE_PHOTO).getIRIString(), RESOURCE_TYPE_PHOTO);
+
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.DOCUMENTS, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(specimenId), PHYSICAL_OBJECT).getIRIString(), PHYSICAL_OBJECT);
         String[] split = StringUtils.split(specimenId, ":");
         String catalogNumber = split.length > 0 ? split[split.length - 1] : specimenId;
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, catalogNumber);
@@ -137,35 +147,26 @@ public class DarkTaxonUtil {
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
 
 
-        String eventId = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/eventID");
-        String protocol = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/samplingProtocol");
-        String locality = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/locality");
-        String eventDate = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/eventDate");
+        String eventId = getValueOrThrow(multimedia, DWC_TERMS_EVENT_ID);
+        String protocol = getValueOrThrow(multimedia, DWC_TERMS_SAMPLING_PROTOCOL);
+        String locality = getValueOrThrow(multimedia, DWC_TERMS_LOCALITY);
+        String eventDate = getValueOrThrow(multimedia, DWC_TERMS_EVENT_DATE);
         String title = "Sample event at " + locality + " on " + eventDate + " using " + protocol;
         zenodoMetadata.put(ZenodoMetaUtil.TITLE, title);
 
         setDescription(zenodoMetadata, title);
 
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
+        addCustomFieldsIfAvailable(multimedia, zenodoMetadata);
+        appendKeyImageIfDefinedOrMetadataJSONOtherwise(jsonString, multimedia, zenodoMetadata, "event.json");
 
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_EVENT_DATE, StringUtils.split(eventDate, "/")[0]);
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE, eventDate);
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_LOCALITY, locality);
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY, getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/recordedBy"));
-        addRecordedByIfAvailable(multimedia, zenodoMetadata, DWC_TERMS_RECORDED_BY_ID);
-        addRecordedByIfAvailable(multimedia, zenodoMetadata, GBIF_RECORDED_BY_ID);
-        ZenodoMetaUtil.setFilename(zenodoMetadata, "event.json");
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, eventId);
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString());
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString());
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, eventId, EVENT);
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString(), EVENT);
 
-        appendAlternateIdentifiers(zenodoMetadata, Hasher.calcHashIRI(jsonString, HashType.md5).getIRIString());
         ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_EVENT);
         ZenodoMetaUtil.setCreators(zenodoMetadata, Arrays.asList("Museum für Naturkunde Berlin"));
         ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
         ZenodoMetaUtil.setCommunities(zenodoMetadata, ctx.getCommunities().stream());
         addReferences(zenodoMetadata);
-
 
         return ZenodoMetaUtil.wrap(zenodoMetadata);
     }
@@ -186,24 +187,36 @@ public class DarkTaxonUtil {
 
         ObjectNode zenodoMetadata = new ObjectMapper().createObjectNode();
 
-        String eventId = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/eventID");
-        String occurrenceId = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/occurrenceID");
-        String country = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/country");
-        String eventDate = getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/eventDate");
+        String eventId = getValueOrThrow(multimedia, DWC_TERMS_EVENT_ID);
+        String occurrenceId = getValueOrThrow(multimedia, DWC_TERMS_OCCURRENCE_ID);
+        String eventDate = getValueOrThrow(multimedia, DWC_TERMS_EVENT_DATE);
+
+        addCustomFieldsIfAvailable(multimedia, zenodoMetadata);
+
+        appendKeyImageIfDefinedOrMetadataJSONOtherwise(jsonString, multimedia, zenodoMetadata, "occurrence.json");
+
         String title = "Physical object " + occurrenceId + " sampled through event " + eventId + " on " + eventDate;
         zenodoMetadata.put(ZenodoMetaUtil.TITLE, title);
 
         setDescription(zenodoMetadata, title);
 
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
 
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_EVENT_DATE, StringUtils.split(eventDate, "/")[0]);
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE, eventDate);
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_COUNTRY, country);
-        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, "http://rs.tdwg.org/dwc/terms/catalogNumber");
-        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_BASIS_OF_RECORD, "http://rs.tdwg.org/dwc/terms/basisOfRecord");
-        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_SCIENTIFIC_NAME, "http://rs.tdwg.org/dwc/terms/scientificName");
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_MATERIAL_SAMPLE_ID, occurrenceId);
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, occurrenceId, PHYSICAL_OBJECT);
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(occurrenceId), PHYSICAL_OBJECT).getIRIString(), PHYSICAL_OBJECT);
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, eventId, EVENT);
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString(), EVENT);
+        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DOCUMENTED_BY, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(occurrenceId), RESOURCE_TYPE_PHOTO).getIRIString(), RESOURCE_TYPE_PHOTO);
+
+        ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PHYSICAL_OBJECT);
+        ZenodoMetaUtil.setCreators(zenodoMetadata, Arrays.asList("Museum für Naturkunde Berlin"));
+        ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
+        ZenodoMetaUtil.setCommunities(zenodoMetadata, ctx.getCommunities().stream());
+        addReferences(zenodoMetadata);
+
+        return ZenodoMetaUtil.wrap(zenodoMetadata);
+    }
+
+    private static void appendKeyImageIfDefinedOrMetadataJSONOtherwise(String jsonString, JsonNode multimedia, ObjectNode zenodoMetadata, String metadataFilename) {
         String filename = null;
         String contentId = null;
 
@@ -224,28 +237,45 @@ public class DarkTaxonUtil {
                 LOG.warn("found dynamic properties, but failed to process [" + dynamicProperties + "]", e);
             }
         }
-
         if (StringUtils.isBlank(contentId)) {
             contentId = Hasher.calcHashIRI(jsonString, HashType.md5).getIRIString();
-            filename = "occurrence.json";
+            filename = metadataFilename;
         }
-
         ZenodoMetaUtil.setFilename(zenodoMetadata, filename);
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, occurrenceId);
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(occurrenceId), PHYSICAL_OBJECT).getIRIString());
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(occurrenceId), PHYSICAL_OBJECT).getIRIString());
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, eventId);
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString());
-        ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_DERIVED_FROM, ZenodoUtils.getQueryForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString());
-
         appendAlternateIdentifiers(zenodoMetadata, contentId);
-        ZenodoMetaUtil.setValue(zenodoMetadata, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PHYSICAL_OBJECT);
-        ZenodoMetaUtil.setCreators(zenodoMetadata, Arrays.asList("Museum für Naturkunde Berlin"));
-        ZenodoMetaUtil.setValue(zenodoMetadata, PUBLICATION_DATE, publicationDateFactory.getPublicationDate());
-        ZenodoMetaUtil.setCommunities(zenodoMetadata, ctx.getCommunities().stream());
-        addReferences(zenodoMetadata);
+    }
 
-        return ZenodoMetaUtil.wrap(zenodoMetadata);
+    private static void addCustomFieldsIfAvailable(JsonNode multimedia, ObjectNode zenodoMetadata) throws MissingMetadataFieldException {
+        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_INSTITUTION_CODE, "MfN");
+
+        appendEventDateAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata);
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE, DWC_TERMS_EVENT_DATE);
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_COUNTRY, DWC_TERMS_COUNTRY);
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CATALOG_NUMBER, TERMS_CATALOG_NUMBER);
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_BASIS_OF_RECORD, DWC_TERMS_BASIS_OF_RECORD);
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_SCIENTIFIC_NAME, DWC_TERMS_SCIENTIFIC_NAME);
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_MATERIAL_SAMPLE_ID, DWC_TERMS_OCCURRENCE_ID);
+
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_LOCALITY, DWC_TERMS_LOCALITY);
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY, DWC_TERMS_RECORDED_BY);
+
+        addRecordedByIfAvailable(multimedia, zenodoMetadata, DWC_TERMS_RECORDED_BY_ID);
+        addRecordedByIfAvailable(multimedia, zenodoMetadata, GBIF_RECORDED_BY_ID);
+
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_SUBJECT_PART, AC_TERMS_SUBJECT_PART);
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_CAPTURE_DEVICE, AC_TERMS_CAPTURE_DEVICE);
+        addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_AC_RESOURCE_CREATION_TECHNIQUE, AC_TERMS_RESOURCE_CREATION_TECHNIQUE);
+
+    }
+
+    private static void appendEventDateAsZenodoCustomFieldIfAvailable(JsonNode multimedia, ObjectNode zenodoMetadata) {
+        if (multimedia.has(DWC_TERMS_EVENT_DATE)) {
+            JsonNode valueNode = multimedia.get(DWC_TERMS_EVENT_DATE);
+            if (!valueNode.isNull() && StringUtils.isNotBlank(valueNode.asText())) {
+                String eventDate2 = valueNode.asText();
+                addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_EVENT_DATE, StringUtils.split(eventDate2, "/")[0]);
+            }
+        }
     }
 
     private static void addValueAsCustomFieldIfAvailable(ObjectNode zenodoMetadata, String customField, String value) {

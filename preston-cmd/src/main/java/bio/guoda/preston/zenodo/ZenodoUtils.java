@@ -243,14 +243,15 @@ public class ZenodoUtils {
     }
 
     public static IRI getQueryForExistingDepositions(ZenodoConfig ctx, List<String> contentIds, String method, String type) {
-        String query = "q=" + getQueryForIds(contentIds);
+        String prefix = communitiesPrefix(ctx);
+        String query = prefix + "q=" + getQueryForIds(contentIds);
         query = appendTypeClause(type, query);
         return getQuery(ctx.getEndpoint(), query, method);
     }
 
     private static String appendTypeClause(String type, String query) {
         if (StringUtils.isNotBlank(type)) {
-            query = query + "&f=resource_type%3A" + type;
+            query = query + "&f=resource_type%3A" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(type);
         }
         return query;
     }
@@ -265,11 +266,15 @@ public class ZenodoUtils {
     }
 
     public static IRI getQueryForExistingRecords(ZenodoConfig ctx, List<String> ids, String type) {
-        String prefix = ctx.getCommunities().size() == 0
-                ? ""
-                : "communities=" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(StringUtils.join(ctx.getCommunities(), ",")) + "&";
+        String prefix = communitiesPrefix(ctx);
         String queryPath = prefix + "all_versions=false&q=" + getQueryForIds(ids);
         return getQuery(ctx.getEndpoint(), appendTypeClause(type, queryPath), "/api/records");
+    }
+
+    private static String communitiesPrefix(ZenodoConfig ctx) {
+        return ctx.getCommunities().size() == 0
+                    ? ""
+                    : "communities=" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(StringUtils.join(ctx.getCommunities(), ",")) + "&";
     }
 
     private static String getQueryForIds(List<String> ids) {

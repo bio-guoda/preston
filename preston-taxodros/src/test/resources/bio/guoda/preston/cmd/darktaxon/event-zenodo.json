@@ -8,25 +8,23 @@
       "dwc:verbatimEventDate" : [ "2024-05-04/2024-05-08" ],
       "dwc:locality" : [ "Berlin, Swiss Embassy" ],
       "dwc:recordedBy" : [ "Donat Agosti" ],
-      "dwc:recordedByID" : [ "https://orcid.org/0000-0001-9286-1200" ],
-      "gbif-dwc:recordedByID" : [ "https://orcid.org/0000-0001-9286-1200" ]
+      "dwc:recordedByID" : [ "https://orcid.org/0000-0001-9286-1200" ]
     },
     "filename" : "event.json",
     "related_identifiers" : [ {
-      "relation" : "isAlternateIdentifier",
-      "identifier" : "urn:lsid:MfN:Ento:SchweiBo1"
-    }, {
-      "relation" : "isVersionOf",
-      "identifier" : "https://sandbox.zenodo.org/search?q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ASchweiBo1%22&f=resource_type%3Aevent"
-    }, {
-      "relation" : "isVersionOf",
-      "identifier" : "https://sandbox.zenodo.org/api/records?communities=mfn-test&all_versions=false&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ASchweiBo1%22&f=resource_type%3Aevent"
-    }, {
       "relation" : "isAlternateIdentifier",
       "identifier" : "hash://md5/672a403a43a9f8575ad5feeffc21bdc2"
     }, {
       "relation" : "hasVersion",
       "identifier" : "hash://md5/672a403a43a9f8575ad5feeffc21bdc2"
+    }, {
+      "relation" : "isAlternateIdentifier",
+      "identifier" : "urn:lsid:MfN:Ento:SchweiBo1",
+      "resource_type" : "event"
+    }, {
+      "relation" : "isVersionOf",
+      "identifier" : "https://sandbox.zenodo.org/search?communities=mfn-test&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ASchweiBo1%22&f=resource_type%3Aevent",
+      "resource_type" : "event"
     } ],
     "upload_type" : "event",
     "creators" : [ {
