@@ -1,0 +1,138 @@
+{
+  "created" : "2024-09-09T16:07:33.468557+00:00",
+  "modified" : "2024-09-09T16:07:33.622006+00:00",
+  "id" : 107873,
+  "conceptrecid" : "107871",
+  "doi" : "10.5072/zenodo.107873",
+  "conceptdoi" : "10.5072/zenodo.107871",
+  "doi_url" : "https://handle.stage.datacite.org/10.5072/zenodo.107873",
+  "metadata" : {
+    "title" : "Physical object urn:lsid:MfN:Ento:TESTINGDELETE sampled through event urn:lsid:MfN:Ento:BWM001 on 2022-07-24",
+    "doi" : "10.5072/zenodo.107873",
+    "publication_date" : "2024-09-09",
+    "description" : "Physical object urn:lsid:MfN:Ento:TESTINGDELETE sampled through event urn:lsid:MfN:Ento:BWM001 on 2022-07-24",
+    "access_right" : "open",
+    "creators" : [ {
+      "name" : "Museum für Naturkunde Berlin",
+      "affiliation" : null
+    } ],
+    "related_identifiers" : [ {
+      "identifier" : "https://sandbox.zenodo.org/search?q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ATESTINGDELETE%22&f=resource_type%3Aphysicalobject",
+      "relation" : "isVersionOf",
+      "scheme" : "url"
+    }, {
+      "identifier" : "https://sandbox.zenodo.org/api/records?communities=mfn-test&all_versions=false&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ATESTINGDELETE%22&f=resource_type%3Aphysicalobject",
+      "relation" : "isVersionOf",
+      "scheme" : "url"
+    }, {
+      "identifier" : "urn:lsid:MfN:Ento:BWM001",
+      "relation" : "isDerivedFrom",
+      "scheme" : "lsid"
+    }, {
+      "identifier" : "https://sandbox.zenodo.org/search?q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABWM001%22&f=resource_type%3Aevent",
+      "relation" : "isDerivedFrom",
+      "scheme" : "url"
+    }, {
+      "identifier" : "https://sandbox.zenodo.org/api/records?communities=mfn-test&all_versions=false&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABWM001%22&f=resource_type%3Aevent",
+      "relation" : "isDerivedFrom",
+      "scheme" : "url"
+    }, {
+      "identifier" : "hash://md5/d3b07384d113edec49eaa6238ad5ff00",
+      "relation" : "hasVersion",
+      "scheme" : "url"
+    } ],
+    "references" : [ "Hartop E, Srivathsan A, Ronquist F, Meier R (2022) Towards Large-Scale Integrative Taxonomy (LIT): resolving the data conundrum for dark taxa. Syst Biol 71:1404–1422. https://doi.org/10.1093/sysbio/syac033", "Srivathsan, A., Meier, R. (2024). Scalable, Cost-Effective, and Decentralized DNA Barcoding with Oxford Nanopore Sequencing. In: DeSalle, R. (eds) DNA Barcoding. Methods in Molecular Biology, vol 2744. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-3581-0_14" ],
+    "custom" : {
+      "dwc:basisOfRecord" : [ "PreservedSpecimen" ],
+      "dwc:catalogNumber" : [ "TESTINGDELETE" ],
+      "dwc:country" : [ "DE" ],
+      "dwc:eventDate" : [ "2022-07-24" ],
+      "dwc:institutionCode" : [ "MfN" ],
+      "dwc:materialSampleID" : [ "urn:lsid:MfN:Ento:TESTINGDELETE" ],
+      "dwc:scientificName" : [ "Insecta" ],
+      "dwc:verbatimEventDate" : [ "2022-07-24" ]
+    },
+    "resource_type" : {
+      "title" : "Physical object",
+      "type" : "physicalobject"
+    },
+    "alternate_identifiers" : [ {
+      "identifier" : "urn:lsid:MfN:Ento:TESTINGDELETE"
+    }, {
+      "identifier" : "hash://md5/d3b07384d113edec49eaa6238ad5ff00"
+    } ],
+    "license" : {
+      "id" : "cc-by-4.0"
+    },
+    "communities" : [ {
+      "id" : "mfn-test"
+    } ],
+    "relations" : {
+      "version" : [ {
+        "index" : 1,
+        "is_last" : true,
+        "parent" : {
+          "pid_type" : "recid",
+          "pid_value" : "107871"
+        }
+      } ]
+    }
+  },
+  "title" : "Physical object urn:lsid:MfN:Ento:TESTINGDELETE sampled through event urn:lsid:MfN:Ento:BWM001 on 2022-07-24",
+  "links" : {
+    "self" : "https://sandbox.zenodo.org/api/records/107873",
+    "self_html" : "https://sandbox.zenodo.org/records/107873",
+    "self_doi" : "https://sandbox.zenodo.org/doi/10.5072/zenodo.107873",
+    "doi" : "https://handle.stage.datacite.org/10.5072/zenodo.107873",
+    "parent" : "https://sandbox.zenodo.org/api/records/107871",
+    "parent_html" : "https://sandbox.zenodo.org/records/107871",
+    "parent_doi" : "https://sandbox.zenodo.org/doi/10.5072/zenodo.107871",
+    "self_iiif_manifest" : "https://sandbox.zenodo.org/api/iiif/record:107873/manifest",
+    "self_iiif_sequence" : "https://sandbox.zenodo.org/api/iiif/record:107873/sequence/default",
+    "files" : "https://sandbox.zenodo.org/api/records/107873/files",
+    "media_files" : "https://sandbox.zenodo.org/api/records/107873/media-files",
+    "archive" : "https://sandbox.zenodo.org/api/records/107873/files-archive",
+    "archive_media" : "https://sandbox.zenodo.org/api/records/107873/media-files-archive",
+    "latest" : "https://sandbox.zenodo.org/api/records/107873/versions/latest",
+    "latest_html" : "https://sandbox.zenodo.org/records/107873/latest",
+    "draft" : "https://sandbox.zenodo.org/api/records/107873/draft",
+    "versions" : "https://sandbox.zenodo.org/api/records/107873/versions",
+    "access_links" : "https://sandbox.zenodo.org/api/records/107873/access/links",
+    "access_grants" : "https://sandbox.zenodo.org/api/records/107873/access/grants",
+    "access_users" : "https://sandbox.zenodo.org/api/records/107873/access/users",
+    "access_request" : "https://sandbox.zenodo.org/api/records/107873/access/request",
+    "access" : "https://sandbox.zenodo.org/api/records/107873/access",
+    "reserve_doi" : "https://sandbox.zenodo.org/api/records/107873/draft/pids/doi",
+    "communities" : "https://sandbox.zenodo.org/api/records/107873/communities",
+    "communities-suggestions" : "https://sandbox.zenodo.org/api/records/107873/communities-suggestions",
+    "requests" : "https://sandbox.zenodo.org/api/records/107873/requests"
+  },
+  "updated" : "2024-09-09T16:07:33.622006+00:00",
+  "recid" : "107873",
+  "revision" : 4,
+  "files" : [ {
+    "id" : "ba1a0c80-d8a0-4afc-997b-4059b1c03ae5",
+    "key" : "event.json",
+    "size" : 4,
+    "checksum" : "md5:d3b07384d113edec49eaa6238ad5ff00",
+    "links" : {
+      "self" : "https://sandbox.zenodo.org/api/records/107873/files/event.json/content"
+    }
+  } ],
+  "owners" : [ {
+    "id" : "4405"
+  } ],
+  "status" : "published",
+  "stats" : {
+    "downloads" : 0,
+    "unique_downloads" : 0,
+    "views" : 0,
+    "unique_views" : 0,
+    "version_downloads" : 0,
+    "version_unique_downloads" : 0,
+    "version_unique_views" : 0,
+    "version_views" : 0
+  },
+  "state" : "done",
+  "submitted" : true
+}

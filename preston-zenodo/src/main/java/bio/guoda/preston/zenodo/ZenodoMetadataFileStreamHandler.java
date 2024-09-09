@@ -11,6 +11,9 @@ import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -28,6 +31,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import static bio.guoda.preston.zenodo.ZenodoUtils.delete;
 import static bio.guoda.preston.zenodo.ZenodoUtils.getObjectMapper;
 
 public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
@@ -186,6 +190,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             } else if (existingIds.size() == 1 && ctx.createNewVersionForExisting()) {
                 ctxLocal.setDepositId(existingIds.get(0));
                 ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
+                deleteExistingContentIfPresent(ctxLocal);
                 String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
                 ZenodoUtils.update(ctxLocal, input);
                 uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
@@ -205,6 +210,17 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         } catch (Throwable e) {
             LOG.warn("unexpected error while handling [" + coordinate.getIRIString() + "]", e);
             attemptCleanupAndRethrow(ctxLocal, e);
+        }
+    }
+
+    private void deleteExistingContentIfPresent(ZenodoContext ctxLocal) throws IOException {
+        List<IRI> fileEndpoints = ZenodoUtils.getFileEndpoints(ctxLocal);
+        for (IRI fileEndpoint : fileEndpoints) {
+            try (InputStream inputStream = delete(fileEndpoint)) {
+                IOUtils.copy(inputStream, NullOutputStream.INSTANCE);
+            } catch (IOException e) {
+                throw new IOException("failed to delete existing file [" + fileEndpoint.getIRIString() + "] for deposition [" + ctxLocal.getMetadata() + "]", e);
+            }
         }
     }
 

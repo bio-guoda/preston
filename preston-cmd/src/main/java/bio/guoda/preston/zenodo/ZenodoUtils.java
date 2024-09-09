@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
@@ -69,14 +70,23 @@ public class ZenodoUtils {
 
     public static void delete(ZenodoContext ctx) throws IOException {
         String deleteRequestURI = ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId();
-        try (InputStream inputStream = ResourcesHTTP.asInputStream(
-                RefNodeFactory.toIRI(deleteRequestURI),
-                new HttpDelete(URI.create(deleteRequestURI)),
-                ignoreProgress(),
-                ignoreNone()
-        )) {
+        try (InputStream inputStream = delete(deleteRequestURI)) {
             updateContext(ctx, inputStream);
         }
+    }
+
+    public static InputStream delete(String deleteRequestURI) throws IOException {
+        IRI dataURI = RefNodeFactory.toIRI(deleteRequestURI);
+        return delete(dataURI);
+    }
+
+    public static InputStream delete(IRI dataURI) throws IOException {
+        return ResourcesHTTP.asInputStream(
+                dataURI,
+                new HttpDelete(dataURI.getIRIString()),
+                ignoreProgress(),
+                ignoreNone()
+        );
     }
 
     public static ZenodoContext update(ZenodoContext ctx, String metadata) throws IOException {
@@ -286,5 +296,21 @@ public class ZenodoUtils {
 
     private static IRI getQuery(String apiEndpoint, String filter, String method) {
         return RefNodeFactory.toIRI((apiEndpoint + method) + "?" + filter);
+    }
+
+    public static List<IRI> getFileEndpoints(ZenodoContext ctx) {
+        JsonNode metadata = ctx.getMetadata();
+        JsonNode files = metadata == null ? new ObjectMapper().createArrayNode() : metadata.at("/files");
+        List<String> ids = new ArrayList<>();
+        for (JsonNode file : files) {
+            JsonNode at = file.at("/id");
+            if (!at.isMissingNode()) {
+                ids.add(at.asText());
+            }
+        }
+        return ids
+                .stream()
+                .map(id -> ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId() + "/files/" + id)
+                .map(RefNodeFactory::toIRI).collect(Collectors.toList());
     }
 }
