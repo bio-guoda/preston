@@ -1,5 +1,6 @@
 package bio.guoda.preston.store;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
@@ -144,6 +145,18 @@ public class HashKeyUtilTest {
     public void extractContentHashMD5() {
         IRI contentHash = HashKeyUtil.extractContentHash(toIRI("blub:hash://md5/b1946ac92492d2347c6235b4d2611184!/blah"));
         assertThat(contentHash.getIRIString(), is("hash://md5/b1946ac92492d2347c6235b4d2611184"));
+    }
+
+    @Test
+    public void extractContentHashMD5NoEmbedded() {
+        IRI contentHash = HashKeyUtil.extractContentHash(toIRI("hash://md5/b83eb94a2bb524b23f65df2d2f7cecbe"));
+        assertThat(contentHash.getIRIString(), is("hash://md5/b83eb94a2bb524b23f65df2d2f7cecbe"));
+
+    }
+    @Test
+    public void extractHashType() {
+        HashType type = HashKeyUtil.hashTypeFor(toIRI("hash://md5/b83eb94a2bb524b23f65df2d2f7cecbe"));
+        assertThat(type, is(HashType.md5));
     }
 
     @Test(expected = IllegalArgumentException.class)

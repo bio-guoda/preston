@@ -199,7 +199,7 @@ public class DarkTaxonUtil {
         addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_BASIS_OF_RECORD, "http://rs.tdwg.org/dwc/terms/basisOfRecord");
         addFieldValueAsZenodoCustomFieldIfAvailable(multimedia, zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_SCIENTIFIC_NAME, "http://rs.tdwg.org/dwc/terms/scientificName");
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_MATERIAL_SAMPLE_ID, occurrenceId);
-        String filename = "event.json";
+        String filename = null;
         String contentId = null;
 
         if (multimedia.has(DC_TERMS_DYNAMIC_PROPERTIES)) {
@@ -207,13 +207,11 @@ public class DarkTaxonUtil {
             try {
                 JsonNode properties = new ObjectMapper().readTree(dynamicProperties);
                 JsonNode at = properties.at("/keyImageFilename");
-                if (!at.isMissingNode()) {
-                    filename = at.asText();
-                }
                 JsonNode id = properties.at("/keyImageId");
-                if (!id.isMissingNode()) {
+                if (!at.isMissingNode() && !id.isMissingNode()) {
                     String contentIdCandidate = id.asText();
                     if (HashKeyUtil.hashTypeFor(contentIdCandidate) != null) {
+                        filename = at.asText();
                         contentId = HashKeyUtil.extractContentHash(RefNodeFactory.toIRI(contentIdCandidate)).getIRIString();
                     }
                 }
@@ -224,6 +222,7 @@ public class DarkTaxonUtil {
 
         if (StringUtils.isBlank(contentId)) {
             contentId = Hasher.calcHashIRI(jsonString, HashType.md5).getIRIString();
+            filename = "event.json";
         }
 
         ZenodoMetaUtil.setFilename(zenodoMetadata, filename);
