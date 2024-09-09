@@ -29,6 +29,7 @@ public class DarkTaxonUtil {
     public static final String EVENT = "event";
     public static final String PHYSICAL_OBJECT = "physicalobject";
     public static final String PHOTO = "image%2Binner%3Aimage-photo";
+    public static final String GBIF_RECORDED_BY_ID = "http://rs.gbif.org/terms/1.0/recordedByID";
 
     static void appendAlternateIdentifiers(ObjectNode linkRecords, String imageContentId) {
         ZenodoMetaUtil.appendIdentifier(linkRecords, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, imageContentId);
@@ -151,10 +152,8 @@ public class DarkTaxonUtil {
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_VERBATIM_EVENT_DATE, eventDate);
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_LOCALITY, locality);
         addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY, getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/recordedBy"));
-        if (multimedia.has(DWC_TERMS_RECORDED_BY_ID) && StringUtils.isNotBlank(multimedia.get(DWC_TERMS_RECORDED_BY_ID).asText())) {
-            addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY_ID, getValueOrThrow(multimedia, DWC_TERMS_RECORDED_BY_ID));
-        }
-        addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_GBIF_DWC_RECORDED_BY_ID, getValueOrThrow(multimedia, "http://rs.tdwg.org/dwc/terms/recordedByID"));
+        addRecordedByIfAvailable(multimedia, zenodoMetadata, DWC_TERMS_RECORDED_BY_ID);
+        addRecordedByIfAvailable(multimedia, zenodoMetadata, GBIF_RECORDED_BY_ID);
         ZenodoMetaUtil.setFilename(zenodoMetadata, "event.json");
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, eventId);
         ZenodoMetaUtil.appendIdentifier(zenodoMetadata, ZenodoMetaUtil.IS_VERSION_OF, ZenodoUtils.getSearchPageForExistingRecords(ctx, Arrays.asList(eventId), EVENT).getIRIString());
@@ -169,6 +168,12 @@ public class DarkTaxonUtil {
 
 
         return ZenodoMetaUtil.wrap(zenodoMetadata);
+    }
+
+    private static void addRecordedByIfAvailable(JsonNode multimedia, ObjectNode zenodoMetadata, String fieldName) throws MissingMetadataFieldException {
+        if (multimedia.has(fieldName) && StringUtils.isNotBlank(multimedia.get(fieldName).asText())) {
+            addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_RECORDED_BY_ID, getValueOrThrow(multimedia, fieldName));
+        }
     }
 
     private static void addReferences(ObjectNode zenodoMetadata) {
@@ -222,7 +227,7 @@ public class DarkTaxonUtil {
 
         if (StringUtils.isBlank(contentId)) {
             contentId = Hasher.calcHashIRI(jsonString, HashType.md5).getIRIString();
-            filename = "event.json";
+            filename = "occurrence.json";
         }
 
         ZenodoMetaUtil.setFilename(zenodoMetadata, filename);
