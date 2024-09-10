@@ -40,6 +40,9 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
     public static final Pattern RAW_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>RAW)_(?<imageStackNumber>[0-9]+)_(?<imageNumber>[0-9]+)[.]tiff$");
     public static final Pattern STACKED_IMAGEFILE_PATTERN = Pattern.compile("(.*)/(?<plateId>[A-Z]+[0-9]+)_(?<specimenId>[A-Z]+[0-9]+)_(?<imageAcquisitionMethod>stacked)_(?<imageStackNumber>[0-9]+)[.]tiff$");
     public static final String IMAGE_CONTENT_ID = "darktaxon:imageContentId";
+    public static final String AC_TERMS_MULTIMEDIA = "http://rs.tdwg.org/ac/terms/Multimedia";
+    public static final String DWC_TERMS_OCCURRENCE = "http://rs.tdwg.org/dwc/terms/Occurrence";
+    public static final String DWC_TERMS_EVENT = "http://rs.tdwg.org/dwc/terms/Event";
     private final List<String> communities;
     private final ZenodoConfig ctx;
     private PublicationDateFactory publicationDateFactory;
@@ -83,11 +86,11 @@ public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
                         String fieldName = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
                         if (jsonNode.has(fieldName)) {
                             String type = jsonNode.get(fieldName).asText();
-                            if ("http://rs.tdwg.org/ac/terms/Multimedia".equals(type)) {
+                            if (AC_TERMS_MULTIMEDIA.equals(type)) {
                                 writeDeposit(DarkTaxonUtil.toPhotoDeposit(jsonNode, publicationDateFactory, ctx));
-                            } else if ("http://rs.tdwg.org/dwc/terms/Occurrence".equals(type)) {
+                            } else if (DWC_TERMS_OCCURRENCE.equals(type)) {
                                 writeDeposit(DarkTaxonUtil.toPhysicalObjectDeposit(withNewline(line), publicationDateFactory, ctx));
-                            } else if ("http://rs.tdwg.org/dwc/terms/Event".equals(type)) {
+                            } else if (DWC_TERMS_EVENT.equals(type)) {
                                 writeDeposit(DarkTaxonUtil.toEventDeposit(withNewline(line), publicationDateFactory, ctx));
                             }
                          }
