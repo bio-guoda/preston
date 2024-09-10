@@ -30,6 +30,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import static bio.guoda.preston.cmd.ZenodoMetaUtil.HAS_VERSION;
+import static bio.guoda.preston.cmd.ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER;
+import static bio.guoda.preston.cmd.ZenodoMetaUtil.IS_DERIVED_FROM;
 import static bio.guoda.preston.zenodo.ZenodoUtils.delete;
 import static bio.guoda.preston.zenodo.ZenodoUtils.getObjectMapper;
 
@@ -113,19 +116,19 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 JsonNode relation = alternateIdentifier.at("/relation");
                 JsonNode identifier = alternateIdentifier.at("/identifier");
                 if (relation != null && identifier != null) {
-                    if (StringUtils.equals(relation.asText(), "isAlternateIdentifier")) {
+                    if (StringUtils.equals(relation.asText(), IS_ALTERNATE_IDENTIFIER)) {
                         String identiferText = identifier.asText();
                         if (StringUtils.startsWith(identiferText, "urn:lsid")) {
                             recordIds.add(identiferText);
                         } else if (StringUtils.startsWith(identiferText, "hash:")) {
                             contentIds.add(identiferText);
                         }
-                    } else if (StringUtils.equals(relation.asText(), "isDerivedFrom")) {
+                    } else if (StringUtils.equals(relation.asText(), IS_DERIVED_FROM)) {
                         String identiferText = identifier.asText();
                         if (StringUtils.isNotBlank(identiferText)) {
                             origins.add(identiferText);
                         }
-                    } else if (StringUtils.equals(relation.asText(), "hasVersion")) {
+                    } else if (StringUtils.equals(relation.asText(), HAS_VERSION)) {
                         String identiferText = identifier.asText();
                         if (StringUtils.startsWith(identiferText, "hash:")) {
                             contentIds.add(identiferText);
