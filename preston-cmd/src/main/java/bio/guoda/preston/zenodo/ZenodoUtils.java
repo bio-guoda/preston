@@ -37,6 +37,9 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
+import static bio.guoda.preston.cmd.ZenodoMetaUtil.IMAGE_TYPE_PHOTO;
+import static bio.guoda.preston.cmd.ZenodoMetaUtil.RESOURCE_TYPE_PHOTO;
+
 public class ZenodoUtils {
 
 
@@ -245,13 +248,22 @@ public class ZenodoUtils {
     public static IRI getQueryForExistingDepositions(ZenodoConfig ctx, List<String> contentIds, String method, String type) {
         String prefix = communitiesPrefix(ctx);
         String query = prefix + "q=" + getQueryForIds(contentIds);
-        query = appendTypeClause(type, query);
+        query = appendTypeClause(type, query, method);
         return getQuery(ctx.getEndpoint(), query, method);
     }
 
-    private static String appendTypeClause(String type, String query) {
-        if (StringUtils.isNotBlank(type)) {
-            query = query + "&f=resource_type%3A" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(type);
+    private static String appendTypeClause(String type, String query, String method) {
+        if ( StringUtils.isNotBlank(type)) {
+            if (StringUtils.startsWith(method, "/search")) {
+                query = query + "&f=resource_type%3A" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(type);
+            } else {
+                // see https://github.com/zenodo/zenodo/issues/2545
+                if (RESOURCE_TYPE_PHOTO.equals(type) || "image-photo".equals(type)) {
+                    query = query + "&type=image&subtype=photo";
+                } else {
+                    query = query + "&type=" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(type);
+                }
+            }
         }
         return query;
     }
@@ -268,7 +280,8 @@ public class ZenodoUtils {
     public static IRI getQueryForExistingRecords(ZenodoConfig ctx, List<String> ids, String type) {
         String prefix = communitiesPrefix(ctx);
         String queryPath = prefix + "all_versions=false&q=" + getQueryForIds(ids);
-        return getQuery(ctx.getEndpoint(), appendTypeClause(type, queryPath), "/api/records");
+        String method = "/api/records";
+        return getQuery(ctx.getEndpoint(), appendTypeClause(type, queryPath, method), method);
     }
 
     private static String communitiesPrefix(ZenodoConfig ctx) {

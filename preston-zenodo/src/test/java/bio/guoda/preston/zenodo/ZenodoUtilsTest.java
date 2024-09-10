@@ -1,5 +1,6 @@
 package bio.guoda.preston.zenodo;
 
+import bio.guoda.preston.RefNodeFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.rdf.api.IRI;
@@ -98,5 +99,66 @@ public class ZenodoUtilsTest {
         assertThat(fileEndpoints.size(), Is.is(0));
 
     }
+
+    @Test
+    public void queryForExistingRecordsPhysicalObject() {
+        IRI queryForExistingRecords = ZenodoUtils.getQueryForExistingRecords(
+                new ZenodoContext("secret", "https://sandbox.zenodo.org"),
+                Arrays.asList("urn:lsid:MfN:Ento:BMT0004596"),
+                "physicalobject"
+        );
+
+        assertThat(queryForExistingRecords, Is.is(RefNodeFactory.toIRI(
+                "https://sandbox.zenodo.org/api/records" +
+                        "?all_versions=false" +
+                        "&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0004596%22" +
+                        "&type=physicalobject"))
+        );
+    }
+
+    @Test
+    public void searchPageForExistingRecordsPhysicalObject() {
+        IRI queryForExistingRecords = ZenodoUtils.getSearchPageForExistingRecords(
+                new ZenodoContext("secret", "https://sandbox.zenodo.org"),
+                Arrays.asList("urn:lsid:MfN:Ento:BMT0004596"),
+                "physicalobject"
+        );
+
+        assertThat(queryForExistingRecords, Is.is(RefNodeFactory.toIRI(
+                "https://sandbox.zenodo.org/search" +
+                        "?q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0004596%22" +
+                        "&f=resource_type%3Aphysicalobject")));
+    }
+
+    @Test
+    public void queryForExistingRecordsPhoto() {
+        IRI queryForExistingRecords = ZenodoUtils.getQueryForExistingRecords(
+                new ZenodoContext("secret", "https://sandbox.zenodo.org"),
+                Arrays.asList("urn:lsid:MfN:Ento:BMT0004596"),
+                "image-photo"
+        );
+
+        assertThat(queryForExistingRecords, Is.is(RefNodeFactory.toIRI(
+                "https://sandbox.zenodo.org/api/records" +
+                        "?all_versions=false" +
+                        "&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0004596%22" +
+                        "&type=image" +
+                        "&subtype=photo")));
+    }
+
+
+    @Test
+    public void searchPageForExistingRecords() {
+        IRI queryForExistingRecords = ZenodoUtils.getSearchPageForExistingRecords(
+                new ZenodoContext("secret", "https://sandbox.zenodo.org"),
+                Arrays.asList("urn:lsid:MfN:Ento:BMT0004596"),
+                "image-photo"
+        );
+
+        assertThat(queryForExistingRecords.getIRIString(), Is.is("https://sandbox.zenodo.org/search" +
+                "?q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0004596%22" +
+                "&f=resource_type%3Aimage-photo"));
+    }
+
 
 }

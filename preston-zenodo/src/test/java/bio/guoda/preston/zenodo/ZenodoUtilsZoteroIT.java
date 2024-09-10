@@ -113,6 +113,8 @@ public class ZenodoUtilsZoteroIT {
         assertOneRecordWithMatchingId(Arrays.asList(getContentId(), getLsid()));
     }
 
+
+
     private void assertOneRecordWithMatchingId(List<String> contentId) throws IOException {
         Collection<Pair<Long, String>> ids = ZenodoUtils.findByAlternateIds(ctx, contentId, "");
         assertThat(ids, not(nullValue()));
