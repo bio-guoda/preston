@@ -101,6 +101,10 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             if (!uploadType.isMissingNode()) {
                 resourceType = uploadType.asText();
             }
+            JsonNode imageType = zenodoMetadata.at("/metadata/image_type");
+            if (!imageType.isMissingNode()) {
+                resourceType = resourceType + "-" + imageType.asText();
+            }
 
             Dereferencer<InputStream> adHocQueryDereferencer = ResourcesHTTP::asInputStream;
             Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findRecordsByAlternateIds(
