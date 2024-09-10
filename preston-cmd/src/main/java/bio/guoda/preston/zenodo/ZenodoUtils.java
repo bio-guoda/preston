@@ -5,6 +5,7 @@ import bio.guoda.preston.DerefState;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.cmd.JavaScriptAndPythonFriendlyURLEncodingUtil;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.util.UUIDUtil;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.json.JsonWriteFeature;
@@ -23,6 +24,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ContentType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,11 +40,10 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
-import static bio.guoda.preston.cmd.ZenodoMetaUtil.IMAGE_TYPE_PHOTO;
 import static bio.guoda.preston.cmd.ZenodoMetaUtil.RESOURCE_TYPE_PHOTO;
 
 public class ZenodoUtils {
-
+    private static final Logger LOG = LoggerFactory.getLogger(ZenodoUtils.class);
 
     private final static String APPLICATION_JSON = ContentType.APPLICATION_JSON.getMimeType();
 
@@ -229,16 +231,16 @@ public class ZenodoUtils {
         }
     }
 
-    public static Collection<Pair<Long, String>> findByAlternateIds(ZenodoConfig ctx, List<String> ids, String type) throws IOException {
+    public static Collection<Pair<Long, String>> findByAlternateIds(ZenodoConfig ctx, List<String> ids, String type, Dereferencer<InputStream> dereferencer) throws IOException {
         Collection<Pair<Long, String>> foundIds = new TreeSet<>();
-        findExistingRecords(ctx, ids, foundIds, type);
-        findExistingDepositions(ctx, ids, foundIds, type);
+        findExistingRecords(ctx, ids, foundIds, type, dereferencer);
+        findExistingDepositions(ctx, ids, foundIds, type, dereferencer);
         return foundIds;
     }
 
-    private static void findExistingDepositions(ZenodoConfig ctx, List<String> ids, Collection<Pair<Long, String>> foundIds, String type) throws IOException {
+    private static void findExistingDepositions(ZenodoConfig ctx, List<String> ids, Collection<Pair<Long, String>> foundIds, String type, Dereferencer<InputStream> dereferencer) throws IOException {
         IRI query1 = getQueryForExistingDepositions(ctx, ids, type);
-        executeQueryAndCollectIds(foundIds, query1);
+        executeQueryAndCollectIds(foundIds, query1, dereferencer);
     }
 
     public static IRI getQueryForExistingDepositions(ZenodoConfig ctx, List<String> contentIds, String type) {
@@ -272,9 +274,9 @@ public class ZenodoUtils {
         return getQueryForExistingDepositions(ctx, contentIds, "/search", type);
     }
 
-    private static void findExistingRecords(ZenodoConfig ctx, List<String> ids, Collection<Pair<Long, String>> foundIds, String type) throws IOException {
+    private static void findExistingRecords(ZenodoConfig ctx, List<String> ids, Collection<Pair<Long, String>> foundIds, String type, Dereferencer<InputStream> dereferencer) throws IOException {
         IRI query = getQueryForExistingRecords(ctx, ids, type);
-        executeQueryAndCollectIds(foundIds, query);
+        executeQueryAndCollectIds(foundIds, query, dereferencer);
     }
 
     public static IRI getQueryForExistingRecords(ZenodoConfig ctx, List<String> ids, String type) {
@@ -297,9 +299,12 @@ public class ZenodoUtils {
                 .collect(Collectors.joining("%20AND%20"));
     }
 
-    private static void executeQueryAndCollectIds(Collection<Pair<Long, String>> foundIds, IRI query) throws IOException {
-        try (InputStream is = ResourcesHTTP.asInputStream(query)) {
+    private static void executeQueryAndCollectIds(Collection<Pair<Long, String>> foundIds, IRI query, Dereferencer<InputStream> dereferencer) throws IOException {
+
+        LOG.info("executing query [" + query + "]...");
+        try (InputStream is = dereferencer.get(query)) {
             JsonNode jsonNode = getObjectMapper().readTree(is);
+            LOG.info("got query result [" + jsonNode.toPrettyString() + "]");
             JsonNode hits = jsonNode.has("hits")
                     && jsonNode.get("hits").has("hits") ? jsonNode.get("hits").get("hits") : jsonNode;
             for (JsonNode hit : hits) {
@@ -309,6 +314,9 @@ public class ZenodoUtils {
                     foundIds.add(Pair.of(hit.get("id").asLong(), hit.get("state").asText()));
                 }
             }
+        } finally {
+            LOG.info("executing query [" + query + "] done.");
+
         }
     }
 

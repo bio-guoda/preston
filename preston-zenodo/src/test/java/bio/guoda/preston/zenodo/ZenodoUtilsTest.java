@@ -117,6 +117,21 @@ public class ZenodoUtilsTest {
     }
 
     @Test
+    public void queryForExistingDepositionsPhysicalObject() {
+        IRI queryForExistingRecords = ZenodoUtils.getQueryForExistingDepositions(
+                new ZenodoContext("secret", "https://sandbox.zenodo.org"),
+                Arrays.asList("urn:lsid:MfN:Ento:BMT0004596"),
+                "physicalobject"
+        );
+
+        assertThat(queryForExistingRecords.getIRIString(), Is.is(
+                "https://sandbox.zenodo.org/api/deposit/depositions" +
+                        "?q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0004596%22" +
+                        "&type=physicalobject")
+        );
+    }
+
+    @Test
     public void searchPageForExistingRecordsPhysicalObject() {
         IRI queryForExistingRecords = ZenodoUtils.getSearchPageForExistingRecords(
                 new ZenodoContext("secret", "https://sandbox.zenodo.org"),
@@ -138,12 +153,12 @@ public class ZenodoUtilsTest {
                 "image-photo"
         );
 
-        assertThat(queryForExistingRecords, Is.is(RefNodeFactory.toIRI(
+        assertThat(queryForExistingRecords.getIRIString(), Is.is(
                 "https://sandbox.zenodo.org/api/records" +
                         "?all_versions=false" +
                         "&q=alternate.identifier:%22urn%3Alsid%3AMfN%3AEnto%3ABMT0004596%22" +
                         "&type=image" +
-                        "&subtype=photo")));
+                        "&subtype=photo"));
     }
 
 

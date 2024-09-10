@@ -3,6 +3,7 @@ package bio.guoda.preston.zenodo;
 import bio.guoda.preston.DateUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.cmd.ZenodoMetaUtil;
 import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.store.Dereferencer;
@@ -101,7 +102,13 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 resourceType = uploadType.asText();
             }
 
-            Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(ctx, recordIds, resourceType);
+            Dereferencer<InputStream> adHocQueryDereferencer = ResourcesHTTP::asInputStream;
+            Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(
+                    ctx,
+                    recordIds,
+                    resourceType,
+                    adHocQueryDereferencer
+            );
             deleteDraftsIfPresent(foundDeposits, recordIds);
             createNewVersion(coordinate, zenodoMetadata, recordIds, contentIds, origins, foundDeposits);
 

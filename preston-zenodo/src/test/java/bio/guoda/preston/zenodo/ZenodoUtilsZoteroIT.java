@@ -3,6 +3,7 @@ package bio.guoda.preston.zenodo;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.store.Dereferencer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,7 +74,7 @@ public class ZenodoUtilsZoteroIT {
     }
 
     private void cleanupPreExisting() throws IOException {
-        Collection<Pair<Long, String>> byAlternateIds = ZenodoUtils.findByAlternateIds(ctx, Arrays.asList(getContentId(), getLsid()), "");
+        Collection<Pair<Long, String>> byAlternateIds = ZenodoUtils.findByAlternateIds(ctx, Arrays.asList(getContentId(), getLsid()), "", uri -> ResourcesHTTP.asInputStream(uri));
         byAlternateIds
                 .stream()
                 .filter(d -> StringUtils.equals(d.getValue(), "unsubmitted"))
@@ -116,7 +117,7 @@ public class ZenodoUtilsZoteroIT {
 
 
     private void assertOneRecordWithMatchingId(List<String> contentId) throws IOException {
-        Collection<Pair<Long, String>> ids = ZenodoUtils.findByAlternateIds(ctx, contentId, "");
+        Collection<Pair<Long, String>> ids = ZenodoUtils.findByAlternateIds(ctx, contentId, "", uri -> ResourcesHTTP.asInputStream(uri));
         assertThat(ids, not(nullValue()));
         List<Long> filteredIds = ids
                 .stream()
