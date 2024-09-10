@@ -97,14 +97,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 throw new IOException("cannot publish zenodo record: no lsid found in [" + coordinate.getIRIString() + "]");
             }
 
-            JsonNode uploadType = zenodoMetadata.at("/metadata/upload_type");
-            if (!uploadType.isMissingNode()) {
-                resourceType = uploadType.asText();
-            }
-            JsonNode imageType = zenodoMetadata.at("/metadata/image_type");
-            if (!imageType.isMissingNode()) {
-                resourceType = resourceType + "-" + imageType.asText();
-            }
+            resourceType = updateResourceType(resourceType, zenodoMetadata);
 
             Dereferencer<InputStream> adHocQueryDereferencer = ResourcesHTTP::asInputStream;
             Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findRecordsByAlternateIds(
@@ -117,6 +110,18 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
         }
 
+    }
+
+    static String updateResourceType(String resourceType, JsonNode zenodoMetadata) {
+        JsonNode uploadType = zenodoMetadata.at("/metadata/upload_type");
+        if (!uploadType.isMissingNode()) {
+            resourceType = uploadType.asText();
+        }
+        JsonNode imageType = zenodoMetadata.at("/metadata/image_type");
+        if (!imageType.isMissingNode()) {
+            resourceType = resourceType + "-" + imageType.asText();
+        }
+        return resourceType;
     }
 
     private void collectIds(JsonNode zenodoMetadata, List<String> recordIds, List<String> contentIds, List<String> origins) {
