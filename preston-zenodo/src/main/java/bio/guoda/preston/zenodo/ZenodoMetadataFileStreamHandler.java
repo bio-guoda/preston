@@ -103,13 +103,12 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             }
 
             Dereferencer<InputStream> adHocQueryDereferencer = ResourcesHTTP::asInputStream;
-            Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findByAlternateIds(
+            Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findRecordsByAlternateIds(
                     ctx,
                     recordIds,
                     resourceType,
                     adHocQueryDereferencer
             );
-            deleteDraftsIfPresent(foundDeposits, recordIds);
             createNewVersion(coordinate, zenodoMetadata, recordIds, contentIds, origins, foundDeposits);
 
         }
@@ -143,29 +142,6 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     }
                 }
             }
-        }
-    }
-
-    private void deleteDraftsIfPresent(Collection<Pair<Long, String>> foundDeposits, List<String> recordIds) throws IOException {
-        List<Long> draftIds = foundDeposits
-                .stream()
-                .filter(x -> StringUtils.equals(x.getValue(), "unsubmitted"))
-                .map(Pair::getKey)
-                .distinct()
-                .collect(Collectors.toList());
-
-        ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
-        for (Long draftId : draftIds) {
-            ctxLocal.setDepositId(draftId);
-            try {
-                String msg = "deleting draft deposit [" + ctxLocal.getDepositId() + "] associated with [{" + StringUtils.join(recordIds, "\"}, {\"") + "}]";
-                LOG.info(msg + " ...");
-                ZenodoUtils.delete(ctxLocal);
-                LOG.info(msg + " done.");
-            } catch (IOException ex) {
-                throw new IOException("failed to delete draft/unsubmitted deposit id [" + draftId + "]");
-            }
-
         }
     }
 

@@ -231,21 +231,12 @@ public class ZenodoUtils {
         }
     }
 
-    public static Collection<Pair<Long, String>> findByAlternateIds(ZenodoConfig ctx, List<String> ids, String type, Dereferencer<InputStream> dereferencer) throws IOException {
+    public static Collection<Pair<Long, String>> findRecordsByAlternateIds(ZenodoConfig ctx, List<String> ids, String type, Dereferencer<InputStream> dereferencer) throws IOException {
         Collection<Pair<Long, String>> foundIds = new TreeSet<>();
         findExistingRecords(ctx, ids, foundIds, type, dereferencer);
-        findExistingDepositions(ctx, ids, foundIds, type, dereferencer);
         return foundIds;
     }
 
-    private static void findExistingDepositions(ZenodoConfig ctx, List<String> ids, Collection<Pair<Long, String>> foundIds, String type, Dereferencer<InputStream> dereferencer) throws IOException {
-        IRI query1 = getQueryForExistingDepositions(ctx, ids, type);
-        executeQueryAndCollectIds(foundIds, query1, dereferencer);
-    }
-
-    public static IRI getQueryForExistingDepositions(ZenodoConfig ctx, List<String> contentIds, String type) {
-        return getQueryForExistingDepositions(ctx, contentIds, "/api/deposit/depositions", type);
-    }
 
     public static IRI getQueryForExistingDepositions(ZenodoConfig ctx, List<String> contentIds, String method, String type) {
         String prefix = communitiesPrefix(ctx);
@@ -271,7 +262,10 @@ public class ZenodoUtils {
     }
 
     public static IRI getSearchPageForExistingRecords(ZenodoConfig ctx, List<String> contentIds, String type) {
-        return getQueryForExistingDepositions(ctx, contentIds, "/search", type);
+        String prefix = communitiesPrefix(ctx);
+        String query = prefix + "q=" + getQueryForIds(contentIds);
+        query = appendTypeClause(type, query, "/search");
+        return getQuery(ctx.getEndpoint(), query, "/search");
     }
 
     private static void findExistingRecords(ZenodoConfig ctx, List<String> ids, Collection<Pair<Long, String>> foundIds, String type, Dereferencer<InputStream> dereferencer) throws IOException {
