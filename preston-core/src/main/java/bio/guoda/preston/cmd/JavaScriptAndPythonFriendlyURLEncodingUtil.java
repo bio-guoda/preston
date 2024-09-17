@@ -2,20 +2,28 @@ package bio.guoda.preston.cmd;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public final class JavaScriptAndPythonFriendlyURLEncodingUtil {
+
+
     public static String urlEncode(String str) {
+        String result;
+
         try {
-            ScriptEngineManager manager = new ScriptEngineManager();
-            ScriptEngine engine = manager.getEngineByName("JavaScript");
             String quoteEscaped = StringUtils.replace(str, "'", "&quot;");
-            return  (String) engine.eval("encodeURIComponent('" + quoteEscaped + "')");
-        } catch (ScriptException e) {
-            return str;
+            result = URLEncoder.encode(quoteEscaped, "UTF-8")
+                    .replaceAll("\\+", "%20")
+                    .replaceAll("\\%21", "!")
+                    .replaceAll("\\%27", "'")
+                    .replaceAll("\\%28", "(")
+                    .replaceAll("\\%29", ")")
+                    .replaceAll("\\%7E", "~");
+        } catch (UnsupportedEncodingException e) {
+            result = str;
         }
 
+        return result;
     }
 }
