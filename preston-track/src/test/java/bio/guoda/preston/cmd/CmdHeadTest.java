@@ -37,7 +37,7 @@ public class CmdHeadTest {
 
         cmdHead.run();
 
-        String expectedHeadContentId = "hash://sha256/30845fefa4a854fc67da113a06759f86902b591bf0708bd625e611680aa1c9c4";
+        String expectedHeadContentId = "hash://sha256/30845fefa4a854fc67da113a06759f86902b591bf0708bd625e611680aa1c9c4\n";
         assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is(expectedHeadContentId));
 
     }
@@ -73,7 +73,7 @@ public class CmdHeadTest {
 
         cmdHead.run();
 
-        String expectedHeadContentId = "hash://sha256/30845fefa4a854fc67da113a06759f86902b591bf0708bd625e611680aa1c9c4";
+        String expectedHeadContentId = "hash://sha256/30845fefa4a854fc67da113a06759f86902b591bf0708bd625e611680aa1c9c4\n";
         assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is(expectedHeadContentId));
 
     }
@@ -94,7 +94,7 @@ public class CmdHeadTest {
         cmdHead.run();
 
         // expect most recent version
-        String expectedHeadContentId = "hash://sha256/30845fefa4a854fc67da113a06759f86902b591bf0708bd625e611680aa1c9c4";
+        String expectedHeadContentId = "hash://sha256/30845fefa4a854fc67da113a06759f86902b591bf0708bd625e611680aa1c9c4\n";
         assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is(expectedHeadContentId));
 
     }

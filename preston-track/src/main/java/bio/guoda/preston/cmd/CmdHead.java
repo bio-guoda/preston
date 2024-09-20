@@ -22,7 +22,7 @@ public class CmdHead extends LoggingPersisting implements Runnable {
             throw new RuntimeException("failed to print most recent provenance log version/hash");
         }
         try {
-            IOUtils.write(mostRecentLog.get().getIRIString(), getOutputStream(), StandardCharsets.UTF_8);
+            IOUtils.write(mostRecentLog.get().getIRIString() + "\n", getOutputStream(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException("failed to print most recent provenance log version/hash [" + mostRecentLog.get().getIRIString() + "]", e);
         }
