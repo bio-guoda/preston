@@ -61,9 +61,9 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String SYS = "taxodros-syst";
     private static final String PREFIX_PUBLISHER = ".Z.";
 
-    public static final String TAXODROS_DATA_DOI = "10.5281/zenodo.10723540";
-    public static final String TAXODROS_DATA_VERSION_SHA256 = "hash://sha256/ca86d74b318a334bddbc7c6a387a09530a083b8617718f5369ad548744c602d3";
-    public static final String TAXODROS_DATA_VERSION_MD5 = "hash://md5/26a67012dde325cf2a3a058cc2f9c1b8";
+    public static final String TAXODROS_DATA_DOI = "10.5281/zenodo.13841002";
+    public static final String TAXODROS_DATA_VERSION_SHA256 = "hash://sha256/a6e757007c04215cafa537c09a06a0e8a68be70cbc9c965c857c7a9058ceeb16";
+    public static final String TAXODROS_DATA_VERSION_MD5 = "hash://md5/b3ead19ea211a66e4f59a6842e097c7b";
     public static final String LSID_PREFIX = "urn:lsid:taxodros.uzh.ch";
 
     private ContentStreamHandler contentStreamHandler;
@@ -321,6 +321,8 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, "https://linker.bio/" + value);
         ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, TAXODROS_DATA_DOI);
         ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, "https://www.taxodros.uzh.ch");
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, TAXODROS_DATA_VERSION_MD5);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, TAXODROS_DATA_VERSION_SHA256);
         ZenodoMetaUtil.append(objectNode, ZenodoMetaUtil.REFERENCES, "Bächli, G. (2024). TaxoDros - The Database on Taxonomy of Drosophilidae " + TAXODROS_DATA_VERSION_MD5 + " " + TAXODROS_DATA_VERSION_SHA256 + " [Data set]. Zenodo. " + "https://doi.org/" + TAXODROS_DATA_DOI);
 
     }
