@@ -187,7 +187,8 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                         String methodText = getAndResetCapture(textCapture);
                         Matcher matcher = Pattern.compile("(.*)(10[.])(?<doiPrefix>[0-9]+)/(?<doiSuffix>[^ ]+)(.*)").matcher(methodText);
                         if (matcher.matches()) {
-                            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.DOI, "10." + matcher.group("doiPrefix") + "/" + matcher.group("doiSuffix"));
+                            String doiString = "10." + matcher.group("doiPrefix") + "/" + matcher.group("doiSuffix");
+                            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, doiString);
                         }
                         ZenodoMetaUtil.setValue(objectNode, "taxodros:method", methodText);
                         appendIdentifier(textCapture, line, PREFIX_FILENAME);

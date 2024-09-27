@@ -55,9 +55,12 @@ public class TaxoDrosFileExtractorTest {
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
 
-
-        assertThat(taxonNode.has("doi"), is(true));
-        assertThat(taxonNode.get("doi").textValue(), is("10.7868/S0016675814060150"));
+        JsonNode first = taxonNode.at("/related_identifiers/0");
+        assertThat(first.get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(first.get("identifier").asText(), is("urn:lsid:taxodros.uzh.ch:id:abd%20el-halim%20et%20al.%2C%202005"));
+        JsonNode second = taxonNode.at("/related_identifiers/1");
+        assertThat(second.get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(second.get("identifier").asText(), is("10.7868/S0016675814060150"));
     }
 
     @Test
@@ -67,8 +70,14 @@ public class TaxoDrosFileExtractorTest {
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
 
-        assertThat(taxonNode.has("doi"), is(true));
-        assertThat(taxonNode.get("doi").textValue(), is("10.11646/zootaxa.4161.2.4"));
+        JsonNode first = taxonNode.at("/related_identifiers/0");
+        assertThat(first.get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(first.get("identifier").asText(), is("urn:lsid:taxodros.uzh.ch:id:huang%20%26%20chen%2C%202016"));
+        JsonNode second = taxonNode.at("/related_identifiers/1");
+        assertThat(second.get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(second.get("identifier").asText(), is("10.11646/zootaxa.4161.2.4"));
+
+
         assertThat(taxonNode.get("publication_date").textValue(), is("2016"));
     }
 
@@ -79,8 +88,13 @@ public class TaxoDrosFileExtractorTest {
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
 
-        assertThat(taxonNode.has("doi"), is(true));
-        assertThat(taxonNode.get("doi").textValue(), is("10.1016/j.tpb.2006.05.001"));
+
+        JsonNode first = taxonNode.at("/related_identifiers/0");
+        assertThat(first.get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(first.get("identifier").asText(), is("urn:lsid:taxodros.uzh.ch:id:abrusan%20%26%20krambeck%2C%202006"));
+        JsonNode second = taxonNode.at("/related_identifiers/1");
+        assertThat(second.get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(second.get("identifier").asText(), is("10.1016/j.tpb.2006.05.001"));
 
         JsonNode creatorNames = taxonNode.at("/creators");
 
@@ -128,8 +142,13 @@ public class TaxoDrosFileExtractorTest {
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
 
-        assertThat(taxonNode.has("doi"), is(true));
-        assertThat(taxonNode.get("doi").textValue(), is("10.7868/S0016675814060150"));
+        JsonNode first = taxonNode.at("/related_identifiers/0");
+        assertThat(first.get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(first.get("identifier").asText(), is("urn:lsid:taxodros.uzh.ch:id:abd%20el-halim%20et%20al.%2C%202005"));
+        JsonNode second = taxonNode.at("/related_identifiers/1");
+        assertThat(second.get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(second.get("identifier").asText(), is("10.7868/S0016675814060150"));
+
     }
 
     @Test
