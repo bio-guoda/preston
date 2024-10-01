@@ -19,7 +19,6 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -95,22 +94,7 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                     String line = reader.readLine();
                     if (line == null || StringUtils.startsWith(line, ".TEXT;")) {
                         if (objectNode.size() > 0) {
-                            if (isType(objectNode, DROS_5) || isType(objectNode, DROS_3)) {
-                                if (isType(objectNode, DROS_5)) {
-                                    setOriginReference(iriString, lineStart, lineFinish, objectNode);
-                                    String filename = getAndResetCapture(textCapture);
-                                    ZenodoMetaUtil.setFilename(objectNode, filename);
-                                    ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":filename:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename));
-                                    ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
-                                    ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
-                                    ZenodoMetaUtil.setType(objectNode, DROS_5);
-                                } else if (isType(objectNode, DROS_3)) {
-                                    lineFinish = lineNumber - 1;
-                                    setOriginReference(iriString, lineStart, lineFinish, objectNode);
-                                }
-                                writeRecord(foundAtLeastOne, objectNode);
-                                lineFinish = -1;
-                            }
+                            lineFinish = closeRecordAndWrite(foundAtLeastOne, iriString, lineStart, lineFinish, textCapture, objectNode, lineNumber);
                         }
                         lineStart = lineNumber;
                         objectNode.removeAll();
@@ -137,7 +121,18 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
                     } else if (StringUtils.startsWith(line, PREFIX_TITLE)) {
                         setTypeDROS5(objectNode);
                         String publicationYear = getAndResetCapture(textCapture);
-                        ZenodoMetaUtil.setPublicationDate(objectNode, publicationYear);
+                        TreeMap<String, String> pubYearTranslations = new TreeMap<String, String>() {{
+                            put("202o", "2020");
+                            put("985", "1985");
+                            put("191", "1961");
+                        }};
+                        String pubYearTranslated = pubYearTranslations.getOrDefault(publicationYear, publicationYear);
+                        try {
+                            ZenodoMetaUtil.setPublicationDate(objectNode, pubYearTranslated);
+                        } catch (IllegalArgumentException ex) {
+                            closeRecord(iriString, lineStart, lineNumber - 1, textCapture, objectNode, lineNumber);
+                            throw new ContentStreamException("suspicious publication year [" + publicationYear + "] found in [" + objectNode.toPrettyString() + "]", ex);
+                        }
                         appendIdentifier(textCapture, line, PREFIX_TITLE);
                     } else if (StringUtils.startsWith(line, PREFIX_PUBLISHER)) {
                         setTypeDROS5(objectNode);
@@ -216,6 +211,37 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         }
 
         return foundAtLeastOne.get();
+    }
+
+    private int closeRecordAndWrite(AtomicBoolean foundAtLeastOne, String iriString, int lineStart, int lineFinish, AtomicReference<StringBuilder> textCapture, ObjectNode objectNode, int lineNumber) throws IOException {
+        lineFinish = closeRecord(iriString, lineStart, lineFinish, textCapture, objectNode, lineNumber);
+        if (isDROS(objectNode)) {
+            writeRecord(foundAtLeastOne, objectNode);
+            lineFinish = -1;
+        }
+        return lineFinish;
+    }
+
+    private int closeRecord(String iriString, int lineStart, int lineFinish, AtomicReference<StringBuilder> textCapture, ObjectNode objectNode, int lineNumber) {
+        if (isDROS(objectNode)) {
+            if (isType(objectNode, DROS_5)) {
+                setOriginReference(iriString, lineStart, lineFinish, objectNode);
+                String filename = getAndResetCapture(textCapture);
+                ZenodoMetaUtil.setFilename(objectNode, filename);
+                ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, LSID_PREFIX + ":filename:" + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(filename));
+                ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
+                ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
+                ZenodoMetaUtil.setType(objectNode, DROS_5);
+            } else if (isType(objectNode, DROS_3)) {
+                lineFinish = lineNumber - 1;
+                setOriginReference(iriString, lineStart, lineFinish, objectNode);
+            }
+        }
+        return lineFinish;
+    }
+
+    private boolean isDROS(ObjectNode objectNode) {
+        return isType(objectNode, DROS_5) || isType(objectNode, DROS_3);
     }
 
     private List<String> collectCreators(String authorStrings) {
