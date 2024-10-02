@@ -1,6 +1,7 @@
 package bio.guoda.preston;
 
 import bio.guoda.preston.cmd.CmdHistory;
+import bio.guoda.preston.cmd.CmdTrack;
 import org.junit.Test;
 import picocli.CommandLine;
 
@@ -22,6 +23,22 @@ public class PrestonTest {
                 "https://deeplinker.bio/,https://linker.bio/");
 
         assertTwoRemotes(parseResult);
+    }
+
+    @Test
+    public void parseMessagePhrase() {
+        CommandLine commandLine = Preston.getCommandLine();
+        CommandLine.ParseResult parseResult = commandLine.parseArgs("track",
+                "--message",
+                "hello world");
+        assertThat(parseResult, is(notNullValue()));
+
+        CommandLine.ParseResult subcommand = parseResult.subcommand();
+        Object o = subcommand.commandSpec().userObject();
+        assertTrue(o instanceof CmdTrack);
+        CmdTrack cmd = (CmdTrack) o;
+
+        assertThat(cmd.getActivityDescription(), is("hello world"));
     }
 
     @Test

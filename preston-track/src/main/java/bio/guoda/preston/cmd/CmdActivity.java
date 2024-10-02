@@ -39,10 +39,10 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
     @CommandLine.Option(
             names = {"-m", "--message"},
-            split = " ",
+            arity = "1..*",
             description = "Custom description of this tracking activity or command. (default: \"${DEFAULT-VALUE}\")"
     )
-    private List<String> description = Arrays.asList(getDescriptionDefault());
+    private String description = getDescriptionDefault();
 
     public abstract String getDescriptionDefault();
 
@@ -172,7 +172,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     }
 
     public String getActivityDescription() {
-        return StringUtils.join(description, " ");
+        return description;
     }
 
     private static class LoggerExitHook extends Thread {

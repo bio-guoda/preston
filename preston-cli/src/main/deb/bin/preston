@@ -3,4 +3,4 @@
 # Launches Preston in JVM
 #
 
-java -Xmx4G -XX:+UseG1GC -cp "/usr/share/preston/lib/*" bio.guoda.preston.Preston $@
+java -Xmx4G -XX:+UseG1GC -cp "/usr/share/preston/lib/*" bio.guoda.preston.Preston "$@"
