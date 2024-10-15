@@ -53,12 +53,13 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
                     String prefix = StringUtils.substring(iriString, 0, iriString.length() - META_XML.length());
 
                     String metaDataIRI = prefix + metadataLocation;
-                    InputStream emlStream = dereferencer.get(RefNodeFactory.toIRI(metaDataIRI));
-
-                    if (emlStream != null) {
-                        SAXParser p = SAX_FACTORY.newSAXParser();
-                        p.parse(emlStream, new CitationSaxHandler(metaDataIRI, os));
+                    try (InputStream emlStream = dereferencer.get(RefNodeFactory.toIRI(metaDataIRI))) {
+                        if (emlStream != null) {
+                            SAXParser p = SAX_FACTORY.newSAXParser();
+                            p.parse(emlStream, new CitationSaxHandler(metaDataIRI, os));
+                        }
                     }
+
                 }
 
                 return true;

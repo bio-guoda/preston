@@ -86,5 +86,13 @@ public class ContentStreamUtilTest {
 
     }
 
+    @Test
+    public void tarGzVSF() {
+        String url = "tar:gz:hash://sha256/bedcc1f122d59ec002e0e6d2802c0e422eadf6208669fff141a895bd3ed15d4a!/FaEu-DWCA/eml.xml";
+        String s = ContentStreamUtil.truncateGZNotationForVFSIfNeeded("tar:gz:hash://sha256/bedcc1f122d59ec002e0e6d2802c0e422eadf6208669fff141a895bd3ed15d4a!/FaEu-DWCA/eml.xml");
+
+        assertThat(s, Is.is(url));
+    }
+
 
 }

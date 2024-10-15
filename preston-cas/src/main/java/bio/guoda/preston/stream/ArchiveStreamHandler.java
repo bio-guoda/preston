@@ -4,6 +4,7 @@ import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.io.input.CloseShieldInputStream;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class ArchiveStreamHandler implements ContentStreamHandler {
         return false;
     }
 
-    private Pair<ArchiveInputStream, String> getArchiveStreamAndFormat(InputStream in) {
+    public static Pair<ArchiveInputStream, String> getArchiveStreamAndFormat(InputStream in) {
         try {
             String archiveFormat = ArchiveStreamFactory.detect(in);
             // do not close this stream; it would also close the "in" stream
@@ -59,14 +60,14 @@ public class ArchiveStreamHandler implements ContentStreamHandler {
                         throw new ContentStreamException("failed to create content URI related to entry [" + entry.getName() + "] in [" + version.getIRIString() + "]", e);
                     }
                     if (shouldReadArchiveEntry(entryIri)) {
-                        contentStreamHandler.handle(entryIri, in);
+                        contentStreamHandler.handle(entryIri, CloseShieldInputStream.wrap(in));
                     }
                 }
             }
         } catch (Throwable th) {
             String dataCoordinates = entry == null || entry.isDirectory()
                     ? version.getIRIString()
-                    : "<zip:" + version.getIRIString() + "!/" + entry.getName() + ">";
+                    : "<" + archiveFormat + ":" + version.getIRIString() + "!/" + entry.getName() + ">";
             String msg = "failed to process " + dataCoordinates;
             LOG.warn(msg, th);
             throw new ContentStreamException(msg, th);
