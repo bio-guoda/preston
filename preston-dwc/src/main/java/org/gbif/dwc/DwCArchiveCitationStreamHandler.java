@@ -79,6 +79,7 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
 
         private final OutputStream os;
         AtomicBoolean inCitation = new AtomicBoolean(false);
+        AtomicBoolean inBibliography = new AtomicBoolean(false);
 
         AtomicReference<StringBuilder> builder = new AtomicReference<>();
 
@@ -92,7 +93,7 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
 
         @Override
         public void characters(char[] ch, int start, int length) {
-            if (inCitation.get()) {
+            if (inCitation.get() && !inBibliography.get()) {
                 builder.get().append(StringUtils.replace(new String(ch, start, length), "\n", ""));
             }
             super.characters(ch, start, length);
@@ -103,6 +104,9 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
             if (StringUtils.equals(qName, "citation")) {
                 builder.set(new StringBuilder());
                 inCitation.set(true);
+            }
+            if (StringUtils.equals(qName, "bibliography")) {
+                inBibliography.set(true);
             }
             super.startElement(uri, localName, qName, attributes);
         }
@@ -120,6 +124,10 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
                     }
                 }
             }
+            if (StringUtils.equals(qName, "bibliography")) {
+                inBibliography.set(false);
+            }
+
             super.endElement(uri, localName, qName);
         }
     }

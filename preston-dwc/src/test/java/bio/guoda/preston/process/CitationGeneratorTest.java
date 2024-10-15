@@ -67,4 +67,44 @@ public class CitationGeneratorTest {
         assertThat(actual, Is.is(expected));
     }
 
+    @Test
+    public void onEmlWithBiography() {
+
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                URL resource = getClass().getResource("/bio/guoda/preston/Ramírez-Chaves-et-al-2022.zip");
+
+                IRI iri = toIRI(resource.toExternalForm());
+
+                if (StringUtils.equals("hash://sha256/dbcb0c2feb882a172ccba4e56a87e2572874546a718adbcf43c62c82af22855d", key.getIRIString())) {
+                    try {
+                        return new FileInputStream(new File(URI.create(iri.getIRIString())));
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return null;
+            }
+        };
+
+
+        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/dbcb0c2feb882a172ccba4e56a87e2572874546a718adbcf43c62c82af22855d"));
+
+
+        Cmd cmd = new Cmd();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmd.setOutputStream(outputStream);
+
+        CitationGenerator citationGenerator = new CitationGenerator(cmd, blobStore);
+        citationGenerator.on(statement);
+
+        String actual = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+
+        assertThat(actual.split("\n").length, Is.is(1));
+
+        assertThat(actual, Is.is("Ramírez-Chaves H E, Mejía Fontecha I Y, Velasquez D, Castaño D (2022): Colección de Mamíferos (Mammalia) del Museo de Historia Natural de la Universidad de Caldas, Colombia. v2.7. Universidad de Caldas. Dataset/Occurrence. https://doi.org/10.15472/mnevig. Accessed at <zip:hash://sha256/dbcb0c2feb882a172ccba4e56a87e2572874546a718adbcf43c62c82af22855d!/eml.xml> .\n"));
+
+    }
+
 }
