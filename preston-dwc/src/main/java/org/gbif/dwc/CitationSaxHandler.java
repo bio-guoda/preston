@@ -41,19 +41,20 @@ public class CitationSaxHandler extends SimpleSaxHandler {
     }
 
     private StringBuilder append(char[] ch, int start, int length, StringBuilder builder) {
-        return builder.append(StringUtils.trim(StringUtils.replace(new String(ch, start, length), "\n", "")));
+        return builder
+                .append(StringUtils.trim(StringUtils.replace(new String(ch, start, length), "\n", "")));
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        if (StringUtils.equals(qName, "citation")) {
+        if (StringUtils.equals(qName, "citation") && builder.length() == 0) {
             inCitation.set(true);
         }
         if (StringUtils.equals(qName, "bibliography")) {
             inBibliography.set(true);
         }
 
-        if (StringUtils.equals(qName, "title")) {
+        if (StringUtils.equals(qName, "title") && titleBuilder.length() == 0) {
             inTitle.set(true);
         }
         super.startElement(uri, localName, qName, attributes);

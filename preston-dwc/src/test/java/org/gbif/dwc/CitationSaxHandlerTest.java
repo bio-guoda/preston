@@ -60,4 +60,18 @@ public class CitationSaxHandlerTest {
 
     }
 
+    @Test
+    public void martha() throws ParserConfigurationException, SAXException, IOException {
+
+        InputStream is = getClass().getResourceAsStream("/bio/guoda/preston/martha.eml.xml");
+
+        SAXParser p = SAX_FACTORY.newSAXParser();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        p.parse(is, new CitationSaxHandler("https://example.org", os));
+
+
+        assertThat(new String(os.toByteArray(), StandardCharsets.UTF_8), Is.is("Martha's Vineyard species checklist. Accessed at <https://example.org> .\n"));
+
+    }
+
 }
