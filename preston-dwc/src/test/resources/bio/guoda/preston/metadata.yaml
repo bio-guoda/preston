@@ -1,0 +1,57 @@
+# yaml-language-server: $schema=metadata.json
+# from https://raw.githubusercontent.com/mdoering/famous-organism/e7f72b4ba497bb257c9b65171215d9d06e0f5c4a/metadata.yaml
+# see also https://github.com/mdoering/famous-organism/issues/25
+
+identifier:
+  col: 37354
+  gbif: 00e791be-36ae-40ee-8165-0b2cb0b8c84f
+
+title: Species named after famous people
+alias: Famous
+
+description: A list of species named after famous people including musicians, politicians and scientists.
+
+keyword:
+  - famous
+  - curious
+  - etymology
+  - entertaining
+
+issued: 2024-06-26
+version: 2024-06-26
+
+# Single point of contact for questions
+contact:
+  given: Markus
+  family: Döring
+  email: mdoering@gbif.org
+  orcid: 0000-0001-7757-1889
+  organization: GBIF
+
+creator:
+  given: Markus
+  family: Döring
+  email: mdoering@gbif.org
+  orcid: 0000-0001-7757-1889
+  organization: GBIF
+
+
+geographicScope: global
+taxonomicScope: Biota
+temporalScope:
+
+license: CC0-1.0
+
+url: https://github.com/mdoering/famous-organism
+logo:
+
+source:
+  - id: curioustaxonomy
+    type: WEBPAGE
+    title: Curiosities of Biological Nomenclature
+    url: http://www.curioustaxonomy.net/etym/people.html
+
+  - id: wikipedia
+    type: WEBPAGE
+    title: "Wikipedia: List of organisms named after famous people"
+    url: https://en.wikipedia.org/wiki/List_of_organisms_named_after_famous_people_(born_1950–present)

@@ -157,4 +157,45 @@ public class CitationGeneratorTest {
 
     }
 
+
+    @Test
+    public void checkFamousOrganism() throws ArchiveException {
+
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) {
+                URL resource = getClass().getResource("/bio/guoda/preston/famous-organism.zip");
+
+                IRI iri = toIRI(resource.toExternalForm());
+
+                if (StringUtils.equals("hash://sha256/bedcc1f122d59ec002e0e6d2802c0e422eadf6208669fff141a895bd3ed15d4a", key.getIRIString())) {
+                    try {
+                        return new FileInputStream(new File(URI.create(iri.getIRIString())));
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return null;
+            }
+        };
+
+
+        Quad statement = toStatement(toIRI("blip"), HAS_VERSION, toIRI("hash://sha256/bedcc1f122d59ec002e0e6d2802c0e422eadf6208669fff141a895bd3ed15d4a"));
+
+
+        Cmd cmd = new Cmd();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmd.setOutputStream(outputStream);
+
+        CitationGenerator citationGenerator = new CitationGenerator(cmd, blobStore);
+        citationGenerator.on(statement);
+
+        String actual = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+
+        assertThat(actual.split("\n").length, Is.is(1));
+
+        assertThat(actual, Is.is("Species named after famous people. Accessed at <zip:hash://sha256/bedcc1f122d59ec002e0e6d2802c0e422eadf6208669fff141a895bd3ed15d4a!/famous-organism-master/metadata.yaml>.\n"));
+
+    }
+
 }

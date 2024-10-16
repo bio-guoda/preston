@@ -4,12 +4,17 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactoryBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.gbif.dwc.meta.DwcMetaFiles2;
 import org.xml.sax.SAXException;
+import org.yaml.snakeyaml.Yaml;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -51,23 +56,41 @@ public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
                     String prefix = StringUtils.substring(iriString, 0, iriString.length() - META_XML.length());
 
                     String metaDataIRI = prefix + metadataLocation;
-                    try (InputStream emlStream = dereferencer.get(RefNodeFactory.toIRI(metaDataIRI))) {
-                        if (emlStream != null) {
-                            SAXParser p = SAX_FACTORY.newSAXParser();
-                            p.parse(emlStream, new CitationSaxHandler(metaDataIRI, os));
+                    try (InputStream metadataStream = dereferencer.get(RefNodeFactory.toIRI(metaDataIRI))) {
+                        if (StringUtils.endsWith(metaDataIRI, ".xml")) {
+                            handleAsXML(metaDataIRI, metadataStream);
+                        } else if (StringUtils.endsWith(metaDataIRI, ".yaml") || StringUtils.endsWith(metaDataIRI, ".yml")) {
+                            ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+                            JsonNode jsonNode = objectMapper.readTree(metadataStream);
+                            JsonNode at = jsonNode.at("/title");
+                            if (!at.isMissingNode()) {
+                                IOUtils.copy(IOUtils.toInputStream(at.asText() + ". " + getAccessedAt(RefNodeFactory.toIRI(metaDataIRI)) + "\n", StandardCharsets.UTF_8), os);
+                            }
+
                         }
                     }
 
                 }
                 if (os.getCount() == 0) {
-                    IOUtils.copy(IOUtils.toInputStream("Accessed at <" + version.getIRIString() + ">.", StandardCharsets.UTF_8), os);
+                    IOUtils.copy(IOUtils.toInputStream(getAccessedAt(version), StandardCharsets.UTF_8), os);
                 }
                 return true;
             }
         } catch (IOException | SAXException | ParserConfigurationException e) {
-            throw new ContentStreamException("failed to parseQuads [" + iriString + "]", e);
+            throw new ContentStreamException("failed to parse [" + iriString + "]", e);
         }
         return false;
+    }
+
+    private String getAccessedAt(IRI version) {
+        return "Accessed at <" + version.getIRIString() + ">.";
+    }
+
+    private void handleAsXML(String metaDataIRI, InputStream emlStream) throws ParserConfigurationException, SAXException, IOException {
+        if (emlStream != null) {
+            SAXParser p = SAX_FACTORY.newSAXParser();
+            p.parse(emlStream, new CitationSaxHandler(metaDataIRI, os));
+        }
     }
 
     @Override
