@@ -1,0 +1,470 @@
+<eml:eml xmlns:eml="eml://ecoinformatics.org/eml-2.1.1"
+         xmlns:dc="http://purl.org/dc/terms/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml.xsd"
+         packageId="1a58ec89-e5d4-4b2b-9ed3-1c8b5f70f4fc/v2.7" system="http://gbif.org" scope="system"
+         xml:lang="spa">
+
+<dataset>
+  <alternateIdentifier>doi:10.15472/mnevig</alternateIdentifier>
+  <alternateIdentifier>1a58ec89-e5d4-4b2b-9ed3-1c8b5f70f4fc</alternateIdentifier>
+  <alternateIdentifier>https://ipt.biodiversidad.co/sib/resource?r=mamif_caldas</alternateIdentifier>
+  <title xml:lang="spa">Colección de Mamíferos (Mammalia) del Museo de Historia Natural de la Universidad de Caldas, Colombia</title>
+      <creator>
+    <individualName>
+        <givenName>Héctor E.</givenName>
+      <surName>Ramírez-Chaves</surName>
+    </individualName>
+    <organizationName>Universidad de Caldas</organizationName>
+    <positionName>Docente</positionName>
+    <address>
+        <deliveryPoint>Calle 65 # 26-10</deliveryPoint>
+        <city>Manizales</city>
+        <administrativeArea>Caldas</administrativeArea>
+        <country>CO</country>
+    </address>
+    <electronicMailAddress>hector.ramirez@ucaldas.edu.co</electronicMailAddress>
+          <userId directory="http://orcid.org/">0000-0002-2454-9482</userId>
+      </creator>
+      <creator>
+    <individualName>
+        <givenName>Ingrith Yuliany</givenName>
+      <surName>Mejía Fontecha</surName>
+    </individualName>
+    <organizationName>Universidad de Caldas</organizationName>
+    <positionName>Estudiante</positionName>
+    <address>
+        <deliveryPoint>Calle 65 # 26-10</deliveryPoint>
+        <city>Manizales</city>
+        <administrativeArea>Caldas</administrativeArea>
+        <country>CO</country>
+    </address>
+    <electronicMailAddress>ingrith.1711312024@ucaldas.edu.co</electronicMailAddress>
+      </creator>
+      <creator>
+    <individualName>
+        <givenName>Daniela</givenName>
+      <surName>Velasquez</surName>
+    </individualName>
+    <organizationName>Universidad de Caldas</organizationName>
+    <positionName>Estudiante Maestría</positionName>
+    <address>
+        <deliveryPoint>Calle 65 # 26-10</deliveryPoint>
+        <city>Manizales</city>
+        <administrativeArea>Caldas</administrativeArea>
+        <postalCode>170003</postalCode>
+        <country>CO</country>
+    </address>
+      </creator>
+      <creator>
+    <individualName>
+        <givenName>Daniel</givenName>
+      <surName>Castaño</surName>
+    </individualName>
+    <organizationName>Universidad de Caldas</organizationName>
+    <positionName>Egresado</positionName>
+    <address>
+        <deliveryPoint>Calle 65 # 26-10</deliveryPoint>
+        <city>Manizales</city>
+        <administrativeArea>Caldas</administrativeArea>
+        <postalCode>170003</postalCode>
+        <country>CO</country>
+    </address>
+      </creator>
+      <metadataProvider>
+    <individualName>
+        <givenName>Héctor E.</givenName>
+      <surName>Ramírez-Chaves</surName>
+    </individualName>
+    <organizationName>Universidad de Caldas</organizationName>
+    <positionName>Docente</positionName>
+    <address>
+        <deliveryPoint>Calle 65 # 26-10</deliveryPoint>
+        <city>Manizales</city>
+        <administrativeArea>Caldas</administrativeArea>
+        <country>CO</country>
+    </address>
+    <electronicMailAddress>hector.ramirez@ucaldas.edu.co</electronicMailAddress>
+          <userId directory="http://orcid.org/">0000-0002-2454-9482</userId>
+      </metadataProvider>
+  <pubDate>
+      2022-03-18
+  </pubDate>
+  <language>spa</language>
+  <abstract>
+    <para>Se presentan la información de 3.828 registros depositados en la Colección de Mamíferos del Museo de Historia Natural de la Universidad de Caldas, que a la fecha se constituye en la más completa del Eje Cafetero. La mayoría de los registros (n=2.212) proceden del departamento de Caldas, sin embargo, se cuenta con registros para 23 departamentos más. Los órdenes más representativos son Chiroptera (n=2.454) y Rodentia (n=747). En total, se incluyen registros de 238 especies nativas y 8 exóticas, pertenecientes a 12 órdenes, 42 familias (39 nativas) y 134 géneros (127 nativos).</para>
+  </abstract>
+      <keywordSet>
+            <keyword>Eje Cafetero</keyword>
+            <keyword>Colombia</keyword>
+            <keyword>Mamíferos</keyword>
+            <keyword>Mammalia</keyword>
+            <keyword>Universidad de Caldas</keyword>
+        <keywordThesaurus>n/a</keywordThesaurus>
+      </keywordSet>
+      <keywordSet>
+            <keyword>Occurrence</keyword>
+        <keywordThesaurus>GBIF Dataset Type Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_type_2015-07-10.xml</keywordThesaurus>
+      </keywordSet>
+      <keywordSet>
+            <keyword>Specimen</keyword>
+        <keywordThesaurus>GBIF Dataset Subtype Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_subtype.xml</keywordThesaurus>
+      </keywordSet>
+  <intellectualRights>
+    <para>This work is licensed under a <ulink url="http://creativecommons.org/licenses/by-nc/4.0/legalcode"><citetitle>Creative Commons Attribution Non Commercial (CC-BY-NC) 4.0 License</citetitle></ulink>.</para>
+  </intellectualRights>
+  <coverage>
+      <geographicCoverage>
+          <geographicDescription>Comprende todo el territorio colombiano; existen registros para 24 de los 32 departamentos del país. Los departamentos de Caldas, Arauca y Risaralda presentan el mayor número de registros con 2.212, 647 y 181, respectivamente. Los departamentos de Caquetá, Córdoba, Guainía, Guaviare, Norte de Santander, San Andrés y Providencia, Sucre y Vaupés no registran ningún ejemplar en la colección.</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.98</westBoundingCoordinate>
+          <eastBoundingCoordinate>-66.27</eastBoundingCoordinate>
+          <northBoundingCoordinate>13.582</northBoundingCoordinate>
+          <southBoundingCoordinate>-5.266</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+          <temporalCoverage>
+              <rangeOfDates>
+                  <beginDate>
+                    <calendarDate>1972-06-24</calendarDate>
+                  </beginDate>
+                <endDate>
+                  <calendarDate>2022-01-28</calendarDate>
+                </endDate>
+              </rangeOfDates>
+          </temporalCoverage>
+          <taxonomicCoverage>
+              <generalTaxonomicCoverage>Este recurso contien 2.279 registros de mamíferos, agrupados en 12 ordenes, 41 familias, 125 géneros y 212 especies. Con un 80% clasificado a nivel de especie, 19% a género y 1% a familia.</generalTaxonomicCoverage>
+              <taxonomicClassification>
+                  <taxonRankName>class</taxonRankName>
+                <taxonRankValue>Mammalia</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Aotidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Atelidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Bradypodidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Caenolestidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Callitrichidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Canidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Caviidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Cebidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Cercopithecidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Cervidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Chlamyphoridae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Cricetidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Cuniculidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Dasypodidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Dasyproctidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Didelphidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Dinomyidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Echimyidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Emballonuridae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Erethizontidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Felidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Heteromyidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Leporidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Megalonychidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Mephitidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Molossidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Mormoopidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Muridae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Mustelidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Myrmecophagidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Noctilionidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Phyllostomidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Procyonidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Sciuridae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Soricidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Suidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Tapiridae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Tayassuidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Thyropteridae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Ursidae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Vespertilionidae</taxonRankValue>
+              </taxonomicClassification>
+          </taxonomicCoverage>
+  </coverage>
+  <purpose>
+    <para>Presentar la información asociada a los mamíferos almacenados en la colección de Mamíferos del Centro de Museos, Museo de Historia Natural, Universidad de Caldas (MHN-UCa-M).</para>
+  </purpose>
+  <maintenance>
+    <description>
+      <para>Revisión constante de ejemplares.</para>
+    </description>
+    <maintenanceUpdateFrequency>asNeeded</maintenanceUpdateFrequency>
+  </maintenance>
+
+      <contact>
+    <individualName>
+        <givenName>Héctor E.</givenName>
+      <surName>Ramírez-Chaves</surName>
+    </individualName>
+    <organizationName>Universidad de Caldas</organizationName>
+    <positionName>Docente</positionName>
+    <address>
+        <deliveryPoint>Calle 65 # 26-10</deliveryPoint>
+        <city>Manizales</city>
+        <administrativeArea>Caldas</administrativeArea>
+        <country>CO</country>
+    </address>
+    <electronicMailAddress>hector.ramirez@ucaldas.edu.co</electronicMailAddress>
+          <userId directory="http://orcid.org/">0000-0002-2454-9482</userId>
+      </contact>
+  <methods>
+        <methodStep>
+          <description>
+            <para>Se revisó la identidad de los ejemplares mediante claves taxonómicas y se exploró la literatura en los que pudieron ser citados (https://scholar.google.com/citations?hl=es&amp;user=_q9scQgAAAAJ&amp;view_op=list_works&amp;sortby=pubdate).</para>
+          </description>
+        </methodStep>
+      <sampling>
+        <studyExtent>
+          <description>
+            <para>Diferentes sitios a lo largo de Colombia.</para>
+          </description>
+        </studyExtent>
+        <samplingDescription>
+          <para>Información obtenida a partir de salidas de campo de varios investigadores: Redes de niebla, trampas Sherman, capturas manuales, especímenes atropellados, etc.</para>
+        </samplingDescription>
+      </sampling>
+      <qualityControl>
+        <description>
+          <para>Para confirmar los nombres científicos se utilizó la base de datos de Catalog of Life (http://www.catalogueoflife.org/) e información de listas recientes de mamíferos de Colombia. Los departamentos colombianos fueron codificados teniendo en cuenta la clasificación del DANE (http://190.25.231.237/dvpbuscar/dvpbuscar.html) y los países el estándar ISO 3166-2. La precisión y exactitud de las coordenadas geográficas fueron verificadas utilizando la herramienta GPS Visualizer (http://www.gpsvisualizer.com/)
+
+Ajuste de vocabularios controlados en:
+Elemento de registro: collectionID;
+Elementos geográficos: stateProvince y county;
+Elemento temporal: eventDate.</para>
+        </description>
+      </qualityControl>
+  </methods>
+  <project >
+    <title>Museo de Historia Natural, Colección de Vertebrados e Invertebrados -Colección de Mamíferos</title>
+      <personnel>
+        <individualName>
+            <givenName>Héctor E.</givenName>
+          <surName>Ramírez-Chaves</surName>
+        </individualName>
+              <userId directory="http://orcid.org/">0000-0002-2454-9482</userId>
+        <role>author</role>
+      </personnel>
+      <abstract>
+        <para>Se revisaron los registros y ejemplares depositados en la colección de Mamíferos del Museo de Historia Natural de la Universidad de Caldas (MHN-UCa) hasta enero de 2022. Se extrajo información de 53 artículos científicos en los cuales se citan ejemplares depositados en la colección de Mamíferos del MHN-UCa. Se confirma la presencia de 246 especies (8 exóticas) depositadas en la colección pertenecientes a 12 órdenes, 42 familias y 134 géneros.</para>
+      </abstract>
+      <funding>
+        <para>Centro de Museos, Museo de Historia Natural, Universidad de Caldas.</para>
+      </funding>
+      <studyAreaDescription>
+        <descriptor name="generic"
+                    citableClassificationSystem="false">
+          <descriptorValue>Los registros de mamíferos del conjunto de datos corresponden a 153 municipios de Colombia, ubicados en 24 departamentos. La región Andina es la mejor representada, seguida de la Orinoquía. Para las otras regiones naturales de Colombia, sólo la Caribe y Pacífica superan los 60 registros. Los registros provienen de un intervalo altitudinal comprendido entre los 0 y los 3970 m.</descriptorValue>
+        </descriptor>
+      </studyAreaDescription>
+      <designDescription>
+        <description>
+          <para>El tratamiento taxonómico sigue las propuestas empleadas para los mamíferos de Colombia (Ramírez-Chaves et al. 2021) Para las especies domesticadas (5) se sigue la taxonomía propuesta por Gentry et al. (2004) y Ramírez-Chaves et al. (2011). La revisión de las determinaciones taxonómicas siguió  principalmente las propuestas de Gardner (2008) para Didelphimorphia, Paucituberculata, Eulipotyphla, Cingulata, Pilosa y Chiroptera, de Patton et al. (2015) para Rodentia y de Suárez-Castro y Ramírez-Chaves (2015) para Carnivora. Los ajustes posteriores siguen principalmente a ASM Mammal Diversity Database (https://www.mammaldiversity.org/).</para>
+        </description>
+      </designDescription>
+  </project>
+</dataset>
+  <additionalMetadata>
+    <metadata>
+      <gbif>
+          <dateStamp>2017-09-02T10:44:00.908+00:00</dateStamp>
+          <hierarchyLevel>dataset</hierarchyLevel>
+            <citation identifier="https://doi.org/10.15472/mnevig">Ramírez-Chaves H E, Mejía Fontecha I Y, Velasquez D, Castaño D (2022): Colección de Mamíferos (Mammalia) del Museo de Historia Natural de la Universidad de Caldas, Colombia. v2.7. Universidad de Caldas. Dataset/Occurrence. https://doi.org/10.15472/mnevig</citation>
+          <bibliography>
+                <citation>Cardona, D. M., J. H. Castaño y J. E. Botero. 2016. Distribución anidada de murciélagos en fragmentos de bosque premontano de la cuenca media del río Cauca, Colombia. Mastozoología Neotropical 23: 371-387.</citation>
+                <citation>Castaño, J. H. y J. D. Corrales. 2004. Primer registro de Centronycteris centralis (Chiroptera: Emballonuridae) en los Andes colombianos. Mastozoología Neotropical 14: 69-72.</citation>
+                <citation>Castaño, J. H. y J. D. Corrales. 2010. Mamíferos de la cuenca del río La Miel (Caldas): diversidad y uso cultural. Boletín Científico, Centro de Museos, Museo de Historia Natural 14: 56-75.</citation>
+                <citation>Castaño, J. H., Y. Muñoz-Saba, J. E. Botero y J. H. Vélez. 2003a. Mamíferos del Departamento de Caldas – Colombia. Biota Colombiana 4: 247-259.</citation>
+                <citation>Castaño, J. H., J. D. Corrales y S. Velásquez. 2003b. Estructura y composición de la comunidad de murciélagos de un fragmento de bosque andino en la ciudad de Manizales, Caldas. Boletín Científico, Centro de Museos, Museo de Historia Natural 7: 113-120.</citation>
+                <citation>Castaño, J. H., J. E. Botero, S. Velásquez y J. D. Corrales. 2004a. Murciélagos en agroecosistemas cafeteros de Colombia. Chiroptera Neotropical 10: 196-199.</citation>
+                <citation>Castaño, J. H., O. A. Orrego Santa, D. M. Cardona Ramírez. 2004b. Primer registro para Caldas del Murciélago de Ventosas de Vientre Blanco (Thyroptera tricolor Spix, 1823). Boletín Científico, Centro de Museos, Museo de Historia Natural 8: 260-266.</citation>
+                <citation>Castaño, J. H., D. A. Torres, V. Rojas-Díaz, C. A. Saavedra-Rodríguez y J. Pérez-Torres. 2017. Mamíferos del departamento de Risaralda, Colombia. Biota Colombiana 18: 239-254.</citation>
+                <citation>Castaño Salazar, J. H. 2012. Mamíferos de Caldas: Un análisis de vacíos de información. Boletín Científico, Centro de Museos, Museo de Historia Natural 16: 101-119.</citation>
+                <citation>Castaño Ramírez, N. D. y H. E. Ramírez-Chaves. 2018. Sistematización y estimación del índice de salud de la Colección de Mamíferos (Mammalia) del Museo de Historia Natural de la Universidad de Caldas, Colombia. Boletín Científico, Centro de Museos, Museo de Historia Natural 22: 90-103.</citation>
+                <citation>Díaz-Nieto. J. y R. S. Voss. 2016. A revision of the didelphid marsupial genus Marmosops, part 1. Species of the subgenus Sciophanes. Bulletin of the American Museum of Natural History 402: 1-70.</citation>
+                <citation>Escobar-Lasso, S. y C. F. Guzmán-Hernández. 2014. El registro de mayor altitud del Hurón Mayor Galictis vittata, con notas sobre su presencia y conservación dentro del departamento de Caldas, en la región andina de Colombia. Therya 5: 567-574.</citation>
+                <citation>Escobar-Lasso, S., J. Cerón-Cardona y J. H. Castaño-Salazar. 2013. Los mamíferos de la cuenca del río Chinchiná, en la región andina de Colombia. Therya 4: 139-155.</citation>
+                <citation>Escobar-Lasso, S. y M. Gil-Fernández. 2014. The highest elevation record of Mustela frenata (Carnivora: Mustelidae)	and distribution in Caldas department, Andean region of Colombia. Mammalogy Notes 1: 7-9.</citation>
+                <citation>Escobar-Lasso, S., J. Cerón-Cardona, J. H. Castaño-Salazar, L. Mendieta-Giraldo y O. Ospina-Herrera. 2014. Los felinos silvestres del departamento de Caldas, en la región andina de Colombia: composición, distribución y conservación. Therya 5: 575-588.</citation>
+                <citation>García Restrepo, S., S. O. Montilla, V. Bustamante Manrique, S. Bustamante Manrique, C. Cepeda-Duque, J. D. Sánchez Londoño y H. E. Ramírez-Chaves. 2018. Estado de la investigación primatológica en el Eje Cafetero y Antioquia, Colombia. Neotropical Primates 24: 56-63.</citation>
+                <citation>Gardner, A.L. (editor). 2008. Mammals of South America. Vol. 1: Marsupials, xenarthrans, shrews, and bats. Chicago: University of Chicago Press. (fechado 2007, impreso 2008).</citation>
+                <citation>Gentry, A., J. Clutton-Brock, C. P. Groves. 2004. The naming of wild animal species and their domestic derivatives. Journal of Archaeological Science 31: 645-651</citation>
+                <citation>Gómez-B., K. A., I. Y. Mejía Fontecha y H. E. Ramírez-Chaves. 2017. Mamíferos: Colección Universidad de Caldas. Disponible en: https://www.gbif.org/dataset/1a58ec89-e5d4-4b2b-9ed3-1c8b5f70f4fc</citation>
+                <citation>Mantilla-Meluk, H., A. Cadena G. y A. M. Jiménez-Ortega. 2014. Historia de la mastozoología en Colombia: Pasado, presente y perspectivas. Pp. 153-174. En: Ortega,</citation>
+                <citation>J., J. L. Martínez y D. G. Tirira (Eds.). Historia de la mastozoología en Latinoamérica, las Guayanas y el Caribe. Editorial Murciélago Balnco y Asociación Ecuatoriana de Mastozoología, Quito y México, D.F.</citation>
+                <citation>Marín, D., H. E. Ramírez-Chaves y A. F. Suárez-Castro. 2012. Revisión cráneo-dentaria de Procyon (Carnivora: Procyonidae) en Colombia y Ecuador, con notas sobre su taxonomía y distribución. Mastozoologia Neotropical 19: 259-270.</citation>
+                <citation>Marín-C, D., J. D. Corrales-E y J. D. Valencia. 2018. Nuevos registros de la rata cangrejera Ichthyomys hydrobates (Winge, 1891) (Rodentia: Cricetidae) en Colombia. Mastozoologia Neotropical 25: 235-243.</citation>
+                <citation>Montilla, S. O., J. C. Cepeda-Duque y S. Bustamante-Manrique. 2018. Distribución del mono nocturno andino Aotus lemurinus en el departamento del Quindío, Colombia. Mammalogy Notes 4: 6-10.</citation>
+                <citation>Ossa L., P. A., J. M. Giraldo M., G. A. López G., L. G. Dias y F. A. Rivera P. 2012. Colecciones biológicas: una alternativa para los estudios de diversidad genética. Boletín Científico, Centro de Museos, Museo de Historia Natural 16: 143-155.</citation>
+                <citation>Patterson, B. D. 2002. On the continuing need for scientific collecting of mammals. Mastozoologia Neotropical 9: 253-262.</citation>
+                <citation>Patton, J. L., U. F. J. Pardiñas, G. DʼElía, G. (Eds.). 2015. Mammals of South America. Volume 2. Rodents. The University of Chicago Press. Chicago.</citation>
+                <citation>Ramírez-Chaves, H. E., M. C. Calderón-Capote y A. F. Suárez-Castro, A. F. 2018. The genus Dasyprocta Illiger, 1811 (Mammalia: Rodentia) in Colombia. Mastozoología Neotropical 25:139-149.</citation>
+                <citation>Ramírez-Chaves, H. E., M. Ortega-Rincón, W. A, Pérez, D. Marín. 2011. Historia de las especies de mamíferos exóticos en Colombia. Boletín Científico, Centro de Museos, Museo de Historia Natural, Universidad de Caldas 15: 139-156.</citation>
+                <citation>Ramírez-Chaves, H. E., K. P. Mulder, D. Marín, W. A. Pérez, V. M. Martínez-Arias. 2012. Has Colombian Weasel Mustela felipei been overlooked in collections? Small Carnivore Conservation 47: 30-34.</citation>
+                <citation>Ramírez-Chaves, H. E., A. F. Suárez Castro, Sociedad Colombiana de Mastozoología, D. 
+Zurc, D. C. Concha Osbahr, A. Trujillo, E. A. Noguera Urbano, G. E. Pantoja Peña, M. E. 
+Rodríguez Posada, J. F. González Maya, J. Pérez Torres, H. Mantilla Meluk, C López Castañeda, A. Velásquez Valencia, D. Zárrate Charry D. 2018. Mamíferos de Colombia. Version 1.5. Sociedad Colombiana de Mastozoología. Checklist dataset https://doi.org/10.15472/kl1whs accessed via GBIF.org on 2019-03-29.</citation>
+                <citation>Roncancio-D., N. y J. Estévez-V. 2007. Evaluación del ensamblaje de murciélagos en áreas sometidas a regeneración natural y a restauración por medio de plantaciones de aliso. Boletín Científico, Centro de Museos, Museo de Historia Natural 11: 131-143.</citation>
+                <citation>Roncancio-D., N. y J. Estévez-V. 2007. Evaluación del ensamblaje de murciélagos en áreas sometidas a regeneración natural y a restauración por medio de plantaciones de aliso. Boletín Científico, Centro de Museos, Museo de Historia Natural 11: 131-143.</citation>
+                <citation>Roncancio, N. y H. E. Ramírez-Chaves. 2008. Registro de leucismo en Sturnira erythromos en los Andes centrales de Colombia. Chiroptera Neotropical 14: 412-414.</citation>
+                <citation>Sánchez, F. 2000. Inventario de mamíferos en un bosque andino del departamento de Caldas, Colombia. Boletín Científico, Centro de Museos, Museo de Historia Natural 4: 17-25.</citation>
+                <citation>Sánchez, F. y M. Alvear. 2003. Comentarios sobre el uso de hábitat, dieta, y conocimiento popular de los mamíferos en un bosque andino de Caldas, Colombia. Boletín Científico, Centro de Museos, Museo de Historia Natural 7: 122-144.</citation>
+                <citation>Sánchez, F., P. Sánchez-Palomino y A. Cadena. 2003. Inventario de mamíferos en un bosque de los Andes Centrales de Colombia. Caldasia 26: 291-309.</citation>
+                <citation>Simmons, J. E. y Muñoz-Saba, Y. 2005. Cuidado, manejo y conservación de las colecciones biológicas. Bogotá: Universidad Nacional de Colombia.</citation>
+                <citation>Solari, S., Y. Muñoz-Saba, J. V. Rodríguez-Mahecha, T. R. Defler, H. E. Ramírez-Chaves y F. Trujillo. 2013. Riqueza, Endemismo y conservación de los mamíferos de Colombia. Mastozoología Neotropical 20: 301-365.</citation>
+                <citation>Suárez-Castro, A. F., H. E. Ramírez-Chaves (eds.). 2015. Los carnívoros terrestres y semiacuáticos continentales de Colombia. Guía de Campo. Bogotá: Editorial Universidad Nacional de Colombia, 220 pp.</citation>
+                <citation>Ramírez-Chaves H.E., Morales-Martínez D.M., Pérez W.A., Velásquez-Guarín D., Mejía-Fontecha I.Y., Ortiz-Giraldo M., Ossa-López P.A. &amp; Rivera-Páez F.A.	2021. A new species of small Eptesicus Rafinesque (Chiroptera: Vespertilionidae) from northern South America. Zootaxa	https://doi.org/10.11646/zootaxa.5020.3.4</citation>
+                <citation>Ramírez-Chaves H.E., Ossa-López P.A., Lasso-Lasso L., Rivera-Páez F.A., Roncancio-Duque N., Escobedo-Morales L.A. &amp; Maldonado J.E.	2021. Range extension of the Central American Red Brocket, Mazama temama (Kerr, 1792) (Artiodactyla, Cervidae), in Colombia	Check List	https://doi.org/10.15560/17.4.1095</citation>
+          </bibliography>
+            <physical>
+              <objectName>Perfil en Google scholar de la colección</objectName>
+              <characterEncoding>UTF-8</characterEncoding>
+              <dataFormat>
+                <externallyDefinedFormat>
+                  <formatName>Página web</formatName>
+                    <formatVersion>1</formatVersion>
+                </externallyDefinedFormat>
+              </dataFormat>
+              <distribution>
+                <online>
+                  <url function="download">https://scholar.google.com/citations?hl=es&amp;user=_q9scQgAAAAJ&amp;view_op=list_works&amp;sortby=pubdate</url>
+                </online>
+              </distribution>
+            </physical>
+          <resourceLogoUrl>https://raw.githubusercontent.com/SIB-Colombia/logos/main/socio-SiB-ucaldas.png</resourceLogoUrl>
+              <collection>
+                  <parentCollectionIdentifier>MHN-UCa</parentCollectionIdentifier>
+                  <collectionIdentifier>Registro Nacional de Colecciones Biológicas: 86</collectionIdentifier>
+                <collectionName>Colección de Vertebrados e Invertebrados</collectionName>
+              </collection>
+                <specimenPreservationMethod>alcohol</specimenPreservationMethod>
+                <specimenPreservationMethod>mounted</specimenPreservationMethod>
+                <specimenPreservationMethod>formalin</specimenPreservationMethod>
+          <dc:replaces>1a58ec89-e5d4-4b2b-9ed3-1c8b5f70f4fc/v2.7.xml</dc:replaces>
+      </gbif>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>
