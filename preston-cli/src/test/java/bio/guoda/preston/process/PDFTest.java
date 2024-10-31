@@ -82,9 +82,6 @@ public class PDFTest {
         ByteArrayOutputStream output2 = new ByteArrayOutputStream();
         IOUtils.copy(resourceAsStream, output2);
 
-        IOUtils.write(output1.toByteArray(), new FileOutputStream("/home/jorrit/tmp/bla.pdf"));
-
-
         assertThat(customMetadataValue, is(contentId.getIRIString()));
 
         assertThat(output1.toString(), is(output2.toString()));
@@ -140,7 +137,6 @@ public class PDFTest {
         assertThat(firstPageRange.getStyle(), is(PDPageLabelRange.STYLE_DECIMAL));
         assertThat(firstPageRange.getPrefix(), is(""));
         String customMetadataValue = actualDoc.getDocumentInformation().getCustomMetadataValue(RefNodeConstants.WAS_DERIVED_FROM.getIRIString());
-        IOUtils.write(output1.toByteArray(), new FileOutputStream("/home/jorrit/tmp/bla-e.pdf"));
 
         InputStream resourceAsStream = getClass().getResourceAsStream("elliott-page3.pdf");
         ByteArrayOutputStream output2 = new ByteArrayOutputStream();
