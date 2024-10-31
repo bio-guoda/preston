@@ -4,7 +4,6 @@ import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.Preston;
 import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.Version;
 import bio.guoda.preston.stream.ContentStreamException;
 import org.apache.commons.io.IOUtils;
@@ -21,15 +20,13 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
-import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertTrue;
 
 public class PDFTest {
 
@@ -74,7 +71,8 @@ public class PDFTest {
 
         PDPageLabelRange pageLabelRange = documentCatalog.getPageLabels().getPageLabelRange(26);
 
-        ByteArrayOutputStream output1 = toOutputStream(page, contentId, pageLabelRange, 0);
+        ByteArrayOutputStream output1 = new ByteArrayOutputStream();
+        saveAsPDF(0, pageLabelRange, page, contentId, output1);
         PDDocument actualDoc = Loader.loadPDF(output1.toByteArray());
         String customMetadataValue = actualDoc.getDocumentInformation().getCustomMetadataValue(RefNodeConstants.WAS_DERIVED_FROM.getIRIString());
 
@@ -128,7 +126,8 @@ public class PDFTest {
 
         PDPage page = pdDocument.getPage(pageIndex);
 
-        ByteArrayOutputStream output1 = toOutputStream(page, contentId, pageLabelRange, 0);
+        ByteArrayOutputStream output1 = new ByteArrayOutputStream();
+        saveAsPDF(0, pageLabelRange, page, contentId, output1);
         PDDocument actualDoc = Loader.loadPDF(output1.toByteArray());
 
         PDPageLabelRange firstPageRange = actualDoc.getDocumentCatalog().getPageLabels().getPageLabelRange(0);
@@ -159,22 +158,24 @@ public class PDFTest {
         return pageLabels == null && NumberUtils.isDigits(pageLabel);
     }
 
-    private ByteArrayOutputStream toOutputStream(PDPage page, IRI contentId, PDPageLabelRange range, int startPage) throws IOException {
-        PDDocument splitDoc = new PDDocument();
+    public static void saveAsPDF(int pageIndex,
+                                            PDPageLabelRange pageLabel,
+                                            PDPage page,
+                                            IRI contentId,
+                                            OutputStream output) throws IOException {
+        PDDocument subset = new PDDocument();
 
 
-        splitDoc.getDocumentInformation().setCustomMetadataValue(RefNodeConstants.WAS_DERIVED_FROM.getIRIString(), contentId.getIRIString());
-        splitDoc.getDocumentInformation().setTitle(contentId.toString());
-        splitDoc.getDocumentInformation().setProducer(Preston.class.getSimpleName() + " v" + Version.getVersionString() + "@" + Version.getGitCommitHash());
-        splitDoc.addPage(page);
-        splitDoc.setDocumentId(1L);
-        PDPageLabels pdPageLabels = new PDPageLabels(splitDoc);
-        pdPageLabels.setLabelItem(startPage, range);
-        splitDoc.getDocumentCatalog().setPageLabels(pdPageLabels);
+        subset.getDocumentInformation().setCustomMetadataValue(RefNodeConstants.WAS_DERIVED_FROM.getIRIString(), contentId.getIRIString());
+        subset.getDocumentInformation().setTitle(contentId.toString());
+        subset.getDocumentInformation().setProducer(Preston.class.getSimpleName() + " v" + Version.getVersionString() + "@" + Version.getGitCommitHash());
+        subset.addPage(page);
+        subset.setDocumentId(1L);
+        PDPageLabels pdPageLabels = new PDPageLabels(subset);
+        pdPageLabels.setLabelItem(pageIndex, pageLabel);
+        subset.getDocumentCatalog().setPageLabels(pdPageLabels);
 
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        splitDoc.save(output);
-        return output;
+        subset.save(output);
     }
 
 }
