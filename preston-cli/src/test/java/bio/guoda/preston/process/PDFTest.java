@@ -72,7 +72,9 @@ public class PDFTest {
         PDPageLabelRange pageLabelRange = documentCatalog.getPageLabels().getPageLabelRange(26);
 
         ByteArrayOutputStream output1 = new ByteArrayOutputStream();
+
         saveAsPDF(0, pageLabelRange, page, contentId, output1);
+
         PDDocument actualDoc = Loader.loadPDF(output1.toByteArray());
         String customMetadataValue = actualDoc.getDocumentInformation().getCustomMetadataValue(RefNodeConstants.WAS_DERIVED_FROM.getIRIString());
 
@@ -105,29 +107,12 @@ public class PDFTest {
 
         assertThat(pdDocument.getNumberOfPages(), is(expectedPageCount));
 
-        PDDocumentCatalog documentCatalog = pdDocument.getDocumentCatalog();
-
-        PDPageLabels pageLabels = documentCatalog.getPageLabels();
-        int pageIndex;
-        PDPageLabelRange pageLabelRange = null;
-        if (useIndexAsLabel(requestedPageLabel, pageLabels)) {
-            int requestedPageNumber = Integer.parseInt(requestedPageLabel);
-            pageIndex = requestedPageNumber - 1;
-            pageLabelRange = new PDPageLabelRange();
-            pageLabelRange.setPrefix("");
-            pageLabelRange.setStart(requestedPageNumber);
-            pageLabelRange.setStyle(PDPageLabelRange.STYLE_DECIMAL);
-        } else if (useLabel(requestedPageLabel, pageLabels)) {
-            pageIndex = pageLabels.getPageIndicesByLabels().get(requestedPageLabel);
-            pageLabelRange = pageLabels.getPageLabelRange(pageIndex);
-        } else {
-            throw new ContentStreamException("cannot find page [" + requestedPageLabel + "] in " + contentId.toString());
-        }
-
-        PDPage page = pdDocument.getPage(pageIndex);
+        SelectedPage selectedPage = selectPage(requestedPageLabel, pdDocument);
 
         ByteArrayOutputStream output1 = new ByteArrayOutputStream();
-        saveAsPDF(0, pageLabelRange, page, contentId, output1);
+
+        saveAsPDF(selectedPage, contentId, output1);
+
         PDDocument actualDoc = Loader.loadPDF(output1.toByteArray());
 
         PDPageLabelRange firstPageRange = actualDoc.getDocumentCatalog().getPageLabels().getPageLabelRange(0);
@@ -142,7 +127,6 @@ public class PDFTest {
         IOUtils.copy(resourceAsStream, output2);
 
 
-
         assertThat(customMetadataValue, is(contentId.getIRIString()));
 
         assertThat(output1.toString(), is(output2.toString()));
@@ -150,19 +134,54 @@ public class PDFTest {
 
     }
 
-    private boolean useLabel(String pageLabel, PDPageLabels pageLabels) {
+    private static SelectedPage selectPage(String requestedPageLabel, PDDocument doc) throws IOException, ContentStreamException {
+        PDDocumentCatalog documentCatalog = doc.getDocumentCatalog();
+
+        PDPageLabels pageLabels = documentCatalog.getPageLabels();
+        int pageIndex;
+        PDPageLabelRange pageLabelRange;
+        if (useIndexAsLabel(requestedPageLabel, pageLabels)) {
+            int requestedPageNumber = Integer.parseInt(requestedPageLabel);
+            pageIndex = requestedPageNumber - 1;
+            pageLabelRange = new PDPageLabelRange();
+            pageLabelRange.setPrefix("");
+            pageLabelRange.setStart(requestedPageNumber);
+            pageLabelRange.setStyle(PDPageLabelRange.STYLE_DECIMAL);
+        } else if (useLabel(requestedPageLabel, pageLabels)) {
+            pageIndex = pageLabels.getPageIndicesByLabels().get(requestedPageLabel);
+            pageLabelRange = pageLabels.getPageLabelRange(pageIndex);
+        } else {
+            throw new ContentStreamException("cannot find page [" + requestedPageLabel + "]");
+        }
+
+        PDPage page = doc.getPage(pageIndex);
+
+        return new SelectedPage(page, 0, pageLabelRange);
+    }
+
+    private static boolean useLabel(String pageLabel, PDPageLabels pageLabels) {
         return pageLabels != null && pageLabels.getPageIndicesByLabels().containsKey(pageLabel);
     }
 
-    private boolean useIndexAsLabel(String pageLabel, PDPageLabels pageLabels) {
+    private static boolean useIndexAsLabel(String pageLabel, PDPageLabels pageLabels) {
         return pageLabels == null && NumberUtils.isDigits(pageLabel);
     }
 
+    public static void saveAsPDF(SelectedPage selectedPage,
+                                 IRI contentId,
+                                 OutputStream output) throws IOException {
+        saveAsPDF(selectedPage.getIndex(),
+                selectedPage.getPageLabelRange(),
+                selectedPage.getPage(),
+                contentId,
+                output);
+    }
+
     public static void saveAsPDF(int pageIndex,
-                                            PDPageLabelRange pageLabel,
-                                            PDPage page,
-                                            IRI contentId,
-                                            OutputStream output) throws IOException {
+                                 PDPageLabelRange pageLabel,
+                                 PDPage page,
+                                 IRI contentId,
+                                 OutputStream output) throws IOException {
         PDDocument subset = new PDDocument();
 
 
