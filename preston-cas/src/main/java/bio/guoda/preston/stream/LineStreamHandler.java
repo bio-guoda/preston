@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.stream.ContentStreamFactory.URI_PREFIX_LINE;
 
 public class LineStreamHandler implements ContentStreamHandler {
 
@@ -23,7 +24,7 @@ public class LineStreamHandler implements ContentStreamHandler {
 
     @Override
     public boolean handle(IRI version, InputStream in) throws ContentStreamException {
-        if (!version.getIRIString().startsWith("line:")) {
+        if (!version.getIRIString().startsWith(URI_PREFIX_LINE + ":")) {
             Charset charset;
             try {
                 charset = new UniversalEncodingDetector().detect(in, new Metadata());
@@ -59,7 +60,7 @@ public class LineStreamHandler implements ContentStreamHandler {
     }
 
     private IRI getLineIri(IRI version, int lineNumber) {
-        return toIRI(String.format("line:%s!/L%d", version.getIRIString(), lineNumber));
+        return toIRI(String.format((URI_PREFIX_LINE + ":") + "%s!/L%d", version.getIRIString(), lineNumber));
     }
 
     @Override

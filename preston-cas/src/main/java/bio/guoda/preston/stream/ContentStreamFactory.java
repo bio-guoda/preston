@@ -33,6 +33,7 @@ public class ContentStreamFactory implements InputStreamFactory {
     public static final String URI_PREFIX_CUT = "cut";
     public static final String URI_PREFIX_LINE = "line";
     private static final String URI_PREFIX_THUMBNAIL = "thumbnail";
+    private static final String URI_PREFIX_PDF = "pdf";
     private final IRI targetIri;
     private final IRI contentReference;
 
@@ -124,6 +125,9 @@ public class ContentStreamFactory implements InputStreamFactory {
                 } else if (nextOperatorMatcher.group(1).equals(URI_PREFIX_THUMBNAIL)) {
                     handle(toIRI(nextOperatorMatcher.group()), createThumbnailForImageStream(iri, in));
                     return true;
+                } else if (nextOperatorMatcher.group(1).equals(URI_PREFIX_PDF)) {
+                    handle(toIRI(nextOperatorMatcher.group()), selectPagesFromPDF(iri, in));
+                    return true;
                 }
             }
 
@@ -161,6 +165,24 @@ public class ContentStreamFactory implements InputStreamFactory {
                 }
             } catch (IOException e) {
                 throw new ContentStreamException("failed to create thumbnail from [" + iri + "]");
+            }
+        }
+
+        private InputStream selectPagesFromPDF(IRI iri, InputStream in) throws ContentStreamException {
+            try {
+                if (in == null) {
+                    throw new ContentStreamException("no content provided for [" + iri + "]");
+                }
+                BufferedImage srcImage = ImageIO.read(in);
+                if (srcImage == null) {
+                }
+                BufferedImage scaledImage = Scalr.resize(srcImage, 256);
+                try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                    ImageIO.write(scaledImage, "jpg", outputStream);
+                    return new ByteArrayInputStream(outputStream.toByteArray());
+                }
+            } catch (IOException e) {
+                throw new ContentStreamException("failed to create pdf from [" + iri + "]");
             }
         }
 

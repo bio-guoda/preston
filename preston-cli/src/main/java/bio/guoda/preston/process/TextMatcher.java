@@ -1,7 +1,6 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import bio.guoda.preston.stream.ArchiveStreamHandler;
 import bio.guoda.preston.stream.CompressedStreamHandler;

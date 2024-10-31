@@ -3,12 +3,12 @@ package bio.guoda.preston.process;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDPageLabelRange;
 
-public class SelectedPage {
+public class PageSelected {
     private final PDPage page;
     private final int index;
     private final PDPageLabelRange pageLabelRange;
 
-    public SelectedPage(PDPage page, int index, PDPageLabelRange pageLabelRange) {
+    public PageSelected(PDPage page, int index, PDPageLabelRange pageLabelRange) {
         this.page = page;
         this.index = index;
         this.pageLabelRange = pageLabelRange;

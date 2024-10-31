@@ -34,6 +34,7 @@ import static bio.guoda.preston.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static bio.guoda.preston.stream.CharBufferByteReader.getBufferPosition;
 import static bio.guoda.preston.stream.CharBufferByteReader.setBufferPosition;
+import static bio.guoda.preston.stream.ContentStreamFactory.URI_PREFIX_CUT;
 
 public class MatchingTextStreamHandler implements ContentStreamHandler {
     private static final int BUFFER_SIZE = 4096;
@@ -54,7 +55,7 @@ public class MatchingTextStreamHandler implements ContentStreamHandler {
     }
 
     private static IRI getCutIri(IRI fileIri, int startAt, int endAt) {
-        return toIRI(String.format("cut:%s!/b%d-%d", fileIri.getIRIString(), startAt + 1, endAt));
+        return toIRI(String.format((URI_PREFIX_CUT + ":") + "%s!/b%d-%d", fileIri.getIRIString(), startAt + 1, endAt));
     }
 
     @Override
