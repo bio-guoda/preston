@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -61,6 +62,10 @@ public class ContentStreamFactoryTest {
 
     public InputStream getZipArchiveStream() {
         return getClass().getResourceAsStream("/bio/guoda/preston/process/nested.zip");
+    }
+
+    public InputStream getPDFStream() {
+        return getClass().getResourceAsStream("/bio/guoda/preston/process/elliott2023.pdf");
     }
 
     @Test
@@ -117,6 +122,21 @@ public class ContentStreamFactoryTest {
         ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("zip:zip:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/level2.zip!/level2.txt"));
         InputStream inputStream = factory.create(getZipArchiveStream());
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("https://example.org"));
+    }
+
+    @Test
+    public void contentStreamForPdfPage() throws IOException {
+        ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("pdf:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/p3"));
+        InputStream inputStream = factory.create(getPDFStream());
+
+        ByteArrayOutputStream actual = new ByteArrayOutputStream();
+        IOUtils.copy(inputStream, actual);
+
+        InputStream expectedIs = getClass().getResourceAsStream("/bio/guoda/preston/process/elliott2023-page3_b.pdf");
+        ByteArrayOutputStream expected = new ByteArrayOutputStream();
+        IOUtils.copy(expectedIs, expected);
+
+        assertThat(actual.toString(), Is.is(expected.toString()));
     }
 
     @Test(expected = IOException.class)

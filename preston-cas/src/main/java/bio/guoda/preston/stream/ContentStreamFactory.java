@@ -1,9 +1,14 @@
 package bio.guoda.preston.stream;
 
+import bio.guoda.preston.process.PDFUtil;
+import bio.guoda.preston.process.PageSelected;
 import bio.guoda.preston.store.HashKeyUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.txt.UniversalEncodingDetector;
 import org.imgscalr.Scalr;
@@ -12,12 +17,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -89,6 +91,7 @@ public class ContentStreamFactory implements InputStreamFactory {
 
     private class ContentStreamRequest implements ContentStreamHandler {
 
+        public static final String GROUPNAME_PAGE_NUMBER = "pageNumber";
         private final ContentStreamHandler handler;
         private InputStream contentStream;
         private boolean keepReading = true;
@@ -173,14 +176,24 @@ public class ContentStreamFactory implements InputStreamFactory {
                 if (in == null) {
                     throw new ContentStreamException("no content provided for [" + iri + "]");
                 }
-                BufferedImage srcImage = ImageIO.read(in);
-                if (srcImage == null) {
+
+                Matcher pageMatcher = Pattern
+                        .compile(String.format("%s:%s!/p(?<" + GROUPNAME_PAGE_NUMBER + ">[1-9][0-9]*)", URI_PREFIX_PDF, iri.getIRIString()))
+                        .matcher(targetIri.getIRIString());
+
+                if (pageMatcher.matches()) {
+                    try (ByteArrayOutputStream pdfOS = new ByteArrayOutputStream()) {
+                        IOUtils.copy(in, pdfOS);
+                        PDDocument doc = Loader.loadPDF(pdfOS.toByteArray());
+                        PageSelected pageSelected = PDFUtil.selectPage(pageMatcher.group(GROUPNAME_PAGE_NUMBER), doc);
+                        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+                            PDFUtil.saveAsPDF(pageSelected, targetIri, os);
+                            return new ByteArrayInputStream(os.toByteArray());
+                        }
+
+                    }
                 }
-                BufferedImage scaledImage = Scalr.resize(srcImage, 256);
-                try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-                    ImageIO.write(scaledImage, "jpg", outputStream);
-                    return new ByteArrayInputStream(outputStream.toByteArray());
-                }
+                throw new ContentStreamException("invalid pdf iri: [" + iri + "]");
             } catch (IOException e) {
                 throw new ContentStreamException("failed to create pdf from [" + iri + "]");
             }

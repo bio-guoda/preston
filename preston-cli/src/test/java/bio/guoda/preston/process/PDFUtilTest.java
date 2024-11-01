@@ -17,7 +17,6 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -118,8 +117,8 @@ public class PDFUtilTest {
         assertThat(firstPageRange.getStyle(), is(PDPageLabelRange.STYLE_DECIMAL));
         assertThat(firstPageRange.getPrefix(), is(""));
         String customMetadataValue = actualDoc.getDocumentInformation().getCustomMetadataValue(RefNodeConstants.WAS_DERIVED_FROM.getIRIString());
-        
-        InputStream resourceAsStream = getClass().getResourceAsStream("elliott-page3.pdf");
+
+        InputStream resourceAsStream = getClass().getResourceAsStream("elliott2023-page3.pdf");
         ByteArrayOutputStream output2 = new ByteArrayOutputStream();
         IOUtils.copy(resourceAsStream, output2);
 
