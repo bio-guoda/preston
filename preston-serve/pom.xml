@@ -14,7 +14,7 @@
     <description>Serve biodiversity datasets via http endpoint</description>
 
     <properties>
-        <jetty.version>9.4.55.v20240627</jetty.version>
+        <jetty.version>9.4.56.v20240826</jetty.version>
     </properties>
 
     <dependencies>
