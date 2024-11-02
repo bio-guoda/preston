@@ -178,7 +178,7 @@ public class ContentStreamFactory implements InputStreamFactory {
                 }
 
                 Matcher pageMatcher = Pattern
-                        .compile(String.format("%s:%s!/p(?<" + GROUPNAME_PAGE_NUMBER + ">[1-9][0-9]*)", URI_PREFIX_PDF, iri.getIRIString()))
+                        .compile(String.format("%s:%s!/p(?<" + GROUPNAME_PAGE_NUMBER + ">[1-9IVXC][0-9IVXC]*)", URI_PREFIX_PDF, iri.getIRIString()))
                         .matcher(targetIri.getIRIString());
 
                 if (pageMatcher.matches()) {

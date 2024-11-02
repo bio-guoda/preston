@@ -68,6 +68,10 @@ public class ContentStreamFactoryTest {
         return getClass().getResourceAsStream("/bio/guoda/preston/process/elliott2023.pdf");
     }
 
+    public InputStream getPDFStreamKoopman() {
+        return getClass().getResourceAsStream("/bio/guoda/preston/process/koopman1994.pdf");
+    }
+
     @Test
     public void contentStreamForEmbeddedContent() throws IOException {
         ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("zip:hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!/level1.txt"));
@@ -133,6 +137,22 @@ public class ContentStreamFactoryTest {
         IOUtils.copy(inputStream, actual);
 
         InputStream expectedIs = getClass().getResourceAsStream("/bio/guoda/preston/process/elliott2023-page3_b.pdf");
+        ByteArrayOutputStream expected = new ByteArrayOutputStream();
+        IOUtils.copy(expectedIs, expected);
+
+        assertThat(actual.toString(), Is.is(expected.toString()));
+    }
+
+    @Test
+    public void contentStreamForPdfPageNonNumeric() throws IOException {
+        String contentId = "hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI("pdf:" + contentId + "!/pIV"));
+        InputStream inputStream = factory.create(getPDFStreamKoopman());
+
+        ByteArrayOutputStream actual = new ByteArrayOutputStream();
+        IOUtils.copy(inputStream, actual);
+
+        InputStream expectedIs = getClass().getResourceAsStream("/bio/guoda/preston/process/koopman1994-pageIV_b.pdf");
         ByteArrayOutputStream expected = new ByteArrayOutputStream();
         IOUtils.copy(expectedIs, expected);
 
