@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +29,7 @@ public class ContentStreamFactoryTest {
     @Test
     public void matchingGZipPrefix() throws IOException {
 
-        assertTrue(ContentStreamFactory.hasSupportedCompressionPrefix(
+        assertTrue(ContentStreamFactory.hasSupportedCompressionPrefix(  
                 RefNodeFactory.toIRI("gz:something"),
                 RefNodeFactory.toIRI("gz:something!/something"))
         );
