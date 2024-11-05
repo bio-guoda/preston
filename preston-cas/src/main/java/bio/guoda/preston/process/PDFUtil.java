@@ -12,6 +12,8 @@ import org.apache.pdfbox.pdmodel.common.PDPageLabels;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.List;
 
 public class PDFUtil {
     public static PageSelected selectPage(String requestedPageLabel, PDDocument doc) throws IOException, ContentStreamException {
@@ -50,16 +52,25 @@ public class PDFUtil {
     public static void saveAsPDF(PageSelected pageSelected,
                                  IRI contentId,
                                  OutputStream output) throws IOException {
+        saveAsPDF(Arrays.asList(pageSelected), contentId, output);
+    }
+
+
+    public static void saveAsPDF(List<PageSelected> selectedPages,
+                                 IRI contentId,
+                                 OutputStream output) throws IOException {
         PDDocument subset = new PDDocument();
 
 
         subset.getDocumentInformation().setCustomMetadataValue(RefNodeConstants.WAS_DERIVED_FROM.getIRIString(), contentId.getIRIString());
         subset.getDocumentInformation().setTitle(contentId.toString());
         //subset.getDocumentInformation().setProducer(Preston.class.getSimpleName() + " v" + Version.getVersionString() + "@" + Version.getGitCommitHash());
-        subset.addPage(pageSelected.getPage());
-        subset.setDocumentId(1L);
         PDPageLabels pdPageLabels = new PDPageLabels(subset);
-        pdPageLabels.setLabelItem(pageSelected.getIndex(), pageSelected.getPageLabelRange());
+        for (PageSelected selectedPage : selectedPages) {
+            subset.addPage(selectedPage.getPage());
+            pdPageLabels.setLabelItem(selectedPage.getIndex(), selectedPage.getPageLabelRange());
+        }
+        subset.setDocumentId(1L);
         subset.getDocumentCatalog().setPageLabels(pdPageLabels);
 
         subset.save(output);

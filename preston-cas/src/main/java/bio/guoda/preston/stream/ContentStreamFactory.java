@@ -21,7 +21,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.PrimitiveIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.LongStream;
@@ -34,9 +37,8 @@ import static bio.guoda.preston.stream.ContentStreamUtil.getMarkSupportedReader;
 public class ContentStreamFactory implements InputStreamFactory {
     public static final String URI_PREFIX_CUT = "cut";
     public static final String URI_PREFIX_LINE = "line";
-    private static final String URI_PREFIX_THUMBNAIL = "thumbnail";
-    private static final String URI_PREFIX_PDF = "pdf";
-    public static final String NUMBER_TYPE = "L";
+    public static final String URI_PREFIX_THUMBNAIL = "thumbnail";
+    public static final String URI_PREFIX_PAGE = "pdf";
     private final IRI targetIri;
     private final IRI contentReference;
 
@@ -129,7 +131,7 @@ public class ContentStreamFactory implements InputStreamFactory {
                 } else if (nextOperatorMatcher.group(1).equals(URI_PREFIX_THUMBNAIL)) {
                     handle(toIRI(nextOperatorMatcher.group()), createThumbnailForImageStream(iri, in));
                     return true;
-                } else if (nextOperatorMatcher.group(1).equals(URI_PREFIX_PDF)) {
+                } else if (nextOperatorMatcher.group(1).equals(URI_PREFIX_PAGE)) {
                     handle(toIRI(nextOperatorMatcher.group()), selectPagesFromPDF(iri, in));
                     return true;
                 }
@@ -148,7 +150,7 @@ public class ContentStreamFactory implements InputStreamFactory {
                 throw new ContentStreamException("failed to detect charset", e);
             }
 
-            SelectedLinesReader lineReader = new SelectedLinesReader(getLineNumberStream(iri, NUMBER_TYPE, targetIri).iterator(),
+            SelectedLinesReader lineReader = new SelectedLinesReader(getLineNumberStream(iri, RangeType.Line, targetIri).iterator(),
                     getMarkSupportedReader(new InputStreamReader(markableIn, charset)));
             return new ReaderInputStream(lineReader, charset);
         }
@@ -178,17 +180,26 @@ public class ContentStreamFactory implements InputStreamFactory {
                     throw new ContentStreamException("no content provided for [" + iri + "]");
                 }
 
+                LongStream pageNumberStream = getLineNumberStream(iri, RangeType.Page, targetIri);
+
                 Matcher pageMatcher = Pattern
-                        .compile(String.format("%s:%s!/p(?<" + GROUPNAME_PAGE_NUMBER + ">[1-9IVXC][0-9IVXC]*)", URI_PREFIX_PDF, iri.getIRIString()))
+                        .compile(String.format("%s:%s!/p(?<" + GROUPNAME_PAGE_NUMBER + ">[1-9IVXC][0-9IVXC]*)", URI_PREFIX_PAGE, iri.getIRIString()))
                         .matcher(targetIri.getIRIString());
 
                 if (pageMatcher.matches()) {
                     try (ByteArrayOutputStream pdfOS = new ByteArrayOutputStream()) {
                         IOUtils.copy(in, pdfOS);
                         PDDocument doc = Loader.loadPDF(pdfOS.toByteArray());
-                        PageSelected pageSelected = PDFUtil.selectPage(pageMatcher.group(GROUPNAME_PAGE_NUMBER), doc);
+
+                        PrimitiveIterator.OfLong iterator = pageNumberStream.iterator();
+
+                        List<PageSelected> selectedPages = new ArrayList<>();
+                        while (iterator.hasNext()) {
+                            Long pageNumber = iterator.next();
+                            selectedPages.add(PDFUtil.selectPage(Long.toString(pageNumber), doc));
+                        }
                         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-                            PDFUtil.saveAsPDF(pageSelected, targetIri, os);
+                            PDFUtil.saveAsPDF(selectedPages, targetIri, os);
                             return new ByteArrayInputStream(os.toByteArray());
                         }
 
@@ -202,7 +213,7 @@ public class ContentStreamFactory implements InputStreamFactory {
 
 
         private boolean lineQueryIsComplex(IRI iri) {
-            return getLineNumberStream(iri, NUMBER_TYPE, targetIri).limit(2).count() > 1;
+            return getLineNumberStream(iri, RangeType.Line, targetIri).limit(2).count() > 1;
         }
 
         private void cutAndParseBytes(IRI iri, InputStream in) throws ContentStreamException {
@@ -245,9 +256,9 @@ public class ContentStreamFactory implements InputStreamFactory {
 
     }
 
-    public static LongStream getLineNumberStream(IRI iri, String numberType, IRI targetIri) {
+    public static LongStream getLineNumberStream(IRI iri, RangeType rangeType, IRI targetIri) {
         Matcher lineQueryMatcher = Pattern
-                .compile(String.format("%s:%s!/([%s0-9\\-,]*)", URI_PREFIX_LINE, iri.getIRIString(), numberType))
+                .compile(String.format("%s:%s!/([%s%s\\-,]*)", rangeType.getIriPrefix(), iri.getIRIString(), rangeType.getPrefix(), rangeType.getPattern()))
                 .matcher(targetIri.getIRIString());
 
         if (lineQueryMatcher.find()) {
@@ -255,7 +266,7 @@ public class ContentStreamFactory implements InputStreamFactory {
 
             return Arrays.stream(linesQuery.split(","))
                     .flatMapToLong(lineRange -> {
-                        final Pattern lineRangePattern = Pattern.compile(String.format("%s([0-9]+)(?:-%s([0-9]+))?", numberType, numberType));
+                        final Pattern lineRangePattern = Pattern.compile(String.format("%s([%s]+)(?:-%s([%s]+))?", rangeType.getPrefix(), rangeType.getPattern(), rangeType.getPrefix(), rangeType.getPattern()));
                         Matcher lineRangeMatcher = lineRangePattern.matcher(lineRange);
 
                         if (lineRangeMatcher.find()) {
