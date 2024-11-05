@@ -12,6 +12,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 import java.util.zip.GZIPInputStream;
 
 import static junit.framework.TestCase.assertTrue;
@@ -273,4 +275,63 @@ public class ContentStreamFactoryTest {
 
     }
 
+    @Test
+    public void lineNumberStream() {
+        LongStream streamOfNumbers = ContentStreamFactory.getLineNumberStream(
+                RefNodeFactory.toIRI("hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f"),
+                "L",
+                RefNodeFactory.toIRI("line:hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f!/L1,L3"));
+
+        long[] numbers = streamOfNumbers.toArray();
+        assertThat(numbers.length, Is.is(2));
+        assertThat(numbers[0], Is.is(1L));
+        assertThat(numbers[1], Is.is(3L));
+    }
+
+
+    @Test
+    public void lineNumberStreamRange() {
+        LongStream streamOfNumbers = ContentStreamFactory.getLineNumberStream(
+                RefNodeFactory.toIRI("hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f"),
+                "L",
+                RefNodeFactory.toIRI("line:hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f!/L1-L3"));
+
+        long[] numbers = streamOfNumbers.toArray();
+        assertThat(numbers.length, Is.is(3));
+        assertThat(numbers[0], Is.is(1L));
+        assertThat(numbers[1], Is.is(2L));
+        assertThat(numbers[2], Is.is(3L));
+    }
+
+    @Test
+    public void lineNumberStreamRangeAndIntersection() {
+        LongStream streamOfNumbers = ContentStreamFactory.getLineNumberStream(
+                RefNodeFactory.toIRI("hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f"),
+                "L",
+                RefNodeFactory.toIRI("line:hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f!/L1-L3,L5"));
+
+        long[] numbers = streamOfNumbers.toArray();
+        assertThat(numbers.length, Is.is(4));
+        assertThat(numbers[0], Is.is(1L));
+        assertThat(numbers[1], Is.is(2L));
+        assertThat(numbers[2], Is.is(3L));
+        assertThat(numbers[3], Is.is(5L));
+    }
+
+    @Test
+    public void lineNumberStreamRangeAndIntersectionRange() {
+        LongStream streamOfNumbers = ContentStreamFactory.getLineNumberStream(
+                RefNodeFactory.toIRI("hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f"),
+                "L",
+                RefNodeFactory.toIRI("line:hash://sha256/d89ad03a0c058ecb19c49d158ea1324b83669713a9d446e49786bdfcc23a3c3f!/L1-L3,L5-L7"));
+
+        long[] numbers = streamOfNumbers.toArray();
+        assertThat(numbers.length, Is.is(6));
+        assertThat(numbers[0], Is.is(1L));
+        assertThat(numbers[1], Is.is(2L));
+        assertThat(numbers[2], Is.is(3L));
+        assertThat(numbers[3], Is.is(5L));
+        assertThat(numbers[4], Is.is(6L));
+        assertThat(numbers[5], Is.is(7L));
+    }
 }

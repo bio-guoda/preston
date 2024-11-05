@@ -36,6 +36,7 @@ public class ContentStreamFactory implements InputStreamFactory {
     public static final String URI_PREFIX_LINE = "line";
     private static final String URI_PREFIX_THUMBNAIL = "thumbnail";
     private static final String URI_PREFIX_PDF = "pdf";
+    public static final String NUMBER_TYPE = "L";
     private final IRI targetIri;
     private final IRI contentReference;
 
@@ -147,7 +148,7 @@ public class ContentStreamFactory implements InputStreamFactory {
                 throw new ContentStreamException("failed to detect charset", e);
             }
 
-            SelectedLinesReader lineReader = new SelectedLinesReader(getLineNumberStream(iri).iterator(),
+            SelectedLinesReader lineReader = new SelectedLinesReader(getLineNumberStream(iri, NUMBER_TYPE, targetIri).iterator(),
                     getMarkSupportedReader(new InputStreamReader(markableIn, charset)));
             return new ReaderInputStream(lineReader, charset);
         }
@@ -199,34 +200,9 @@ public class ContentStreamFactory implements InputStreamFactory {
             }
         }
 
-        private LongStream getLineNumberStream(IRI iri) {
-            Matcher lineQueryMatcher = Pattern
-                    .compile(String.format("%s:%s!/([L0-9\\-,]*)", URI_PREFIX_LINE, iri.getIRIString()))
-                    .matcher(targetIri.getIRIString());
-
-            if (lineQueryMatcher.find()) {
-                String linesQuery = lineQueryMatcher.group(1);
-
-                return Arrays.stream(linesQuery.split(","))
-                        .flatMapToLong(lineRange -> {
-                            final Pattern lineRangePattern = Pattern.compile("L([0-9]+)(?:-L([0-9]+))?");
-                            Matcher lineRangeMatcher = lineRangePattern.matcher(lineRange);
-
-                            if (lineRangeMatcher.find()) {
-                                long firstLine = Long.parseLong(lineRangeMatcher.group(1));
-                                long lastLine = lineRangeMatcher.group(2) == null ? firstLine : Long.parseLong(lineRangeMatcher.group(2));
-                                return LongStream.rangeClosed(firstLine, lastLine);
-                            } else {
-                                return LongStream.empty();
-                            }
-                        });
-            } else {
-                throw new IllegalArgumentException("[" + iri + "] is not a valid line URI");
-            }
-        }
 
         private boolean lineQueryIsComplex(IRI iri) {
-            return getLineNumberStream(iri).limit(2).count() > 1;
+            return getLineNumberStream(iri, NUMBER_TYPE, targetIri).limit(2).count() > 1;
         }
 
         private void cutAndParseBytes(IRI iri, InputStream in) throws ContentStreamException {
@@ -268,4 +244,31 @@ public class ContentStreamFactory implements InputStreamFactory {
         }
 
     }
+
+    public static LongStream getLineNumberStream(IRI iri, String numberType, IRI targetIri) {
+        Matcher lineQueryMatcher = Pattern
+                .compile(String.format("%s:%s!/([%s0-9\\-,]*)", URI_PREFIX_LINE, iri.getIRIString(), numberType))
+                .matcher(targetIri.getIRIString());
+
+        if (lineQueryMatcher.find()) {
+            String linesQuery = lineQueryMatcher.group(1);
+
+            return Arrays.stream(linesQuery.split(","))
+                    .flatMapToLong(lineRange -> {
+                        final Pattern lineRangePattern = Pattern.compile(String.format("%s([0-9]+)(?:-%s([0-9]+))?", numberType, numberType));
+                        Matcher lineRangeMatcher = lineRangePattern.matcher(lineRange);
+
+                        if (lineRangeMatcher.find()) {
+                            long firstLine = Long.parseLong(lineRangeMatcher.group(1));
+                            long lastLine = lineRangeMatcher.group(2) == null ? firstLine : Long.parseLong(lineRangeMatcher.group(2));
+                            return LongStream.rangeClosed(firstLine, lastLine);
+                        } else {
+                            return LongStream.empty();
+                        }
+                    });
+        } else {
+            throw new IllegalArgumentException("[" + iri + "] is not a valid line URI");
+        }
+    }
+
 }
