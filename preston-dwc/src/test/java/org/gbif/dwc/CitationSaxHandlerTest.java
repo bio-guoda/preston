@@ -74,4 +74,17 @@ public class CitationSaxHandlerTest {
 
     }
 
+    @Test
+    public void beesAreAChangin() throws ParserConfigurationException, SAXException, IOException {
+
+        InputStream is = getClass().getResourceAsStream("/bio/guoda/preston/beesAreChangin.eml.xml");
+
+        SAXParser p = SAX_FACTORY.newSAXParser();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        p.parse(is, new CitationSaxHandler("https://example.org", os));
+
+        assertThat(new String(os.toByteArray(), StandardCharsets.UTF_8), Is.is("Bee Library -                    7add464b-ef1e-4604-b0cd-773070d545fe. Accessed at <https://example.org> .\n"));
+
+    }
+
 }

@@ -1,0 +1,44 @@
+{
+    "metadata": {
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": "taxodros-dros5",
+        "related_identifiers": [
+            {
+                "relation": "isAlternateIdentifier",
+                "identifier": "https://library.big-bee.net/portal/collections/misc/collprofiles.php?collid=21"
+            },
+            {
+                "relation": "isDerivedFrom",
+                "identifier": "http://localhost:8080/zip:hash://sha256/11b703fc157c831610bfb0f4ca966487d9bbc169f60dbfe3268ad949bb2c1234!/eml.xml"
+            },
+            {
+                "relation": "isPartOf",
+                "identifier": "https://library.big-bee.net/"
+            },
+            {
+                "relation": "cites",
+                "identifier": "10.3897/biss.5.74037"
+            },
+            {
+                "relation": "isAlternateIdentifier",
+                "identifier": "hash://sha256/11b703fc157c831610bfb0f4ca966487d9bbc169f60dbfe3268ad949bb2c1234"
+            }
+        ],
+        "creators": [
+            {
+                "name": "Smith, Colleen"
+            }
+        ],
+        "publication_date": "2024-11-01",
+        "title": "The Bees they are a Changin project",
+        "description": "This collection is an aggregate research collection for examining how bee body size is responding to climate change. There will be duplicate records with other portals: UCSB's collection, the AMNH collection and the LACM collection.",
+        "upload_type": "dataset",
+        "license": "cc-zero",
+        "filename": "dwca.zip",
+        "references": ["Seltmann KC, Allen J, Brown BV, Carper A, Engel MS, Franz N, Gilbert E, Grinter C, Gonzalez VH, Horsley P, Lee S, Maier C, Miko I, Morris P, Oboyski P, Pierce NE, Poelen J, Scott VL, Smith M, Talamas EJ, Tsutsui ND, Tucker E (2021) Announcing Big-Bee: An initiative to promote understanding of bees through image and trait digitization. Biodiversity Information Science and Standards 5: e74037. https://doi.org/10.3897/biss.5.74037"],
+        "communities": [
+            {
+                "identifier": "bigbee"
+            }
+        ]
+    }
+}

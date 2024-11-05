@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="eml://ecoinformatics.org/eml-2.1.1" xmlns:dc="http://purl.org/dc/terms/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.0.1/eml.xsd"
+         packageId="dc108ad3-d954-44f2-8701-98568620bcb0" system="https://symbiota.org" scope="system" xml:lang="eng">
+    <dataset>
+        <alternateIdentifier>https://library.big-bee.net/portal/collections/misc/collprofiles.php?collid=21
+        </alternateIdentifier>
+        <title xml:lang="eng">The Bees they are a Changin project</title>
+        <creator id="eee23760-e01a-4f79-97c3-cf9f4cb0876b">
+            <organizationName>Bee Library</organizationName>
+            <electronicMailAddress>seltmann@ucsb.edu</electronicMailAddress>
+            <onlineUrl>https://library.big-bee.net/portal/index.php</onlineUrl>
+        </creator>
+        <metadataProvider>
+            <organizationName>Bee Library</organizationName>
+            <electronicMailAddress>seltmann@ucsb.edu</electronicMailAddress>
+            <onlineUrl>https://library.big-bee.net/portal/index.php</onlineUrl>
+        </metadataProvider>
+        <pubDate>2024-11-01</pubDate>
+        <language>eng</language>
+        <abstract>
+            <para>This collection is an aggregate research collection for examining how bee body size is responding to
+                climate change. There will be duplicate records with other portals: UCSB's collection, the AMNH
+                collection and the LACM collection.
+            </para>
+        </abstract>
+        <contact>
+            <organizationName>The Bees they are a Changin project</organizationName>
+            <phone></phone>
+            <electronicMailAddress></electronicMailAddress>
+        </contact>
+        <associatedParty>
+            <individualName>
+                <surName>Smith</surName>
+                <givenName>Colleen</givenName>
+            </individualName>
+            <electronicMailAddress></electronicMailAddress>
+            <role>contentProvider</role>
+        </associatedParty>
+        <intellectualRights>
+            <para>To the extent possible under law, the publisher has waived all rights to these data and has dedicated
+                them to the
+                <ulink url="http://creativecommons.org/publicdomain/zero/1.0/">
+                    <citetitle></citetitle>
+                </ulink>
+            </para>
+        </intellectualRights>
+    </dataset>
+    <additionalMetadata>
+        <metadata>
+            <symbiota id="eee23760-e01a-4f79-97c3-cf9f4cb0876b">
+                <dateStamp>2024-11-01T06:12:42-07:00</dateStamp>
+                <citation identifier="7add464b-ef1e-4604-b0cd-773070d545fe">Bee Library -
+                    7add464b-ef1e-4604-b0cd-773070d545fe
+                </citation>
+                <physical>
+                    <characterEncoding>UTF-8</characterEncoding>
+                    <dataFormat>
+                        <externallyDefinedFormat>
+                            <formatName>Darwin Core Archive</formatName>
+                        </externallyDefinedFormat>
+                    </dataFormat>
+                </physical>
+                <collection identifier="46da7109-a045-450b-ad55-f7ba692014fa" id="21">
+                    <alternateIdentifier>
+                        https://library.big-bee.net/portal/collections/misc/collprofiles.php?collid=21
+                    </alternateIdentifier>
+                    <parentCollectionIdentifier>UCSB</parentCollectionIdentifier>
+                    <collectionIdentifier>Smith</collectionIdentifier>
+                    <collectionName>The Bees they are a Changin project</collectionName>
+                    <onlineUrl></onlineUrl>
+                    <intellectualRights>http://creativecommons.org/publicdomain/zero/1.0/</intellectualRights>
+                    <associatedParty>
+                        <individualName>
+                            <surName>Smith</surName>
+                            <givenName>Colleen</givenName>
+                        </individualName>
+                        <electronicMailAddress></electronicMailAddress>
+                    </associatedParty>
+                    <abstract>
+                        <para>&lt;p&gt;This collection is an aggregate research collection for examining how bee body
+                            size is responding to climate change. There will be duplicate records with other portals:
+                            UCSB's collection, the AMNH collection and the LACM collection.&lt;/p&gt;
+                        </para>
+                    </abstract>
+                </collection>
+            </symbiota>
+        </metadata>
+    </additionalMetadata>
+</eml:eml>
