@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PDFUtil {
-    public static PageSelected selectPage(String requestedPageLabel, PDDocument doc) throws IOException, ContentStreamException {
+    public static PageSelected selectPage(String requestedPageLabel, PDDocument doc, int index) throws IOException, ContentStreamException {
         PDDocumentCatalog documentCatalog = doc.getDocumentCatalog();
 
         PDPageLabels pageLabels = documentCatalog.getPageLabels();
@@ -38,7 +38,7 @@ public class PDFUtil {
 
         PDPage page = doc.getPage(pageIndex);
 
-        return new PageSelected(page, 0, pageLabelRange);
+        return new PageSelected(page, index, pageLabelRange);
     }
 
     private static boolean useLabel(String pageLabel, PDPageLabels pageLabels) {

@@ -149,7 +149,7 @@ public class PDFUtilTest {
 
         assertThat(pdDocument.getNumberOfPages(), is(expectedPageCount));
 
-        PageSelected pageSelected = PDFUtil.selectPage(requestedPageLabel, pdDocument);
+        PageSelected pageSelected = PDFUtil.selectPage(requestedPageLabel, pdDocument, 0);
 
         ByteArrayOutputStream output1 = new ByteArrayOutputStream();
 

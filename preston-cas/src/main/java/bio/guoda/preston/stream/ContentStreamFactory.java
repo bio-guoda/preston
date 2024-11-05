@@ -191,9 +191,11 @@ public class ContentStreamFactory implements InputStreamFactory {
 
 
                         List<PageSelected> selectedPages = new ArrayList<>();
+                        int index = 0;
                         while (pageNumberIterator.hasNext()) {
                             Long pageNumber = pageNumberIterator.next();
-                            selectedPages.add(PDFUtil.selectPage(Long.toString(pageNumber), doc));
+                            selectedPages.add(PDFUtil.selectPage(Long.toString(pageNumber), doc, index));
+                            index++;
                         }
                         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
                             PDFUtil.saveAsPDF(selectedPages, targetIri, os);
