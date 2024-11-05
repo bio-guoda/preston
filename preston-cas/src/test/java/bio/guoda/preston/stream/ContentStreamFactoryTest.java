@@ -157,8 +157,6 @@ public class ContentStreamFactoryTest {
         ByteArrayOutputStream actual = new ByteArrayOutputStream();
         IOUtils.copy(inputStream, actual);
 
-        //IOUtils.write(actual.toByteArray(), new FileOutputStream("/home/jorrit/proj/ebbe/preston/preston-test/src/main/resources/bio/guoda/preston/process/elliott2023-pages3-5.pdf"));
-
         InputStream expectedIs = getClass().getResourceAsStream("/bio/guoda/preston/process/elliott2023-pages3-5.pdf");
         ByteArrayOutputStream expected = new ByteArrayOutputStream();
         IOUtils.copy(expectedIs, expected);
