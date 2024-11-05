@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -32,7 +33,7 @@ public class ContentStreamFactoryTest {
     @Test
     public void matchingGZipPrefix() throws IOException {
 
-        assertTrue(ContentStreamFactory.hasSupportedCompressionPrefix(  
+        assertTrue(ContentStreamFactory.hasSupportedCompressionPrefix(
                 RefNodeFactory.toIRI("gz:something"),
                 RefNodeFactory.toIRI("gz:something!/something"))
         );
@@ -139,6 +140,24 @@ public class ContentStreamFactoryTest {
         IOUtils.copy(inputStream, actual);
 
         InputStream expectedIs = getClass().getResourceAsStream("/bio/guoda/preston/process/elliott2023-page3_b.pdf");
+        ByteArrayOutputStream expected = new ByteArrayOutputStream();
+        IOUtils.copy(expectedIs, expected);
+
+        assertThat(actual.toString(), Is.is(expected.toString()));
+    }
+
+    @Test
+    public void contentStreamForPdfPageRange() throws IOException {
+        ContentStreamFactory factory = new ContentStreamFactory(RefNodeFactory.toIRI(
+                "pdf:" +
+                        "hash://sha256/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                        "!/p3-p5"));
+        InputStream inputStream = factory.create(getPDFStream());
+
+        ByteArrayOutputStream actual = new ByteArrayOutputStream();
+        IOUtils.copy(inputStream, actual);
+
+        InputStream expectedIs = getClass().getResourceAsStream("/bio/guoda/preston/process/elliott2023-pages3-5.pdf");
         ByteArrayOutputStream expected = new ByteArrayOutputStream();
         IOUtils.copy(expectedIs, expected);
 

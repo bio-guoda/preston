@@ -182,20 +182,17 @@ public class ContentStreamFactory implements InputStreamFactory {
 
                 LongStream pageNumberStream = getLineNumberStream(iri, RangeType.Page, targetIri);
 
-                Matcher pageMatcher = Pattern
-                        .compile(String.format("%s:%s!/p(?<" + GROUPNAME_PAGE_NUMBER + ">[1-9IVXC][0-9IVXC]*)", URI_PREFIX_PAGE, iri.getIRIString()))
-                        .matcher(targetIri.getIRIString());
+                PrimitiveIterator.OfLong pageNumberIterator = pageNumberStream.iterator();
 
-                if (pageMatcher.matches()) {
+                if (pageNumberIterator.hasNext()) {
                     try (ByteArrayOutputStream pdfOS = new ByteArrayOutputStream()) {
                         IOUtils.copy(in, pdfOS);
                         PDDocument doc = Loader.loadPDF(pdfOS.toByteArray());
 
-                        PrimitiveIterator.OfLong iterator = pageNumberStream.iterator();
 
                         List<PageSelected> selectedPages = new ArrayList<>();
-                        while (iterator.hasNext()) {
-                            Long pageNumber = iterator.next();
+                        while (pageNumberIterator.hasNext()) {
+                            Long pageNumber = pageNumberIterator.next();
                             selectedPages.add(PDFUtil.selectPage(Long.toString(pageNumber), doc));
                         }
                         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
