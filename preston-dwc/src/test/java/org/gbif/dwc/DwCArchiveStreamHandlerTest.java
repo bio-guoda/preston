@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -47,6 +48,16 @@ public class DwCArchiveStreamHandlerTest {
 
     }
 
+    @Test
+    public void handleNonMeta() throws SAXException, IOException, ContentStreamException {
+        InputStream is = getClass().getResourceAsStream("non-meta.xml");
+
+        Archive starRecords = DwcMetaFiles2.fromMetaDescriptor(is);
+
+        assertThat(starRecords.getCore(), is(nullValue()));
+
+    }
+
     @Test(expected = ContentStreamException.class)
     public void unescapedDoubleQuotesInCSV() throws ContentStreamException {
         // from https://github.com/bio-guoda/preston/issues/162
@@ -73,10 +84,39 @@ public class DwCArchiveStreamHandlerTest {
         try {
             handler.handle(RefNodeFactory.toIRI("foo:bar!/meta.xml"),
                     getClass().getResourceAsStream("issue162/meta.xml"));
-        } catch(ContentStreamException ex) {
+        } catch (ContentStreamException ex) {
             assertThat(ex.getMessage(), is("failed to handle dwc records from <line:foo:bar!/DarwinCore.txt!/L2>"));
             throw ex;
         }
     }
+
+    @Test
+    public void doNothingOnNonDwCMetaXML() throws ContentStreamException {
+        // from https://github.com/bio-guoda/preston/issues/162
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        DwCArchiveStreamHandler handler = new DwCArchiveStreamHandler(new ContentStreamHandler() {
+            @Override
+            public boolean handle(IRI version, InputStream in) throws ContentStreamException {
+                return false;
+            }
+
+            @Override
+            public boolean shouldKeepProcessing() {
+                return false;
+            }
+        }, new Dereferencer<InputStream>() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                String resourceName = StringUtils.replace(uri.getIRIString(), "foo:bar!", "issue162");
+                return DwCArchiveStreamHandlerTest.this.getClass()
+                        .getResourceAsStream(resourceName);
+            }
+        }, os);
+
+        handler.handle(RefNodeFactory.toIRI("foo:bar!/meta.xml"),
+                getClass().getResourceAsStream("non-meta.xml"));
+
+    }
+
 
 }

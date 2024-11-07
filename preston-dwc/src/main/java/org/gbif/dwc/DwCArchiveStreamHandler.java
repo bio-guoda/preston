@@ -71,22 +71,24 @@ public class DwCArchiveStreamHandler implements ContentStreamHandler {
         Archive starRecords = DwcMetaFiles2.fromMetaDescriptor(is);
         ArchiveFile core = starRecords.getCore();
 
-        streamRecords(
-                outputStream,
-                dereferencer,
-                getLocation(iriString, core),
-                "http://rs.tdwg.org/dwc/text/id", processorState
-        );
-
-        Set<ArchiveFile> extensions = starRecords.getExtensions();
-        for (ArchiveFile extension : extensions) {
+        if (core != null) {
             streamRecords(
                     outputStream,
                     dereferencer,
-                    getLocation(iriString, extension),
-                    "http://rs.tdwg.org/dwc/text/coreid",
-                    processorState
+                    getLocation(iriString, core),
+                    "http://rs.tdwg.org/dwc/text/id", processorState
             );
+
+            Set<ArchiveFile> extensions = starRecords.getExtensions();
+            for (ArchiveFile extension : extensions) {
+                streamRecords(
+                        outputStream,
+                        dereferencer,
+                        getLocation(iriString, extension),
+                        "http://rs.tdwg.org/dwc/text/coreid",
+                        processorState
+                );
+            }
         }
 
     }
