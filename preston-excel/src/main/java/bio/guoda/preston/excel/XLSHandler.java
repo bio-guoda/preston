@@ -5,6 +5,7 @@ import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -21,7 +22,10 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public class XLSHandler {
 
@@ -41,7 +45,7 @@ public class XLSHandler {
     public static void asJsonStream(OutputStream out, IRI resourceIRI, Workbook workbook, String mimeType, Integer skipLines, Boolean headerless) throws IOException {
         final DataFormatter formatter = new DataFormatter();
         for (Sheet sheet : workbook) {
-            HashMap<Integer,String> header = new HashMap<>();
+            HashMap<Integer, String> header = new HashMap<>();
             int rowNumber = 0;
             for (Row r : sheet) {
                 if (rowNumber == skipLines || headerless) {
@@ -62,10 +66,19 @@ public class XLSHandler {
                     ObjectNode objectNode = obj.createObjectNode();
                     setMetaData(resourceIRI, mimeType, sheet, r, objectNode);
 
+                    List<Integer> columnIndeces = new ArrayList<>();
                     for (Cell c : r) {
                         int columnNumber = c.getColumnIndex();
-                        String fieldName = columnNumber < header.size() ? header.get(columnNumber) : ("column" + columnNumber);
-                        objectNode.put(fieldName, getCellValue(formatter, c));
+                        String fieldName = getFieldName(header, columnNumber);
+                        String value = getCellValue(formatter, c);
+                        objectNode.put(fieldName, value);
+                        columnIndeces.add(columnNumber);
+                    }
+
+                    Collection<Integer> missing = CollectionUtils.disjunction(columnIndeces, header.keySet());
+                    for (Integer missingIndex : missing) {
+                        String fieldName = getFieldName(header, missingIndex);
+                        objectNode.set(fieldName, new ObjectMapper().nullNode());
                     }
 
                     writeObjectNode(out, objectNode);
@@ -73,6 +86,10 @@ public class XLSHandler {
                 rowNumber++;
             }
         }
+    }
+
+    private static String getFieldName(HashMap<Integer, String> header, int columnNumber) {
+        return columnNumber < header.size() ? header.get(columnNumber) : ("column" + columnNumber);
     }
 
     public static void writeObjectNode(OutputStream out, ObjectNode objectNode) throws IOException {

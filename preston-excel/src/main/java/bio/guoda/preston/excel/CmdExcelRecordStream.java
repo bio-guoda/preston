@@ -17,7 +17,7 @@ import java.io.IOException;
 
 @CommandLine.Command(
         name = "excel-stream",
-        aliases = {"excel2json"},
+        aliases = {"excel2json", "xlsx-stream", "xls-stream"},
         description = "Extract records from Excel files (*.xls, *.xlsx) in line-json"
 )
 public class CmdExcelRecordStream extends LoggingPersisting implements Runnable {
