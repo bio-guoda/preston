@@ -49,42 +49,55 @@ public class XLSHandler {
             int rowNumber = 0;
             for (Row r : sheet) {
                 if (rowNumber == skipLines || headerless) {
-                    for (Cell c : r) {
-                        int column = c.getColumnIndex();
-                        if (headerless) {
-                            header.put(column, Integer.toString(column + 1));
-                        } else {
-                            String value = getCellValue(formatter, c);
-                            header.put(column, StringUtils.isBlank(value) ? ("column" + column) : value);
-                        }
-                    }
+                    populateHeader(headerless, formatter, header, r);
                 }
 
                 if (isDataRowWithoutHeader(skipLines, headerless, rowNumber)
                         || isDataRowWithHeader(skipLines, headerless, rowNumber)) {
-                    ObjectMapper obj = new ObjectMapper();
-                    ObjectNode objectNode = obj.createObjectNode();
-                    setMetaData(resourceIRI, mimeType, sheet, r, objectNode);
-
-                    List<Integer> columnIndeces = new ArrayList<>();
-                    for (Cell c : r) {
-                        int columnNumber = c.getColumnIndex();
-                        String fieldName = getFieldName(header, columnNumber);
-                        String value = getCellValue(formatter, c);
-                        objectNode.put(fieldName, value);
-                        columnIndeces.add(columnNumber);
-                    }
-
-                    Collection<Integer> missing = CollectionUtils.disjunction(columnIndeces, header.keySet());
-                    for (Integer missingIndex : missing) {
-                        String fieldName = getFieldName(header, missingIndex);
-                        objectNode.set(fieldName, new ObjectMapper().nullNode());
-                    }
-
-                    writeObjectNode(out, objectNode);
+                    handleDataRow(out, resourceIRI, mimeType, formatter, sheet, header, r);
                 }
                 rowNumber++;
             }
+        }
+    }
+
+    private static void handleDataRow(OutputStream out, IRI resourceIRI, String mimeType, DataFormatter formatter, Sheet sheet, HashMap<Integer, String> header, Row row) throws IOException {
+        ObjectMapper obj = new ObjectMapper();
+        ObjectNode objectNode = obj.createObjectNode();
+        setMetaData(resourceIRI, mimeType, sheet, row, objectNode);
+
+        short maxColIx = row.getLastCellNum();
+        for (short colIx = 0; colIx < maxColIx; colIx++) {
+            int cellIndex = Short.toUnsignedInt(colIx);
+            String fieldName = getFieldName(header, cellIndex);
+            Cell cell = row.getCell(cellIndex);
+            if (null == cell) {
+                objectNode.set(fieldName, new ObjectMapper().nullNode());
+            } else {
+                objectNode.put(fieldName, getCellValue(formatter, cell));
+            }
+        }
+
+        writeObjectNode(out, objectNode);
+    }
+
+    private static void populateHeader(Boolean headerless, DataFormatter formatter, HashMap<Integer, String> header, Row r) {
+        short maxColIx = r.getLastCellNum();
+        for (short colIx = 0; colIx < maxColIx; colIx++) {
+            int cellIndex = Short.toUnsignedInt(colIx);
+            String columnName;
+            if (headerless) {
+                columnName = Integer.toString(cellIndex + 1);
+            } else {
+                Cell cell = r.getCell(colIx);
+                if (cell == null) {
+                    columnName = ("column" + colIx);
+                } else {
+                    String value = getCellValue(formatter, cell);
+                    columnName = StringUtils.isBlank(value) ? ("column" + cellIndex + 1) : value;
+                }
+            }
+            header.put(cellIndex, columnName);
         }
     }
 

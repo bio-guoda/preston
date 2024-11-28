@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import static bio.guoda.preston.excel.XLSXHandler.rowsAsJsonStream;
 import static junit.framework.TestCase.assertNotNull;
@@ -119,6 +121,9 @@ public class XLSXHandlerTest {
 
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
+        IOUtils.write(out.toByteArray(), new FileOutputStream("/home/jorrit/tmp/msw3-03.xlsx.headerless.skip.json"));
+
+
         JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[0]);
 
         assertThat(jsonNode.get("1").asText(), is("MONOTREMATA"));
@@ -146,17 +151,66 @@ public class XLSXHandlerTest {
 
         XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false);
 
-        String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "msw3-03.xlsx.headerless.skip.json");
-
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
-
-        IOUtils.write(actual, new FileOutputStream("/home/jorrit/tmp/crayfish.json"), StandardCharsets.UTF_8);
 
         JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[121]);
 
         assertThat(jsonNode.get("WoCID").asText(), is("WI1721"));
-        assertThat(jsonNode.has("DOI"), Is.is(true));
-        assertThat(jsonNode.get("DOI").isNull(), Is.is(true));
+        Iterator<Map.Entry<String, JsonNode>> fields = jsonNode.fields();
+        fields.next();
+        fields.next();
+        Map.Entry<String, JsonNode> first = fields.next();
+        assertThat(first.getKey(), is("WoCID"));
+        assertThat(first.getValue().asText(), is("WI1721"));
+
+        Map.Entry<String, JsonNode> second = fields.next();
+        assertThat(second.getKey(), is("DOI"));
+        assertThat(second.getValue().isNull(), is(true));
+
+        Map.Entry<String, JsonNode> third = fields.next();
+        assertThat(third.getKey(), is("URL"));
+        assertThat(third.getValue().asText(), is("https://www.sva.se/media/ofelrebo/rapport-kr%C3%A4ftor-och-%C3%A5l-2018.pdf"));
+
+    }
+
+    @Test
+    public void dumpEmptyColumnAsNullKeepOrder() throws IOException {
+        // use this count to fetch all field information
+        // if required
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IRI resourceIRI = RefNodeFactory.toIRI("some:iri");
+
+        KeyValueStoreReadOnly contentStore = new KeyValueStoreReadOnly() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                return getClass().getResourceAsStream("ion2024-crayfish.xslx");
+            }
+        };
+
+        assertNotNull(contentStore.get(resourceIRI));
+
+        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false);
+
+        String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
+
+        JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[0]);
+
+        assertThat(jsonNode.get("WoCID").asText(), is("WA2338"));
+        Iterator<Map.Entry<String, JsonNode>> fields = jsonNode.fields();
+        fields.next();
+        fields.next();
+        Map.Entry<String, JsonNode> first = fields.next();
+        assertThat(first.getKey(), is("WoCID"));
+        assertThat(first.getValue().asText(), is("WA2338"));
+
+        Map.Entry<String, JsonNode> second = fields.next();
+        assertThat(second.getKey(), is("DOI"));
+        assertThat(second.getValue().asText(), is("10.1016/j.jip.2017.09.004"));
+
+        Map.Entry<String, JsonNode> third = fields.next();
+        assertThat(third.getKey(), is("URL"));
+        assertThat(third.getValue().isNull(), is(true));
 
     }
 
@@ -180,8 +234,7 @@ public class XLSXHandlerTest {
 
         JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[0]);
 
-        assertThat(StringUtils.replace(jsonNode.toString(), "\" :", "\":"),
-                is(expected));
+        assertThat(StringUtils.replace(jsonNode.toString(), "\" :", "\":"), is(expected));
 
     }
 
