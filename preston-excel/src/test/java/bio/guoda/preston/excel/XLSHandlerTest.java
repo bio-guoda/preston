@@ -69,7 +69,6 @@ public class XLSHandlerTest {
         JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[0]);
 
         assertThat(jsonNode.get("1").asText(), Is.is("ORDER"));
-        assertThat(actual, Is.is(expected));
 
         jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[1]);
 

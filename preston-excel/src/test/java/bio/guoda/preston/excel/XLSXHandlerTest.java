@@ -121,9 +121,6 @@ public class XLSXHandlerTest {
 
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
-        IOUtils.write(out.toByteArray(), new FileOutputStream("/home/jorrit/tmp/msw3-03.xlsx.headerless.skip.json"));
-
-
         JsonNode jsonNode = new ObjectMapper().readTree(StringUtils.split(actual, "\n")[0]);
 
         assertThat(jsonNode.get("1").asText(), is("MONOTREMATA"));
