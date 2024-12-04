@@ -16,7 +16,6 @@ import java.util.List;
 
 @CommandLine.Command(
         name = "ris-stream",
-        hidden = true,
         description = "Stream RIS records into line-json with Zenodo metadata"
 )
 public class CmdRISStream extends LoggingPersisting implements Runnable {
