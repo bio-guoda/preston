@@ -17,6 +17,11 @@ public class RateLimitUtils {
     public static final String X_RATE_LIMIT_RESET = X_RATE_LIMIT_PREFIX + "Reset";
     public static final int HTTP_STATUS_CODE_TOO_MANY_REQUESTS = 429;
 
+    public static boolean hasRetryAfterHint(HttpMessage msg) {
+        Map<String, Long> rateLimits = parseRateLimits(msg);
+        return rateLimits.containsKey(HttpHeaders.RETRY_AFTER);
+    }
+
     public static Map<String, Long> parseRateLimits(HttpMessage msg) {
         Map<String, Long> rateLimits = new TreeMap<>();
 
