@@ -14,6 +14,7 @@
         <module>preston-core</module>
         <module>preston-test</module>
         <module>preston-cas</module>
+        <module>preston-stream</module>
         <module>preston-dwc</module>
         <module>preston-taxonworks</module>
         <module>preston-plazi</module>
