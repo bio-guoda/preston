@@ -4,7 +4,6 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.Is;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;

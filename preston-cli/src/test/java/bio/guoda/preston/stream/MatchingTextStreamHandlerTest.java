@@ -14,7 +14,6 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-import static bio.guoda.preston.store.TestUtil.getTestBlobStoreForResource;
 import static bio.guoda.preston.store.TestUtil.getTestBlobStoreForTextResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

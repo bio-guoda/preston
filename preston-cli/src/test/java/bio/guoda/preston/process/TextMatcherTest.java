@@ -13,7 +13,6 @@ import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;

@@ -13,7 +13,6 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
-import static bio.guoda.preston.store.TestUtil.toUTF8;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.*;
 
@@ -23,7 +22,7 @@ public class DereferencerContentAddressedTest {
     public void dereference() throws IOException {
         Dereferencer<InputStream> dereferencer = new DereferenceTest("derefData@");
         HashType type = HashType.sha256;
-        BlobStore blobStore = new BlobStoreAppendOnly(TestUtil.getTestPersistence(), true, type);
+        BlobStore blobStore = new BlobStoreAppendOnly(TestUtil.getTestPersistenceWithRemove(), true, type);
         DereferencerContentAddressed dereferencerContentAddressed = new DereferencerContentAddressed(dereferencer, blobStore);
 
         IRI contentHash = dereferencerContentAddressed.get(toIRI(URI.create("http://some")));
@@ -32,7 +31,7 @@ public class DereferencerContentAddressedTest {
 
         String expectedContent = "derefData@http://some";
 
-        String actualContent = toUTF8(content);
+        String actualContent = TestUtil.toUTF8(content);
         assertThat(actualContent, Is.is(expectedContent));
         assertThat(contentHash, Is.is(Hasher.calcHashIRI(expectedContent, type)));
 

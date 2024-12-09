@@ -1,13 +1,10 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashType;
-import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;
 import bio.guoda.preston.store.TestUtilForProcessor;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
@@ -20,9 +17,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import static bio.guoda.preston.MimeTypes.MIME_TYPE_JSON;
-import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
-import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.SEE_ALSO;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
@@ -31,7 +25,6 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static bio.guoda.preston.TripleMatcher.hasTriple;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringEndsWith.endsWith;

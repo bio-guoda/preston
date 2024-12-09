@@ -17,9 +17,9 @@ public class KeyValueStoreWithValidationTest {
 
     @Test(expected = IOException.class)
     public void putInvalid() throws IOException {
-        KeyValueStoreWithRemove staging = TestUtil.getTestPersistence();
-        KeyValueStore verified = TestUtil.getTestPersistence();
-        KeyValueStore backing = TestUtil.getTestPersistence();
+        KeyValueStoreWithRemove staging = TestUtil.getTestPersistenceWithRemove();
+        KeyValueStore verified = TestUtil.getTestPersistenceWithRemove();
+        KeyValueStore backing = TestUtil.getTestPersistenceWithRemove();
 
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
@@ -41,9 +41,9 @@ public class KeyValueStoreWithValidationTest {
 
     @Test
     public void putValid() throws IOException {
-        KeyValueStoreWithRemove staging = TestUtil.getTestPersistence();
-        KeyValueStore verified = TestUtil.getTestPersistence();
-        KeyValueStore backing = TestUtil.getTestPersistence();
+        KeyValueStoreWithRemove staging = TestUtil.getTestPersistenceWithRemove();
+        KeyValueStore verified = TestUtil.getTestPersistenceWithRemove();
+        KeyValueStore backing = TestUtil.getTestPersistenceWithRemove();
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
                 new ValidatingKeyValueStreamHashTypeIRIFactory(),
@@ -68,9 +68,9 @@ public class KeyValueStoreWithValidationTest {
 
     @Test(expected = IOException.class)
     public void getInvalid() throws IOException {
-        KeyValueStoreWithRemove staging = TestUtil.getTestPersistence();
-        KeyValueStore verified = TestUtil.getTestPersistence();
-        KeyValueStore backing = TestUtil.getTestPersistence();
+        KeyValueStoreWithRemove staging = TestUtil.getTestPersistenceWithRemove();
+        KeyValueStore verified = TestUtil.getTestPersistenceWithRemove();
+        KeyValueStore backing = TestUtil.getTestPersistenceWithRemove();
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
                 new ValidatingKeyValueStreamHashTypeIRIFactory(),
@@ -99,9 +99,9 @@ public class KeyValueStoreWithValidationTest {
 
     @Test
     public void getValid() throws IOException {
-        KeyValueStoreWithRemove staging = TestUtil.getTestPersistence();
-        KeyValueStore verified = TestUtil.getTestPersistence();
-        KeyValueStore backing = TestUtil.getTestPersistence();
+        KeyValueStoreWithRemove staging = TestUtil.getTestPersistenceWithRemove();
+        KeyValueStore verified = TestUtil.getTestPersistenceWithRemove();
+        KeyValueStore backing = TestUtil.getTestPersistenceWithRemove();
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
                 new ValidatingKeyValueStreamHashTypeIRIFactory(),
@@ -126,9 +126,9 @@ public class KeyValueStoreWithValidationTest {
 
     @Test
     public void getUnknownKey() throws IOException {
-        KeyValueStoreWithRemove staging = TestUtil.getTestPersistence();
-        KeyValueStore verified = TestUtil.getTestPersistence();
-        KeyValueStore backing = TestUtil.getTestPersistence();
+        KeyValueStoreWithRemove staging = TestUtil.getTestPersistenceWithRemove();
+        KeyValueStore verified = TestUtil.getTestPersistenceWithRemove();
+        KeyValueStore backing = TestUtil.getTestPersistenceWithRemove();
 
         KeyValueStore keyStore = new KeyValueStoreWithValidation(
                 new ValidatingKeyValueStreamHashTypeIRIFactory(),

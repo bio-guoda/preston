@@ -5,13 +5,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -32,7 +28,7 @@ public class BlobStoreAppendOnlyTest {
 
     private void assertClosingStream(boolean expectedClosingStream) throws IOException {
         BlobStore blobStore = new BlobStoreAppendOnly(
-                TestUtil.getTestPersistence(),
+                TestUtil.getTestPersistenceWithRemove(),
                 expectedClosingStream,
                 HashType.sha256
         );

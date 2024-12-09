@@ -2,6 +2,7 @@ package bio.guoda.preston.stream;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.TestUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Ignore;
@@ -13,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 
-import static bio.guoda.preston.store.TestUtil.getTestBlobStoreForResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -70,7 +70,7 @@ public class LineStreamHandlerTest {
         };
 
         IRI contentIri = RefNodeFactory.toIRI("blah");
-        BlobStoreReadOnly store = getTestBlobStoreForResource(pathToResource);
+        BlobStoreReadOnly store = TestUtil.getTestBlobStoreForResource(pathToResource);
 
         LineStreamHandler lineHandler = new LineStreamHandler(testHandler);
         lineHandler.handle(contentIri, store.get(contentIri));
