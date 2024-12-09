@@ -2,7 +2,6 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.Version;
 import bio.guoda.preston.process.EmittingStreamFactory;
 import bio.guoda.preston.process.EmittingStreamOfAnyQuad;
 import bio.guoda.preston.process.ParsingEmitter;
@@ -12,7 +11,7 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.AliasDereferencer;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.ContentHashDereferencer;
+import bio.guoda.preston.stream.ContentHashDereferencer;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.HashKeyUtil;
 import org.apache.commons.lang3.StringUtils;

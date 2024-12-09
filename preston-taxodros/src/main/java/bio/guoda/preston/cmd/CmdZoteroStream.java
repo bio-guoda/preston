@@ -6,7 +6,7 @@ import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.ContentHashDereferencer;
+import bio.guoda.preston.stream.ContentHashDereferencer;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.IRI;

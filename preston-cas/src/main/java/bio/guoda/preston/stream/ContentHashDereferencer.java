@@ -1,7 +1,8 @@
-package bio.guoda.preston.store;
+package bio.guoda.preston.stream;
 
-import bio.guoda.preston.stream.ContentStreamFactory;
-import bio.guoda.preston.stream.ContentStreamUtil;
+import bio.guoda.preston.store.DereferenceException;
+import bio.guoda.preston.store.Dereferencer;
+import bio.guoda.preston.store.HashKeyUtil;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
