@@ -1,6 +1,5 @@
-package bio.guoda.preston.util;
+package bio.guoda.preston.stream;
 
-import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.Is;
 import org.junit.Test;
@@ -8,9 +7,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.regex.Matcher;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
