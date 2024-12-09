@@ -1,4 +1,4 @@
-package bio.guoda.preston.process;
+package bio.guoda.preston.stream;
 
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.stream.ContentStreamHandlerImpl;

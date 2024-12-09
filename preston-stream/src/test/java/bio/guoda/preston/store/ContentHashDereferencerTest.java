@@ -5,6 +5,7 @@ import bio.guoda.preston.Hasher;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
+import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,7 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 public class ContentHashDereferencerTest {
 
@@ -25,14 +25,14 @@ public class ContentHashDereferencerTest {
     public void getByteRange() throws IOException {
         BlobStoreReadOnly blobStore = key -> IOUtils.toInputStream("some bits and bytes", StandardCharsets.UTF_8);
         InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("cut:" + aContentHash + "!/b6-9"));
-        assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), is("bits"));
+        assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), Is.is("bits"));
     }
 
     @Test
     public void getFileInArchive() throws IOException {
         BlobStoreReadOnly blobStore = TestUtil.getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
         InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("tar:gz:" + aContentHash + "!/level1.txt"));
-        assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), is("https://example.org"));
+        assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), Is.is("https://example.org"));
     }
 
 
@@ -46,7 +46,7 @@ public class ContentHashDereferencerTest {
 
         assertThat(
                 IOUtils.toString(content, StandardCharsets.UTF_8),
-                is("https://example.org")
+                Is.is("https://example.org")
         );
     }
 
@@ -54,21 +54,21 @@ public class ContentHashDereferencerTest {
     public void getGzippedFile() throws IOException {
         BlobStoreReadOnly blobStore = TestUtil.getTestBlobStoreForResource("/bio/guoda/preston/process/hello.txt.gz");
         InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("gz:" + aContentHash + ""));
-        assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), is("hello"));
+        assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), Is.is("hello"));
     }
 
     @Test
     public void getGzippedFileIgnoreSuffix() throws IOException {
         BlobStoreReadOnly blobStore = TestUtil.getTestBlobStoreForResource("/bio/guoda/preston/process/hello.txt.gz");
         InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("gz:" + aContentHash + "!/hello.txt"));
-        assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), is("hello"));
+        assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), Is.is("hello"));
     }
 
     @Test
     public void getBytesFromFileInArchive() throws IOException {
         BlobStoreReadOnly blobStore = TestUtil.getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
         InputStream content = new ContentHashDereferencer(blobStore).get(toIRI("cut:tar:gz:" + aContentHash + "!/level1.txt!/b9-15"));
-        assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), is("example"));
+        assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), Is.is("example"));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class ContentHashDereferencerTest {
         InputStream content = new ContentHashDereferencer(blobStore).get(toIRI(aContentHash));
         IOUtils.copyLarge(content, byteGobbler);
 
-        assertThat(bytesWritten.get(), is(303));
+        assertThat(bytesWritten.get(), Is.is(303));
     }
 
     @Test
@@ -107,7 +107,7 @@ public class ContentHashDereferencerTest {
         InputStream content = new ContentHashDereferencer(blobStore).get(toIRI(query));
         IRI iri = Hasher.calcHashIRI(content, NullOutputStream.INSTANCE, HashType.sha256);
 
-        assertThat(iri.getIRIString(), is("hash://sha256/a908d1b21a86d95df40168df4795ad7c33ab668a383cb5944e6f4557e5186255"));
+        assertThat(iri.getIRIString(), Is.is("hash://sha256/a908d1b21a86d95df40168df4795ad7c33ab668a383cb5944e6f4557e5186255"));
     }
 
 }
