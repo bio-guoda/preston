@@ -46,16 +46,10 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.twelvemonkeys.imageio</groupId>
-            <artifactId>imageio-tiff</artifactId>
-            <version>3.11.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
             <version>3.0.3</version>
         </dependency>
-
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>preston-test</artifactId>
