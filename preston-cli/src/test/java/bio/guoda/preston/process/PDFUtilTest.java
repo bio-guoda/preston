@@ -82,6 +82,7 @@ public class PDFUtilTest {
 
         assertThat(output1.toString(), is(output2.toString()));
 
+        assertThat(actualDoc.getVersion(), is(1.6f));
 
     }
 
