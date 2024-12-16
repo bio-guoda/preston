@@ -16,7 +16,8 @@ import java.util.regex.Pattern;
 
 public class KeyTo1LevelZenodoPath implements KeyToPath {
 
-    public static final String ZENODO_API_PREFIX = "https://zenodo.org/api/records/?q=_files.checksum:";
+    public static final String ZENODO_API_BASE_PREFIX = "https://zenodo.org/api/records/?q=";
+    public static final String ZENODO_API_PREFIX = ZENODO_API_BASE_PREFIX + "_files.checksum:";
     public static final String ZENODO_API_SUFFIX = "%22&all_versions=true";
 
     public static final String ZENODO_API_PREFIX_2023_10_13 = "https://zenodo.org/api/records?q=files.entries.checksum:";
@@ -51,9 +52,51 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
             IRI zenodoQuery = RefNodeFactory.toIRI(baseURI.toString() + "%22md5:" + md5HexHash + getSuffix());
             try (InputStream inputStream = deref.get(zenodoQuery)) {
                 path = findFirstHit(md5HexHash, inputStream);
+                if (null == path) {
+                    path = queryByPlainHashQuery(key, path, md5HexHash);
+
+                }
             } catch (IOException e) {
                 // opportunistic
             }
+        }
+        return path;
+    }
+
+    private URI queryByPlainHashQuery(IRI key, URI path, String md5HexHash) {
+        IRI zenodoQueryPlainHash = RefNodeFactory.toIRI(ZENODO_API_BASE_PREFIX + "%22" + key.getIRIString() + getSuffix());
+        try (InputStream inputStream2 = deref.get(zenodoQueryPlainHash)) {
+            URI filesEndpoint = findFirstHit(md5HexHash, inputStream2);
+            if (filesEndpoint != null) {
+                path = pathToFirstMatchingEntry(path, md5HexHash, filesEndpoint);
+            }
+        } catch (IOException e) {
+            // opportunistic
+        }
+        return path;
+    }
+
+    private URI pathToFirstMatchingEntry(URI path, String md5HexHash, URI filesEndpoint) {
+        try (InputStream inputStream3 = deref.get(RefNodeFactory.toIRI(filesEndpoint))) {
+            if (inputStream3 == null) {
+                throw new IOException("no input found");
+            }
+            JsonNode jsonNode = new ObjectMapper().readTree(inputStream3);
+
+            if (jsonNode != null && !jsonNode.at("/entries").isMissingNode()) {
+                for (JsonNode entry : jsonNode.at("/entries")) {
+                    JsonNode checksum = entry.at("/checksum");
+                    if (!checksum.isMissingNode() && ("md5:" + md5HexHash).equals(checksum.asText())) {
+                        JsonNode contentLink = entry.at("/links/content");
+                        path = contentLink.isMissingNode() ? null : URI.create(contentLink.asText());
+                    }
+
+                }
+            }
+
+
+        } catch (IOException e) {
+            // opportunistic
         }
         return path;
     }
@@ -78,26 +121,45 @@ public class KeyTo1LevelZenodoPath implements KeyToPath {
                 JsonNode moreHits = hits.get("hits");
                 for (JsonNode hit : moreHits) {
                     if (hit.has("files")) {
-                        JsonNode files = hit.get("files");
-                        for (JsonNode file : files) {
-                            if (file.has("checksum")) {
-                                String checksum = file.get("checksum").asText();
-                                if (StringUtils.equals(suffix, checksum)
-                                        || StringUtils.equals("md5:" + suffix, checksum)) {
-                                    if (file.has("links")) {
-                                        JsonNode links = file.get("links");
-                                        if (links.has("download")) {
-                                            return URI.create(links.get("download").asText());
-                                        } else if (links.has("self")) {
-                                            String selfURI = links.get("self").asText();
-                                            Matcher matcher = URL_PATTERN_SELF.matcher(selfURI);
-                                            return matcher.matches()
-                                                    ? URI.create(matcher.group("prefix") + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(matcher.group("filename")) + matcher.group("suffix"))
-                                                    : URI.create(selfURI);
-                                        }
-                                    }
-                                }
-                            }
+                        if (isRestricted(hit)) {
+                            JsonNode at = hit.at("/links/files");
+                            return at.isMissingNode()
+                                    ? null
+                                    : URI.create(at.asText());
+                        } else {
+                            URI file = getFirstFileUrl(suffix, hit);
+                            if (file != null) return file;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private static boolean isRestricted(JsonNode hit) {
+        JsonNode metadata = hit.get("metadata");
+        return metadata != null && metadata.has("access_right")
+                && StringUtils.equals("restricted", metadata.get("access_right").asText());
+    }
+
+    private static URI getFirstFileUrl(String suffix, JsonNode hit) {
+        JsonNode files = hit.get("files");
+        for (JsonNode file : files) {
+            if (file.has("checksum")) {
+                String checksum = file.get("checksum").asText();
+                if (StringUtils.equals(suffix, checksum)
+                        || StringUtils.equals("md5:" + suffix, checksum)) {
+                    if (file.has("links")) {
+                        JsonNode links = file.get("links");
+                        if (links.has("download")) {
+                            return URI.create(links.get("download").asText());
+                        } else if (links.has("self")) {
+                            String selfURI = links.get("self").asText();
+                            Matcher matcher = URL_PATTERN_SELF.matcher(selfURI);
+                            return matcher.matches()
+                                    ? URI.create(matcher.group("prefix") + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(matcher.group("filename")) + matcher.group("suffix"))
+                                    : URI.create(selfURI);
                         }
                     }
                 }

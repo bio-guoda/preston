@@ -37,6 +37,33 @@ public class CmdGetIT {
         assertThat(outputStream.size(), Is.is(3392786));
     }
 
+
+    @Test
+    public void getZenodoRestricted() {
+        CmdGet cmdGet = new CmdGet();
+        cmdGet.setLocalDataDir(folder.getRoot().getAbsolutePath());
+        cmdGet.setRemotes(Arrays.asList(URI.create("https://zenodo.org")));
+        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("hash://md5/587f269cfa00aa40b7b50243ea8bdab9")));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmdGet.setOutputStream(outputStream);
+        cmdGet.run();
+
+        assertThat(outputStream.size(), Is.is(3392786));
+    }
+
+    @Test
+    public void getZenodoOpen() {
+        CmdGet cmdGet = new CmdGet();
+        cmdGet.setLocalDataDir(folder.getRoot().getAbsolutePath());
+        cmdGet.setRemotes(Arrays.asList(URI.create("https://zenodo.org")));
+        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("hash://md5/e124dfa939ce3adfd06401b43c216fed")));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmdGet.setOutputStream(outputStream);
+        cmdGet.run();
+
+        assertThat(outputStream.size(), Is.is(1148893));
+    }
+
     @Test
     public void getDataOneSHA1TwoBytes() {
         CmdGet cmdGet = new CmdGet();

@@ -18,7 +18,6 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ResourcesHTTPIT {
@@ -112,7 +111,7 @@ public class ResourcesHTTPIT {
 
     @Test
     public void zenodoAuth() throws IOException {
-        //System.setProperty("ZENODO_TOKEN", "[insert token here]");
+        // System.setProperty("ZENODO_TOKEN", "[insert token here]");
         try (InputStream is
                      = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://sandbox.zenodo.org/api/deposit/depositions")))) {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -120,6 +119,57 @@ public class ResourcesHTTPIT {
             JsonNode jsonNode = new ObjectMapper().readTree(outputStream.toByteArray());
 
             assertThat(jsonNode.isArray(), Is.is(true));
+        }
+
+    }
+
+    @Test
+    public void zenodoAuthQueryRestrictedContentByZenodoIndexedContentHash() throws IOException {
+        // Zenodo does not support searching restricted content by their Zenodo indexed hash
+        try (InputStream is
+                     = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://zenodo.org/api/records?q=files.entries.checksum:%22md5:587f269cfa00aa40b7b50243ea8bdab9%22&allversions=1")))) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            IOUtils.copy(is, outputStream);
+            JsonNode jsonNode = new ObjectMapper().readTree(outputStream.toByteArray());
+
+            JsonNode hits = jsonNode.get("hits").get("hits");
+            assertThat(hits.isArray(), Is.is(true));
+            assertThat(hits.size(), Is.is(0));
+        }
+
+    }
+
+    @Test
+    public void zenodoAuthAccessRestrictedContent() throws IOException {
+        //System.setProperty("ZENODO_TOKEN", "[your token here]");
+        try (InputStream is
+                     = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://zenodo.org/api/records/13477150/files/Eric%20Mo%C3%AFse%20Bakwo%20Fils%20et%20al.%20-%202022%20-%20New%20record%20and%20update%20on%20the%20geographic%20distributi.pdf/content")))) {
+            CountingOutputStream outputStream = new CountingOutputStream(NullOutputStream.INSTANCE);
+            IOUtils.copy(is, outputStream);
+
+            assertThat(outputStream.getByteCount(), Is.is(1233336L));
+        }
+    }
+
+    @Test
+    public void zenodoAuthGetRestrictedContent() throws IOException {
+        //System.setProperty("ZENODO_TOKEN", "[your token here]");
+        try (InputStream is
+                     = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://zenodo.org/api/records/13477150/files/Eric%20Mo%C3%AFse%20Bakwo%20Fils%20et%20al.%20-%202022%20-%20New%20record%20and%20update%20on%20the%20geographic%20distributi.pdf/content")))) {
+            CountingOutputStream outputStream = new CountingOutputStream(NullOutputStream.INSTANCE);
+            IOUtils.copy(is, outputStream);
+
+            assertThat(outputStream.getByteCount(), Is.is(1233336L));
+        }
+
+    }
+
+    @Test(expected = IOException.class)
+    public void zenodoNoAuthGetRestrictedContent() throws IOException {
+        try (InputStream is
+                     = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://zenodo.org/api/records/13477150/files/Eric%20Mo%C3%AFse%20Bakwo%20Fils%20et%20al.%20-%202022%20-%20New%20record%20and%20update%20on%20the%20geographic%20distributi.pdf/content")))) {
+            CountingOutputStream outputStream = new CountingOutputStream(NullOutputStream.INSTANCE);
+            IOUtils.copy(is, outputStream);
         }
 
     }

@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.net.URI;
 
+import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,6 +26,14 @@ public class KeyTo1LevelZenodoPathIT {
     public void findFirstHitNonExisting() {
         KeyTo1LevelZenodoPath keyTo1LevelZenodoPath = new KeyTo1LevelZenodoPath(URI.create("https://zenodo.org"), ResourcesHTTP::asInputStream);
         assertNull(keyTo1LevelZenodoPath.toPath(RefNodeFactory.toIRI("hash://md5/d982d38c1b4dda6d3c1372a6c3e5d97e")));
+    }
+
+    @Test
+    public void findFirstHitNonExistingRetryRestrictedContentWithPlainHash() {
+        KeyTo1LevelZenodoPath keyTo1LevelZenodoPath = new KeyTo1LevelZenodoPath(URI.create("https://zenodo.org"), ResourcesHTTP::asInputStream);
+        URI path = keyTo1LevelZenodoPath.toPath(RefNodeFactory.toIRI("hash://md5/587f269cfa00aa40b7b50243ea8bdab9"));
+        assertNotNull(path);
+        assertThat(path.toString(), is("https://zenodo.org/api/records/13477150/files/Eric%20Mo%C3%AFse%20Bakwo%20Fils%20et%20al.%20-%202022%20-%20New%20record%20and%20update%20on%20the%20geographic%20distributi.pdf/content"));
     }
 
     @Test
