@@ -33,11 +33,15 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 public class ActivityUtil {
 
     public static Stream<Quad> beginInformedActivity(BlankNodeOrIRI newActivity, Optional<BlankNodeOrIRI> sourceActivity) {
-        Stream<Quad> quadStream = Stream.of(toStatement(newActivity, newActivity, IS_A, ACTIVITY));
+        Stream<Quad> quadStream = Stream.of(isAnActivity(newActivity));
 
         return sourceActivity
                 .map(activity -> Stream.concat(quadStream, Stream.of(toStatement(newActivity, newActivity, WAS_INFORMED_BY, activity))))
                 .orElse(quadStream);
+    }
+
+    private static Quad isAnActivity(BlankNodeOrIRI newActivity) {
+        return toStatement(newActivity, newActivity, IS_A, ACTIVITY);
     }
 
     public static void emitWithActivityName(Stream<Quad> quadStream, StatementsEmitter emitter, BlankNodeOrIRI activity) {
@@ -110,9 +114,9 @@ public class ActivityUtil {
                 toStatement(activityId, softwareAgent, DESCRIPTION, toEnglishLiteral(softwareAgentDescription)),
 
 
-                toStatement(activityId, activityId, IS_A, ACTIVITY),
+                isAnActivity(activityId),
                 toStatement(activityId, activityId, DESCRIPTION, toEnglishLiteral(ctx.getDescription())),
-                toStatement(activityId, activityId, toIRI("http://www.w3.org/ns/prov#startedAtTime"), RefNodeFactory.nowDateTimeLiteral()),
+                toStatement(activityId, activityId, RefNodeConstants.STARTED_AT_TIME, RefNodeFactory.nowDateTimeLiteral()),
                 toStatement(activityId, activityId, RefNodeConstants.WAS_STARTED_BY, softwareAgent),
 
 
