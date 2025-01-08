@@ -3,7 +3,6 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
-import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.DerefProgressLogger;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.DereferencerContentAddressedTarGZ;
@@ -149,13 +148,13 @@ public class Persisting extends PersistingLocal {
             ValidatingKeyValueStreamFactory kvStreamFactory,
             List<KeyValueStoreReadOnly> remotes
     ) {
-        File stagingDir = getTmpDir();
+        File stagingDir = new File(getTmpDir());
 
         List<KeyValueStoreReadOnly> validatedRemotes = remotes
                 .stream()
                 .map(remote -> {
                     KeyValueStoreLocalFileSystem staging = new KeyValueStoreLocalFileSystem(
-                            getTmpDir(),
+                            new File(getTmpDir()),
                             new KeyTo1LevelPath(stagingDir.toURI()),
                             kvStreamFactory
                     );

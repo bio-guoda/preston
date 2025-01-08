@@ -43,7 +43,7 @@ public class CmdListTest {
 
         cmd.setRemotes(Collections.singletonList(Paths.get(dataDir.toURI()).toUri()));
 
-        cmd.setLocalDataDir(folder.newFolder("data").getAbsolutePath());
+        cmd.setDataDir(folder.newFolder("data").getAbsolutePath());
         cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b"));
         cmd.setCacheEnabled(false);
 
@@ -81,7 +81,7 @@ public class CmdListTest {
 
         cmd.setRemotes(Collections.singletonList(Paths.get(dataDir.toURI()).toUri()));
 
-        cmd.setLocalDataDir(folder.newFolder("data").getAbsolutePath());
+        cmd.setDataDir(folder.newFolder("data").getAbsolutePath());
         cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/824d332100a58b29ee41c792725b115617b50821ec76aa8fcc058c2e8cf5413b"));
         cmd.setCacheEnabled(false);
         cmd.setLogMode(LogTypes.tsv);

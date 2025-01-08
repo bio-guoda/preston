@@ -47,7 +47,7 @@ public class CmdZenodoIT {
         String resourceURI = "taxodros-data/6e/f3/6ef3b8e326cd52972da1c00de60dc222";
 
         File dataDir = folder.newFolder("zenodo-test");
-        cmdZenodo.setLocalDataDir(dataDir.getAbsolutePath());
+        cmdZenodo.setDataDir(dataDir.getAbsolutePath());
         cmdZenodo.setApiEndpoint("https://sandbox.zenodo.org");
 
         System.setProperty("ZENODO_TOKEN", ZenodoTestUtil.getAccessToken());
@@ -181,7 +181,7 @@ public class CmdZenodoIT {
 
 
         File dataDir = folder.newFolder();
-        cmdZenodo1.setLocalDataDir(dataDir.getAbsolutePath());
+        cmdZenodo1.setDataDir(dataDir.getAbsolutePath());
         cmdZenodo1.setRemotes(Arrays.asList(remote));
         cmdZenodo1.setHashType(HashType.md5);
         cmdZenodo1.setApiEndpoint("https://sandbox.zenodo.org");
@@ -207,7 +207,7 @@ public class CmdZenodoIT {
 
 
         File dataDir = folder.newFolder();
-        cmdZenodo.setLocalDataDir(dataDir.getAbsolutePath());
+        cmdZenodo.setDataDir(dataDir.getAbsolutePath());
         cmdZenodo.setRemotes(Arrays.asList(remote));
         cmdZenodo.setApiEndpoint("https://sandbox.zenodo.org");
 

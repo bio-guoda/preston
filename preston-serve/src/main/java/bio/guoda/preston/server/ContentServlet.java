@@ -25,7 +25,7 @@ public class ContentServlet extends HttpServlet {
 
     private CmdGet initCmdGet() {
         CmdGet cmdGet = new CmdGet();
-        cmdGet.setLocalDataDir(getInitParameter(PRESTON_PROPERTY_LOCAL_PATH));
+        cmdGet.setDataDir(getInitParameter(PRESTON_PROPERTY_LOCAL_PATH));
         String remotePath = getInitParameter(PRESTON_PROPERTY_REMOTE_PATH);
         String cacheEnabledValue = getInitParameter(PRESTON_PROPERTY_CACHE_ENABLED);
         cmdGet.setCacheEnabled(StringUtils.equalsIgnoreCase(cacheEnabledValue, "true"));

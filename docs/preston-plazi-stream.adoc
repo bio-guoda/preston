@@ -20,8 +20,8 @@ preston-plazi-stream - transforms plazi treatment xml into json stream
 == Synopsis
 
 *preston plazi-stream* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
-                     [*--data-dir*=_<localDataDir>_] [*-l*=_<logMode>_]
-                     [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
+                     [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_]
+                     [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_]...
 
 // end::picocli-generated-man-section-synopsis[]
 
@@ -38,7 +38,7 @@ transforms plazi treatment xml into json stream
 *-a*, *--algo, --hash-algorithm*=_<hashType>_::
   Hash algorithm used to generate primary content identifiers
 
-*--data-dir*=_<localDataDir>_::
+*--data-dir*=_<dataDir>_::
   Location of local content cache
 
 *-l*, *--log*=_<logMode>_::
@@ -53,7 +53,7 @@ transforms plazi treatment xml into json stream
 *--repos, --remote, --remotes, --include, --repositories*=_<remotes>_::
   Included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)
 
-*--tmp-dir*=_<localTmpDir>_::
+*--tmp-dir*=_<tmpDir>_::
   Location of local tmp dir
 
 // end::picocli-generated-man-section-options[]

@@ -32,7 +32,7 @@ public class PersistingLocal extends CmdWithProvenance {
             defaultValue = "data",
             description = "Location of local content cache"
     )
-    private String localDataDir = "data";
+    private String dataDir = "data";
 
     @CommandLine.Option(
             names = {"-d", "--depth"},
@@ -46,7 +46,7 @@ public class PersistingLocal extends CmdWithProvenance {
             defaultValue = "tmp",
             description = "Location of local tmp dir"
     )
-    private String localTmpDir = "tmp";
+    private String tmpDir = "tmp";
 
     @CommandLine.Option(
             names = {"--hash-algorithm", "--algo", "-a"},
@@ -56,15 +56,7 @@ public class PersistingLocal extends CmdWithProvenance {
     private KeyToPath keyToPathLocal = null;
 
 
-    File getDefaultDataDir() {
-        return getDataDir(getLocalDataDir());
-    }
-
-    File getTmpDir() {
-        return getDataDir(getLocalTmpDir());
-    }
-
-    static File getDataDir(String data1) {
+    static File mkdir(String data1) {
         File data = new File(data1);
         try {
             FileUtils.forceMkdir(data);
@@ -76,14 +68,14 @@ public class PersistingLocal extends CmdWithProvenance {
 
     protected KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory) {
         KeyValueStore primary = new KeyValueStoreLocalFileSystem(
-                getTmpDir(),
-                getKeyToPathLocal(getDefaultDataDir().toURI()),
+                new File(getTmpDir()),
+                getKeyToPathLocal(new File(getDataDir()).toURI()),
                 validatingKeyValueStreamFactory
         );
 
         KeyValueStoreReadOnly fallback = new KeyValueStoreLocalFileSystem(
-                getTmpDir(),
-                new KeyTo5LevelPath(getDefaultDataDir().toURI()),
+                new File(getTmpDir()),
+                new KeyTo5LevelPath(new File(getDataDir()).toURI()),
                 validatingKeyValueStreamFactory
         );
 
@@ -152,20 +144,22 @@ public class PersistingLocal extends CmdWithProvenance {
         }
     }
 
-    public String getLocalDataDir() {
-        return localDataDir;
+    public String getDataDir() {
+        mkdir(dataDir);
+        return dataDir;
     }
 
-    public String getLocalTmpDir() {
-        return localTmpDir;
+    public String getTmpDir() {
+        mkdir(tmpDir);
+        return tmpDir;
     }
 
-    public void setLocalDataDir(String localDataDir) {
-        this.localDataDir = localDataDir;
+    public void setDataDir(String dataDir) {
+        this.dataDir = dataDir;
     }
 
-    public void setLocalTmpDir(String localTmpDir) {
-        this.localTmpDir = localTmpDir;
+    public void setTmpDir(String tmpDir) {
+        this.tmpDir = tmpDir;
     }
 
     public HashType getHashType() {

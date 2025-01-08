@@ -46,7 +46,7 @@ public class CmdTrackIT {
         CmdTrack cmd = new CmdTrack();
 
         String localDataDir = dataDir.getRoot().getAbsolutePath() + "/data";
-        cmd.setLocalDataDir(localDataDir);
+        cmd.setDataDir(localDataDir);
         cmd.setIRIs(Collections.singletonList(RefNodeFactory.toIRI("https://mbd-db.osu.edu/api/v1/backend_table/hol/taxon_name/collecting_units/records?taxon_name_id=05fbf4bb-f8e1-404e-a27c-759d345aa4d0&page=2840")));
         cmd.setCacheEnabled(true);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -75,7 +75,7 @@ public class CmdTrackIT {
         CmdTrack cmd = new CmdTrack();
 
         String localDataDir = dataDir.getRoot().getAbsolutePath() + "/data";
-        cmd.setLocalDataDir(localDataDir);
+        cmd.setDataDir(localDataDir);
         cmd.setIRIs(Collections.singletonList(RefNodeFactory.toIRI("https://example.org")));
         cmd.setCacheEnabled(enableCache);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

@@ -181,7 +181,7 @@ public class CmdAppendTest {
 
     public void assertDepth(String absolutePath, int expectedHistoryDepth) {
         CmdHistory history = new CmdHistory();
-        history.setLocalDataDir(absolutePath);
+        history.setDataDir(absolutePath);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         history.setOutputStream(outputStream);
         history.run();
@@ -191,7 +191,7 @@ public class CmdAppendTest {
 
     public void verifyAppend(String absolutePath) {
         CmdAppend cmd = new CmdAppend();
-        cmd.setLocalDataDir(absolutePath);
+        cmd.setDataDir(absolutePath);
 
         String nquadToBeAppended = "<foo:bar> <some:iri> <foo:bar> .";
         cmd.setInputStream(IOUtils.toInputStream(nquadToBeAppended, StandardCharsets.UTF_8));

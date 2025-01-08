@@ -20,8 +20,8 @@ preston-test - Verifies completeness and, optionally, the integrity, of a biodiv
 == Synopsis
 
 *preston test* [*--no-cache*] [*--no-process*] [*--skip-hash-verification*]
-             [*-a*=_<hashType>_] [*--data-dir*=_<localDataDir>_]
-             [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
+             [*-a*=_<hashType>_] [*--data-dir*=_<dataDir>_]
+             [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_]...
 
 // end::picocli-generated-man-section-synopsis[]
 
@@ -38,7 +38,7 @@ Verifies completeness and, optionally, the integrity, of a biodiversity dataset 
 *-a*, *--algo, --hash-algorithm*=_<hashType>_::
   Hash algorithm used to generate primary content identifiers
 
-*--data-dir*=_<localDataDir>_::
+*--data-dir*=_<dataDir>_::
   Location of local content cache
 
 *--no-cache, --disable-cache*::
@@ -53,7 +53,7 @@ Verifies completeness and, optionally, the integrity, of a biodiversity dataset 
 *--skip-hash-verification*::
   Do not verify hash, just check availability
 
-*--tmp-dir*=_<localTmpDir>_::
+*--tmp-dir*=_<tmpDir>_::
   Location of local tmp dir
 
 // end::picocli-generated-man-section-options[]

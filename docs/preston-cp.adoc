@@ -20,8 +20,8 @@ preston-cp - Copy biodiversity dataset graph
 == Synopsis
 
 *preston cp* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
-           [*--data-dir*=_<localDataDir>_] [*-l*=_<logMode>_] [*-p*=_<pathPattern>_]
-           [*-t*=_<archiveType>_] [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
+           [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_] [*-p*=_<pathPattern>_]
+           [*-t*=_<archiveType>_] [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_]...
            _<targetDir>_
 
 // end::picocli-generated-man-section-synopsis[]
@@ -39,7 +39,7 @@ Copy biodiversity dataset graph
 *-a*, *--algo, --hash-algorithm*=_<hashType>_::
   Hash algorithm used to generate primary content identifiers
 
-*--data-dir*=_<localDataDir>_::
+*--data-dir*=_<dataDir>_::
   Location of local content cache
 
 *-l*, *--log*=_<logMode>_::
@@ -60,7 +60,7 @@ Copy biodiversity dataset graph
 *-t*, *--type*=_<archiveType>_::
   Archive type
 
-*--tmp-dir*=_<localTmpDir>_::
+*--tmp-dir*=_<tmpDir>_::
   Location of local tmp dir
 
 // end::picocli-generated-man-section-options[]

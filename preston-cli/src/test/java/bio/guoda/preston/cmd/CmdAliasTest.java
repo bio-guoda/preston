@@ -62,19 +62,19 @@ public class CmdAliasTest {
         CmdTrack cmd = new CmdTrack();
         cmd.setIRIs(Collections.singletonList(RefNodeFactory.toIRI(getClass().getResource("content.txt").toURI())));
         String dataDir = tmpFolder.newFolder("data").getAbsolutePath();
-        cmd.setLocalDataDir(dataDir);
+        cmd.setDataDir(dataDir);
         cmd.run();
 
         CmdAlias cmdAlias = new CmdAlias();
         IRI alias = RefNodeFactory.toIRI("my:content.txt");
         IRI contentId = RefNodeFactory.toIRI("hash://sha256/c7be1ed902fb8dd4d48997c6452f5d7e509fbcdbe2808b16bcf4edce4c07d14e");
         cmdAlias.setParams(Arrays.asList(alias, contentId));
-        cmdAlias.setLocalDataDir(dataDir);
+        cmdAlias.setDataDir(dataDir);
         cmdAlias.run();
 
         CmdGet get = new CmdGet();
         get.setContentIdsOrAliases(Collections.singletonList(RefNodeFactory.toIRI("my:content.txt")));
-        get.setLocalDataDir(dataDir);
+        get.setDataDir(dataDir);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         get.setOutputStream(outputStream);
 
@@ -104,12 +104,12 @@ public class CmdAliasTest {
         String dataDir = tmpFolder.getRoot().getAbsolutePath();
         CmdTrack track = new CmdTrack();
         track.setOutputStream(NullOutputStream.INSTANCE);
-        track.setLocalDataDir(dataDir);
+        track.setDataDir(dataDir);
         track.setIRIs(Arrays.asList(RefNodeFactory.toIRI("https://example.org")));
         track.run();
 
         CmdAlias cmdAlias = new CmdAlias();
-        cmdAlias.setLocalDataDir(dataDir);
+        cmdAlias.setDataDir(dataDir);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdAlias.setOutputStream(outputStream);
         cmdAlias.run();
@@ -125,12 +125,12 @@ public class CmdAliasTest {
         String dataDir = tmpFolder.getRoot().getAbsolutePath();
         CmdTrack track = new CmdTrack();
         track.setOutputStream(NullOutputStream.INSTANCE);
-        track.setLocalDataDir(dataDir);
+        track.setDataDir(dataDir);
         track.setIRIs(Arrays.asList(RefNodeFactory.toIRI("https://example.org")));
         track.run();
 
         CmdAlias cmdAlias = new CmdAlias();
-        cmdAlias.setLocalDataDir(dataDir);
+        cmdAlias.setDataDir(dataDir);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdAlias.setOutputStream(outputStream);
         cmdAlias.run();

@@ -20,7 +20,7 @@ preston-cat - Get biodiversity data
 == Synopsis
 
 *preston cat* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
-            [*--data-dir*=_<localDataDir>_] [*--tmp-dir*=_<localTmpDir>_]
+            [*--data-dir*=_<dataDir>_] [*--tmp-dir*=_<tmpDir>_]
             [*--repos*=_<remotes>_]... [_<contentIdsOrAliases>_...]
 
 // end::picocli-generated-man-section-synopsis[]
@@ -38,7 +38,7 @@ Get biodiversity data
 *-a*, *--algo, --hash-algorithm*=_<hashType>_::
   Hash algorithm used to generate primary content identifiers
 
-*--data-dir*=_<localDataDir>_::
+*--data-dir*=_<dataDir>_::
   Location of local content cache
 
 *--no-cache, --disable-cache*::
@@ -50,7 +50,7 @@ Get biodiversity data
 *--repos, --remote, --remotes, --include, --repositories*=_<remotes>_::
   Included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)
 
-*--tmp-dir*=_<localTmpDir>_::
+*--tmp-dir*=_<tmpDir>_::
   Location of local tmp dir
 
 // end::picocli-generated-man-section-options[]

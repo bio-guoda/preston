@@ -14,6 +14,7 @@ import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,7 @@ public class CmdVerify extends Persisting implements Runnable {
                 hashGenerator,
                 skipHashVerification,
                 getOutputStream(),
-                getKeyToPathLocal(getDefaultDataDir().toURI())
+                getKeyToPathLocal(new File(getDataDir()).toURI())
         );
         CmdContext ctx = new CmdContext(this, getProvenanceAnchor(), statementListener);
 

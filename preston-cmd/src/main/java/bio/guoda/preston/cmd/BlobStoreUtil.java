@@ -68,7 +68,7 @@ public class BlobStoreUtil {
 
     private static Map<String, String> buildIndexedBlobStore(Persisting persisting) {
 
-        File tmpDir = persisting.getTmpDir();
+        File tmpDir = new File(persisting.getTmpDir());
         IRI provenanceAnchor = AnchorUtil.findAnchorOrThrow(persisting);
 
         // indexing

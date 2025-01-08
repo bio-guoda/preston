@@ -107,8 +107,8 @@ public class BlobStoreUtilTest {
         Persisting persisting = new Persisting();
         persisting.setHashType(HashType.md5);
 
-        persisting.setLocalDataDir(dataDir.getAbsolutePath());
-        persisting.setLocalTmpDir(folder.newFolder("tmp").getAbsolutePath());
+        persisting.setDataDir(dataDir.getAbsolutePath());
+        persisting.setTmpDir(folder.newFolder("tmp").getAbsolutePath());
         persisting.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/ec998a9c63a64ac7bfef04c91ee84f16"));
         return persisting;
     }

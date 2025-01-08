@@ -7,10 +7,8 @@ import bio.guoda.preston.process.StopProcessingException;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
-import org.apache.commons.compress.parallel.InputStreamSupplier;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ProxyInputStream;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
 
@@ -23,10 +21,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -207,7 +203,7 @@ public class CmdGetTest {
         File resource = new File(getClass().getResource(path).toURI());
         File dataDir = resource.getParentFile().getParentFile().getParentFile();
 
-        cmd.setLocalDataDir(dataDir.getAbsolutePath());
+        cmd.setDataDir(dataDir.getAbsolutePath());
         cmd.setOutputStream(out);
         cmd.setContentIdsOrAliases(Collections.singletonList(toIRI("https://bing.com")));
 
@@ -230,7 +226,7 @@ public class CmdGetTest {
         File resource = new File(getClass().getResource(path).toURI());
         File dataDir = resource.getParentFile().getParentFile().getParentFile();
 
-        cmd.setLocalDataDir(dataDir.getAbsolutePath());
+        cmd.setDataDir(dataDir.getAbsolutePath());
         cmd.setOutputStream(out);
         cmd.setContentIdsOrAliases(Collections.singletonList(toIRI("file:///tmp/preston-test/foo.txt")));
         cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/30845fefa4a854fc67da113a06759f86902b591bf0708bd625e611680aa1c9c4"));
@@ -250,7 +246,7 @@ public class CmdGetTest {
         File resource = new File(getClass().getResource(path).toURI());
         File dataDir = resource.getParentFile().getParentFile().getParentFile();
 
-        cmd.setLocalDataDir(dataDir.getAbsolutePath());
+        cmd.setDataDir(dataDir.getAbsolutePath());
         cmd.setOutputStream(out);
         cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/b1937f9fb1d84b02f2e0cd6e11018688fd009280394a7c1fd264c10de9b14998"));
         cmd.setContentIdsOrAliases(Collections.singletonList(toIRI("file:///tmp/preston-test/foo.txt")));

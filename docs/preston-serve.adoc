@@ -20,8 +20,8 @@ preston-serve - provide access to content via http endpoint
 == Synopsis
 
 *preston serve* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
-              [*--data-dir*=_<localDataDir>_] [*-h*=_<host>_] [*-l*=_<logMode>_]
-              [*-p*=_<port>_] [*--tmp-dir*=_<localTmpDir>_] [*--repos*=_<remotes>_]...
+              [*--data-dir*=_<dataDir>_] [*-h*=_<host>_] [*-l*=_<logMode>_]
+              [*-p*=_<port>_] [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_]...
 
 // end::picocli-generated-man-section-synopsis[]
 
@@ -38,7 +38,7 @@ provide access to content via http endpoint
 *-a*, *--algo, --hash-algorithm*=_<hashType>_::
   Hash algorithm used to generate primary content identifiers
 
-*--data-dir*=_<localDataDir>_::
+*--data-dir*=_<dataDir>_::
   Location of local content cache
 
 *-h*, *--host*=_<host>_::
@@ -59,7 +59,7 @@ provide access to content via http endpoint
 *--repos, --remote, --remotes, --include, --repositories*=_<remotes>_::
   Included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)
 
-*--tmp-dir*=_<localTmpDir>_::
+*--tmp-dir*=_<tmpDir>_::
   Location of local tmp dir
 
 // end::picocli-generated-man-section-options[]

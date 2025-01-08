@@ -174,7 +174,7 @@ public class RISFileExtractorTest {
         Persisting processorState = new Persisting();
         URL resource = getClass().getResource("/bio/guoda/preston/cmd/bhldatadir/2a/5d/2a5de79372318317a382ea9a2cef069780b852b01210ef59e06b640a3539cb5a");
         File dataDir = new File(resource.getFile()).getParentFile().getParentFile().getParentFile();
-        processorState.setLocalDataDir(dataDir.getAbsolutePath());
+        processorState.setDataDir(dataDir.getAbsolutePath());
 
         StatementsListener extractor = new RISFileExtractor(
                 processorState,

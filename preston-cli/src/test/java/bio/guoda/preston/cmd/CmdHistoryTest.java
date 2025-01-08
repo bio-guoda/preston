@@ -33,7 +33,7 @@ public class CmdHistoryTest {
         cmd.setRemotes(Collections.singletonList(indexAndDataRemote));
         cmd.setCacheEnabled(false);
 
-        cmd.setLocalDataDir(folder.newFolder("data").getAbsolutePath());
+        cmd.setDataDir(folder.newFolder("data").getAbsolutePath());
         cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/87d3b8e67b0148f98abd0ff65be720993400ffc465764794a9afcdc00fe1a2e9"));
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -55,7 +55,7 @@ public class CmdHistoryTest {
         cmd.setRemotes(Collections.singletonList(indexAndDataRemote));
         cmd.setCacheEnabled(false);
 
-        cmd.setLocalDataDir(folder.newFolder("data").getAbsolutePath());
+        cmd.setDataDir(folder.newFolder("data").getAbsolutePath());
         cmd.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/b1a9328ef8106189402f566a6100e39d"));
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -74,7 +74,7 @@ public class CmdHistoryTest {
     public void traceDescendants() throws IOException, URISyntaxException {
         CmdHistory cmd = new CmdHistory();
         cmd.setRemotes(Arrays.asList(getIndexAndContentRemote(), getContentOnly()));
-        cmd.setLocalDataDir(folder.newFolder("data").getAbsolutePath());
+        cmd.setDataDir(folder.newFolder("data").getAbsolutePath());
         cmd.setCacheEnabled(false);
 
 

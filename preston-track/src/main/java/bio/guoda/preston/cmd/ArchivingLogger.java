@@ -53,7 +53,7 @@ public class ArchivingLogger extends StatementsListenerAdapter {
     }
 
     void start() throws IOException {
-        tmpArchive = File.createTempFile("archive", "nq", persistingLocal.getTmpDir());
+        tmpArchive = File.createTempFile("archive", "nq", new File(persistingLocal.getTmpDir()));
         os = IOUtils.buffer(new FileOutputStream(tmpArchive));
         listener = new StatementLoggerNQuads(os);
     }

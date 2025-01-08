@@ -64,15 +64,15 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
-        File source = getDefaultDataDir();
-        File target = Persisting.getDataDir(targetDir);
+        File source = new File(getDataDir());
+        File target = Persisting.mkdir(targetDir);
         if (ArchiveType.jekyll.equals(getArchiveType())) {
             generateJekyllSiteContent(target, getProvenanceTracer());
         } else {
             if (source.equals(target)) {
                 throw new IllegalArgumentException("source dir [" + source.getAbsolutePath() + "] must be different from target dir [" + target.getAbsolutePath() + "].");
             }
-            File tmp = getTmpDir();
+            File tmp = new File(getTmpDir());
 
             Factory<KeyValueStore> keyValueStoreFactory = new Factory<KeyValueStore>() {
                 @Override

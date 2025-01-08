@@ -40,7 +40,7 @@ public class CmdCopyToTest {
         File src = src1;
         File copyTo = tmpDir.newFolder("dst");
         CmdCopyTo cmdCopyTo = new CmdCopyTo();
-        cmdCopyTo.setLocalDataDir(src.getAbsolutePath());
+        cmdCopyTo.setDataDir(src.getAbsolutePath());
         cmdCopyTo.setTargetDir(copyTo.getAbsolutePath());
         cmdCopyTo.setArchiveType(ArchiveType.jekyll);
 
@@ -89,7 +89,7 @@ public class CmdCopyToTest {
         File src = prepareSrcDir(getClass().getResource("/bio/guoda/preston/cmd/data-two-versions.zip"));
         File copyTo = tmpDir.newFolder("dst");
         CmdCopyTo cmdCopyTo = new CmdCopyTo();
-        cmdCopyTo.setLocalDataDir(src.getAbsolutePath());
+        cmdCopyTo.setDataDir(src.getAbsolutePath());
         cmdCopyTo.setTargetDir(copyTo.getAbsolutePath());
         cmdCopyTo.setPathPattern(HashPathPattern.directoryDepth0);
         cmdCopyTo.setArchiveType(ArchiveType.data_prov_provindex);
@@ -118,7 +118,7 @@ public class CmdCopyToTest {
         File src = prepareSrcDir(getClass().getResource("/bio/guoda/preston/cmd/data-two-versions.zip"));
         File copyTo = tmpDir.newFolder("dst");
         CmdCopyTo cmdCopyTo = new CmdCopyTo();
-        cmdCopyTo.setLocalDataDir(src.getAbsolutePath());
+        cmdCopyTo.setDataDir(src.getAbsolutePath());
         cmdCopyTo.setTargetDir(copyTo.getAbsolutePath());
         cmdCopyTo.setProvenanceArchor(RefNodeFactory.toIRI("hash://sha256/df1d4e1f20e1d8f89ddbb0fccb9f8005283c334a6e5a6fb19e30720bed2a9c1c"));
         cmdCopyTo.setPathPattern(HashPathPattern.directoryDepth0);
@@ -162,7 +162,7 @@ public class CmdCopyToTest {
         assertCopy(src, copyTo);
         File copyToAgain = tmpDir.newFolder("bar");
         CmdCopyTo cmdCopyTo = new CmdCopyTo();
-        cmdCopyTo.setLocalDataDir(copyTo.getAbsolutePath());
+        cmdCopyTo.setDataDir(copyTo.getAbsolutePath());
         cmdCopyTo.setTargetDir(copyToAgain.getAbsolutePath());
         cmdCopyTo.setKeyToPathLocal(new KeyTo1LevelPath(copyTo.toURI()));
         cmdCopyTo.setPathPattern(HashPathPattern.directoryDepth0);
@@ -182,7 +182,7 @@ public class CmdCopyToTest {
 
     private void assertCopy(File sourceDir, File targetDir) throws IOException {
         CmdCopyTo cmdCopyTo = new CmdCopyTo();
-        cmdCopyTo.setLocalDataDir(sourceDir.getAbsolutePath());
+        cmdCopyTo.setDataDir(sourceDir.getAbsolutePath());
         cmdCopyTo.setTargetDir(targetDir.getAbsolutePath());
         cmdCopyTo.setPathPattern(HashPathPattern.directoryDepth0);
         cmdCopyTo.setArchiveType(ArchiveType.data_prov_provindex);

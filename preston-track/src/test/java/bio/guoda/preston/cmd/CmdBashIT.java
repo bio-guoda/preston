@@ -70,7 +70,7 @@ public class CmdBashIT {
         trackScript();
 
         CmdBash cmdBash = new CmdBash();
-        cmdBash.setLocalDataDir(folder.getRoot().getAbsolutePath());
+        cmdBash.setDataDir(folder.getRoot().getAbsolutePath());
         cmdBash.setCommandsContentId(RefNodeFactory.toIRI("hash://sha256/77af778b51abd4a3c51c5ddd97204a9c3ae614ebccb75a606c3b6865aed6744e"));
 
         File source = folder.newFile("stdinstub");
@@ -102,7 +102,7 @@ public class CmdBashIT {
         IRI uuidAlias = RefNodeFactory.toIRI(UUID.fromString(group));
 
         CmdBash cmdBash = new CmdBash();
-        cmdBash.setLocalDataDir(folder.getRoot().getAbsolutePath());
+        cmdBash.setDataDir(folder.getRoot().getAbsolutePath());
         cmdBash.setCommandsContentId(uuidAlias);
 
         ByteArrayOutputStream boas = new ByteArrayOutputStream();
@@ -132,7 +132,7 @@ public class CmdBashIT {
 
     private ByteArrayOutputStream trackScript() throws URISyntaxException {
         CmdTrack cmdTrack = new CmdTrack();
-        cmdTrack.setLocalDataDir(folder.getRoot().getAbsolutePath());
+        cmdTrack.setDataDir(folder.getRoot().getAbsolutePath());
 
         cmdTrack.setIRIs(Collections.singletonList(RefNodeFactory.toIRI(getClass().getResource("cat.sh").toURI())));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
