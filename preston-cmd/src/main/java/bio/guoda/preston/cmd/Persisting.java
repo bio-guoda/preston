@@ -63,9 +63,9 @@ public class Persisting extends PersistingLocal {
                 getDepth(),
                 isCacheEnabled(),
                 getRemotes(),
-                this.getHashType(),
+                getHashType(),
                 getProgressListener(),
-                this.supportTarGzDiscovery
+                isSupportTarGzDiscovery()
         );
 
     }
