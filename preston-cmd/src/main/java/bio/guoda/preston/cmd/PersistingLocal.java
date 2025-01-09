@@ -5,12 +5,8 @@ import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyTo1LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
-import bio.guoda.preston.store.KeyTo5LevelPath;
 import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.KeyValueStoreReadOnly;
-import bio.guoda.preston.store.KeyValueStoreWithFallback;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.ProvenanceTracerByIndex;
 import bio.guoda.preston.store.ProvenanceTracerImpl;
@@ -67,19 +63,26 @@ public class PersistingLocal extends CmdWithProvenance {
     }
 
     protected KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory) {
-        KeyValueStore primary = new KeyValueStoreLocalFileSystem(
+        return getKeyValueStore(validatingKeyValueStreamFactory,
+                new File(getDataDir()),
                 new File(getTmpDir()),
-                getKeyToPathLocal(new File(getDataDir()).toURI()),
-                validatingKeyValueStreamFactory
-        );
+                this.depth);
+    }
 
-        KeyValueStoreReadOnly fallback = new KeyValueStoreLocalFileSystem(
-                new File(getTmpDir()),
-                new KeyTo5LevelPath(new File(getDataDir()).toURI()),
-                validatingKeyValueStreamFactory
-        );
+    public static KeyValueStore getKeyValueStore(
+            ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory,
+            File dataDir,
+            File tmpDir,
+            int directoryDepth) {
 
-        return new KeyValueStoreWithFallback(primary, fallback);
+        final KeyToPathFactory keyToPathFactory
+                = new KeyToPathFactoryDepth(dataDir.toURI(), directoryDepth);
+
+        return new KeyValueStoreFactoryFallBack(
+                dataDir,
+                tmpDir,
+                keyToPathFactory.getKeyToPath()
+        ).getKeyValueStore(validatingKeyValueStreamFactory);
     }
 
 
@@ -94,8 +97,8 @@ public class PersistingLocal extends CmdWithProvenance {
 
     private Factory<KeyValueStore> getKeyValueStoreFactoryForOrigins() {
         return () -> getKeyValueStore(
-                    new ValidatingKeyValueStreamContentAddressedFactory()
-            );
+                new ValidatingKeyValueStreamContentAddressedFactory()
+        );
     }
 
     public boolean isAnchored() {
@@ -109,7 +112,7 @@ public class PersistingLocal extends CmdWithProvenance {
         return getTracerOfDescendants(factory);
     }
 
-    protected ProvenanceTracer getTracerOfDescendants(Factory<KeyValueStore>  keyValueStoreFactory) {
+    protected ProvenanceTracer getTracerOfDescendants(Factory<KeyValueStore> keyValueStoreFactory) {
         HexaStoreImpl hexastore = new HexaStoreImpl(
                 keyValueStoreFactory.create(),
                 getHashType()
