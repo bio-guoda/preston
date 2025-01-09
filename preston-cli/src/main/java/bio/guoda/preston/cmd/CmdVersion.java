@@ -1,6 +1,6 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.Version;
+import bio.guoda.preston.VersionUtil;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -13,7 +13,7 @@ public class CmdVersion extends Cmd implements Runnable {
 
     @Override
     public void run() {
-        print(Version.getVersionString() + "\n", () -> {
+        print(VersionUtil.getVersionString() + "\n", () -> {
 
         });
     }

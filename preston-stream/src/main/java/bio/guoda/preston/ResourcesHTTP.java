@@ -194,7 +194,7 @@ public class ResourcesHTTP {
                     .setSSLContext(build)
                     .setServiceUnavailableRetryStrategy(new RateLimitedRetryStrategy())
                     .setRetryHandler(new DefaultHttpRequestRetryHandler(3, true))
-                    .setUserAgent("globalbioticinteractions/" + Version.getVersionString() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)")
+                    .setUserAgent("globalbioticinteractions/" + VersionUtil.getVersionString() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)")
                     .setDefaultRequestConfig(config)
                     // for loading proxy config see https://github.com/globalbioticinteractions/nomer/issues/121
                     .useSystemProperties()

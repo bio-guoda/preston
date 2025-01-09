@@ -2,7 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.Version;
+import bio.guoda.preston.VersionUtil;
 import bio.guoda.preston.process.ActivityUtil;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStore;
@@ -13,7 +13,6 @@ import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
@@ -21,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
@@ -166,8 +164,8 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
 
 
     static List<Quad> findActivityInfo(ActivityContext activity) {
-        String version = Version.getVersionString(null);
-        String softwareAgentVersion = version == null ? "" : (" (Version " + Version.getVersionString() + ")");
+        String version = VersionUtil.getVersionString(null);
+        String softwareAgentVersion = version == null ? "" : (" (Version " + VersionUtil.getVersionString() + ")");
         return ActivityUtil.generateSoftwareAgentProcessDescription(activity, PRESTON, RefNodeConstants.PRESTON_DOI_URL_IRI, "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2018-2024. Preston: a biodiversity dataset tracker" + softwareAgentVersion + " [Software]. Zenodo. " + RefNodeConstants.PRESTON_DOI_URL_IRI.getIRIString(), "Preston is a software program that finds, archives and provides access to biodiversity datasets.");
     }
 

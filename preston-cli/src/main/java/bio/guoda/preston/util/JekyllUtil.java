@@ -4,7 +4,7 @@ import bio.guoda.preston.DateUtil;
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.Version;
+import bio.guoda.preston.VersionUtil;
 import bio.guoda.preston.process.RegistryReaderGBIF;
 import bio.guoda.preston.process.RegistryReaderIDigBio;
 import bio.guoda.preston.process.StatementListener;
@@ -206,7 +206,7 @@ public class JekyllUtil {
                 objectNode.put("data_location_comment", "replace [data_location/provenance_location] if content is hosted separately, e.g., [https://example.org/data/] would link content to locations like [https://example.org/data/aa/bb/aabb...] where [aabb...] is a sha256 content/provenance hash");
                 objectNode.put("data_location", "data/");
                 objectNode.put("provenance_location", "data/");
-                objectNode.put("version", Version.getVersionString());
+                objectNode.put("version", VersionUtil.getVersionString());
                 final DateTime dateTime = lastCrawlTime.get();
                 if (dateTime != null) {
                     objectNode.put("created_at", dateTime.toString());
