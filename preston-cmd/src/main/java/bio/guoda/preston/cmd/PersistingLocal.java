@@ -61,17 +61,8 @@ public class PersistingLocal extends CmdWithProvenance {
         return data;
     }
 
-    protected KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory) {
-        return KeyValueStoreUtil.getKeyValueStore(validatingKeyValueStreamFactory,
-                new File(getDataDir()),
-                new File(getTmpDir()),
-                getDepth());
-    }
-
-
     public ProvenanceTracer getProvenanceTracer() {
         Factory<KeyValueStore> factoryForOrigins = getKeyValueStoreFactoryForOrigins();
-
 
         return isAnchored()
                 ? getTracerOfOrigins(factoryForOrigins)
@@ -79,9 +70,13 @@ public class PersistingLocal extends CmdWithProvenance {
     }
 
     private Factory<KeyValueStore> getKeyValueStoreFactoryForOrigins() {
-        return () -> getKeyValueStore(
-                new ValidatingKeyValueStreamContentAddressedFactory()
-        );
+        return () ->
+                KeyValueStoreUtil.getKeyValueStore(
+                        new ValidatingKeyValueStreamContentAddressedFactory(),
+                        new File(getDataDir()),
+                        new File(getTmpDir()),
+                        getDepth()
+                );
     }
 
     public boolean isAnchored() {
@@ -89,9 +84,13 @@ public class PersistingLocal extends CmdWithProvenance {
     }
 
     protected ProvenanceTracer getTracerOfDescendants() {
-        Factory<KeyValueStore> factory = () -> getKeyValueStore(
-                new ValidatingKeyValueStreamHashTypeIRIFactory()
-        );
+        Factory<KeyValueStore> factory = () ->
+                KeyValueStoreUtil.getKeyValueStore(
+                        new ValidatingKeyValueStreamHashTypeIRIFactory(),
+                        new File(getDataDir()),
+                        new File(getTmpDir()),
+                        getDepth()
+                );
         return getTracerOfDescendants(factory);
     }
 

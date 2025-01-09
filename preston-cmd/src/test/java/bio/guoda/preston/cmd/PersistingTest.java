@@ -5,6 +5,7 @@ import bio.guoda.preston.DerefState;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.KeyValueStoreUtil;
 import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamWithViolations;
 import org.apache.commons.io.IOUtils;
@@ -143,7 +144,7 @@ public class PersistingTest {
     @Test
     public void fileDereferencer() throws IOException, URISyntaxException {
 
-        Dereferencer<InputStream> deref = Persisting.getInputStreamDereferencerFile(new DerefProgressListener() {
+        Dereferencer<InputStream> deref = KeyValueStoreUtil.getInputStreamDereferencerFile(new DerefProgressListener() {
             @Override
             public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
 
@@ -160,7 +161,7 @@ public class PersistingTest {
     @Test
     public void fileDereferencerNonFileURL() throws IOException, URISyntaxException {
 
-        Dereferencer<InputStream> deref = Persisting.getInputStreamDereferencerFile(new DerefProgressListener() {
+        Dereferencer<InputStream> deref = KeyValueStoreUtil.getInputStreamDereferencerFile(new DerefProgressListener() {
             @Override
             public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
 
