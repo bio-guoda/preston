@@ -40,7 +40,7 @@ public class KeyValueStoreUtil {
         ).getKeyValueStore(validatingKeyValueStreamFactory);
     }
 
-    public static KeyValueStoreStickyFailover createStickyFailoverWithValidatedCache(
+    private static KeyValueStoreStickyFailover createStickyFailoverWithValidatedCache(
             ValidatingKeyValueStreamFactory kvStreamFactory,
             List<KeyValueStoreReadOnly> remotes,
             File stagingDir,
