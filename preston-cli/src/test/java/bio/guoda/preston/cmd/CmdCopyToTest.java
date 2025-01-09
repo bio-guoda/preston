@@ -164,7 +164,7 @@ public class CmdCopyToTest {
         CmdCopyTo cmdCopyTo = new CmdCopyTo();
         cmdCopyTo.setDataDir(copyTo.getAbsolutePath());
         cmdCopyTo.setTargetDir(copyToAgain.getAbsolutePath());
-        cmdCopyTo.setDepth(1);
+        cmdCopyTo.setDepth(0);
         cmdCopyTo.setPathPattern(HashPathPattern.directoryDepth0);
         cmdCopyTo.setArchiveType(ArchiveType.data_prov_provindex);
 
