@@ -3,9 +3,6 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.store.HexaStoreImpl;
-import bio.guoda.preston.store.KeyTo1LevelPath;
-import bio.guoda.preston.store.KeyTo3LevelPath;
-import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreUtil;
 import bio.guoda.preston.store.ProvenanceTracer;
@@ -20,7 +17,6 @@ import picocli.CommandLine;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 
 public class PersistingLocal extends CmdWithProvenance {
 
@@ -69,13 +65,22 @@ public class PersistingLocal extends CmdWithProvenance {
                 : getTracerOfDescendants();
     }
 
+    protected KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory kvStreamFactory) {
+
+        return KeyValueStoreUtil.getKeyValueStore(
+                new ValidatingKeyValueStreamContentAddressedFactory(),
+                new File(getDataDir()),
+                new File(getTmpDir()),
+                getDepth()
+        );
+
+    }
+
+
     private Factory<KeyValueStore> getKeyValueStoreFactoryForOrigins() {
         return () ->
-                KeyValueStoreUtil.getKeyValueStore(
-                        new ValidatingKeyValueStreamContentAddressedFactory(),
-                        new File(getDataDir()),
-                        new File(getTmpDir()),
-                        getDepth()
+                getKeyValueStore(
+                        new ValidatingKeyValueStreamContentAddressedFactory()
                 );
     }
 
@@ -85,11 +90,8 @@ public class PersistingLocal extends CmdWithProvenance {
 
     protected ProvenanceTracer getTracerOfDescendants() {
         Factory<KeyValueStore> factory = () ->
-                KeyValueStoreUtil.getKeyValueStore(
-                        new ValidatingKeyValueStreamHashTypeIRIFactory(),
-                        new File(getDataDir()),
-                        new File(getTmpDir()),
-                        getDepth()
+                getKeyValueStore(
+                        new ValidatingKeyValueStreamHashTypeIRIFactory()
                 );
         return getTracerOfDescendants(factory);
     }

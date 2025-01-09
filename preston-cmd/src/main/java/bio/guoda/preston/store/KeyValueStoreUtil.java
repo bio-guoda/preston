@@ -69,7 +69,16 @@ public class KeyValueStoreUtil {
         return new KeyValueStoreStickyFailover(validatedRemotes);
     }
 
-    public static KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory kvStreamFactory, String dataDir, String tmpDir, int depth, boolean cacheEnabled, List<URI> remotes, HashType hashType, DerefProgressListener progressListener, boolean supportTarGzDiscovery) {
+    public static KeyValueStore getKeyValueStore(
+            ValidatingKeyValueStreamFactory kvStreamFactory,
+            String dataDir,
+            String tmpDir,
+            int depth,
+            boolean cacheEnabled,
+            List<URI> remotes,
+            HashType hashType,
+            DerefProgressListener progressListener,
+            boolean supportTarGzDiscovery) {
         KeyValueStore keyValueStore = getKeyValueStore(kvStreamFactory,
                 new File(dataDir),
                 new File(tmpDir),

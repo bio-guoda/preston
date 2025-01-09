@@ -53,6 +53,7 @@ public class Persisting extends PersistingLocal {
         return !this.disableCache;
     }
 
+    @Override
     protected KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory kvStreamFactory) {
 
         return KeyValueStoreUtil.getKeyValueStore(
