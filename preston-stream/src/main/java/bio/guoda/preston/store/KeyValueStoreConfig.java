@@ -40,7 +40,8 @@ public class KeyValueStoreConfig {
     }
 
     public KeyValueStoreConfig(File dataDir, File tmpDir, int directoryDepth) {
-        this(dataDir, tmpDir,
+        this(dataDir,
+                tmpDir,
                 directoryDepth,
                 false,
                 Collections.emptyList(),
