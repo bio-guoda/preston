@@ -7,6 +7,7 @@ import bio.guoda.preston.store.KeyTo1LevelPath;
 import bio.guoda.preston.store.KeyTo3LevelPath;
 import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.KeyValueStoreUtil;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.ProvenanceTracerByIndex;
 import bio.guoda.preston.store.ProvenanceTracerImpl;
@@ -49,8 +50,6 @@ public class PersistingLocal extends CmdWithProvenance {
             description = "Hash algorithm used to generate primary content identifiers. Supported values: ${COMPLETION-CANDIDATES}."
     )
     private HashType hashType = HashType.sha256;
-    private KeyToPath keyToPathLocal = null;
-
 
     static File mkdir(String data1) {
         File data = new File(data1);
@@ -63,26 +62,10 @@ public class PersistingLocal extends CmdWithProvenance {
     }
 
     protected KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory) {
-        return getKeyValueStore(validatingKeyValueStreamFactory,
+        return KeyValueStoreUtil.getKeyValueStore(validatingKeyValueStreamFactory,
                 new File(getDataDir()),
                 new File(getTmpDir()),
-                this.depth);
-    }
-
-    public static KeyValueStore getKeyValueStore(
-            ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory,
-            File dataDir,
-            File tmpDir,
-            int directoryDepth) {
-
-        final KeyToPathFactory keyToPathFactory
-                = new KeyToPathFactoryDepth(dataDir.toURI(), directoryDepth);
-
-        return new KeyValueStoreFactoryFallBack(
-                dataDir,
-                tmpDir,
-                keyToPathFactory.getKeyToPath()
-        ).getKeyValueStore(validatingKeyValueStreamFactory);
+                getDepth());
     }
 
 
@@ -125,26 +108,12 @@ public class PersistingLocal extends CmdWithProvenance {
         return new ProvenanceTracerImpl(keyValueStoreFactory.create(), this);
     }
 
-
-    public KeyToPath getKeyToPathLocal(URI baseURI) {
-        initIfNeeded(baseURI);
-        return keyToPathLocal;
+    public int getDepth() {
+        return depth;
     }
 
-    public void setKeyToPathLocal(KeyToPath keyToPath) {
-        this.keyToPathLocal = keyToPath;
-    }
-
-    private void initIfNeeded(URI baseURI) {
-        if (keyToPathLocal == null) {
-            if (depth == 2) {
-                keyToPathLocal = new KeyTo3LevelPath(baseURI);
-            } else if (depth == 0) {
-                keyToPathLocal = new KeyTo1LevelPath(baseURI);
-            } else {
-                throw new IllegalArgumentException("only directory depths in {0,2} are supported, but found [" + depth + "]");
-            }
-        }
+    public void setDepth(int depth) {
+        this.depth = depth;
     }
 
     public String getDataDir() {

@@ -67,8 +67,9 @@ public class CmdVerify extends Persisting implements Runnable {
                 hashGenerator,
                 skipHashVerification,
                 getOutputStream(),
-                getKeyToPathLocal(new File(getDataDir()).toURI())
+                new KeyToPathFactoryDepth(new File(getDataDir()).toURI(), getDepth()).getKeyToPath()
         );
+
         CmdContext ctx = new CmdContext(this, getProvenanceAnchor(), statementListener);
 
         attemptReplay(
@@ -76,11 +77,11 @@ public class CmdVerify extends Persisting implements Runnable {
                 ctx,
                 getProvenanceTracer(),
                 new EmittingStreamFactory() {
-            @Override
-            public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
-                return new EmittingStreamOfAnyVersions(emitter, context);
-            }
-        });
+                    @Override
+                    public ParsingEmitter createEmitter(StatementEmitter emitter, ProcessorState context) {
+                        return new EmittingStreamOfAnyVersions(emitter, context);
+                    }
+                });
     }
 
 
