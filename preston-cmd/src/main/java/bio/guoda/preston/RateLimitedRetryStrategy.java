@@ -1,15 +1,12 @@
 package bio.guoda.preston;
 
-import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ServiceUnavailableRetryStrategy;
-import org.apache.http.impl.client.DefaultServiceUnavailableRetryStrategy;
 import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class RateLimitedRetryStrategy implements ServiceUnavailableRetryStrategy {
