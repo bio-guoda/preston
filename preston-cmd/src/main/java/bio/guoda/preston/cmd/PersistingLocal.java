@@ -4,6 +4,8 @@ import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.KeyValueStoreConfig;
+import bio.guoda.preston.store.KeyValueStoreFactoryImpl;
 import bio.guoda.preston.store.KeyValueStoreUtil;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.ProvenanceTracerByIndex;
@@ -65,14 +67,12 @@ public class PersistingLocal extends CmdWithProvenance {
                 : getTracerOfDescendants();
     }
 
-    protected KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory kvStreamFactory) {
+    protected KeyValueStoreConfig getKeyValueStoreConfig() {
+        return new KeyValueStoreConfig(new File(getDataDir()), new File(getTmpDir()), getDepth());
+    }
 
-        return KeyValueStoreUtil.getKeyValueStore(
-                new ValidatingKeyValueStreamContentAddressedFactory(),
-                new File(getDataDir()),
-                new File(getTmpDir()),
-                getDepth()
-        );
+    protected KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory kvStreamFactory) {
+        return new KeyValueStoreFactoryImpl(getKeyValueStoreConfig()).getKeyValueStore(kvStreamFactory);
 
     }
 

@@ -4,7 +4,6 @@ import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.stream.ContentStreamUtil;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -27,15 +26,17 @@ public class KeyValueStoreUtil {
             final File tmpDir,
             int directoryDepth) {
 
-        final KeyToPathFactory keyToPathFactory
-                = new KeyToPathFactoryDepth(dataDir.toURI(), directoryDepth);
-
-        return new KeyValueStoreFactoryFallBack(
+        KeyValueStoreConfig config = new KeyValueStoreConfig(
                 dataDir,
                 tmpDir,
-                keyToPathFactory.getKeyToPath()
+                directoryDepth
+        );
+
+        return new KeyValueStoreFactoryFallBack(
+                config
         ).getKeyValueStore(validatingKeyValueStreamFactory);
     }
+
 
     private static KeyValueStoreStickyFailover createStickyFailoverWithValidatedCache(
             ValidatingKeyValueStreamFactory kvStreamFactory,
@@ -66,45 +67,13 @@ public class KeyValueStoreUtil {
         return new KeyValueStoreStickyFailover(validatedRemotes);
     }
 
-    public static KeyValueStore getKeyValueStore(
-            ValidatingKeyValueStreamFactory kvStreamFactory,
-            String dataDir,
-            String tmpDir,
-            int depth,
-            boolean cacheEnabled,
-            List<URI> remotes,
-            HashType hashType,
-            DerefProgressListener progressListener,
-            boolean supportTarGzDiscovery) {
-        KeyValueStore keyValueStore = getKeyValueStore(kvStreamFactory,
-                new File(dataDir),
-                new File(tmpDir),
-                depth);
 
-        return CollectionUtils.isEmpty(remotes)
-                ? keyValueStore
-                : withRemoteSupport(
-                kvStreamFactory,
-                keyValueStore,
-                remotes,
-                supportTarGzDiscovery,
-                hashType,
-                progressListener,
-                cacheEnabled,
-                tmpDir
-        );
-    }
-
-    private static KeyValueStore withRemoteSupport(ValidatingKeyValueStreamFactory kvStreamFactory,
-                                                   KeyValueStore keyValueStore,
-                                                   List<URI> remotes,
-                                                   boolean supportTarGzDiscovery,
-                                                   HashType hashType,
-                                                   DerefProgressListener progressListener,
-                                                   boolean cacheEnabled, String tmpDir) {
+    static KeyValueStore withRemoteSupport(ValidatingKeyValueStreamFactory kvStreamFactory,
+                                           KeyValueStore keyValueStore,
+                                           KeyValueStoreConfig config) {
         KeyValueStore store;
         Stream<Pair<URI, KeyToPath>> keyToPathStream =
-                remotes
+                config.getRemotes()
                         .stream()
                         .flatMap(uri -> Stream.of(
                                 Pair.of(uri, new KeyToHashURI(uri)),
@@ -112,25 +81,25 @@ public class KeyValueStoreUtil {
                                 Pair.of(uri, new KeyTo1LevelPath(uri)),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritagePath(uri)),
                                 Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri)),
-                                Pair.of(uri, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, progressListener)))),
-                                Pair.of(uri, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, progressListener), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13))),
-                                Pair.of(uri, new KeyTo1LevelDataOnePath(uri, getDerefStream(uri, progressListener))),
+                                Pair.of(uri, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, config.getProgressListener())))),
+                                Pair.of(uri, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13))),
+                                Pair.of(uri, new KeyTo1LevelDataOnePath(uri, getDerefStream(uri, config.getProgressListener()))),
                                 Pair.of(uri, new KeyTo1LevelOCIPath(uri)),
-                                Pair.of(uri, new KeyTo1LevelWikiMediaCommonsPath(uri, getDerefStream(uri, progressListener))),
-                                Pair.of(uri, new KeyTo1LevelDataVersePath(uri, getDerefStream(uri, progressListener)))
+                                Pair.of(uri, new KeyTo1LevelWikiMediaCommonsPath(uri, getDerefStream(uri, config.getProgressListener()))),
+                                Pair.of(uri, new KeyTo1LevelDataVersePath(uri, getDerefStream(uri, config.getProgressListener())))
                         ));
 
         List<KeyValueStoreReadOnly> keyValueStoreRemotes =
-                supportTarGzDiscovery
-                        ? includeTarGzSupport(keyToPathStream, keyValueStore, remotes, hashType, progressListener, cacheEnabled)
-                        : defaultRemotePathSupport(keyToPathStream, progressListener).collect(Collectors.toList());
+                config.isSupportTarGzDiscovery()
+                        ? includeTarGzSupport(keyToPathStream, keyValueStore, config.getRemotes(), config.getHashType(), config.getProgressListener(), config.isCacheEnabled())
+                        : defaultRemotePathSupport(keyToPathStream, config.getProgressListener()).collect(Collectors.toList());
 
 
-        if (cacheEnabled) {
+        if (config.isCacheEnabled()) {
             KeyValueStoreStickyFailover source = createStickyFailoverWithValidatedCache(
                     kvStreamFactory,
                     keyValueStoreRemotes,
-                    new File(tmpDir),
+                    config.getTmpDir(),
                     keyValueStore
             );
             store = new KeyValueStoreCopying(
@@ -245,4 +214,5 @@ public class KeyValueStoreUtil {
 
         return withStoreAt(keyToPath, dereferencer);
     }
+
 }

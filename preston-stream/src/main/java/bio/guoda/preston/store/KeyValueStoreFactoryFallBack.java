@@ -8,10 +8,15 @@ public class KeyValueStoreFactoryFallBack implements KeyValueStoreFactory {
     private final File tmpDir;
     private KeyToPath keyToPath;
 
-    public KeyValueStoreFactoryFallBack(File dataDir, File tmpDir, KeyToPath keyToPath) {
+    public KeyValueStoreFactoryFallBack(File dataDir, File tmpDir, int directoryDepth) {
         this.dataDir = dataDir;
         this.tmpDir = tmpDir;
-        this.keyToPath = keyToPath;
+        this.keyToPath = new KeyToPathFactoryDepth(dataDir.toURI(), directoryDepth).getKeyToPath();
+
+    }
+
+    public KeyValueStoreFactoryFallBack(KeyValueStoreConfig config) {
+        this(config.getDataDir(), config.getTmpDir(), config.getDirectoryDepth());
     }
 
     @Override

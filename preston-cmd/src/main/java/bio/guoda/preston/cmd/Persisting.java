@@ -1,14 +1,15 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.DerefProgressListener;
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.store.DerefProgressLogger;
 import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.KeyValueStoreUtil;
+import bio.guoda.preston.store.KeyValueStoreConfig;
+import bio.guoda.preston.store.KeyValueStoreFactoryImpl;
 import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
 import bio.guoda.preston.stream.ContentStreamUtil;
 import picocli.CommandLine;
 
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,21 +54,19 @@ public class Persisting extends PersistingLocal {
         return !this.disableCache;
     }
 
+
     @Override
-    protected KeyValueStore getKeyValueStore(ValidatingKeyValueStreamFactory kvStreamFactory) {
-
-        return KeyValueStoreUtil.getKeyValueStore(
-                kvStreamFactory,
-                getDataDir(),
-                getTmpDir(),
-                getDepth(),
-                isCacheEnabled(),
-                getRemotes(),
-                getHashType(),
-                getProgressListener(),
-                isSupportTarGzDiscovery()
-        );
-
+    protected KeyValueStoreConfig getKeyValueStoreConfig() {
+        return new KeyValueStoreConfig(
+                    new File(getDataDir()),
+                    new File(getTmpDir()),
+                    getDepth(),
+                    isCacheEnabled(),
+                    getRemotes(),
+                    getHashType(),
+                    getProgressListener(),
+                    isSupportTarGzDiscovery()
+            );
     }
 
     private DerefProgressListener getProgressListener() {
