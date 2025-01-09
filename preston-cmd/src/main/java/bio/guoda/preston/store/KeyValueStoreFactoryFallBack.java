@@ -1,12 +1,4 @@
-package bio.guoda.preston.cmd;
-
-import bio.guoda.preston.store.KeyTo5LevelPath;
-import bio.guoda.preston.store.KeyToPath;
-import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.KeyValueStoreLocalFileSystem;
-import bio.guoda.preston.store.KeyValueStoreReadOnly;
-import bio.guoda.preston.store.KeyValueStoreWithFallback;
-import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
+package bio.guoda.preston.store;
 
 import java.io.File;
 

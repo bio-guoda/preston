@@ -1,8 +1,4 @@
-package bio.guoda.preston.cmd;
-
-import bio.guoda.preston.store.KeyTo1LevelPath;
-import bio.guoda.preston.store.KeyTo3LevelPath;
-import bio.guoda.preston.store.KeyToPath;
+package bio.guoda.preston.store;
 
 import java.net.URI;
 

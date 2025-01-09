@@ -10,6 +10,7 @@ import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStore;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
+import bio.guoda.preston.store.KeyToPathFactoryDepth;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
