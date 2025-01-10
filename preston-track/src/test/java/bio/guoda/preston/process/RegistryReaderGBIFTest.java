@@ -1,8 +1,8 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.HashType;
-import bio.guoda.preston.Seeds;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.TestUtil;
 import bio.guoda.preston.store.TestUtilForProcessor;
@@ -25,11 +25,11 @@ import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
-import static bio.guoda.preston.TripleMatcher.hasTriple;
 import static bio.guoda.preston.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
+import static bio.guoda.preston.TripleMatcher.hasTriple;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -256,6 +256,29 @@ public class RegistryReaderGBIFTest {
                 startsWith("<https://api.gbif.org/v1/occurrence/1142366485> <http://www.w3.org/ns/prov#hadMember> <http://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg> <urn:uuid:"));
         assertThat(getVersionSource(nodes.get(4)).toString(),
                 is("<http://fm-digital-assets.fieldmuseum.org/672/422/28936_Menacanthus_campephili_PT_v_IN.jpg>"));
+    }
+
+    @Test
+    public void isDatasetRecordEndpoint() {
+        assertTrue(RegistryReaderGBIF.describesDatasetRecord(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://api.gbif.org/v1/dataset/1234"),
+                HAS_VERSION,
+                RefNodeFactory.toIRI("hash://sha256/123"))));
+    }
+    @Test
+    public void isDatasetRecordEndpointAlternate() {
+        assertTrue(RegistryReaderGBIF.describesDatasetRecord(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://gbif.org/api/dataset/1234"),
+                HAS_VERSION,
+                RefNodeFactory.toIRI("hash://sha256/123"))));
+    }
+
+    @Test
+    public void isDatasetRecordEndpointAlternateOther() {
+        assertTrue(RegistryReaderGBIF.describesDatasetRecord(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://www.gbif.org/api/dataset/1234"),
+                HAS_VERSION,
+                RefNodeFactory.toIRI("hash://sha256/123"))));
     }
 
     @Test

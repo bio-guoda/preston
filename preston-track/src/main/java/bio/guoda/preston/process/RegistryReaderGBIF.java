@@ -55,6 +55,8 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     }};
 
     public static final String GBIF_API_DATASET_PART = "//api.gbif.org/v1/dataset";
+    public static final String GBIF_API_DATASET_PART_ALTERNATE = "//www.gbif.org/api/dataset";
+    public static final String GBIF_API_DATASET_PART_ALTERNATE_OTHER = "//gbif.org/api/dataset";
     public static final String GBIF_DATASET_INDEX_STRING = "https://api.gbif.org/v1/dataset/search/export";
     public static final String GBIF_API_OCCURRENCE_DOWNLOAD_PART = "//api.gbif.org/v1/occurrence/download";
     public static final String GBIF_OCCURRENCE_PART_PATH = "api.gbif.org/v1/occurrence";
@@ -102,7 +104,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 && getVersionSource(statement).toString().contains(GBIF_DATASET_INDEX_STRING)) {
             handleDatasetIndex(statement);
         } else if (hasVersionAvailable(statement)
-                && getVersionSource(statement).toString().contains(GBIF_API_DATASET_PART)) {
+                && describesDatasetRecord(statement)) {
             handleDataset(statement);
         } else if (hasVersionAvailable(statement)
                 && isOccurrenceDownload(statement)) {
@@ -111,6 +113,13 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 && isOccurrenceRecordEndpoint(statement)) {
             handleOccurrenceRecords(statement);
         }
+    }
+
+    static boolean describesDatasetRecord(Quad statement) {
+        IRI versionSource = getVersionSource(statement);
+        return StringUtils.contains(versionSource.toString(), GBIF_API_DATASET_PART)
+                || StringUtils.contains(versionSource.toString(), GBIF_API_DATASET_PART_ALTERNATE)
+                || StringUtils.contains(versionSource.toString(), GBIF_API_DATASET_PART_ALTERNATE_OTHER);
     }
 
     private boolean isOccurrenceRecordEndpoint(Quad statement) {
