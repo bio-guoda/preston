@@ -1,0 +1,20 @@
+<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<https://preston.guoda.bio> <http://purl.org/dc/terms/description> "Preston is a software program that finds, archives and provides access to biodiversity datasets."@en <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> <http://purl.org/dc/terms/description> "A crawl event that discovers biodiversity archives."@en <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> <http://www.w3.org/ns/prov#startedAtTime> "2025-01-13T23:10:46.115Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> <http://www.w3.org/ns/prov#wasStartedBy> <https://preston.guoda.bio> <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<https://doi.org/10.5281/zenodo.1410543> <http://www.w3.org/ns/prov#usedBy> <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<https://doi.org/10.5281/zenodo.1410543> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/dc/dcmitype/Software> <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<https://doi.org/10.5281/zenodo.1410543> <http://purl.org/dc/terms/bibliographicCitation> "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2018-2024. Preston: a biodiversity dataset tracker (Version 0.10.3-SNAPSHOT) [Software]. Zenodo. https://doi.org/10.5281/zenodo.1410543"@en <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<urn:uuid:0659a54f-b713-4f86-a917-5be166a14110> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Entity> <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<urn:uuid:0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/dc/terms/description> "A biodiversity dataset graph archive."@en <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<hash://sha256/f77dcae12a11513fc207253b277e5e5806d5443399cf8dae0980aac096048cf9> <http://www.w3.org/ns/prov#usedBy> <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> .
+<https://deeplinker.bio/.well-known/genid/30a3df1f-259e-36e2-a8f4-1685a0d20c2e> <http://www.w3.org/ns/prov#wasGeneratedBy> <urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> <urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> .
+<https://deeplinker.bio/.well-known/genid/30a3df1f-259e-36e2-a8f4-1685a0d20c2e> <http://www.w3.org/ns/prov#qualifiedGeneration> <urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> <urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> .
+<urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> <http://www.w3.org/ns/prov#generatedAtTime> "2025-01-13T23:10:46.518Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> <urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> .
+<urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Generation> <urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> .
+<urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> <http://www.w3.org/ns/prov#wasInformedBy> <urn:uuid:d471bba5-9c6c-434a-91bf-faa61d858603> <urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> .
+<urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> <http://www.w3.org/ns/prov#used> <line:hash://sha256/854831f2665681track818b902104aa1212a1f1e38a2307a7d66ca1dfad4d8240c!/L1> <urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> .
+<line:hash://sha256/854831f2665681track818b902104aa1212a1f1e38a2307a7d66ca1dfad4d8240c!/L1> <http://purl.org/pav/hasVersion> <https://deeplinker.bio/.well-known/genid/30a3df1f-259e-36e2-a8f4-1685a0d20c2e> <urn:uuid:2674693a-daa7-432c-ba2b-51dd05ee37c1> .
