@@ -68,6 +68,7 @@ public class CmdGetTest {
         System.setOut(new PrintStream(out));
 
         CmdGet cmdGet = new CmdGet();
+        cmdGet.setDataDir(new File(uri).getAbsolutePath());
 
 
         cmdGet.setRemotes(Collections.singletonList(uri));
