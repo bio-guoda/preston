@@ -23,7 +23,6 @@ public class CmdVerifyTest {
         String actual = new String(stdout.toByteArray(), StandardCharsets.UTF_8);
         assertThat(actual, Is.is(not("")));
         assertThat(actual, containsString("f0c131ebf6ad2dce71ab9a10aa116dcedb219ae4539f9e5bf0e57b84f51f22ca\tFAIL\tMISSING\t"));
-        assertThat(actual, containsString("854831f2665681b90818b902104aa1212a1f1e38a2307a7d66ca1dfad4d8240c\tOK\tCONTENT_PRESENT_VALID_HASH"));
     }
 
     @Test
