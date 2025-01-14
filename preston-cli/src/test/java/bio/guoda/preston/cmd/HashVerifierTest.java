@@ -8,7 +8,9 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyToPath;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Quad;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
@@ -28,6 +30,7 @@ public class HashVerifierTest {
     @Test
     public void nonHashVersion() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
         StatementsListener hashVerifier = new HashVerifier(
                 new TreeMap<>(),
                 new BlobStoreNull(),
@@ -35,6 +38,7 @@ public class HashVerifierTest {
                 true,
                 outputStream,
                 null);
+
         hashVerifier.on(RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI("foo:bar"),
                 RefNodeConstants.HAS_VERSION,
@@ -53,6 +57,7 @@ public class HashVerifierTest {
     @Test
     public void hashVersionMissing() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
         StatementsListener hashVerifier = new HashVerifier(
                 new TreeMap<>(),
                 new BlobStoreNull(),
@@ -70,6 +75,7 @@ public class HashVerifierTest {
                         return true;
                     }
                 });
+
         hashVerifier.on(RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI("foo:bar"),
                 RefNodeConstants.HAS_VERSION,
@@ -89,6 +95,7 @@ public class HashVerifierTest {
     public void hashVersionPresentMismatchNotVerified() {
         String resourceLocation = getResourceLocation();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
         StatementsListener hashVerifier = new HashVerifier(
                 new TreeMap<>(),
                 new BlobStoreReadOnly() {
@@ -111,6 +118,7 @@ public class HashVerifierTest {
                         return true;
                     }
                 });
+
         hashVerifier.on(RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI("foo:bar"),
                 RefNodeConstants.HAS_VERSION,
@@ -125,6 +133,101 @@ public class HashVerifierTest {
                         "4384\t" +
                         "\n"));
     }
+
+    @Test
+    public void innerHashBasedClaimPresentAndMatchesContent() throws IOException {
+        BlobStoreReadOnly blobStore = contentBasedBlobStore();
+
+        Quad statement = RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2"),
+                RefNodeConstants.HAS_VERSION,
+                RefNodeFactory.toIRI("hash://sha256/9c3aee7110b787f0fb5f81633a36392bd277ea945d44c874a9a23601aefe20cf"));
+
+
+        boolean containsHashBasedContentRelation = HashVerifier.containsHashBasedContentRelationClaim(statement);
+        assertThat(containsHashBasedContentRelation, Is.is(true));
+
+        boolean verified = HashVerifier.verifyContentRelationClaim(blobStore, (IRI) statement.getSubject(), (IRI) statement.getObject(), new HashGeneratorImpl(HashType.sha256));
+
+        assertThat(verified, Is.is(true));
+    }
+
+    @Test
+    public void verifyHashBasedClaimPresentAndMatchesContent() throws IOException {
+        String resourceLocation = getResourceLocation();
+        BlobStoreReadOnly blobStore = contentBasedBlobStore();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        StatementsListener hashVerifier = new HashVerifier(
+                new TreeMap<>(),
+                blobStore,
+                new HashGeneratorImpl(HashType.sha256),
+                true,
+                outputStream,
+                new KeyToPath() {
+                    @Override
+                    public URI toPath(IRI key) {
+                        return URI.create(resourceLocation);
+                    }
+
+                    @Override
+                    public boolean supports(IRI key) {
+                        return true;
+                    }
+                });
+
+
+        hashVerifier.on(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2"),
+                RefNodeConstants.HAS_VERSION,
+                RefNodeFactory.toIRI("hash://sha256/9c3aee7110b787f0fb5f81633a36392bd277ea945d44c874a9a23601aefe20cf"))
+        );
+
+        assertThat(new String((outputStream).toByteArray(), StandardCharsets.UTF_8),
+                Is.is("cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2\t" +
+                        resourceLocation + "\t" +
+                        "OK\t" +
+                        "CONTENT_PRESENT_VALID_HASH\t" +
+                        "2\t" +
+                        "hash://sha256/9c3aee7110b787f0fb5f81633a36392bd277ea945d44c874a9a23601aefe20cf\n"));
+
+    }
+
+    @Test
+    public void innerHashBasedClaimPresentAndDoesNotMatchesContent() throws IOException {
+
+        BlobStoreReadOnly blobStore = contentBasedBlobStore();
+
+        Quad statement = RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2"),
+                RefNodeConstants.HAS_VERSION,
+                RefNodeFactory.toIRI("hash://sha256/0c3aee7110b787f0fb5f81633a36392bd277ea945d44c874a9a23601aefe20cf"));
+
+        boolean containsHashBasedContentRelation = HashVerifier.containsHashBasedContentRelationClaim(statement);
+        assertThat(containsHashBasedContentRelation, Is.is(true));
+
+        boolean verified = HashVerifier.verifyContentRelationClaim(blobStore, (IRI) statement.getSubject(), (IRI) statement.getObject(), new HashGeneratorImpl(HashType.sha256));
+
+        assertThat(verified, Is.is(false));
+    }
+
+    private BlobStoreReadOnly contentBasedBlobStore() {
+        return new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                String expectedInnerHash = "hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c";
+                if (StringUtils.equals(uri.getIRIString(),
+                        RefNodeFactory.toIRI(expectedInnerHash).getIRIString())) {
+                    return IOUtils.toInputStream("foo\n", StandardCharsets.UTF_8);
+                } else if (StringUtils.equals(uri.getIRIString(),
+                        RefNodeFactory.toIRI("cut:" + expectedInnerHash + "!/b1-2").getIRIString())) {
+                    return IOUtils.toInputStream("fo", StandardCharsets.UTF_8);
+                } else {
+                    throw new IOException("Kaboom!");
+                }
+            }
+        };
+    }
+
 
     @Test
     public void hashVersionPresentMismatchVerified() {
@@ -194,6 +297,7 @@ public class HashVerifierTest {
                         return true;
                     }
                 });
+
         hashVerifier.on(RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI("foo:bar"),
                 RefNodeConstants.HAS_VERSION,

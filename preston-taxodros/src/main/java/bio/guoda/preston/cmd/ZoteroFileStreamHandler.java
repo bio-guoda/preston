@@ -104,9 +104,12 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                     IRI zoteroItemIRI = RefNodeFactory.toIRI(zoteroItemUrl);
 
                     DerferencerFactory derferencerFactory = () -> timedDereferencer;
-                    Logger log = LOG;
 
-                    InputStream itemInputStream = ContentQueryUtil.getContent(zoteroItemIRI, derferencerFactory, log);
+                    InputStream itemInputStream = ContentQueryUtil.getContent(
+                            zoteroItemIRI,
+                            derferencerFactory,
+                            LOG
+                    );
 
                     JsonNode itemData = new ObjectMapper().readTree(itemInputStream);
                     if (isPrimaryAttachmentOf(zoteroAttachmentDownloadUrl, itemData)) {

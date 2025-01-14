@@ -1,10 +1,8 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.DerefProgressListener;
-import bio.guoda.preston.DerefState;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.stream.ContentStreamUtil;
-import org.apache.commons.rdf.api.IRI;
 
 import java.io.File;
 import java.net.URI;
