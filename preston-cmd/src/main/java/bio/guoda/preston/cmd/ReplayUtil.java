@@ -1,16 +1,17 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.IRIFixingProcessor;
 import bio.guoda.preston.process.EmittingStreamFactory;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
+import bio.guoda.preston.process.StatementIRIProcessor;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.ArchiverReadOnly;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.IRIFixingProcessor;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.ProvenanceTracer;
-import bio.guoda.preston.process.StatementIRIProcessor;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.VersionedRDFChainEmitter;
 import org.apache.commons.rdf.api.IRI;
@@ -18,6 +19,7 @@ import org.apache.commons.rdf.api.Quad;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +49,7 @@ public final class ReplayUtil {
         );
     }
 
-    static void attemptReplay(final BlobStoreReadOnly provenanceLogStore,
+    static void attemptReplay(final Dereferencer<InputStream> provenanceLogStore,
                               final CmdContext ctx,
                               ProvenanceTracer provenanceTracer,
                               EmittingStreamFactory emitterFactory) {

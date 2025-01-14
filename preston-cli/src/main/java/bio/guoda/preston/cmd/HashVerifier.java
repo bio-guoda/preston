@@ -2,7 +2,6 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.HashGenerator;
 import bio.guoda.preston.process.StatementsListenerAdapter;
-import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.HashKeyUtil;
 import bio.guoda.preston.store.KeyToPath;
@@ -29,14 +28,14 @@ import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 
 public class HashVerifier extends StatementsListenerAdapter {
     private final Map<String, VerificationState> verifiedMap;
-    private final BlobStoreReadOnly blobStore;
+    private final Dereferencer<InputStream> blobStore;
     private final HashGenerator<IRI> hashGenerator;
     private final boolean skipHashVerification;
     private final KeyToPath keyToPath;
     private final OutputStream outputStream;
 
     public HashVerifier(Map<String, VerificationState> verifiedMap,
-                        BlobStoreReadOnly blobStore,
+                        Dereferencer<InputStream> blobStore,
                         HashGenerator<IRI> hashGenerator,
                         boolean skipHashVerification,
                         OutputStream outputStream,
