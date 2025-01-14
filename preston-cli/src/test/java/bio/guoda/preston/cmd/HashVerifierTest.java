@@ -155,6 +155,32 @@ public class HashVerifierTest {
     }
 
     @Test
+    public void innerHashBasedClaimPresentAndMatchesContentSubjectInnerhash() throws IOException {
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                String expectedInnerHash = "hash://md5/c5947e7e77c3be275090ffb69f4c83cd";
+                if (StringUtils.equals(uri.getIRIString(),
+                        RefNodeFactory.toIRI(expectedInnerHash).getIRIString())) {
+                    return IOUtils.toInputStream("foo\n", StandardCharsets.UTF_8);
+                } else {
+                    throw new IOException("Kaboom!");
+                }
+            }
+        };
+
+        Quad statement = RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://api.zotero.org/groups/5435545/items/NDP3BCDT"),
+                RefNodeConstants.HAS_VERSION,
+                RefNodeFactory.toIRI("cut:hash://md5/c5947e7e77c3be275090ffb69f4c83cd!/b132637-135167")
+        );
+
+
+        boolean containsHashBasedContentRelation = HashVerifier.containsHashBasedContentRelationClaim(statement);
+        assertThat(containsHashBasedContentRelation, Is.is(false));
+    }
+
+    @Test
     public void verifyHashBasedClaimPresentAndMatchesContent() throws IOException {
         String resourceLocation = getResourceLocation();
         BlobStoreReadOnly blobStore = contentBasedBlobStore();
