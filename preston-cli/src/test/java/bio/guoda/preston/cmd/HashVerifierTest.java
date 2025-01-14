@@ -78,15 +78,16 @@ public class HashVerifierTest {
                     }
                 });
 
+        String contentId = "hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c";
         hashVerifier.on(RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI("foo:bar"),
                 RefNodeConstants.HAS_VERSION,
-                RefNodeFactory.toIRI("hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c"))
+                RefNodeFactory.toIRI(contentId))
         );
 
         assertThat(new String((outputStream).toByteArray(), StandardCharsets.UTF_8),
-                Is.is("hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c\t" +
-                        "foo/bar\t" +
+                Is.is(contentId + "\t" +
+                        contentId + "\t" +
                         "FAIL\t" +
                         "MISSING\t" +
                         "\t" +
