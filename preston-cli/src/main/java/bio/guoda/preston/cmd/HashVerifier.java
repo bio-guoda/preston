@@ -58,23 +58,7 @@ public class HashVerifier extends StatementsListenerAdapter {
                     if (HashVerifier.containsHashBasedContentRelationClaim(statement)) {
                         entry = verifyHashBasedRelation(statement);
                     } else if (HashVerifier.containsLocationBasedRelationClaimWithCompositeHash(statement)) {
-                        IRI subject = (IRI) statement.getSubject();
-                        IRI object = (IRI) statement.getObject();
-                        VerificationEntry verificationEntry = verifyAuthenticity(
-                                subject,
-                                new ContentHashDereferencer(blobStore).get(object),
-                                hashGenerator,
-                                VerificationState.MISSING
-                        );
-                        if (verificationEntry != null) {
-                            verificationEntry = new VerificationEntry(
-                                    object,
-                                    VerificationState.CONTENT_PRESENT_HASH_OPERATION_SUCCEEDS,
-                                    verificationEntry.getCalculatedHashIRI(),
-                                    verificationEntry.getFileSize()
-                            );
-                        }
-                        entry = verificationEntry;
+                        entry = verifyCompositeHash(statement);
                     } else {
                         entry = verifyLocationBasedRelation(iri);
                     }
@@ -96,6 +80,22 @@ public class HashVerifier extends StatementsListenerAdapter {
                 );
             }
         }
+    }
+
+    private VerificationEntry verifyCompositeHash(Quad statement) throws IOException {
+        IRI object = (IRI) statement.getObject();
+        VerificationEntry entry = new VerificationEntry(object, VerificationState.MISSING, null, null);
+
+        try (CountingOutputStream counting = new CountingOutputStream(NullOutputStream.INSTANCE)) {
+            IRI hash = hashGenerator.hash(new ContentHashDereferencer(blobStore).get(object), counting);
+            entry.setCalculatedHashIRI(hash);
+            entry.setState(entry.getCalculatedHashIRI() != null
+                    ? VerificationState.CONTENT_PRESENT_HASH_OPERATION_SUCCEEDS
+                    : VerificationState.MISSING);
+            entry.setFileSize(counting.getByteCount());
+        }
+
+        return entry;
     }
 
     private VerificationEntry verifyHashBasedRelation(Quad statement) throws IOException {
@@ -170,7 +170,7 @@ public class HashVerifier extends StatementsListenerAdapter {
     private void writeEntry(VerificationEntry verificationEntry) {
         verifiedMap.put(verificationEntry.getIri().getIRIString(), verificationEntry.getState());
 
-        String uriString = HashKeyUtil.isValidHashKey(verificationEntry.getIri())
+        String uriString = HashKeyUtil.isValidPlainHashKey(verificationEntry.getIri())
                 ? keyToPath.toPath(verificationEntry.getIri()).toString()
                 : verificationEntry.getIri().getIRIString();
         String msg = writeVerificationLogEntry(verificationEntry.getIri(), verificationEntry.getState(), verificationEntry.getCalculatedHashIRI(), verificationEntry.getFileSize(), uriString);
@@ -218,14 +218,11 @@ public class HashVerifier extends StatementsListenerAdapter {
     public static boolean containsLocationBasedRelationClaimWithCompositeHash(Quad statement) {
         boolean containsLocationBasedRelationClaimWithCompositeHash = false;
         if (statement.getPredicate().equals(HAS_VERSION)) {
-            BlankNodeOrIRI subject = statement.getSubject();
             RDFTerm object = statement.getObject();
-            if (subject instanceof IRI && object instanceof IRI) {
-                IRI derivedFromHash = (IRI) subject;
-                IRI claimedDerivedVersion = (IRI) object;
-                if (!HashKeyUtil.isValidHashKey(derivedFromHash)
-                        && HashKeyUtil.isValidHashKey(claimedDerivedVersion)
-                        && !HashKeyUtil.isValidPlainHashKey(claimedDerivedVersion)) {
+            if (object instanceof IRI) {
+                IRI content = (IRI) object;
+                if (HashKeyUtil.isValidHashKey(content)
+                        && !HashKeyUtil.isValidPlainHashKey(content)) {
                     containsLocationBasedRelationClaimWithCompositeHash = true;
                 }
             }

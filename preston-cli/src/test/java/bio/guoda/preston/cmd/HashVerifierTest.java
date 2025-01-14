@@ -10,6 +10,7 @@ import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.stream.ContentHashDereferencer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.hamcrest.core.Is;
@@ -156,6 +157,19 @@ public class HashVerifierTest {
 
     @Test
     public void innerHashBasedClaimPresentAndMatchesContentSubjectInnerhash() throws IOException {
+        assertAvailableCompositeHash(
+                RefNodeFactory.toIRI("https://api.zotero.org/groups/5435545/items/NDP3BCDT")
+        );
+    }
+
+    @Test
+    public void innerHashBasedClaimPresentAndMatchesContentSubjectInnerhashBlanknode() throws IOException {
+        assertAvailableCompositeHash(
+                RefNodeFactory.toBlank()
+        );
+    }
+
+    private void assertAvailableCompositeHash(BlankNodeOrIRI subject) throws IOException {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI uri) throws IOException {
@@ -170,7 +184,7 @@ public class HashVerifierTest {
         };
 
         Quad statement = RefNodeFactory.toStatement(
-                RefNodeFactory.toIRI("https://api.zotero.org/groups/5435545/items/NDP3BCDT"),
+                subject,
                 RefNodeConstants.HAS_VERSION,
                 RefNodeFactory.toIRI("cut:hash://md5/c5947e7e77c3be275090ffb69f4c83cd!/b1-2")
         );
@@ -189,8 +203,6 @@ public class HashVerifierTest {
         );
 
         assertThat(verified, Is.is(true));
-
-
     }
 
     @Test
@@ -287,7 +299,7 @@ public class HashVerifierTest {
 
 
         hashVerifier.on(RefNodeFactory.toStatement(
-                RefNodeFactory.toIRI("https://example.org"),
+                RefNodeFactory.toIRI("https://api.zotero.org/groups/5435545/items/9CUCQ7BA"),
                 RefNodeConstants.HAS_VERSION,
                 RefNodeFactory.toIRI("cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2"))
                 );
