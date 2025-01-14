@@ -3,9 +3,11 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.HashGenerator;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.HashKeyUtil;
 import bio.guoda.preston.store.KeyToPath;
 import bio.guoda.preston.store.VersionUtil;
+import bio.guoda.preston.stream.ContentHashDereferencer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
@@ -83,7 +85,7 @@ public class HashVerifier extends StatementsListenerAdapter {
         IRI subject = (IRI) statement.getSubject();
         VerificationEntry verificationEntry = verifyAuthenticity(
                 (IRI) statement.getObject(),
-                blobStore.get(subject),
+                new ContentHashDereferencer(blobStore).get(subject),
                 hashGenerator,
                 VerificationState.MISSING
         );
@@ -197,7 +199,10 @@ public class HashVerifier extends StatementsListenerAdapter {
         return containsHashBasedContentRelationClaim;
     }
 
-    public static boolean verifyContentRelationClaim(BlobStoreReadOnly blobStore, IRI derivedFromHash, IRI claimedDerivedVersion, HashGenerator<IRI> hashGenerator) throws IOException {
+    public static boolean verifyContentRelationClaim(Dereferencer<InputStream> blobStore,
+                                                     IRI derivedFromHash,
+                                                     IRI claimedDerivedVersion,
+                                                     HashGenerator<IRI> hashGenerator) throws IOException {
         boolean verified = false;
         IRI calculatedVersion = hashGenerator.hash(blobStore.get(derivedFromHash));
         if (StringUtils.equals(calculatedVersion.getIRIString(), claimedDerivedVersion.getIRIString())) {

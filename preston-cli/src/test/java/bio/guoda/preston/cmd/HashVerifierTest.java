@@ -7,6 +7,7 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyToPath;
+import bio.guoda.preston.stream.ContentHashDereferencer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -147,7 +148,8 @@ public class HashVerifierTest {
         boolean containsHashBasedContentRelation = HashVerifier.containsHashBasedContentRelationClaim(statement);
         assertThat(containsHashBasedContentRelation, Is.is(true));
 
-        boolean verified = HashVerifier.verifyContentRelationClaim(blobStore, (IRI) statement.getSubject(), (IRI) statement.getObject(), new HashGeneratorImpl(HashType.sha256));
+        boolean verified = HashVerifier.verifyContentRelationClaim(
+                new ContentHashDereferencer(blobStore), (IRI) statement.getSubject(), (IRI) statement.getObject(), new HashGeneratorImpl(HashType.sha256));
 
         assertThat(verified, Is.is(true));
     }
@@ -205,7 +207,12 @@ public class HashVerifierTest {
         boolean containsHashBasedContentRelation = HashVerifier.containsHashBasedContentRelationClaim(statement);
         assertThat(containsHashBasedContentRelation, Is.is(true));
 
-        boolean verified = HashVerifier.verifyContentRelationClaim(blobStore, (IRI) statement.getSubject(), (IRI) statement.getObject(), new HashGeneratorImpl(HashType.sha256));
+        boolean verified = HashVerifier.verifyContentRelationClaim(
+                new ContentHashDereferencer(blobStore),
+                (IRI) statement.getSubject(),
+                (IRI) statement.getObject(),
+                new HashGeneratorImpl(HashType.sha256)
+        );
 
         assertThat(verified, Is.is(false));
     }
@@ -218,9 +225,6 @@ public class HashVerifierTest {
                 if (StringUtils.equals(uri.getIRIString(),
                         RefNodeFactory.toIRI(expectedInnerHash).getIRIString())) {
                     return IOUtils.toInputStream("foo\n", StandardCharsets.UTF_8);
-                } else if (StringUtils.equals(uri.getIRIString(),
-                        RefNodeFactory.toIRI("cut:" + expectedInnerHash + "!/b1-2").getIRIString())) {
-                    return IOUtils.toInputStream("fo", StandardCharsets.UTF_8);
                 } else {
                     throw new IOException("Kaboom!");
                 }
