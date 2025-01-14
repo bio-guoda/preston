@@ -32,7 +32,8 @@ public class CmdVerify extends Persisting implements Runnable {
 
     public static final List<VerificationState> OK_STATES = Arrays.asList(
             VerificationState.CONTENT_PRESENT_VALID_HASH,
-            VerificationState.CONTENT_PRESENT_HASH_NOT_VERIFIED);
+            VerificationState.CONTENT_PRESENT_HASH_NOT_VERIFIED,
+            VerificationState.CONTENT_PRESENT_HASH_OPERATION_SUCCEEDS);
 
     public static final List<VerificationState> SKIP_STATES = Arrays.asList(
             VerificationState.UNSUPPORTED_CONTENT_HASH);

@@ -22,7 +22,7 @@ public enum HashType {
         String hexPatternString = "([a-fA-F0-9])" + "{" + hexLength +  "}";
         this.hexPattern = Pattern.compile(hexPatternString);
         iriPatternString = prefix + hexPatternString;
-        this.iriPattern = Pattern.compile("([a-zA-Z0-9]{2,}:)*(?<contentId>" + iriPatternString + "){1}" + "(!/.*){0,1}");
+        this.iriPattern = Pattern.compile("(?<prefix>[a-zA-Z0-9]{2,}:)*(?<contentId>" + iriPatternString + "){1}" + "(?<suffix>!/.*){0,1}");
         this.iriStringLength = iriStringLength;
     }
 

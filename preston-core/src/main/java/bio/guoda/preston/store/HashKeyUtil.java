@@ -51,6 +51,26 @@ public class HashKeyUtil {
                 .matches();
     }
 
+    public static boolean isValidPlainHashKey(IRI hashKey) {
+        boolean isPlainHashKey = false;
+        String iriString = hashKey.getIRIString();
+
+        HashType type = hashTypeFor(iriString);
+
+        if (type != null) {
+            Matcher matcher = type
+                    .getIRIPattern()
+                    .matcher(iriString);
+            if (matcher.matches()) {
+                isPlainHashKey =
+                        StringUtils.isBlank(matcher.group("prefix"))
+                        && StringUtils.isBlank(matcher.group("suffix"));
+            }
+        }
+
+        return isPlainHashKey;
+    }
+
     public static HashType hashTypeFor(IRI contentId) {
         return hashTypeFor(contentId.getIRIString());
     }

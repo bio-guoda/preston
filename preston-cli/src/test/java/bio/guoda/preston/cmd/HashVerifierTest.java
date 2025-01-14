@@ -172,12 +172,54 @@ public class HashVerifierTest {
         Quad statement = RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI("https://api.zotero.org/groups/5435545/items/NDP3BCDT"),
                 RefNodeConstants.HAS_VERSION,
-                RefNodeFactory.toIRI("cut:hash://md5/c5947e7e77c3be275090ffb69f4c83cd!/b132637-135167")
+                RefNodeFactory.toIRI("cut:hash://md5/c5947e7e77c3be275090ffb69f4c83cd!/b1-2")
         );
 
 
         boolean containsHashBasedContentRelation = HashVerifier.containsHashBasedContentRelationClaim(statement);
         assertThat(containsHashBasedContentRelation, Is.is(false));
+
+        boolean hasCompositeHash = HashVerifier.containsLocationBasedRelationClaimWithCompositeHash(statement);
+        assertThat(hasCompositeHash, Is.is(true));
+
+        boolean verified = HashVerifier.verifyCompositeHashIRI(
+                new ContentHashDereferencer(blobStore),
+                (IRI) statement.getObject(),
+                new HashGeneratorImpl(HashType.sha256)
+        );
+
+        assertThat(verified, Is.is(true));
+
+
+    }
+
+    @Test
+    public void innerHashBasedClaimPresentAndMatchesContentSubjectPlainHash() throws IOException {
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                String expectedInnerHash = "hash://md5/c5947e7e77c3be275090ffb69f4c83cd";
+                if (StringUtils.equals(uri.getIRIString(),
+                        RefNodeFactory.toIRI(expectedInnerHash).getIRIString())) {
+                    return IOUtils.toInputStream("foo\n", StandardCharsets.UTF_8);
+                } else {
+                    throw new IOException("Kaboom!");
+                }
+            }
+        };
+
+        Quad statement = RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://api.zotero.org/groups/5435545/items/NDP3BCDT"),
+                RefNodeConstants.HAS_VERSION,
+                RefNodeFactory.toIRI("hash://md5/c5947e7e77c3be275090ffb69f4c83cd")
+        );
+
+
+        boolean containsHashBasedContentRelation = HashVerifier.containsHashBasedContentRelationClaim(statement);
+        assertThat(containsHashBasedContentRelation, Is.is(false));
+
+        boolean hasCompositeHash = HashVerifier.containsLocationBasedRelationClaimWithCompositeHash(statement);
+        assertThat(hasCompositeHash, Is.is(false));
     }
 
     @Test
@@ -215,6 +257,46 @@ public class HashVerifierTest {
                         resourceLocation + "\t" +
                         "OK\t" +
                         "CONTENT_PRESENT_VALID_HASH\t" +
+                        "2\t" +
+                        "hash://sha256/9c3aee7110b787f0fb5f81633a36392bd277ea945d44c874a9a23601aefe20cf\n"));
+
+    }
+
+    @Test
+    public void verifyLocationBasedClaimOnCompositeHash() throws IOException {
+        String resourceLocation = getResourceLocation();
+        BlobStoreReadOnly blobStore = contentBasedBlobStore();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        StatementsListener hashVerifier = new HashVerifier(
+                new TreeMap<>(),
+                blobStore,
+                new HashGeneratorImpl(HashType.sha256),
+                true,
+                outputStream,
+                new KeyToPath() {
+                    @Override
+                    public URI toPath(IRI key) {
+                        return URI.create(resourceLocation);
+                    }
+
+                    @Override
+                    public boolean supports(IRI key) {
+                        return true;
+                    }
+                });
+
+
+        hashVerifier.on(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://example.org"),
+                RefNodeConstants.HAS_VERSION,
+                RefNodeFactory.toIRI("cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2"))
+                );
+
+        assertThat(new String((outputStream).toByteArray(), StandardCharsets.UTF_8),
+                Is.is("cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2\t" +
+                        resourceLocation + "\t" +
+                        "OK\t" +
+                        "CONTENT_PRESENT_HASH_OPERATION_SUCCEEDS\t" +
                         "2\t" +
                         "hash://sha256/9c3aee7110b787f0fb5f81633a36392bd277ea945d44c874a9a23601aefe20cf\n"));
 
