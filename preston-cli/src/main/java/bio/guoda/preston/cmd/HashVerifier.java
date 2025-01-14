@@ -170,12 +170,37 @@ public class HashVerifier extends StatementsListenerAdapter {
     private void writeEntry(VerificationEntry verificationEntry) {
         verifiedMap.put(verificationEntry.getIri().getIRIString(), verificationEntry.getState());
 
-        String uriString = HashKeyUtil.isValidPlainHashKey(verificationEntry.getIri())
+        String uriString = hasContentLocation(verificationEntry)
                 ? keyToPath.toPath(verificationEntry.getIri()).toString()
                 : verificationEntry.getIri().getIRIString();
-        String msg = writeVerificationLogEntry(verificationEntry.getIri(), verificationEntry.getState(), verificationEntry.getCalculatedHashIRI(), verificationEntry.getFileSize(), uriString);
+
         new PrintStream(outputStream)
-                .print(msg);
+                .print(getMsg(verificationEntry, uriString));
+    }
+
+    private boolean hasContentLocation(VerificationEntry verificationEntry) {
+        return CmdVerify.CONTENT_PRESENT_STATES.contains(verificationEntry.getState())
+                && HashKeyUtil.isValidPlainHashKey(verificationEntry.getIri());
+    }
+
+    private String getMsg(VerificationEntry verificationEntry, String uriString) {
+        VerificationState state = verificationEntry.getState();
+        IRI calculatedHashIRI = verificationEntry.getCalculatedHashIRI();
+        Long fileSize = verificationEntry.getFileSize();
+        String stateString = "FAIL";
+        if (CmdVerify.OK_STATES.contains(state)) {
+            stateString = "OK";
+        } else if (CmdVerify.SKIP_STATES.contains(state)) {
+            stateString = "SKIP";
+        }
+
+        return verificationEntry.getIri().getIRIString() + "\t" +
+                uriString + "\t" +
+                stateString + "\t" +
+                state + "\t" +
+                (fileSize == null ? "" : fileSize) + "\t" +
+                (calculatedHashIRI == null ? "" : calculatedHashIRI.getIRIString()) +
+                "\n";
     }
 
     private String writeVerificationLogEntry(IRI iri,

@@ -16,6 +16,7 @@ import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
 
 import java.io.File;
+import java.util.AbstractCollection;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,13 @@ public class CmdVerify extends Persisting implements Runnable {
 
 
     public static final String DO_NOT_VERIFY_HASH_JUST_CHECK_AVAILABILITY = "Do not verify hash, just check availability";
+
+    public static final List<VerificationState> CONTENT_PRESENT_STATES = Arrays.asList(
+            VerificationState.CONTENT_PRESENT_HASH_NOT_VERIFIED,
+            VerificationState.CONTENT_PRESENT_HASH_OPERATION_SUCCEEDS,
+            VerificationState.CONTENT_PRESENT_INVALID_HASH,
+            VerificationState.CONTENT_PRESENT_VALID_HASH
+    );
 
     @CommandLine.Option(
             names = "--skip-hash-verification",
