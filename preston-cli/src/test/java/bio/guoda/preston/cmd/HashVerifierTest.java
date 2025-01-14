@@ -258,15 +258,16 @@ public class HashVerifierTest {
                 });
 
 
+        String compositeHashIRI = "cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2";
         hashVerifier.on(RefNodeFactory.toStatement(
-                RefNodeFactory.toIRI("cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2"),
+                RefNodeFactory.toIRI(compositeHashIRI),
                 RefNodeConstants.HAS_VERSION,
                 RefNodeFactory.toIRI("hash://sha256/9c3aee7110b787f0fb5f81633a36392bd277ea945d44c874a9a23601aefe20cf"))
         );
 
         assertThat(new String((outputStream).toByteArray(), StandardCharsets.UTF_8),
-                Is.is("cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2\t" +
-                        resourceLocation + "\t" +
+                Is.is(compositeHashIRI + "\t" +
+                        compositeHashIRI + "\t" +
                         "OK\t" +
                         "CONTENT_PRESENT_VALID_HASH\t" +
                         "2\t" +
@@ -298,15 +299,16 @@ public class HashVerifierTest {
                 });
 
 
+        String compositeHashIRI = "cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2";
         hashVerifier.on(RefNodeFactory.toStatement(
                 RefNodeFactory.toIRI("https://api.zotero.org/groups/5435545/items/9CUCQ7BA"),
                 RefNodeConstants.HAS_VERSION,
-                RefNodeFactory.toIRI("cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2"))
-                );
+                RefNodeFactory.toIRI(compositeHashIRI))
+        );
 
         assertThat(new String((outputStream).toByteArray(), StandardCharsets.UTF_8),
-                Is.is("cut:hash://sha256/b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c!/b1-2\t" +
-                        resourceLocation + "\t" +
+                Is.is(compositeHashIRI + "\t" +
+                        compositeHashIRI + "\t" +
                         "OK\t" +
                         "CONTENT_PRESENT_HASH_OPERATION_SUCCEEDS\t" +
                         "2\t" +
