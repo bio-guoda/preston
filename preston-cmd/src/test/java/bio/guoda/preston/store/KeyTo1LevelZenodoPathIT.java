@@ -23,6 +23,13 @@ public class KeyTo1LevelZenodoPathIT {
     }
 
     @Test
+    public void findFirstHitByHash942d0c469322df33da20e10204197bc5() {
+        KeyTo1LevelZenodoPath keyTo1LevelZenodoPath = new KeyTo1LevelZenodoPath(URI.create("https://zenodo.org"), ResourcesHTTP::asInputStream);
+        URI uri = keyTo1LevelZenodoPath.toPath(RefNodeFactory.toIRI("hash://md5/942d0c469322df33da20e10204197bc5"));
+        assertThat(uri.toString(), not(is("https://zenodo.org/api/records/?q=_files.checksum:/942d0c469322df33da20e10204197bc5")));
+    }
+
+    @Test
     public void findFirstHitNonExisting() {
         KeyTo1LevelZenodoPath keyTo1LevelZenodoPath = new KeyTo1LevelZenodoPath(URI.create("https://zenodo.org"), ResourcesHTTP::asInputStream);
         assertNull(keyTo1LevelZenodoPath.toPath(RefNodeFactory.toIRI("hash://md5/d982d38c1b4dda6d3c1372a6c3e5d97e")));

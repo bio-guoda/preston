@@ -1,6 +1,9 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.RefNodeFactory;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.Is;
 import org.junit.Test;
@@ -8,9 +11,11 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -38,6 +43,91 @@ public class KeyTo1LevelZenodoPathTest {
 
     @Test
     public void toPath20231020() {
+        IRI hash = RefNodeFactory.toIRI("hash://md5/eb5e8f37583644943b86d1d9ebd4ded5");
+
+        Dereferencer<InputStream> dereferencer = new Dereferencer<InputStream>() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records?q=files.entries.checksum:%22md5:eb5e8f37583644943b86d1d9ebd4ded5%22&allversions=1"));
+                return KeyTo1LevelZenodoPathTest.this.getClass().getResourceAsStream("zenodo-response-all-versions-2023-10-20.json");
+            }
+        };
+
+        URI actualPath = new KeyTo1LevelZenodoPath(
+                URI.create("https://zenodo.org"),
+                dereferencer,
+                KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13,
+                KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13
+        )
+                .toPath(hash);
+        assertThat(actualPath.toString(), Is.is("https://zenodo.org/api/records/4589980/files/figure.png/content"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void illegalFilename() {
+        assertNotNull(URI.create("https://zenodo.org/api/records/13505983/files/Thuiller%20et%20al.%20-%202006%20-%20INTERACTIONS%20BETWEEN%20ENVIRONMENT,%20SPECIES%20TRAITS,%20.]/content"));
+    }
+
+    @Test
+    public void finFirstHitRestricted() throws IOException {
+        InputStream is = getClass().getResourceAsStream("zenodo-13505983.json");
+
+        URI suffix = KeyTo1LevelZenodoPath.findFirstHit("suffix", is);
+
+        assertThat(suffix, is(URI.create("https://zenodo.org/api/records/13505983/files")));
+
+    }
+
+    @Test
+    public void escapeIllegalCharacters() throws IOException, URISyntaxException {
+        InputStream is = getClass().getResourceAsStream("zenodo-13505983-files.json");
+
+        JsonNode response = new ObjectMapper().readTree(is);
+        JsonNode entry = response.at("/entries").get(0);
+
+        URI uri = KeyTo1LevelZenodoPath.contentLinkForFileEntry(entry, response.at("/links/self").asText());
+
+        String prefix = "https://zenodo.org/api/records/13505983/files/";
+        String funkyUrl = prefix + "Thuiller%20et%20al.%20-%202006%20-%20INTERACTIONS%20BETWEEN%20ENVIRONMENT,%20SPECIES%20TRAITS,%20.]/content";
+        String encodedUrl = prefix + "Thuiller%20et%20al.%20-%202006%20-%20INTERACTIONS%20BETWEEN%20ENVIRONMENT%2C%20SPECIES%20TRAITS%2C%20.%5D/content";
+        assertNotNull(uri);
+        assertThat(uri.toString(), not(is(funkyUrl)));
+        assertThat(uri.toString(), is(encodedUrl));
+    }
+
+    @Test
+    public void toPath13505983Restricted() {
+        IRI hash = RefNodeFactory.toIRI("hash://md5/942d0c469322df33da20e10204197bc5");
+
+        Dereferencer<InputStream> dereferencer = new Dereferencer<InputStream>() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                InputStream is = null;
+                if (StringUtils.equals(uri.getIRIString(), "https://zenodo.org/api/records/?q=_files.checksum:%22md5:942d0c469322df33da20e10204197bc5%22&all_versions=true")) {
+                    is = getClass().getResourceAsStream("zenodo-13505983-empty.json");
+                } else if (StringUtils.equals(uri.getIRIString(), "https://zenodo.org/api/records/?q=%22hash://md5/942d0c469322df33da20e10204197bc5%22&all_versions=true")) {
+                    is = getClass().getResourceAsStream("zenodo-13505983.json");
+                } else if (StringUtils.equals(uri.getIRIString(), "https://zenodo.org/api/records/13505983/files")) {
+                    is = getClass().getResourceAsStream("zenodo-13505983-files.json");
+                }
+                return is;
+            }
+        };
+
+        URI actualPath = new KeyTo1LevelZenodoPath(URI.create("https://zenodo.org"), dereferencer)
+                .toPath(hash);
+
+        assertThat(
+                actualPath.toString(),
+                Is.is("https://zenodo.org/api/records/13505983/files/Thuiller%20et%20al.%20-%202006%20-%20INTERACTIONS%20BETWEEN%20ENVIRONMENT%2C%20SPECIES%20TRAITS%2C%20.%5D/content")
+        );
+    }
+
+
+    @Test
+    public void toPathIllegalFilename() {
         IRI hash = RefNodeFactory.toIRI("hash://md5/eb5e8f37583644943b86d1d9ebd4ded5");
 
         Dereferencer<InputStream> dereferencer = new Dereferencer<InputStream>() {

@@ -1,0 +1,27 @@
+{
+  "hits": {
+    "hits": [],
+    "total": 0
+  },
+  "aggregations": {
+    "access_status": {
+      "buckets": [],
+      "label": "Access status"
+    },
+    "resource_type": {
+      "buckets": [],
+      "label": "Resource types"
+    },
+    "subject": {
+      "buckets": [],
+      "label": "Subjects"
+    },
+    "file_type": {
+      "buckets": [],
+      "label": "File type"
+    }
+  },
+  "links": {
+    "self": "https://zenodo.org/api/records?allversions=True&page=1&q=_files.checksum%3A%22md5%3A942d0c469322df33da20e10204197bc5%22&size=25&sort=bestmatch"
+  }
+}

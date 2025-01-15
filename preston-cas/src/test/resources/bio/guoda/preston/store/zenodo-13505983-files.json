@@ -1,0 +1,32 @@
+{
+  "enabled": true,
+  "links": {
+    "self": "https://zenodo.org/api/records/13505983/files",
+    "archive": "https://zenodo.org/api/records/13505983/files-archive"
+  },
+  "entries": [
+    {
+      "key": "Thuiller et al. - 2006 - INTERACTIONS BETWEEN ENVIRONMENT, SPECIES TRAITS, .]",
+      "storage_class": "L",
+      "checksum": "md5:942d0c469322df33da20e10204197bc5",
+      "size": 557019,
+      "created": "2024-08-29T16:18:19.665761+00:00",
+      "updated": "2024-08-29T16:18:19.683370+00:00",
+      "status": "completed",
+      "mimetype": "application/octet-stream",
+      "version_id": "96fed50c-891d-4aa6-9aae-a7a8f0764ea5",
+      "file_id": "9d0c815b-2e5a-4c14-ad53-59d879a22df2",
+      "bucket_id": "a70a6e1a-ef02-4f9a-8987-20c96230cf28",
+      "metadata": {},
+      "access": {
+        "hidden": false
+      },
+      "links": {
+        "self": "https://zenodo.org/api/records/13505983/files/Thuiller%20et%20al.%20-%202006%20-%20INTERACTIONS%20BETWEEN%20ENVIRONMENT,%20SPECIES%20TRAITS,%20.]",
+        "content": "https://zenodo.org/api/records/13505983/files/Thuiller%20et%20al.%20-%202006%20-%20INTERACTIONS%20BETWEEN%20ENVIRONMENT,%20SPECIES%20TRAITS,%20.]/content"
+      }
+    }
+  ],
+  "default_preview": null,
+  "order": []
+}

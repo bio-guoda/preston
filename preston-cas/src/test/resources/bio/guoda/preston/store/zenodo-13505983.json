@@ -1,0 +1,233 @@
+{
+  "hits" : {
+    "hits" : [ {
+      "created" : "2024-08-29T16:18:19.637219+00:00",
+      "modified" : "2024-08-29T16:18:20.128406+00:00",
+      "id" : 13505983,
+      "conceptrecid" : "13505982",
+      "doi" : "10.5281/zenodo.13505983",
+      "conceptdoi" : "10.5281/zenodo.13505982",
+      "doi_url" : "https://doi.org/10.5281/zenodo.13505983",
+      "metadata" : {
+        "title" : "INTERACTIONS BETWEEN ENVIRONMENT, SPECIES TRAITS, AND HUMAN USES DESCRIBE PATTERNS OF PLANT INVASIONS",
+        "doi" : "10.5281/zenodo.13505983",
+        "publication_date" : "2006",
+        "description" : "(Uploaded by Plazi for the Bat Literature Project) Although invasive alien species (IAS) are a major threat to biodiversity, human health, and economy, our understanding of the factors controlling their distribution and abundance is limited. Here, we determine how environmental factors, land use, life-history traits of the invaders, residence time, origin, and human usage interact to shape the spatial pattern of invasive alien plant species in South Africa. Relationships between the environmental factors and the extrinsic and intrinsic attributes of species were investigated using RLQ analysis, a multivariate method for relating a species-attribute table to an environmental table by way of a species presence/absence table. We then clustered species according to their position on the RLQ axes, and tested these groups for phylogenetic independence. The first three axes of the RLQ explained 99% of the variation and were strongly related to the species attributes. The clustering showed that, after accounting for environmental factors, the spatial pattern of IAS in South Africa was driven by human uses, life forms, and reproductive traits. The seven clusters of species strongly reflected geographical distribution, but also intrinsic species attributes and patterns of human use. Two of the clusters, centered on the genera Acacia and Opuntia, were phylogenetically non-independent. The remaining clusters comprised species of diverse taxonomic affinities, but sharing traits facilitating invasion in particular habitats. This information is useful for assessing the extent to which the potential spread of recent introductions can be predicted by considering the interaction of their biological attributes, region of origin, and human use.",
+        "access_right" : "restricted",
+        "creators" : [ {
+          "name" : "Thuiller, Wilfried",
+          "affiliation" : null
+        }, {
+          "name" : "Richardson, David M.",
+          "affiliation" : null
+        }, {
+          "name" : "Rouget, Mathieu",
+          "affiliation" : null
+        }, {
+          "name" : "Procheş, Şerban",
+          "affiliation" : null
+        }, {
+          "name" : "Wilson, John R. U.",
+          "affiliation" : null
+        } ],
+        "keywords" : [ "Biodiversity", "Mammalia", "Chiroptera", "Chordata", "Animalia", "bats", "bat" ],
+        "related_identifiers" : [ {
+          "identifier" : "hash://md5/942d0c469322df33da20e10204197bc5",
+          "relation" : "hasVersion",
+          "scheme" : "url"
+        }, {
+          "identifier" : "hash://sha256/ee34f0481b28099de02d65e6085e62fbc820b259ec4342a37c53085742cefe12",
+          "relation" : "hasVersion",
+          "scheme" : "url"
+        }, {
+          "identifier" : "zotero://select/groups/5435545/items/W92DGTU4",
+          "relation" : "isDerivedFrom",
+          "scheme" : "url"
+        }, {
+          "identifier" : "https://zotero.org/groups/5435545/items/W92DGTU4",
+          "relation" : "isDerivedFrom",
+          "scheme" : "url"
+        }, {
+          "identifier" : "https://linker.bio/cut:hash://md5/bb68bae4cae057245dda856ebbe1d20b!/b341073-343630",
+          "relation" : "isDerivedFrom",
+          "scheme" : "url"
+        }, {
+          "identifier" : "hash://md5/26f7ce5dd404e33c6570edd4ba250d20",
+          "relation" : "isPartOf",
+          "scheme" : "url"
+        }, {
+          "identifier" : "10.5281/zenodo.1410543",
+          "relation" : "isCompiledBy",
+          "resource_type" : "software",
+          "scheme" : "doi"
+        } ],
+        "custom" : {
+          "dwc:class" : [ "Mammalia" ],
+          "dwc:kingdom" : [ "Animalia" ],
+          "dwc:order" : [ "Chiroptera" ],
+          "dwc:phylum" : [ "Chordata" ]
+        },
+        "resource_type" : {
+          "title" : "Journal article",
+          "type" : "publication",
+          "subtype" : "article"
+        },
+        "journal" : {
+          "issue" : "7",
+          "pages" : "1755-1769",
+          "title" : "Ecology",
+          "volume" : "87"
+        },
+        "alternate_identifiers" : [ {
+          "identifier" : "hash://md5/942d0c469322df33da20e10204197bc5"
+        }, {
+          "identifier" : "urn:lsid:zotero.org:groups:5435545:items:W92DGTU4"
+        }, {
+          "identifier" : "10.1890/0012-9658(2006)87[1755:IBESTA]2.0.CO;2"
+        } ],
+        "communities" : [ {
+          "id" : "batlit"
+        }, {
+          "id" : "biosyslit"
+        } ],
+        "relations" : {
+          "version" : [ {
+            "index" : 0,
+            "is_last" : true,
+            "parent" : {
+              "pid_type" : "recid",
+              "pid_value" : "13505982"
+            }
+          } ]
+        }
+      },
+      "title" : "INTERACTIONS BETWEEN ENVIRONMENT, SPECIES TRAITS, AND HUMAN USES DESCRIBE PATTERNS OF PLANT INVASIONS",
+      "links" : {
+        "self" : "https://zenodo.org/api/records/13505983",
+        "self_html" : "https://zenodo.org/records/13505983",
+        "doi" : "https://doi.org/10.5281/zenodo.13505983",
+        "self_doi" : "https://doi.org/10.5281/zenodo.13505983",
+        "self_doi_html" : "https://zenodo.org/doi/10.5281/zenodo.13505983",
+        "parent" : "https://zenodo.org/api/records/13505982",
+        "parent_html" : "https://zenodo.org/records/13505982",
+        "parent_doi" : "https://doi.org/10.5281/zenodo.13505982",
+        "parent_doi_html" : "https://zenodo.org/doi/10.5281/zenodo.13505982",
+        "self_iiif_manifest" : "https://zenodo.org/api/iiif/record:13505983/manifest",
+        "self_iiif_sequence" : "https://zenodo.org/api/iiif/record:13505983/sequence/default",
+        "files" : "https://zenodo.org/api/records/13505983/files",
+        "media_files" : "https://zenodo.org/api/records/13505983/media-files",
+        "archive" : "https://zenodo.org/api/records/13505983/files-archive",
+        "archive_media" : "https://zenodo.org/api/records/13505983/media-files-archive",
+        "latest" : "https://zenodo.org/api/records/13505983/versions/latest",
+        "latest_html" : "https://zenodo.org/records/13505983/latest",
+        "versions" : "https://zenodo.org/api/records/13505983/versions",
+        "draft" : "https://zenodo.org/api/records/13505983/draft",
+        "reserve_doi" : "https://zenodo.org/api/records/13505983/draft/pids/doi",
+        "access_links" : "https://zenodo.org/api/records/13505983/access/links",
+        "access_grants" : "https://zenodo.org/api/records/13505983/access/grants",
+        "access_users" : "https://zenodo.org/api/records/13505983/access/users",
+        "access_request" : "https://zenodo.org/api/records/13505983/access/request",
+        "access" : "https://zenodo.org/api/records/13505983/access",
+        "communities" : "https://zenodo.org/api/records/13505983/communities",
+        "communities-suggestions" : "https://zenodo.org/api/records/13505983/communities-suggestions",
+        "requests" : "https://zenodo.org/api/records/13505983/requests"
+      },
+      "updated" : "2024-08-29T16:18:20.128406+00:00",
+      "recid" : "13505983",
+      "revision" : 5,
+      "files" : [ ],
+      "swh" : { },
+      "owners" : [ {
+        "id" : "7292"
+      } ],
+      "status" : "published",
+      "stats" : {
+        "downloads" : 2,
+        "unique_downloads" : 2,
+        "views" : 16,
+        "unique_views" : 16,
+        "version_downloads" : 2,
+        "version_unique_downloads" : 2,
+        "version_unique_views" : 16,
+        "version_views" : 16
+      },
+      "state" : "done",
+      "submitted" : true
+    } ],
+    "total" : 1
+  },
+  "aggregations" : {
+    "access_status" : {
+      "buckets" : [ {
+        "key" : "restricted",
+        "doc_count" : 1,
+        "label" : "Restricted",
+        "is_selected" : false
+      } ],
+      "label" : "Access status"
+    },
+    "resource_type" : {
+      "buckets" : [ {
+        "key" : "publication",
+        "doc_count" : 1,
+        "label" : "Publication",
+        "is_selected" : false,
+        "inner" : {
+          "buckets" : [ {
+            "key" : "publication-article",
+            "doc_count" : 1,
+            "label" : "Journal article",
+            "is_selected" : false
+          } ]
+        }
+      } ],
+      "label" : "Resource types"
+    },
+    "subject" : {
+      "buckets" : [ {
+        "key" : "Animalia",
+        "doc_count" : 1,
+        "label" : "Animalia",
+        "is_selected" : false
+      }, {
+        "key" : "Biodiversity",
+        "doc_count" : 1,
+        "label" : "Biodiversity",
+        "is_selected" : false
+      }, {
+        "key" : "Chiroptera",
+        "doc_count" : 1,
+        "label" : "Chiroptera",
+        "is_selected" : false
+      }, {
+        "key" : "Chordata",
+        "doc_count" : 1,
+        "label" : "Chordata",
+        "is_selected" : false
+      }, {
+        "key" : "Mammalia",
+        "doc_count" : 1,
+        "label" : "Mammalia",
+        "is_selected" : false
+      }, {
+        "key" : "bat",
+        "doc_count" : 1,
+        "label" : "bat",
+        "is_selected" : false
+      }, {
+        "key" : "bats",
+        "doc_count" : 1,
+        "label" : "bats",
+        "is_selected" : false
+      } ],
+      "label" : "Subjects"
+    },
+    "file_type" : {
+      "buckets" : [ ],
+      "label" : "File type"
+    }
+  },
+  "links" : {
+    "self" : "https://zenodo.org/api/records?allversions=True&page=1&q=%22hash%3A%2F%2Fmd5%2F942d0c469322df33da20e10204197bc5%22&size=25&sort=bestmatch"
+  }
+}

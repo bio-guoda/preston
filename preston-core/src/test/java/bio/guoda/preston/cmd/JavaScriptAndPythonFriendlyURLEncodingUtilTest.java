@@ -27,6 +27,19 @@ public class JavaScriptAndPythonFriendlyURLEncodingUtilTest {
     }
 
     @Test
+    public void squareBracketsMark() {
+        String s = JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode("[question].txt");
+        assertThat(s, Is.is("%5Bquestion%5D.txt"));
+    }
+
+    @Test
+    public void squareClosingBracket() {
+        String s = JavaScriptAndPythonFriendlyURLEncodingUtil
+                .urlEncode("Thuiller et al. - 2006 - INTERACTIONS BETWEEN ENVIRONMENT, SPECIES TRAITS, .]");
+        assertThat(s, Is.is("Thuiller%20et%20al.%20-%202006%20-%20INTERACTIONS%20BETWEEN%20ENVIRONMENT%2C%20SPECIES%20TRAITS%2C%20.%5D"));
+    }
+
+    @Test
     public void unreservedCharacters() {
         String unreservedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
         assertThat(
