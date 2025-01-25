@@ -59,7 +59,6 @@ public class KeyValueStoreLocalFileSystemTest {
 
     @Test
     public void writeDefault() throws IOException {
-        HashType type = HashType.sha256;
         KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
                 new File(path.toFile(), "tmp"),
                 new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()),
@@ -70,7 +69,20 @@ public class KeyValueStoreLocalFileSystemTest {
         filePersistence.put(someValueKey, IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
 
         assertThat(TestUtil.toUTF8(filePersistence.get(someValueKey)), is("some value"));
+    }
 
+    @Test
+    public void writeDefaultMD5() throws IOException {
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
+                new File(path.toFile(), "tmp"),
+                new KeyTo3LevelPath(new File(path.toFile(), "datasets").toURI()),
+                new ValidatingKeyValueStreamContentAddressedFactory());
+
+        IRI someValueKey = RefNodeFactory.toIRI("hash://md5/5946210c9e93ae37891dfe96c3e39614");
+        assertNull(filePersistence.get(someValueKey));
+        filePersistence.put(someValueKey, IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
+
+        assertThat(TestUtil.toUTF8(filePersistence.get(someValueKey)), is("some value"));
     }
 
     private static ValidatingKeyValueStreamFactory getAlwaysAccepting() {
