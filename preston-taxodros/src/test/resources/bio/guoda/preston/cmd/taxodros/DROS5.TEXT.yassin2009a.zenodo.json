@@ -1,0 +1,70 @@
+{
+  "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" : "taxodros-dros5",
+  "keywords" : [ "Biodiversity", "Taxonomy", "fruit flies", "flies", "Animalia", "Arthropoda", "Insecta", "Diptera" ],
+  "custom" : {
+    "dwc:kingdom" : [ "Animalia" ],
+    "dwc:phylum" : [ "Arthropoda" ],
+    "dwc:class" : [ "Insecta" ],
+    "dwc:order" : [ "Diptera" ]
+  },
+  "referenceId" : "yassin et al., 2009a",
+  "related_identifiers" : [ {
+    "relation" : "isAlternateIdentifier",
+    "identifier" : "urn:lsid:taxodros.uzh.ch:id:yassin%20et%20al.%2C%202009a"
+  }, {
+    "relation" : "isDerivedFrom",
+    "identifier" : "https://linker.bio/line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L12"
+  }, {
+    "relation" : "isDerivedFrom",
+    "identifier" : "10.123/456"
+  }, {
+    "relation" : "isPartOf",
+    "identifier" : "https://www.taxodros.uzh.ch"
+  }, {
+    "relation" : "isPartOf",
+    "identifier" : "hash://md5/abcd"
+  }, {
+    "relation" : "isPartOf",
+    "identifier" : "hash://sha256/efgh"
+  }, {
+    "relation" : "isAlternateIdentifier",
+    "identifier" : "urn:lsid:taxodros.uzh.ch:filename:Yassin%20et%20al.%2C%202009a.pdf"
+  } ],
+  "creators" : [ {
+    "name" : "Yassin, A."
+  }, {
+    "name" : "Borai, F."
+  }, {
+    "name" : "Capy, P."
+  }, {
+    "name" : "David, J.R."
+  }, {
+    "name" : "Elias, E."
+  }, {
+    "name" : "Riad, S.A."
+  }, {
+    "name" : "Shalaby, H.G."
+  }, {
+    "name" : "Serour, S."
+  }, {
+    "name" : "Abou-Youssef, A.Y."
+  } ],
+  "access_right" : "restricted",
+  "publication_date" : "2009",
+  "title" : "Evolutionary Genetics of Zaprionus. II. Mitochondrial DNA and chromosomal variation of the invasive drosophilid Zaprionus indianus in Egypt.",
+  "publication_type" : "article",
+  "journal_title" : "Mitochondrial DNA",
+  "journal_volume" : "20",
+  "journal_pages" : "34-40",
+  "taxodros:method" : "ocr+ / 2009a",
+  "http://www.w3.org/ns/prov#wasDerivedFrom" : "line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L12",
+  "references" : [ "Bächli, G. (1999). TaxoDros - The Database on Taxonomy of Drosophilidae hash://md5/abcd hash://sha256/efgh [Data set]. Zenodo. https://doi.org/10.123/456" ],
+  "filename" : "Yassin et al., 2009a.pdf",
+  "upload_type" : "publication",
+  "communities" : [ {
+    "identifier" : "taxodros"
+  }, {
+    "identifier" : "biosyslit"
+  } ],
+  "description" : "Uploaded by Plazi for TaxoDros. We do not have abstracts."
+}

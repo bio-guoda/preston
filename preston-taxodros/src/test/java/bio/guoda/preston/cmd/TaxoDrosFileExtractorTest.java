@@ -243,6 +243,25 @@ public class TaxoDrosFileExtractorTest {
     }
 
     @Test
+    public void parseYassin2009a() throws IOException {
+        String[] jsonObjects = getResource("DROS5.TEXT.yassin2009a.txt");
+        assertThat(jsonObjects.length, is(1));
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+
+        String expectedPrettyString = IOUtils.toString(getClass().getResourceAsStream("taxodros/DROS5.TEXT.yassin2009a.zenodo.json"), StandardCharsets.UTF_8);
+
+        assertThat(expectedPrettyString, is(taxonNode.toPrettyString()));
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText()
+                , is("line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L12"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText()
+                , is("taxodros-dros5"));
+        assertThat(taxonNode.get("upload_type").asText(), is("publication"));
+        assertThat(taxonNode.get("publication_type").asText(), is("article"));
+        assertThat(taxonNode.get(NON_JOURNAL_TITLE).asText(), is("Evolutionary Genetics of Zaprionus. II. Mitochondrial DNA and chromosomal variation of the invasive drosophilid Zaprionus indianus in Egypt."));
+    }
+
+
+    @Test
     public void parseBookChapterCitationSinglePage() throws IOException {
         String[] jsonObjects = getResource("DROS5.TEXT.bookchapter.single.page.txt");
         assertThat(jsonObjects.length, is(1));

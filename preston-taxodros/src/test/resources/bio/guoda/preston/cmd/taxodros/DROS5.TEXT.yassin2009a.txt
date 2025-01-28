@@ -1,0 +1,12 @@
+.TEXT;
+yassin et al., 2009a
+.A Yassin, A., Borai, F., Capy, P., David, J.R.,
+Elias, E., Riad, S.A., Shalaby, H.G.,
+Serour, S., & Abou-Youssef, A.Y.,
+.J 2009
+.S Evolutionary Genetics of Zaprionus. II.
+Mitochondrial DNA and chromosomal variation of
+the invasive drosophilid Zaprionus indianus in Egypt.
+.Z Mitochondrial DNA, 20:34-40.
+.K ocr+ / 2009a
+.P Yassin et al., 2009a.pdf
