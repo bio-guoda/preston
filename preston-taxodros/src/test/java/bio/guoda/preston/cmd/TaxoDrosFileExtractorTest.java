@@ -23,6 +23,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Properties;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
@@ -330,6 +331,7 @@ public class TaxoDrosFileExtractorTest {
         assertThat(taxonNode.get("taxodros:method").asText(), is("ocr"));
         assertThat(taxonNode.get("publication_type").textValue(), is("article"));
         assertThat(taxonNode.get("filename").asText(), is("Abd El-Halim et al., 2005M.pdf"));
+        assertThat(taxonNode.get("references").get(0).asText(), is("Bächli, G. (1999). TaxoDros - The Database on Taxonomy of Drosophilidae hash://md5/abcd hash://sha256/efgh [Data set]. Zenodo. https://doi.org/10.123/456"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Biodiversity"));
@@ -366,7 +368,13 @@ public class TaxoDrosFileExtractorTest {
                 new ProcessorStateAlwaysContinue(),
                 blobStore,
                 byteArrayOutputStream,
-                Arrays.asList("taxodros", "biosyslit")
+                Arrays.asList("taxodros", "biosyslit"),
+                new Properties() {{
+                    setProperty(TaxoDrosFileStreamHandler.PROP_TAXODROS_DATA_DOI, "10.123/456");
+                    setProperty(TaxoDrosFileStreamHandler.PROP_TAXODROS_DATA_VERSION_SHA256, "hash://sha256/efgh");
+                    setProperty(TaxoDrosFileStreamHandler.PROP_TAXODROS_DATA_VERSION_MD5, "hash://md5/abcd");
+                    setProperty(TaxoDrosFileStreamHandler.PROP_TAXODROS_DATA_YEAR, "1999");
+                }}
         );
 
         extractor.on(statement);

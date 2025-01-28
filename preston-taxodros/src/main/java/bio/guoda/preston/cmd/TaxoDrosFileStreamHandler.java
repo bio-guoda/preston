@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -59,10 +60,17 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     public static final String DROS_3 = "taxodros-dros3";
     public static final String SYS = "taxodros-syst";
     private static final String PREFIX_PUBLISHER = ".Z.";
+    public static final String PROP_TAXODROS_DATA_DOI = "taxodros.data.doi";
+    public static final String PROP_TAXODROS_DATA_VERSION_SHA256 = "taxodros.data.version.sha256";
+    public static final String PROP_TAXODROS_DATA_VERSION_MD5 = "taxodros.data.version.md5";
+    public static final String PROP_TAXODROS_DATA_YEAR = "taxodros.data.year";
+
+    private final Properties props;
 
     public static final String TAXODROS_DATA_DOI = "10.5281/zenodo.13841002";
     public static final String TAXODROS_DATA_VERSION_SHA256 = "hash://sha256/a6e757007c04215cafa537c09a06a0e8a68be70cbc9c965c857c7a9058ceeb16";
     public static final String TAXODROS_DATA_VERSION_MD5 = "hash://md5/b3ead19ea211a66e4f59a6842e097c7b";
+    public static final String TAXODROS_DATA_YEAR = "2024";
     public static final String LSID_PREFIX = "urn:lsid:taxodros.uzh.ch";
 
     private ContentStreamHandler contentStreamHandler;
@@ -70,10 +78,13 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
     private List<String> communities;
 
     public TaxoDrosFileStreamHandler(ContentStreamHandler contentStreamHandler,
-                                     OutputStream os, List<String> communities) {
+                                     OutputStream os,
+                                     List<String> communities,
+                                     Properties props) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
         this.communities = communities;
+        this.props = props;
     }
 
     @Override
@@ -343,14 +354,19 @@ public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
         String suffix = lineFinish > lineStart
                 ? "-" + "L" + lineFinish
                 : "";
+
+        String doi = props.getProperty(PROP_TAXODROS_DATA_DOI);
+        String md5 = props.getProperty(PROP_TAXODROS_DATA_VERSION_MD5);
+        String sha256 = props.getProperty(PROP_TAXODROS_DATA_VERSION_SHA256);
+
         String value = "line:" + iriString + "!/L" + lineStart + suffix;
         ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, value);
         ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, "https://linker.bio/" + value);
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, TAXODROS_DATA_DOI);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, doi);
         ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, "https://www.taxodros.uzh.ch");
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, TAXODROS_DATA_VERSION_MD5);
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, TAXODROS_DATA_VERSION_SHA256);
-        ZenodoMetaUtil.append(objectNode, ZenodoMetaUtil.REFERENCES, "Bächli, G. (2024). TaxoDros - The Database on Taxonomy of Drosophilidae " + TAXODROS_DATA_VERSION_MD5 + " " + TAXODROS_DATA_VERSION_SHA256 + " [Data set]. Zenodo. " + "https://doi.org/" + TAXODROS_DATA_DOI);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, md5);
+        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, sha256);
+        ZenodoMetaUtil.append(objectNode, ZenodoMetaUtil.REFERENCES, "Bächli, G. (" + props.getProperty(PROP_TAXODROS_DATA_YEAR) + "). TaxoDros - The Database on Taxonomy of Drosophilidae " + md5 + " " + sha256 + " [Data set]. Zenodo. " + "https://doi.org/" + doi);
 
     }
 

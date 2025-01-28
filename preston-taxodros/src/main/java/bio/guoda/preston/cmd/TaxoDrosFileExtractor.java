@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Properties;
 
 public class TaxoDrosFileExtractor extends ProcessorExtracting {
     private final Logger LOG = LoggerFactory.getLogger(TaxoDrosFileExtractor.class);
@@ -25,16 +26,20 @@ public class TaxoDrosFileExtractor extends ProcessorExtracting {
     private final ProcessorState processorState;
     private final OutputStream outputStream;
     private final List<String> communities;
+    private final Properties props;
 
     public TaxoDrosFileExtractor(ProcessorState processorState,
                                  BlobStoreReadOnly blobStoreReadOnly,
                                  OutputStream out,
                                  List<String> communities,
+                                 Properties props,
                                  StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
         this.communities = communities;
+        this.props = props;
+
     }
 
 
@@ -54,7 +59,7 @@ public class TaxoDrosFileExtractor extends ProcessorExtracting {
             this.handler = new ContentStreamHandlerImpl(
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
-                    new TaxoDrosFileStreamHandler(this, outputStream, communities)
+                    new TaxoDrosFileStreamHandler(this, outputStream, communities, props)
             );
         }
 

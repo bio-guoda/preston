@@ -13,6 +13,7 @@ import picocli.CommandLine;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 @CommandLine.Command(
         name = "taxodros-stream",
@@ -25,6 +26,31 @@ public class CmdTaxoDrosStream extends LoggingPersisting implements Runnable {
             description = "associated Zenodo communities"
     )
     private List<String> communities = Arrays.asList("taxodros", "biosyslit");
+
+    @CommandLine.Option(
+            names = {"--pub-doi"},
+            description = "associated Taxodros DOI"
+    )
+    private String doi = TaxoDrosFileStreamHandler.TAXODROS_DATA_DOI;
+
+    @CommandLine.Option(
+            names = {"--pub-md5"},
+            description = "associated Taxodros md5 fingerprint"
+    )
+    private String md5 = TaxoDrosFileStreamHandler.TAXODROS_DATA_VERSION_MD5;
+
+    @CommandLine.Option(
+            names = {"--pub-sha256"},
+            description = "associated Taxodros sha256 fingerprint"
+    )
+    private String sha256 = TaxoDrosFileStreamHandler.TAXODROS_DATA_VERSION_SHA256;
+
+    @CommandLine.Option(
+            names = {"--pub-year"},
+            description = "associated Taxodros publication year"
+    )
+    private String year = TaxoDrosFileStreamHandler.TAXODROS_DATA_YEAR;
+
 
     @Override
     public void run() {
@@ -45,6 +71,12 @@ public class CmdTaxoDrosStream extends LoggingPersisting implements Runnable {
                 blobStoreReadOnly,
                 getOutputStream(),
                 communities,
+                new Properties() {{
+                    setProperty(TaxoDrosFileStreamHandler.PROP_TAXODROS_DATA_DOI, doi);
+                    setProperty(TaxoDrosFileStreamHandler.PROP_TAXODROS_DATA_VERSION_SHA256, sha256);
+                    setProperty(TaxoDrosFileStreamHandler.PROP_TAXODROS_DATA_VERSION_MD5, md5);
+                    setProperty(TaxoDrosFileStreamHandler.PROP_TAXODROS_DATA_YEAR, year);
+                }},
                 listener);
 
         StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {
