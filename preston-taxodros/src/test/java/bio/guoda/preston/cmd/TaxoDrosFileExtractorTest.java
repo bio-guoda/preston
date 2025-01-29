@@ -30,6 +30,7 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static junit.framework.TestCase.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -80,6 +81,35 @@ public class TaxoDrosFileExtractorTest {
 
 
         assertThat(taxonNode.get("publication_date").textValue(), is("2016"));
+    }
+
+    @Test
+    public void authorsPeriodInsteadOfComma() throws IOException {
+        // note that ".A Ward. P.I.," should be ".A Ward, P.I.," (notice the Ward, instead of Ward.)
+        String[] jsonObjects = getResource("DROS5.TEXT.ward2002.txt");
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+
+        JsonNode first = taxonNode.at("/related_identifiers/0");
+        assertThat(first.get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(first.get("identifier").asText(), is("urn:lsid:taxodros.uzh.ch:id:ward%2C%202002"));
+
+        assertThat(taxonNode.get("creators").size(), is(0));
+    }
+
+    @Test
+    public void authorsPeriodInsteadOfCommaFixed() throws IOException {
+        String[] jsonObjects = getResource("DROS5.TEXT.ward2002-fixed.txt");
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+
+        JsonNode first = taxonNode.at("/related_identifiers/0");
+        assertThat(first.get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(first.get("identifier").asText(), is("urn:lsid:taxodros.uzh.ch:id:ward%2C%202002"));
+
+        assertThat(taxonNode.get("creators").size(), is(greaterThan(0)));
     }
 
     @Test

@@ -1,0 +1,8 @@
+.TEXT;
+ward, 2002
+.A Ward, P.I.,
+.J 2002
+.S Die Ko-Evolution der Geschlechter.
+.Z Vjschr. naturforsch. Ges. Zurich, 147:93-97.
+.K ocr
+.P Ward, 2002.pdf
