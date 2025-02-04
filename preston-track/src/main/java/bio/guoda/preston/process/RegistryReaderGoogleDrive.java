@@ -41,6 +41,8 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
             = Pattern.compile("https://.*google.com/(?<type>[a-z]+)/d/(?<id>[a-zA-Z0-9-_]+)/{0,1}.*(?<slideId>#slide=id[.][a-z0-9_]+){0,1}");
     private static final Pattern GID_PATTERN
             = Pattern.compile(".*gid=(?<gid>[0-9]+).*");
+    private static final Pattern TAB_PATTERN
+            = Pattern.compile(".*tab=(?<tab>[a-z0-9.]+).*");
     private static final Pattern SLIDE_PATTERN
             = Pattern.compile(".*#slide=id[.](?<slideId>[a-z0-9_]+).*");
     private static final GoogleResourceId NOT_A_GOOGLE_RESOURCE_ID
@@ -48,9 +50,10 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
 
     public static final String PRESENTATION = "presentation";
     public static final String SPREADSHEETS = "spreadsheets";
+    public static final String DOCUMENT = "document";
 
     private static final TreeMap<String, List<Type>> TYPES_FOR_TYPES = new TreeMap<String, List<Type>>() {{
-        put("document", Arrays.asList(pdf, docx, txt, odt, rtf, epub, html));
+        put(DOCUMENT, Arrays.asList(pdf, docx, txt, odt, rtf, epub, html));
         put(PRESENTATION, Arrays.asList(pdf, pptx, odp, txt, html, png, jpg, svg));
         put(SPREADSHEETS, Arrays.asList(xlsx, ods, pdf, csv, tsv, zip));
     }};
@@ -168,6 +171,11 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
                 if (matcher1.matches()) {
                     grid = new GoogleResourceId(matcher.group("id"), matcher.group("type"), matcher1.group("slideId"));
                 }
+            } else if (StringUtils.equals(DOCUMENT, matcher.group("type"))) {
+                Matcher matcher1 = TAB_PATTERN.matcher(url);
+                if (matcher1.matches()) {
+                    grid = new GoogleResourceId(matcher.group("id"), matcher.group("type"), matcher1.group("tab"));
+                }
             }
         }
         return grid;
@@ -196,23 +204,26 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         StringBuilder exportUrl = new StringBuilder();
         exportUrl.append("https://docs.google.com/");
         exportUrl.append(id.getType());
+        exportUrl.append("/u/0/export?id=");
+        exportUrl.append(id.getId());
 
-            exportUrl.append("/u/0/export?id=");
-            exportUrl.append(id.getId());
         if (PRESENTATION.equals(id.getType())) {
             if (StringUtils.isNotBlank(id.getGid())
                     && Arrays.asList(png, jpg, svg).contains(type)) {
                 exportUrl.append("&pageid=");
                 exportUrl.append(id.getGid());
             }
-        } else
-            if (StringUtils.isNotBlank(id.getGid())
-                    && TYPES_SINGLE_TABLE.contains(type)) {
-                exportUrl.append("&gid=");
-                exportUrl.append(id.getGid());
-            }
-            exportUrl.append("&format=");
-            exportUrl.append(type.type);
+        } else if (DOCUMENT.equals(id.getType())
+                && StringUtils.isNotBlank(id.getGid())) {
+            exportUrl.append("&tab=");
+            exportUrl.append(id.getGid());
+        } else if (StringUtils.isNotBlank(id.getGid())
+                && TYPES_SINGLE_TABLE.contains(type)) {
+            exportUrl.append("&gid=");
+            exportUrl.append(id.getGid());
+        }
+        exportUrl.append("&format=");
+        exportUrl.append(type.type);
 
         return RefNodeFactory.toIRI(exportUrl.toString());
     }

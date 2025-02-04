@@ -211,6 +211,19 @@ public class RegistryReaderGoogleDriveTest {
     }
 
     @Test
+    public void detectDocsWithTabsURL() {
+        String url = "https://docs.google.com/document/d/1MDfcQESQh9abAxIhAs4gCRi88SnTP0s39bscvsREgto/edit?tab=t.bcaxfrmawmxl";
+
+        RegistryReaderGoogleDrive.GoogleResourceId googleResourceId = RegistryReaderGoogleDrive.getGoogleResourceId(url);
+
+        assertThat(googleResourceId.getId(), Is.is("1MDfcQESQh9abAxIhAs4gCRi88SnTP0s39bscvsREgto"));
+        assertThat(googleResourceId.getType(), Is.is("document"));
+        assertThat(googleResourceId.getGid(), Is.is("t.bcaxfrmawmxl"));
+        assertThat(RegistryReaderGoogleDrive.toExportIRI(googleResourceId, pdf).getIRIString(),
+                Is.is("https://docs.google.com/document/u/0/export?id=1MDfcQESQh9abAxIhAs4gCRi88SnTP0s39bscvsREgto&tab=t.bcaxfrmawmxl&format=pdf"));
+    }
+
+    @Test
     public void detectPresentationSheetsURL() {
         String url = "https://docs.google.com/presentation/d/1kV0tVscrYO6WxZYRupnzjVQecmmky27Oc7YeePZjBXg/edit#slide=id.p";
 
