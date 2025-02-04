@@ -225,8 +225,20 @@ class MetaXMLSaxHandler2 extends SimpleSaxHandler {
             if (af != null) {
                 af.addField(field);
             } else {
-                log.warn("field found outside of an archive file");
+                log.warn("field [" + field.getTerm().qualifiedName() + "] found outside of an archive file");
             }
+        } else if ("table".equalsIgnoreCase(localName)) {
+            log.warn("found non-dwc <table> element with rowType [" + attributes.getValue("rowType") + "], but attempting to work with the data regardless.");
+            af = buildArchiveFile(attributes);
+            setFirstTableAsCoreOtherwiseAsExtension();
+        }
+    }
+
+    private void setFirstTableAsCoreOtherwiseAsExtension() {
+        if (archive.getCore() == null) {
+            archive.setCore(af);
+        } else {
+            archive.addExtension(af);
         }
     }
 }
