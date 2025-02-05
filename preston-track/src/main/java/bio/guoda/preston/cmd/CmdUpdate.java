@@ -11,6 +11,7 @@ import bio.guoda.preston.process.RegistryReaderGBIF;
 import bio.guoda.preston.process.RegistryReaderGitHubIssues;
 import bio.guoda.preston.process.RegistryReaderGoogleDrive;
 import bio.guoda.preston.process.RegistryReaderIDigBio;
+import bio.guoda.preston.process.RegistryReaderOAI;
 import bio.guoda.preston.process.RegistryReaderOBIS;
 import bio.guoda.preston.process.RegistryReaderRSS;
 import bio.guoda.preston.process.RegistryReaderTaxonWorks;
@@ -115,7 +116,8 @@ public class CmdUpdate extends CmdTrack {
                 new RegistryReaderRSS(blobStore, queueAsListener),
                 new RegistryReaderTaxonWorks(blobStore, queueAsListener),
                 new RegistryReaderZotero(blobStore, queueAsListener),
-                new RegistryReaderGoogleDrive(blobStore, queueAsListener)
+                new RegistryReaderGoogleDrive(blobStore, queueAsListener),
+                new RegistryReaderOAI(blobStore, queueAsListener)
         );
     }
 
