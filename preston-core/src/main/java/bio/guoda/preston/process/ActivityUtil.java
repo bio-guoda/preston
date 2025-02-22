@@ -63,9 +63,25 @@ public class ActivityUtil {
     }
 
     public static void emitDownloadActivity(IRI versionSource, BlankNodeOrIRI newVersion, StatementsEmitter emitter, Optional<BlankNodeOrIRI> sourceActivity) {
-        Literal nowLiteral = RefNodeFactory.nowDateTimeLiteral();
+        Literal dateTime = RefNodeFactory.nowDateTimeLiteral();
 
         IRI downloadActivity = toIRI(UUID.randomUUID());
+
+        emitDownloadActivity(
+                versionSource,
+                newVersion,
+                emitter,
+                sourceActivity,
+                dateTime,
+                downloadActivity);
+    }
+
+    private static void emitDownloadActivity(IRI versionSource,
+                                             BlankNodeOrIRI newVersion,
+                                             StatementsEmitter emitter,
+                                             Optional<BlankNodeOrIRI> sourceActivity,
+                                             Literal dateTime,
+                                             IRI downloadActivity) {
         emitter.emit(toStatement(
                 downloadActivity,
                 newVersion,
@@ -80,7 +96,7 @@ public class ActivityUtil {
                 downloadActivity,
                 downloadActivity,
                 GENERATED_AT_TIME,
-                nowLiteral));
+                dateTime));
         emitter.emit(toStatement(
                 downloadActivity,
                 downloadActivity,
