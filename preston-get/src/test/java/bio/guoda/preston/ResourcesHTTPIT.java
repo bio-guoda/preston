@@ -174,4 +174,14 @@ public class ResourcesHTTPIT {
 
     }
 
+    @Test(expected = org.apache.http.client.ClientProtocolException.class)
+    public void circularRedirect() throws IOException {
+        try (InputStream is
+                     = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://www.snib.mx/iptconabio/archive.do?r=ecoab-host-plant")))) {
+            CountingOutputStream outputStream = new CountingOutputStream(NullOutputStream.INSTANCE);
+            IOUtils.copy(is, outputStream);
+        }
+
+    }
+
 }
