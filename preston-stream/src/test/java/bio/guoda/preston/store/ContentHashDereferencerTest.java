@@ -72,6 +72,12 @@ public class ContentHashDereferencerTest {
         assertThat(IOUtils.toString(content, StandardCharsets.UTF_8), Is.is("example"));
     }
 
+    @Test(expected = DereferenceException.class)
+    public void nonHashURI() throws IOException {
+        BlobStoreReadOnly blobStore = TestUtil.getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
+        new ContentHashDereferencer(blobStore).get(toIRI("https://docs.google.com/spreadsheets/d/1NQ8MBY8qHJJp9ogtfYRnPC0c3cZF9IySHJIQXIA_Asg/export?format=tsv&id=1NQ8MBY8qHJJp9ogtfYRnPC0c3cZF9IySHJIQXIA_Asg&gid=359918449"));
+    }
+
     @Test
     public void getArchive() throws IOException {
         BlobStoreReadOnly blobStore = TestUtil.getTestBlobStoreForResource("/bio/guoda/preston/process/nested.tar.gz");
