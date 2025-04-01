@@ -104,7 +104,7 @@ public class DarkTaxonFileExtractor extends ProcessorExtracting {
     }
 
     public String getActivityDescription() {
-        return "An activity that streams TaxoDros Files into line-json.";
+        return "An activity that creates or updates Zenodo records for MfN Specimen.";
     }
 
 }
