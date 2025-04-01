@@ -160,7 +160,12 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         }
     }
 
-    private void createNewVersion(IRI coordinate, JsonNode zenodoMetadata, List<String> recordIds, List<String> contentIds, List<String> origins, Collection<Pair<Long, String>> foundDeposits) throws IOException {
+    private void createNewVersion(IRI coordinate,
+                                  JsonNode zenodoMetadata,
+                                  List<String> recordIds,
+                                  List<String> contentIds,
+                                  List<String> origins,
+                                  Collection<Pair<Long, String>> foundDeposits) throws IOException {
         List<Long> existingIds = foundDeposits
                 .stream()
                 .filter(x -> !StringUtils.equals(x.getValue(), "unsubmitted"))
@@ -183,7 +188,8 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
         try {
             if (existingIds.size() == 0 && !ctx.shouldUpdateMetadataOnly()) {
-                ctxLocal = ZenodoUtils.create(ctxLocal, zenodoMetadata);
+                ctxLocal = ZenodoUtils.createEmptyDeposit(ctxLocal);
+                updateMetadata(ctxLocal, zenodoMetadata);
                 uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
                 emitRelations(recordIds, contentIds, origins, ctxLocal);
                 emitRefreshed(ctxLocal);
@@ -191,16 +197,14 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 ctxLocal.setDepositId(existingIds.get(0));
                 ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
                 deleteExistingContentIfPresent(ctxLocal);
-                String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
-                ZenodoUtils.update(ctxLocal, input);
+                updateMetadata(ctxLocal, zenodoMetadata);
                 uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
                 emitRelations(recordIds, contentIds, origins, ctxLocal);
                 emitRefreshed(ctxLocal);
             } else if (existingIds.size() == 1 && ctx.shouldUpdateMetadataOnly()) {
                 ctxLocal.setDepositId(existingIds.get(0));
                 ctxLocal = ZenodoUtils.editExistingVersion(ctxLocal);
-                String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
-                ZenodoUtils.update(ctxLocal, input);
+                updateMetadata(ctxLocal, zenodoMetadata);
                 ZenodoUtils.publish(ctxLocal);
                 emitRelations(recordIds, contentIds, origins, ctxLocal);
                 emitRefreshed(ctxLocal);
@@ -211,6 +215,11 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             LOG.warn("unexpected error while handling [" + coordinate.getIRIString() + "]", e);
             attemptCleanupAndRethrow(ctxLocal, e);
         }
+    }
+
+    private void updateMetadata(ZenodoContext ctxLocal, JsonNode zenodoMetadata) throws IOException {
+        String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
+        ZenodoUtils.update(ctxLocal, StringUtils.replace(input, "{{ ZENODO_DEPOSIT_ID }}", Long.toString(ctxLocal.getDepositId())));
     }
 
     private void deleteExistingContentIfPresent(ZenodoContext ctxLocal) throws IOException {
@@ -297,16 +306,20 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
     private void uploadContentAndPublish(JsonNode zenodoMetadata, List<String> ids, ZenodoContext ctx) throws IOException {
         if (hasCustomFilename(zenodoMetadata)) {
             uploadAttemptSingleFile(zenodoMetadata, ids, ctx);
+        } else if (candidateFileAttachments.size() > CmdZenodo.MAX_ZENODO_FILE_ATTACHMENTS) {
+            throw new IOException("cannot publish more than " + CmdZenodo.MAX_ZENODO_FILE_ATTACHMENTS + " for a Zenodo deposit but found [" + candidateFileAttachments.size() + "]: to many file attachments specified for [" + zenodoMetadata.toPrettyString() + "]");
         } else if (candidateFileAttachments.size() > 0) {
-            uploadAttemptAvailableFiles(ctx);
+            uploadAttemptOneOrMoreFiles(ctx);
         } else {
             throw new IOException("cannot publish: no file attachments specified for [" + zenodoMetadata.toPrettyString() + "]");
         }
         ZenodoUtils.publish(ctx);
     }
 
-    private void uploadAttemptAvailableFiles(ZenodoContext ctx) throws IOException {
-        for (Quad versionStatement : this.candidateFileAttachments) {
+    private void uploadAttemptOneOrMoreFiles(ZenodoContext ctx) throws IOException {
+        ArrayList<Quad> candidates = new ArrayList<>(this.candidateFileAttachments);
+        this.candidateFileAttachments.clear();
+        for (Quad versionStatement : candidates) {
             String filename = filenameFor(versionStatement);
             IRI version = VersionUtil.mostRecentVersion(versionStatement);
             if (version != null && StringUtils.isNoneBlank(filename)) {

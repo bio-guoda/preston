@@ -20,7 +20,7 @@ import java.util.Collection;
 
 @CommandLine.Command(
         name = "zenodo",
-        description = "create/update associated Zenodo records"
+        description = "createEmptyDeposit/update associated Zenodo records"
 )
 public class CmdZenodo extends CmdZenodoEnabled implements Runnable {
 
@@ -43,7 +43,8 @@ public class CmdZenodo extends CmdZenodoEnabled implements Runnable {
                 LogErrorHandlerExitOnError.EXIT_ON_ERROR
         );
 
-        Collection<Quad> fileDepositCandidates = new CircularFifoQueue<Quad>(MAX_ZENODO_FILE_ATTACHMENTS);
+        // limit queue depth, but allow for maximum + 1
+        Collection<Quad> fileDepositCandidates = new CircularFifoQueue<Quad>(MAX_ZENODO_FILE_ATTACHMENTS + 1);
 
         StatementsListener textMatcher = new ZenodoMetadataFileExtractor(
                 this,
@@ -58,9 +59,8 @@ public class CmdZenodo extends CmdZenodoEnabled implements Runnable {
             @Override
             public void emit(Quad statement) {
                 if (!RefNodeFactory.isBlankOrSkolemizedBlank(statement.getSubject())) {
-                    if (fileDepositCandidates.size() >= 100) {
-                        fileDepositCandidates.add(statement);
-                    }
+
+                    fileDepositCandidates.add(statement);
                 }
                 textMatcher.on(statement);
             }

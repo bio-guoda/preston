@@ -108,7 +108,7 @@ public class CmdCopyTo extends LoggingPersisting implements Runnable {
         try {
             listener = JekyllUtil.createJekyllSiteGenerator(provenanceLogStore, target);
         } catch (IOException e) {
-            throw new RuntimeException("failed to create jekyll site content", e);
+            throw new RuntimeException("failed to createEmptyDeposit jekyll site content", e);
         }
 
         final AtomicReference<DateTime> lastCrawlTime = new AtomicReference<>();

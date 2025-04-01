@@ -36,7 +36,7 @@ public abstract class CmdZenodoEnabled extends LoggingPersisting implements Runn
 
     @CommandLine.Option(
             names = {"--new-version"},
-            description = "create new version if a Zenodo deposit with matching identifiers already exists"
+            description = "createEmptyDeposit new version if a Zenodo deposit with matching identifiers already exists"
     )
     private Boolean createNewVersionForExisting = false;
 

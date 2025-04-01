@@ -53,9 +53,8 @@ public class ZenodoUtilsTaxoDrosIT {
         ctx = new ZenodoContext(ZenodoTestUtil.getAccessToken(), "https://sandbox.zenodo.org");
         InputStream request = getInputStream();
         assertNotNull(request);
-        ObjectMapper objectMapper = ZenodoUtils.getObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(IOUtils.toString(request, StandardCharsets.UTF_8));
-        ctx = ZenodoUtils.create(ctx, jsonNode);
+        ctx = ZenodoUtils.createEmptyDeposit(ctx);
+        ZenodoUtils.update(ctx, IOUtils.toString(request, StandardCharsets.UTF_8));
 
         assertNotNull(ctx);
         assertNotNull(ctx.getBucketId());

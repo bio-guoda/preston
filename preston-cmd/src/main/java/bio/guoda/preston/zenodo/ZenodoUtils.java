@@ -172,15 +172,14 @@ public class ZenodoUtils {
         };
     }
 
-    public static ZenodoContext create(ZenodoContext ctx, JsonNode jsonNode) throws IOException {
+    public static ZenodoContext createEmptyDeposit(ZenodoContext ctx) throws IOException {
         String requestURI = ctx.getEndpoint() + "/api/deposit/depositions";
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
-        JsonNode payload = jsonNode == null ? getObjectMapper().createObjectNode() : jsonNode;
         HttpPost request = new HttpPost(URI.create(dataURI.getIRIString()));
         request.setHeader("Accept", "*/*");
         BasicHttpEntity entity = new BasicHttpEntity();
 
-        String input = getObjectMapper().writer().writeValueAsString(payload);
+        String input = "{}";
         entity.setContent(IOUtils.toInputStream(input, StandardCharsets.UTF_8));
         entity.setContentLength(input.length());
         entity.setContentType(APPLICATION_JSON);
