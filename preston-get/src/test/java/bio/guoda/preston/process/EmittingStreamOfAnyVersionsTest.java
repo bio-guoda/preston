@@ -29,7 +29,7 @@ public class EmittingStreamOfAnyVersionsTest {
 
         assertThat(quads.size(), Is.is(1));
 
-        assertThat(quads.get(0).getSubject(), Is.is(IsInstanceOf.instanceOf(BlankNode.class)));
+        assertThat(quads.get(0).getSubject().ntriplesString(), Is.is("<https://bisque.cyverse.org/image_service/image/00-fXkw8KPeArtBjNrpPHtvTU/resize:1250/format:jpeg>"));
         assertThat(quads.get(0).getPredicate().ntriplesString(), Is.is("<http://purl.org/pav/hasVersion>"));
         assertThat(quads.get(0).getObject().ntriplesString(), Is.is("<hash://sha256/a8770ba1ae326327fddb91178ed58cc97462e78d6cdb97370a578f31a79ff817>"));
 
