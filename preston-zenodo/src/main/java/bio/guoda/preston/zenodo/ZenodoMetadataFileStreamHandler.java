@@ -8,6 +8,7 @@ import bio.guoda.preston.cmd.ZenodoMetaUtil;
 import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.HashKeyUtil;
+import bio.guoda.preston.store.VersionUtil;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,6 +18,8 @@ import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.rdf.api.RDFTerm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,16 +47,19 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
     private final Dereferencer<InputStream> dereferencer;
     private final ZenodoConfig ctx;
     private final StatementEmitter emitter;
+    private final Collection<Quad> candidateFileAttachments;
     private ContentStreamHandler contentStreamHandler;
 
     public ZenodoMetadataFileStreamHandler(ContentStreamHandler contentStreamHandler,
                                            Dereferencer<InputStream> inputStreamDereferencer,
                                            StatementEmitter emitter,
-                                           ZenodoConfig ctx) {
+                                           ZenodoConfig ctx,
+                                           Collection<Quad> candidateFileAttachments) {
         this.contentStreamHandler = contentStreamHandler;
         this.dereferencer = inputStreamDereferencer;
         this.emitter = emitter;
         this.ctx = ctx;
+        this.candidateFileAttachments = candidateFileAttachments;
     }
 
     @Override
@@ -289,38 +295,45 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
     }
 
     private void uploadContentAndPublish(JsonNode zenodoMetadata, List<String> ids, ZenodoContext ctx) throws IOException {
-        if (ctx.getFileVersions().isEmpty()) {
+        if (hasCustomFilename(zenodoMetadata)) {
             uploadAttemptSingleFile(zenodoMetadata, ids, ctx);
-        } else {
+        } else if (candidateFileAttachments.size() > 0) {
             uploadAttemptAvailableFiles(ctx);
+        } else {
+            throw new IOException("cannot publish: no file attachments specified for [" + zenodoMetadata.toPrettyString() + "]");
         }
         ZenodoUtils.publish(ctx);
     }
 
     private void uploadAttemptAvailableFiles(ZenodoContext ctx) throws IOException {
-        for (Pair<String, IRI> nameIri : ctx.getFileVersions()) {
-            IRI iri = nameIri.getValue();
-            String filename = nameIri.getKey();
-            String msg = "upload [" + iri + "] as [" + filename + "]";
-            LOG.info(msg + " started...");
-            ZenodoUtils.upload(ctx,
-                    filename,
-                    new DereferencingEntity(dereferencer, iri)
-            );
-            LOG.info(msg + " finished.");
+        for (Quad versionStatement : this.candidateFileAttachments) {
+            String filename = filenameFor(versionStatement);
+            IRI version = VersionUtil.mostRecentVersion(versionStatement);
+            if (version != null && StringUtils.isNoneBlank(filename)) {
+                String msg = "upload [" + version + "] as [" + filename + "]";
+                LOG.info(msg + " started...");
+                ZenodoUtils.upload(ctx,
+                        filename,
+                        new DereferencingEntity(dereferencer, version)
+                );
+                LOG.info(msg + " finished.");
+            }
         }
     }
 
-    private void uploadAttemptSingleFile(JsonNode metadata, List<String> ids, ZenodoContext ctx) throws IOException {
-        JsonNode filename = metadata.at("/metadata/filename");
-        boolean singleFilename = false;
-        if (!filename.isMissingNode()) {
-            singleFilename = true;
+    static String filenameFor(Quad quad) {
+        String filename = null;
+        RDFTerm nameInspiration = quad.getSubject() instanceof IRI ? quad.getSubject() : quad.getObject();
+        if (nameInspiration instanceof IRI) {
+            IRI versionAlias = (IRI) nameInspiration;
+            String[] split = StringUtils.split(versionAlias.getIRIString(), "/");
+            filename = split[split.length - 1];
         }
+        return filename;
+    }
 
-        if (!singleFilename) {
-            throw new IOException("no filename specified for [" + metadata.toString() + "]");
-        }
+    private void uploadAttemptSingleFile(JsonNode metadata, List<String> ids, ZenodoContext ctx) throws IOException {
+        JsonNode filename = getFilenameNode(metadata);
 
 
         List<IRI> contentIdCandidate = ids.stream()
@@ -351,6 +364,28 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         if (lastException != null) {
             throw lastException;
         }
+    }
+
+    private boolean hasCustomFilename(JsonNode metadata) {
+        JsonNode filename = metadata.at("/metadata/filename");
+        boolean singleFilename = false;
+        if (!filename.isMissingNode()) {
+            singleFilename = true;
+        }
+        return singleFilename;
+    }
+
+    private JsonNode getFilenameNode(JsonNode metadata) throws IOException {
+        JsonNode filename = metadata.at("/metadata/filename");
+        boolean singleFilename = false;
+        if (!filename.isMissingNode()) {
+            singleFilename = true;
+        }
+
+        if (!singleFilename) {
+            throw new IOException("no filename specified for [" + metadata.toString() + "]");
+        }
+        return filename;
     }
 
     private boolean maybeContainsPrestonEnabledZenodoMetadata(JsonNode jsonNode) {

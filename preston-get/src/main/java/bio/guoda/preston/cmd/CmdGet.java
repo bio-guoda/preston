@@ -1,24 +1,16 @@
 package bio.guoda.preston.cmd;
 
-import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.process.StopProcessingException;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.HashKeyUtil;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.VersionUtil;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,9 +50,8 @@ public class CmdGet extends Persisting implements Runnable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
-                IRI contentId = VersionUtil.getMostRecentContentId(line);
-                if (contentId != null) {
-                    Quad quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, contentId);
+                Quad quad = VersionUtil.parseAsVersionStatementOrNull(line);
+                if (quad != null) {
                     ContentQueryUtil.copyMostRecentContent(blobStore, quad, this, new CopyShopImpl(this));
                 }
             }

@@ -27,6 +27,7 @@ public class VersionUtil {
     private static final Pattern PATTERN_SUBJECT_NEWER = Pattern.compile("<(?<subj>" + VERSION_PATTERN + ")> (" + HAS_PREVIOUS_VERSION.toString() + "|" + WAS_DERIVED_FROM.toString() + "|" + USED_BY + ") (.*) [.]$");
     private static final Pattern PATTERN_SUBJECT_NEWER_USED_BY_ONLY = Pattern.compile("<(?<subj>" + VERSION_PATTERN + ")> (" + USED_BY + ") (.*) [.]$");
     private static final Pattern PATTERN_OBJECT_NEWER = Pattern.compile(".* (" + HAS_VERSION.toString() + ") <(?<obj>" + VERSION_PATTERN + ")>(.*) [.]$");
+    private static final Pattern PATTERN_VERSION_STATEMENT = Pattern.compile("^<(?<subj>" + VERSION_PATTERN + ")> (" + HAS_VERSION.toString() + ") <(?<obj>" + VERSION_PATTERN + ")>(.*) [.]$");
 
     public static IRI findMostRecentVersion(IRI provenanceRoot, HexaStore hexastore) throws IOException {
         return findMostRecentVersion(provenanceRoot, hexastore, null);
@@ -127,16 +128,36 @@ public class VersionUtil {
         return !StringUtils.endsWith(line, " .");
     }
 
-    public static IRI getMostRecentContentId(String line) {
+    private static IRI getMostRecentContentId(String line) {
         IRI iri = mostRecentVersion(line);
         if (iri == null && maybeNotQuad(line)) {
             try {
                 iri = toIRI(StringUtils.trim(line));
             } catch (IllegalArgumentException ex) {
-                // simply ignore invalid IRIs
+                // ignore invalid IRIs
             }
         }
 
         return iri != null && HashKeyUtil.isValidHashKey(iri) ? iri : null;
+    }
+
+    public static Quad parseAsVersionStatementOrNull(String line) {
+        Quad aQuad = null;
+        final Matcher versionStatement = PATTERN_VERSION_STATEMENT.matcher(line);
+        if (versionStatement.matches()) {
+            IRI versionObject = toIRI(versionStatement.group("obj"));
+            IRI versionSubject = toIRI(versionStatement.group("subj"));
+            if (HashKeyUtil.isValidHashKey(versionObject)) {
+                aQuad = toStatement(versionSubject, HAS_VERSION, versionObject);
+            }
+        }
+
+        if (aQuad == null) {
+            IRI contentId = getMostRecentContentId(line);
+            if (contentId != null) {
+                aQuad = toStatement(RefNodeFactory.toBlank(), HAS_VERSION, contentId);
+            }
+        }
+        return aQuad;
     }
 }

@@ -1,9 +1,6 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.RefNodeConstants;
-import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.VersionUtil;
-import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 
 import java.io.BufferedReader;
@@ -29,10 +26,9 @@ public class EmittingStreamOfAnyVersions extends EmittingStreamAbstract {
         try {
             String line;
             while (getContext().shouldKeepProcessing() && (line = reader.readLine()) != null) {
-                IRI contentId = VersionUtil.getMostRecentContentId(line);
-                if (contentId != null) {
-                    Quad quad = RefNodeFactory.toStatement(RefNodeFactory.toBlank(), RefNodeConstants.HAS_VERSION, contentId);
-                    copyOnEmit(quad);
+                Quad aQuad = VersionUtil.parseAsVersionStatementOrNull(line);
+                if (aQuad != null) {
+                    copyOnEmit(aQuad);
                 }
             }
         } catch (IOException ex) {

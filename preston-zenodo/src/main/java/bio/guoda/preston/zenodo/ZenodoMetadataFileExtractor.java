@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
 
 public class ZenodoMetadataFileExtractor extends ProcessorExtracting {
@@ -25,14 +26,17 @@ public class ZenodoMetadataFileExtractor extends ProcessorExtracting {
 
     private final ProcessorState processorState;
     private final ZenodoConfig zenodoContext;
+    private final Collection<Quad> candidateFileDeposits;
 
     public ZenodoMetadataFileExtractor(CmdZenodo processorState,
                                        BlobStoreReadOnly blobStoreReadOnly,
                                        ZenodoConfig zenodoContext,
+                                       Collection<Quad> candidateFileDeposits,
                                        StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.zenodoContext = zenodoContext;
+        this.candidateFileDeposits = candidateFileDeposits;
         setEmitSelector(new EmitAfterZenodoRecordUpdate());
     }
 
@@ -56,7 +60,8 @@ public class ZenodoMetadataFileExtractor extends ProcessorExtracting {
                     new ZenodoMetadataFileStreamHandler(this,
                             new ContentHashDereferencer(ZenodoMetadataFileExtractor.this),
                             this,
-                            zenodoContext
+                            zenodoContext,
+                            ZenodoMetadataFileExtractor.this.candidateFileDeposits
                     )
             );
         }

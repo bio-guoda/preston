@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
@@ -259,6 +260,22 @@ public class VersionUtilTest {
 
         assertThat(iri.getIRIString(), is(getNewer()));
 
+    }
+
+    @Test
+    public void parseVersionStatement() {
+        Quad statement = VersionUtil.parseAsVersionStatementOrNull("<foo:bar> <http://purl.org/pav/hasVersion> <hash://md5/b1946ac92492d2347c6235b4d2611184> .");
+
+        assertThat(statement.getSubject().ntriplesString(), is("<foo:bar>"));
+        assertThat(statement.getPredicate().ntriplesString(), is("<http://purl.org/pav/hasVersion>"));
+        assertThat(statement.getObject().ntriplesString(), is("<hash://md5/b1946ac92492d2347c6235b4d2611184>"));
+
+    }
+
+    @Test
+    public void parseVersionStatementNone() {
+        Quad statement = VersionUtil.parseAsVersionStatementOrNull("this ain't no version statement");
+        assertNull(statement);
     }
 
     private String getOlder() {
