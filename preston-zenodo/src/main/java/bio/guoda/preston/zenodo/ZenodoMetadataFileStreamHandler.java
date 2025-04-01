@@ -289,15 +289,39 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
     }
 
     private void uploadContentAndPublish(JsonNode zenodoMetadata, List<String> ids, ZenodoContext ctx) throws IOException {
-        uploadAttempt(zenodoMetadata, ids, ctx);
+        if (ctx.getFileVersions().isEmpty()) {
+            uploadAttemptSingleFile(zenodoMetadata, ids, ctx);
+        } else {
+            uploadAttemptAvailableFiles(ctx);
+        }
         ZenodoUtils.publish(ctx);
     }
 
-    private void uploadAttempt(JsonNode metadata, List<String> ids, ZenodoContext ctx) throws IOException {
+    private void uploadAttemptAvailableFiles(ZenodoContext ctx) throws IOException {
+        for (Pair<String, IRI> nameIri : ctx.getFileVersions()) {
+            IRI iri = nameIri.getValue();
+            String filename = nameIri.getKey();
+            String msg = "upload [" + iri + "] as [" + filename + "]";
+            LOG.info(msg + " started...");
+            ZenodoUtils.upload(ctx,
+                    filename,
+                    new DereferencingEntity(dereferencer, iri)
+            );
+            LOG.info(msg + " finished.");
+        }
+    }
+
+    private void uploadAttemptSingleFile(JsonNode metadata, List<String> ids, ZenodoContext ctx) throws IOException {
         JsonNode filename = metadata.at("/metadata/filename");
-        if (filename.isMissingNode()) {
+        boolean singleFilename = false;
+        if (!filename.isMissingNode()) {
+            singleFilename = true;
+        }
+
+        if (!singleFilename) {
             throw new IOException("no filename specified for [" + metadata.toString() + "]");
         }
+
 
         List<IRI> contentIdCandidate = ids.stream()
                 .map(RefNodeFactory::toIRI)
@@ -305,7 +329,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 .collect(Collectors.toList());
 
         if (contentIdCandidate.size() == 0) {
-            LOG.info("no content id found for [" + filename + "] in candidate ids [" + StringUtils.join(ids) + "] for [" + metadata.toPrettyString() + "]");
+            LOG.info("no content id found for [" + filename.asText() + "] in candidate ids [" + StringUtils.join(ids) + "] for [" + metadata.toPrettyString() + "]");
         }
 
         IOException lastException = null;

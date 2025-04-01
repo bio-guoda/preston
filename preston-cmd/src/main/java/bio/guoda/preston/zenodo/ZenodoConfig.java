@@ -1,5 +1,6 @@
 package bio.guoda.preston.zenodo;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 
 import java.util.List;
@@ -10,6 +11,8 @@ public interface ZenodoConfig {
     String getEndpoint();
 
     List<String> getCommunities();
+
+    List<Pair<String, IRI>> getFileVersions();
 
     void setCreateNewVersionForExisting(Boolean skipOnExisting);
 

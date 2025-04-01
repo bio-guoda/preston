@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
@@ -26,6 +27,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
@@ -197,6 +199,11 @@ public class DarkTaxonFileExtractorTest {
             @Override
             public List<String> getCommunities() {
                 return Arrays.asList("my-community");
+            }
+
+            @Override
+            public List<Pair<String, IRI>> getFileVersions() {
+                return Collections.emptyList();
             }
 
             @Override

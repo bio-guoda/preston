@@ -1,6 +1,8 @@
 package bio.guoda.preston.zenodo;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.rdf.api.IRI;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,6 +75,11 @@ public class ZenodoContext implements ZenodoConfig {
     @Override
     public List<String> getCommunities() {
         return this.communities;
+    }
+
+    @Override
+    public List<Pair<String, IRI>> getFileVersions() {
+        return new ArrayList<>();
     }
 
     public void setMetadata(JsonNode metadata) {

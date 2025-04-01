@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -74,6 +75,15 @@ public class ZenodoMetadataFileStreamHandlerTest {
         ZenodoContext contextDefault = new ZenodoContext("bla");
         contextDefault.setAllowEmptyPublicationDate(false);
         assertFalse(ZenodoMetadataFileStreamHandler.hasAllowedPublicationDate(jsonNode, contextDefault));
+    }
+
+    @Test
+    public void noFilenameAttribute() throws IOException {
+        JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("globi-data/review.json"));
+        assertNotNull(jsonNode);
+        ZenodoContext contextDefault = new ZenodoContext("bla");
+        contextDefault.setAllowEmptyPublicationDate(false);
+        assertTrue(ZenodoMetadataFileStreamHandler.hasAllowedPublicationDate(jsonNode, contextDefault));
     }
 
 }
