@@ -59,7 +59,6 @@ public class CmdZenodo extends CmdZenodoEnabled implements Runnable {
             @Override
             public void emit(Quad statement) {
                 if (!RefNodeFactory.isBlankOrSkolemizedBlank(statement.getSubject())) {
-
                     fileDepositCandidates.add(statement);
                 }
                 textMatcher.on(statement);

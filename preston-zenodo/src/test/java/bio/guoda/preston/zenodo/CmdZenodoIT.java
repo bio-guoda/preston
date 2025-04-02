@@ -1,14 +1,16 @@
 package bio.guoda.preston.zenodo;
 
 import bio.guoda.preston.HashType;
-import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.Hasher;
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.cmd.ZenodoMetaUtil;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Quad;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,11 +26,17 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeFactory.toIRI;
+import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThan;
@@ -42,7 +50,57 @@ public class CmdZenodoIT {
     public TemporaryFolder folder = new TemporaryFolder();
 
     @Test
-    public void createOrUpdateZenodo() throws URISyntaxException, IOException {
+    public void createOrUpdateZenodoStreamingFiles() throws URISyntaxException, IOException {
+        CmdZenodo cmdZenodo = new CmdZenodo();
+        String resourceURI = "taxodros-data/6e/f3/6ef3b8e326cd52972da1c00de60dc222";
+
+        File dataDir = folder.newFolder("streaming-test");
+        cmdZenodo.setDataDir(dataDir.getAbsolutePath());
+        cmdZenodo.setApiEndpoint("https://sandbox.zenodo.org");
+        System.setProperty("ZENODO_TOKEN", ZenodoTestUtil.getAccessToken());
+
+        UUID uuid = UUID.randomUUID();
+        IRI contentId = ZenodoTestUtil.contentIdFor(uuid);
+        String metadata = ZenodoTestUtil.getMetadataSample(uuid, contentId);
+
+        IRI metadataContentId = Hasher.calcHashIRI(metadata, HashType.md5);
+
+        Stream<Quad> quadStream = Stream.of(
+                toStatement(toIRI("https://example.org/file.txt"), HAS_VERSION, contentId),
+                toStatement(toIRI("https://example.org/zenodo.json"), HAS_VERSION, metadataContentId)
+        );
+
+        String contentStream = quadStream.map(Quad::toString)
+                .collect(Collectors.joining("\n"));
+
+        cmdZenodo.setInputStream(IOUtils.toInputStream(contentStream, StandardCharsets.UTF_8));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmdZenodo.setOutputStream(outputStream);
+        cmdZenodo.setCacheEnabled(false);
+
+        AtomicReference<IRI> requested = new AtomicReference<>(null);
+        cmdZenodo.run(new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                requested.set(uri);
+                return uri.equals(contentId)
+                        ? ZenodoTestUtil.dereferencerFor(uuid).get(uri)
+                        : IOUtils.toInputStream(metadata, StandardCharsets.UTF_8);
+            }
+        });
+        String log = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+
+        System.out.println(log);
+
+        String[] split = StringUtils.split(log, '\n');
+        assertThat(split.length, greaterThan(0));
+        assertThat(split[split.length - 1], startsWith("<https://sandbox.zenodo.org/records/"));
+        assertThat(split[split.length - 1], containsString("> <http://www.w3.org/ns/prov#wasDerivedFrom> <line:hash://md5/7e5ae7ff14d66bff5224b21c80cdb87d!/L1> <urn:uuid:"));
+    }
+
+
+    @Test
+    public void createOrUpdateZenodoTaxodros() throws URISyntaxException, IOException {
         CmdZenodo cmdZenodo = new CmdZenodo();
         String resourceURI = "taxodros-data/6e/f3/6ef3b8e326cd52972da1c00de60dc222";
 
@@ -70,13 +128,13 @@ public class CmdZenodoIT {
         String log = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
         String[] split = StringUtils.split(log, '\n');
         assertThat(split.length, greaterThan(0));
-        assertThat(split[split.length-1], startsWith("<https://sandbox.zenodo.org/records/"));
-        assertThat(split[split.length-1], containsString("> <http://www.w3.org/ns/prov#wasDerivedFrom> <line:hash://md5/7e5ae7ff14d66bff5224b21c80cdb87d!/L1> <urn:uuid:"));
+        assertThat(split[split.length - 1], startsWith("<https://sandbox.zenodo.org/records/"));
+        assertThat(split[split.length - 1], containsString("> <http://www.w3.org/ns/prov#wasDerivedFrom> <line:hash://md5/7e5ae7ff14d66bff5224b21c80cdb87d!/L1> <urn:uuid:"));
     }
 
 
     @Test
-    public void createDepositAndUpdateToRestrict() throws URISyntaxException, IOException {
+    public void createDepositAndUpdateToRestrictBatLit() throws URISyntaxException, IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         CmdZenodo cmdZenodo = createCmd(outputStream);
 
@@ -140,7 +198,6 @@ public class CmdZenodoIT {
         publishNewVersionOfResource(outputStream, resourceNew);
 
         assertStateOfDepositedFiles(outputStream, fileChecksumNew);
-
 
 
     }
@@ -220,7 +277,7 @@ public class CmdZenodoIT {
     }
 
     private JsonNode requestDepositMetadata(String depositId) throws IOException {
-        InputStream inputStream = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI("https://sandbox.zenodo.org/api/records/" + depositId));
+        InputStream inputStream = ResourcesHTTP.asInputStream(toIRI("https://sandbox.zenodo.org/api/records/" + depositId));
         return new ObjectMapper().readTree(inputStream);
     }
 

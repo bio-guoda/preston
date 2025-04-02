@@ -1,15 +1,11 @@
 package bio.guoda.preston.zenodo;
 
-import bio.guoda.preston.HashType;
-import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.process.StatementsEmitterAdapter;
-import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
@@ -18,7 +14,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -32,7 +27,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertNotNull;
 
 public class ZenodoMetadataFileStreamHandlerIT {
 
@@ -80,8 +74,9 @@ public class ZenodoMetadataFileStreamHandlerIT {
 
         UUID uuid = UUID.randomUUID();
 
-        byte[] content = uuid.toString().getBytes(StandardCharsets.UTF_8);
-        IRI contentId = Hasher.calcHashIRI(new ByteArrayInputStream(content), NullOutputStream.INSTANCE, HashType.md5);
+        IRI contentId = ZenodoTestUtil.contentIdFor(uuid);
+        String metadata = ZenodoTestUtil.getMetadataSample(uuid, contentId);
+
 
         ZenodoMetadataFileStreamHandler handler = new ZenodoMetadataFileStreamHandler(
                 new ContentStreamHandler() {
@@ -95,12 +90,7 @@ public class ZenodoMetadataFileStreamHandlerIT {
                         return true;
                     }
                 },
-                new Dereferencer<InputStream>() {
-                    @Override
-                    public InputStream get(IRI uri) throws IOException {
-                        return new ByteArrayInputStream(content);
-                    }
-                },
+                ZenodoTestUtil.dereferencerFor(uuid),
                 new StatementsEmitterAdapter() {
                     @Override
                     public void emit(Quad statement) {
@@ -122,11 +112,6 @@ public class ZenodoMetadataFileStreamHandlerIT {
                 "",
                 ResourcesHTTP::asInputStream);
 
-        String metadata =
-                StringUtils.replace(
-                        StringUtils.replace(IOUtils.toString(getClass().getResourceAsStream("zenodo-metadata-globi-review.json"), StandardCharsets.UTF_8),
-                "hash://md5/foo", contentId.getIRIString())
-                , "urn:lsid:foo", "urn:lsid:" + uuid.toString());
 
         handler.handle(
                 contentId,
