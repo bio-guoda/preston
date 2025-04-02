@@ -7,7 +7,7 @@ import org.apache.commons.rdf.api.Quad;
 
 import java.util.List;
 
-class EmitAfterZenodoRecordUpdate implements EmitSelector {
+public class EmitAfterZenodoRecordUpdate implements EmitSelector {
     @Override
     public boolean shouldEmit(List<Quad> nodes) {
         long count = nodes.stream()

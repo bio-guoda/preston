@@ -83,7 +83,7 @@ public class ZenodoMetadataFileStreamHandlerTest {
 
     @Test
     public void noFilenameAttribute() throws IOException {
-        JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("globi-data/review.json"));
+        JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("zenodo-metadata-globi-review.json"));
         assertNotNull(jsonNode);
         ZenodoContext contextDefault = new ZenodoContext("bla");
         contextDefault.setAllowEmptyPublicationDate(false);

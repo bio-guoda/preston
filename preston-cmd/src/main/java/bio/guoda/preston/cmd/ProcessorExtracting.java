@@ -89,18 +89,20 @@ public abstract class ProcessorExtracting extends ProcessorReadOnly {
         }
 
         private void emitBatch() {
-            BlankNodeOrIRI newActivity = toIRI(UUID.randomUUID());
-            emitAsNewActivity(
-                    Stream.concat(
-                            Stream.of(
-                                    toStatement(newActivity, USED, version),
-                                    toStatement(newActivity, DESCRIPTION, RefNodeFactory.toEnglishLiteral(ProcessorExtracting.this.getActivityDescription()))
-                            ),
-                            nodes.stream()
-                    ),
-                    ProcessorExtracting.this,
-                    statement.getGraphName(),
-                    newActivity);
+            if (nodes.size() > 0) {
+                BlankNodeOrIRI newActivity = toIRI(UUID.randomUUID());
+                emitAsNewActivity(
+                        Stream.concat(
+                                Stream.of(
+                                        toStatement(newActivity, USED, version),
+                                        toStatement(newActivity, DESCRIPTION, RefNodeFactory.toEnglishLiteral(ProcessorExtracting.this.getActivityDescription()))
+                                ),
+                                nodes.stream()
+                        ),
+                        ProcessorExtracting.this,
+                        statement.getGraphName(),
+                        newActivity);
+            }
             nodes.clear();
         }
 
