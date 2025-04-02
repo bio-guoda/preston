@@ -217,6 +217,8 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         } catch (Throwable e) {
             LOG.warn("unexpected error while handling [" + coordinate.getIRIString() + "]", e);
             attemptCleanupAndRethrow(ctxLocal, e);
+        } finally {
+            candidateFileAttachments.clear();
         }
     }
 

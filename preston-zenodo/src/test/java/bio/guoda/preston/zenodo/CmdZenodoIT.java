@@ -69,33 +69,8 @@ public class CmdZenodoIT {
 
         assertThat(metadata, containsString("{{ ZENODO_DEPOSIT_ID }}"));
 
-        IRI metadataContentId = Hasher.calcHashIRI(metadata, HashType.md5);
+        String log = attemptDeposit(cmdZenodo, uuid, contentId, metadata);
 
-        Stream<Quad> quadStream = Stream.of(
-                toStatement(toIRI("https://example.org/file.txt"), HAS_VERSION, contentId),
-                toStatement(toIRI("https://example.org/zenodo.json"), HAS_VERSION, metadataContentId)
-        );
-
-        String contentStream = quadStream.map(Quad::toString)
-                .collect(Collectors.joining("\n"));
-
-        cmdZenodo.setInputStream(IOUtils.toInputStream(contentStream, StandardCharsets.UTF_8));
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        cmdZenodo.setOutputStream(outputStream);
-        cmdZenodo.setCacheEnabled(false);
-
-        AtomicReference<IRI> requested = new AtomicReference<>(null);
-        cmdZenodo.run(new BlobStoreReadOnly() {
-            @Override
-            public InputStream get(IRI uri) throws IOException {
-                requested.set(uri);
-                return uri.equals(contentId)
-                        ? ZenodoTestUtil.dereferencerFor(uuid).get(uri)
-                        : IOUtils.toInputStream(metadata, StandardCharsets.UTF_8);
-            }
-        });
-        String log = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
-        
         String[] split = StringUtils.split(log, '\n');
         assertThat(split.length, greaterThan(0));
         assertThat(split[split.length - 3], containsString("files/file.txt> <http://purl.org/pav/hasVersion> <hash://md5"));
@@ -123,6 +98,59 @@ public class CmdZenodoIT {
         assertThat(publishedRecordMetadata.at("/metadata/description").asText(), not(containsString("{{ ZENODO_DEPOSIT_ID }}")));
         assertThat(publishedRecordMetadata.at("/metadata/description").asText(), containsString(matcher.group("recordId") + "/files/review.zip"));
 
+    }
+
+    @Test
+    public void depositTwice() throws IOException {
+        CmdZenodo cmdZenodo = new CmdZenodo();
+
+        File dataDir = folder.newFolder("streaming-test");
+        cmdZenodo.setDataDir(dataDir.getAbsolutePath());
+        cmdZenodo.setApiEndpoint("https://sandbox.zenodo.org");
+        System.setProperty("ZENODO_TOKEN", ZenodoTestUtil.getAccessToken());
+
+        UUID uuid = UUID.randomUUID();
+        IRI contentId = ZenodoTestUtil.contentIdFor(uuid);
+        String metadata = ZenodoTestUtil.getMetadataSample(uuid, contentId);
+
+        assertThat(metadata, containsString("{{ ZENODO_DEPOSIT_ID }}"));
+
+        attemptDeposit(cmdZenodo, uuid, contentId, metadata);
+        String log = attemptDeposit(cmdZenodo, uuid, contentId, metadata);
+
+        System.out.println(log);
+
+        assertThat(log, not(containsString("HAS_VERSION")));
+    }
+
+
+    public String attemptDeposit(CmdZenodo cmdZenodo, UUID uuid, IRI contentId, String metadata) {
+        IRI metadataContentId = Hasher.calcHashIRI(metadata, HashType.md5);
+
+        Stream<Quad> quadStream = Stream.of(
+                toStatement(toIRI("https://example.org/file.txt"), HAS_VERSION, contentId),
+                toStatement(toIRI("https://example.org/zenodo.json"), HAS_VERSION, metadataContentId)
+        );
+
+        String contentStream = quadStream.map(Quad::toString)
+                .collect(Collectors.joining("\n"));
+
+        cmdZenodo.setInputStream(IOUtils.toInputStream(contentStream, StandardCharsets.UTF_8));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmdZenodo.setOutputStream(outputStream);
+        cmdZenodo.setCacheEnabled(false);
+
+        AtomicReference<IRI> requested = new AtomicReference<>(null);
+        cmdZenodo.run(new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                requested.set(uri);
+                return uri.equals(contentId)
+                        ? ZenodoTestUtil.dereferencerFor(uuid).get(uri)
+                        : IOUtils.toInputStream(metadata, StandardCharsets.UTF_8);
+            }
+        });
+        return new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
     }
 
 
