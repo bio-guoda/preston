@@ -27,6 +27,7 @@ import org.apache.http.entity.ContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -75,20 +76,23 @@ public class ZenodoUtils {
 
     public static void delete(ZenodoContext ctx) throws IOException {
         String deleteRequestURI = ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId();
-        try (InputStream inputStream = delete(deleteRequestURI)) {
+        try (InputStream inputStream = delete(deleteRequestURI, ctx)) {
             updateContext(ctx, inputStream);
         }
     }
 
-    public static InputStream delete(String deleteRequestURI) throws IOException {
+    public static InputStream delete(String deleteRequestURI, ZenodoContext ctx) throws IOException {
         IRI dataURI = RefNodeFactory.toIRI(deleteRequestURI);
-        return delete(dataURI);
+        return delete(dataURI, ctx);
     }
 
-    public static InputStream delete(IRI dataURI) throws IOException {
+    public static InputStream delete(IRI dataURI, ZenodoContext ctx) throws IOException {
+        HttpDelete request = new HttpDelete(dataURI.getIRIString());
+        ResourcesHTTP.appendAuthBearerIfAvailable(request, ctx.getAccessToken());
+
         return ResourcesHTTP.asInputStream(
                 dataURI,
-                new HttpDelete(dataURI.getIRIString()),
+                request,
                 ignoreProgress(),
                 ignoreNone()
         );
@@ -98,10 +102,13 @@ public class ZenodoUtils {
         String requestURI = ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId();
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
         HttpPut request = new HttpPut(URI.create(requestURI));
+        ResourcesHTTP.appendAuthBearerIfAvailable(request, ctx.getAccessToken());
 
         BasicHttpEntity entity = new BasicHttpEntity();
-        entity.setContent(IOUtils.toInputStream(metadata, StandardCharsets.UTF_8));
-        entity.setContentLength(metadata.length());
+        byte[] bytes = metadata.getBytes(StandardCharsets.UTF_8);
+        ByteArrayInputStream is = new ByteArrayInputStream(bytes);
+        entity.setContent(is);
+        entity.setContentLength(bytes.length);
         entity.setContentType(APPLICATION_JSON);
         request.setEntity(entity);
         InputStream inputStream1 = ResourcesHTTP.asInputStream(
@@ -117,6 +124,7 @@ public class ZenodoUtils {
         String requestURI = ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId();
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
         HttpGet request = new HttpGet(URI.create(requestURI));
+        ResourcesHTTP.appendAuthBearerIfAvailable(request, ctx.getAccessToken());
 
         try (InputStream is = ResourcesHTTP.asInputStream(
                 dataURI,
@@ -131,9 +139,11 @@ public class ZenodoUtils {
     public static ZenodoContext createNewVersion(ZenodoContext ctx) throws IOException {
         String requestURI = ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId() + "/actions/newversion";
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
+        HttpPost request = new HttpPost(URI.create(dataURI.getIRIString()));
+        ResourcesHTTP.appendAuthBearerIfAvailable(request, ctx.getAccessToken());
         try (InputStream is = ResourcesHTTP.asInputStream(
                 dataURI,
-                new HttpPost(URI.create(dataURI.getIRIString())),
+                request,
                 ignoreProgress(),
                 ignoreNone()
         )) {
@@ -144,9 +154,11 @@ public class ZenodoUtils {
     public static ZenodoContext editExistingVersion(ZenodoContext ctx) throws IOException {
         String requestURI = ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId() + "/actions/edit";
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
+        HttpPost request = new HttpPost(URI.create(dataURI.getIRIString()));
+        ResourcesHTTP.appendAuthBearerIfAvailable(request, ctx.getAccessToken());
         try (InputStream is = ResourcesHTTP.asInputStream(
                 dataURI,
-                new HttpPost(URI.create(dataURI.getIRIString())),
+                request,
                 ignoreProgress(),
                 ignoreNone()
         )) {
@@ -176,6 +188,7 @@ public class ZenodoUtils {
         String requestURI = ctx.getEndpoint() + "/api/deposit/depositions";
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
         HttpPost request = new HttpPost(URI.create(dataURI.getIRIString()));
+        ResourcesHTTP.appendAuthBearerIfAvailable(request, ctx.getAccessToken());
         request.setHeader("Accept", "*/*");
         BasicHttpEntity entity = new BasicHttpEntity();
 
@@ -197,9 +210,11 @@ public class ZenodoUtils {
     public static ZenodoContext publish(ZenodoContext ctx) throws IOException {
         String requestURI = ctx.getEndpoint() + "/api/deposit/depositions/" + ctx.getDepositId() + "/actions/publish";
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
+        HttpPost request = new HttpPost(URI.create(dataURI.getIRIString()));
+        ResourcesHTTP.appendAuthBearerIfAvailable(request, ctx.getAccessToken());
         try (InputStream inputStream = ResourcesHTTP.asInputStream(
                 dataURI,
-                new HttpPost(URI.create(dataURI.getIRIString())),
+                request,
                 ignoreProgress(),
                 ignoreNone()
         )) {
@@ -219,6 +234,8 @@ public class ZenodoUtils {
         IRI dataURI = RefNodeFactory.toIRI(requestURI);
         HttpPut request = new HttpPut(requestURI);
         request.setEntity(entity);
+        ResourcesHTTP.appendAuthBearerIfAvailable(request, ctx.getAccessToken());
+
 
         try (InputStream is = ResourcesHTTP.asInputStream(
                 dataURI,

@@ -89,10 +89,10 @@ public class ResourcesHTTP {
             msg.addHeader("Accept", MIMETYPE_GITHUB_JSON);
             appendGitHubAuthTokenIfAvailable(msg);
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.zotero.org/")) {
-            appendAuthBearerIfAvailable(msg, ZOTERO_AUTH_TOKEN);
+            appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, ZOTERO_AUTH_TOKEN);
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://zenodo.org/api")
                 || StringUtils.startsWith(dataURI.getIRIString(), "https://sandbox.zenodo.org/api")) {
-            appendAuthBearerIfAvailable(msg, ZENODO_AUTH_TOKEN);
+            appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, ZENODO_AUTH_TOKEN);
         }
     }
 
@@ -103,8 +103,12 @@ public class ResourcesHTTP {
         }
     }
 
-    private static void appendAuthBearerIfAvailable(HttpMessage msg, String authTokenEnvironmentVariableName) {
+    private static void appendAuthBearerUsingEnvironmentVariableIfAvailable(HttpMessage msg, String authTokenEnvironmentVariableName) {
         String authToken = EnvUtil.getEnvironmentVariable(authTokenEnvironmentVariableName);
+        appendAuthBearerIfAvailable(msg, authToken);
+    }
+
+    public static void appendAuthBearerIfAvailable(HttpMessage msg, String authToken) {
         if (StringUtils.isNotBlank(authToken)) {
             msg.addHeader("Authorization", "Bearer " + authToken);
         }

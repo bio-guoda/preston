@@ -11,6 +11,7 @@ import bio.guoda.preston.store.HashKeyUtil;
 import bio.guoda.preston.store.VersionUtil;
 import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
@@ -59,7 +60,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         this.dereferencer = inputStreamDereferencer;
         this.emitter = emitter;
         this.ctx = ctx;
-        this.candidateFileAttachments = candidateFileAttachments;
+        this.candidateFileAttachments = new ArrayList<>(candidateFileAttachments);
     }
 
     @Override
@@ -75,8 +76,15 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 if (line == null) {
                     break;
                 } else {
+                    JsonNode zenodoMetadata;
                     try {
-                        attemptToHandleJSON(line, coordinate);
+                        zenodoMetadata = getObjectMapper().readTree(line);
+                    } catch (JsonProcessingException ex) {
+                        // likely not a json-lines file, so skip altogether
+                        break;
+                    }
+                    try {
+                        handleJson(coordinate, zenodoMetadata);
                     } catch (IOException ex) {
                         LOG.warn("failed to handle [" + line + "] in [" + coordinate + "]", ex);
                     }
@@ -89,9 +97,8 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         return foundAtLeastOne.get();
     }
 
-    private void attemptToHandleJSON(String line, IRI coordinate) throws IOException {
+    private void handleJson(IRI coordinate, JsonNode zenodoMetadata) throws IOException {
         String resourceType = "";
-        JsonNode zenodoMetadata = getObjectMapper().readTree(line);
         if (maybeContainsPrestonEnabledZenodoMetadata(zenodoMetadata)) {
             List<String> recordIds = new ArrayList<>();
             List<String> contentIds = new ArrayList<>();
@@ -115,7 +122,6 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             createNewVersion(coordinate, zenodoMetadata, recordIds, contentIds, origins, foundDeposits);
 
         }
-
     }
 
     static String updateResourceType(String resourceType, JsonNode zenodoMetadata) {
@@ -225,7 +231,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
     private void deleteExistingContentIfPresent(ZenodoContext ctxLocal) throws IOException {
         List<IRI> fileEndpoints = ZenodoUtils.getFileEndpoints(ctxLocal);
         for (IRI fileEndpoint : fileEndpoints) {
-            try (InputStream inputStream = delete(fileEndpoint)) {
+            try (InputStream inputStream = delete(fileEndpoint, ctxLocal)) {
                 IOUtils.copy(inputStream, NullOutputStream.INSTANCE);
             } catch (IOException e) {
                 throw new IOException("failed to delete existing file [" + fileEndpoint.getIRIString() + "] for deposition [" + ctxLocal.getMetadata() + "]", e);
