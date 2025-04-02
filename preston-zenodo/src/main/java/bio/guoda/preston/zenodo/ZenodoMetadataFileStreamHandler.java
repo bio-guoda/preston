@@ -197,23 +197,20 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 ctxLocal = ZenodoUtils.createEmptyDeposit(ctxLocal);
                 updateMetadata(ctxLocal, zenodoMetadata);
                 uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
-                emitRelations(recordIds, contentIds, origins, ctxLocal);
-                emitRefreshed(ctxLocal);
+                emitPublicationStatements(recordIds, contentIds, origins, ctxLocal);
             } else if (existingIds.size() == 1 && ctx.createNewVersionForExisting()) {
                 ctxLocal.setDepositId(existingIds.get(0));
                 ctxLocal = ZenodoUtils.createNewVersion(ctxLocal);
                 deleteExistingContentIfPresent(ctxLocal);
                 updateMetadata(ctxLocal, zenodoMetadata);
                 uploadContentAndPublish(zenodoMetadata, contentIds, ctxLocal);
-                emitRelations(recordIds, contentIds, origins, ctxLocal);
-                emitRefreshed(ctxLocal);
+                emitPublicationStatements(recordIds, contentIds, origins, ctxLocal);
             } else if (existingIds.size() == 1 && ctx.shouldUpdateMetadataOnly()) {
                 ctxLocal.setDepositId(existingIds.get(0));
                 ctxLocal = ZenodoUtils.editExistingVersion(ctxLocal);
                 updateMetadata(ctxLocal, zenodoMetadata);
                 ZenodoUtils.publish(ctxLocal);
-                emitRelations(recordIds, contentIds, origins, ctxLocal);
-                emitRefreshed(ctxLocal);
+                emitPublicationStatements(recordIds, contentIds, origins, ctxLocal);
             } else {
                 emitRelatedExistingRecords(coordinate, existingIds, ctxLocal);
             }
@@ -221,6 +218,35 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             LOG.warn("unexpected error while handling [" + coordinate.getIRIString() + "]", e);
             attemptCleanupAndRethrow(ctxLocal, e);
         }
+    }
+
+    private void emitPublicationStatements(List<String> recordIds, List<String> contentIds, List<String> origins, ZenodoContext ctxLocal) {
+        emitRelations(recordIds, contentIds, origins, ctxLocal);
+
+        emitRelations(ctxLocal,
+                RefNodeConstants.HAD_MEMBER,
+                candidateFileAttachments.stream()
+                        .map(Quad::getObject)
+                        .filter(q -> q instanceof IRI).map(q -> ((IRI) q).getIRIString())
+                        .collect(Collectors.toList()));
+
+        emitRelations(ctxLocal,
+                RefNodeConstants.HAD_MEMBER,
+                candidateFileAttachments.stream()
+                        .map(q -> fileIRI(ctxLocal, q))
+                        .map(IRI::getIRIString)
+                        .collect(Collectors.toList()));
+
+        candidateFileAttachments
+                .stream()
+                .map(q -> RefNodeFactory.toStatement(fileIRI(ctxLocal, q), q.getPredicate(), q.getObject()))
+                .forEach(emitter::emit);
+
+        emitRefreshed(ctxLocal);
+    }
+
+    private IRI fileIRI(ZenodoContext ctxLocal, Quad q) {
+        return RefNodeFactory.toIRI(getRecordUrl(ctxLocal).getIRIString() + "/files/" + filenameFor(q));
     }
 
     private void updateMetadata(ZenodoContext ctxLocal, JsonNode zenodoMetadata) throws IOException {
@@ -294,14 +320,14 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         orgins
                 .stream()
                 .map(RefNodeFactory::toIRI)
-                .forEach(o -> emitOrigin(o, ctxLocal, relationType));
+                .forEach(o -> emitRecordRelation(ctxLocal, relationType, o));
     }
 
-    private void emitOrigin(IRI origin, ZenodoContext ctxLocal, IRI wasDerivedFrom) {
+    private void emitRecordRelation(ZenodoContext subject, IRI verb, IRI object) {
         emitter.emit(RefNodeFactory.toStatement(
-                getRecordUrl(ctxLocal),
-                wasDerivedFrom,
-                origin)
+                getRecordUrl(subject),
+                verb,
+                object)
         );
     }
 
@@ -324,7 +350,6 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
     private void uploadAttemptOneOrMoreFiles(ZenodoContext ctx) throws IOException {
         ArrayList<Quad> candidates = new ArrayList<>(this.candidateFileAttachments);
-        this.candidateFileAttachments.clear();
         for (Quad versionStatement : candidates) {
             String filename = filenameFor(versionStatement);
             IRI version = VersionUtil.mostRecentVersion(versionStatement);
