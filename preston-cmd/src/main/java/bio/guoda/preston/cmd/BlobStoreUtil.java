@@ -122,7 +122,7 @@ public class BlobStoreUtil {
             File db = File.createTempFile("mapdb-temp", "db", tmpDir);
             return DBMaker.newFileDB(db);
         } catch (IOException e) {
-            throw new IOError(new IOException("failed to createEmptyDeposit tmpFile in [" + tmpDir.getAbsolutePath() + "]", e));
+            throw new IOError(new IOException("failed to create tmpFile in [" + tmpDir.getAbsolutePath() + "]", e));
         }
 
     }

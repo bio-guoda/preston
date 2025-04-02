@@ -138,7 +138,7 @@ public class XLSHandler {
         try {
             sheetName = StringUtils.substring(new URI("https", "example.org", "/" + sheet.getSheetName(), null).getRawPath(), 1);
         } catch (URISyntaxException e) {
-            throw new IOException("failed to createEmptyDeposit resource location", e);
+            throw new IOException("failed to create resource location", e);
         }
 
         int rowNumberWithOffsetOne = r.getRowNum() + 1;

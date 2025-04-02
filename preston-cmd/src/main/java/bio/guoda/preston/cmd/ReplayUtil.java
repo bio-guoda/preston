@@ -85,7 +85,7 @@ public final class ReplayUtil {
         }
 
         if (!receivedSomething.get()) {
-            LOG.warn("No provenance found. Please use/createEmptyDeposit a Preston data archive.");
+            LOG.warn("No provenance found. Please use/create a Preston data archive.");
         }
     }
 

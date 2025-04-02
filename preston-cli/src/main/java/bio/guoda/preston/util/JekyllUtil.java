@@ -58,7 +58,7 @@ public class JekyllUtil {
         try {
             FileUtils.forceMkdir(posts);
         } catch (IOException ex) {
-            throw new IOException("failed to createEmptyDeposit jekyll [posts/] dir at [" + posts.getAbsolutePath() + "]", ex);
+            throw new IOException("failed to create jekyll [posts/] dir at [" + posts.getAbsolutePath() + "]", ex);
         }
 
 
@@ -134,7 +134,7 @@ public class JekyllUtil {
                             }, recordType);
 
                         } catch (IOException e) {
-                            throw new RuntimeException("failed to createEmptyDeposit jekyll pages", e);
+                            throw new RuntimeException("failed to create jekyll pages", e);
                         }
                     }
                 }

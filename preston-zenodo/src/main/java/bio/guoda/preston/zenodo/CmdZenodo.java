@@ -20,7 +20,7 @@ import java.util.Collection;
 
 @CommandLine.Command(
         name = "zenodo",
-        description = "createEmptyDeposit/update associated Zenodo records"
+        description = "create/update associated Zenodo records"
 )
 public class CmdZenodo extends CmdZenodoEnabled implements Runnable {
 
