@@ -1,5 +1,6 @@
 package bio.guoda.preston;
 
+import org.apache.http.client.methods.HttpGet;
 import org.junit.Test;
 
 import java.io.File;
@@ -32,6 +33,18 @@ public class ResourcesHTTPTest {
         try (InputStream inputStream = ResourcesHTTP.asInputStreamOfflineOnly(RefNodeFactory.toIRI(nonExistingResource))) {
             assertThat(inputStream, is(nullValue()));
         }
+    }
+
+    @Test
+    public void setAuthorizationNotAdd() {
+        HttpGet httpGet = new HttpGet("https://example.org");
+        assertThat(httpGet.getAllHeaders().length, is(0));
+        ResourcesHTTP.setAuthBearerIfAvailable(httpGet, "1234");
+        assertThat(httpGet.getAllHeaders().length, is(1));
+        assertThat(httpGet.getFirstHeader("Authorization").toString(), is("Authorization: Bearer 1234"));
+        ResourcesHTTP.setAuthBearerIfAvailable(httpGet, "4567");
+        assertThat(httpGet.getAllHeaders().length, is(1));
+        assertThat(httpGet.getFirstHeader("Authorization").toString(), is("Authorization: Bearer 4567"));
     }
 
 }

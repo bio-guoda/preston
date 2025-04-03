@@ -17,7 +17,6 @@ import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -246,7 +245,7 @@ public class ZenodoUtils {
     public static void setCredentials(ZenodoContext ctx, HttpRequest request) throws IOException {
         LOG.info(request.toString());
         credentialsOrThrow(ctx);
-        ResourcesHTTP.appendAuthBearerIfAvailable(request, ctx.getAccessToken());
+        ResourcesHTTP.setAuthBearerIfAvailable(request, ctx.getAccessToken());
     }
 
     public static Collection<Pair<Long, String>> findRecordsByAlternateIds(ZenodoConfig ctx, List<String> ids, String type, Dereferencer<InputStream> dereferencer) throws IOException {

@@ -4,6 +4,7 @@ import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpMessage;
 import org.apache.http.StatusLine;
@@ -20,6 +21,8 @@ import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import java.io.ByteArrayInputStream;
@@ -36,6 +39,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class ResourcesHTTP {
+    private static final Logger LOG = LoggerFactory.getLogger(ResourcesHTTP.class);
+
     public static final String ZENODO_AUTH_TOKEN = "ZENODO_TOKEN";
     public static final String ZOTERO_AUTH_TOKEN = "ZOTERO_TOKEN";
     public static final String GITHUB_AUTH_TOKEN = "GITHUB_TOKEN";
@@ -107,11 +112,12 @@ public class ResourcesHTTP {
 
     private static void appendAuthBearerUsingEnvironmentVariableIfAvailable(HttpMessage msg, String authTokenEnvironmentVariableName) {
         String authToken = EnvUtil.getEnvironmentVariable(authTokenEnvironmentVariableName);
-        appendAuthBearerIfAvailable(msg, authToken);
+        setAuthBearerIfAvailable(msg, authToken);
     }
 
-    public static void appendAuthBearerIfAvailable(HttpMessage msg, String authToken) {
+    public static void setAuthBearerIfAvailable(HttpMessage msg, String authToken) {
         if (StringUtils.isNotBlank(authToken)) {
+            msg.removeHeaders("Authorization");
             msg.addHeader("Authorization", "Bearer " + authToken);
         }
     }
@@ -128,6 +134,11 @@ public class ResourcesHTTP {
                     : getHttpClient();
 
             injectAuthorizationIfPossible(dataURI, request);
+
+            Header[] allHeaders = request.getAllHeaders();
+            for (Header header : allHeaders) {
+                LOG.info(header.toString());
+            }
 
             CloseableHttpResponse response = client.execute(request);
             StatusLine statusLine = response.getStatusLine();
