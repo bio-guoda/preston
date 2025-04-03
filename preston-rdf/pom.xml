@@ -27,6 +27,39 @@
                     <groupId>org.eclipse.rdf4j</groupId>
                     <artifactId>rdf4j-rio-jsonld</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.rdf4j</groupId>
+                    <artifactId>rdf4j-repository-sail</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.rdf4j</groupId>
+                    <artifactId>rdf4j-sail-memory</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.rdf4j</groupId>
+                    <artifactId>rdf4j-rio-rdfxml</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.rdf4j</groupId>
+                    <artifactId>rdf4j-rio-turtle</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.rdf4j</groupId>
+                    <artifactId>rdf4j-rio-trig</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.rdf4j</groupId>
+                    <artifactId>rdf4j-rio-ntriples</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.jsonld-java</groupId>
+                    <artifactId>jsonld-java</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+
             </exclusions>
         </dependency>
     </dependencies>
