@@ -135,11 +135,6 @@ public class ResourcesHTTP {
 
             injectAuthorizationIfPossible(dataURI, request);
 
-            Header[] allHeaders = request.getAllHeaders();
-            for (Header header : allHeaders) {
-                LOG.info(header.toString());
-            }
-
             CloseableHttpResponse response = client.execute(request);
             StatusLine statusLine = response.getStatusLine();
             HttpEntity entity = response.getEntity();
