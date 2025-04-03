@@ -86,7 +86,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     try {
                         handleJson(coordinate, zenodoMetadata);
                     } catch (IOException ex) {
-                        LOG.warn("failed to handle [" + line + "] in [" + coordinate + "]", ex);
+                        LOG.warn("failed to handle [" + coordinate + "] as jsonlines", ex);
                     }
                 }
             }
@@ -180,6 +180,9 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 .collect(Collectors.toList());
 
         ZenodoContext ctxLocal = new ZenodoContext(this.ctx);
+
+        ZenodoUtils.credentialsOrThrow(ctxLocal);
+
 
         if (!hasAllowedPublicationDate(zenodoMetadata, ctx)) {
             throw new IOException("missing publication date for [" + zenodoMetadata.toPrettyString() + "]");
@@ -311,7 +314,9 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
     private void attemptCleanupAndRethrow(ZenodoContext ctxLocal, Throwable e) throws IOException {
         try {
-            ZenodoUtils.delete(ctxLocal);
+            if (ctxLocal.getDepositId() != null) {
+                ZenodoUtils.delete(ctxLocal);
+            }
         } catch (IOException ex) {
             // ignore
         }

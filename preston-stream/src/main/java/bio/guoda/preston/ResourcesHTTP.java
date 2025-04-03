@@ -1,6 +1,7 @@
 package bio.guoda.preston;
 
 import bio.guoda.preston.stream.ContentStreamUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
@@ -26,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -133,11 +135,14 @@ public class ResourcesHTTP {
             if (shouldIgnore.test(statusLine.getStatusCode())) {
                 EntityUtils.consume(entity);
             } else {
-                if (statusLine.getStatusCode() >= 300) {
-                    if (shouldRedirect(dataURI) || !REDIRECT_CODES.contains(statusLine.getStatusCode())) {
-                        EntityUtils.consume(entity);
-                        throw new HttpResponseException(statusLine.getStatusCode(), "[" + dataURI + "]" + statusLine.getReasonPhrase());
+                if (new ShouldThrowOn(dataURI).test(statusLine.getStatusCode())) {
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("[").append(dataURI).append("] with reason [").append(statusLine.getReasonPhrase()).append("]");
+                    if (entity != null && entity.getContentLength() < 1024 * 1024) {
+                        builder.append(" and possible error message [").append(IOUtils.toString(entity.getContent(), StandardCharsets.UTF_8)).append("]");
                     }
+                    EntityUtils.consumeQuietly(entity);
+                    throw new HttpResponseException(statusLine.getStatusCode(), builder.toString());
                 }
 
                 return entity == null
@@ -217,4 +222,23 @@ public class ResourcesHTTP {
                 .setConnectTimeout(soTimeoutMs);
     }
 
+    public static class ShouldThrowOn implements Predicate<Integer> {
+
+        private final IRI dataURI;
+
+        public ShouldThrowOn(IRI dataURI) {
+            this.dataURI = dataURI;
+        }
+
+        @Override
+        public boolean test(Integer statusCode) {
+            boolean shouldThrow = false;
+            if (statusCode >= 300) {
+                if (shouldRedirect(dataURI) || !REDIRECT_CODES.contains(statusCode)) {
+                    shouldThrow = true;
+                }
+            }
+            return shouldThrow;
+        }
+    }
 }

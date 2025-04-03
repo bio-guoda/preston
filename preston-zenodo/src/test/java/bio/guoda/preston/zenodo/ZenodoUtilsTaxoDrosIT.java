@@ -6,7 +6,6 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.store.Dereferencer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
@@ -50,7 +49,7 @@ public class ZenodoUtilsTaxoDrosIT {
 
     @Before
     public void create() throws IOException {
-        ctx = new ZenodoContext(ZenodoTestUtil.getAccessToken(), "https://sandbox.zenodo.org");
+        ctx = ZenodoTestUtil.createSandboxContext();
         InputStream request = getInputStream();
         assertNotNull(request);
         ctx = ZenodoUtils.createEmptyDeposit(ctx);

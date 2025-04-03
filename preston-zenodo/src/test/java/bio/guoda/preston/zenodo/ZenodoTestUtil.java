@@ -42,4 +42,8 @@ public class ZenodoTestUtil {
     public static IRI contentIdFor(UUID uuid) throws IOException {
         return Hasher.calcHashIRI(inputStreamFrom(uuid), NullOutputStream.INSTANCE, HashType.md5);
     }
+
+    public static ZenodoContext createSandboxContext() throws IOException {
+        return new ZenodoContext(getAccessToken(), "https://sandbox.zenodo.org");
+    }
 }
