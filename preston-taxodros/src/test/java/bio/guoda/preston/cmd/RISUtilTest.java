@@ -129,6 +129,47 @@ public class RISUtilTest {
 
     }
 
+    @Test
+    public void streamRISToZenodoLineJsonWithOriginalDOI() throws IOException {
+
+        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+
+        Consumer<ObjectNode> listener = jsonNode
+                -> jsonObjects.add(
+                translateRISToZenodo(
+                        jsonNode,
+                        Arrays.asList("community-foo"),
+                        true
+                )
+        );
+
+        InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-multiple.ris");
+
+        assertNotNull(bibTex);
+
+        parseRIS(bibTex, listener, "foo:bar");
+
+
+        assertThat(jsonObjects.size(), is(5));
+
+        JsonNode taxonNode = jsonObjects.get(1);
+
+        assertThat(taxonNode.get("description").asText(), is("(Uploaded by Plazi from the Biodiversity Heritage Library) No abstract provided."));
+
+        JsonNode communities = taxonNode.get("communities");
+        assertThat(communities.isArray(), is(true));
+        assertThat(communities.size(), is(1));
+        assertThat(communities.get(0).get("identifier").asText(), is("community-foo"));
+
+
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("https://linker.bio/line:foo:bar!/L23-L44"));
+        assertThat(taxonNode.get(TYPE).asText(), is("application/x-research-info-systems"));
+        assertThat(taxonNode.get("referenceId").asText(), is("https://www.biodiversitylibrary.org/part/337600"));
+
+        assertThat(taxonNode.get("doi").asText(), is("10.3897/subtbiol.43.85804"));
+
+    }
+
     private boolean shouldUseProvidedDoi() {
         return false;
     }
