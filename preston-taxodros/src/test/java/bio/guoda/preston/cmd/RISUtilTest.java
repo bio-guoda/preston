@@ -132,7 +132,7 @@ public class RISUtilTest {
     @Test
     public void streamRISToZenodoLineJsonWithOriginalDOI() throws IOException {
 
-        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+        List<JsonNode> jsonObjects = new ArrayList<>();
 
         Consumer<ObjectNode> listener = jsonNode
                 -> jsonObjects.add(
