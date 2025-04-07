@@ -24,16 +24,19 @@ public class RISFileExtractor extends ProcessorExtracting {
     private final Persisting processorState;
     private final OutputStream outputStream;
     private final List<String> communities;
+    private final boolean ifAvailableReuseDOI;
 
     public RISFileExtractor(Persisting processorState,
                             BlobStoreReadOnly blobStoreReadOnly,
                             OutputStream out,
                             List<String> communities,
+                            boolean ifAvailableReuseDOI,
                             StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
         this.communities = communities;
+        this.ifAvailableReuseDOI = ifAvailableReuseDOI;
     }
 
 
@@ -58,7 +61,8 @@ public class RISFileExtractor extends ProcessorExtracting {
                             outputStream,
                             processorState,
                             RISFileExtractor.this,
-                            communities
+                            communities,
+                            RISFileExtractor.this.ifAvailableReuseDOI
                     )
             );
         }

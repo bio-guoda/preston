@@ -24,6 +24,7 @@ public class RISFileStreamHandler implements ContentStreamHandler {
     private final Persisting persisting;
     private final Dereferencer<InputStream> dereferencer;
     private final IRI provenanceAnchor;
+    private final boolean ifAvailableReuseDOI;
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
     private final List<String> communities;
@@ -32,13 +33,15 @@ public class RISFileStreamHandler implements ContentStreamHandler {
                                 OutputStream os,
                                 Persisting persisting,
                                 Dereferencer<InputStream> dereferencer,
-                                List<String> communities) {
+                                List<String> communities,
+                                boolean ifAvailableReuseDOI) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
         this.persisting = persisting;
         this.dereferencer = dereferencer;
         this.communities = communities;
         this.provenanceAnchor = AnchorUtil.findAnchorOrThrow(persisting);
+        this.ifAvailableReuseDOI = true;
     }
 
     @Override
@@ -50,7 +53,11 @@ public class RISFileStreamHandler implements ContentStreamHandler {
                 @Override
                 public void accept(ObjectNode jsonNode) {
                     try {
-                        ObjectNode zenodoObject = RISUtil.translateRISToZenodo(jsonNode, communities, false);
+                        ObjectNode zenodoObject = RISUtil.translateRISToZenodo(
+                                jsonNode,
+                                communities,
+                                ifAvailableReuseDOI
+                        );
                         ZenodoMetaUtil.appendIdentifier(zenodoObject, ZenodoMetaUtil.IS_PART_OF, provenanceAnchor.getIRIString());
 
                         Stream.of(HashType.md5, HashType.sha256)
