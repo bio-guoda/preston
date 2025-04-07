@@ -41,7 +41,7 @@ public class RISFileStreamHandler implements ContentStreamHandler {
         this.dereferencer = dereferencer;
         this.communities = communities;
         this.provenanceAnchor = AnchorUtil.findAnchorOrThrow(persisting);
-        this.ifAvailableReuseDOI = true;
+        this.ifAvailableReuseDOI = ifAvailableReuseDOI;
     }
 
     @Override
