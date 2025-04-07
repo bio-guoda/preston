@@ -50,7 +50,7 @@ public class RISFileStreamHandler implements ContentStreamHandler {
                 @Override
                 public void accept(ObjectNode jsonNode) {
                     try {
-                        ObjectNode zenodoObject = RISUtil.translateRISToZenodo(jsonNode, communities);
+                        ObjectNode zenodoObject = RISUtil.translateRISToZenodo(jsonNode, communities, false);
                         ZenodoMetaUtil.appendIdentifier(zenodoObject, ZenodoMetaUtil.IS_PART_OF, provenanceAnchor.getIRIString());
 
                         Stream.of(HashType.md5, HashType.sha256)

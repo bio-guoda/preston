@@ -73,7 +73,7 @@ public class RISUtil {
         }
     }
 
-    public static ObjectNode translateRISToZenodo(JsonNode jsonNode, List<String> communities) {
+    public static ObjectNode translateRISToZenodo(JsonNode jsonNode, List<String> communities, boolean useProvidedDOI) {
         ObjectNode metadata = new ObjectMapper().createObjectNode();
         ArrayNode relatedIdentifiers = new ObjectMapper().createArrayNode();
         metadata.put("description", "(Uploaded by Plazi from the Biodiversity Heritage Library) No abstract provided.");
@@ -140,6 +140,9 @@ public class RISUtil {
         if (jsonNode.has("DO")) {
             String doiString = jsonNode.get("DO").asText();
             addAlternateIdentifier(relatedIdentifiers, doiString);
+            if (useProvidedDOI) {
+                metadata.put("doi", doiString);
+            }
         }
 
         if (jsonNode.has("SN")) {
@@ -204,6 +207,10 @@ public class RISUtil {
         addDefaultAuthorIfNoneAvailable(metadata);
 
         return metadata;
+    }
+
+    public boolean shouldUseProvidedDoi() {
+        return false;
     }
 
     private static void addDefaultAuthorIfNoneAvailable(ObjectNode metadata) {
