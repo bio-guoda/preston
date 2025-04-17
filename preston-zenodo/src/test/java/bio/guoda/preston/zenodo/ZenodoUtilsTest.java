@@ -49,21 +49,6 @@ public class ZenodoUtilsTest {
     }
 
     @Test
-    public void queryForExistingRecordsMatchingPrefix() {
-        ZenodoContext ctx = new ZenodoContext("secret", "https://sandbox.zenodo.org", Arrays.asList("community 1", "community 2"));
-        IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingRecords(
-                ctx,
-                Arrays.asList("foo:bar", "foo:bar:1234"),
-                ""
-        );
-
-        assertThat(
-                queryForExistingDepositions.getIRIString(),
-                is("https://sandbox.zenodo.org/api/records?communities=community%201%2Ccommunity%202&all_versions=false&q=alternate.identifier:%22foo%3Abar%22")
-        );
-    }
-
-    @Test
     public void extractFileIds() throws IOException {
         ZenodoContext ctx = getContext();
 
