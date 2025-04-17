@@ -307,6 +307,8 @@ public class ZenodoUtils {
         return ids.stream()
                 .map(JavaScriptAndPythonFriendlyURLEncodingUtil::urlEncode)
                 .map(id -> "alternate.identifier:%22" + id + "%22")
+                .distinct()
+                .sorted()
                 .collect(Collectors.joining("%20AND%20"));
     }
 

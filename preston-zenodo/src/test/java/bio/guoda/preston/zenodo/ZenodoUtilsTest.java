@@ -21,7 +21,21 @@ public class ZenodoUtilsTest {
 
 
     @Test
-    public void queryForExistingRecords() {
+    public void queryForExistingRecordsDifferentIds() {
+        ZenodoContext ctx = new ZenodoContext("secret", "https://sandbox.zenodo.org", Arrays.asList("community 1", "community 2"));
+        IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingRecords(
+                ctx,
+                Arrays.asList("foo:bar", "foo:baz"), ""
+        );
+
+        assertThat(
+                queryForExistingDepositions.getIRIString(),
+                is("https://sandbox.zenodo.org/api/records?communities=community%201%2Ccommunity%202&all_versions=false&q=alternate.identifier:%22foo%3Abar%22%20AND%20alternate.identifier:%22foo%3Abaz%22")
+        );
+    }
+
+    @Test
+    public void queryForExistingRecordsIdenticalIds() {
         ZenodoContext ctx = new ZenodoContext("secret", "https://sandbox.zenodo.org", Arrays.asList("community 1", "community 2"));
         IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingRecords(
                 ctx,
@@ -30,7 +44,22 @@ public class ZenodoUtilsTest {
 
         assertThat(
                 queryForExistingDepositions.getIRIString(),
-                is("https://sandbox.zenodo.org/api/records?communities=community%201%2Ccommunity%202&all_versions=false&q=alternate.identifier:%22foo%3Abar%22%20AND%20alternate.identifier:%22foo%3Abar%22")
+                is("https://sandbox.zenodo.org/api/records?communities=community%201%2Ccommunity%202&all_versions=false&q=alternate.identifier:%22foo%3Abar%22")
+        );
+    }
+
+    @Test
+    public void queryForExistingRecordsMatchingPrefix() {
+        ZenodoContext ctx = new ZenodoContext("secret", "https://sandbox.zenodo.org", Arrays.asList("community 1", "community 2"));
+        IRI queryForExistingDepositions = ZenodoUtils.getQueryForExistingRecords(
+                ctx,
+                Arrays.asList("foo:bar", "foo:bar:1234"),
+                ""
+        );
+
+        assertThat(
+                queryForExistingDepositions.getIRIString(),
+                is("https://sandbox.zenodo.org/api/records?communities=community%201%2Ccommunity%202&all_versions=false&q=alternate.identifier:%22foo%3Abar%22")
         );
     }
 
