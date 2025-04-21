@@ -124,6 +124,9 @@ public class RISUtil {
         if (jsonNode.has("SP") && jsonNode.has("EP")) {
             metadata.put("journal_pages", jsonNode.get("SP").asText() + "-" + jsonNode.get("EP").asText());
         }
+        if (jsonNode.has("IS")) {
+            metadata.put("journal_issue", jsonNode.get("IS").asText());
+        }
         if (jsonNode.has("PY")) {
             metadata.put("publication_date", jsonNode.get("PY").asText());
         }

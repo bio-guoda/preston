@@ -34,13 +34,13 @@ public class RISFileExtractorTest {
 
     @Test
     public void streamBHLPartsToZenodoLineJson() throws IOException {
-        String[] jsonObjects = getResource("ris/bhlpart-multiple.ris");
+        String[] jsonObjects = getResource("ris/bhlpart-multiple.ris", "332157");
         assertArticleItem(jsonObjects);
     }
 
     @Test
     public void streamBHLPartToZenodoLineJsonMissingAttachment() throws IOException {
-        String[] jsonObjects = getResource("ris/bhlpart-multiple.ris");
+        String[] jsonObjects = getResource("ris/bhlpart-multiple.ris", "332157");
         assertThat(jsonObjects.length, is(5));
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[1]);
@@ -68,6 +68,19 @@ public class RISFileExtractorTest {
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("cave"));
+    }
+
+    @Test
+    public void streamBHLWithJournalIssue() throws IOException {
+        String[] jsonObjects = getResource("ris/bhlpart-journal-issue.ris", "149328");
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode metadata = unwrapMetadata(jsonObjects[0]);
+
+        assertThat(metadata.get("journal_pages").asText(), is("123-132"));
+        assertThat(metadata.get("journal_title").asText(), is("Opinions and declarations rendered by the International Commission on Zoological Nomenclature"));
+        assertThat(metadata.get("journal_volume").asText(), is("2"));
+        assertThat(metadata.get("journal_issue").asText(), is("14"));
     }
 
     private void assertArticleItem(String[] jsonObjects) throws JsonProcessingException {
@@ -143,7 +156,7 @@ public class RISFileExtractorTest {
         return rootNode.get("metadata");
     }
 
-    private String[] getResource(String records) throws IOException {
+    private String[] getResource(String records, final String bhlPartId) throws IOException {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -156,7 +169,7 @@ public class RISFileExtractorTest {
                     } catch (FileNotFoundException e) {
                         throw new RuntimeException(e);
                     }
-                } else if (StringUtils.equals("https://www.biodiversitylibrary.org/partpdf/332157", key.getIRIString())) {
+                } else if (StringUtils.equals("https://www.biodiversitylibrary.org/partpdf/" + bhlPartId, key.getIRIString())) {
                     return IOUtils.toInputStream("hello! I am supposed to be a pdf...", StandardCharsets.UTF_8);
                 }
                 return null;

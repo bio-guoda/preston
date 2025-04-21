@@ -565,7 +565,7 @@ Preston needs Java 8+.
 Preston is a stand-alone java application, packaged in a jarfile. You can build you own (see [building](#building)) or download a prebuilt jar at [releases](https://github.com/bio-guoda/preston/releases).
 
 
-See [Quick Start](#quick-start) for installing standalone Preston. 
+See [Quick Start](#quickstart) for installing standalone Preston. 
 
 ### Docker
 If you'd like to run Preston inside a docker container so that you don't have to worry about installing/conflicting java dependencies use:
