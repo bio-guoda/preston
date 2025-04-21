@@ -71,6 +71,19 @@ public class RISFileExtractorTest {
     }
 
     @Test
+    public void streamBHLWithAuthorTrailingCommas() throws IOException {
+        String[] jsonObjects = getResource("ris/bhlpart-author-trailing-comma.ris", "44156");
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode metadata = unwrapMetadata(jsonObjects[0]);
+
+        JsonNode creators = metadata.at("/creators/0");
+
+        assertThat(creators.get("name").asText(), is("Rathbun, Mary Jane"));
+
+    }
+
+    @Test
     public void streamBHLWithJournalIssue() throws IOException {
         String[] jsonObjects = getResource("ris/bhlpart-journal-issue.ris", "149328");
         assertThat(jsonObjects.length, is(1));

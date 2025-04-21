@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
@@ -186,9 +187,9 @@ public class RISUtil {
         if (authors != null) {
             ArrayNode creators = new ObjectMapper().createArrayNode();
             if (authors.isArray()) {
-                authors.forEach(value -> creators.add(new ObjectMapper().createObjectNode().put("name", value.asText())));
+                authors.forEach(value -> creators.add(new ObjectMapper().createObjectNode().put("name", removeTrailingComma(value.asText()))));
             } else {
-                creators.add(new ObjectMapper().createObjectNode().put("name", authors.asText()));
+                creators.add(new ObjectMapper().createObjectNode().put("name", removeTrailingComma(authors.asText())));
             }
             metadata.set("creators", creators);
         }
@@ -210,6 +211,10 @@ public class RISUtil {
         addDefaultAuthorIfNoneAvailable(metadata);
 
         return metadata;
+    }
+
+    public static String removeTrailingComma(String author) {
+        return RegExUtils.removePattern(author, ",$");
     }
 
     private static void addDefaultAuthorIfNoneAvailable(ObjectNode metadata) {
