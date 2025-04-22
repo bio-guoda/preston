@@ -181,6 +181,10 @@ public class RISUtil {
             if (StringUtils.isNotBlank(lsid)) {
                 addAlternateIdentifier(relatedIdentifiers, lsid);
             }
+
+            if (StringUtils.contains(url, "biodiversitylibrary.org")) {
+                addKeyword(metadata, "Biodiversity");
+            }
         }
 
         JsonNode authors = jsonNode.get("AU");
@@ -211,6 +215,15 @@ public class RISUtil {
         addDefaultAuthorIfNoneAvailable(metadata);
 
         return metadata;
+    }
+
+    public static void addKeyword(ObjectNode metadata, String keyword) {
+        JsonNode keywords = metadata.at("/keywords");
+        if (null == keywords || !keywords.isArray()) {
+            keywords = new ObjectMapper().createArrayNode();
+        }
+        ((ArrayNode) keywords).add(keyword);
+        metadata.set("keywords", keywords);
     }
 
     public static String removeTrailingComma(String author) {

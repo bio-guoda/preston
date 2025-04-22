@@ -20,12 +20,15 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -94,6 +97,30 @@ public class RISFileExtractorTest {
         assertThat(metadata.get("journal_title").asText(), is("Opinions and declarations rendered by the International Commission on Zoological Nomenclature"));
         assertThat(metadata.get("journal_volume").asText(), is("2"));
         assertThat(metadata.get("journal_issue").asText(), is("14"));
+    }
+
+    @Test
+    public void streamBHLWithBiodiversityKeyword() throws IOException {
+        String[] jsonObjects = getResource("ris/bhlpart-journal-issue.ris", "149328");
+        assertThat(jsonObjects.length, is(1));
+
+        List<String> keywordsFound = getKeywords(jsonObjects[0]);
+
+        assertThat(keywordsFound, hasItem("Biodiversity"));
+
+    }
+
+    private List<String> getKeywords(String jsonObject) throws JsonProcessingException {
+        JsonNode metadata = unwrapMetadata(jsonObject);
+
+        JsonNode keywords = metadata.get("keywords");
+
+        List<String> keywordsFound = new ArrayList<>();
+        for (JsonNode keyword : keywords) {
+            assertThat(keyword.isTextual(), is(true));
+            keywordsFound.add(keyword.asText());
+        }
+        return keywordsFound;
     }
 
     private void assertArticleItem(String[] jsonObjects) throws JsonProcessingException {
