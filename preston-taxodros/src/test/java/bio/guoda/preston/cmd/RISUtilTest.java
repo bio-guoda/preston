@@ -89,7 +89,7 @@ public class RISUtilTest {
         assertThat(creators.isArray(), is(true));
         assertThat(creators.size(), is(5));
         assertThat(creators.get(0).get("name").asText(), is("Le Cesne, Maxime"));
-        assertThat(creators.get(1).get("name").asText(), is("Bourgoin, Thierry,"));
+        assertThat(creators.get(1).get("name").asText(), is("Bourgoin, Thierry"));
         assertThat(creators.get(2).get("name").asText(), is("Hoch, Hannelore"));
         assertThat(creators.get(3).get("name").asText(), is("Luo, Yang"));
         assertThat(creators.get(4).get("name").asText(), is("Zhang, Yalin"));
