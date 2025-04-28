@@ -38,6 +38,19 @@ public class BlobStoreUtilTest {
     }
 
     @Test
+    public void indexedBlobStoreWithAlternate() throws IOException, URISyntaxException {
+        File dataDir = getDataDir("index-data-with-alternate/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+
+        Persisting persisting = getPersisting(dataDir);
+        persisting.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/075777140639f93508f92c286b36aadf"));
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(getBlobStore(), persisting);
+
+        InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.com"));
+
+        assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("foo"));
+    }
+
+    @Test
     public void indexedBlobStoreWithoutProvenanceAnchor() throws IOException, URISyntaxException {
         File dataDir = getDataDir();
 

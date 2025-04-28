@@ -11,13 +11,15 @@ import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.process.StatementsListenerAdapter;
 import bio.guoda.preston.store.AliasDereferencer;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.stream.ContentHashDereferencer;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.HashKeyUtil;
+import bio.guoda.preston.stream.ContentHashDereferencer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,9 @@ public class BlobStoreUtil {
     private static final Logger LOG = LoggerFactory.getLogger(BlobStoreUtil.class);
 
     public static BlobStoreReadOnly createIndexedBlobStoreFor(BlobStoreReadOnly blobStoreReadOnly, Persisting persisting) {
-        Map<String, String> treeMap = buildIndexedBlobStore(persisting);
+        Pair<Map<String, String>, Map<String, String>> aliasAndVersionMaps = buildIndexedBlobStore(persisting);
+        Map<String, String> versionMap = aliasAndVersionMaps.getKey();
+        Map<String, String> aliasMap = aliasAndVersionMaps.getValue();
 
         return new BlobStoreReadOnly() {
 
@@ -44,7 +48,11 @@ public class BlobStoreUtil {
                 if (HashKeyUtil.isValidHashKey(uri)) {
                     iriForLookup = uri;
                 } else {
-                    String indexedVersion = treeMap.get(uri.getIRIString());
+                    String indexedVersion = versionMap.get(uri.getIRIString());
+                    if (StringUtils.isBlank(indexedVersion)) {
+                        String alternate = aliasMap.get(uri.getIRIString());
+                        indexedVersion = StringUtils.isBlank(alternate) ? uri.getIRIString() : versionMap.get(alternate);
+                    }
                     iriForLookup = StringUtils.isBlank(indexedVersion) ? uri : RefNodeFactory.toIRI(indexedVersion);
                 }
 
@@ -54,6 +62,7 @@ public class BlobStoreUtil {
 
                 return blobStoreReadOnly.get(iriForLookup);
             }
+
         };
     }
 
@@ -66,21 +75,25 @@ public class BlobStoreUtil {
     }
 
 
-    private static Map<String, String> buildIndexedBlobStore(Persisting persisting) {
+    private static org.apache.commons.lang3.tuple.Pair<Map<String, String>, Map<String, String>> buildIndexedBlobStore(Persisting persisting) {
 
         File tmpDir = new File(persisting.getTmpDir());
         IRI provenanceAnchor = AnchorUtil.findAnchorOrThrow(persisting);
 
         // indexing
-        DBMaker maker = newTmpFileDB(tmpDir);
-        Map<String, String> treeMap = maker
+        DB db = newTmpFileDB(tmpDir)
                 .deleteFilesAfterClose()
                 .closeOnJvmShutdown()
                 .transactionDisable()
-                .make()
-                .createTreeMap("zotero-stream")
                 .make();
 
+        Map<String, String> versionMap = db
+                .createTreeMap("versionMap")
+                .make();
+
+        Map<String, String> alternateMap = db
+                .createTreeMap("alternateMap")
+                .make();
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
@@ -90,19 +103,35 @@ public class BlobStoreUtil {
         StatementsListener listener = new StatementsListenerAdapter() {
             @Override
             public void on(Quad statement) {
-                if (RefNodeConstants.HAS_VERSION.equals(statement.getPredicate())
-                        && !RefNodeFactory.isBlankOrSkolemizedBlank(statement.getObject())) {
-                    if (statement.getSubject() instanceof IRI && statement.getObject() instanceof IRI) {
-                        IRI version = (IRI) statement.getObject();
-                        if (HashKeyUtil.isValidHashKey(version)) {
-                            index.incrementAndGet();
-                            String uri = ((IRI) statement.getSubject()).getIRIString();
-                            String indexedVersion = version.getIRIString();
-                            treeMap.putIfAbsent(uri, indexedVersion);
-                        }
+                if (hasIRIs(statement)) {
+                    IRI object = (IRI) statement.getObject();
+                    IRI subject = (IRI) statement.getSubject();
+                    if (RefNodeConstants.HAS_VERSION.equals(statement.getPredicate())
+                            && !RefNodeFactory.isBlankOrSkolemizedBlank(statement.getObject())) {
+                        indexVersion(statement, object);
+                    } else if (RefNodeConstants.ALTERNATE_OF.equals(statement.getPredicate())) {
+                        indexAlternate(object, subject);
                     }
                 }
+            }
 
+            void indexAlternate(IRI object, IRI subject) {
+                alternateMap.putIfAbsent(object.getIRIString(), subject.getIRIString());
+                alternateMap.putIfAbsent(subject.getIRIString(), object.getIRIString());
+            }
+
+            void indexVersion(Quad statement, IRI object) {
+                IRI version = object;
+                if (HashKeyUtil.isValidHashKey(version)) {
+                    index.incrementAndGet();
+                    String uri = ((IRI) statement.getSubject()).getIRIString();
+                    String indexedVersion = version.getIRIString();
+                    versionMap.putIfAbsent(uri, indexedVersion);
+                }
+            }
+
+            public boolean hasIRIs(Quad statement) {
+                return statement.getSubject() instanceof IRI && statement.getObject() instanceof IRI;
             }
         };
         ReplayUtil.replay(listener, persisting, new EmittingStreamFactory() {
@@ -114,7 +143,7 @@ public class BlobStoreUtil {
         stopWatch.stop();
         LOG.info("version index for [" + provenanceAnchor + "] with [" + index.get() + "] versions built in [" + stopWatch.getTime(TimeUnit.SECONDS) + "] s");
 
-        return treeMap;
+        return org.apache.commons.lang3.tuple.Pair.of(versionMap, alternateMap);
     }
 
     private static DBMaker newTmpFileDB(File tmpDir) {
