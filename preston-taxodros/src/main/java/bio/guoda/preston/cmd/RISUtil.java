@@ -2,7 +2,6 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.process.ProcessorState;
-import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -273,15 +272,15 @@ public class RISUtil {
 
 
     private static ArrayNode addDerivedFrom(ArrayNode relatedIdentifiers, String id) {
-        return addRelation(relatedIdentifiers, id, "isDerivedFrom");
+        return addRelation(relatedIdentifiers, id, ZenodoMetaUtil.IS_DERIVED_FROM);
     }
 
     private static ArrayNode addAlternateIdentifier(ArrayNode relatedIdentifiers, String id) {
-        return addRelation(relatedIdentifiers, id, "isAlternateIdentifier");
+        return addRelation(relatedIdentifiers, id, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER);
     }
 
     private static ArrayNode addAlternateIdentifier(ArrayNode relatedIdentifiers, String id, String scheme) {
-        return addRelation(relatedIdentifiers, id, "isAlternateIdentifier", scheme);
+        return addRelation(relatedIdentifiers, id, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, scheme);
     }
 
     private static ArrayNode addRelation(ArrayNode relatedIdentifiers, String id, String relationType) {
