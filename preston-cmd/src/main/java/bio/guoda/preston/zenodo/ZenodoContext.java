@@ -13,16 +13,17 @@ public class ZenodoContext implements ZenodoConfig {
 
     private final String endpoint;
     private final List<String> communities;
+    private final IRI licenseRelations;
     private Long depositId;
     private UUID bucketId;
     private final String accessToken;
     private JsonNode metadata;
 
-
     private boolean createNewVersionForExisting = false;
     private boolean restrictedOnly = false;
     private boolean updateMetadataOnly = false;
     private boolean allowEmptyPublicationDate = false;
+    private String tmpDir;
 
     public ZenodoContext(String accessToken) {
         this(accessToken, "https://sandbox.zenodo.org");
@@ -33,9 +34,14 @@ public class ZenodoContext implements ZenodoConfig {
     }
 
     public ZenodoContext(String accessToken, String endpoint, List<String> communities) {
+        this(accessToken, endpoint, communities, null);
+    }
+
+    public ZenodoContext(String accessToken, String endpoint, List<String> communities, IRI licenseRelations) {
         this.accessToken = accessToken;
         this.endpoint = endpoint;
         this.communities = communities;
+        this.licenseRelations = licenseRelations;
     }
 
     public ZenodoContext(ZenodoConfig config) {
@@ -43,6 +49,7 @@ public class ZenodoContext implements ZenodoConfig {
         this.endpoint = config.getEndpoint();
         this.communities = new ArrayList<>(config.getCommunities());
         this.createNewVersionForExisting = config.createNewVersionForExisting();
+        this.licenseRelations = config.getLicenseRelations();
     }
 
 
@@ -128,5 +135,17 @@ public class ZenodoContext implements ZenodoConfig {
     @Override
     public boolean shouldAllowEmptyPublicationDate() {
         return allowEmptyPublicationDate;
+    }
+
+    public IRI getLicenseRelations() {
+        return licenseRelations;
+    }
+
+    public void setTmpDir(String tmpDir) {
+        this.tmpDir = tmpDir;
+    }
+
+    public String getTmpDir() {
+        return tmpDir;
     }
 }

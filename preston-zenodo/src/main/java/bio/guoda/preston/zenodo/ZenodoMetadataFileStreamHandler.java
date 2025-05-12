@@ -4,7 +4,9 @@ import bio.guoda.preston.DateUtil;
 import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.ResourcesHTTP;
+import bio.guoda.preston.cmd.BlobStoreUtil;
 import bio.guoda.preston.cmd.ZenodoMetaUtil;
+import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.HashKeyUtil;
@@ -13,6 +15,7 @@ import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
@@ -21,10 +24,12 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
+import org.mapdb.DBMaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,12 +37,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static bio.guoda.preston.RefNodeConstants.HAS_LICENSE;
 import static bio.guoda.preston.cmd.ZenodoMetaUtil.HAS_VERSION;
 import static bio.guoda.preston.cmd.ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER;
 import static bio.guoda.preston.cmd.ZenodoMetaUtil.IS_DERIVED_FROM;
+import static bio.guoda.preston.store.VersionUtil.VERSION_PATTERN;
 import static bio.guoda.preston.zenodo.ZenodoUtils.delete;
 import static bio.guoda.preston.zenodo.ZenodoUtils.getObjectMapper;
 
@@ -49,7 +59,8 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
     private final ZenodoConfig ctx;
     private final StatementEmitter emitter;
     private final Collection<Quad> candidateFileAttachments;
-    private ContentStreamHandler contentStreamHandler;
+    private final ContentStreamHandler contentStreamHandler;
+    private Map<String, String> licenseMap = null;
 
     public ZenodoMetadataFileStreamHandler(ContentStreamHandler contentStreamHandler,
                                            Dereferencer<InputStream> inputStreamDereferencer,
@@ -61,6 +72,50 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         this.emitter = emitter;
         this.ctx = ctx;
         this.candidateFileAttachments = new ArrayList<>(candidateFileAttachments);
+    }
+
+    protected static void annotateLicenseByAlternateIdentifier(JsonNode jsonNode, Map<String, String> licenseMap) {
+        JsonNode relatedIdentifiers = jsonNode.at("/metadata/related_identifiers");
+        for (JsonNode relatedIdentifier : relatedIdentifiers) {
+            if (IS_ALTERNATE_IDENTIFIER.equals(relatedIdentifier.at("/relation").asText())) {
+                if (!relatedIdentifier.at("/identifier").isMissingNode()) {
+                    String alternateIdentifierString = relatedIdentifier.at("/identifier").asText();
+                    if (licenseMap.containsKey(alternateIdentifierString)) {
+                        JsonNode metadata = jsonNode.get("metadata");
+                        if (metadata.isObject()) {
+                            ((ObjectNode) metadata).set("license", new ObjectMapper().createObjectNode().textNode(licenseMap.get(alternateIdentifierString)));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static void buildTranslatorMap(Dereferencer<InputStream> dereferencer, IRI translatorMapIRI, Map<String, String> licenseMap) throws IOException {
+        ProcessorState state = new ProcessorState() {
+            @Override
+            public void stopProcessing() {
+
+            }
+
+            @Override
+            public boolean shouldKeepProcessing() {
+                return true;
+            }
+        };
+
+        final Pattern PATTERN_LICENSE_STATEMENT = Pattern.compile("^<(?<id>" + VERSION_PATTERN + ")> (" + HAS_LICENSE.toString() + ") <https://spdx.org/licenses/(?<license>" + VERSION_PATTERN + ")>(.*) [.]$");
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(dereferencer.get(translatorMapIRI)));
+        String line;
+        while (state.shouldKeepProcessing() && (line = reader.readLine()) != null) {
+            final Matcher licenseStatement = PATTERN_LICENSE_STATEMENT.matcher(line);
+            if (licenseStatement.matches()) {
+                String licenseString = licenseStatement.group("license");
+                String idString = licenseStatement.group("id");
+                licenseMap.putIfAbsent(idString, StringUtils.lowerCase(licenseString));
+            }
+        }
     }
 
     @Override
@@ -195,6 +250,23 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             }
         }
 
+        if (ctx.getLicenseRelations() != null) {
+            if (licenseMap != null) {
+                LOG.info("building license map defined by [" + ctx.getLicenseRelations() + "]...");
+                this.licenseMap = BlobStoreUtil
+                        .getFileDb(new File(StringUtils.isBlank(ctx.getTmpDir()) ? "tmp" : ctx.getTmpDir()))
+                        .createTreeMap("licenseMap")
+                        .make();
+
+                buildTranslatorMap(dereferencer,
+                        ctx.getLicenseRelations(),
+                        licenseMap
+                );
+                LOG.info("building license map defined by [" + ctx.getLicenseRelations() + "] done.");
+            }
+        }
+
+
         try {
             if (existingIds.size() == 0 && !ctx.shouldUpdateMetadataOnly()) {
                 ctxLocal = ZenodoUtils.createEmptyDeposit(ctxLocal);
@@ -225,7 +297,8 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         }
     }
 
-    private void emitPublicationStatements(List<String> recordIds, List<String> contentIds, List<String> origins, ZenodoContext ctxLocal) {
+    private void emitPublicationStatements
+            (List<String> recordIds, List<String> contentIds, List<String> origins, ZenodoContext ctxLocal) {
         emitRelations(recordIds, contentIds, origins, ctxLocal);
 
         emitRelations(ctxLocal,
@@ -285,7 +358,8 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         );
     }
 
-    private void emitRelations(List<String> lsids, List<String> contentIds, List<String> origins, ZenodoContext ctxLocal) {
+    private void emitRelations
+            (List<String> lsids, List<String> contentIds, List<String> origins, ZenodoContext ctxLocal) {
         emitRelations(ctxLocal, RefNodeConstants.WAS_DERIVED_FROM, origins);
         emitRelations(ctxLocal, RefNodeConstants.ALTERNATE_OF, contentIds);
         emitRelations(ctxLocal, RefNodeConstants.ALTERNATE_OF, lsids);
@@ -342,7 +416,8 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         return getRecordUrl(ctxLocal, ctxLocal.getDepositId());
     }
 
-    private void uploadContentAndPublish(JsonNode zenodoMetadata, List<String> ids, ZenodoContext ctx) throws IOException {
+    private void uploadContentAndPublish(JsonNode zenodoMetadata, List<String> ids, ZenodoContext ctx) throws
+            IOException {
         if (hasCustomFilename(zenodoMetadata)) {
             uploadAttemptSingleFile(zenodoMetadata, ids, ctx);
         } else if (candidateFileAttachments.size() > CmdZenodo.MAX_ZENODO_FILE_ATTACHMENTS) {
@@ -383,7 +458,8 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         return filename;
     }
 
-    private void uploadAttemptSingleFile(JsonNode metadata, List<String> ids, ZenodoContext ctx) throws IOException {
+    private void uploadAttemptSingleFile(JsonNode metadata, List<String> ids, ZenodoContext ctx) throws
+            IOException {
         JsonNode filename = getFilenameNode(metadata);
 
 

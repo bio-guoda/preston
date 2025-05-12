@@ -245,6 +245,16 @@ public class DarkTaxonFileExtractorTest {
             public boolean shouldAllowEmptyPublicationDate() {
                 return false;
             }
+
+            @Override
+            public IRI getLicenseRelations() {
+                return null;
+            }
+
+            @Override
+            public String getTmpDir() {
+                return "";
+            }
         };
     }
 

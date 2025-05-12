@@ -1,17 +1,8 @@
 package bio.guoda.preston.zenodo;
 
 import bio.guoda.preston.EnvUtil;
-import bio.guoda.preston.StatementLogFactory;
-import bio.guoda.preston.cmd.BlobStoreUtil;
-import bio.guoda.preston.cmd.LogErrorHandlerExitOnError;
 import bio.guoda.preston.cmd.LoggingPersisting;
-import bio.guoda.preston.process.EmittingStreamOfAnyVersions;
-import bio.guoda.preston.process.StatementsEmitterAdapter;
-import bio.guoda.preston.process.StatementsListener;
-import bio.guoda.preston.store.BlobStoreAppendOnly;
-import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
-import org.apache.commons.rdf.api.Quad;
+import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
 
 import java.util.Collections;
@@ -47,6 +38,15 @@ public abstract class CmdZenodoEnabled extends LoggingPersisting implements Runn
     private List<String> communities = Collections.emptyList();
 
     @CommandLine.Option(
+            names = {"--licenses", "--license"},
+            description = "provide licenses for (alternate) identifiers: when provided, only deposits with identified licenses are published. The license relations are expected in rdf/nquads format:" +
+                    " <some:id> <http://purl.org/dc/elements/1.1/license> <https://spdx.org/licenses/...> .\n" +
+                    " For example:\n" +
+                    " <urn:lsid:biodiversitylibrary.org:part:94849> <http://purl.org/dc/elements/1.1/license> <https://spdx.org/licenses/CC-BY-NC-SA-3.0> ."
+    )
+    private IRI licenseRelations = null;
+
+    @CommandLine.Option(
             names = {"--restricted-access-only"},
             description = "always set [access_right] to [restricted]"
     )
@@ -68,13 +68,23 @@ public abstract class CmdZenodoEnabled extends LoggingPersisting implements Runn
         ZenodoContext zenodoContext = new ZenodoContext(
                 getAccessToken(),
                 getApiEndpoint(),
-                getCommunities()
+                getCommunities(),
+                getLicenseRelations()
         );
         zenodoContext.setCreateNewVersionForExisting(createNewVersionForExisting);
         zenodoContext.setPublishRestrictedOnly(publishRestrictedOnly);
         zenodoContext.setUpdateMetadataOnly(updateMetadataOnly);
         zenodoContext.setAllowEmptyPublicationDate(allowEmptyPublicationDate);
+        zenodoContext.setTmpDir(getTmpDir());
         return zenodoContext;
+    }
+
+    private IRI getLicenseRelations() {
+        return licenseRelations;
+    }
+
+    private void setLicenseRelations(IRI licenseRelations) {
+        this.licenseRelations = licenseRelations;
     }
 
     private String getAccessToken() {

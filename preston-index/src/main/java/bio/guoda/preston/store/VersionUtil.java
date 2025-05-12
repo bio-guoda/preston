@@ -23,7 +23,7 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class VersionUtil {
 
-    private static final String VERSION_PATTERN = "[^<>]*";
+    public static final String VERSION_PATTERN = "[^<>]*";
     private static final Pattern PATTERN_SUBJECT_NEWER = Pattern.compile("<(?<subj>" + VERSION_PATTERN + ")> (" + HAS_PREVIOUS_VERSION.toString() + "|" + WAS_DERIVED_FROM.toString() + "|" + USED_BY + ") (.*) [.]$");
     private static final Pattern PATTERN_SUBJECT_NEWER_USED_BY_ONLY = Pattern.compile("<(?<subj>" + VERSION_PATTERN + ")> (" + USED_BY + ") (.*) [.]$");
     private static final Pattern PATTERN_OBJECT_NEWER = Pattern.compile(".* (" + HAS_VERSION.toString() + ") <(?<obj>" + VERSION_PATTERN + ")>(.*) [.]$");

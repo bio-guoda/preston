@@ -81,11 +81,7 @@ public class BlobStoreUtil {
         IRI provenanceAnchor = AnchorUtil.findAnchorOrThrow(persisting);
 
         // indexing
-        DB db = newTmpFileDB(tmpDir)
-                .deleteFilesAfterClose()
-                .closeOnJvmShutdown()
-                .transactionDisable()
-                .make();
+        DB db = getFileDb(tmpDir);
 
         Map<String, String> versionMap = db
                 .createTreeMap("versionMap")
@@ -144,6 +140,15 @@ public class BlobStoreUtil {
         LOG.info("version index for [" + provenanceAnchor + "] with [" + index.get() + "] versions built in [" + stopWatch.getTime(TimeUnit.SECONDS) + "] s");
 
         return org.apache.commons.lang3.tuple.Pair.of(versionMap, alternateMap);
+    }
+
+    public static DB getFileDb(File tmpDir) {
+        DB db = newTmpFileDB(tmpDir)
+                .deleteFilesAfterClose()
+                .closeOnJvmShutdown()
+                .transactionDisable()
+                .make();
+        return db;
     }
 
     private static DBMaker newTmpFileDB(File tmpDir) {

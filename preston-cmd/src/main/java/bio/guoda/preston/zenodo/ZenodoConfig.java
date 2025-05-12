@@ -29,4 +29,8 @@ public interface ZenodoConfig {
     void setAllowEmptyPublicationDate(boolean allowEmptyPublicationDate);
 
     boolean shouldAllowEmptyPublicationDate();
+
+    IRI getLicenseRelations();
+
+    String getTmpDir();
 }
