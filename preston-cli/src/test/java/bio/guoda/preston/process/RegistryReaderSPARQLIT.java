@@ -23,7 +23,7 @@ import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 
-public class RegistryReaderSPARQLTest {
+public class RegistryReaderSPARQLIT {
 
     @Ignore("order of authors changes so comparison over time is hard related to https://github.com/bio-guoda/preston/issues/137")
     @Test

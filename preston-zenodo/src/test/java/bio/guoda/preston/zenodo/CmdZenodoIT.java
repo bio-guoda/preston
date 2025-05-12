@@ -237,6 +237,55 @@ public class CmdZenodoIT {
 
 
     }
+    @Test
+    public void createDepositWithProvidedLicenseMap() throws URISyntaxException, IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        CmdZenodo cmdZenodo = createCmd(outputStream);
+
+        // first make sure a deposit exists
+        cmdZenodo.run();
+        String log = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+        String[] split = StringUtils.split(log, '\n');
+        assertThat(split.length, greaterThan(0));
+
+        assertThat(log, containsString("https://sandbox.zenodo.org/records/"));
+
+        Pattern compile = Pattern.compile(".*https://sandbox.zenodo.org/records/(?<depositId>[0-9]+).*");
+        Matcher matcher = compile.matcher(StringUtils.replace(log, "\n", " "));
+        assertThat(matcher.matches(), Is.is(true));
+
+
+        String depositId = matcher.group("depositId");
+        JsonNode depositMetadata = requestDepositMetadata(depositId);
+
+        assertThat(depositMetadata.at("/metadata").isMissingNode(), Is.is(false));
+
+        outputStream = new ByteArrayOutputStream();
+        cmdZenodo = createCmd(outputStream);
+
+        // then update metadata to be open
+        cmdZenodo.setUpdateMetadataOnly(true);
+        cmdZenodo.setPublishRestrictedOnly(false);
+        cmdZenodo.run();
+
+        depositMetadata = requestDepositMetadata(depositId);
+
+        assertThat(depositMetadata.at("/metadata/" + ZenodoMetaUtil.ACCESS_RIGHT).asText(), Is.is("open"));
+
+        outputStream = new ByteArrayOutputStream();
+        cmdZenodo = createCmd(outputStream);
+
+        // then update metadata to be restricted
+        cmdZenodo.setUpdateMetadataOnly(true);
+        cmdZenodo.setPublishRestrictedOnly(true);
+        cmdZenodo.run();
+
+        depositMetadata = requestDepositMetadata(depositId);
+
+        assertThat(depositMetadata.at("/metadata/" + ZenodoMetaUtil.ACCESS_RIGHT).asText(), Is.is("restricted"));
+
+
+    }
 
     @Test
     public void createDepositAndCreateNewVersionWithDifferentFile() throws URISyntaxException, IOException {
