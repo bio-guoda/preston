@@ -53,6 +53,12 @@ public abstract class CmdZenodoEnabled extends LoggingPersisting implements Runn
     private boolean publishRestrictedOnly = false;
 
     @CommandLine.Option(
+            names = {"--explicit-license-only"},
+            description = "only deposit records with explicit licenses: default license not allowed."
+    )
+    private boolean explicitLicenseOnly = false;
+
+    @CommandLine.Option(
             names = {"--update-metadata-only"},
             description = "update metadata of existing record(s) only: if no associated record exists do nothing."
     )
@@ -73,6 +79,7 @@ public abstract class CmdZenodoEnabled extends LoggingPersisting implements Runn
         );
         zenodoContext.setCreateNewVersionForExisting(createNewVersionForExisting);
         zenodoContext.setPublishRestrictedOnly(publishRestrictedOnly);
+        zenodoContext.setExplicitLicenseOnly(explicitLicenseOnly);
         zenodoContext.setUpdateMetadataOnly(updateMetadataOnly);
         zenodoContext.setAllowEmptyPublicationDate(allowEmptyPublicationDate);
         zenodoContext.setTmpDir(getTmpDir());
@@ -116,6 +123,14 @@ public abstract class CmdZenodoEnabled extends LoggingPersisting implements Runn
     }
 
     public boolean shouldUpdateMetadataOnly() {
+        return updateMetadataOnly;
+    }
+
+    public void setExplicitLicenseOnly(boolean explicitLicenseOnly) {
+        this.explicitLicenseOnly = explicitLicenseOnly;
+    }
+
+    public boolean shouldAllowExplicitLicenseOnly() {
         return updateMetadataOnly;
     }
 }

@@ -334,6 +334,11 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         if (licenseMap != null) {
             annotateLicenseByAlternateIdentifier(zenodoMetadata, licenseMap);
         }
+
+        if (ctx.shouldAllowExplicitLicenseOnly() && zenodoMetadata.at("/metadata/license").isMissingNode()) {
+            throw new IOException("will only publish deposit with explicit license, but none is provided in [" + zenodoMetadata.toPrettyString() + "]");
+        }
+
         String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
         ZenodoUtils.update(ctxLocal, StringUtils.replace(input, "{{ ZENODO_DEPOSIT_ID }}", Long.toString(ctxLocal.getDepositId())));
     }

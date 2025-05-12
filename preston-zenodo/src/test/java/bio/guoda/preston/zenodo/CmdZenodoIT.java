@@ -237,6 +237,7 @@ public class CmdZenodoIT {
 
 
     }
+
     @Test
     public void createDepositWithProvidedLicenseMap() throws URISyntaxException, IOException {
         System.setProperty("ZENODO_TOKEN", ZenodoTestUtil.getAccessToken());
@@ -281,6 +282,62 @@ public class CmdZenodoIT {
         cmdZenodo.run();
 
         depositMetadata = requestDepositMetadata(depositId);
+
+        assertThat(depositMetadata.at("/metadata/license/id").asText(), Is.is("cc-by-nc-sa-3.0"));
+
+
+    }
+
+    @Test
+    public void createDepositWithExplicitLicenseOnly() throws URISyntaxException, IOException {
+        System.setProperty("ZENODO_TOKEN", ZenodoTestUtil.getAccessToken());
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        String path = "bhl-data/bf/5a/bf5adca9c87277542d8315be10a372240284d041e8545ab613d5f200ec4167c0";
+        CmdZenodo cmdZenodo = createCmd(outputStream, path);
+
+        // first make sure a deposit exists
+        cmdZenodo.run();
+        String log = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+        String[] split = StringUtils.split(log, '\n');
+        assertThat(split.length, greaterThan(0));
+
+        assertThat(log, containsString("https://sandbox.zenodo.org/records/"));
+
+        Pattern compile = Pattern.compile(".*https://sandbox.zenodo.org/records/(?<depositId>[0-9]+).*");
+        Matcher matcher = compile.matcher(StringUtils.replace(log, "\n", " "));
+        assertThat(matcher.matches(), Is.is(true));
+
+
+        String depositId = matcher.group("depositId");
+        JsonNode depositMetadata = requestDepositMetadata(depositId);
+        String expectedLastModified = depositMetadata.at("/modified").asText();
+        assertThat(depositMetadata.at("/metadata").isMissingNode(), Is.is(false));
+
+        outputStream = new ByteArrayOutputStream();
+        cmdZenodo = createCmd(outputStream, path);
+
+        cmdZenodo.setUpdateMetadataOnly(true);
+        cmdZenodo.setExplicitLicenseOnly(true);
+        cmdZenodo.run();
+
+        depositMetadata = requestDepositMetadata(depositId);
+        String actualLastModifiedWithoutExplicitLicense = depositMetadata.at("/modified").asText();
+
+        assertThat(actualLastModifiedWithoutExplicitLicense, is(expectedLastModified));
+
+        outputStream = new ByteArrayOutputStream();
+        cmdZenodo = createCmd(outputStream, path);
+
+        // then update metadata to be restricted
+        cmdZenodo.setUpdateMetadataOnly(true);
+        cmdZenodo.setExplicitLicenseOnly(true);
+        cmdZenodo.setLicenseRelations(RefNodeFactory.toIRI("hash://sha256/67d630b743d3cc9a99ce4a894daf041a7e72ed9510b2a45a98f4ee19a228b65a"));
+        cmdZenodo.run();
+
+        depositMetadata = requestDepositMetadata(depositId);
+        String actualLastModifiedWithExplicitLicense = depositMetadata.at("/modified").asText();
+
+        assertThat(actualLastModifiedWithExplicitLicense, is(not(expectedLastModified)));
 
         assertThat(depositMetadata.at("/metadata/license/id").asText(), Is.is("cc-by-nc-sa-3.0"));
 

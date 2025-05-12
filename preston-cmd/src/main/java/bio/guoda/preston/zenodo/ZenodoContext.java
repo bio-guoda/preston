@@ -24,6 +24,7 @@ public class ZenodoContext implements ZenodoConfig {
     private boolean updateMetadataOnly = false;
     private boolean allowEmptyPublicationDate = false;
     private String tmpDir;
+    private boolean explicitLicenseOnly = false;
 
     public ZenodoContext(String accessToken) {
         this(accessToken, "https://sandbox.zenodo.org");
@@ -148,4 +149,16 @@ public class ZenodoContext implements ZenodoConfig {
     public String getTmpDir() {
         return tmpDir;
     }
+
+    @Override
+    public void setExplicitLicenseOnly(boolean explicitLicenseOnly) {
+        this.explicitLicenseOnly = explicitLicenseOnly;
+    }
+
+    @Override
+    public boolean shouldAllowExplicitLicenseOnly() {
+        return this.explicitLicenseOnly;
+    }
+
+
 }

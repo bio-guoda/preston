@@ -33,4 +33,9 @@ public interface ZenodoConfig {
     IRI getLicenseRelations();
 
     String getTmpDir();
+
+    void setExplicitLicenseOnly(boolean explicitLicenseOnly);
+
+    boolean shouldAllowExplicitLicenseOnly();
+
 }

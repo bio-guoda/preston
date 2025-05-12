@@ -255,6 +255,16 @@ public class DarkTaxonFileExtractorTest {
             public String getTmpDir() {
                 return "";
             }
+
+            @Override
+            public void setExplicitLicenseOnly(boolean explicitLicenseOnly) {
+
+            }
+
+            @Override
+            public boolean shouldAllowExplicitLicenseOnly() {
+                return false;
+            }
         };
     }
 
