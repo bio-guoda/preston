@@ -24,7 +24,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
-import org.mapdb.DBMaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,7 +90,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         }
     }
 
-    static void buildTranslatorMap(Dereferencer<InputStream> dereferencer, IRI translatorMapIRI, Map<String, String> licenseMap) throws IOException {
+    static void buildLicenseMap(Dereferencer<InputStream> dereferencer, IRI translatorMapIRI, Map<String, String> licenseMap) throws IOException {
         ProcessorState state = new ProcessorState() {
             @Override
             public void stopProcessing() {
@@ -250,21 +249,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             }
         }
 
-        if (ctx.getLicenseRelations() != null) {
-            if (licenseMap != null) {
-                LOG.info("building license map defined by [" + ctx.getLicenseRelations() + "]...");
-                this.licenseMap = BlobStoreUtil
-                        .getFileDb(new File(StringUtils.isBlank(ctx.getTmpDir()) ? "tmp" : ctx.getTmpDir()))
-                        .createTreeMap("licenseMap")
-                        .make();
-
-                buildTranslatorMap(dereferencer,
-                        ctx.getLicenseRelations(),
-                        licenseMap
-                );
-                LOG.info("building license map defined by [" + ctx.getLicenseRelations() + "] done.");
-            }
-        }
+        checkLicenseMap();
 
 
         try {
@@ -294,6 +279,24 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
             attemptCleanupAndRethrow(ctxLocal, e);
         } finally {
             candidateFileAttachments.clear();
+        }
+    }
+
+    private void checkLicenseMap() throws IOException {
+        if (ctx.getLicenseRelations() != null) {
+            if (licenseMap == null) {
+                LOG.info("building license map defined by [" + ctx.getLicenseRelations() + "]...");
+                this.licenseMap = BlobStoreUtil
+                        .getFileDb(new File(StringUtils.isBlank(ctx.getTmpDir()) ? "tmp" : ctx.getTmpDir()))
+                        .createTreeMap("licenseMap")
+                        .make();
+
+                buildLicenseMap(dereferencer,
+                        ctx.getLicenseRelations(),
+                        licenseMap
+                );
+                LOG.info("building license map defined by [" + ctx.getLicenseRelations() + "] done.");
+            }
         }
     }
 
@@ -328,6 +331,9 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
     }
 
     private void updateMetadata(ZenodoContext ctxLocal, JsonNode zenodoMetadata) throws IOException {
+        if (licenseMap != null) {
+            annotateLicenseByAlternateIdentifier(zenodoMetadata, licenseMap);
+        }
         String input = getObjectMapper().writer().writeValueAsString(zenodoMetadata);
         ZenodoUtils.update(ctxLocal, StringUtils.replace(input, "{{ ZENODO_DEPOSIT_ID }}", Long.toString(ctxLocal.getDepositId())));
     }

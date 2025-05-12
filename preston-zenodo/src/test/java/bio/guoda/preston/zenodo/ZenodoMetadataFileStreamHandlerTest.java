@@ -135,7 +135,7 @@ public class ZenodoMetadataFileStreamHandlerTest {
         final Map<String, String> licenseMap = new TreeMap<>();
         Dereferencer<InputStream> dereferencer = withDummyTranslatorMap(partUrn, translatorMapIRI);
 
-        ZenodoMetadataFileStreamHandler.buildTranslatorMap(dereferencer, translatorMapIRI, licenseMap);
+        ZenodoMetadataFileStreamHandler.buildLicenseMap(dereferencer, translatorMapIRI, licenseMap);
 
         JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("/bio/guoda/preston/zenodo/zenodo-bhl-metadata.json"));
 
@@ -155,7 +155,7 @@ public class ZenodoMetadataFileStreamHandlerTest {
         final Map<String, String> licenseMap = new TreeMap<>();
         Dereferencer<InputStream> dereferencer = withDummyTranslatorMap(partUrn, translatorMapIRI);
 
-        ZenodoMetadataFileStreamHandler.buildTranslatorMap(dereferencer, translatorMapIRI, licenseMap);
+        ZenodoMetadataFileStreamHandler.buildLicenseMap(dereferencer, translatorMapIRI, licenseMap);
 
         JsonNode jsonNode = new ObjectMapper().readTree(getClass().getResourceAsStream("/bio/guoda/preston/zenodo/zenodo-bhl-metadata.json"));
 

@@ -83,7 +83,7 @@ public abstract class CmdZenodoEnabled extends LoggingPersisting implements Runn
         return licenseRelations;
     }
 
-    private void setLicenseRelations(IRI licenseRelations) {
+    public void setLicenseRelations(IRI licenseRelations) {
         this.licenseRelations = licenseRelations;
     }
 

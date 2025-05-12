@@ -191,7 +191,7 @@ public class CmdZenodoIT {
     @Test
     public void createDepositAndUpdateToRestrictBatLit() throws URISyntaxException, IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        CmdZenodo cmdZenodo = createCmd(outputStream);
+        CmdZenodo cmdZenodo = createCmd(outputStream, "batlit-data/31/31/3131a4dd8ed099a31e2f2032c0248ba7");
 
         // first make sure a deposit exists
         cmdZenodo.run();
@@ -212,7 +212,7 @@ public class CmdZenodoIT {
         assertThat(depositMetadata.at("/metadata").isMissingNode(), Is.is(false));
 
         outputStream = new ByteArrayOutputStream();
-        cmdZenodo = createCmd(outputStream);
+        cmdZenodo = createCmd(outputStream, "batlit-data/31/31/3131a4dd8ed099a31e2f2032c0248ba7");
 
         // then update metadata to be open
         cmdZenodo.setUpdateMetadataOnly(true);
@@ -224,7 +224,7 @@ public class CmdZenodoIT {
         assertThat(depositMetadata.at("/metadata/" + ZenodoMetaUtil.ACCESS_RIGHT).asText(), Is.is("open"));
 
         outputStream = new ByteArrayOutputStream();
-        cmdZenodo = createCmd(outputStream);
+        cmdZenodo = createCmd(outputStream, "batlit-data/31/31/3131a4dd8ed099a31e2f2032c0248ba7");
 
         // then update metadata to be restricted
         cmdZenodo.setUpdateMetadataOnly(true);
@@ -239,8 +239,10 @@ public class CmdZenodoIT {
     }
     @Test
     public void createDepositWithProvidedLicenseMap() throws URISyntaxException, IOException {
+        System.setProperty("ZENODO_TOKEN", ZenodoTestUtil.getAccessToken());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        CmdZenodo cmdZenodo = createCmd(outputStream);
+        String path = "bhl-data/bf/5a/bf5adca9c87277542d8315be10a372240284d041e8545ab613d5f200ec4167c0";
+        CmdZenodo cmdZenodo = createCmd(outputStream, path);
 
         // first make sure a deposit exists
         cmdZenodo.run();
@@ -261,28 +263,26 @@ public class CmdZenodoIT {
         assertThat(depositMetadata.at("/metadata").isMissingNode(), Is.is(false));
 
         outputStream = new ByteArrayOutputStream();
-        cmdZenodo = createCmd(outputStream);
+        cmdZenodo = createCmd(outputStream, path);
 
-        // then update metadata to be open
         cmdZenodo.setUpdateMetadataOnly(true);
-        cmdZenodo.setPublishRestrictedOnly(false);
         cmdZenodo.run();
 
         depositMetadata = requestDepositMetadata(depositId);
 
-        assertThat(depositMetadata.at("/metadata/" + ZenodoMetaUtil.ACCESS_RIGHT).asText(), Is.is("open"));
+        assertThat(depositMetadata.at("/metadata/license/id").asText(), Is.is("cc-by-4.0"));
 
         outputStream = new ByteArrayOutputStream();
-        cmdZenodo = createCmd(outputStream);
+        cmdZenodo = createCmd(outputStream, path);
 
         // then update metadata to be restricted
         cmdZenodo.setUpdateMetadataOnly(true);
-        cmdZenodo.setPublishRestrictedOnly(true);
+        cmdZenodo.setLicenseRelations(RefNodeFactory.toIRI("hash://sha256/67d630b743d3cc9a99ce4a894daf041a7e72ed9510b2a45a98f4ee19a228b65a"));
         cmdZenodo.run();
 
         depositMetadata = requestDepositMetadata(depositId);
 
-        assertThat(depositMetadata.at("/metadata/" + ZenodoMetaUtil.ACCESS_RIGHT).asText(), Is.is("restricted"));
+        assertThat(depositMetadata.at("/metadata/license/id").asText(), Is.is("cc-by-nc-sa-3.0"));
 
 
     }
@@ -359,9 +359,9 @@ public class CmdZenodoIT {
     }
 
 
-    private CmdZenodo createCmd(ByteArrayOutputStream outputStream) throws IOException {
+    private CmdZenodo createCmd(ByteArrayOutputStream outputStream, String resourceURI1) throws IOException {
         CmdZenodo cmdZenodo = new CmdZenodo();
-        String resourceURI = "batlit-data/31/31/3131a4dd8ed099a31e2f2032c0248ba7";
+        String resourceURI = resourceURI1;
 
         URL resource = getClass().getResource(resourceURI);
         URI remote = new File(resource.getFile()).getParentFile().getParentFile().getParentFile().toURI();
