@@ -364,6 +364,100 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>rpm-maven-plugin</artifactId>
+                <version>2.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>rpm</goal>
+                        </goals>
+                        <configuration>
+                            <license>MIT (c) 2018, Jorrit Poelen</license>
+                            <distribution>Preston 2018/2025</distribution>
+                            <group>Application/Collectors</group>
+                            <packager>Jorrit Poelen</packager>
+                            <prefix>/usr/local</prefix>
+                            <copyTo>${project.build.directory}/${project.artifactId}-${project.version}.rpm</copyTo>
+                            <!--<changelogFile>changelog.md</changelogFile>-->
+                            <defineStatements>
+                                <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+                            </defineStatements>
+                            <mappings>
+                                <mapping>
+                                    <directory>/usr/local/preston/lib</directory>
+                                    <filemode>440</filemode>
+                                    <username>preston-bioguoda</username>
+                                    <groupname>preston-bioguoda</groupname>
+                                    <dependency/>
+                                </mapping>
+                                <mapping>
+                                    <directory>/usr/local/preston/lib</directory>
+                                    <filemode>440</filemode>
+                                    <username>preston-bioguoda</username>
+                                    <groupname>preston-bioguoda</groupname>
+                                    <sources>
+                                        <source>
+                                            <location>target/${project.artifactId}-${project.version}.jar</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                                <mapping>
+                                    <directory>/usr/local/preston/bin</directory>
+                                    <filemode>775</filemode>
+                                    <username>preston-bioguoda</username>
+                                    <groupname>preston-bioguoda</groupname>
+                                    <sources>
+                                        <source>
+                                            <location>src/main/rpm/preston-cli.sh</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                                <mapping>
+                                    <directory>/usr/local/preston/bin</directory>
+                                    <filemode>775</filemode>
+                                    <username>preston-bioguoda</username>
+                                    <groupname>preston-bioguoda</groupname>
+                                    <sources>
+                                        <source>
+                                            <location>${project.build.directory}/preston_completion</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                                <mapping>
+                                    <directory>/usr/local/preston/conf</directory>
+                                    <configuration>true</configuration>
+                                    <filemode>640</filemode>
+                                    <username>preston-bioguoda</username>
+                                    <groupname>preston-bioguoda</groupname>
+                                    <sources>
+                                        <source>
+                                            <location>src/main/conf</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                            </mappings>
+                            <preinstallScriptlet>
+                                <scriptFile>src/main/rpm/preinstall.sh</scriptFile>
+                                <fileEncoding>utf-8</fileEncoding>
+                                <filter>true</filter>
+                            </preinstallScriptlet>
+                            <postremoveScriptlet>
+                                <scriptFile>src/main/rpm/remove.sh</scriptFile>
+                                <fileEncoding>utf-8</fileEncoding>
+                                <filter>true</filter>
+                            </postremoveScriptlet>
+                            <postinstallScriptlet>
+                                <scriptFile>src/main/rpm/postinstall.sh</scriptFile>
+                                <fileEncoding>utf-8</fileEncoding>
+                                <filter>true</filter>
+                            </postinstallScriptlet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
