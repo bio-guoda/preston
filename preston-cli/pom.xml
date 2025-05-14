@@ -388,15 +388,23 @@
                             <mappings>
                                 <mapping>
                                     <directory>/opt/preston/lib</directory>
-                                    <dirmode>755</dirmode>
+                                    <directoryIncluded>true</directoryIncluded>
+                                    <filemode>755</filemode>
+                                    <username>root</username>
+                                    <groupname>root</groupname>
+                                </mapping>
+                                <mapping>
+                                    <directory>/opt/preston/lib</directory>
+                                    <directoryIncluded>false</directoryIncluded>
                                     <filemode>644</filemode>
+                                    <directoryIncluded>false</directoryIncluded>
                                     <username>root</username>
                                     <groupname>root</groupname>
                                     <dependency/>
                                 </mapping>
                                 <mapping>
                                     <directory>/opt/preston/lib</directory>
-                                    <dirmode>755</dirmode>
+                                    <directoryIncluded>false</directoryIncluded>
                                     <filemode>644</filemode>
                                     <username>root</username>
                                     <groupname>root</groupname>
