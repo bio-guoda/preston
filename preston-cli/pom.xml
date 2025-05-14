@@ -379,7 +379,7 @@
                             <distribution>Preston 2018/2025</distribution>
                             <group>Application/Collectors</group>
                             <packager>Jorrit Poelen</packager>
-                            <prefix>/usr/local</prefix>
+                            <prefix>/opt/preston</prefix>
                             <copyTo>${project.build.directory}/${project.artifactId}-${project.version}.rpm</copyTo>
                             <!--<changelogFile>changelog.md</changelogFile>-->
                             <defineStatements>
@@ -387,7 +387,7 @@
                             </defineStatements>
                             <mappings>
                                 <mapping>
-                                    <directory>/usr/local/preston/lib</directory>
+                                    <directory>/opt/preston/lib</directory>
                                     <dirmode>755</dirmode>
                                     <filemode>644</filemode>
                                     <username>root</username>
@@ -395,7 +395,7 @@
                                     <dependency/>
                                 </mapping>
                                 <mapping>
-                                    <directory>/usr/local/preston/lib</directory>
+                                    <directory>/opt/preston/lib</directory>
                                     <dirmode>755</dirmode>
                                     <filemode>644</filemode>
                                     <username>root</username>
@@ -408,6 +408,7 @@
                                 </mapping>
                                 <mapping>
                                     <directory>/usr/bin</directory>
+                                    <directoryIncluded>false</directoryIncluded>
                                     <filemode>755</filemode>
                                     <username>root</username>
                                     <groupname>root</groupname>
