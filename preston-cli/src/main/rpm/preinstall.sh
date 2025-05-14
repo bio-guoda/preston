@@ -25,7 +25,7 @@ function verify_java_version_min {
 default_user_creation_if_required
 
 # Verify the existence of java command, if not there verification should exit already
-type -P java &> /dev/null || { echo "java not found"; exit 1; }
+type -P java &> /dev/null || { echo "java not found; please install java using [sudo dnf install java-21-openjdk.x86_64] (fedora) or similar."; exit 1; }
 
 verify_java_version_min
 exit_code=$?
