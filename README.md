@@ -16,14 +16,16 @@ Elliott M.J., Poelen, J.H. & Fortes, J.A.B. (2023) Signing data citations enable
 [`toc`](#table-of-contents) / [`quickstart`](#quickstart) / [`introduction`](#introduction) / [`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding) / [`(data) publications`](#publications)
 
 ## Quickstart
-To install [a preston release](../../releases) on your linux/mac: 
+To install [a preston release](../../releases/latest) on your linux/mac: 
 
 ```console
 sudo sh -c '(curl -L https://github.com/bio-guoda/preston/releases/latest/download/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
 ```
 :warning: Note that this installs preston using sudo privileges and makes preston.jar executable. Please inspect the script before running it. Also see [install](#install).
 
-Note that a debian package (Debian, Ubuntu, etc) is also available for use with the [Advanced Package Tool (or apt)](https://en.wikipedia.org/wiki/APT_(software)) via:
+Note that [preston.deb](https://github.com/bio-guoda/preston/releases/latest/download/preston.deb) (Debian, Ubuntu, etc) and [preston.rpm](https://github.com/bio-guoda/preston/releases/latest/download/preston.rpm) (RedHat, Fedora, etc) packages are also available.
+
+### deb package example
 
 ```console
 sudo apt update
@@ -33,6 +35,16 @@ sudo apt install ./preston.deb
 ```
 
 To remove type ```sudo apt remove preston```.
+
+
+### rpm package example
+
+```console
+curl -L https://github.com/bio-guoda/preston/releases/latest/download/preston.rpm > preston.rpm
+sudo dnf install ./preston.rpm
+```
+
+To remove type ```sudo dnf remove preston```.
 
 
 Then, visit [jhpoelen.nl/bees](https://jhpoelen.nl/bees) or [github.com/bio-guoda/preston-amazon](https://github.com/bio-guoda/preston-amazon) for worked out examples. 
