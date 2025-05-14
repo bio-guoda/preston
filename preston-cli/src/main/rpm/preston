@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+# Launches Preston in JVM
+#
+
+java -Xmx4G -XX:+UseG1GC -cp "/opt/preston/lib/*" bio.guoda.preston.Preston "$@"

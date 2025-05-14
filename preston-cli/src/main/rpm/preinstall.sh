@@ -2,14 +2,6 @@
 set -o errexit
 set -o nounset
 set -o pipefail
-function default_user_creation_if_required {
-  if id "preston-bioguoda" &>/dev/null;
-  then
-    echo "User preston-bioguoda already exist"
-  else
-    adduser -M -r preston-bioguoda
-  fi
-}
 
 function verify_java_version_min {
     minimal_version=8
@@ -20,9 +12,6 @@ function verify_java_version_min {
     fi
     return 0
 }
-
-
-default_user_creation_if_required
 
 # Verify the existence of java command, if not there verification should exit already
 type -P java &> /dev/null || { echo "java not found; please install java using [sudo dnf install java-21-openjdk.x86_64] (fedora) or similar."; exit 1; }
