@@ -385,6 +385,9 @@
                             <defineStatements>
                                 <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
                             </defineStatements>
+			    <requires>
+			        <require>java >= 1.8</require>
+			    </requires>			    
                             <mappings>
                                 <mapping>
                                     <directory>/opt/preston/lib</directory>
@@ -392,15 +395,6 @@
                                     <filemode>755</filemode>
                                     <username>root</username>
                                     <groupname>root</groupname>
-                                </mapping>
-                                <mapping>
-                                    <directory>/opt/preston/lib</directory>
-                                    <directoryIncluded>false</directoryIncluded>
-                                    <filemode>644</filemode>
-                                    <directoryIncluded>false</directoryIncluded>
-                                    <username>root</username>
-                                    <groupname>root</groupname>
-                                    <dependency/>
                                 </mapping>
                                 <mapping>
                                     <directory>/opt/preston/lib</directory>
@@ -414,6 +408,15 @@
                                         </source>
                                     </sources>
                                 </mapping>
+				<mapping>
+                                    <directory>/opt/preston/lib</directory>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <filemode>644</filemode>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <username>root</username>
+                                    <groupname>root</groupname>
+                                    <dependency/>
+                                </mapping>
                                 <mapping>
                                     <directory>/usr/bin</directory>
                                     <directoryIncluded>false</directoryIncluded>
@@ -426,12 +429,20 @@
                                         </source>
                                     </sources>
                                 </mapping>
+				<!-- Bash completion -->
+				<mapping>
+  				    <directory>/usr/share/bash-completion/completions</directory>
+                                    <directoryIncluded>false</directoryIncluded>
+				    <filemode>644</filemode>
+				    <username>root</username>
+				    <groupname>root</groupname>
+				    <sources>
+				        <source>
+					  <location>target/preston_completion</location>
+					</source>
+				    </sources>
+				</mapping>				
                             </mappings>
-                            <preinstallScriptlet>
-                                <scriptFile>src/main/rpm/preinstall.sh</scriptFile>
-                                <fileEncoding>utf-8</fileEncoding>
-                                <filter>true</filter>
-                            </preinstallScriptlet>
                         </configuration>
                     </execution>
                 </executions>
