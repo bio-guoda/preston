@@ -401,6 +401,15 @@
                                     <directory>/opt/${project.artifactId}/lib</directory>
                                     <directoryIncluded>false</directoryIncluded>
                                     <filemode>644</filemode>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <username>root</username>
+                                    <groupname>root</groupname>
+                                    <dependency/>
+                                </mapping>
+                                <mapping>
+                                    <directory>/opt/${project.artifactId}/lib</directory>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <filemode>644</filemode>
                                     <username>root</username>
                                     <groupname>root</groupname>
                                     <sources>
@@ -408,15 +417,6 @@
                                             <location>target/${project.artifactId}-${project.version}.jar</location>
                                         </source>
                                     </sources>
-                                </mapping>
-                                <mapping>
-                                    <directory>/opt/${project.artifactId}/lib</directory>
-                                    <directoryIncluded>false</directoryIncluded>
-                                    <filemode>644</filemode>
-                                    <directoryIncluded>false</directoryIncluded>
-                                    <username>root</username>
-                                    <groupname>root</groupname>
-                                    <dependency/>
                                 </mapping>
                                 <mapping>
                                     <directory>/usr/bin</directory>
