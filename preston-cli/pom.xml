@@ -379,7 +379,7 @@
                             <distribution>Preston 2018/2025</distribution>
                             <group>Application/Collectors</group>
                             <packager>Jorrit Poelen</packager>
-                            <prefix>/opt/preston</prefix>
+                            <prefix>/opt/${project.artifactId}</prefix>
                             <copyTo>${project.build.directory}/${project.artifactId}-${project.version}.rpm</copyTo>
                             <!--<changelogFile>changelog.md</changelogFile>-->
                             <defineStatements>
@@ -387,14 +387,14 @@
                             </defineStatements>
                             <mappings>
                                 <mapping>
-                                    <directory>/opt/preston/lib</directory>
+                                    <directory>/opt/${project.artifactId}/lib</directory>
                                     <directoryIncluded>true</directoryIncluded>
                                     <filemode>755</filemode>
                                     <username>root</username>
                                     <groupname>root</groupname>
                                 </mapping>
                                 <mapping>
-                                    <directory>/opt/preston/lib</directory>
+                                    <directory>/opt/${project.artifactId}/lib</directory>
                                     <directoryIncluded>false</directoryIncluded>
                                     <filemode>644</filemode>
                                     <directoryIncluded>false</directoryIncluded>
@@ -403,7 +403,7 @@
                                     <dependency/>
                                 </mapping>
                                 <mapping>
-                                    <directory>/opt/preston/lib</directory>
+                                    <directory>/opt/${project.artifactId}/lib</directory>
                                     <directoryIncluded>false</directoryIncluded>
                                     <filemode>644</filemode>
                                     <username>root</username>
@@ -422,7 +422,7 @@
                                     <groupname>root</groupname>
                                     <sources>
                                         <source>
-                                            <location>src/main/rpm/preston</location>
+                                            <location>src/main/rpm/${project.artifactId}}</location>
                                         </source>
                                     </sources>
                                 </mapping>
