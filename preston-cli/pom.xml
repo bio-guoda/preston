@@ -426,7 +426,7 @@
                                     <groupname>root</groupname>
                                     <sources>
                                         <source>
-                                            <location>src/main/rpm/preston</location>
+                                            <location>src/main/rpm/${project.artifactId}</location>
                                         </source>
                                     </sources>
                                 </mapping>
