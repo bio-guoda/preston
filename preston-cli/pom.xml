@@ -385,6 +385,10 @@
                             <defineStatements>
                                 <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
                             </defineStatements>
+                            <requires>
+                                <require>java-headless >= 1.8</require>
+                                <require>bash-completion</require>
+                            </requires>
                             <mappings>
                                 <mapping>
                                     <directory>/opt/${project.artifactId}/lib</directory>
@@ -426,17 +430,24 @@
                                         </source>
                                     </sources>
                                 </mapping>
+                                <mapping>
+                                    <directory>/usr/share/bash-completion/completions</directory>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <filemode>644</filemode>
+                                    <username>root</username>
+                                    <groupname>root</groupname>
+                                    <sources>
+                                        <source>
+                                            <location>target/${project.artifactId}_completion</location>
+                                            <destination>${project.artifactId}</destination>
+                                        </source>
+                                    </sources>
+                                </mapping>
                             </mappings>
-                            <preinstallScriptlet>
-                                <scriptFile>src/main/rpm/preinstall.sh</scriptFile>
-                                <fileEncoding>utf-8</fileEncoding>
-                                <filter>true</filter>
-                            </preinstallScriptlet>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
-
 </project>
