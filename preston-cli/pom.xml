@@ -439,8 +439,6 @@
                                     <sources>
                                         <source>
                                             <location>src/main/rpm/${project.artifactId}</location>
-                                            <!-- needs to be called just "preston" for bash-completion to find it -->
-                                            <destination>preston</destination>
                                         </source>
                                     </sources>
                                 </mapping>
