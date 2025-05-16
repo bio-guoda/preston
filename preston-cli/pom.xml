@@ -385,9 +385,10 @@
                             <defineStatements>
                                 <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
                             </defineStatements>
-			    <requires>
-			        <require>java >= 1.8</require>
-			    </requires>			    
+                            <requires>
+                                <require>java-headless >= 1.8</require>
+                                <require>bash-completion</require>
+                            </requires>
                             <mappings>
                                 <mapping>
                                     <directory>/opt/preston/lib</directory>
@@ -408,7 +409,7 @@
                                         </source>
                                     </sources>
                                 </mapping>
-				<mapping>
+                                <mapping>
                                     <directory>/opt/preston/lib</directory>
                                     <directoryIncluded>false</directoryIncluded>
                                     <filemode>644</filemode>
@@ -429,19 +430,20 @@
                                         </source>
                                     </sources>
                                 </mapping>
-				<!-- Bash completion -->
-				<mapping>
-  				    <directory>/usr/share/bash-completion/completions</directory>
+                                <mapping>
+                                    <directory>/usr/share/bash-completion/completions</directory>
                                     <directoryIncluded>false</directoryIncluded>
-				    <filemode>644</filemode>
-				    <username>root</username>
-				    <groupname>root</groupname>
-				    <sources>
-				        <source>
-					  <location>target/preston_completion</location>
-					</source>
-				    </sources>
-				</mapping>				
+                                    <filemode>644</filemode>
+                                    <username>root</username>
+                                    <groupname>root</groupname>
+                                    <sources>
+                                        <source>
+                                            <location>target/preston_completion</location>
+                                            <!-- needs to be called just "preston" for bash-completion to find it -->
+                                            <destination>preston</destination>
+                                        </source>
+                                    </sources>
+                                </mapping>
                             </mappings>
                         </configuration>
                     </execution>
@@ -449,5 +451,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
