@@ -5,7 +5,7 @@
     <parent>
         <groupId>bio.guoda</groupId>
         <artifactId>preston-parent</artifactId>
-        <version>0.10.8</version>
+        <version>0.10.9-SNAPSHOT</version>
         <relativePath>../preston-parent/pom.xml</relativePath>
     </parent>
 
@@ -379,7 +379,7 @@
                             <distribution>Preston 2018/2025</distribution>
                             <group>Application/Collectors</group>
                             <packager>Jorrit Poelen</packager>
-                            <prefix>/opt/preston</prefix>
+                            <prefix>/opt/${project.artifactId}</prefix>
                             <copyTo>${project.build.directory}/${project.artifactId}-${project.version}.rpm</copyTo>
                             <!--<changelogFile>changelog.md</changelogFile>-->
                             <defineStatements>
@@ -391,14 +391,14 @@
                             </requires>
                             <mappings>
                                 <mapping>
-                                    <directory>/opt/preston/lib</directory>
+                                    <directory>/opt/${project.artifactId}/lib</directory>
                                     <directoryIncluded>true</directoryIncluded>
                                     <filemode>755</filemode>
                                     <username>root</username>
                                     <groupname>root</groupname>
                                 </mapping>
                                 <mapping>
-                                    <directory>/opt/preston/lib</directory>
+                                    <directory>/opt/${project.artifactId}/lib</directory>
                                     <directoryIncluded>false</directoryIncluded>
                                     <filemode>644</filemode>
                                     <username>root</username>
@@ -410,7 +410,7 @@
                                     </sources>
                                 </mapping>
                                 <mapping>
-                                    <directory>/opt/preston/lib</directory>
+                                    <directory>/opt/${project.artifactId}/lib</directory>
                                     <directoryIncluded>false</directoryIncluded>
                                     <filemode>644</filemode>
                                     <directoryIncluded>false</directoryIncluded>
