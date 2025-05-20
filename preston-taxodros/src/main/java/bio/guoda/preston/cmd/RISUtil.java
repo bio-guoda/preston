@@ -183,6 +183,9 @@ public class RISUtil {
 
             if (StringUtils.contains(url, "biodiversitylibrary.org")) {
                 addKeyword(metadata, "Biodiversity");
+                addKeyword(metadata, "Source: Biodiversity Heritage Library");
+                addKeyword(metadata, "Source: https://biodiversitylibrary.org");
+                addKeyword(metadata, "Source: BHL");
             }
         }
 
