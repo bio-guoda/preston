@@ -49,7 +49,7 @@ public class KeyTo1LevelZenodoPathTest {
 
             @Override
             public InputStream get(IRI uri) throws IOException {
-                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records?q=files.entries.checksum:%22md5:eb5e8f37583644943b86d1d9ebd4ded5%22&allversions=1"));
+                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records?q=files.entries.checksum:%22md5:eb5e8f37583644943b86d1d9ebd4ded5%22&allversions=1&size=1"));
                 return KeyTo1LevelZenodoPathTest.this.getClass().getResourceAsStream("zenodo-response-all-versions-2023-10-20.json");
             }
         };
@@ -134,7 +134,7 @@ public class KeyTo1LevelZenodoPathTest {
 
             @Override
             public InputStream get(IRI uri) throws IOException {
-                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records?q=files.entries.checksum:%22md5:eb5e8f37583644943b86d1d9ebd4ded5%22&allversions=1"));
+                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records?q=files.entries.checksum:%22md5:eb5e8f37583644943b86d1d9ebd4ded5%22&allversions=1&size=1"));
                 return KeyTo1LevelZenodoPathTest.this.getClass().getResourceAsStream("zenodo-response-all-versions-2023-10-20.json");
             }
         };
