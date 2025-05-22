@@ -35,7 +35,7 @@ public class KeyTo1LevelZenodoPathTest {
 
             @Override
             public InputStream get(IRI uri) throws IOException {
-                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records/?q=_files.checksum:%22md5:eb5e8f37583644943b86d1d9ebd4ded5%22&all_versions=true"));
+                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records/?q=_files.checksum:%22md5:eb5e8f37583644943b86d1d9ebd4ded5%22&all_versions=true&size=1"));
                 return KeyTo1LevelZenodoPathTest.this.getClass().getResourceAsStream("zenodo-response.json");
             }
         };
@@ -105,9 +105,9 @@ public class KeyTo1LevelZenodoPathTest {
             @Override
             public InputStream get(IRI uri) throws IOException {
                 InputStream is = null;
-                if (StringUtils.equals(uri.getIRIString(), "https://zenodo.org/api/records/?q=_files.checksum:%22md5:942d0c469322df33da20e10204197bc5%22&all_versions=true")) {
+                if (StringUtils.equals(uri.getIRIString(), "https://zenodo.org/api/records/?q=_files.checksum:%22md5:942d0c469322df33da20e10204197bc5%22&all_versions=true&size=1")) {
                     is = getClass().getResourceAsStream("zenodo-13505983-empty.json");
-                } else if (StringUtils.equals(uri.getIRIString(), "https://zenodo.org/api/records/?q=%22hash://md5/942d0c469322df33da20e10204197bc5%22&all_versions=true")) {
+                } else if (StringUtils.equals(uri.getIRIString(), "https://zenodo.org/api/records/?q=%22hash://md5/942d0c469322df33da20e10204197bc5%22&all_versions=true&size=1")) {
                     is = getClass().getResourceAsStream("zenodo-13505983.json");
                 } else if (StringUtils.equals(uri.getIRIString(), "https://zenodo.org/api/records/13505983/files")) {
                     is = getClass().getResourceAsStream("zenodo-13505983-files.json");
@@ -164,7 +164,7 @@ public class KeyTo1LevelZenodoPathTest {
 
             @Override
             public InputStream get(IRI uri) throws IOException {
-                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records/?q=_files.checksum:%22md5:d11ddcecf3d5cbc627439260bdbfda72%22&all_versions=true"));
+                assertThat(uri.getIRIString(), is("https://zenodo.org/api/records/?q=_files.checksum:%22md5:d11ddcecf3d5cbc627439260bdbfda72%22&all_versions=true&size=1"));
                 return KeyTo1LevelZenodoPathTest.this.getClass().getResourceAsStream("zenodo-response-all-versions.json");
             }
         };
