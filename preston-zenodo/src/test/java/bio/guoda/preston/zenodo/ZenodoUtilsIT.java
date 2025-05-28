@@ -1,8 +1,12 @@
 package bio.guoda.preston.zenodo;
 
+import bio.guoda.preston.ResourcesHTTP;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -35,6 +39,34 @@ public class ZenodoUtilsIT {
         ZenodoContext ctx = new ZenodoContext(null, "https://sandbox.zenodo.org");
         assertThat(ctx.getDepositId(), is(nullValue()));
         ZenodoUtils.createEmptyDeposit(ctx);
+    }
+
+    @Test
+    public void findNonExistingWithMatchingNamespacePrefix() throws IOException {
+
+        ZenodoContext ctx = new ZenodoContext(null, "https://zenodo.org");
+        Collection<Pair<Long, String>> foundRecords = ZenodoUtils.findRecordsByAlternateIds(
+                ctx,
+                Arrays.asList("urn:lsid:globalbioticinteractions.org:dataset:globalbioticinteractions/us"),
+                null,
+                ResourcesHTTP::asInputStream
+        );
+
+        assertThat(foundRecords.size(), is(0));
+    }
+
+    @Test
+    public void findExistingByNamespace() throws IOException {
+
+        ZenodoContext ctx = new ZenodoContext(null, "https://zenodo.org");
+        Collection<Pair<Long, String>> foundRecords = ZenodoUtils.findRecordsByAlternateIds(
+                ctx,
+                Arrays.asList("urn:lsid:globalbioticinteractions.org:dataset:globalbioticinteractions/template-dataset"),
+                null,
+                ResourcesHTTP::asInputStream
+        );
+
+        assertThat(foundRecords.size(), is(1));
     }
 
 

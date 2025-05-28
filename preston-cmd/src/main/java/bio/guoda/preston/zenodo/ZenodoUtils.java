@@ -285,9 +285,9 @@ public class ZenodoUtils {
         return getQuery(ctx.getEndpoint(), query, "/search");
     }
 
-    private static void findExistingRecords(ZenodoConfig ctx, List<String> ids, Collection<Pair<Long, String>> foundIds, String type, Dereferencer<InputStream> dereferencer) throws IOException {
-        IRI query = getQueryForExistingRecords(ctx, ids, type);
-        executeQueryAndCollectIds(foundIds, query, dereferencer);
+    private static void findExistingRecords(ZenodoConfig ctx, List<String> alternateIds, Collection<Pair<Long, String>> foundIds, String type, Dereferencer<InputStream> dereferencer) throws IOException {
+        IRI query = getQueryForExistingRecords(ctx, alternateIds, type);
+        executeQueryMatchAlternateIdsAndCollectDepositIds(foundIds, query, dereferencer, alternateIds);
     }
 
     public static IRI getQueryForExistingRecords(ZenodoConfig ctx, List<String> ids, String type) {
@@ -312,7 +312,7 @@ public class ZenodoUtils {
                 .collect(Collectors.joining("%20AND%20"));
     }
 
-    private static void executeQueryAndCollectIds(Collection<Pair<Long, String>> foundIds, IRI query, Dereferencer<InputStream> dereferencer) throws IOException {
+    private static void executeQueryMatchAlternateIdsAndCollectDepositIds(Collection<Pair<Long, String>> foundIds, IRI query, Dereferencer<InputStream> dereferencer, List<String> alternateIds) throws IOException {
 
         LOG.info("executing query [" + query + "]...");
         try (InputStream is = dereferencer.get(query)) {
@@ -324,7 +324,14 @@ public class ZenodoUtils {
                 if (hit.has("id")
                         && hit.get("id").isIntegralNumber()
                         && hit.has("state")) {
-                    foundIds.add(Pair.of(hit.get("id").asLong(), hit.get("state").asText()));
+                    JsonNode altIds = hit.at("/metadata/alternate_identifiers");
+                    for (JsonNode altId : altIds) {
+                        if (altId.has("identifier") && alternateIds.contains(altId.get("identifier").asText())) {
+                            foundIds.add(Pair.of(hit.get("id").asLong(), hit.get("state").asText()));
+                            break;
+                        }
+                    }
+
                 }
             }
         } finally {
