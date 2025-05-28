@@ -42,7 +42,7 @@ public class DereferencingEntity extends AbstractHttpEntity {
                 LOG.info("calculating content length for [" + resource.getIRIString() + "]...");
                 DerefProgressLogger outgoing = new DerefProgressLogger(System.err, "counting bytes: ");
                 InputStream inputStreamWithLogger = ContentStreamUtil.getInputStreamWithProgressLogger(resource, outgoing, -1, inputStream);
-                int copy = IOUtils.copy(inputStreamWithLogger, NullOutputStream.INSTANCE);
+                long copy = IOUtils.copyLarge(inputStreamWithLogger, NullOutputStream.INSTANCE);
                 LOG.info("calculating content length for [" + resource.getIRIString() + "] done.");
                 contentLength.set(copy);
             } catch (IOException e) {
