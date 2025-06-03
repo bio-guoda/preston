@@ -8,13 +8,9 @@ import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.apache.tika.detect.DefaultDetector;
-import org.apache.tika.detect.MagicDetector;
 import org.apache.tika.detect.TextDetector;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
-import org.apache.tika.mime.MimeType;
-import org.apache.tika.parser.txt.UniversalEncodingDetector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,8 +18,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -42,11 +36,11 @@ import static bio.guoda.preston.RefNodeFactory.toContentType;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
-public class RegistryReaderSciELO extends ProcessorReadOnly {
+public class SciELOSoftRedirector extends ProcessorReadOnly {
     public static final String SCI_ELO_URL_PART = "scielo.php?script=sci_pdf";
-    private static final Logger LOG = LoggerFactory.getLogger(RegistryReaderSciELO.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SciELOSoftRedirector.class);
 
-    public RegistryReaderSciELO(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
+    public SciELOSoftRedirector(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
     }
 

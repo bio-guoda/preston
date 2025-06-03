@@ -19,7 +19,7 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class RegistryReaderSciELOTest {
+public class SciELOSoftRedirectorTest {
 
     @Test
     public void onSoftRedirect() {
@@ -30,7 +30,7 @@ public class RegistryReaderSciELOTest {
             }
         };
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderSciELO registryReader = new RegistryReaderSciELO(
+        SciELOSoftRedirector registryReader = new SciELOSoftRedirector(
                 blobStore,
                 TestUtilForProcessor.testListener(nodes)
         );
@@ -61,7 +61,7 @@ public class RegistryReaderSciELOTest {
             }
         };
         ArrayList<Quad> nodes = new ArrayList<>();
-        RegistryReaderSciELO registryReader = new RegistryReaderSciELO(
+        SciELOSoftRedirector registryReader = new SciELOSoftRedirector(
                 blobStore,
                 TestUtilForProcessor.testListener(nodes)
         );
