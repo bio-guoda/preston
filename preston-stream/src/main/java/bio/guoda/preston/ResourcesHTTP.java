@@ -4,7 +4,6 @@ import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpMessage;
 import org.apache.http.StatusLine;
@@ -209,7 +208,7 @@ public class ResourcesHTTP {
                     .setSSLContext(build)
                     .setServiceUnavailableRetryStrategy(new RateLimitedRetryStrategy())
                     .setRetryHandler(new DefaultHttpRequestRetryHandler(3, true))
-                    .setUserAgent("globalbioticinteractions/" + VersionUtil.getVersionString() + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)")
+                    .setUserAgent(getUserAgent(VersionUtil.getVersionString()))
                     .setDefaultRequestConfig(config)
                     // for loading proxy config see https://github.com/globalbioticinteractions/nomer/issues/121
                     .useSystemProperties()
@@ -217,6 +216,10 @@ public class ResourcesHTTP {
         } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
             throw new IllegalStateException("unexpected ssl exception", e);
         }
+    }
+
+    static String getUserAgent(String versionString) {
+        return "globalbioticinteractions/" + versionString + " (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)";
     }
 
     private static RequestConfig.Builder defaultConfig() {

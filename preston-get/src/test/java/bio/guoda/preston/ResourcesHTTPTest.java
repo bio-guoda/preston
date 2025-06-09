@@ -47,4 +47,10 @@ public class ResourcesHTTPTest {
         assertThat(httpGet.getFirstHeader("Authorization").toString(), is("Authorization: Bearer 4567"));
     }
 
+    @Test
+    public void userAgent() {
+        String userAgent = ResourcesHTTP.getUserAgent("1.1.1");
+        assertThat(userAgent, is("globalbioticinteractions/1.1.1 (https://globalbioticinteractions.org; mailto:info@globalbioticinteractions.org)"));
+    }
+
 }
