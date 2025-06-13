@@ -109,7 +109,7 @@ public class RISUtilTest {
         assertThat(keywords.get(0).asText(), is("cave"));
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(5));
+        assertThat(identifiers.size(), is(4));
         // provided by Zoteros
         assertThat(identifiers.get(0).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(0).get("identifier").asText(), is("https://linker.bio/line:foo:bar!/L23-L44"));
@@ -117,15 +117,12 @@ public class RISUtilTest {
         assertThat(identifiers.get(1).get("identifier").asText(), is("10.3897/subtbiol.43.85804"));
 
         assertThat(identifiers.get(2).get("relation").asText(), is("isDerivedFrom"));
-        assertThat(identifiers.get(2).get("identifier").asText(), is("https://www.biodiversitylibrary.org/partpdf/337600"));
+        assertThat(identifiers.get(2).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/337600"));
+        assertThat(identifiers.get(2).has("resource_type"), is(false));
 
-        assertThat(identifiers.get(3).get("relation").asText(), is("isDerivedFrom"));
-        assertThat(identifiers.get(3).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/337600"));
+        assertThat(identifiers.get(3).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(3).get("identifier").asText(), is("urn:lsid:biodiversitylibrary.org:part:337600"));
         assertThat(identifiers.get(3).has("resource_type"), is(false));
-
-        assertThat(identifiers.get(4).get("relation").asText(), is("isAlternateIdentifier"));
-        assertThat(identifiers.get(4).get("identifier").asText(), is("urn:lsid:biodiversitylibrary.org:part:337600"));
-        assertThat(identifiers.get(4).has("resource_type"), is(false));
 
     }
 
@@ -233,7 +230,7 @@ public class RISUtilTest {
 
         assertThat(jsonObjects.size(), is(1));
         JsonNode relatedIdentifiers = jsonObjects.get(0).get("related_identifiers");
-        assertThat(relatedIdentifiers.size(), is(5));
+        assertThat(relatedIdentifiers.size(), is(4));
 
         assertThat(relatedIdentifiers.get(1).get("identifier").asText(), is("0196-0768"));
         assertThat(relatedIdentifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
@@ -263,7 +260,7 @@ public class RISUtilTest {
 
         JsonNode relatedIdentifiers = citationRecord.get("related_identifiers");
 
-        assertThat(relatedIdentifiers.size(), is(5));
+        assertThat(relatedIdentifiers.size(), is(4));
 
         assertThat(relatedIdentifiers.get(1).get("identifier").asText(), is("0081-0266"));
         assertThat(relatedIdentifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
@@ -294,7 +291,7 @@ public class RISUtilTest {
 
         JsonNode relatedIdentifiers = citationRecord.get("related_identifiers");
 
-        assertThat(relatedIdentifiers.size(), is(5));
+        assertThat(relatedIdentifiers.size(), is(4));
 
         assertThat(relatedIdentifiers.get(1).get("identifier").asText(), is("9780982841945"));
         assertThat(relatedIdentifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
