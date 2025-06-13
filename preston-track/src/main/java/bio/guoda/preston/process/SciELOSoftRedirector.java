@@ -100,29 +100,6 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
         }
     }
 
-    private static void handleBarCodes(BufferedReader bufferedReader, int barCodeIndex, StatementsEmitter emitter, IRI versionSource) throws IOException {
-        String line;
-        long lineNumber = 1;
-        while ((line = bufferedReader.readLine()) != null) {
-            lineNumber++;
-            String[] values = StringUtils.split(line, '\t');
-            if (barCodeIndex < values.length - 1) {
-                String barCode = StringUtils.trim(values[barCodeIndex]);
-                if (StringUtils.isNotBlank(barCode)) {
-                    Stream.of(
-                                    toStatement(toIRI(barCode),
-                                            WAS_DERIVED_FROM,
-                                            RefNodeFactory.toIRI("line:" + versionSource.getIRIString() + "!/L" + lineNumber)))
-
-                            .forEach(emitter::emit);
-                    submit(emitter, barCode, "_meta.xml", MimeTypes.XML);
-                    submit(emitter, barCode, "_djvu.txt", MimeTypes.TEXT_UTF8);
-                }
-            }
-
-        }
-    }
-
     private static void submit(StatementsEmitter emitter, String barCode, String ext, String fileFormat) {
         IRI resource = toIRI("https://archive.org/download/" + barCode + "/" + barCode + ext);
         Stream.of(
@@ -131,6 +108,4 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
                         toStatement(resource, HAS_VERSION, toBlank()))
                 .forEach(emitter::emit);
     }
-
-
 }
