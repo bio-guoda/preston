@@ -37,19 +37,81 @@ public class RISFileExtractorTest {
 
     @Test
     public void streamBHLPartsToZenodoLineJson() throws IOException {
-        String[] jsonObjects = getResource("ris/bhlpart-multiple.ris", "332157");
+        String[] jsonObjects = extractMetadata("ris/bhlpart-multiple.ris", "332157");
         assertArticleItem(jsonObjects);
     }
 
     @Test
+    public void streamBHLSciELOPartsToZenodoLineJson() throws IOException {
+        String[] jsonObjects = extractMetadata("ris/bhlpart-scielo.ris", "108952");
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+
+        assertThat(taxonNode.get("description").asText(), is("(Uploaded by Plazi from the Biodiversity Heritage Library) No abstract provided."));
+
+        JsonNode communities = taxonNode.get("communities");
+        assertThat(communities.isArray(), is(true));
+        assertThat(communities.size(), is(1));
+        assertThat(communities.get(0).get("identifier").asText(), is("biosyslit"));
+
+
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("https://linker.bio/line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L12"));
+        assertThat(taxonNode.get("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").asText(), is("application/x-research-info-systems"));
+        assertThat(taxonNode.get("referenceId").asText(), is("https://www.biodiversitylibrary.org/part/108952"));
+
+        JsonNode creators = taxonNode.get("creators");
+        assertThat(creators.isArray(), is(true));
+        assertThat(creators.size(), is(1));
+        assertThat(creators.get(0).get("name").asText(), is("Buys, Sandor Christiano."));
+        assertThat(taxonNode.get("journal_title").asText(), is("Biota Neotropica"));
+        assertThat(taxonNode.get("publication_date").asText(), is("2011-12-01"));
+        assertThat(taxonNode.get("journal_issue"), is(nullValue()));
+        assertThat(taxonNode.get("access_right"), is(nullValue()));
+        assertThat(taxonNode.get("publication_type").textValue(), is("article"));
+        assertThat(taxonNode.get("upload_type").textValue(), is("publication"));
+        assertThat(taxonNode.get("filename").textValue(), is("bhlpart108952.pdf"));
+
+
+        JsonNode identifiers = taxonNode.at("/related_identifiers");
+        assertThat(identifiers.size(), is(6));
+
+        assertThat(identifiers.get(0).get("relation").asText(), is("isDerivedFrom"));
+        assertThat(identifiers.get(0).get("identifier").asText(), is("https://linker.bio/line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L12"));
+        assertThat(identifiers.get(1).get("relation").asText(), is("isDerivedFrom"));
+        assertThat(identifiers.get(1).get("identifier").asText(), is(not("https://www.biodiversitylibrary.org/partpdf/108952")));
+        assertThat(identifiers.get(1).has("resource_type"), is(false));
+
+        assertThat(identifiers.get(1).get("relation").asText(), is("isDerivedFrom"));
+        assertThat(identifiers.get(1).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/108952"));
+
+        assertThat(identifiers.get(2).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(2).get("identifier").asText(), is("urn:lsid:biodiversitylibrary.org:part:108952"));
+
+        assertThat(identifiers.get(3).get("relation").asText(), is("isPartOf"));
+        assertThat(identifiers.get(3).get("identifier").asText(), is("hash://sha256/37171f648818b1286f7df81bca57c9b8c43d2e22d64c8520f7d2464e282cd6e0"));
+
+        // calculated on the fly
+        assertThat(identifiers.get(4).get("relation").asText(), is("hasVersion"));
+        assertThat(identifiers.get(4).get("identifier").asText(), is("hash://md5/f3452e34cc97208fdac0d1375c94c7a2"));
+
+        assertThat(identifiers.get(5).get("relation").asText(), is("hasVersion"));
+        assertThat(identifiers.get(5).get("identifier").asText(), is("hash://sha256/da8e8a1b2579542779408c410edb110f9a44f4206db2df66ec46391bcba78015"));
+
+
+        JsonNode keywords = taxonNode.at("/keywords");
+        assertThat(keywords.get(0).asText(), is("Aculeate"));
+    }
+
+    @Test
     public void streamBHLPartToZenodoLineJsonMissingAttachment() throws IOException {
-        String[] jsonObjects = getResource("ris/bhlpart-multiple.ris", "332157");
+        String[] jsonObjects = extractMetadata("ris/bhlpart-multiple.ris", "332157");
         assertThat(jsonObjects.length, is(5));
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[1]);
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(6));
+        assertThat(identifiers.size(), is(5));
         // provided by Zoteros
         assertThat(identifiers.get(0).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(0).get("identifier").asText(), is("https://linker.bio/line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L23-L44"));
@@ -57,17 +119,13 @@ public class RISFileExtractorTest {
         assertThat(identifiers.get(1).get("identifier").asText(), is("10.3897/subtbiol.43.85804"));
 
         assertThat(identifiers.get(2).get("relation").asText(), is("isDerivedFrom"));
-        assertThat(identifiers.get(2).get("identifier").asText(), is("https://www.biodiversitylibrary.org/partpdf/337600"));
-        assertThat(identifiers.get(2).has("resource_type"), is(false));
+        assertThat(identifiers.get(2).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/337600"));
 
-        assertThat(identifiers.get(3).get("relation").asText(), is("isDerivedFrom"));
-        assertThat(identifiers.get(3).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/337600"));
+        assertThat(identifiers.get(3).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(3).get("identifier").asText(), is("urn:lsid:biodiversitylibrary.org:part:337600"));
 
-        assertThat(identifiers.get(4).get("relation").asText(), is("isAlternateIdentifier"));
-        assertThat(identifiers.get(4).get("identifier").asText(), is("urn:lsid:biodiversitylibrary.org:part:337600"));
-
-        assertThat(identifiers.get(5).get("relation").asText(), is("isPartOf"));
-        assertThat(identifiers.get(5).get("identifier").asText(), is("hash://sha256/37171f648818b1286f7df81bca57c9b8c43d2e22d64c8520f7d2464e282cd6e0"));
+        assertThat(identifiers.get(4).get("relation").asText(), is("isPartOf"));
+        assertThat(identifiers.get(4).get("identifier").asText(), is("hash://sha256/37171f648818b1286f7df81bca57c9b8c43d2e22d64c8520f7d2464e282cd6e0"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("cave"));
@@ -75,7 +133,7 @@ public class RISFileExtractorTest {
 
     @Test
     public void streamBHLWithAuthorTrailingCommas() throws IOException {
-        String[] jsonObjects = getResource("ris/bhlpart-author-trailing-comma.ris", "44156");
+        String[] jsonObjects = extractMetadata("ris/bhlpart-author-trailing-comma.ris", "44156");
         assertThat(jsonObjects.length, is(1));
 
         JsonNode metadata = unwrapMetadata(jsonObjects[0]);
@@ -88,7 +146,7 @@ public class RISFileExtractorTest {
 
     @Test
     public void streamBHLWithJournalIssue() throws IOException {
-        String[] jsonObjects = getResource("ris/bhlpart-journal-issue.ris", "149328");
+        String[] jsonObjects = extractMetadata("ris/bhlpart-journal-issue.ris", "149328");
         assertThat(jsonObjects.length, is(1));
 
         JsonNode metadata = unwrapMetadata(jsonObjects[0]);
@@ -101,7 +159,7 @@ public class RISFileExtractorTest {
 
     @Test
     public void streamBHLWithBiodiversityKeyword() throws IOException {
-        String[] jsonObjects = getResource("ris/bhlpart-journal-issue.ris", "149328");
+        String[] jsonObjects = extractMetadata("ris/bhlpart-journal-issue.ris", "149328");
         assertThat(jsonObjects.length, is(1));
 
         List<String> keywordsFound = getKeywords(jsonObjects[0]);
@@ -159,32 +217,28 @@ public class RISFileExtractorTest {
 
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(8));
-        // provided by Zoteros
+        assertThat(identifiers.size(), is(7));
+
         assertThat(identifiers.get(0).get("relation").asText(), is("isDerivedFrom"));
         assertThat(identifiers.get(0).get("identifier").asText(), is("https://linker.bio/line:hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1!/L1-L22"));
         assertThat(identifiers.get(1).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(1).get("identifier").asText(), is("10.3897/mycokeys.85.73405"));
 
         assertThat(identifiers.get(2).get("relation").asText(), is("isDerivedFrom"));
-        assertThat(identifiers.get(2).get("identifier").asText(), is("https://www.biodiversitylibrary.org/partpdf/332157"));
-        assertThat(identifiers.get(2).has("resource_type"), is(false));
+        assertThat(identifiers.get(2).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/332157"));
 
-        assertThat(identifiers.get(3).get("relation").asText(), is("isDerivedFrom"));
-        assertThat(identifiers.get(3).get("identifier").asText(), is("https://www.biodiversitylibrary.org/part/332157"));
+        assertThat(identifiers.get(3).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(3).get("identifier").asText(), is("urn:lsid:biodiversitylibrary.org:part:332157"));
 
-        assertThat(identifiers.get(4).get("relation").asText(), is("isAlternateIdentifier"));
-        assertThat(identifiers.get(4).get("identifier").asText(), is("urn:lsid:biodiversitylibrary.org:part:332157"));
-
-        assertThat(identifiers.get(5).get("relation").asText(), is("isPartOf"));
-        assertThat(identifiers.get(5).get("identifier").asText(), is("hash://sha256/37171f648818b1286f7df81bca57c9b8c43d2e22d64c8520f7d2464e282cd6e0"));
+        assertThat(identifiers.get(4).get("relation").asText(), is("isPartOf"));
+        assertThat(identifiers.get(4).get("identifier").asText(), is("hash://sha256/37171f648818b1286f7df81bca57c9b8c43d2e22d64c8520f7d2464e282cd6e0"));
 
         // calculated on the fly
-        assertThat(identifiers.get(6).get("relation").asText(), is("hasVersion"));
-        assertThat(identifiers.get(6).get("identifier").asText(), is("hash://md5/f3452e34cc97208fdac0d1375c94c7a2"));
+        assertThat(identifiers.get(5).get("relation").asText(), is("hasVersion"));
+        assertThat(identifiers.get(5).get("identifier").asText(), is("hash://md5/f3452e34cc97208fdac0d1375c94c7a2"));
 
-        assertThat(identifiers.get(7).get("relation").asText(), is("hasVersion"));
-        assertThat(identifiers.get(7).get("identifier").asText(), is("hash://sha256/da8e8a1b2579542779408c410edb110f9a44f4206db2df66ec46391bcba78015"));
+        assertThat(identifiers.get(6).get("relation").asText(), is("hasVersion"));
+        assertThat(identifiers.get(6).get("identifier").asText(), is("hash://sha256/da8e8a1b2579542779408c410edb110f9a44f4206db2df66ec46391bcba78015"));
 
 
         JsonNode keywords = taxonNode.at("/keywords");
@@ -196,7 +250,7 @@ public class RISFileExtractorTest {
         return rootNode.get("metadata");
     }
 
-    private String[] getResource(String records, final String bhlPartId) throws IOException {
+    private String[] extractMetadata(String records, final String bhlPartId) throws IOException {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {

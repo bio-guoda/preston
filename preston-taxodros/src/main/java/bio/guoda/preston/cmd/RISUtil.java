@@ -165,11 +165,6 @@ public class RISUtil {
             String url = jsonNode.get("UR").asText();
             metadata.put("referenceId", url);
 
-            String downloadUrl = getBHLPartPDFUrl(metadata);
-            if (StringUtils.isNotBlank(downloadUrl)) {
-                addDerivedFrom(relatedIdentifiers, downloadUrl);
-            }
-
             String filename = getBHLPartPdfFilename(metadata);
             if (StringUtils.isNotBlank(filename)) {
                 metadata.put("filename", filename);
