@@ -99,8 +99,10 @@ public class RISFileExtractorTest {
         assertThat(identifiers.get(5).get("identifier").asText(), is("hash://sha256/da8e8a1b2579542779408c410edb110f9a44f4206db2df66ec46391bcba78015"));
 
 
-        JsonNode keywords = taxonNode.at("/keywords");
-        assertThat(keywords.get(0).asText(), is("Aculeate"));
+        List<String> keywordList = getKeywordList(taxonNode);
+
+        assertThat(keywordList, hasItem("Biodiversity"));
+        assertThat(keywordList, hasItem("Aculeate"));
     }
 
     @Test
@@ -127,8 +129,10 @@ public class RISFileExtractorTest {
         assertThat(identifiers.get(4).get("relation").asText(), is("isPartOf"));
         assertThat(identifiers.get(4).get("identifier").asText(), is("hash://sha256/37171f648818b1286f7df81bca57c9b8c43d2e22d64c8520f7d2464e282cd6e0"));
 
-        JsonNode keywords = taxonNode.at("/keywords");
-        assertThat(keywords.get(0).asText(), is("cave"));
+        List<String> keywordList = getKeywordList(taxonNode);
+
+        assertThat(keywordList, hasItem("Biodiversity"));
+        assertThat(keywordList, hasItem("cave"));
     }
 
     @Test
@@ -165,6 +169,20 @@ public class RISFileExtractorTest {
         List<String> keywordsFound = getKeywords(jsonObjects[0]);
 
         assertThat(keywordsFound, hasItem("Biodiversity"));
+        assertThat(keywordsFound, hasItem("BHL-Corpus"));
+
+    }
+
+    @Test
+    public void streamBHLWithBiodiversityKeywordAndCustomKeywords() throws IOException {
+        String[] jsonObjects = extractMetadata("ris/bhlpart-scielo.ris", "108952");
+        assertThat(jsonObjects.length, is(1));
+
+        List<String> keywordsFound = getKeywords(jsonObjects[0]);
+
+        assertThat(keywordsFound, hasItem("Biodiversity"));
+        assertThat(keywordsFound, hasItem("BHL-Corpus"));
+        assertThat(keywordsFound, hasItem("Geographic distribution"));
 
     }
 
@@ -241,8 +259,21 @@ public class RISFileExtractorTest {
         assertThat(identifiers.get(6).get("identifier").asText(), is("hash://sha256/da8e8a1b2579542779408c410edb110f9a44f4206db2df66ec46391bcba78015"));
 
 
+        List<String> keywordList = getKeywordList(taxonNode);
+
+        assertThat(keywordList, hasItem("Biodiversity"));
+        assertThat(keywordList, hasItem("Entomophthorales"));
+    }
+
+    private static List<String> getKeywordList(JsonNode taxonNode) {
         JsonNode keywords = taxonNode.at("/keywords");
-        assertThat(keywords.get(0).asText(), is("Entomophthorales"));
+
+        List<String> keywordList = new ArrayList<>();
+
+        for (JsonNode keyword : keywords) {
+            keywordList.add(keyword.asText());
+        }
+        return keywordList;
     }
 
     private JsonNode unwrapMetadata(String jsonObject) throws JsonProcessingException {

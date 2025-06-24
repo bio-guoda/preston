@@ -178,6 +178,7 @@ public class RISUtil {
 
             if (StringUtils.contains(url, "biodiversitylibrary.org")) {
                 addKeyword(metadata, "Biodiversity");
+                addKeyword(metadata, "BHL-Corpus");
                 addKeyword(metadata, "Source: Biodiversity Heritage Library");
                 addKeyword(metadata, "Source: https://biodiversitylibrary.org");
                 addKeyword(metadata, "Source: BHL");
@@ -196,7 +197,7 @@ public class RISUtil {
         }
         JsonNode keywords = jsonNode.get("KW");
         if (keywords != null) {
-            ArrayNode keywordsList = new ObjectMapper().createArrayNode();
+            final ArrayNode keywordsList = getKeywordList(metadata);
             if (keywords.isArray()) {
                 keywords.forEach(value -> keywordsList.add(value.asText()));
             } else {
@@ -214,13 +215,19 @@ public class RISUtil {
         return metadata;
     }
 
-    public static void addKeyword(ObjectNode metadata, String keyword) {
-        JsonNode keywords = metadata.at("/keywords");
-        if (null == keywords || !keywords.isArray()) {
-            keywords = new ObjectMapper().createArrayNode();
+    private static ArrayNode getKeywordList(ObjectNode metadata) {
+        final ArrayNode keywordList = new ObjectMapper().createArrayNode();
+        JsonNode keywordsExisting = metadata.at("/keywords");
+        if (keywordsExisting.isArray()) {
+            keywordList.addAll((ArrayNode) keywordsExisting);
         }
-        ((ArrayNode) keywords).add(keyword);
-        metadata.set("keywords", keywords);
+        return keywordList;
+    }
+
+    public static void addKeyword(ObjectNode metadata, String keyword) {
+        ArrayNode keywordList = getKeywordList(metadata);
+        keywordList.add(keyword);
+        metadata.set("keywords", keywordList);
     }
 
     public static String removeTrailingComma(String author) {
