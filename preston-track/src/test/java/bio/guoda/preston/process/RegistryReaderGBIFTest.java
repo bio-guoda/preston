@@ -265,6 +265,7 @@ public class RegistryReaderGBIFTest {
                 HAS_VERSION,
                 RefNodeFactory.toIRI("hash://sha256/123"))));
     }
+
     @Test
     public void isDatasetRecordEndpointAlternate() {
         assertTrue(RegistryReaderGBIF.describesDatasetRecord(RefNodeFactory.toStatement(
@@ -279,6 +280,40 @@ public class RegistryReaderGBIFTest {
                 RefNodeFactory.toIRI("https://www.gbif.org/api/dataset/1234"),
                 HAS_VERSION,
                 RefNodeFactory.toIRI("hash://sha256/123"))));
+    }
+
+    @Test
+    public void isDatasetLandingPage() {
+        assertTrue(RegistryReaderGBIF.isDatasetLandingPage(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://www.gbif.org/dataset/8aa91cea-dbec-4bbe-ab25-7eae7d7d624c"),
+                HAS_VERSION,
+                RefNodeFactory.toIRI("hash://sha256/123"))));
+    }
+
+    @Test
+    public void isDatasetLandingPageAlternative() {
+        assertTrue(RegistryReaderGBIF.isDatasetLandingPage(RefNodeFactory.toStatement(
+                RefNodeFactory.toIRI("https://gbif.org/dataset/8aa91cea-dbec-4bbe-ab25-7eae7d7d624c"),
+                HAS_VERSION,
+                RefNodeFactory.toIRI("hash://sha256/123"))));
+    }
+
+    @Test
+    public void onDatasetLandingPage() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(TestUtil.getTestBlobStore(HashType.sha256), TestUtilForProcessor.testListener(nodes));
+        registryReaderGBIF.on(
+                toStatement(
+                        toIRI("https://gbif.org/dataset/8aa91cea-dbec-4bbe-ab25-7eae7d7d624c"),
+                        HAS_VERSION,
+                        RefNodeFactory.toIRI("hash://sha256/123")
+                )
+        );
+        assertThat(nodes.size(), is(3));
+
+        assertThat(nodes.get(nodes.size()-1).getSubject().ntriplesString(), is("<https://gbif.org/api/dataset/8aa91cea-dbec-4bbe-ab25-7eae7d7d624c>"));
+        assertThat(RefNodeFactory.isBlankOrSkolemizedBlank(nodes.get(nodes.size()-1).getObject()), is(true));
+
     }
 
     @Test
@@ -372,6 +407,7 @@ public class RegistryReaderGBIFTest {
         assertThat(lastRefNode.toString(), startsWith("<http://example.org/?offset=40638&limit=2> <http://purl.org/pav/hasVersion> "));
 
     }
+
     @Test
     public void parseDatasetIndex() throws IOException {
 

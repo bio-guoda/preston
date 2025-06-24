@@ -1,6 +1,7 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.util.UUIDUtil;
@@ -11,10 +12,10 @@ import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,6 +48,7 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class RegistryReaderGBIF extends ProcessorReadOnly {
+    public static final Pattern GBIF_DATASET_LANDING_PAGE_URL = Pattern.compile("http[s]{0,1}://(www[.]){0,1}gbif.org/dataset/(?<datasetId>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})");
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
         put("DWC_ARCHIVE", MimeTypes.MIME_TYPE_DWCA);
         put("BIOCASE_XML_ARCHIVE", MimeTypes.MIME_TYPE_ABCDA);
@@ -110,6 +112,9 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 && isOccurrenceDownload(statement)) {
             handleOccurrenceDownload(statement);
         } else if (hasVersionAvailable(statement)
+                && isDatasetLandingPage(statement)) {
+            handleDatasetLandingPage(statement);
+        } else if (hasVersionAvailable(statement)
                 && isOccurrenceRecordEndpoint(statement)) {
             handleOccurrenceRecords(statement);
         }
@@ -131,6 +136,12 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 && !getVersionSource(statement).toString().contains("/download/request/");
     }
 
+    public static boolean isDatasetLandingPage(Quad statement) {
+        IRI versionSource = getVersionSource(statement);
+        Matcher matcher = GBIF_DATASET_LANDING_PAGE_URL.matcher(versionSource.getIRIString());
+        return matcher.matches();
+    }
+
     public void handleOccurrenceDownload(Quad statement) {
         List<Quad> nodes = new ArrayList<>();
         try {
@@ -147,6 +158,19 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         } catch (IOException e) {
             LOG.warn("failed to handle [" + statement.toString() + "]", e);
         }
+        ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+    }
+
+    public void handleDatasetLandingPage(Quad statement) {
+        List<Quad> nodes = new ArrayList<>();
+        IRI landingPage = getVersionSource(statement);
+        Matcher matcher = GBIF_DATASET_LANDING_PAGE_URL.matcher(landingPage.getIRIString());
+        if (matcher.matches()) {
+            IRI datasetEndpoint = toIRI("https://gbif.org/api/dataset/" + matcher.group("datasetId"));
+            nodes.add(toStatement(landingPage, SEE_ALSO, datasetEndpoint));
+            nodes.add(toStatement(datasetEndpoint, HAS_VERSION, toBlank()));
+        }
+
         ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
     }
 
@@ -221,9 +245,9 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
 
     private static void emitPageRequest(StatementsEmitter emitter, IRI nextPage, String mimeType) {
         Stream.of(
-                toStatement(nextPage, CREATED_BY, Seeds.GBIF),
-                toStatement(nextPage, HAS_FORMAT, toContentType(mimeType)),
-                toStatement(nextPage, HAS_VERSION, toBlank()))
+                        toStatement(nextPage, CREATED_BY, Seeds.GBIF),
+                        toStatement(nextPage, HAS_FORMAT, toContentType(mimeType)),
+                        toStatement(nextPage, HAS_VERSION, toBlank()))
                 .forEach(emitter::emit);
     }
 
