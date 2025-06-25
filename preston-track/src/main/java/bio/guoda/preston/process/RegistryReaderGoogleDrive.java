@@ -22,13 +22,13 @@ import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.docx;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.epub;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.html;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.jpg;
+import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.md;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.odp;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.ods;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.odt;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.pdf;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.png;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.pptx;
-import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.rtf;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.svg;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.tsv;
 import static bio.guoda.preston.process.RegistryReaderGoogleDrive.Type.txt;
@@ -53,7 +53,7 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
     public static final String DOCUMENT = "document";
 
     private static final TreeMap<String, List<Type>> TYPES_FOR_TYPES = new TreeMap<String, List<Type>>() {{
-        put(DOCUMENT, Arrays.asList(pdf, docx, txt, odt, rtf, epub, html));
+        put(DOCUMENT, Arrays.asList(pdf, docx, txt, odt, md, html));
         put(PRESENTATION, Arrays.asList(pdf, pptx, odp, txt, html, png, jpg, svg));
         put(SPREADSHEETS, Arrays.asList(xlsx, ods, pdf, csv, tsv, zip));
     }};
@@ -107,7 +107,7 @@ public class RegistryReaderGoogleDrive extends ProcessorReadOnly {
         odt("odt", "application/vnd.oasis.opendocument.text"),
         ods("ods", "application/vnd.oasis.opendocument.spreadsheet"),
         odp("odp", "application/vnd.oasis.opendocument.presentation"),
-        rtf("rtf", "application/application/rtf");
+        md("md", "text/markdown");
 
         public String getMimeType() {
             return mimeType;
