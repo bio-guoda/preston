@@ -52,6 +52,34 @@ public class SciELOSoftRedirectorTest {
         assertThat(redirectedTo.getPredicate(), is(HAS_VERSION));
         assertThat(RefNodeFactory.isBlankOrSkolemizedBlank(redirectedTo.getObject()), is(true));
     }
+
+    @Test
+    public void onSoftRedirectChile() {
+        // see https://github.com/bio-guoda/preston/issues/336#issuecomment-3005353035
+        // no soft redirect present likely due to cloudflare bot wall
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return getClass().getResourceAsStream("scielo-redirect-chile.html");
+            }
+        };
+        ArrayList<Quad> nodes = new ArrayList<>();
+        SciELOSoftRedirector registryReader = new SciELOSoftRedirector(
+                blobStore,
+                TestUtilForProcessor.testListener(nodes)
+        );
+        Quad redirectResource = toStatement(
+                toIRI("https://www.scielo.org.ar/scielo.php?script=sci_pdf&pid=S1667-782X2007000100006"),
+                HAS_VERSION,
+                createTestNode()
+        );
+
+        registryReader.on(redirectResource);
+
+        assertThat(nodes.size(), is(0));
+    }
+
+
     @Test
     public void onPDF() {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
