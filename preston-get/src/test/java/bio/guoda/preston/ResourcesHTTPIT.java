@@ -30,6 +30,20 @@ public class ResourcesHTTPIT {
     }
 
     @Test
+    public void SciELO403SoftRedirect() throws IOException {
+        try (InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("http://www.scielo.cl/scielo.php?script=sci_pdf&pid=S0718-19572015000100003")))) {
+            IOUtils.copy(is, NullOutputStream.INSTANCE);
+        }
+    }
+
+    @Test
+    public void SciELO403SoftRedirectHttps() throws IOException {
+        try (InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://www.scielo.cl/scielo.php?script=sci_pdf&pid=S0718-19572015000100003")))) {
+            IOUtils.copy(is, NullOutputStream.INSTANCE);
+        }
+    }
+
+    @Test
     public void irelandServerPickyAboutContentHeaderWithJSON404Ignore() throws IOException {
         final AtomicBoolean gotBusyMessage = new AtomicBoolean(false);
         final AtomicBoolean gotDoneMessage = new AtomicBoolean(false);

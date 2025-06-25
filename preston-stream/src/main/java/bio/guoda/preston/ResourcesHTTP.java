@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpMessage;
+import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.config.CookieSpecs;
@@ -36,6 +37,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class ResourcesHTTP {
     private static final Logger LOG = LoggerFactory.getLogger(ResourcesHTTP.class);
@@ -44,17 +46,26 @@ public class ResourcesHTTP {
     public static final String ZOTERO_AUTH_TOKEN = "ZOTERO_TOKEN";
     public static final String GITHUB_AUTH_TOKEN = "GITHUB_TOKEN";
 
-    private static final List<Integer> REDIRECT_CODES = Arrays.asList(301, 302, 303);
+    private static final List<Integer> REDIRECT_CODES = Arrays.asList(
+            HttpStatus.SC_MOVED_PERMANENTLY,
+            HttpStatus.SC_MOVED_TEMPORARILY,
+            HttpStatus.SC_SEE_OTHER
+    );
+
     public static final String MIMETYPE_GITHUB_JSON = "application/vnd.github+json";
+
     public static final Predicate<Integer> SHOULD_IGNORE_40x_50x
             = statusCode -> statusCode >= 400;
+
     public static final Predicate<Integer> NEVER_IGNORE = new Predicate<Integer>() {
         @Override
         public boolean test(Integer integer) {
             return false;
         }
     };
+
     private static CloseableHttpClient httpClient = null;
+
     private static CloseableHttpClient redirectingHttpClient = null;
 
     public static InputStream asInputStreamOfflineOnly(IRI dataIRI) throws IOException {
@@ -233,6 +244,7 @@ public class ResourcesHTTP {
 
     public static class ShouldThrowOn implements Predicate<Integer> {
 
+        public static final Pattern SCIELO_403_SOFT_REDIRECT = Pattern.compile("http[s]?://(www.)?scielo.cl/scielo.php\\?script=sci_pdf.*");
         private final IRI dataURI;
 
         public ShouldThrowOn(IRI dataURI) {
@@ -241,11 +253,12 @@ public class ResourcesHTTP {
 
         @Override
         public boolean test(Integer statusCode) {
-            boolean shouldThrow = false;
-            if (statusCode >= 300) {
-                if (shouldRedirect(dataURI) || !REDIRECT_CODES.contains(statusCode)) {
-                    shouldThrow = true;
-                }
+            boolean shouldThrow;
+            if (statusCode == HttpStatus.SC_FORBIDDEN
+                    && SCIELO_403_SOFT_REDIRECT.matcher(dataURI.getIRIString()).matches()) {
+                shouldThrow = false;
+            } else {
+                shouldThrow = statusCode >= 300 && (shouldRedirect(dataURI) || !REDIRECT_CODES.contains(statusCode));
             }
             return shouldThrow;
         }
