@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toBlank;
@@ -78,22 +79,33 @@ public class CmdTrack extends CmdActivity {
                       StatementsListener[] listeners) {
         StatementsListener processor = createActivityProcessor(blobStore, ctx, listeners);
 
-        while (!statementQueue.isEmpty()) {
-            processor.on(statementQueue.poll());
-        }
+        handleQueue(statementQueue, processor);
 
         if (StringUtils.isNotBlank(getFilename())) {
-            try {
-                Files.lines(Paths.get(new File(getFilename()).toURI()), StandardCharsets.UTF_8)
+            try (Stream<String> lines = Files.lines(Paths.get(new File(getFilename()).toURI()), StandardCharsets.UTF_8)) {
+                lines
                         .map(expandToFileURIIfNeeded())
                         .map(RefNodeFactory::toIRI)
                         .map(iri -> toStatement(ctx.getActivity(), iri, HAS_VERSION, toBlank()))
-                        .forEach(processor::on);
+                        .forEach(quad -> {
+                            processor.on(quad);
+                            // process derived statements also
+                            handleQueue(statementQueue, processor);
+                        });
             } catch (IOException e) {
                 String msg = "failed to handle [" + getFilename() + "]";
                 LOG.warn(msg, e);
                 throw new RuntimeException(msg, e);
             }
+
+            handleQueue(statementQueue, processor);
+
+        }
+    }
+
+    private static void handleQueue(Queue<List<Quad>> statementQueue, StatementsListener processor) {
+        while (!statementQueue.isEmpty()) {
+            processor.on(statementQueue.poll());
         }
     }
 

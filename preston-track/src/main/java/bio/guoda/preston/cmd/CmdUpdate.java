@@ -14,9 +14,9 @@ import bio.guoda.preston.process.RegistryReaderIDigBio;
 import bio.guoda.preston.process.RegistryReaderOAI;
 import bio.guoda.preston.process.RegistryReaderOBIS;
 import bio.guoda.preston.process.RegistryReaderRSS;
-import bio.guoda.preston.process.SciELOSoftRedirector;
 import bio.guoda.preston.process.RegistryReaderTaxonWorks;
 import bio.guoda.preston.process.RegistryReaderZotero;
+import bio.guoda.preston.process.SciELOSoftRedirector;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.Dereferencer;
@@ -38,7 +38,6 @@ import java.util.stream.Stream;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
 import static bio.guoda.preston.RefNodeFactory.toBlank;
-import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 @CommandLine.Command(
