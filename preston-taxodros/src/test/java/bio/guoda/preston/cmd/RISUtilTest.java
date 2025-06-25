@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 import static bio.guoda.preston.cmd.RISUtil.TYPE;
 import static bio.guoda.preston.cmd.RISUtil.translateRISToZenodo;
 import static junit.framework.TestCase.assertNotNull;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -105,8 +106,8 @@ public class RISUtilTest {
         assertThat(taxonNode.get("doi"), is(nullValue()));
         assertThat(taxonNode.get("filename").textValue(), is("bhlpart337600.pdf"));
 
-        JsonNode keywords = taxonNode.at("/keywords");
-        assertThat(keywords.get(0).asText(), is("cave"));
+        List<String> keywordList = RISFileExtractorTest.getKeywordList(taxonNode);
+        assertThat(keywordList, hasItem("cave"));
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
         assertThat(identifiers.size(), is(4));

@@ -265,7 +265,7 @@ public class RISFileExtractorTest {
         assertThat(keywordList, hasItem("Entomophthorales"));
     }
 
-    private static List<String> getKeywordList(JsonNode taxonNode) {
+    public static List<String> getKeywordList(JsonNode taxonNode) {
         JsonNode keywords = taxonNode.at("/keywords");
 
         List<String> keywordList = new ArrayList<>();
