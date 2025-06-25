@@ -39,7 +39,7 @@ public abstract class CmdZenodoEnabled extends LoggingPersisting implements Runn
 
     @CommandLine.Option(
             names = {"--licenses", "--license"},
-            description = "provide licenses for (alternate) identifiers: when provided, only deposits with identified licenses are published. The license relations are expected in rdf/nquads format:" +
+            description = "contentid (e.g., sha256, md5) to resource that associates licenses for (alternate) identifiers: when provided, only deposits with identified licenses are published. The license relations are expected in rdf/nquads format:" +
                     " <some:id> <http://purl.org/dc/elements/1.1/license> <https://spdx.org/licenses/...> .\n" +
                     " For example:\n" +
                     " <urn:lsid:biodiversitylibrary.org:part:94849> <http://purl.org/dc/elements/1.1/license> <https://spdx.org/licenses/CC-BY-NC-SA-3.0> ."

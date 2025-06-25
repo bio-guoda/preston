@@ -1,11 +1,9 @@
 package bio.guoda.preston.process;
 
-import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.tika.detect.TextDetector;
@@ -15,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -27,7 +24,6 @@ import java.util.stream.Stream;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.SEE_ALSO;
-import static bio.guoda.preston.RefNodeConstants.WAS_DERIVED_FROM;
 import static bio.guoda.preston.RefNodeFactory.getVersion;
 import static bio.guoda.preston.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;

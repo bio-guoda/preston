@@ -78,23 +78,23 @@ public class ContentQueryUtil {
         return contentStream;
     }
 
-    public static InputStream getContent(IRI zoteroItemIRI, DerferencerFactory derferencerFactory, Logger log) throws IOException, ContentStreamException {
+    public static InputStream getContent(IRI contentId, DerferencerFactory derferencerFactory, Logger log) throws IOException, ContentStreamException {
         InputStream itemInputStream = null;
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         try {
-            itemInputStream = getContent(zoteroItemIRI, derferencerFactory);
+            itemInputStream = getContent(contentId, derferencerFactory);
         } finally {
             stopWatch.stop();
             if (itemInputStream == null) {
-                logReponseTime(stopWatch, zoteroItemIRI.getIRIString(), "failed to resolve in", log);
+                logReponseTime(stopWatch, contentId.getIRIString(), "failed to resolve in", log);
             } else {
-                logReponseTime(stopWatch, zoteroItemIRI.getIRIString(), "resolved in", log);
+                logReponseTime(stopWatch, contentId.getIRIString(), "resolved in", log);
             }
         }
         if (itemInputStream == null) {
-            throw new ContentStreamException("cannot generate Zenodo record due to unresolved content [" + zoteroItemIRI.getIRIString() + "]");
+            throw new ContentStreamException("cannot generate Zenodo record due to unresolved content [" + contentId.getIRIString() + "]");
         }
         return itemInputStream;
     }
