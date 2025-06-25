@@ -172,7 +172,7 @@ public class PersistingTest {
         assertNull(inputStream);
     }
 
-    private static ValidatingKeyValueStreamFactory getAlwaysAccepting() {
+    public static ValidatingKeyValueStreamFactory getAlwaysAccepting() {
         return (key, is) -> new ValidatingKeyValueStreamWithViolations() {
             @Override
             public InputStream getValueStream() {

@@ -28,12 +28,15 @@ import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class BlobStoreUtil {
     private static final Logger LOG = LoggerFactory.getLogger(BlobStoreUtil.class);
+    public static final List<IRI> ALTERNATE_VERBS = Arrays.asList(RefNodeConstants.ALTERNATE_OF, RefNodeConstants.SEE_ALSO);
 
     public static BlobStoreReadOnly createIndexedBlobStoreFor(BlobStoreReadOnly blobStoreReadOnly, Persisting persisting) {
         Pair<Map<String, String>, Map<String, String>> aliasAndVersionMaps = buildIndexedBlobStore(persisting);
@@ -44,16 +47,13 @@ public class BlobStoreUtil {
 
             @Override
             public InputStream get(IRI uri) throws IOException {
-                IRI iriForLookup = null;
+                IRI iriForLookup;
                 if (HashKeyUtil.isValidHashKey(uri)) {
                     iriForLookup = uri;
                 } else {
-                    String indexedVersion = versionMap.get(uri.getIRIString());
-                    if (StringUtils.isBlank(indexedVersion)) {
-                        String alternate = aliasMap.get(uri.getIRIString());
-                        indexedVersion = StringUtils.isBlank(alternate) ? uri.getIRIString() : versionMap.get(alternate);
-                    }
-                    iriForLookup = StringUtils.isBlank(indexedVersion) ? uri : RefNodeFactory.toIRI(indexedVersion);
+                    String alternate = aliasMap.get(uri.getIRIString());
+                    String indexedVersion = StringUtils.isBlank(alternate) ? versionMap.get(uri.getIRIString()) : versionMap.get(alternate);
+                    iriForLookup = StringUtils.isBlank(indexedVersion) ? null : RefNodeFactory.toIRI(indexedVersion);
                 }
 
                 if (iriForLookup == null) {
@@ -105,7 +105,7 @@ public class BlobStoreUtil {
                     if (RefNodeConstants.HAS_VERSION.equals(statement.getPredicate())
                             && !RefNodeFactory.isBlankOrSkolemizedBlank(statement.getObject())) {
                         indexVersion(statement, object);
-                    } else if (RefNodeConstants.ALTERNATE_OF.equals(statement.getPredicate())) {
+                    } else if (ALTERNATE_VERBS.contains(statement.getPredicate())) {
                         indexAlternate(object, subject);
                     }
                 }

@@ -44,7 +44,7 @@ public class SciELOSoftRedirectorTest {
 
         assertThat(nodes.size(), is(3));
         Quad seeAlso = nodes.get(1);
-        assertThat(seeAlso.getPredicate(), is(RefNodeConstants.SEE_ALSO));
+        assertThat(seeAlso.getPredicate(), is(RefNodeConstants.ALTERNATE_OF));
         assertThat(seeAlso.getObject().toString(), is("<https://www.scielo.org.ar/pdf/ecoaus/v17n1/v17n1a06.pdf>"));
 
         Quad redirectedTo = nodes.get(2);

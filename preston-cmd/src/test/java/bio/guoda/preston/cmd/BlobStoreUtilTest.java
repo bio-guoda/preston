@@ -4,7 +4,11 @@ import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.KeyValueStore;
+import bio.guoda.preston.store.ValidatingKeyValueStream;
+import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
@@ -17,6 +21,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -48,6 +53,29 @@ public class BlobStoreUtilTest {
         InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.com"));
 
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("foo"));
+    }
+
+    @Test
+    public void indexedBlobStoreSeeAlso() throws IOException, URISyntaxException {
+        File dataDir = getDataDir("index-data-see-also/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+
+        Persisting persisting = getPersisting(dataDir);
+        persisting.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/2ac736577db30d14ea1ce41542564032"));
+        KeyValueStore keyValueStore = persisting.getKeyValueStore(PersistingTest.getAlwaysAccepting());
+        BlobStoreReadOnly blobStoreReadOnly = new BlobStoreReadOnly() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                return keyValueStore.get(uri);
+            }
+        };
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(blobStoreReadOnly, persisting);
+
+        InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("http://www.scielo.org.mx/scielo.php?script=sci_pdf&pid=S1870-34532015000100028"));
+
+        IRI contentId = Hasher.calcHashIRI(inputStream, NullOutputStream.INSTANCE, HashType.md5);
+
+        assertThat(contentId.getIRIString(), Is.is("hash://md5/b3c657620e4d1ff29514adf48bd4b12f"));
     }
 
     @Test

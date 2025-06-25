@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import static bio.guoda.preston.RefNodeConstants.ALTERNATE_OF;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.SEE_ALSO;
@@ -84,7 +85,7 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
                 if (matcher.matches()) {
                     String pdfUrl = matcher.group("pdfUrl");
                     try {
-                        emitter.emit(RefNodeFactory.toStatement(source, SEE_ALSO, RefNodeFactory.toIRI(pdfUrl)));
+                        emitter.emit(RefNodeFactory.toStatement(source, ALTERNATE_OF, RefNodeFactory.toIRI(pdfUrl)));
                         emitter.emit(RefNodeFactory.toStatement(RefNodeFactory.toIRI(pdfUrl), HAS_VERSION, RefNodeFactory.toBlank()));
                         break;
                     } catch (IllegalArgumentException ex) {
