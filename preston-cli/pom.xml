@@ -217,7 +217,6 @@
                         </goals>
                         <configuration>
                             <backend>manpage</backend>
-                            <sourceDocumentName>${project.artifactId}.adoc</sourceDocumentName>
                         </configuration>
                     </execution>
                 </executions>
