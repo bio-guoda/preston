@@ -44,16 +44,19 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
         name = "track",
         aliases = {"update"},
         description = "Track content at some resource location (or url)",
-        footer =
-                Cmd.BUGS +
-                "%n%nExample:%n%n" +
-                "# print a record from UCSB-IZC %n" +
+        footerHeading = "Examples",
+        footer = {
+                "%n1.",
+                "Print a record from a natural history collection at UC Santa Barbara UCSB-IZC",
+                "----",
                 "preston track\\%n" +
-                " https://doi.org/10.15468/w6hvhv\\%n" +
-                " | preston dwc-stream\\%n" +
-                " | head -1\\%n" +
-                " | jq .\\%n" +
-                " > specimen.json"
+                        " https://doi.org/10.15468/w6hvhv\\%n" +
+                        " | preston dwc-stream\\%n" +
+                        " | head -1\\%n" +
+                        " | jq .\\%n" +
+                        " > specimen.json",
+                "----"
+        }
 )
 
 public class CmdUpdate extends CmdTrack {

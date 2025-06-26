@@ -79,12 +79,12 @@ Get content
 == Examples
 
 [%hardbreaks]
-Get a picture of a bunny:
-[source]
+
+1.
+Get a picture of a bunny using bash and wikimedia.org:
 ----
 preston cat \
 --remote https://wikimedia.org \
---remote https://linker.bio \
 hash://sha1/86fa30f32d9c557ea5d2a768e9c3595d3abb17a2 \
 > bunny.jpg
 ----

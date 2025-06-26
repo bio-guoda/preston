@@ -24,12 +24,11 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
         description = "Get content",
         footerHeading = "Examples",
         footer = {
-                "Get a picture of a bunny:",
-                "[source]",
+                "%n1.",
+                "Get a picture of a bunny using bash and wikimedia.org:",
                 "----",
                 "preston cat \\%n" +
                 "--remote https://wikimedia.org \\%n" +
-                "--remote https://linker.bio \\%n" +
                 "hash://sha1/86fa30f32d9c557ea5d2a768e9c3595d3abb17a2 \\%n" +
                 "> bunny.jpg",
                 "----"
