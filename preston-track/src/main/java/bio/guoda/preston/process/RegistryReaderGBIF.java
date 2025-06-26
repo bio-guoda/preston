@@ -28,6 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import static bio.guoda.preston.RefNodeConstants.ALTERNATE_OF;
 import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
 import static bio.guoda.preston.RefNodeConstants.DEPICTS;
 import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
@@ -48,7 +49,11 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class RegistryReaderGBIF extends ProcessorReadOnly {
-    public static final Pattern GBIF_DATASET_LANDING_PAGE_URL = Pattern.compile("http[s]{0,1}://(www[.]){0,1}gbif.org/dataset/(?<datasetId>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})");
+    public static final String UUID_PATTERN = "(?<uuid>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})";
+    public static final String GBIF_DATASET_UUID_PATTERN = "http[s]{0,1}://(www[.]){0,1}gbif.org/dataset/" + UUID_PATTERN;
+    public static final Pattern DATASET_LANDING_PAGE_JSON_LD_PATTERN = Pattern.compile(".*\"url\":\\s+\"" + GBIF_DATASET_UUID_PATTERN + "\".*");
+    public static final Pattern GBIF_DATASET_LANDING_PAGE_URL = Pattern.compile(GBIF_DATASET_UUID_PATTERN);
+    public static final Pattern GBIF_DOI = Pattern.compile("http[s]?://(dx[.])?doi[.]org/" + RegistryReaderDOI.GBIF_DOI_PART + "[a-z0-9]+");
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
         put("DWC_ARCHIVE", MimeTypes.MIME_TYPE_DWCA);
         put("BIOCASE_XML_ARCHIVE", MimeTypes.MIME_TYPE_ABCDA);
@@ -115,6 +120,9 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
                 && isDatasetLandingPage(statement)) {
             handleDatasetLandingPage(statement);
         } else if (hasVersionAvailable(statement)
+                && isGBIFDOI(statement)) {
+            handleGBIFDOI(statement);
+        } else if (hasVersionAvailable(statement)
                 && isOccurrenceRecordEndpoint(statement)) {
             handleOccurrenceRecords(statement);
         }
@@ -142,6 +150,13 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         return matcher.matches();
     }
 
+    public static boolean isGBIFDOI(Quad statement) {
+        IRI versionSource = getVersionSource(statement);
+        return versionSource == null
+                ? false
+                : GBIF_DOI.matcher(versionSource.getIRIString()).matches();
+    }
+
     public void handleOccurrenceDownload(Quad statement) {
         List<Quad> nodes = new ArrayList<>();
         try {
@@ -166,9 +181,45 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
         IRI landingPage = getVersionSource(statement);
         Matcher matcher = GBIF_DATASET_LANDING_PAGE_URL.matcher(landingPage.getIRIString());
         if (matcher.matches()) {
-            IRI datasetEndpoint = toIRI("https://gbif.org/api/dataset/" + matcher.group("datasetId"));
+            IRI datasetEndpoint = toIRI("https://gbif.org/api/dataset/" + matcher.group("uuid"));
             nodes.add(toStatement(landingPage, SEE_ALSO, datasetEndpoint));
             nodes.add(toStatement(datasetEndpoint, HAS_VERSION, toBlank()));
+        }
+
+        ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+    }
+
+    public void handleGBIFDOI(Quad statement) {
+        List<Quad> nodes = new ArrayList<>();
+        IRI currentPage = (IRI) getVersion(statement);
+        try (InputStream is = get(currentPage)) {
+            LineIterator lineIterator = IOUtils.lineIterator(is, StandardCharsets.UTF_8);
+            while (lineIterator.hasNext()) {
+                String line = lineIterator.nextLine();
+                Matcher matcher = DATASET_LANDING_PAGE_JSON_LD_PATTERN.matcher(line);
+                if (matcher.matches()) {
+                    IRI candidateGBIFDataset = toIRI("https://www.gbif.org/dataset/" + matcher.group("uuid"));
+                    nodes.add(RefNodeFactory.toStatement(
+                            getVersionSource(statement),
+                            ALTERNATE_OF,
+                            candidateGBIFDataset
+                    ));
+                    nodes.add(RefNodeFactory.toStatement(
+                            currentPage,
+                            HAD_MEMBER,
+                            candidateGBIFDataset
+                    ));
+                    nodes.add(RefNodeFactory.toStatement(
+                            candidateGBIFDataset,
+                            HAS_VERSION,
+                            RefNodeFactory.toBlank()
+                    ));
+                    break;
+                }
+
+            }
+        } catch (IOException e) {
+            LOG.warn("no content for [" + currentPage + "]", e);
         }
 
         ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());

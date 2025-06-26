@@ -25,6 +25,7 @@ import static bio.guoda.preston.RefNodeConstants.CREATED_BY;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeConstants.WAS_ASSOCIATED_WITH;
+import static bio.guoda.preston.RefNodeFactory.getVersion;
 import static bio.guoda.preston.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toLiteral;
@@ -265,6 +266,32 @@ public class RegistryReaderGBIFTest {
                 HAS_VERSION,
                 RefNodeFactory.toIRI("hash://sha256/123"))));
     }
+
+    @Test
+    public void datasetRecordDOI() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return getClass().getResourceAsStream("ucsb-izc.html");
+            }
+        };
+        RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtilForProcessor.testListener(nodes));
+
+        Quad doiLandingPage = toStatement(toIRI(
+                "https://doi.org/10.15468/w6hvhv"),
+                HAS_VERSION,
+                toIRI("hash://sha256/82ec2b936c310cc0b7a60b87e9c1d8fa4ca6fa7d21e95b5007a6c6d67bcd1544")
+        );
+
+        registryReaderGBIF.on(doiLandingPage);
+
+        assertThat(nodes.size(), is(4));
+        Quad secondPage = nodes.get(nodes.size() - 1);
+        assertThat(getVersionSource(secondPage).toString(), is("<https://www.gbif.org/dataset/d6097f75-f99e-4c2a-b8a5-b0fc213ecbd0>"));
+        assertThat(RefNodeFactory.isBlankOrSkolemizedBlank(getVersion(secondPage)), is(true));
+    }
+
 
     @Test
     public void isDatasetRecordEndpointAlternate() {
