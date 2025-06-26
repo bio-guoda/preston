@@ -11,6 +11,9 @@ import java.util.List;
 
 public class Cmd implements ProcessorState {
 
+    public static final String BUGS = "%nBugs:%n%nPlease report bugs or ask questions at" +
+            "%n<https://github.com/bio-guoda/preston/issues>" +
+            "%n or <mailto:info@globalbioticinteractions.org> .";
     private final List<ProcessorState> states = new ArrayList<ProcessorState>() {{
         add(new ProcessorStateImpl());
     }};

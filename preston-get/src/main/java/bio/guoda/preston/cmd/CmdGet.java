@@ -21,7 +21,7 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
         aliases = {"get"},
         description = "Get content",
         footer =
-                "%nBugs: Please report bugs or ask questions at <https://github.com/bio-guoda/preston/issues> ." +
+                Cmd.BUGS +
                 "%n%nExample:%n%n" +
                 "# get a picture of a bunny%n" +
                 "preston cat\\%n" +

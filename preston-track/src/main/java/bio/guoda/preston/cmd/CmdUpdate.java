@@ -45,7 +45,7 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
         aliases = {"update"},
         description = "Track content at some resource location (or url)",
         footer =
-                "%nBugs: Please report bugs or ask questions at <https://github.com/bio-guoda/preston/issues> ." +
+                Cmd.BUGS +
                 "%n%nExample:%n%n" +
                 "# print a record from UCSB-IZC %n" +
                 "preston track\\%n" +
