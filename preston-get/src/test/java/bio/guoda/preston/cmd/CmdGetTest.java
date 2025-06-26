@@ -11,12 +11,16 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ProxyInputStream;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Test;
+import picocli.CommandLine;
+import picocli.codegen.docgen.manpage.ManPageGenerator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -31,6 +35,7 @@ import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertEquals;
 
 public class CmdGetTest {
 
@@ -258,6 +263,16 @@ public class CmdGetTest {
                 not(startsWith("bar2")));
         assertThat(new String(out.toByteArray(), StandardCharsets.UTF_8),
                 startsWith("bar"));
+    }
+
+    @Test
+    public void testADoc() throws IOException {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ManPageGenerator.writeSingleManPage(pw, new CommandLine(new CmdGet()).getCommandSpec());
+        pw.flush();
+        String expected = IOUtils.toString(getClass().getResourceAsStream("preston-cat.adoc"), StandardCharsets.UTF_8);
+        assertThat(sw.getBuffer().toString(), is(expected));
     }
 
 

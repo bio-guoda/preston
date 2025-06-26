@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.Version;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
@@ -17,18 +18,22 @@ import java.util.List;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 
 @CommandLine.Command(
+        versionProvider = Version.class,
         name = "cat",
         aliases = {"get"},
         description = "Get content",
-        footer =
-                Cmd.BUGS +
-                "%n%nExample:%n%n" +
-                "# get a picture of a bunny%n" +
-                "preston cat\\%n" +
-                " --remote https://wikimedia.org\\%n" +
-                " --remote https://linker.bio\\%n" +
-                " hash://sha1/86fa30f32d9c557ea5d2a768e9c3595d3abb17a2\\%n" +
-                " > bunny.jpg"
+        footerHeading = "Examples",
+        footer = {
+                "Get a picture of a bunny:",
+                "[source]",
+                "----",
+                "preston cat \\%n" +
+                "--remote https://wikimedia.org \\%n" +
+                "--remote https://linker.bio \\%n" +
+                "hash://sha1/86fa30f32d9c557ea5d2a768e9c3595d3abb17a2 \\%n" +
+                "> bunny.jpg",
+                "----"
+        }
 )
 public class CmdGet extends Persisting implements Runnable {
 
