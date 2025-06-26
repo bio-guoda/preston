@@ -43,7 +43,17 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 @CommandLine.Command(
         name = "track",
         aliases = {"update"},
-        description = "Tracks a biodiversity dataset graph"
+        description = "Track content at some resource location (or url)",
+        footer =
+                "%nBugs: Please report bugs or ask questions at <https://github.com/bio-guoda/preston/issues> ." +
+                "%n%nExample:%n%n" +
+                "# print a record from UCSB-IZC %n" +
+                "preston track\\%n" +
+                " https://doi.org/10.15468/w6hvhv\\%n" +
+                " | preston dwc-stream\\%n" +
+                " | head -1\\%n" +
+                " | jq .\\%n" +
+                " > specimen.json"
 )
 
 public class CmdUpdate extends CmdTrack {

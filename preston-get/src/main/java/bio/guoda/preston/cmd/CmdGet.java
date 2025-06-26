@@ -19,7 +19,16 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 @CommandLine.Command(
         name = "cat",
         aliases = {"get"},
-        description = "Get biodiversity data"
+        description = "Get content",
+        footer =
+                "%nBugs: Please report bugs or ask questions at <https://github.com/bio-guoda/preston/issues> ." +
+                "%n%nExample:%n%n" +
+                "# get a picture of a bunny%n" +
+                "preston cat\\%n" +
+                " --remote https://wikimedia.org\\%n" +
+                " --remote https://linker.bio\\%n" +
+                " hash://sha1/86fa30f32d9c557ea5d2a768e9c3595d3abb17a2\\%n" +
+                " > bunny.jpg"
 )
 public class CmdGet extends Persisting implements Runnable {
 
