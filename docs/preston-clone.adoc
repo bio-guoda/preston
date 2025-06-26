@@ -19,9 +19,10 @@ preston-clone - Clone biodiversity dataset graph
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston clone* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
-              [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_]
-              [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_]... [_<remotes>_...]
+*preston clone* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
+              [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_] [*-r*=_<provenanceAnchor>_]
+              [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,_<remotes>_...]]...
+              [_<remotes>_...]
 
 // end::picocli-generated-man-section-synopsis[]
 
@@ -36,13 +37,16 @@ Clone biodiversity dataset graph
 == Options
 
 *-a*, *--algo, --hash-algorithm*=_<hashType>_::
-  Hash algorithm used to generate primary content identifiers
+  Hash algorithm used to generate primary content identifiers. Supported values: sha256, md5, sha1.
+
+*-d*, *--depth*=_<depth>_::
+  folder depth of data dir
 
 *--data-dir*=_<dataDir>_::
   Location of local content cache
 
 *-l*, *--log*=_<logMode>_::
-  Log format
+  Log format. Supported values: tsv, nquads.
 
 *--no-cache, --disable-cache*::
   Disable local content cache
@@ -50,8 +54,11 @@ Clone biodiversity dataset graph
 *--no-process, --no-progress*::
   Disable progress monitor
 
-*--repos, --remote, --remotes, --include, --repositories*=_<remotes>_::
-  Included repositories dependency (e.g., https://deeplinker.bio/,https://example.org)
+*-r*, *--anchor, --provenance-root, --provenance-anchor*=_<provenanceAnchor>_::
+  specify the provenance root/anchor of the command. By default, any available data graph will be traversed up to it's most recent additions. If the provenance root is set, only specified provenance signature and their origins are included in the scope.
+
+*--repos, --remote, --remotes, --include, --repositories*=_<remotes>_[,_<remotes>_...]::
+  Included repository dependencies (e.g., https://linker.bio/,https://softwareheritage.org,https://wikimedia.org,https://dataone.org,https://zenodo.org)
 
 *--tmp-dir*=_<tmpDir>_::
   Location of local tmp dir

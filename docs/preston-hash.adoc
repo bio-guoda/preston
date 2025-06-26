@@ -12,7 +12,7 @@
 // tag::picocli-generated-man-section-name[]
 == Name
 
-preston-hash - Offline (re-)processing of tracked biodiversity dataset graph using stdin
+preston-hash - generate content id from stdin
 
 // end::picocli-generated-man-section-name[]
 
@@ -26,7 +26,7 @@ preston-hash - Offline (re-)processing of tracked biodiversity dataset graph usi
 // tag::picocli-generated-man-section-description[]
 == Description
 
-Offline (re-)processing of tracked biodiversity dataset graph using stdin
+generate content id from stdin
 
 // end::picocli-generated-man-section-description[]
 

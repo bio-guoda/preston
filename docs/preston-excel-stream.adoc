@@ -5,32 +5,31 @@
 :manmanual: Preston Manual
 :mansource: 
 :man-linkstyle: pass:[blue R < >]
-= preston-track(1)
+= preston-excel-stream(1)
 
 // end::picocli-generated-man-section-header[]
 
 // tag::picocli-generated-man-section-name[]
 == Name
 
-preston-track - Track content at some resource location (or url)
+preston-excel-stream - Extract records from Excel files (*.xls, *.xlsx) in line-json
 
 // end::picocli-generated-man-section-name[]
 
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston track* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
-              [*--data-dir*=_<dataDir>_] [*-f*=_<filename>_] [*-l*=_<logMode>_]
-              [*-r*=_<provenanceAnchor>_] [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,
-              _<remotes>_...]]... [*-u*=_<seeds>_]... [*-m*=_<description>_...]
-              [_<IRIs>_...]
+*preston excel-stream* [*--headerless*] [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
+                     [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_]
+                     [*-r*=_<provenanceAnchor>_] [*--skip-lines*=_<skipLines>_]
+                     [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,_<remotes>_...]]...
 
 // end::picocli-generated-man-section-synopsis[]
 
 // tag::picocli-generated-man-section-description[]
 == Description
 
-Track content at some resource location (or url)
+Extract records from Excel files (*.xls, *.xlsx) in line-json
 
 // end::picocli-generated-man-section-description[]
 
@@ -46,14 +45,11 @@ Track content at some resource location (or url)
 *--data-dir*=_<dataDir>_::
   Location of local content cache
 
-*-f*, *--file*=_<filename>_::
-  Read URLs to be tracked from file.
+*--headerless*::
+  use column numbers as column names
 
 *-l*, *--log*=_<logMode>_::
   Log format. Supported values: tsv, nquads.
-
-*-m*, *--message*=_<description>_...::
-  Custom description of this tracking activity or command. (default: "A crawl event that discovers biodiversity archives.")
 
 *--no-cache, --disable-cache*::
   Disable local content cache
@@ -67,20 +63,15 @@ Track content at some resource location (or url)
 *--repos, --remote, --remotes, --include, --repositories*=_<remotes>_[,_<remotes>_...]::
   Included repository dependencies (e.g., https://linker.bio/,https://softwareheritage.org,https://wikimedia.org,https://dataone.org,https://zenodo.org)
 
+*--skip-lines*=_<skipLines>_::
+  skip specified number of lines before processing the xlsx worksheet
+
 *--tmp-dir*=_<tmpDir>_::
   Location of local tmp dir
-
-*-u*, *--seed*=_<seeds>_::
-  Starting points for graph discovery. Only active when no content urls are provided.
 
 // end::picocli-generated-man-section-options[]
 
 // tag::picocli-generated-man-section-arguments[]
-== Arguments
-
-[_<IRIs>_...]::
-  [url1] [url2] ...
-
 // end::picocli-generated-man-section-arguments[]
 
 // tag::picocli-generated-man-section-commands[]
@@ -90,21 +81,6 @@ Track content at some resource location (or url)
 // end::picocli-generated-man-section-exit-status[]
 
 // tag::picocli-generated-man-section-footer[]
-== Examples
-
-[%hardbreaks]
-
-1.
-Print a record from a natural history collection at UC Santa Barbara UCSB-IZC
-----
-preston track\
- https://doi.org/10.15468/w6hvhv\
- | preston dwc-stream\
- | head -1\
- | jq .\
- > specimen.json
-----
-
 // end::picocli-generated-man-section-footer[]
 
 // end::picocli-generated-full-manpage[]

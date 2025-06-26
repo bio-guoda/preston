@@ -5,32 +5,35 @@
 :manmanual: Preston Manual
 :mansource: 
 :man-linkstyle: pass:[blue R < >]
-= preston-track(1)
+= preston-zenodo(1)
 
 // end::picocli-generated-man-section-header[]
 
 // tag::picocli-generated-man-section-name[]
 == Name
 
-preston-track - Track content at some resource location (or url)
+preston-zenodo - create/update associated Zenodo records
 
 // end::picocli-generated-man-section-name[]
 
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston track* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
-              [*--data-dir*=_<dataDir>_] [*-f*=_<filename>_] [*-l*=_<logMode>_]
-              [*-r*=_<provenanceAnchor>_] [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,
-              _<remotes>_...]]... [*-u*=_<seeds>_]... [*-m*=_<description>_...]
-              [_<IRIs>_...]
+*preston zenodo* [*--allow-empty-publication-date*] [*--explicit-license-only*]
+               [*--new-version*] [*--no-cache*] [*--no-process*]
+               [*--restricted-access-only*] [*--update-metadata-only*]
+               [*-a*=_<hashType>_] [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_]
+               [*--endpoint*=_<apiEndpoint>_] [*-l*=_<logMode>_]
+               [*--license*=_<licenseRelations>_] [*-r*=_<provenanceAnchor>_]
+               [*--tmp-dir*=_<tmpDir>_] [*--community*=_<communities>_]...
+               [*--repos*=_<remotes>_[,_<remotes>_...]]...
 
 // end::picocli-generated-man-section-synopsis[]
 
 // tag::picocli-generated-man-section-description[]
 == Description
 
-Track content at some resource location (or url)
+create/update associated Zenodo records
 
 // end::picocli-generated-man-section-description[]
 
@@ -40,20 +43,36 @@ Track content at some resource location (or url)
 *-a*, *--algo, --hash-algorithm*=_<hashType>_::
   Hash algorithm used to generate primary content identifiers. Supported values: sha256, md5, sha1.
 
+*--allow-empty-publication-date*::
+  Zenodo accepts deposits with empty publication dates. On accepting a deposit without publication date, Zenodo sets the publication date to current date/time by default.
+
+*--community, --communities*=_<communities>_::
+  associated Zenodo communities
+
 *-d*, *--depth*=_<depth>_::
   folder depth of data dir
 
 *--data-dir*=_<dataDir>_::
   Location of local content cache
 
-*-f*, *--file*=_<filename>_::
-  Read URLs to be tracked from file.
+*--endpoint*=_<apiEndpoint>_::
+  Zenodo api endpoint. Uses [ ZENODO_ENDPOINT] environment variable by default.
+
+*--explicit-license-only*::
+  only deposit records with explicit licenses: default license not allowed.
 
 *-l*, *--log*=_<logMode>_::
   Log format. Supported values: tsv, nquads.
 
-*-m*, *--message*=_<description>_...::
-  Custom description of this tracking activity or command. (default: "A crawl event that discovers biodiversity archives.")
+*--license, --licenses*=_<licenseRelations>_::
+  contentid (e.g., sha256, md5) to resource that associates licenses for (alternate) identifiers: when provided, only deposits with identified licenses are published. The license relations are expected in rdf/nquads format: <some:id> <http://purl.org/dc/elements/1.1/license> <https://spdx.org/licenses/...> .
++
+ For example:
++
+ <urn:lsid:biodiversitylibrary.org:part:94849> <http://purl.org/dc/elements/1.1/license> <https://spdx.org/licenses/CC-BY-NC-SA-3.0> .
+
+*--new-version*::
+  deposit new version if a Zenodo deposit with matching identifiers already exists
 
 *--no-cache, --disable-cache*::
   Disable local content cache
@@ -67,20 +86,18 @@ Track content at some resource location (or url)
 *--repos, --remote, --remotes, --include, --repositories*=_<remotes>_[,_<remotes>_...]::
   Included repository dependencies (e.g., https://linker.bio/,https://softwareheritage.org,https://wikimedia.org,https://dataone.org,https://zenodo.org)
 
+*--restricted-access-only*::
+  always set [access_right] to [restricted]
+
 *--tmp-dir*=_<tmpDir>_::
   Location of local tmp dir
 
-*-u*, *--seed*=_<seeds>_::
-  Starting points for graph discovery. Only active when no content urls are provided.
+*--update-metadata-only*::
+  update metadata of existing record(s) only: if no associated record exists do nothing.
 
 // end::picocli-generated-man-section-options[]
 
 // tag::picocli-generated-man-section-arguments[]
-== Arguments
-
-[_<IRIs>_...]::
-  [url1] [url2] ...
-
 // end::picocli-generated-man-section-arguments[]
 
 // tag::picocli-generated-man-section-commands[]
@@ -90,21 +107,6 @@ Track content at some resource location (or url)
 // end::picocli-generated-man-section-exit-status[]
 
 // tag::picocli-generated-man-section-footer[]
-== Examples
-
-[%hardbreaks]
-
-1.
-Print a record from a natural history collection at UC Santa Barbara UCSB-IZC
-----
-preston track\
- https://doi.org/10.15468/w6hvhv\
- | preston dwc-stream\
- | head -1\
- | jq .\
- > specimen.json
-----
-
 // end::picocli-generated-man-section-footer[]
 
 // end::picocli-generated-full-manpage[]

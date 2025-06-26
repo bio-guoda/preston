@@ -5,32 +5,34 @@
 :manmanual: Preston Manual
 :mansource: 
 :man-linkstyle: pass:[blue R < >]
-= preston-track(1)
+= preston-taxodros-stream(1)
 
 // end::picocli-generated-man-section-header[]
 
 // tag::picocli-generated-man-section-name[]
 == Name
 
-preston-track - Track content at some resource location (or url)
+preston-taxodros-stream - Stream TaxoDros https://www.taxodros.uzh.ch/ records into line-json with Zenodo metadata; Also see Bächli, G. (2024). TaxoDros - The Database on Taxonomy of Drosophilidae hash://md5/d68c923002c43271cee07ba172c67b0b hash://sha256/3e41eec4c91598b8a2de96e1d1ed47d271a7560eb6ef350a17bc67cc61255302 [Data set]. Zenodo. https://doi.org/10.5281/zenodo.10565403 .
 
 // end::picocli-generated-man-section-name[]
 
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston track* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
-              [*--data-dir*=_<dataDir>_] [*-f*=_<filename>_] [*-l*=_<logMode>_]
-              [*-r*=_<provenanceAnchor>_] [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,
-              _<remotes>_...]]... [*-u*=_<seeds>_]... [*-m*=_<description>_...]
-              [_<IRIs>_...]
+*preston taxodros-stream* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
+                        [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_]
+                        [*--pub-doi*=_<doi>_] [*--pub-md5*=_<md5>_]
+                        [*--pub-sha256*=_<sha256>_] [*--pub-year*=_<year>_]
+                        [*-r*=_<provenanceAnchor>_] [*--tmp-dir*=_<tmpDir>_]
+                        [*--communities*=_<communities>_]... [*--repos*=_<remotes>_[,
+                        _<remotes>_...]]...
 
 // end::picocli-generated-man-section-synopsis[]
 
 // tag::picocli-generated-man-section-description[]
 == Description
 
-Track content at some resource location (or url)
+Stream TaxoDros https://www.taxodros.uzh.ch/ records into line-json with Zenodo metadata; Also see Bächli, G. (2024). TaxoDros - The Database on Taxonomy of Drosophilidae hash://md5/d68c923002c43271cee07ba172c67b0b hash://sha256/3e41eec4c91598b8a2de96e1d1ed47d271a7560eb6ef350a17bc67cc61255302 [Data set]. Zenodo. https://doi.org/10.5281/zenodo.10565403 .
 
 // end::picocli-generated-man-section-description[]
 
@@ -40,26 +42,35 @@ Track content at some resource location (or url)
 *-a*, *--algo, --hash-algorithm*=_<hashType>_::
   Hash algorithm used to generate primary content identifiers. Supported values: sha256, md5, sha1.
 
+*--communities*=_<communities>_::
+  associated Zenodo communities
+
 *-d*, *--depth*=_<depth>_::
   folder depth of data dir
 
 *--data-dir*=_<dataDir>_::
   Location of local content cache
 
-*-f*, *--file*=_<filename>_::
-  Read URLs to be tracked from file.
-
 *-l*, *--log*=_<logMode>_::
   Log format. Supported values: tsv, nquads.
-
-*-m*, *--message*=_<description>_...::
-  Custom description of this tracking activity or command. (default: "A crawl event that discovers biodiversity archives.")
 
 *--no-cache, --disable-cache*::
   Disable local content cache
 
 *--no-process, --no-progress*::
   Disable progress monitor
+
+*--pub-doi*=_<doi>_::
+  associated Taxodros DOI
+
+*--pub-md5*=_<md5>_::
+  associated Taxodros md5 fingerprint
+
+*--pub-sha256*=_<sha256>_::
+  associated Taxodros sha256 fingerprint
+
+*--pub-year*=_<year>_::
+  associated Taxodros publication year
 
 *-r*, *--anchor, --provenance-root, --provenance-anchor*=_<provenanceAnchor>_::
   specify the provenance root/anchor of the command. By default, any available data graph will be traversed up to it's most recent additions. If the provenance root is set, only specified provenance signature and their origins are included in the scope.
@@ -70,17 +81,9 @@ Track content at some resource location (or url)
 *--tmp-dir*=_<tmpDir>_::
   Location of local tmp dir
 
-*-u*, *--seed*=_<seeds>_::
-  Starting points for graph discovery. Only active when no content urls are provided.
-
 // end::picocli-generated-man-section-options[]
 
 // tag::picocli-generated-man-section-arguments[]
-== Arguments
-
-[_<IRIs>_...]::
-  [url1] [url2] ...
-
 // end::picocli-generated-man-section-arguments[]
 
 // tag::picocli-generated-man-section-commands[]
@@ -90,21 +93,6 @@ Track content at some resource location (or url)
 // end::picocli-generated-man-section-exit-status[]
 
 // tag::picocli-generated-man-section-footer[]
-== Examples
-
-[%hardbreaks]
-
-1.
-Print a record from a natural history collection at UC Santa Barbara UCSB-IZC
-----
-preston track\
- https://doi.org/10.15468/w6hvhv\
- | preston dwc-stream\
- | head -1\
- | jq .\
- > specimen.json
-----
-
 // end::picocli-generated-man-section-footer[]
 
 // end::picocli-generated-full-manpage[]

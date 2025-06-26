@@ -1,9 +1,9 @@
 // tag::picocli-generated-full-manpage[]
 // tag::picocli-generated-man-section-header[]
 :doctype: manpage
-:revnumber: 0.4.0
+:revnumber: 0.10.13-SNAPSHOT@5360fd3699387b8ea821874fda7fe1721fedcaf3
 :manmanual: Preston Manual
-:mansource: 0.4.0
+:mansource: 0.10.13-SNAPSHOT@5360fd3699387b8ea821874fda7fe1721fedcaf3
 :man-linkstyle: pass:[blue R < >]
 = preston(1)
 
@@ -48,7 +48,7 @@ a biodiversity dataset tracker
 == Commands
 
 xref:preston-cat.adoc[*cat*, *get*]::
-  Get biodiversity data
+  Get content
 
 xref:preston-ls.adoc[*ls*, *log*, *logs*]::
   Show biodiversity dataset provenance logs
@@ -60,31 +60,19 @@ xref:preston-clone.adoc[*clone*, *pull*]::
   Clone biodiversity dataset graph
 
 xref:preston-track.adoc[*track*, *update*]::
-  Tracks a biodiversity dataset graph
+  Track content at some resource location (or url)
 
 xref:preston-append.adoc[*append*, *handle*, *process*, *add*]::
   Offline (re-)processing of tracked biodiversity dataset graph using stdin
 
-xref:preston-history.adoc[*history*]::
-  Show history of biodiversity dataset graph
-
-xref:preston-origins.adoc[*origins*, *origin*, *prov*, *provenance*]::
-  Traces to origin of biodiversity dataset graphs
+xref:preston-history.adoc[*history*, *origin*, *origins*, *prov*, *provenance*]::
+  Show history/origins/provenance of biodiversity dataset graph
 
 xref:preston-merge.adoc[*merge*, *join*, *use*, *import*]::
   Merges biodiversity dataset graphs
 
-xref:preston-sketch.adoc[*sketch*, *bloom*]::
-  Creates sketches (e.g., bloom filters or theta sketches) from matched content for estimating content overlap
-
-xref:preston-diff.adoc[*diff*, *intersect*]::
-  Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets
-
-xref:preston-union.adoc[*union*]::
-  Uses pre-calculated sketches (only theta sketches for now) to calculates union of distinct elements found in datasets
-
 xref:preston-grep.adoc[*grep*, *match*, *findURLs*]::
-  Uses pre-calculated sketches (e.g., bloom filter, theta sketch) to calculates estimates for overlap between datasets
+  Uses Java-style regular expression (e.g., "Homo sapie.*") to find matching content in biodiversity dataset graph
 
 xref:preston-test.adoc[*test*, *verify*, *check*, *validate*, *touch*]::
   Verifies completeness and, optionally, the integrity, of a biodiversity dataset graph by touching (or visiting) all associated content.
@@ -96,10 +84,12 @@ xref:preston-seeds.adoc[*seeds*]::
   Lists supported biodiversity networks
 
 xref:preston-hash.adoc[*hash*]::
-  Offline (re-)processing of tracked biodiversity dataset graph using stdin
+  generate content id from stdin
 
 xref:preston-alias.adoc[*alias*, *aliases*]::
-  Search for (friendly) aliases, or names, for content hashes
+  Define new (friendly) aliases, or names, for content hashes, or, when no definition is provided, lists related aliases instead.
++
+
 
 xref:preston-dwc-stream.adoc[*dwc-stream*, *json-stream*, *dwc-json-stream*]::
   Extract records from DarwinCore archives in line-json
@@ -107,14 +97,53 @@ xref:preston-dwc-stream.adoc[*dwc-stream*, *json-stream*, *dwc-json-stream*]::
 xref:preston-dbase-json-stream.adoc[*dbase-json-stream*, *dbase2json*, *dbase-stream*]::
   Extract records from DBase files (*.DBF) in line-json
 
+xref:preston-excel-stream.adoc[*excel-stream*, *excel2json*, *xlsx-stream*, *xls-stream*]::
+  Extract records from Excel files (*.xls, *.xlsx) in line-json
+
 xref:preston-plazi-stream.adoc[*plazi-stream*]::
   transforms plazi treatment xml into json stream 
+
+xref:preston-zenodo.adoc[*zenodo*]::
+  create/update associated Zenodo records
+
+xref:preston-zotero-stream.adoc[*zotero-stream*]::
+  Stream Zotero records into line-json with Zenodo metadata
+
+xref:preston-ris-stream.adoc[*ris-stream*]::
+  Stream RIS records into line-json with Zenodo metadata
+
+xref:preston-genbank-stream.adoc[*genbank-stream*, *gb-stream*]::
+  Stream genbank accession records into line-json
+
+xref:preston-taxodros-stream.adoc[*taxodros-stream*]::
+  Stream TaxoDros https://www.taxodros.uzh.ch/ records into line-json with Zenodo metadata; Also see Bächli, G. (2024). TaxoDros - The Database on Taxonomy of Drosophilidae hash://md5/d68c923002c43271cee07ba172c67b0b hash://sha256/3e41eec4c91598b8a2de96e1d1ed47d271a7560eb6ef350a17bc67cc61255302 [Data set]. Zenodo. https://doi.org/10.5281/zenodo.10565403 .
+
+xref:preston-mbd-stream.adoc[*mbd-stream*]::
+  Stream Museum for Biological Diversity (MBD) Database Pages into line-json
+
+xref:preston-github-stream.adoc[*github-stream*, *gh-stream*]::
+  Stream GitHub metadata into line-json
+
+xref:preston-taxonworks-stream.adoc[*taxonworks-stream*, *tw-stream*]::
+  Stream TaxonWorks metadata into line-json
 
 xref:preston-serve.adoc[*serve*, *s*, *server*]::
   provide access to content via http endpoint
 
+xref:preston-redirect.adoc[*redirect*, *r*, *proxy*]::
+  attempts to redirect to content associated with provided identifier in a defined content universe
+
 xref:preston-cite.adoc[*cite*]::
   Cites datasets in dataset archive
+
+xref:preston-qrcode.adoc[*qrcode*, *label*]::
+  generates a printable PNG image QRCode of provenance head or anchor. See also "head".
+
+xref:preston-head.adoc[*head*]::
+  shows most recent provenance log version/hash
+
+xref:preston-bash.adoc[*bash*]::
+  runs provided bash script and tracks stdout
 
 xref:preston-config-man.adoc[*config-man*, *config-manpage*, *install-manpage*]::
   Installs/configures Preston man page, so you can type [man preston] on unix-like system to learn more about Preston. 
