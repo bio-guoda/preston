@@ -269,6 +269,30 @@ public class RegistryReaderGBIFTest {
 
     @Test
     public void datasetRecordDOI() {
+        assertDatasetDoiRedirect("https://doi.org/10.15468/w6hvhv");
+    }
+
+    @Test
+    public void datasetRecordDOIDx() {
+        assertDatasetDoiRedirect("http://dx.doi.org/10.15468/w6hvhv");
+    }
+
+    @Test
+    public void datasetRecordDOIDxHttps() {
+        assertDatasetDoiRedirect("https://dx.doi.org/10.15468/w6hvhv");
+    }
+
+    @Test
+    public void datasetRecordDOIShort() {
+        assertDatasetDoiRedirect("doi:10.15468/w6hvhv");
+    }
+
+    @Test
+    public void datasetRecordDOIShorter() {
+        assertDatasetDoiRedirect("10.15468/w6hvhv");
+    }
+
+    private void assertDatasetDoiRedirect(String doiString) {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
@@ -279,7 +303,7 @@ public class RegistryReaderGBIFTest {
         RegistryReaderGBIF registryReaderGBIF = new RegistryReaderGBIF(blobStore, TestUtilForProcessor.testListener(nodes));
 
         Quad doiLandingPage = toStatement(toIRI(
-                "https://doi.org/10.15468/w6hvhv"),
+                        doiString),
                 HAS_VERSION,
                 toIRI("hash://sha256/82ec2b936c310cc0b7a60b87e9c1d8fa4ca6fa7d21e95b5007a6c6d67bcd1544")
         );

@@ -53,7 +53,7 @@ public class RegistryReaderGBIF extends ProcessorReadOnly {
     public static final String GBIF_DATASET_UUID_PATTERN = "http[s]{0,1}://(www[.]){0,1}gbif.org/dataset/" + UUID_PATTERN;
     public static final Pattern DATASET_LANDING_PAGE_JSON_LD_PATTERN = Pattern.compile(".*\"url\":\\s+\"" + GBIF_DATASET_UUID_PATTERN + "\".*");
     public static final Pattern GBIF_DATASET_LANDING_PAGE_URL = Pattern.compile(GBIF_DATASET_UUID_PATTERN);
-    public static final Pattern GBIF_DOI = Pattern.compile("http[s]?://(dx[.])?doi[.]org/" + RegistryReaderDOI.GBIF_DOI_PART + "[a-z0-9]+");
+    public static final Pattern GBIF_DOI = Pattern.compile("(http[s]?://|doi:)?(dx[.])?(doi[.]org/)?" + RegistryReaderDOI.GBIF_DOI_PART + "(dl[.])?[a-z0-9]+");
     private static final Map<String, String> SUPPORTED_ENDPOINT_TYPES = new HashMap<String, String>() {{
         put("DWC_ARCHIVE", MimeTypes.MIME_TYPE_DWCA);
         put("BIOCASE_XML_ARCHIVE", MimeTypes.MIME_TYPE_ABCDA);
