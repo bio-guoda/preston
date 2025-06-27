@@ -42,6 +42,7 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 @CommandLine.Command(
         name = "track",
+        header = "track content at resource location(s)",
         aliases = {"update"},
         description = "Track content at some resource location (or url)",
         footerHeading = "Examples",

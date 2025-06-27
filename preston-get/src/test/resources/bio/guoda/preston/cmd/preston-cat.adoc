@@ -12,7 +12,7 @@
 // tag::picocli-generated-man-section-name[]
 == Name
 
-cat - Get content
+cat - get content by their content id (or anchored alias)
 
 // end::picocli-generated-man-section-name[]
 

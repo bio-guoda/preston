@@ -20,6 +20,7 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 @CommandLine.Command(
         versionProvider = Version.class,
         name = "cat",
+        header = "get content by their content id (or anchored alias)",
         aliases = {"get"},
         description = "Get content",
         footerHeading = "Examples",
