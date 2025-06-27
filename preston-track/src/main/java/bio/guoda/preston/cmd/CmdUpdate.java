@@ -48,7 +48,7 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
         footerHeading = "Examples",
         footer = {
                 "%n1.",
-                "Track natural history collection at UC Santa Barbara UCSB-IZC, then print their first record.",
+                "Track a natural history collection at UC Santa Barbara UCSB-IZC via their GBIF Dataset DOI, then print their first record.",
                 "----",
                 "preston track\\%n" +
                         " https://doi.org/10.15468/w6hvhv\\%n" +
@@ -58,8 +58,12 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
                         " > specimen.json",
                 "----",
                 "%n2.",
-                "Track a DwC-A file via stdin, then print their first record.",
+                "Get a DwC-A file, track that DwC-A file via stdin, then print their first record into specimen.json.",
                 "----",
+                "preston cat\\%n" +
+                        " --remote https://softwareheritage.org\\%n" +
+                        " hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1\\%n" +
+                        " > dwca.zip",
                 "cat dwca.zip\\%n" +
                         " | preston track\\%n" +
                         " | preston dwc-stream\\%n" +
