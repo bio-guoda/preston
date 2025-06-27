@@ -42,13 +42,13 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 @CommandLine.Command(
         name = "track",
-        header = "track content at resource location(s)",
+        header = "track content at resource location(s) or from stdin",
         aliases = {"update"},
         description = "Track content at some resource location (or url)",
         footerHeading = "Examples",
         footer = {
                 "%n1.",
-                "Print a record from a natural history collection at UC Santa Barbara UCSB-IZC",
+                "Track natural history collection at UC Santa Barbara UCSB-IZC, then print their first record.",
                 "----",
                 "preston track\\%n" +
                         " https://doi.org/10.15468/w6hvhv\\%n" +
@@ -56,6 +56,25 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
                         " | head -1\\%n" +
                         " | jq .\\%n" +
                         " > specimen.json",
+                "----",
+                "%n2.",
+                "Track a DwC-A file via stdin, then print their first record.",
+                "----",
+                "cat dwca.zip\\%n" +
+                        " | preston track\\%n" +
+                        " | preston dwc-stream\\%n" +
+                        " | head -1\\%n" +
+                        " | jq .\\%n" +
+                        " > specimen.json",
+                "----",
+                "%n3.",
+                "Track content locations in files, then print their first record.",
+                "----",
+                "echo https://en.wikipedia.org/wiki/Cat > urls.txt%n" +
+                "echo https://en.wikipedia.org/wiki/Dog >> urls.txt%n" +
+                "preston track -f urls.txt\\%n" +
+                        " | preston cat\\%n" +
+                        " > cat-and-dog.html",
                 "----"
         }
 )
