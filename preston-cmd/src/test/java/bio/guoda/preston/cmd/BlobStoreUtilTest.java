@@ -5,8 +5,6 @@ import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.KeyValueStore;
-import bio.guoda.preston.store.ValidatingKeyValueStream;
-import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
@@ -21,7 +19,6 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
@@ -44,7 +41,7 @@ public class BlobStoreUtilTest {
     }
 
     @Test
-    public void indexedBlobStoreWithAlternate() throws IOException, URISyntaxException {
+    public void indexedBlobStoreAlternateOfExampleDotCom() throws IOException, URISyntaxException {
         File dataDir = getDataDir("index-data-with-alternate/27/f5/27f552c25bc733d05a5cc67e9ba63850");
 
         Persisting persisting = getPersisting(dataDir);

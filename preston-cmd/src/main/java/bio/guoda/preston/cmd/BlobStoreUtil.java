@@ -52,8 +52,9 @@ public class BlobStoreUtil {
                 if (HashKeyUtil.isValidHashKey(uri)) {
                     iriForLookup = uri;
                 } else {
-                    List<String> redirects = new ArrayList<>();
                     String redirectCursor = uri.getIRIString();
+                    List<String> redirects = new ArrayList<>();
+                    redirects.add(redirectCursor);
                     String redirectCandidate;
                     while ((redirectCandidate = aliasMap.get(redirectCursor)) != null) {
                         if (StringUtils.isNotBlank(redirectCandidate)
