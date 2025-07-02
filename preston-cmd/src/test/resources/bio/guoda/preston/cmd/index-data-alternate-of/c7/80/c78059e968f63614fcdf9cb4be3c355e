@@ -1,0 +1,26 @@
+<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> .
+<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> .
+<https://preston.guoda.bio> <http://purl.org/dc/terms/description> "Preston is a software program that finds, archives and provides access to biodiversity datasets."@en <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> .
+<urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> .
+<urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> <http://purl.org/dc/terms/description> "An event that (re-) processes existing biodiversity datasets graphs and their provenance."@en <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> .
+<urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> <http://www.w3.org/ns/prov#startedAtTime> "2025-07-02T20:57:01.535Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> .
+<urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> <http://www.w3.org/ns/prov#wasStartedBy> <https://preston.guoda.bio> <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> .
+<https://doi.org/10.5281/zenodo.1410543> <http://www.w3.org/ns/prov#usedBy> <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> .
+<https://doi.org/10.5281/zenodo.1410543> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/dc/dcmitype/Software> <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> .
+<https://doi.org/10.5281/zenodo.1410543> <http://purl.org/dc/terms/bibliographicCitation> "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2018-2024. Preston: a biodiversity dataset tracker (Version 0.10.13-SNAPSHOT@39a00daa6e59856884dbe728377f06a1c0b1cb5b) [Software]. Zenodo. https://doi.org/10.5281/zenodo.1410543"@en <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> .
+<urn:uuid:0659a54f-b713-4f86-a917-5be166a14110> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Entity> <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> .
+<urn:uuid:0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/dc/terms/description> "A biodiversity dataset graph archive."@en <urn:uuid:ee4af223-a856-4fc3-b572-030caf1b2ff4> .
+<urn:uuid:da3dfd36-e9de-4a0b-be21-d4e25588e43e> <http://www.w3.org/ns/prov#used> <http://www.scielo.org.mx/scielo.php?script=sci_pdf&pid=S0065-17372004000100015> <urn:uuid:da3dfd36-e9de-4a0b-be21-d4e25588e43e> .
+<http://www.scielo.org.mx/scielo.php?script=sci_pdf&pid=S0065-17372004000100015> <http://purl.org/pav/hasVersion> <hash://md5/4ed9f833bd9c1f4514a6b4ec41f57ef3> <urn:uuid:da3dfd36-e9de-4a0b-be21-d4e25588e43e> .
+<http://www.scielo.org.mx/scielo.php?script=sci_pdf&pid=S0065-17372004000100015> <http://www.w3.org/ns/prov#alternateOf> <http://www.scielo.org.mx/pdf/azm/v20n1/v20n1a15.pdf> <urn:uuid:d62cd17d-dde9-4d87-b085-5450ce28099f> .
+<urn:uuid:f3cfb3f2-e7d3-4925-ae23-8e1968fa5313> <http://www.w3.org/ns/prov#used> <http://www.scielo.org.mx/pdf/azm/v20n1/v20n1a15.pdf> <urn:uuid:f3cfb3f2-e7d3-4925-ae23-8e1968fa5313> .
+<http://www.scielo.org.mx/pdf/azm/v20n1/v20n1a15.pdf> <http://purl.org/pav/hasVersion> <hash://md5/b7059d174a65ac2412ed750651630be1> <urn:uuid:f3cfb3f2-e7d3-4925-ae23-8e1968fa5313> .
+<urn:uuid:20148031-e3eb-490a-a902-33a3f17ce454> <http://www.w3.org/ns/prov#used> <http://www.scielo.org.mx/scielo.php?script=sci_pdf&pid=S0065-17372004000100015> <urn:uuid:20148031-e3eb-490a-a902-33a3f17ce454> .
+<http://www.scielo.org.mx/scielo.php?script=sci_pdf&pid=S0065-17372004000100015> <http://purl.org/pav/hasVersion> <hash://md5/76a6e92dae18c3ef33101a203348d4b2> <urn:uuid:20148031-e3eb-490a-a902-33a3f17ce454> .
+<https://www.biodiversitylibrary.org/partpdf/172829> <http://www.w3.org/ns/prov#alternateOf> <http://www.scielo.org.mx/scielo.php?script=sci_pdf&pid=S0065-17372004000100015> .
+<urn:uuid:dd7aa26d-b769-43b2-a5c9-5127a3748b19> <http://www.w3.org/ns/prov#used> <https://www.biodiversitylibrary.org/partpdf/172829> <urn:uuid:dd7aa26d-b769-43b2-a5c9-5127a3748b19> .
+<https://www.biodiversitylibrary.org/partpdf/172829> <http://purl.org/pav/hasVersion> <https://deeplinker.bio/.well-known/genid/06530821-6870-361f-a7e1-e146ef87aa21> <urn:uuid:dd7aa26d-b769-43b2-a5c9-5127a3748b19> .
+<urn:uuid:e2be17d1-b7f2-49a7-b8aa-8baa08d7aef7> <http://www.w3.org/ns/prov#used> <https://www.biodiversitylibrary.org/partpdf/172829> <urn:uuid:e2be17d1-b7f2-49a7-b8aa-8baa08d7aef7> .
+<https://www.biodiversitylibrary.org/partpdf/172829> <http://purl.org/pav/hasVersion> <https://deeplinker.bio/.well-known/genid/b57c4e74-402a-3393-bee1-01e695d11318> <urn:uuid:e2be17d1-b7f2-49a7-b8aa-8baa08d7aef7> .
+<urn:uuid:14127cd6-5ed5-4748-a05f-da06415f9075> <http://www.w3.org/ns/prov#used> <https://www.biodiversitylibrary.org/partpdf/172829> <urn:uuid:14127cd6-5ed5-4748-a05f-da06415f9075> .
+<https://www.biodiversitylibrary.org/partpdf/172829> <http://purl.org/pav/hasVersion> <https://deeplinker.bio/.well-known/genid/d461da32-2486-3946-a6d7-31b311f6f90e> <urn:uuid:14127cd6-5ed5-4748-a05f-da06415f9075> .

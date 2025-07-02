@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 public class BlobStoreUtilTest {
 
@@ -76,6 +77,32 @@ public class BlobStoreUtilTest {
         IRI contentId = Hasher.calcHashIRI(inputStream, NullOutputStream.INSTANCE, HashType.md5);
 
         assertThat(contentId.getIRIString(), Is.is("hash://md5/b3c657620e4d1ff29514adf48bd4b12f"));
+    }
+
+    @Test
+    public void indexedBlobStoreAlternateOf() throws IOException, URISyntaxException {
+        // see https://github.com/bio-guoda/preston/issues/336#issuecomment-3029285396
+        File dataDir = getDataDir("index-data-alternate-of/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+
+        Persisting persisting = getPersisting(dataDir);
+        persisting.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/c78059e968f63614fcdf9cb4be3c355e"));
+        KeyValueStore keyValueStore = persisting.getKeyValueStore(PersistingTest.getAlwaysAccepting());
+        BlobStoreReadOnly blobStoreReadOnly = new BlobStoreReadOnly() {
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                return keyValueStore.get(uri);
+            }
+        };
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(blobStoreReadOnly, persisting);
+
+        InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://www.biodiversitylibrary.org/partpdf/172829"));
+
+        assertNotNull(inputStream);
+
+        IRI contentId = Hasher.calcHashIRI(inputStream, NullOutputStream.INSTANCE, HashType.md5);
+
+        assertThat(contentId.getIRIString(), Is.is("hash://md5/b7059d174a65ac2412ed750651630be1"));
     }
 
     @Test
