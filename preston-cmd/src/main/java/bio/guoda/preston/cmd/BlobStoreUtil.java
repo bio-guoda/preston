@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -51,9 +52,25 @@ public class BlobStoreUtil {
                 if (HashKeyUtil.isValidHashKey(uri)) {
                     iriForLookup = uri;
                 } else {
-                    String alternate = aliasMap.get(uri.getIRIString());
-                    String indexedVersion = StringUtils.isBlank(alternate) ? versionMap.get(uri.getIRIString()) : versionMap.get(alternate);
-                    iriForLookup = StringUtils.isBlank(indexedVersion) ? null : RefNodeFactory.toIRI(indexedVersion);
+                    List<String> redirects = new ArrayList<>();
+                    String redirectCursor = uri.getIRIString();
+                    String redirectCandidate;
+                    while ((redirectCandidate = aliasMap.get(redirectCursor)) != null) {
+                        if (StringUtils.isNotBlank(redirectCandidate)
+                                && !redirects.contains(redirectCandidate)) {
+                            redirects.add(redirectCandidate);
+                            redirectCursor = redirectCandidate;
+                        } else {
+                            break;
+                        }
+                    }
+                    String indexedVersion = StringUtils.isBlank(redirectCursor)
+                            ? versionMap.get(uri.getIRIString())
+                            : versionMap.get(redirectCursor);
+
+                    iriForLookup = StringUtils.isBlank(indexedVersion)
+                            ? null
+                            : RefNodeFactory.toIRI(indexedVersion);
                 }
 
                 if (iriForLookup == null) {
