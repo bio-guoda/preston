@@ -36,7 +36,7 @@ import java.util.List;
                 "Then, track record.ris using Preston into Zenodo metadata using: ",
                 "----",
                 "cat record.ris\\",
-                " | preston track\\",
+                " | preston track",
                 "----",
                 "Following, append the associated bhl pdf via: ",
                 "----",
@@ -47,7 +47,7 @@ import java.util.List;
                 "preston head\\",
                 " | preston cat\\",
                 " | preston ris-stream\\",
-                " > record.json\\",
+                " > record.json",
                 "----"
         }
 
