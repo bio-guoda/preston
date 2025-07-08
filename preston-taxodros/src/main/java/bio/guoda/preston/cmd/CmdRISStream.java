@@ -16,7 +16,41 @@ import java.util.List;
 
 @CommandLine.Command(
         name = "ris-stream",
-        description = "Stream RIS records into line-json with Zenodo metadata"
+        header = "translates bibliographic citations from RIS format into Zenodo metadata in JSON lines format",
+        description = "Stream RIS records into line-json with Zenodo metadata",
+        footerHeading = "Examples",
+        footer = {
+                "%n1.",
+                "First, generate a RIS record, record.ris:",
+                "----",
+                "cat > record.ris <<__EOL__",
+                "TY  - BOOK",
+                "TI  - Faber, Helen R May 5, 1913",
+                "T2  - Walter Deane correspondence",
+                "UR  - https://www.biodiversitylibrary.org/part/326364",
+                "PY  - 1913-05-05",
+                "AU  - Faber, Helen R.,",
+                "ER  -",
+                "__EOL__",
+                "----",
+                "Then, track record.ris using Preston into Zenodo metadata using: ",
+                "----",
+                "cat record.ris\\",
+                " | preston track\\",
+                "----",
+                "Following, append the associated bhl pdf via: ",
+                "----",
+                "preston track https://www.biodiversitylibrary.org/partpdf/326364",
+                "----",
+                "Finally, generate Zenodo metadata record.json using: ",
+                "----",
+                "preston head\\",
+                " | preston cat\\",
+                " | preston ris-stream\\",
+                " > record.json\\",
+                "----"
+        }
+
 )
 public class CmdRISStream extends LoggingPersisting implements Runnable {
 
