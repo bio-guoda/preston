@@ -96,13 +96,4 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
             }
         }
     }
-
-    private static void submit(StatementsEmitter emitter, String barCode, String ext, String fileFormat) {
-        IRI resource = toIRI("https://archive.org/download/" + barCode + "/" + barCode + ext);
-        Stream.of(
-                        toStatement(toIRI(barCode), SEE_ALSO, resource),
-                        toStatement(resource, HAS_FORMAT, toContentType(fileFormat)),
-                        toStatement(resource, HAS_VERSION, toBlank()))
-                .forEach(emitter::emit);
-    }
 }
