@@ -18,6 +18,7 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.Is.is;
 
 public class SciELOSoftRedirectorTest {
@@ -141,6 +142,30 @@ public class SciELOSoftRedirectorTest {
         nodes.forEach(System.out::println);
 
         assertThat(nodes.size(), is(0));
+    }
+
+    @Test
+    public void onPDFBrazil() {
+        BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
+            @Override
+            public InputStream get(IRI key) throws IOException {
+                return getClass().getResourceAsStream("scielo.pdf");
+            }
+        };
+        ArrayList<Quad> nodes = new ArrayList<>();
+        SciELOSoftRedirector registryReader = new SciELOSoftRedirector(
+                blobStore,
+                TestUtilForProcessor.testListener(nodes)
+        );
+        Quad pdfResourceVersionStatement = toStatement(
+                toIRI("http://www.scielo.br/scielo.php?script=sci_pdf&pid=S2236-89062014000200010"),
+                HAS_VERSION,
+                createTestNode()
+        );
+
+        registryReader.on(pdfResourceVersionStatement);
+        assertThat(nodes.size(), is(2));
+        assertThat(nodes.get(1).toString(), startsWith("<http://www.scielo.br/scielo.php?script=sci_pdf&pid=S2236-89062014000200010> <http://www.w3.org/ns/prov#alternateOf> <https://doi.org/10.1590/s2236-89062014000200010>"));
     }
 
     private IRI createTestNode() {
