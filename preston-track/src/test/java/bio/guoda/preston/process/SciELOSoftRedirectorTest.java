@@ -4,18 +4,14 @@ import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.TestUtilForProcessor;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.globalbioticinteractions.doi.DOI;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
@@ -30,12 +26,7 @@ public class SciELOSoftRedirectorTest {
     public void chileDOI() {
         String scieloUrl = "https://www.scielo.cl/scielo.php?script=sci_pdf&pid=S0717-65382015000100003";
 
-        Pattern chilePattern = Pattern.compile("http[s]{0,1}://www.scielo.cl/.*pid=(?<pid>[A-Za-z0-9-]+)");
-        String scieloDOI = "";
-        Matcher matcher = chilePattern.matcher(scieloUrl);
-        if (matcher.matches()) {
-            scieloDOI = new DOI("4067", StringUtils.lowerCase(matcher.group("pid"))).toURI().toString();
-        }
+        String scieloDOI = SciELOSoftRedirector.inferChileDOI(scieloUrl);
         assertThat(scieloDOI, is("https://doi.org/10.4067/s0717-65382015000100003"));
     }
 
@@ -43,12 +34,7 @@ public class SciELOSoftRedirectorTest {
     @Test
     public void brazilDOI() {
         String scieloUrl = "http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2236-89062014000200010";
-        String scieloDOI = "";
-        Pattern brazilPattern = Pattern.compile("http[s]{0,1}://www.scielo.br/.*pid=(?<pid>[A-Za-z0-9-]+)");
-        Matcher matcher = brazilPattern.matcher(scieloUrl);
-        if (matcher.matches()) {
-            scieloDOI = new DOI("1590", StringUtils.lowerCase(matcher.group("pid"))).toURI().toString();
-        }
+        String scieloDOI = SciELOSoftRedirector.inferBrazilDOI(scieloUrl);
         assertThat(scieloDOI, is("https://doi.org/10.1590/s2236-89062014000200010"));
     }
 

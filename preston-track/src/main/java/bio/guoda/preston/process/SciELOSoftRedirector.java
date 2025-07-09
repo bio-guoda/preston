@@ -4,11 +4,13 @@ import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.tika.detect.TextDetector;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
+import org.globalbioticinteractions.doi.DOI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +41,26 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
 
     public SciELOSoftRedirector(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
+    }
+
+    static String inferChileDOI(String scieloUrl) {
+        Pattern chilePattern = Pattern.compile("http[s]{0,1}://www.scielo.cl/.*pid=(?<pid>[A-Za-z0-9-]+)");
+        String scieloDOI = "";
+        Matcher matcher = chilePattern.matcher(scieloUrl);
+        if (matcher.matches()) {
+            scieloDOI = new DOI("4067", StringUtils.lowerCase(matcher.group("pid"))).toURI().toString();
+        }
+        return scieloDOI;
+    }
+
+    static String inferBrazilDOI(String scieloUrl) {
+        String scieloDOI = "";
+        Pattern brazilPattern = Pattern.compile("http[s]{0,1}://www.scielo.br/.*pid=(?<pid>[A-Za-z0-9-]+)");
+        Matcher matcher = brazilPattern.matcher(scieloUrl);
+        if (matcher.matches()) {
+            scieloDOI = new DOI("1590", StringUtils.lowerCase(matcher.group("pid"))).toURI().toString();
+        }
+        return scieloDOI;
     }
 
     @Override
