@@ -129,7 +129,8 @@ public class RISFileExtractorTest {
         Dereferencer<IRI> doiForContent = new Dereferencer<IRI>() {
             @Override
             public IRI get(IRI uri) throws IOException {
-                return StringUtils.equals(uri.getIRIString(), "hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1")
+                String pdfContentId = "hash://sha256/da8e8a1b2579542779408c410edb110f9a44f4206db2df66ec46391bcba78015";
+                return StringUtils.equals(uri.getIRIString(), pdfContentId)
                         ? toIRI("https://doi.org/10.1590/s1676-06032011000400032")
                         : null;
             }
