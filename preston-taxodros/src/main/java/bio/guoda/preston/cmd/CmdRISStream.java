@@ -125,7 +125,7 @@ public class CmdRISStream extends LoggingPersisting implements Runnable {
             defaultValue = "false",
             description = "use existing DOI in Zenodo deposit if available"
     )
-    private Boolean ifAvailableUseExistingDOI = false;
+    private Boolean reuseDoi = false;
 
 
     @Override
@@ -152,7 +152,7 @@ public class CmdRISStream extends LoggingPersisting implements Runnable {
                 blobStoreReadOnly,
                 getOutputStream(),
                 communities,
-                ifAvailableUseExistingDOI,
+                reuseDoi,
                 doiForContent,
                 listener);
 
@@ -167,6 +167,10 @@ public class CmdRISStream extends LoggingPersisting implements Runnable {
         new EmittingStreamOfAnyVersions(emitter, this)
                 .parseAndEmit(getInputStream());
 
+    }
+
+    public void setReuseDoi(Boolean reuseDoi) {
+        this.reuseDoi = reuseDoi;
     }
 
 }

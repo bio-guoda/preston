@@ -37,7 +37,8 @@ public class StreamHandlerUtil {
         return "https://linker.bio/" + providedContentId;
     }
 
-    public static void appendContentId(ObjectNode objectNode, String downloadUrlOrContentId, HashType hashType, Dereferencer<InputStream> dereferencer, Persisting persisting) throws ContentStreamException {
+    public static IRI appendContentId(ObjectNode objectNode, String downloadUrlOrContentId, HashType hashType, Dereferencer<InputStream> dereferencer, Persisting persisting) throws ContentStreamException {
+        IRI contentId = null;
         if (StringUtils.isNotBlank(downloadUrlOrContentId)) {
             try {
                 IRI downloadUrlOrContentIdIRI = RefNodeFactory.toIRI(downloadUrlOrContentId);
@@ -45,7 +46,7 @@ public class StreamHandlerUtil {
                 if (attachementInputStream == null) {
                     throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + downloadUrlOrContentId + "]");
                 }
-                IRI contentId = Hasher.calcHashIRI(
+                contentId = Hasher.calcHashIRI(
                         attachementInputStream,
                         NullOutputStream.INSTANCE,
                         hashType
@@ -55,5 +56,6 @@ public class StreamHandlerUtil {
                 throw new ContentStreamException("cannot generate Zenodo record due to unresolved attachment [" + downloadUrlOrContentId + "]", e);
             }
         }
+        return contentId;
     }
 }

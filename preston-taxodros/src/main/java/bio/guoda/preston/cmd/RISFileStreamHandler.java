@@ -68,31 +68,33 @@ public class RISFileStreamHandler implements ContentStreamHandler {
                                 {
                                     try {
                                         String bhlPartPDFUrl = RISUtil.getBHLPartPDFUrl(zenodoObject);
-                                        StreamHandlerUtil.appendContentId(
+                                        IRI contentId = StreamHandlerUtil.appendContentId(
                                                 zenodoObject,
                                                 bhlPartPDFUrl,
                                                 type,
                                                 dereferencer,
                                                 persisting);
-                                    } catch (ContentStreamException e) {
+
+                                        IRI doi = doiForContent.get(contentId);
+                                        if (doi != null) {
+                                            ZenodoMetaUtil.appendIdentifier(
+                                                    zenodoObject,
+                                                    ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER,
+                                                    doi.getIRIString()
+                                            );
+                                            if (ifAvailableReuseDOI) {
+                                                if (!zenodoObject.has("doi")) {
+                                                    zenodoObject.put("doi", doi.getIRIString());
+                                                }
+                                            }
+                                        }
+
+                                    } catch (ContentStreamException | IOException e) {
                                         LOG.warn("failed to find [" + type.name() + "] content id related to metadata for [" + jsonNode.toPrettyString() + "]", e);
                                         // no hash, no content
                                     }
                                 });
 
-                        IRI doi = doiForContent.get(version);
-                        if (doi != null) {
-                            ZenodoMetaUtil.appendIdentifier(
-                                    zenodoObject,
-                                    ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER,
-                                    doi.getIRIString()
-                            );
-                            if (ifAvailableReuseDOI) {
-                                if (!zenodoObject.has("doi")) {
-                                    zenodoObject.put("doi", doi.getIRIString());
-                                }
-                            }
-                        }
                         StreamHandlerUtil.writeRecord(foundAtLeastOne, zenodoObject, outputStream);
                     } catch (IOException e) {
                         LOG.warn("failed to process [" + jsonNode.toPrettyString() + "]", e);

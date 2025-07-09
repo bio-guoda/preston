@@ -43,6 +43,7 @@
     }, {
       "relation" : "isAlternateIdentifier",
       "identifier" : "https://doi.org/10.1590/s2236-89062014000200010"
-    } ]
+    } ],
+    "doi" : "https://doi.org/10.1590/s2236-89062014000200010"
   }
 }

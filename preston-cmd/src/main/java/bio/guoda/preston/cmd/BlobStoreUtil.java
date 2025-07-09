@@ -140,7 +140,7 @@ public class BlobStoreUtil {
     }
 
 
-    private static org.apache.commons.lang3.tuple.Pair<Map<String, String>, Map<String, String>> buildIndexedBlobStore(Persisting persisting) {
+    private static Pair<Map<String, String>, Map<String, String>> buildIndexedBlobStore(Persisting persisting) {
 
         File tmpDir = new File(persisting.getTmpDir());
         IRI provenanceAnchor = AnchorUtil.findAnchorOrThrow(persisting);
