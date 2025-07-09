@@ -37,6 +37,8 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class SciELOSoftRedirector extends ProcessorReadOnly {
     public static final String SCI_ELO_URL_PART = "scielo.php?script=sci_pdf";
+    public static final Pattern CHILE_PATTERN = Pattern.compile("http[s]{0,1}://www.scielo.cl/.*pid=(?<pid>[A-Za-z0-9-]+)");
+    public static final Pattern BRAZIL_PATTERN = Pattern.compile("http[s]{0,1}://www.scielo.br/.*pid=(?<pid>[A-Za-z0-9-]+)");
     private static final Logger LOG = LoggerFactory.getLogger(SciELOSoftRedirector.class);
 
     public SciELOSoftRedirector(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
@@ -44,9 +46,8 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
     }
 
     static String inferChileDOI(String scieloUrl) {
-        Pattern chilePattern = Pattern.compile("http[s]{0,1}://www.scielo.cl/.*pid=(?<pid>[A-Za-z0-9-]+)");
         String scieloDOI = "";
-        Matcher matcher = chilePattern.matcher(scieloUrl);
+        Matcher matcher = CHILE_PATTERN.matcher(scieloUrl);
         if (matcher.matches()) {
             scieloDOI = new DOI("4067", StringUtils.lowerCase(matcher.group("pid"))).toURI().toString();
         }
@@ -55,8 +56,7 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
 
     static String inferBrazilDOI(String scieloUrl) {
         String scieloDOI = "";
-        Pattern brazilPattern = Pattern.compile("http[s]{0,1}://www.scielo.br/.*pid=(?<pid>[A-Za-z0-9-]+)");
-        Matcher matcher = brazilPattern.matcher(scieloUrl);
+        Matcher matcher = BRAZIL_PATTERN.matcher(scieloUrl);
         if (matcher.matches()) {
             scieloDOI = new DOI("1590", StringUtils.lowerCase(matcher.group("pid"))).toURI().toString();
         }
@@ -92,6 +92,11 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
     }
 
     static void parse(StatementsEmitter emitter, InputStream is, IRI source) throws IOException {
+        String doi = inferChileDOI(source.getIRIString());
+        doi = StringUtils.isBlank(doi) ? inferBrazilDOI(source.getIRIString()) : doi;
+        if (StringUtils.isNotBlank(doi)) {
+            emitter.emit(RefNodeFactory.toStatement(source, ALTERNATE_OF, RefNodeFactory.toIRI(doi)));
+        }
 
         BufferedInputStream bis = IOUtils.buffer(is);
 
