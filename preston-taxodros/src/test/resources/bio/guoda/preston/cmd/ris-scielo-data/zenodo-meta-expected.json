@@ -1,0 +1,45 @@
+{
+  "metadata" : {
+    "description" : "(Uploaded by Plazi from the Biodiversity Heritage Library) No abstract provided.",
+    "communities" : [ ],
+    "http://www.w3.org/ns/prov#wasDerivedFrom" : "https://linker.bio/line:hash://sha256/d1e452a2760ae9f5c9f92c497aff02434b50ed826f42accb50d968161526f00d!/L1-L14",
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" : "application/x-research-info-systems",
+    "title" : "A new hairy Leptogium (section Mallotium) from Rio Grande do Sul State, Brazil",
+    "upload_type" : "publication",
+    "publication_type" : "article",
+    "journal_title" : "Hoehnea",
+    "publication_date" : "2014-06-01",
+    "imprint_publisher" : "Hoehnea",
+    "referenceId" : "https://www.biodiversitylibrary.org/part/125156",
+    "filename" : "bhlpart125156.pdf",
+    "keywords" : [ "Biodiversity", "BHL-Corpus", "Source: Biodiversity Heritage Library", "Source: https://biodiversitylibrary.org", "Source: BHL", "cylindrical cells", "involute margin", "Leptogium velutinum" ],
+    "creators" : [ {
+      "name" : "Kitaura, Marcos Junji"
+    }, {
+      "name" : "Käffer, Márcia Isabel"
+    }, {
+      "name" : "Marcelli, Marcelo Pinto"
+    }, {
+      "name" : "Martins, Suzana Maria de Azevedo"
+    } ],
+    "related_identifiers" : [ {
+      "relation" : "isDerivedFrom",
+      "identifier" : "https://linker.bio/line:hash://sha256/d1e452a2760ae9f5c9f92c497aff02434b50ed826f42accb50d968161526f00d!/L1-L14"
+    }, {
+      "relation" : "isDerivedFrom",
+      "identifier" : "https://www.biodiversitylibrary.org/part/125156"
+    }, {
+      "relation" : "isAlternateIdentifier",
+      "identifier" : "urn:lsid:biodiversitylibrary.org:part:125156"
+    }, {
+      "relation" : "isPartOf",
+      "identifier" : "hash://sha256/83a7bcb1e340755edf2af171b13fe5628b81f113ff5062c90a527e1cff9558c4"
+    }, {
+      "relation" : "hasVersion",
+      "identifier" : "hash://md5/b9d36e6be2b6564c94221da24ef4d4d7"
+    }, {
+      "relation" : "hasVersion",
+      "identifier" : "hash://sha256/2a7542427140b4f75fa2f3ba2f868760cd19b995ed40a37c5aa3aaeac5becb82"
+    } ]
+  }
+}

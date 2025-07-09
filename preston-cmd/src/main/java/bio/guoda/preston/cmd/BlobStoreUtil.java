@@ -250,7 +250,9 @@ public class BlobStoreUtil {
                     if (StringUtils.isNotBlank(redirectCandidate)
                             && !redirects.contains(redirectCandidate)) {
                         redirects.add(redirectCandidate);
-                        redirectCursor = redirectCandidate;
+                        if (versionMap.containsKey(redirectCandidate)) {
+                            redirectCursor = redirectCandidate;
+                        }
                     } else {
                         break;
                     }
