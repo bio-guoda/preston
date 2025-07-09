@@ -69,15 +69,15 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
         }
     }
 
-    static void parse(StatementsEmitter emitter, InputStream ubin, IRI source) throws IOException {
+    static void parse(StatementsEmitter emitter, InputStream is, IRI source) throws IOException {
 
-        BufferedInputStream in = IOUtils.buffer(ubin);
+        BufferedInputStream bis = IOUtils.buffer(is);
 
         Metadata metadata = new Metadata();
-        MediaType detectedType = new TextDetector().detect(in, metadata);
+        MediaType detectedType = new TextDetector().detect(bis, metadata);
 
         if (MediaType.TEXT_PLAIN.equals(detectedType)) {
-            LineIterator lineIterator = IOUtils.lineIterator(in, StandardCharsets.UTF_8);
+            LineIterator lineIterator = IOUtils.lineIterator(bis, StandardCharsets.UTF_8);
             while (lineIterator.hasNext()) {
                 String firstChunk = lineIterator.nextLine();
                 Pattern redirectUrlPattern = Pattern.compile(".*<script>.*setTimeout.*window.location=\\\"(?<pdfUrl>.*)\\\".*</script>.*", Pattern.MULTILINE);
