@@ -54,7 +54,7 @@ public class CmdZoteroStream extends LoggingPersisting implements Runnable {
 
     public void run(BlobStoreReadOnly blobStoreReadOnly) {
 
-        BlobStoreReadOnly blobStoreWithIndexedVersions = BlobStoreUtil.createIndexedBlobStoreFor(blobStoreReadOnly, this);
+        BlobStoreReadOnly blobStoreWithIndexedVersions = BlobStoreUtil.createIndexedBlobStoreFor(blobStoreReadOnly, BlobStoreUtil.contentForAlias(this));
 
 
         StatementsListener listener = StatementLogFactory.createPrintingLogger(

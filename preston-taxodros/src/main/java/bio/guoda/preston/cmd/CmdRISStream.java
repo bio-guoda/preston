@@ -6,8 +6,10 @@ import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.commons.io.output.NullPrintStream;
+import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import picocli.CommandLine;
 
@@ -130,13 +132,16 @@ public class CmdRISStream extends LoggingPersisting implements Runnable {
     public void run() {
         BlobStoreReadOnly blobStoreReadonly
                 = new BlobStoreAppendOnly(getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory()), true, getHashType());
-        BlobStoreReadOnly blobStoreWithIndexedVersions = BlobStoreUtil.createIndexedBlobStoreFor(blobStoreReadonly, this);
+        Dereferencer<IRI> versionForAliasLookup = BlobStoreUtil.contentForAlias(this);
+        BlobStoreReadOnly blobStoreWithIndexedVersions = BlobStoreUtil.createIndexedBlobStoreFor(blobStoreReadonly, versionForAliasLookup);
 
-        run(blobStoreWithIndexedVersions);
+        Dereferencer<IRI> doiForContent = BlobStoreUtil.doiForContent(this);
+
+        run(blobStoreWithIndexedVersions, doiForContent);
 
     }
 
-    public void run(BlobStoreReadOnly blobStoreReadOnly) {
+    public void run(BlobStoreReadOnly blobStoreReadOnly, Dereferencer<IRI> doiForContent) {
         StatementsListener listener = StatementLogFactory.createPrintingLogger(
                 getLogMode(),
                 NullPrintStream.INSTANCE,
@@ -148,6 +153,7 @@ public class CmdRISStream extends LoggingPersisting implements Runnable {
                 getOutputStream(),
                 communities,
                 ifAvailableUseExistingDOI,
+                doiForContent,
                 listener);
 
         StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {

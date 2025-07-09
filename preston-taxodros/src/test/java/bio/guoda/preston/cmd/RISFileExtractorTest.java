@@ -1,7 +1,9 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.Dereferencer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,13 +39,27 @@ public class RISFileExtractorTest {
 
     @Test
     public void streamBHLPartsToZenodoLineJson() throws IOException {
-        String[] jsonObjects = extractMetadata("ris/bhlpart-multiple.ris", "332157");
+        String[] jsonObjects = extractMetadata("ris/bhlpart-multiple.ris", "332157", new Dereferencer<IRI>() {
+            @Override
+            public IRI get(IRI uri) throws IOException {
+                return StringUtils.contains(uri.getIRIString(), "S1676-06032011000400032")
+                        ? RefNodeFactory.toIRI("https://doi.org/10.1590/s1676-06032011000400032")
+                        : null;
+            }
+        });
         assertArticleItem(jsonObjects);
     }
 
     @Test
     public void streamBHLSciELOPartsToZenodoLineJson() throws IOException {
-        String[] jsonObjects = extractMetadata("ris/bhlpart-scielo.ris", "108952");
+        String[] jsonObjects = extractMetadata("ris/bhlpart-scielo.ris", "108952", new Dereferencer<IRI>() {
+            @Override
+            public IRI get(IRI uri) throws IOException {
+                return StringUtils.contains(uri.getIRIString(), "S1676-06032011000400032")
+                        ? RefNodeFactory.toIRI("https://doi.org/10.1590/s1676-06032011000400032")
+                        : null;
+            }
+        });
         assertThat(jsonObjects.length, is(1));
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
@@ -106,8 +122,46 @@ public class RISFileExtractorTest {
     }
 
     @Test
+    public void streamBHLSciELOPartsToZenodoLineJsonDOI() throws IOException {
+
+        String expectedDOI = "https://doi.org/10.1590/s1676-06032011000400032";
+
+        Dereferencer<IRI> doiForContent = new Dereferencer<IRI>() {
+            @Override
+            public IRI get(IRI uri) throws IOException {
+                return StringUtils.equals(uri.getIRIString(), "hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1")
+                        ? toIRI("https://doi.org/10.1590/s1676-06032011000400032")
+                        : null;
+            }
+        };
+
+        String[] jsonObjects = extractMetadata(
+                "ris/bhlpart-scielo.ris",
+                "108952",
+                doiForContent
+        );
+
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+
+        JsonNode identifiers = taxonNode.at("/related_identifiers");
+        assertThat(identifiers.size(), is(7));
+
+        assertThat(identifiers.get(6).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(6).get("identifier").asText(), is(expectedDOI));
+
+        JsonNode doiNode = taxonNode.get("doi");
+        assertThat(doiNode, is(not(nullValue())));
+        assertThat(doiNode.asText(), is(expectedDOI));
+    }
+
+    @Test
     public void streamBHLPartToZenodoLineJsonMissingAttachment() throws IOException {
-        String[] jsonObjects = extractMetadata("ris/bhlpart-multiple.ris", "332157");
+        String[] jsonObjects = extractMetadata(
+                "ris/bhlpart-multiple.ris",
+                "332157",
+                uri -> null);
         assertThat(jsonObjects.length, is(5));
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[1]);
@@ -137,7 +191,11 @@ public class RISFileExtractorTest {
 
     @Test
     public void streamBHLWithAuthorTrailingCommas() throws IOException {
-        String[] jsonObjects = extractMetadata("ris/bhlpart-author-trailing-comma.ris", "44156");
+        String[] jsonObjects = extractMetadata(
+                "ris/bhlpart-author-trailing-comma.ris",
+                "44156",
+                uri -> null
+        );
         assertThat(jsonObjects.length, is(1));
 
         JsonNode metadata = unwrapMetadata(jsonObjects[0]);
@@ -150,7 +208,7 @@ public class RISFileExtractorTest {
 
     @Test
     public void streamBHLWithJournalIssue() throws IOException {
-        String[] jsonObjects = extractMetadata("ris/bhlpart-journal-issue.ris", "149328");
+        String[] jsonObjects = extractMetadata("ris/bhlpart-journal-issue.ris", "149328", uri -> null);
         assertThat(jsonObjects.length, is(1));
 
         JsonNode metadata = unwrapMetadata(jsonObjects[0]);
@@ -163,7 +221,14 @@ public class RISFileExtractorTest {
 
     @Test
     public void streamBHLWithBiodiversityKeyword() throws IOException {
-        String[] jsonObjects = extractMetadata("ris/bhlpart-journal-issue.ris", "149328");
+        String[] jsonObjects = extractMetadata("ris/bhlpart-journal-issue.ris", "149328", new Dereferencer<IRI>() {
+            @Override
+            public IRI get(IRI uri) throws IOException {
+                return StringUtils.contains(uri.getIRIString(), "S1676-06032011000400032")
+                        ? RefNodeFactory.toIRI("https://doi.org/10.1590/s1676-06032011000400032")
+                        : null;
+            }
+        });
         assertThat(jsonObjects.length, is(1));
 
         List<String> keywordsFound = getKeywords(jsonObjects[0]);
@@ -175,7 +240,14 @@ public class RISFileExtractorTest {
 
     @Test
     public void streamBHLWithBiodiversityKeywordAndCustomKeywords() throws IOException {
-        String[] jsonObjects = extractMetadata("ris/bhlpart-scielo.ris", "108952");
+        String[] jsonObjects = extractMetadata("ris/bhlpart-scielo.ris", "108952", new Dereferencer<IRI>() {
+            @Override
+            public IRI get(IRI uri) throws IOException {
+                return StringUtils.contains(uri.getIRIString(), "S1676-06032011000400032")
+                        ? RefNodeFactory.toIRI("https://doi.org/10.1590/s1676-06032011000400032")
+                        : null;
+            }
+        });
         assertThat(jsonObjects.length, is(1));
 
         List<String> keywordsFound = getKeywords(jsonObjects[0]);
@@ -281,7 +353,9 @@ public class RISFileExtractorTest {
         return rootNode.get("metadata");
     }
 
-    private String[] extractMetadata(String records, final String bhlPartId) throws IOException {
+    private String[] extractMetadata(String records,
+                                     final String bhlPartId,
+                                     Dereferencer<IRI> doiGenerator) throws IOException {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) throws IOException {
@@ -318,7 +392,8 @@ public class RISFileExtractorTest {
                 blobStore,
                 byteArrayOutputStream,
                 Arrays.asList("biosyslit"),
-                true
+                true,
+                doiGenerator
         );
 
         extractor.on(statement);

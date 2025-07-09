@@ -33,12 +33,56 @@ public class BlobStoreUtilTest {
         File dataDir = getDataDir();
 
         Persisting persisting = getPersisting(dataDir);
-        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(getBlobStore(), persisting);
+        BlobStoreReadOnly blobStoreIndexed = getBlobStoreReadOnly(persisting);
 
         InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.org"));
 
         assertThat(IOUtils.toString(inputStream, StandardCharsets.UTF_8), Is.is("foo"));
     }
+
+    private BlobStoreReadOnly getBlobStoreReadOnly(Persisting persisting) {
+        return BlobStoreUtil.createIndexedBlobStoreFor(
+                getBlobStore(),
+                BlobStoreUtil.contentForAlias(persisting)
+        );
+    }
+
+    @Test
+    public void contentForAlias() throws IOException, URISyntaxException {
+        File dataDir = getDataDir("index-data-with-alternate/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+
+        Persisting persisting = getPersisting(dataDir);
+        persisting.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/075777140639f93508f92c286b36aadf"));
+        IRI resolvedContent = BlobStoreUtil.contentForAlias(persisting).get(RefNodeFactory.toIRI("https://example.com"));
+        assertThat(resolvedContent.getIRIString(), Is.is("hash://md5/d3b07384d113edec49eaa6238ad5ff00"));
+    }
+
+    @Test
+    public void contentForDOI() throws IOException, URISyntaxException {
+        File dataDir = getDataDir("index-data-with-alternate-doi/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+
+        Persisting persisting = getPersisting(dataDir);
+        persisting.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/75178306335979339d18c7f82b245f81"));
+        IRI resolvedContent = BlobStoreUtil
+                .contentForAlias(persisting)
+                .get(RefNodeFactory.toIRI("https://doi.org/10.1590/s2236-89062014000200010"));
+
+        assertThat(resolvedContent.getIRIString(), Is.is("hash://md5/caba3d5bde85428f2d14df94cbfec79c"));
+    }
+
+    @Test
+    public void doiForContent() throws IOException, URISyntaxException {
+        File dataDir = getDataDir("index-data-with-alternate-doi/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+
+        Persisting persisting = getPersisting(dataDir);
+        persisting.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/75178306335979339d18c7f82b245f81"));
+        IRI resolvedContent = BlobStoreUtil
+                .doiForContent(persisting)
+                .get(RefNodeFactory.toIRI("hash://md5/caba3d5bde85428f2d14df94cbfec79c"));
+
+        assertThat(resolvedContent.getIRIString(), Is.is("https://doi.org/10.1590/s2236-89062014000200010"));
+    }
+
 
     @Test
     public void indexedBlobStoreAlternateOfExampleDotCom() throws IOException, URISyntaxException {
@@ -46,7 +90,7 @@ public class BlobStoreUtilTest {
 
         Persisting persisting = getPersisting(dataDir);
         persisting.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/075777140639f93508f92c286b36aadf"));
-        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(getBlobStore(), persisting);
+        BlobStoreReadOnly blobStoreIndexed = getBlobStoreReadOnly(persisting);
 
         InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.com"));
 
@@ -67,7 +111,10 @@ public class BlobStoreUtilTest {
                 return keyValueStore.get(uri);
             }
         };
-        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(blobStoreReadOnly, persisting);
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(
+                blobStoreReadOnly,
+                BlobStoreUtil.contentForAlias(persisting)
+        );
 
         InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("http://www.scielo.org.mx/scielo.php?script=sci_pdf&pid=S1870-34532015000100028"));
 
@@ -91,7 +138,10 @@ public class BlobStoreUtilTest {
                 return keyValueStore.get(uri);
             }
         };
-        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(blobStoreReadOnly, persisting);
+        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(
+                blobStoreReadOnly,
+                BlobStoreUtil.contentForAlias(persisting)
+        );
 
         InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://www.biodiversitylibrary.org/partpdf/172829"));
 
@@ -108,7 +158,7 @@ public class BlobStoreUtilTest {
 
         Persisting persisting = getPersisting(dataDir);
         persisting.setProvenanceArchor(CmdWithProvenance.PROVENANCE_ANCHOR_DEFAULT);
-        BlobStoreReadOnly blobStoreIndexed = BlobStoreUtil.createIndexedBlobStoreFor(getBlobStore(), persisting);
+        BlobStoreReadOnly blobStoreIndexed = getBlobStoreReadOnly(persisting);
 
         InputStream inputStream = blobStoreIndexed.get(RefNodeFactory.toIRI("https://example.org"));
 
@@ -123,8 +173,8 @@ public class BlobStoreUtilTest {
         persisting.setProvenanceArchor(CmdWithProvenance.PROVENANCE_ANCHOR_DEFAULT);
 
         try {
-            BlobStoreUtil.createIndexedBlobStoreFor(getBlobStore(), persisting);
-        } catch(RuntimeException ex) {
+            getBlobStoreReadOnly(persisting);
+        } catch (RuntimeException ex) {
             assertThat(ex.getMessage(), Is.is("Cannot find most recent version: no provenance logs found."));
             throw ex;
         }

@@ -20,11 +20,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.globalbioticinteractions</groupId>
-            <artifactId>doi4j</artifactId>
-            <version>0.1.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark</artifactId>
             <version>0.21.0</version>

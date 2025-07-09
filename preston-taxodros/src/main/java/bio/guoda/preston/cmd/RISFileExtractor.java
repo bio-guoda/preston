@@ -4,6 +4,7 @@ import bio.guoda.preston.process.StatementEmitter;
 import bio.guoda.preston.process.StatementsEmitter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.stream.ArchiveStreamHandler;
 import bio.guoda.preston.stream.CompressedStreamHandler;
 import bio.guoda.preston.stream.ContentStreamException;
@@ -25,18 +26,21 @@ public class RISFileExtractor extends ProcessorExtracting {
     private final OutputStream outputStream;
     private final List<String> communities;
     private final boolean ifAvailableReuseDOI;
+    private final Dereferencer<IRI> doiForContent;
 
     public RISFileExtractor(Persisting processorState,
                             BlobStoreReadOnly blobStoreReadOnly,
                             OutputStream out,
                             List<String> communities,
                             boolean ifAvailableReuseDOI,
+                            Dereferencer<IRI> doiForContent,
                             StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
         this.communities = communities;
         this.ifAvailableReuseDOI = ifAvailableReuseDOI;
+        this.doiForContent = doiForContent;
     }
 
 
@@ -62,7 +66,8 @@ public class RISFileExtractor extends ProcessorExtracting {
                             processorState,
                             RISFileExtractor.this,
                             communities,
-                            RISFileExtractor.this.ifAvailableReuseDOI
+                            RISFileExtractor.this.ifAvailableReuseDOI,
+                            RISFileExtractor.this.doiForContent
                     )
             );
         }

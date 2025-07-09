@@ -25,6 +25,7 @@ public class RISFileStreamHandler implements ContentStreamHandler {
     private final Dereferencer<InputStream> dereferencer;
     private final IRI provenanceAnchor;
     private final boolean ifAvailableReuseDOI;
+    private final Dereferencer<IRI> doiForContent;
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;
     private final List<String> communities;
@@ -34,7 +35,8 @@ public class RISFileStreamHandler implements ContentStreamHandler {
                                 Persisting persisting,
                                 Dereferencer<InputStream> dereferencer,
                                 List<String> communities,
-                                boolean ifAvailableReuseDOI) {
+                                boolean ifAvailableReuseDOI,
+                                Dereferencer<IRI> doiForContent) {
         this.contentStreamHandler = contentStreamHandler;
         this.outputStream = os;
         this.persisting = persisting;
@@ -42,6 +44,7 @@ public class RISFileStreamHandler implements ContentStreamHandler {
         this.communities = communities;
         this.provenanceAnchor = AnchorUtil.findAnchorOrThrow(persisting);
         this.ifAvailableReuseDOI = ifAvailableReuseDOI;
+        this.doiForContent = doiForContent;
     }
 
     @Override
@@ -77,6 +80,19 @@ public class RISFileStreamHandler implements ContentStreamHandler {
                                     }
                                 });
 
+                        IRI doi = doiForContent.get(version);
+                        if (doi != null) {
+                            ZenodoMetaUtil.appendIdentifier(
+                                    zenodoObject,
+                                    ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER,
+                                    doi.getIRIString()
+                            );
+                            if (ifAvailableReuseDOI) {
+                                if (!zenodoObject.has("doi")) {
+                                    zenodoObject.put("doi", doi.getIRIString());
+                                }
+                            }
+                        }
                         StreamHandlerUtil.writeRecord(foundAtLeastOne, zenodoObject, outputStream);
                     } catch (IOException e) {
                         LOG.warn("failed to process [" + jsonNode.toPrettyString() + "]", e);
