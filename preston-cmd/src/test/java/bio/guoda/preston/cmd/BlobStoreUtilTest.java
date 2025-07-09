@@ -4,6 +4,7 @@ import bio.guoda.preston.HashType;
 import bio.guoda.preston.Hasher;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.Dereferencer;
 import bio.guoda.preston.store.KeyValueStore;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
@@ -68,6 +69,30 @@ public class BlobStoreUtilTest {
                 .get(RefNodeFactory.toIRI("https://doi.org/10.1590/s2236-89062014000200010"));
 
         assertThat(resolvedContent.getIRIString(), Is.is("hash://md5/caba3d5bde85428f2d14df94cbfec79c"));
+    }
+
+    @Test
+    public void contentForDOIAndAliasForContent() throws IOException, URISyntaxException {
+        File dataDir = getDataDir("index-data-with-alternate-doi/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+
+        Persisting persisting = getPersisting(dataDir);
+        persisting.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/75178306335979339d18c7f82b245f81"));
+
+        Dereferencer<IRI> contentForAlias = BlobStoreUtil
+                .contentForAlias(persisting);
+
+        Dereferencer<IRI> doiForContent = BlobStoreUtil
+                .doiForContent(persisting);
+
+        IRI resolvedContent = contentForAlias
+                .get(RefNodeFactory.toIRI("https://doi.org/10.1590/s2236-89062014000200010"));
+
+        assertThat(resolvedContent.getIRIString(), Is.is("hash://md5/caba3d5bde85428f2d14df94cbfec79c"));
+
+        IRI doiCandidate = doiForContent.get(RefNodeFactory.toIRI("hash://md5/caba3d5bde85428f2d14df94cbfec79c"));
+
+        assertThat(doiCandidate.getIRIString(), Is.is("https://doi.org/10.1590/s2236-89062014000200010"));
+
     }
 
     @Test
