@@ -28,7 +28,7 @@ public class SciELOSoftRedirectorTest {
         String scieloUrl = "https://www.scielo.cl/scielo.php?script=sci_pdf&pid=S0717-65382015000100003";
 
         String scieloDOI = SciELOSoftRedirector.inferChileDOI(scieloUrl);
-        assertThat(scieloDOI, is("https://doi.org/10.4067/s0717-65382015000100003"));
+        assertThat(scieloDOI, is("https://doi.org/10.4067/S0717-65382015000100003"));
     }
 
 
@@ -36,7 +36,7 @@ public class SciELOSoftRedirectorTest {
     public void brazilDOI() {
         String scieloUrl = "http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2236-89062014000200010";
         String scieloDOI = SciELOSoftRedirector.inferBrazilDOI(scieloUrl);
-        assertThat(scieloDOI, is("https://doi.org/10.1590/s2236-89062014000200010"));
+        assertThat(scieloDOI, is("https://doi.org/10.1590/S2236-89062014000200010"));
     }
 
     @Test
@@ -165,7 +165,7 @@ public class SciELOSoftRedirectorTest {
 
         registryReader.on(pdfResourceVersionStatement);
         assertThat(nodes.size(), is(2));
-        assertThat(nodes.get(1).toString(), startsWith("<http://www.scielo.br/scielo.php?script=sci_pdf&pid=S2236-89062014000200010> <http://www.w3.org/ns/prov#alternateOf> <https://doi.org/10.1590/s2236-89062014000200010>"));
+        assertThat(nodes.get(1).toString(), startsWith("<http://www.scielo.br/scielo.php?script=sci_pdf&pid=S2236-89062014000200010> <http://www.w3.org/ns/prov#alternateOf> <https://doi.org/10.1590/S2236-89062014000200010>"));
     }
 
     private IRI createTestNode() {

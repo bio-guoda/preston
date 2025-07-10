@@ -49,7 +49,7 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
         String scieloDOI = "";
         Matcher matcher = CHILE_PATTERN.matcher(scieloUrl);
         if (matcher.matches()) {
-            scieloDOI = new DOI("4067", StringUtils.lowerCase(matcher.group("pid"))).toURI().toString();
+            scieloDOI = new DOI("4067", StringUtils.upperCase(matcher.group("pid"))).toURI().toString();
         }
         return scieloDOI;
     }
@@ -58,7 +58,7 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
         String scieloDOI = "";
         Matcher matcher = BRAZIL_PATTERN.matcher(scieloUrl);
         if (matcher.matches()) {
-            scieloDOI = new DOI("1590", StringUtils.lowerCase(matcher.group("pid"))).toURI().toString();
+            scieloDOI = new DOI("1590", StringUtils.upperCase(matcher.group("pid"))).toURI().toString();
         }
         return scieloDOI;
     }

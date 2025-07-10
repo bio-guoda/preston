@@ -124,14 +124,14 @@ public class RISFileExtractorTest {
     @Test
     public void streamBHLSciELOPartsToZenodoLineJsonDOI() throws IOException {
 
-        String expectedDOI = "https://doi.org/10.1590/s1676-06032011000400032";
+        String expectedDOI = "https://doi.org/10.1590/S1676-06032011000400032";
 
         Dereferencer<IRI> doiForContent = new Dereferencer<IRI>() {
             @Override
             public IRI get(IRI uri) throws IOException {
                 String pdfContentId = "hash://sha256/da8e8a1b2579542779408c410edb110f9a44f4206db2df66ec46391bcba78015";
                 return StringUtils.equals(uri.getIRIString(), pdfContentId)
-                        ? toIRI("https://doi.org/10.1590/s1676-06032011000400032")
+                        ? toIRI("https://doi.org/10.1590/S1676-06032011000400032")
                         : null;
             }
         };
