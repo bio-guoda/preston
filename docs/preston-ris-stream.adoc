@@ -12,14 +12,14 @@
 // tag::picocli-generated-man-section-name[]
 == Name
 
-preston-ris-stream - Stream RIS records into line-json with Zenodo metadata
+preston-ris-stream - translates bibliographic citations from RIS format into Zenodo metadata in JSON lines format
 
 // end::picocli-generated-man-section-name[]
 
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston ris-stream* [*--no-cache*] [*--no-process*] [*--reuse-doi*] [*-a*=_<hashType>_]
+*preston ris-stream* [*--no-cache*] [*--no-progress*] [*--reuse-doi*] [*-a*=_<hashType>_]
                    [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_]
                    [*-r*=_<provenanceAnchor>_] [*--tmp-dir*=_<tmpDir>_]
                    [*--community*=_<communities>_[,_<communities>_...]]...
@@ -55,7 +55,7 @@ Stream RIS records into line-json with Zenodo metadata
 *--no-cache, --disable-cache*::
   Disable local content cache
 
-*--no-process, --no-progress*::
+*--no-progress*::
   Disable progress monitor
 
 *-r*, *--anchor, --provenance-root, --provenance-anchor*=_<provenanceAnchor>_::
@@ -82,6 +82,97 @@ Stream RIS records into line-json with Zenodo metadata
 // end::picocli-generated-man-section-exit-status[]
 
 // tag::picocli-generated-man-section-footer[]
+== Examples
+
+[%hardbreaks]
+
+1.
+First, append the associated bhl pdf via: 
+----
+preston track https://www.biodiversitylibrary.org/partpdf/326364
+----
+Following, generate a RIS record, record.ris:
+----
+cat > record.ris <<__EOL__
+TY  - BOOK
+TI  - Faber, Helen R May 5, 1913
+T2  - Walter Deane correspondence
+UR  - https://www.biodiversitylibrary.org/part/326364
+PY  - 1913-05-05
+AU  - Faber, Helen R.,
+ER  -
+__EOL__
+----
+Then, track record.ris using Preston into Zenodo metadata using: 
+----
+cat record.ris\
+ | preston track
+----
+Finally, generate Zenodo metadata record.json using: 
+----
+preston head\
+ | preston cat\
+ | preston ris-stream\
+ > record.json
+----
+where record.json:
+----
+{
+  "metadata": {
+    "description": "(Uploaded by Plazi from the Biodiversity Heritage Library) No abstract provided.",
+    "communities": [],
+    "http://www.w3.org/ns/prov#wasDerivedFrom": "https://linker.bio/line:hash://sha256/5fd5944b52b22efc56f901d96ff53a64c42e1f2264763e2f1074ac2c589e47cf!/L1-L7",
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type": "application/x-research-info-systems",
+    "title": "Faber, Helen R May 5, 1913",
+    "upload_type": "publication",
+    "publication_type": "other",
+    "journal_title": "Walter Deane correspondence",
+    "publication_date": "1913-05-05",
+    "referenceId": "https://www.biodiversitylibrary.org/part/326364",
+    "filename": "bhlpart326364.pdf",
+    "keywords": [
+      "Biodiversity",
+      "BHL-Corpus",
+      "Source: Biodiversity Heritage Library",
+      "Source: https://biodiversitylibrary.org",
+      "Source: BHL"
+    ],
+    "creators": [
+      {
+        "name": "Faber, Helen R."
+      }
+    ],
+    "related_identifiers": [
+      {
+        "relation": "isDerivedFrom",
+        "identifier": "https://linker.bio/line:hash://sha256/5fd5944b52b22efc56f901d96ff53a64c42e1f2264763e2f1074ac2c589e47cf!/L1-L7"
+      },
+      {
+        "relation": "isDerivedFrom",
+        "identifier": "https://www.biodiversitylibrary.org/part/326364"
+      },
+      {
+        "relation": "isAlternateIdentifier",
+        "identifier": "urn:lsid:biodiversitylibrary.org:part:326364"
+      },
+      {
+        "relation": "isPartOf",
+        "identifier": "hash://sha256/3983c9abbba981838de5d47a5dadf94c4afcea7df63486effb71d780e592ebe8"
+      },
+      {
+        "relation": "hasVersion",
+        "identifier": "hash://md5/7fddbf186c6bbddb0b49919fc340bb61"
+      },
+      {
+        "relation": "hasVersion",
+        "identifier": "hash://sha256/9b30af8f432b78e0d739b0457376dac998057a5b4b5fccd52b81560ec1f4f146"
+      }
+    ]
+  }
+}
+
+----
+
 // end::picocli-generated-man-section-footer[]
 
 // end::picocli-generated-full-manpage[]

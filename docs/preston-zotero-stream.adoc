@@ -19,7 +19,7 @@ preston-zotero-stream - Stream Zotero records into line-json with Zenodo metadat
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston zotero-stream* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
+*preston zotero-stream* [*--no-cache*] [*--no-progress*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
                       [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_]
                       [*-r*=_<provenanceAnchor>_] [*--tmp-dir*=_<tmpDir>_]
                       [*--community*=_<communities>_[,_<communities>_...]]...
@@ -55,7 +55,7 @@ Stream Zotero records into line-json with Zenodo metadata
 *--no-cache, --disable-cache*::
   Disable local content cache
 
-*--no-process, --no-progress*::
+*--no-progress*::
   Disable progress monitor
 
 *-r*, *--anchor, --provenance-root, --provenance-anchor*=_<provenanceAnchor>_::

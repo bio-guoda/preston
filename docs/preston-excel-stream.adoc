@@ -19,10 +19,11 @@ preston-excel-stream - Extract records from Excel files (*.xls, *.xlsx) in line-
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston excel-stream* [*--headerless*] [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
-                     [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_]
-                     [*-r*=_<provenanceAnchor>_] [*--skip-lines*=_<skipLines>_]
-                     [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,_<remotes>_...]]...
+*preston excel-stream* [*--headerless*] [*--no-cache*] [*--no-progress*]
+                     [*-a*=_<hashType>_] [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_]
+                     [*-l*=_<logMode>_] [*-r*=_<provenanceAnchor>_]
+                     [*--skip-lines*=_<skipLines>_] [*--tmp-dir*=_<tmpDir>_]
+                     [*--repos*=_<remotes>_[,_<remotes>_...]]...
 
 // end::picocli-generated-man-section-synopsis[]
 
@@ -54,7 +55,7 @@ Extract records from Excel files (*.xls, *.xlsx) in line-json
 *--no-cache, --disable-cache*::
   Disable local content cache
 
-*--no-process, --no-progress*::
+*--no-progress*::
   Disable progress monitor
 
 *-r*, *--anchor, --provenance-root, --provenance-anchor*=_<provenanceAnchor>_::

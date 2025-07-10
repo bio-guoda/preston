@@ -20,7 +20,7 @@ preston-zenodo - create/update associated Zenodo records
 == Synopsis
 
 *preston zenodo* [*--allow-empty-publication-date*] [*--explicit-license-only*]
-               [*--new-version*] [*--no-cache*] [*--no-process*]
+               [*--new-version*] [*--no-cache*] [*--no-progress*]
                [*--restricted-access-only*] [*--update-metadata-only*]
                [*-a*=_<hashType>_] [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_]
                [*--endpoint*=_<apiEndpoint>_] [*-l*=_<logMode>_]
@@ -77,7 +77,7 @@ create/update associated Zenodo records
 *--no-cache, --disable-cache*::
   Disable local content cache
 
-*--no-process, --no-progress*::
+*--no-progress*::
   Disable progress monitor
 
 *-r*, *--anchor, --provenance-root, --provenance-anchor*=_<provenanceAnchor>_::

@@ -1,9 +1,9 @@
 // tag::picocli-generated-full-manpage[]
 // tag::picocli-generated-man-section-header[]
 :doctype: manpage
-:revnumber: 0.10.13-SNAPSHOT@5360fd3699387b8ea821874fda7fe1721fedcaf3
+:revnumber: 0.10.14@79f830e2d6f22b2384597e8571af9465063d4c38
 :manmanual: Preston Manual
-:mansource: 0.10.13-SNAPSHOT@5360fd3699387b8ea821874fda7fe1721fedcaf3
+:mansource: 0.10.14@79f830e2d6f22b2384597e8571af9465063d4c38
 :man-linkstyle: pass:[blue R < >]
 = preston(1)
 
@@ -48,7 +48,7 @@ a biodiversity dataset tracker
 == Commands
 
 xref:preston-cat.adoc[*cat*, *get*]::
-  Get content
+  get content by their content id (or anchored alias)
 
 xref:preston-ls.adoc[*ls*, *log*, *logs*]::
   Show biodiversity dataset provenance logs
@@ -60,7 +60,7 @@ xref:preston-clone.adoc[*clone*, *pull*]::
   Clone biodiversity dataset graph
 
 xref:preston-track.adoc[*track*, *update*]::
-  Track content at some resource location (or url)
+  track content at resource location(s) or from stdin
 
 xref:preston-append.adoc[*append*, *handle*, *process*, *add*]::
   Offline (re-)processing of tracked biodiversity dataset graph using stdin
@@ -110,7 +110,7 @@ xref:preston-zotero-stream.adoc[*zotero-stream*]::
   Stream Zotero records into line-json with Zenodo metadata
 
 xref:preston-ris-stream.adoc[*ris-stream*]::
-  Stream RIS records into line-json with Zenodo metadata
+  translates bibliographic citations from RIS format into Zenodo metadata in JSON lines format
 
 xref:preston-genbank-stream.adoc[*genbank-stream*, *gb-stream*]::
   Stream genbank accession records into line-json

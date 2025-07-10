@@ -19,7 +19,7 @@ preston-grep - Uses Java-style regular expression (e.g., "Homo sapie.*") to find
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston grep* [*-o*] [*--no-cache*] [*--no-line*] [*--no-process*] [*-a*=_<hashType>_]
+*preston grep* [*-o*] [*--no-cache*] [*--no-line*] [*--no-progress*] [*-a*=_<hashType>_]
              [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_]
              [*--max*=_<maxHitsPerContent>_] [*-r*=_<provenanceAnchor>_]
              [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,_<remotes>_...]]... _<regex>_
@@ -57,7 +57,7 @@ Uses Java-style regular expression (e.g., "Homo sapie.*") to find matching conte
 *--no-line, --no-lines*::
   Don't report line numbers for matches
 
-*--no-process, --no-progress*::
+*--no-progress*::
   Disable progress monitor
 
 *-o*, *--only-matching*::

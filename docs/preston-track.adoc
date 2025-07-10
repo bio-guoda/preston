@@ -12,14 +12,14 @@
 // tag::picocli-generated-man-section-name[]
 == Name
 
-preston-track - Track content at some resource location (or url)
+preston-track - track content at resource location(s) or from stdin
 
 // end::picocli-generated-man-section-name[]
 
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston track* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
+*preston track* [*--no-cache*] [*--no-progress*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
               [*--data-dir*=_<dataDir>_] [*-f*=_<filename>_] [*-l*=_<logMode>_]
               [*-r*=_<provenanceAnchor>_] [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,
               _<remotes>_...]]... [*-u*=_<seeds>_]... [*-m*=_<description>_...]
@@ -58,7 +58,7 @@ Track content at some resource location (or url)
 *--no-cache, --disable-cache*::
   Disable local content cache
 
-*--no-process, --no-progress*::
+*--no-progress*::
   Disable progress monitor
 
 *-r*, *--anchor, --provenance-root, --provenance-anchor*=_<provenanceAnchor>_::
@@ -95,7 +95,7 @@ Track content at some resource location (or url)
 [%hardbreaks]
 
 1.
-Print a record from a natural history collection at UC Santa Barbara UCSB-IZC
+Track a natural history collection at UC Santa Barbara UCSB-IZC via their GBIF Dataset DOI, then print their first record.
 ----
 preston track\
  https://doi.org/10.15468/w6hvhv\
@@ -103,6 +103,31 @@ preston track\
  | head -1\
  | jq .\
  > specimen.json
+----
+
+2.
+Get a DwC-A file, track that DwC-A file via stdin, then print their first record into specimen.json.
+----
+preston cat\
+ --remote https://softwareheritage.org\
+ hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1\
+ > dwca.zip
+cat dwca.zip\
+ | preston track\
+ | preston dwc-stream\
+ | head -1\
+ | jq .\
+ > specimen.json
+----
+
+3.
+Track content locations in files, then print their first record.
+----
+echo https://en.wikipedia.org/wiki/Cat > urls.txt
+echo https://en.wikipedia.org/wiki/Dog >> urls.txt
+preston track -f urls.txt\
+ | preston cat\
+ > cat-and-dog.html
 ----
 
 // end::picocli-generated-man-section-footer[]

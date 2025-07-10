@@ -20,7 +20,7 @@ preston-alias - Define new (friendly) aliases, or names, for content hashes, or,
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston alias* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
+*preston alias* [*--no-cache*] [*--no-progress*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
               [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_] [*-r*=_<provenanceAnchor>_]
               [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,_<remotes>_...]]...
               [*-m*=_<description>_...] [_<params>_...]
@@ -56,7 +56,7 @@ Define new (friendly) aliases, or names, for content hashes, or, when no definit
 *--no-cache, --disable-cache*::
   Disable local content cache
 
-*--no-process, --no-progress*::
+*--no-progress*::
   Disable progress monitor
 
 *-r*, *--anchor, --provenance-root, --provenance-anchor*=_<provenanceAnchor>_::

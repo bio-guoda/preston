@@ -19,7 +19,7 @@ preston-taxodros-stream - Stream TaxoDros https://www.taxodros.uzh.ch/ records i
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston taxodros-stream* [*--no-cache*] [*--no-process*] [*-a*=_<hashType>_]
+*preston taxodros-stream* [*--no-cache*] [*--no-progress*] [*-a*=_<hashType>_]
                         [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_]
                         [*--pub-doi*=_<doi>_] [*--pub-md5*=_<md5>_]
                         [*--pub-sha256*=_<sha256>_] [*--pub-year*=_<year>_]
@@ -57,7 +57,7 @@ Stream TaxoDros https://www.taxodros.uzh.ch/ records into line-json with Zenodo 
 *--no-cache, --disable-cache*::
   Disable local content cache
 
-*--no-process, --no-progress*::
+*--no-progress*::
   Disable progress monitor
 
 *--pub-doi*=_<doi>_::
