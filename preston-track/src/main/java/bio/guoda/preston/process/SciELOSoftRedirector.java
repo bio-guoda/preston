@@ -21,17 +21,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.ALTERNATE_OF;
-import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
-import static bio.guoda.preston.RefNodeConstants.SEE_ALSO;
 import static bio.guoda.preston.RefNodeFactory.getVersion;
 import static bio.guoda.preston.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
 import static bio.guoda.preston.RefNodeFactory.toBlank;
-import static bio.guoda.preston.RefNodeFactory.toContentType;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
@@ -40,6 +36,8 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
     public static final Pattern CHILE_PATTERN = Pattern.compile("http[s]{0,1}://www.scielo.cl/.*pid=(?<pid>[A-Za-z0-9-]+)");
     public static final Pattern BRAZIL_PATTERN = Pattern.compile("http[s]{0,1}://www.scielo.br/.*pid=(?<pid>[A-Za-z0-9-]+)");
     private static final Logger LOG = LoggerFactory.getLogger(SciELOSoftRedirector.class);
+
+    private boolean inferDOIs = false;
 
     public SciELOSoftRedirector(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
@@ -72,14 +70,16 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
                 IRI version = (IRI) getVersion(statement);
                 InputStream in = get(version);
                 if (in != null) {
-                    parse(new StatementsEmitterAdapter() {
-                              @Override
-                              public void emit(Quad statement) {
-                                  nodes.add(statement);
-                              }
-                          },
+                    StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {
+                        @Override
+                        public void emit(Quad statement) {
+                            nodes.add(statement);
+                        }
+                    };
+                    parse(emitter,
                             in,
-                            getVersionSource(statement)
+                            getVersionSource(statement),
+                            inferDOIs
                     );
                 }
             } catch (IOException e) {
@@ -91,11 +91,13 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
         }
     }
 
-    static void parse(StatementsEmitter emitter, InputStream is, IRI source) throws IOException {
-        String doi = inferChileDOI(source.getIRIString());
-        doi = StringUtils.isBlank(doi) ? inferBrazilDOI(source.getIRIString()) : doi;
-        if (StringUtils.isNotBlank(doi)) {
-            emitter.emit(RefNodeFactory.toStatement(source, ALTERNATE_OF, RefNodeFactory.toIRI(doi)));
+    static void parse(StatementsEmitter emitter, InputStream is, IRI source, boolean inferDOIs1) throws IOException {
+        if (inferDOIs1) {
+            String doi = inferChileDOI(source.getIRIString());
+            doi = StringUtils.isBlank(doi) ? inferBrazilDOI(source.getIRIString()) : doi;
+            if (StringUtils.isNotBlank(doi)) {
+                emitter.emit(RefNodeFactory.toStatement(source, ALTERNATE_OF, RefNodeFactory.toIRI(doi)));
+            }
         }
 
         BufferedInputStream bis = IOUtils.buffer(is);
@@ -123,4 +125,9 @@ public class SciELOSoftRedirector extends ProcessorReadOnly {
             }
         }
     }
+
+    public void setInferDOIs(boolean inferDOIs) {
+        this.inferDOIs = inferDOIs;
+    }
+
 }

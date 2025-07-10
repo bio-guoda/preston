@@ -26,7 +26,6 @@ public class SciELOSoftRedirectorTest {
     @Test
     public void chileDOI() {
         String scieloUrl = "https://www.scielo.cl/scielo.php?script=sci_pdf&pid=S0717-65382015000100003";
-
         String scieloDOI = SciELOSoftRedirector.inferChileDOI(scieloUrl);
         assertThat(scieloDOI, is("https://doi.org/10.4067/S0717-65382015000100003"));
     }
@@ -34,30 +33,10 @@ public class SciELOSoftRedirectorTest {
 
     @Test
     public void brazilDOI() {
+        // see https://github.com/bio-guoda/preston/issues/345
         String scieloUrl = "http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2236-89062014000200010";
         String scieloDOI = SciELOSoftRedirector.inferBrazilDOI(scieloUrl);
         assertThat(scieloDOI, is("https://doi.org/10.1590/S2236-89062014000200010"));
-    }
-
-    @Test
-    public void argentinaDOI() {
-        String scieloUrl = "http://www.scielo.org.ar/scielo.php?script=sci_arttext&pid=S0327-93832015000100002";
-        String scieloDOI = null;
-        assertThat(scieloDOI, is(nullValue()));
-    }
-
-    @Test
-    public void mexicoDOI() {
-        String scieloUrl = "http://www.scielo.org.mx/scielo.php?script=sci_arttext&pid=S0065-17372004000300015";
-        String scieloDOI = null;
-        assertThat(scieloDOI, is(nullValue()));
-    }
-
-    @Test
-    public void colombiaDOI() {
-        String scieloUrl = "http://www.scielo.org.co/scielo.php?script=sci_pdf&pid=S0123-30682014000200013";
-        String scieloDOI = null;
-        assertThat(scieloDOI, is(nullValue()));
     }
 
     @Test
@@ -157,6 +136,7 @@ public class SciELOSoftRedirectorTest {
                 blobStore,
                 TestUtilForProcessor.testListener(nodes)
         );
+        registryReader.setInferDOIs(true);
         Quad pdfResourceVersionStatement = toStatement(
                 toIRI("http://www.scielo.br/scielo.php?script=sci_pdf&pid=S2236-89062014000200010"),
                 HAS_VERSION,
