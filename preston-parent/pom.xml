@@ -5,7 +5,7 @@
 
     <groupId>bio.guoda</groupId>
     <artifactId>preston-parent</artifactId>
-    <version>0.10.14</version>
+    <version>0.10.15-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Preston Shared Project Settings</name>
 

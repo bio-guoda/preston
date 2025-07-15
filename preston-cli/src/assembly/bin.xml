@@ -1,0 +1,26 @@
+    <assembly xmlns="http://maven.apache.org/ASSEMBLY/2.2.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.2.0 https://maven.apache.org/xsd/assembly-2.2.0.xsd">
+      <id>bin</id>
+      <formats>
+        <format>tar.gz</format>
+        <format>zip</format>
+      </formats>
+      <fileSets>
+        <fileSet>
+          <directory>${project.build.directory}/classes/bio/guoda/preston/docs/manpage/</directory>
+          <outputDirectory>share/man</outputDirectory>
+        </fileSet>
+      </fileSets>
+      <files>
+        <file>
+          <source>${project.build.directory}/preston_completion</source>
+          <outputDirectory>etc/bash_completion.d/</outputDirectory>
+        </file>
+        <file>
+          <source>${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar</source>
+          <destName>preston.jar</destName>
+          <outputDirectory>lib/</outputDirectory>
+        </file>
+      </files>
+    </assembly>
