@@ -126,6 +126,39 @@ public class RISUtilTest {
         assertThat(identifiers.get(3).has("resource_type"), is(false));
 
     }
+    @Test
+    public void streamRISToZenodoPatchedDateRange() throws IOException {
+        // see https://github.com/bio-guoda/preston/issues/350
+        List<JsonNode> jsonObjects = new ArrayList<JsonNode>();
+
+        Consumer<ObjectNode> listener = jsonNode -> jsonObjects.add(translateRISToZenodo(jsonNode, Arrays.asList("community-foo"), shouldUseProvidedDoi()));
+
+        InputStream bibTex = getClass().getResourceAsStream("ris/bhlpart-date-range.ris");
+
+        assertNotNull(bibTex);
+
+        parseRIS(bibTex, listener, "foo:bar");
+
+
+        assertThat(jsonObjects.size(), is(1));
+
+        JsonNode taxonNode = jsonObjects.get(0);
+
+        assertThat(taxonNode.get("description").asText(), is("(Uploaded by Plazi from the Biodiversity Heritage Library) No abstract provided."));
+
+        JsonNode communities = taxonNode.get("communities");
+        assertThat(communities.isArray(), is(true));
+        assertThat(communities.size(), is(1));
+        assertThat(communities.get(0).get("identifier").asText(), is("community-foo"));
+
+
+        assertThat(taxonNode.get("http://www.w3.org/ns/prov#wasDerivedFrom").asText(), is("https://linker.bio/line:foo:bar!/L1-L14"));
+        assertThat(taxonNode.get(TYPE).asText(), is("application/x-research-info-systems"));
+        assertThat(taxonNode.get("referenceId").asText(), is("https://www.biodiversitylibrary.org/part/375075"));
+
+        assertThat(taxonNode.get("publication_date").asText(), is("2004/2005"));
+
+    }
 
     @Test
     public void streamRISToZenodoLineJsonWithOriginalDOI() throws IOException {

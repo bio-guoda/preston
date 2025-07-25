@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 
 public class RISUtil {
 
+    public static final Pattern DATE_RANGE_PATTERN = Pattern.compile("(?<start>[0-9]{4})-(?<end>[0-9]{4})");
     private static final Pattern RIS_KEY_VALUE = Pattern.compile("[^A-Z]*(?<key>[A-Z][A-Z2])[ ]+-(?<value>.*)");
     private static final Pattern BHL_PART_URL = Pattern.compile("(?<prefix>https://www.biodiversitylibrary.org/part/)(?<part>[0-9]+)");
     static final String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
@@ -128,7 +129,12 @@ public class RISUtil {
             metadata.put("journal_issue", jsonNode.get("IS").asText());
         }
         if (jsonNode.has("PY")) {
-            metadata.put("publication_date", jsonNode.get("PY").asText());
+            String publicationYear = jsonNode.get("PY").asText();
+            Matcher matcher = DATE_RANGE_PATTERN.matcher(publicationYear);
+            if (matcher.matches()) {
+                publicationYear = matcher.group("start") + "/" + matcher.group("end");
+            }
+            metadata.put("publication_date", publicationYear);
         }
         if (jsonNode.has("PB")) {
             metadata.put("imprint_publisher", jsonNode.get("PB").asText());
