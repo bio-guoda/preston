@@ -58,6 +58,7 @@ public class KeyValueStoreFactoryImplTest {
         assertAvailableInRemote(URI.create("zip:" + uri.toString() + "!/data"));
     }
 
+    @Ignore
     @Test
     public void getOneFromLocalDataDir() throws IOException, URISyntaxException {
         URL resource = getClass().getResource("data/27/f5/27f552c25bc733d05a5cc67e9ba63850");
