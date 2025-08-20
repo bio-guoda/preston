@@ -60,8 +60,8 @@ public class KeyValueStoreFactoryImplTest {
 
     @Test
     public void getOneFromLocalDataDir() throws IOException, URISyntaxException {
-        URL resource = getClass().getResource("data.zip");
-        URI uri = new File(new File(resource.toURI()).getParentFile(), "data").toURI();
+        URL resource = getClass().getResource("data/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+        URI uri = new File(resource.toURI()).getParentFile().getParentFile().getParentFile().toURI();
         assertAvailableInRemote(uri);
     }
 
