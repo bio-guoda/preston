@@ -38,12 +38,18 @@ public class KeyValueStoreFactoryImplTest {
                 new KeyValueStoreConfig(dataDir, tmpDir, 0)
         );
 
-        KeyValueStore keyValueStore = factory.getKeyValueStore(new ValidatingKeyValueStreamContentAddressedFactory());
+        KeyValueStore keyValueStore = factory.getKeyValueStore(
+                new ValidatingKeyValueStreamContentAddressedFactory()
+        );
         IRI key = RefNodeFactory.toIRI("hash://md5/5d41402abc4b2a76b9719d911017c592");
         InputStream inputStream = keyValueStore.get(key);
         assertNull(inputStream);
 
-        BlobStoreAppendOnly blobStore = new BlobStoreAppendOnly(keyValueStore, true, HashType.md5);
+        BlobStoreAppendOnly blobStore = new BlobStoreAppendOnly(
+                keyValueStore,
+                true,
+                HashType.md5
+        );
 
         IRI otherKey = blobStore.put(IOUtils.toInputStream("hello", StandardCharsets.UTF_8));
         assertThat(otherKey.getIRIString(), is("hash://md5/5d41402abc4b2a76b9719d911017c592"));
