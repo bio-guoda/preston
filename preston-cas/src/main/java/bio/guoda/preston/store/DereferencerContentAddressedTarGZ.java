@@ -34,8 +34,8 @@ public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStre
     public InputStream get(IRI uri) throws IOException {
         String iriString = uri == null ? null : uri.getIRIString();
         InputStream inputStream = null;
-        if (Strings.CS.startsWith(iriString, "tgz:")
-                || Strings.CS.startsWith(iriString, "zip:")) {
+        if (StringUtils.startsWith(iriString, "tgz:")
+                || StringUtils.startsWith(iriString, "zip:")) {
             String iriSuffix = StringUtils.substring(iriString, 4);
             String[] tarUrlSplit = iriSuffix == null ? new String[]{} : iriSuffix.split("!/");
             if (tarUrlSplit.length == 2) {
@@ -47,7 +47,7 @@ public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStre
                             ? null
                             : dereferencer.get(RefNodeFactory.toIRI(archiveURL));
                     if (data != null) {
-                        if (Strings.CS.startsWith(iriString, "tgz:")) {
+                        if (StringUtils.startsWith(iriString, "tgz:")) {
                             TarArchiveInputStream tarInputStream = new TarArchiveInputStream(new GZIPInputStream(data));
                             TarArchiveEntry entry;
                             while ((entry = tarInputStream.getNextEntry()) != null) {
@@ -66,7 +66,7 @@ public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStre
                             if (blobStore != null) {
                                 inputStream = blobStore.get(expectedHashIRI);
                             }
-                        } else if (Strings.CS.startsWith(iriString, "zip:")) {
+                        } else if (StringUtils.startsWith(iriString, "zip:")) {
                             ZipArchiveInputStream tarInputStream = new ZipArchiveInputStream((data));
                             ZipArchiveEntry entry;
                             while ((entry = tarInputStream.getNextEntry()) != null) {
