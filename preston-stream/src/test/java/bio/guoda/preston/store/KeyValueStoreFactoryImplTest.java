@@ -6,7 +6,6 @@ import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -59,9 +58,16 @@ public class KeyValueStoreFactoryImplTest {
 
     @Test
     public void getOneFromLocalZip() throws IOException, URISyntaxException {
-        URL resource = getClass().getResource("data.zip");
+        URL resource = getClass().getResource("embedded/data.zip");
         URI uri = resource.toURI();
         assertAvailableInRemote(URI.create("zip:" + uri.toString() + "!/data"));
+    }
+
+    @Test
+    public void getOneFromLocalDirWithDataZip() throws IOException, URISyntaxException {
+        URL resource = getClass().getResource("embedded/data.zip");
+        URI uri = new File(resource.toURI()).getParentFile().toURI();
+        assertAvailableInRemote(URI.create(uri.toString()));
     }
 
     @Test

@@ -7,13 +7,13 @@ import org.apache.commons.rdf.api.IRI;
 import java.net.URI;
 import java.util.Arrays;
 
-public class KeyTo3LevelZipPath extends KeyToPathAcceptsAnyValid {
+public class KeyTo3LevelImplicitZipPath extends KeyToPathAcceptsAnyValid {
 
     private final URI baseURI;
     private final HashType type;
 
 
-    public KeyTo3LevelZipPath(URI baseURI, HashType type) {
+    public KeyTo3LevelImplicitZipPath(URI baseURI, HashType type) {
         this.baseURI = baseURI;
         this.type = type;
     }
@@ -29,8 +29,8 @@ public class KeyTo3LevelZipPath extends KeyToPathAcceptsAnyValid {
         String u1 = keyStr.substring(offset + 2, offset + 4);
 
         String suffix = StringUtils.join(Arrays.asList(u0, u1, keyStr.substring(offset)), "/");
-        URI uri = HashKeyUtil.insertSlashIfNeeded(baseURI,  "data.zip!/data/" + suffix);
-        return URI.create("zip:" + uri.toString());
+        URI uri = HashKeyUtil.insertSlashIfNeeded(baseURI,   suffix);
+        return URI.create(uri.toString());
     }
 
 }

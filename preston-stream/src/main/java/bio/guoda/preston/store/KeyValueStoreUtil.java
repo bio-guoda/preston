@@ -145,6 +145,7 @@ public class KeyValueStoreUtil {
             boolean cacheEnabled) {
         return remotes.stream().flatMap(uri -> Stream.of(
                 getKeyValueStoreReadOnly(uri, new KeyTo3LevelZipPath(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType),
+                getKeyValueStoreReadOnly(uri, new KeyTo3LevelImplicitZipPath(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType),
                 getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPathShorter(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType),
                 getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPathShort(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType),
                 getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPath(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType)
