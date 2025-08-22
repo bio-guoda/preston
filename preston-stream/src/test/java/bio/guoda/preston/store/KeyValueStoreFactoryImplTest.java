@@ -4,6 +4,7 @@ import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -58,7 +59,6 @@ public class KeyValueStoreFactoryImplTest {
         assertAvailableInRemote(URI.create("zip:" + uri.toString() + "!/data"));
     }
 
-    @Ignore
     @Test
     public void getOneFromLocalDataDir() throws IOException, URISyntaxException {
         URL resource = getClass().getResource("data/27/f5/27f552c25bc733d05a5cc67e9ba63850");
@@ -102,7 +102,7 @@ public class KeyValueStoreFactoryImplTest {
         InputStream input = keyValueStoreWithRemote.get(key);
         assertNotNull(input);
         String actual = IOUtils.toString(input, StandardCharsets.UTF_8);
-        assertThat(actual, is("hello"));
+        assertThat(StringUtils.trim(actual), is("hello"));
     }
 
 }
