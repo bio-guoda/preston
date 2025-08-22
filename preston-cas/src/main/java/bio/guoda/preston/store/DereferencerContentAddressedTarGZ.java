@@ -98,6 +98,7 @@ public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStre
         String lastHashElem = hashPathElem[hashPathElem.length - 1];
 
         Optional<HashType> hashType = Arrays.stream(HashType.values())
+                .filter(type -> type.getHexLength() == StringUtils.length(lastHashElem))
                 .filter(type -> type.getHexPattern().matcher(lastHashElem).matches())
                 .findFirst();
 
