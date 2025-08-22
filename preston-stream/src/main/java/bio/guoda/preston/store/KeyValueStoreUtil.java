@@ -137,8 +137,14 @@ public class KeyValueStoreUtil {
         ).collect(Collectors.toList());
     }
 
-    private static Stream<KeyValueStoreReadOnly> tarGzRemotePathSupport(HashType hashType, List<URI> remotes, KeyValueStore keyValueStore, DerefProgressListener progressListener, boolean cacheEnabled) {
+    private static Stream<KeyValueStoreReadOnly> tarGzRemotePathSupport(
+            HashType hashType,
+            List<URI> remotes,
+            KeyValueStore keyValueStore,
+            DerefProgressListener progressListener,
+            boolean cacheEnabled) {
         return remotes.stream().flatMap(uri -> Stream.of(
+                getKeyValueStoreReadOnly(uri, new KeyTo3LevelZipPath(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType),
                 getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPathShorter(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType),
                 getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPathShort(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType),
                 getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPath(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType)
@@ -205,7 +211,8 @@ public class KeyValueStoreUtil {
     private static KeyValueStoreReadOnly remoteWithTarGzCacheAll(
             URI baseURI,
             KeyValueStore keyValueStore,
-            KeyToPath keyToPath, DerefProgressListener progressListener,
+            KeyToPath keyToPath,
+            DerefProgressListener progressListener,
             HashType hashType) {
         DereferencerContentAddressedTarGZ dereferencer =
                 new DereferencerContentAddressedTarGZ(

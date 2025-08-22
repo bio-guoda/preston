@@ -57,7 +57,6 @@ public class KeyValueStoreFactoryImplTest {
         assertThat(actual, is("hello"));
     }
 
-    @Ignore
     @Test
     public void getOneFromLocalZip() throws IOException, URISyntaxException {
         URL resource = getClass().getResource("data.zip");
@@ -79,7 +78,8 @@ public class KeyValueStoreFactoryImplTest {
 
 
         KeyValueStoreFactoryImpl factory = new KeyValueStoreFactoryImpl(
-                new KeyValueStoreConfig(dataDir,
+                new KeyValueStoreConfig(
+                        dataDir,
                         tmpDir,
                         0
                 )
@@ -90,7 +90,8 @@ public class KeyValueStoreFactoryImplTest {
 
 
         KeyValueStoreFactoryImpl factoryWithRemote = new KeyValueStoreFactoryImpl(
-                new KeyValueStoreConfig(dataDir,
+                new KeyValueStoreConfig(
+                        dataDir,
                         tmpDir,
                         0,
                         true,

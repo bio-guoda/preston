@@ -18,8 +18,25 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class DereferencerContentAddressedTarGZTest {
 
     @Test
-    public void pickHashFromTarball() throws IOException {
+    public void extractSHA256URI() {
+        IRI iri = DereferencerContentAddressedTarGZ.extractHashURI("tgz:https://example.com/preston-a1.tar.gz!/1a/57/1a57e55a780b86cff38697cf1b857751ab7b389973d35113564fe5a9a58d6a99");
+        assertThat(iri.getIRIString(), Is.is("hash://sha256/1a57e55a780b86cff38697cf1b857751ab7b389973d35113564fe5a9a58d6a99"));
+    }
 
+    @Test
+    public void extractSHA1URI() {
+        IRI iri = DereferencerContentAddressedTarGZ.extractHashURI("tgz:https://example.com/data.zip!/04/75/047595d0fae972fbed0c51b4a41c7a349e0c47bb");
+        assertThat(iri.getIRIString(), Is.is("hash://sha1/047595d0fae972fbed0c51b4a41c7a349e0c47bb"));
+    }
+
+    @Test
+    public void extractMD5URI() {
+        IRI iri = DereferencerContentAddressedTarGZ.extractHashURI("zip:https://example.com/data.zip!/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+        assertThat(iri.getIRIString(), Is.is("hash://md5/27f552c25bc733d05a5cc67e9ba63850"));
+    }
+
+    @Test
+    public void pickHashFromTarball() throws IOException {
         String knownPresentHash = "hash://sha256/1a57e55a780b86cff38697cf1b857751ab7b389973d35113564fe5a9a58d6a99";
         assertThat(knownPresentHash.length(), Is.is(78));
 
