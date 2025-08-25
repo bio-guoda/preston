@@ -3,6 +3,7 @@ package bio.guoda.preston.store;
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.stream.ContentStreamUtil;
+import org.apache.commons.rdf.api.IRI;
 
 import java.io.File;
 import java.net.URI;
@@ -18,6 +19,7 @@ public class KeyValueStoreConfig {
     private final HashType hashType;
     private final DerefProgressListener progressListener;
     private final boolean supportTarGzDiscovery;
+    private final IRI anchor;
 
     public KeyValueStoreConfig(File dataDir,
                                File tmpDir,
@@ -27,14 +29,16 @@ public class KeyValueStoreConfig {
                                HashType hashType,
                                DerefProgressListener progressListener,
                                boolean supportTarGzDiscovery) {
-        this.dataDir = dataDir;
-        this.tmpDir = tmpDir;
-        this.directoryDepth = directoryDepth;
-        this.cacheEnabled = cacheEnabled;
-        this.remotes = remotes;
-        this.hashType = hashType;
-        this.progressListener = progressListener;
-        this.supportTarGzDiscovery = supportTarGzDiscovery;
+        this(dataDir,
+                tmpDir,
+                directoryDepth,
+                cacheEnabled,
+                remotes,
+                hashType,
+                progressListener,
+                supportTarGzDiscovery,
+                null
+        );
     }
 
     public KeyValueStoreConfig(File dataDir, File tmpDir, int directoryDepth) {
@@ -47,6 +51,18 @@ public class KeyValueStoreConfig {
                 ContentStreamUtil.NOOP_DEREF_PROGRESS_LISTENER,
                 false
         );
+    }
+
+    public KeyValueStoreConfig(File dataDir, File tmpDir, int directoryDepth, boolean cacheEnabled, List<URI> remotes, HashType hashType, DerefProgressListener progressListener, boolean supportTarGzDiscovery, IRI provenanceAnchor) {
+        this.dataDir = dataDir;
+        this.tmpDir = tmpDir;
+        this.directoryDepth = directoryDepth;
+        this.cacheEnabled = cacheEnabled;
+        this.remotes = remotes;
+        this.hashType = hashType;
+        this.progressListener = progressListener;
+        this.supportTarGzDiscovery = supportTarGzDiscovery;
+        this.anchor = provenanceAnchor;
     }
 
     public File getDataDir() {
@@ -79,5 +95,9 @@ public class KeyValueStoreConfig {
 
     public boolean isSupportTarGzDiscovery() {
         return supportTarGzDiscovery;
+    }
+
+    public IRI getAnchor() {
+        return anchor;
     }
 }

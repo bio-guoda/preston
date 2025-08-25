@@ -58,15 +58,16 @@ public class Persisting extends PersistingLocal {
     @Override
     protected KeyValueStoreConfig getKeyValueStoreConfig() {
         return new KeyValueStoreConfig(
-                    new File(getDataDir()),
-                    new File(getTmpDir()),
-                    getDepth(),
-                    isCacheEnabled(),
-                    getRemotes(),
-                    getHashType(),
-                    getProgressListener(),
-                    isSupportTarGzDiscovery()
-            );
+                new File(getDataDir()),
+                new File(getTmpDir()),
+                getDepth(),
+                isCacheEnabled(),
+                getRemotes(),
+                getHashType(),
+                getProgressListener(),
+                isSupportTarGzDiscovery(),
+                getProvenanceAnchor()
+        );
     }
 
     private DerefProgressListener getProgressListener() {
