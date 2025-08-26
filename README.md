@@ -16,16 +16,8 @@ Elliott M.J., Poelen, J.H. & Fortes, J.A.B. (2023) Signing data citations enable
 [`toc`](#table-of-contents) / [`quickstart`](#quickstart) / [`introduction`](#introduction) / [`usage`](#usage) / [`install`](#install) / [`use cases`](#use-cases) / [`architecture`](docs/architecture.md) / [`funding`](#funding) / [`(data) publications`](#publications)
 
 ## Quickstart
-To install [a preston release](../../releases/latest) on your linux/mac: 
 
-```console
-sudo sh -c '(curl -L https://github.com/bio-guoda/preston/releases/latest/download/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
-```
-:warning: Note that this installs preston using sudo privileges and makes preston.jar executable. Please inspect the script before running it. Also see [install](#install).
-
-Note that a [homebrew formula](https://github.com/globalbioticinteractions/homebrew-globi/blob/main/Formula/preston.rb) (Mac), [preston.deb](https://github.com/bio-guoda/preston/releases/latest/download/preston.deb) (Debian, Ubuntu, etc) and [preston.rpm](https://github.com/bio-guoda/preston/releases/latest/download/preston.rpm) (RedHat, Fedora, etc) packages are also available.
-
-### homebrew (mac) example
+### MacOS/homebrew
 
 Use [homebrew](https://brew.sh) to install Preston on your Mac via:
 
@@ -33,7 +25,7 @@ Use [homebrew](https://brew.sh) to install Preston on your Mac via:
 brew install globalbioticinteractions/globi/preston
 ```
 
-### deb package example
+### Debian/Ubuntu
 
 To install Preston on Debian, Ubuntu, etc, you can use [apt](https://en.wikipedia.org/wiki/APT_(software)) via: 
 
@@ -47,7 +39,7 @@ sudo apt install ./preston.deb
 To remove type ```sudo apt remove preston```.
 
 
-### rpm package example
+### RedHat/Fedora/CentOS
 
 To install Preston on RedHat, Fedora, etc, [dnf](https://en.wikipedia.org/wiki/DNF_(software)) can be used:
 
@@ -57,6 +49,18 @@ sudo dnf install ./preston.rpm
 ```
 
 To remove type ```sudo dnf remove preston```.
+
+### shell script
+
+To install [a preston release](../../releases/latest) on your linux/mac: 
+
+```console
+sudo sh -c '(curl -L https://github.com/bio-guoda/preston/releases/latest/download/preston.jar) > /usr/local/bin/preston && chmod +x /usr/local/bin/preston && preston config-manpage' && preston version
+```
+:warning: Note that this installs preston using sudo privileges and makes preston.jar executable. Please inspect the script before running it. Also see [install](#install).
+
+Note that a [homebrew formula](https://github.com/globalbioticinteractions/homebrew-globi/blob/main/Formula/preston.rb) (Mac), [preston.deb](https://github.com/bio-guoda/preston/releases/latest/download/preston.deb) (Debian, Ubuntu, etc) and [preston.rpm](https://github.com/bio-guoda/preston/releases/latest/download/preston.rpm) (RedHat, Fedora, etc) packages are also available.
+
 
 
 Then, visit [jhpoelen.nl/bees](https://jhpoelen.nl/bees) or [github.com/bio-guoda/preston-amazon](https://github.com/bio-guoda/preston-amazon) for worked out examples. 
