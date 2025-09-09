@@ -8,7 +8,6 @@ datasets/*
 .project
 .settings/*
 pom.xml.versionsBackup
-data
 *.jar
 *.deb
 *.rpm

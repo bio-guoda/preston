@@ -1,0 +1,19 @@
+<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> .
+<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> .
+<https://preston.guoda.bio> <http://purl.org/dc/terms/description> "Preston is a software program that finds, archives and provides access to biodiversity datasets."@en <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> .
+<urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> .
+<urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> <http://purl.org/dc/terms/description> "A crawl event that discovers biodiversity archives."@en <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> .
+<urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> <http://www.w3.org/ns/prov#startedAtTime> "2025-09-09T13:57:59.909Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> .
+<urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> <http://www.w3.org/ns/prov#wasStartedBy> <https://preston.guoda.bio> <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> .
+<https://doi.org/10.5281/zenodo.1410543> <http://www.w3.org/ns/prov#usedBy> <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> .
+<https://doi.org/10.5281/zenodo.1410543> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/dc/dcmitype/Software> <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> .
+<https://doi.org/10.5281/zenodo.1410543> <http://purl.org/dc/terms/bibliographicCitation> "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2018-2024. Preston: a biodiversity dataset tracker (Version 0.11.0@d833b9a2995e5673d7df3c9428a7b740edcbd155) [Software]. Zenodo. https://doi.org/10.5281/zenodo.1410543"@en <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> .
+<urn:uuid:0659a54f-b713-4f86-a917-5be166a14110> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Entity> <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> .
+<urn:uuid:0659a54f-b713-4f86-a917-5be166a14110> <http://purl.org/dc/terms/description> "A biodiversity dataset graph archive."@en <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> .
+<hash://md5/20b8f81bf8d4e261fe5dbfcf77c6195c> <http://www.w3.org/ns/prov#wasGeneratedBy> <urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> <urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> .
+<hash://md5/20b8f81bf8d4e261fe5dbfcf77c6195c> <http://www.w3.org/ns/prov#qualifiedGeneration> <urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> <urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> .
+<urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> <http://www.w3.org/ns/prov#generatedAtTime> "2025-09-09T13:58:00.036Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> <urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> .
+<urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Generation> <urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> .
+<urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> <http://www.w3.org/ns/prov#wasInformedBy> <urn:uuid:ebcaeb2c-6934-4271-9ae7-149a9431f9a3> <urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> .
+<urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> <http://www.w3.org/ns/prov#used> <urn:uuid:bd945bd7-1ba7-4729-8189-5f978332815a> <urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> .
+<urn:uuid:bd945bd7-1ba7-4729-8189-5f978332815a> <http://purl.org/pav/hasVersion> <hash://md5/20b8f81bf8d4e261fe5dbfcf77c6195c> <urn:uuid:b4f82476-c531-44ba-8b2b-6d77420aa76f> .
