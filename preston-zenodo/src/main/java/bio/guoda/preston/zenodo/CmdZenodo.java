@@ -20,6 +20,7 @@ import java.util.Collection;
 
 @CommandLine.Command(
         name = "zenodo",
+        aliases = {"publish"},
         description = "create/update associated Zenodo records"
 )
 public class CmdZenodo extends CmdZenodoEnabled implements Runnable {
