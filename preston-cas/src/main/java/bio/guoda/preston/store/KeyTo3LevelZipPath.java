@@ -30,7 +30,7 @@ public class KeyTo3LevelZipPath extends KeyToPathAcceptsAnyValid {
 
         String suffix = StringUtils.join(Arrays.asList(u0, u1, keyStr.substring(offset)), "/");
         URI uri = HashKeyUtil.insertSlashIfNeeded(baseURI,  "data.zip!/data/" + suffix);
-        return URI.create("zip:" + uri.toString());
+        return URI.create("zip:" + uri);
     }
 
 }
