@@ -7,13 +7,13 @@ import org.apache.commons.rdf.api.IRI;
 import java.net.URI;
 import java.util.Arrays;
 
-public class KeyTo3LevelImplicitZipPath extends KeyToPathAcceptsAnyValid {
+public class KeyTo3LevelZipPathImplicit extends KeyToPathAcceptsAnyValid {
 
     private final URI baseURI;
     private final HashType type;
 
 
-    public KeyTo3LevelImplicitZipPath(URI baseURI, HashType type) {
+    public KeyTo3LevelZipPathImplicit(URI baseURI, HashType type) {
         this.baseURI = baseURI;
         this.type = type;
     }

@@ -1,5 +1,6 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.core.Is;
@@ -12,9 +13,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
 
 public class CmdGetIT {
 
@@ -62,6 +61,23 @@ public class CmdGetIT {
     }
 
     @Test
+    public void getZenodoInDataZip() {
+        // see also
+        // Elton, Nomer, & Preston. (2025). Versioned Archive and Review of Biotic Interactions and Taxon Names Found within globalbioticinteractions/vertnet hash://md5/6c194df8ddb37844f7b4f1258c81d93d. Zenodo. https://doi.org/10.5281/zenodo.16915755
+        CmdGet cmdGet = new CmdGet();
+        cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
+        cmdGet.setHashType(HashType.md5);
+        cmdGet.setRemotes(Arrays.asList(URI.create("https://zenodo.org")));
+        cmdGet.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/6c194df8ddb37844f7b4f1258c81d93d"));
+        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("hash://md5/7719d9af32cfdb9aa9cc0de4b8ac7347")));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmdGet.setOutputStream(outputStream);
+        cmdGet.run();
+
+        assertThat(outputStream.size(), Is.is(1148893));
+    }
+
+    @Test
     public void getDataOneSHA1TwoBytes() {
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
@@ -90,9 +106,7 @@ public class CmdGetIT {
     }
 
     @Test
-    public void getGitHubContentRepositoryAsRemove() {
-
-
+    public void getGitHubContentRepositoryAsRemote() {
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
         cmdGet.setRemotes(Arrays.asList(URI.create("https://ghcr.io/cboettig/content-store")));

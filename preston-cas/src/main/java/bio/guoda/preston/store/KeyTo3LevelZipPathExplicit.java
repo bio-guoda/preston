@@ -6,15 +6,14 @@ import org.apache.commons.rdf.api.IRI;
 
 import java.net.URI;
 import java.util.Arrays;
-import java.util.Hashtable;
 
-public class KeyTo3LevelTarGzPath extends KeyToPathAcceptsAnyValid {
+public class KeyTo3LevelZipPathExplicit extends KeyToPathAcceptsAnyValid {
 
     private final URI baseURI;
     private final HashType type;
 
 
-    public KeyTo3LevelTarGzPath(URI baseURI, HashType type) {
+    public KeyTo3LevelZipPathExplicit(URI baseURI, HashType type) {
         this.baseURI = baseURI;
         this.type = type;
     }
@@ -30,8 +29,14 @@ public class KeyTo3LevelTarGzPath extends KeyToPathAcceptsAnyValid {
         String u1 = keyStr.substring(offset + 2, offset + 4);
 
         String suffix = StringUtils.join(Arrays.asList(u0, u1, keyStr.substring(offset)), "/");
-        URI uri = HashKeyUtil.insertSlashIfNeeded(baseURI, "preston-" + u0 + ".tar.gz!/" + suffix);
-        return URI.create("tgz:" + uri);
+
+        URI remoteURI = baseURI;
+        if (StringUtils.endsWith(baseURI.toString(), "data.zip")
+                && !StringUtils.startsWith(baseURI.toString(), "zip:")) {
+            remoteURI = HashKeyUtil.insertSlashIfNeeded(URI.create("zip:" + baseURI + "!/data/"), suffix);
+        }
+
+        return remoteURI;
     }
 
 }
