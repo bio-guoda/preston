@@ -7,6 +7,7 @@ import org.apache.commons.rdf.api.IRI;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -172,5 +173,16 @@ public class HashKeyUtil {
             throw new IOException("found unsupported or invalid hash key [" + key + "]");
         }
         return hashTypeProvided;
+    }
+
+    public static String pathSuffixForKey(IRI key, HashType type1) {
+        String keyStr = key.getIRIString();
+
+        int offset = type1.getPrefix().length();
+        String u0 = keyStr.substring(offset + 0, offset + 2);
+        String u1 = keyStr.substring(offset + 2, offset + 4);
+
+        String suffix = StringUtils.join(Arrays.asList(u0, u1, keyStr.substring(offset)), "/");
+        return suffix;
     }
 }

@@ -20,12 +20,7 @@ public class KeyTo3LevelPath extends KeyToPathAcceptsAnyValid {
 
         HashType type = HashKeyUtil.getHashTypeOrThrow(key);
 
-        String keyStr = key.getIRIString();
-        int offset = type.getPrefix().length();
-        String u0 = keyStr.substring(offset + 0, offset + 2);
-        String u1 = keyStr.substring(offset + 2, offset + 4);
-
-        String suffix = StringUtils.join(Arrays.asList(u0, u1, keyStr.substring(offset)), "/");
+        String suffix = HashKeyUtil.pathSuffixForKey(key, type);
         return HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
     }
 
