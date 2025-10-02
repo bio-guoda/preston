@@ -93,8 +93,8 @@ public class KeyValueStoreUtil {
 
         List<KeyValueStoreReadOnly> keyValueStoreRemotes =
                 config.isSupportTarGzDiscovery()
-                        ? includeTarGzSupport(keyToPathStream, keyValueStore, config.getRemotes(), config.getHashType(), config.getProgressListener(), config.isCacheEnabled())
-                        : defaultRemotePathSupport(keyToPathStream, config.getProgressListener()).collect(Collectors.toList());
+                        ? includeTarGzSupport(keyToPathStream, keyValueStore, config)
+                        : defaultRemotePathSupport(keyToPathStream, config).collect(Collectors.toList());
 
 
         if (config.isCacheEnabled()) {
@@ -118,40 +118,46 @@ public class KeyValueStoreUtil {
         return store;
     }
 
-    private static Stream<KeyValueStoreReadOnly> defaultRemotePathSupport(Stream<Pair<URI, KeyToPath>> keyToPathStream, DerefProgressListener progressListener) {
-        return keyToPathStream.map(x -> withStoreAt(x.getKey(), x.getValue(), progressListener));
+    private static Stream<KeyValueStoreReadOnly> defaultRemotePathSupport(
+            Stream<Pair<URI, KeyToPath>> keyToPathStream,
+            KeyValueStoreConfig config) {
+        return keyToPathStream.map(
+                x ->
+                        withStoreAt(
+                                x.getKey(),
+                                x.getValue(),
+                                config.getProgressListener()
+                        )
+        );
     }
 
     private static List<KeyValueStoreReadOnly> includeTarGzSupport(
             Stream<Pair<URI, KeyToPath>> keyToPathStream,
             KeyValueStore keyValueStore,
-            List<URI> remotes,
-            HashType hashType,
-            DerefProgressListener progressListener, boolean cacheEnabled) {
+            KeyValueStoreConfig config
+    ) {
         return Stream.concat(
-                defaultRemotePathSupport(keyToPathStream, progressListener),
+                defaultRemotePathSupport(
+                        keyToPathStream,
+                        config
+                ),
                 tarGzRemotePathSupport(
-                        hashType,
-                        remotes,
                         keyValueStore,
-                        progressListener,
-                        cacheEnabled)
+                        config
+                )
         ).collect(Collectors.toList());
     }
 
     private static Stream<KeyValueStoreReadOnly> tarGzRemotePathSupport(
-            HashType hashType,
-            List<URI> remotes,
             KeyValueStore keyValueStore,
-            DerefProgressListener progressListener,
-            boolean cacheEnabled) {
-        return remotes.stream().flatMap(uri -> Stream.of(
-                getKeyValueStoreReadOnly(uri, new KeyTo3LevelZipPath(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType),
-                getKeyValueStoreReadOnly(uri, new KeyTo3LevelZipPathImplicit(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType),
-                getKeyValueStoreReadOnly(uri, new KeyTo3LevelZipPathExplicit(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType),
-                getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPathShorter(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType),
-                getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPathShort(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType),
-                getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPath(uri, hashType), keyValueStore, cacheEnabled, progressListener, hashType)
+            KeyValueStoreConfig config) {
+        return config.getRemotes().stream().flatMap(uri -> Stream.of(
+                getKeyValueStoreReadOnly(uri, new KeyTo3LevelZipPath(uri, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
+                getKeyValueStoreReadOnly(uri, new KeyTo3LevelZipPathImplicit(uri, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
+                getKeyValueStoreReadOnly(uri, new KeyTo3LevelZipPathExplicit(uri, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
+                getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPathShorter(uri, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
+                getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPathShort(uri, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
+                getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPath(uri, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType())
         ));
     }
 
