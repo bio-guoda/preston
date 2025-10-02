@@ -23,7 +23,7 @@ public class KeyTo3LevelZipPathImplicit extends KeyToPathAcceptsAnyValid {
         HashKeyUtil.validateHashKey(key);
 
         String suffix = HashKeyUtil.pathSuffixForKey(key, type);
-        URI uri = HashKeyUtil.insertSlashIfNeeded(baseURI,   suffix);
+        URI uri = HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
         return URI.create(uri.toString());
     }
 

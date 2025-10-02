@@ -3,6 +3,7 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,7 +14,9 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 
 public class CmdGetIT {
 
@@ -68,13 +71,19 @@ public class CmdGetIT {
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
         cmdGet.setHashType(HashType.md5);
         cmdGet.setRemotes(Arrays.asList(URI.create("https://zenodo.org")));
-        cmdGet.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/6c194df8ddb37844f7b4f1258c81d93d"));
-        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("hash://md5/7719d9af32cfdb9aa9cc0de4b8ac7347")));
+        cmdGet.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/838ede23f4b8c6e8b7d692b61e954a60"));
+        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("hash://md5/2c6cbababdd943985e3ae4e064bb5b37")));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdGet.setOutputStream(outputStream);
         cmdGet.run();
 
-        assertThat(outputStream.size(), Is.is(1148893));
+        assertThat(outputStream.toByteArray().length, is(greaterThan(0)));
+
+        String content = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+        String[] lines = StringUtils.split(content, "\n");
+
+        assertThat(lines[0], Is.is("Source,Target,Type,Id,Label,Weight"));
+        assertThat(lines[1], Is.is("Canis latrans,Lepus californicus,Directed,0,,1"));
     }
 
     @Test
