@@ -75,20 +75,20 @@ public class KeyValueStoreUtil {
         Stream<Pair<URI, KeyToPath>> keyToPathStream =
                 config.getRemotes()
                         .stream()
-                        .flatMap(uri -> Stream.of(
-                                Pair.of(uri, new KeyToHashURI(uri)),
-                                Pair.of(uri, new KeyTo3LevelPath(uri)),
-                                Pair.of(uri, new KeyTo1LevelPath(uri)),
-                                Pair.of(uri, new KeyTo1LevelSoftwareHeritagePath(uri)),
-                                Pair.of(uri, new KeyTo1LevelSoftwareHeritageAutoDetectPath(uri)),
-                                Pair.of(uri, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, config.getProgressListener())))),
-                                Pair.of(uri, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(uri, getDerefStream(uri, config.getProgressListener())), config.getAnchor())),
-                                Pair.of(uri, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(uri, getDerefStream(uri, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13))),
-                                Pair.of(uri, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(uri, getDerefStream(uri, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13), config.getAnchor())),
-                                Pair.of(uri, new KeyTo1LevelDataOnePath(uri, getDerefStream(uri, config.getProgressListener()))),
-                                Pair.of(uri, new KeyTo1LevelOCIPath(uri)),
-                                Pair.of(uri, new KeyTo1LevelWikiMediaCommonsPath(uri, getDerefStream(uri, config.getProgressListener()))),
-                                Pair.of(uri, new KeyTo1LevelDataVersePath(uri, getDerefStream(uri, config.getProgressListener())))
+                        .flatMap(remote -> Stream.of(
+                                Pair.of(remote, new KeyToHashURI(remote)),
+                                Pair.of(remote, new KeyTo3LevelPath(remote)),
+                                Pair.of(remote, new KeyTo1LevelPath(remote)),
+                                Pair.of(remote, new KeyTo1LevelSoftwareHeritagePath(remote)),
+                                Pair.of(remote, new KeyTo1LevelSoftwareHeritageAutoDetectPath(remote)),
+                                Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, getDerefStream(remote, config.getProgressListener())))),
+                                Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, getDerefStream(remote, config.getProgressListener())), config.getAnchor())),
+                                Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, getDerefStream(remote, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13))),
+                                Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, getDerefStream(remote, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13), config.getAnchor())),
+                                Pair.of(remote, new KeyTo1LevelDataOnePath(remote, getDerefStream(remote, config.getProgressListener()))),
+                                Pair.of(remote, new KeyTo1LevelOCIPath(remote)),
+                                Pair.of(remote, new KeyTo1LevelWikiMediaCommonsPath(remote, getDerefStream(remote, config.getProgressListener()))),
+                                Pair.of(remote, new KeyTo1LevelDataVersePath(remote, getDerefStream(remote, config.getProgressListener())))
                         ));
 
         List<KeyValueStoreReadOnly> keyValueStoreRemotes =
@@ -169,17 +169,17 @@ public class KeyValueStoreUtil {
         }
     }
 
-    private static KeyValueStoreReadOnly withStoreAt(URI baseURI, KeyToPath keyToPath, DerefProgressListener progressListener) {
-        return withStoreAt(keyToPath, getDerefStream(baseURI, progressListener));
+    private static KeyValueStoreReadOnly withStoreAt(URI remote, KeyToPath keyToPath, DerefProgressListener progressListener) {
+        return withStoreAt(keyToPath, getDerefStream(remote, progressListener));
     }
 
     private static KeyValueStoreReadOnly withStoreAt(KeyToPath keyToPath, Dereferencer<InputStream> dereferencer) {
         return new KeyValueStoreWithDereferencing(keyToPath, dereferencer);
     }
 
-    private static Dereferencer<InputStream> getDerefStream(URI baseURI, DerefProgressListener listener) {
+    private static Dereferencer<InputStream> getDerefStream(URI remote, DerefProgressListener listener) {
         Dereferencer<InputStream> dereferencer;
-        if (StringUtils.equalsAnyIgnoreCase(baseURI.getScheme(), "file")) {
+        if (StringUtils.equalsAnyIgnoreCase(remote.getScheme(), "file")) {
             dereferencer = getInputStreamDereferencerFile(listener);
         } else {
             dereferencer = getDerefStreamHTTP(listener);
@@ -211,22 +211,22 @@ public class KeyValueStoreUtil {
     }
 
     private static KeyValueStoreReadOnly remoteWithTarGz(
-            URI baseURI,
+            URI remote,
             KeyToPath keyToPath,
             DerefProgressListener progressListener) {
         return withStoreAt(keyToPath,
-                new DereferencerContentAddressedTarGZ(getDerefStream(baseURI, progressListener)));
+                new DereferencerContentAddressedTarGZ(getDerefStream(remote, progressListener)));
     }
 
     private static KeyValueStoreReadOnly remoteWithTarGzCacheAll(
-            URI baseURI,
+            URI remote,
             KeyValueStore keyValueStore,
             KeyToPath keyToPath,
             DerefProgressListener progressListener,
             HashType hashType) {
         DereferencerContentAddressedTarGZ dereferencer =
                 new DereferencerContentAddressedTarGZ(
-                        getDerefStream(baseURI, progressListener),
+                        getDerefStream(remote, progressListener),
                         new BlobStoreAppendOnly(keyValueStore, false, hashType));
 
         return withStoreAt(keyToPath, dereferencer);
