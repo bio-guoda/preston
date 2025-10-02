@@ -151,21 +151,21 @@ public class KeyValueStoreUtil {
     private static Stream<KeyValueStoreReadOnly> tarGzRemotePathSupport(
             KeyValueStore keyValueStore,
             KeyValueStoreConfig config) {
-        return config.getRemotes().stream().flatMap(uri -> Stream.of(
-                getKeyValueStoreReadOnly(uri, new KeyTo3LevelZipPath(uri, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
-                getKeyValueStoreReadOnly(uri, new KeyTo3LevelZipPathImplicit(uri, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
-                getKeyValueStoreReadOnly(uri, new KeyTo3LevelZipPathExplicit(uri, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
-                getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPathShorter(uri, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
-                getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPathShort(uri, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
-                getKeyValueStoreReadOnly(uri, new KeyTo3LevelTarGzPath(uri, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType())
+        return config.getRemotes().stream().flatMap(remote -> Stream.of(
+                getKeyValueStoreReadOnly(remote, new KeyTo3LevelZipPath(remote, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
+                getKeyValueStoreReadOnly(remote, new KeyTo3LevelZipPathImplicit(remote, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
+                getKeyValueStoreReadOnly(remote, new KeyTo3LevelZipPathExplicit(remote, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
+                getKeyValueStoreReadOnly(remote, new KeyTo3LevelTarGzPathShorter(remote, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
+                getKeyValueStoreReadOnly(remote, new KeyTo3LevelTarGzPathShort(remote, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
+                getKeyValueStoreReadOnly(remote, new KeyTo3LevelTarGzPath(remote, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType())
         ));
     }
 
-    private static KeyValueStoreReadOnly getKeyValueStoreReadOnly(URI uri, KeyToPath keyToPath, KeyValueStore keyValueStore, boolean cacheEnabled, DerefProgressListener progressListener, HashType hashType) {
+    private static KeyValueStoreReadOnly getKeyValueStoreReadOnly(URI remote, KeyToPath keyToPath, KeyValueStore keyValueStore, boolean cacheEnabled, DerefProgressListener progressListener, HashType hashType) {
         if (cacheEnabled) {
-            return remoteWithTarGzCacheAll(uri, keyValueStore, keyToPath, progressListener, hashType);
+            return remoteWithTarGzCacheAll(remote, keyValueStore, keyToPath, progressListener, hashType);
         } else {
-            return remoteWithTarGz(uri, keyToPath, progressListener);
+            return remoteWithTarGz(remote, keyToPath, progressListener);
         }
     }
 

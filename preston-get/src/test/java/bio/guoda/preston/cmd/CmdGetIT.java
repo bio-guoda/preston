@@ -64,7 +64,7 @@ public class CmdGetIT {
     }
 
     @Test
-    public void getZenodoInDataZip() {
+    public void getZenodoInDataZipByAnchor() {
         // see also
         // Elton, Nomer, & Preston. (2025). Versioned Archive and Review of Biotic Interactions and Taxon Names Found within globalbioticinteractions/vertnet hash://md5/6c194df8ddb37844f7b4f1258c81d93d. Zenodo. https://doi.org/10.5281/zenodo.16915755
         CmdGet cmdGet = new CmdGet();
@@ -77,13 +77,34 @@ public class CmdGetIT {
         cmdGet.setOutputStream(outputStream);
         cmdGet.run();
 
+        assertEdgeList(outputStream);
+    }
+
+    @Test
+    public void getZenodoInDataZip() {
+        // see also
+        // Elton, Nomer, & Preston. (2025). Versioned Archive and Review of Biotic Interactions and Taxon Names Found within globalbioticinteractions/vertnet hash://md5/6c194df8ddb37844f7b4f1258c81d93d. Zenodo. https://doi.org/10.5281/zenodo.16915755
+        CmdGet cmdGet = new CmdGet();
+        cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
+        cmdGet.setHashType(HashType.md5);
+        cmdGet.setRemotes(Arrays.asList(URI.create("https://zenodo.org")));
+        cmdGet.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/838ede23f4b8c6e8b7d692b61e954a60"));
+        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("zip:hash://md5/c0307712e8ed5afc64c7dbdfc0c04e4b!/data/2c/6c/2c6cbababdd943985e3ae4e064bb5b37")));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmdGet.setOutputStream(outputStream);
+        cmdGet.run();
+
+        assertEdgeList(outputStream);
+    }
+
+    private static void assertEdgeList(ByteArrayOutputStream outputStream) {
         assertThat(outputStream.toByteArray().length, is(greaterThan(0)));
 
         String content = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
         String[] lines = StringUtils.split(content, "\n");
 
-        assertThat(lines[0], Is.is("Source,Target,Type,Id,Label,Weight"));
-        assertThat(lines[1], Is.is("Canis latrans,Lepus californicus,Directed,0,,1"));
+        assertThat(StringUtils.trim(lines[0]), Is.is("Source,Target,Type,Id,Label,Weight"));
+        assertThat(StringUtils.trim(lines[1]), Is.is("Canis latrans,Lepus californicus,Directed,0,,1"));
     }
 
     @Test
