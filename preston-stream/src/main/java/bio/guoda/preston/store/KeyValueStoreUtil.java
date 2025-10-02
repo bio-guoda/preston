@@ -32,9 +32,8 @@ public class KeyValueStoreUtil {
                 directoryDepth
         );
 
-        return new KeyValueStoreFactoryFallBack(
-                config
-        ).getKeyValueStore(validatingKeyValueStreamFactory);
+        return new KeyValueStoreFactoryFallBack(config)
+                .getKeyValueStore(validatingKeyValueStreamFactory);
     }
 
 
