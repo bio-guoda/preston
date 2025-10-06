@@ -5,16 +5,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
 import java.net.URI;
-import java.util.Arrays;
 
 public class KeyTo3LevelZipPathExplicit extends KeyToPathAcceptsAnyValid {
 
-    private final URI baseURI;
+    private final URI remote;
     private final HashType type;
 
 
-    public KeyTo3LevelZipPathExplicit(URI baseURI, HashType type) {
-        this.baseURI = baseURI;
+    public KeyTo3LevelZipPathExplicit(URI remote, HashType type) {
+        this.remote = remote;
         this.type = type;
     }
 
@@ -24,10 +23,10 @@ public class KeyTo3LevelZipPathExplicit extends KeyToPathAcceptsAnyValid {
 
         String suffix = HashKeyUtil.pathSuffixForKey(key, type);
 
-        URI remoteURI = baseURI;
-        if (StringUtils.endsWith(baseURI.toString(), "data.zip")
-                && !StringUtils.startsWith(baseURI.toString(), "zip:")) {
-            remoteURI = HashKeyUtil.insertSlashIfNeeded(URI.create("zip:" + baseURI + "!/data/"), suffix);
+        URI remoteURI = remote;
+        if (StringUtils.endsWith(remote.toString(), "data.zip")
+                && !StringUtils.startsWith(remote.toString(), "zip:")) {
+            remoteURI = HashKeyUtil.insertSlashIfNeeded(URI.create("zip:" + remote + "!/data/"), suffix);
         }
 
         return remoteURI;

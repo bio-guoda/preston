@@ -1,20 +1,18 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.HashType;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
 import java.net.URI;
-import java.util.Arrays;
 
 public class KeyTo3LevelZipPathImplicit extends KeyToPathAcceptsAnyValid {
 
-    private final URI baseURI;
+    private final URI remote;
     private final HashType type;
 
 
-    public KeyTo3LevelZipPathImplicit(URI baseURI, HashType type) {
-        this.baseURI = baseURI;
+    public KeyTo3LevelZipPathImplicit(URI remote, HashType type) {
+        this.remote = remote;
         this.type = type;
     }
 
@@ -23,7 +21,7 @@ public class KeyTo3LevelZipPathImplicit extends KeyToPathAcceptsAnyValid {
         HashKeyUtil.validateHashKey(key);
 
         String suffix = HashKeyUtil.pathSuffixForKey(key, type);
-        URI uri = HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
+        URI uri = HashKeyUtil.insertSlashIfNeeded(remote, suffix);
         return URI.create(uri.toString());
     }
 

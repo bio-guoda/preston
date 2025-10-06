@@ -21,11 +21,11 @@ public class KeyTo1LevelDataOnePath implements KeyToPath {
 
     public static final String DATAONE_URL_PREFIX = "https://cn.dataone.org/cn/v2/query/solr/?q=checksum:";
     public static final List<HashType> HASH_TYPES_SUPPORTED = Arrays.asList(HashType.md5, HashType.sha256, HashType.sha1);
-    private final URI baseURI;
+    private final URI remote;
     private final Dereferencer<InputStream> deref;
 
-    public KeyTo1LevelDataOnePath(URI baseURI, Dereferencer<InputStream> deref) {
-        this.baseURI = detectPath(baseURI);
+    public KeyTo1LevelDataOnePath(URI remote, Dereferencer<InputStream> deref) {
+        this.remote = detectPath(remote);
         this.deref = deref;
     }
 
@@ -36,8 +36,8 @@ public class KeyTo1LevelDataOnePath implements KeyToPath {
         HashType hashType = HashKeyUtil.hashTypeFor(key);
         int offset = hashType.getPrefix().length();
         String contentId = StringUtils.substring(key.getIRIString(), offset);
-        if (StringUtils.startsWith(baseURI.toString(), DATAONE_URL_PREFIX)) {
-            IRI query = RefNodeFactory.toIRI(baseURI.toString() + contentId + "&fl=identifier,size,formatId,checksum,checksumAlgorithm,replicaMN,dataUrl&rows=10&wt=json");
+        if (StringUtils.startsWith(remote.toString(), DATAONE_URL_PREFIX)) {
+            IRI query = RefNodeFactory.toIRI(remote.toString() + contentId + "&fl=identifier,size,formatId,checksum,checksumAlgorithm,replicaMN,dataUrl&rows=10&wt=json");
             try (InputStream inputStream = deref.get(query)) {
                 URI dataEntryURI = findFirstHit(contentId, inputStream);
                 try (InputStream dataEntryStream = deref.get(RefNodeFactory.toIRI(dataEntryURI))) {
@@ -54,7 +54,7 @@ public class KeyTo1LevelDataOnePath implements KeyToPath {
             }
         }
         if (path == null) {
-            path = HashKeyUtil.insertSlashIfNeeded(baseURI, contentId);
+            path = HashKeyUtil.insertSlashIfNeeded(remote, contentId);
         }
         return path;
     }

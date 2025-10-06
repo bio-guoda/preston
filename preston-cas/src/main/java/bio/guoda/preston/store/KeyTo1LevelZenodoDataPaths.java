@@ -23,24 +23,24 @@ public class KeyTo1LevelZenodoDataPaths implements KeyToPath {
 
     public static final String ZENODO_API_PREFIX_2023_10_13 = "https://zenodo.org/api/records?q=files.entries.checksum:";
     public static final String ZENODO_API_SUFFIX_2023_10_13 = "%22&allversions=0&size=1";
-    private final URI baseURI;
+    private final URI remote;
     private final Dereferencer<InputStream> deref;
     private final String prefix;
     private final String suffix;
     private static final Pattern URL_PATTERN_SELF = Pattern.compile("(?<prefix>^http.*([0-9]+)/files/)(?<filename>[^/]+)(?<suffix>/content)");
 
-    public KeyTo1LevelZenodoDataPaths(URI baseURI, Dereferencer<InputStream> deref) {
-        this(baseURI, deref, ZENODO_API_PREFIX, ZENODO_API_SUFFIX);
+    public KeyTo1LevelZenodoDataPaths(URI remote, Dereferencer<InputStream> deref) {
+        this(remote, deref, ZENODO_API_PREFIX, ZENODO_API_SUFFIX);
     }
 
-    public KeyTo1LevelZenodoDataPaths(URI baseURI,
+    public KeyTo1LevelZenodoDataPaths(URI remote,
                                       Dereferencer<InputStream> deref,
                                       String prefix,
                                       String suffix) {
         this.deref = deref;
         this.prefix = prefix;
         this.suffix = suffix;
-        this.baseURI = detectPath(baseURI);
+        this.remote = detectPath(remote);
     }
 
     @Override
@@ -49,8 +49,8 @@ public class KeyTo1LevelZenodoDataPaths implements KeyToPath {
         HashType hashType = HashKeyUtil.hashTypeFor(key);
         int offset = hashType.getPrefix().length();
         String md5HexHash = StringUtils.substring(key.getIRIString(), offset);
-        if (StringUtils.startsWith(baseURI.toString(), getPrefix())) {
-            IRI zenodoQuery = RefNodeFactory.toIRI(baseURI.toString() + "%22md5:" + md5HexHash + getSuffix());
+        if (StringUtils.startsWith(remote.toString(), getPrefix())) {
+            IRI zenodoQuery = RefNodeFactory.toIRI(remote.toString() + "%22md5:" + md5HexHash + getSuffix());
             try (InputStream inputStream = deref.get(zenodoQuery)) {
                 path = findFirstHit(md5HexHash, inputStream);
                 if (null == path) {

@@ -20,12 +20,12 @@ import java.util.List;
 public class KeyTo1LevelWikiMediaCommonsPath implements KeyToPath {
 
     public static final String WIKIMEDIA_COMMONS_ENDPOINT = "https://commons.wikimedia.org/w/api.php?action=query&list=allimages&format=json&aisha1=";
-    private final URI baseURI;
+    private final URI remote;
     private static final Logger LOG = LoggerFactory.getLogger(KeyTo1LevelWikiMediaCommonsPath.class);
     private final Dereferencer<InputStream> deref;
 
-    public KeyTo1LevelWikiMediaCommonsPath(URI baseURI, Dereferencer<InputStream> deref) {
-        this.baseURI = detectPath(baseURI);
+    public KeyTo1LevelWikiMediaCommonsPath(URI remote, Dereferencer<InputStream> deref) {
+        this.remote = detectPath(remote);
         this.deref = deref;
     }
 
@@ -37,7 +37,7 @@ public class KeyTo1LevelWikiMediaCommonsPath implements KeyToPath {
         HashType hashType = HashKeyUtil.hashTypeFor(key);
         int offset = hashType.getPrefix().length();
 
-        final String s = baseURI.toString();
+        final String s = remote.toString();
 
         String suffix = keyStr.substring(offset);
         String path = StringUtils.join(Arrays.asList(s, suffix), "");
@@ -45,7 +45,7 @@ public class KeyTo1LevelWikiMediaCommonsPath implements KeyToPath {
 
         URI query = StringUtils.equals(s, WIKIMEDIA_COMMONS_ENDPOINT)
                 ? URI.create(path)
-                : HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
+                : HashKeyUtil.insertSlashIfNeeded(remote, suffix);
 
         try {
             return resolveFirstCandidateURI(query);

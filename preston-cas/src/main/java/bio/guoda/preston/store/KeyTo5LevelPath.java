@@ -6,14 +6,13 @@ import org.apache.commons.rdf.api.IRI;
 
 import java.net.URI;
 import java.util.Arrays;
-import java.util.Hashtable;
 
 public class KeyTo5LevelPath extends KeyToPathAcceptsAnyValid {
 
-    private final URI baseURI;
+    private final URI remote;
 
-    public KeyTo5LevelPath(URI baseURI) {
-        this.baseURI = baseURI;
+    public KeyTo5LevelPath(URI remote) {
+        this.remote = remote;
     }
 
     @Override
@@ -26,6 +25,6 @@ public class KeyTo5LevelPath extends KeyToPathAcceptsAnyValid {
         String u1 = keyStr.substring(offset + 2, offset + 4);
         String u2 = keyStr.substring(offset + 4, offset + 6);
         String suffix = StringUtils.join(Arrays.asList(u0, u1, u2, keyStr.substring(offset), "data"), "/");
-        return HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
+        return HashKeyUtil.insertSlashIfNeeded(remote, suffix);
     }
 }

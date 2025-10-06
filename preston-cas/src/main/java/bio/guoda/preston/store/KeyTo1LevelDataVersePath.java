@@ -25,17 +25,17 @@ public class KeyTo1LevelDataVersePath implements KeyToPath {
 
     public static final String MAGIC_HOST = "dataverse.org";
 
-    private final URI baseURI;
+    private final URI remote;
     private final Dereferencer<InputStream> deref;
 
     private static final List<String> registeredDataVerseEndpoints = Collections.synchronizedList(new ArrayList<>());
     private static final List<String> registeredDataVerseHosts = Collections.synchronizedList(new ArrayList<>());
     private static final List<String> failedHosts = Collections.synchronizedList(new ArrayList<>());
 
-    public KeyTo1LevelDataVersePath(URI baseURI,
+    public KeyTo1LevelDataVersePath(URI remote,
                                     Dereferencer<InputStream> deref) {
         this.deref = deref;
-        this.baseURI = baseURI;
+        this.remote = remote;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class KeyTo1LevelDataVersePath implements KeyToPath {
             int offset = hashType.getPrefix().length();
             String md5HexHash = StringUtils.substring(key.getIRIString(), offset);
 
-            if (StringUtils.equals(baseURI.getHost(), MAGIC_HOST)) {
+            if (StringUtils.equals(remote.getHost(), MAGIC_HOST)) {
                 Optional<URI> first = registeredDataVerseHosts
                         .stream()
                         .filter(x -> !failedHosts.contains(x))
@@ -57,15 +57,15 @@ public class KeyTo1LevelDataVersePath implements KeyToPath {
                         .findFirst();
                 path = first.orElse(null);
             } else {
-                path = findFirst(queryForHost(md5HexHash, baseURI));
+                path = findFirst(queryForHost(md5HexHash, remote));
             }
         }
         return path;
     }
 
     private boolean isSupportedHost() {
-        return baseURI != null
-                && (StringUtils.equals(baseURI.getHost(), MAGIC_HOST) || registeredDataVerseHosts.contains(baseURI.getHost()));
+        return remote != null
+                && (StringUtils.equals(remote.getHost(), MAGIC_HOST) || registeredDataVerseHosts.contains(remote.getHost()));
     }
 
     private IRI queryForHost(String md5HexHash, URI host) {

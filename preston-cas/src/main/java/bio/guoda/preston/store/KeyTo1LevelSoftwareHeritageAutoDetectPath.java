@@ -12,11 +12,11 @@ public class KeyTo1LevelSoftwareHeritageAutoDetectPath extends KeyTo1LevelSoftwa
         super(detectPath(baseURI));
     }
 
-    private static URI detectPath(URI baseURI) {
-        return StringUtils.contains(baseURI.getHost(), "softwareheritage.org")
-                && (StringUtils.equals(baseURI.getPath(), "/") || StringUtils.isBlank(baseURI.getPath()))
+    private static URI detectPath(URI remote) {
+        return StringUtils.contains(remote.getHost(), "softwareheritage.org")
+                && (StringUtils.equals(remote.getPath(), "/") || StringUtils.isBlank(remote.getPath()))
                 ? URI.create(SOFTWARE_HERITAGE_API_ENDPOINT)
-                : baseURI;
+                : remote;
     }
 
 }

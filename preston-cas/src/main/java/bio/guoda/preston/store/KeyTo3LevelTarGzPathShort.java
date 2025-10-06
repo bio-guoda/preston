@@ -1,20 +1,18 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.HashType;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
 import java.net.URI;
-import java.util.Arrays;
 
 public class KeyTo3LevelTarGzPathShort extends KeyToPathAcceptsAnyValid {
 
-    private final URI baseURI;
+    private final URI remote;
     private final HashType type;
 
 
-    public KeyTo3LevelTarGzPathShort(URI baseURI, HashType type) {
-        this.baseURI = baseURI;
+    public KeyTo3LevelTarGzPathShort(URI remote, HashType type) {
+        this.remote = remote;
         this.type = type;
     }
 
@@ -28,7 +26,7 @@ public class KeyTo3LevelTarGzPathShort extends KeyToPathAcceptsAnyValid {
         String first = keyStr.substring(offset + 0, offset + 1);
 
         String suffix = HashKeyUtil.pathSuffixForKey(key, type);
-        URI uri = HashKeyUtil.insertSlashIfNeeded(baseURI, "preston-" + first + ".tar.gz!/" + suffix);
+        URI uri = HashKeyUtil.insertSlashIfNeeded(remote, "preston-" + first + ".tar.gz!/" + suffix);
         return URI.create("tgz:" + uri.toString());
     }
 

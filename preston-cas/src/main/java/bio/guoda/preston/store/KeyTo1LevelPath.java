@@ -7,11 +7,11 @@ import java.net.URI;
 
 public class KeyTo1LevelPath extends KeyToPathAcceptsAnyValid {
 
-    private final URI baseURI;
+    private final URI remote;
 
 
-    public KeyTo1LevelPath(URI baseURI) {
-        this.baseURI = baseURI;
+    public KeyTo1LevelPath(URI remote) {
+        this.remote = remote;
     }
 
     @Override
@@ -19,7 +19,7 @@ public class KeyTo1LevelPath extends KeyToPathAcceptsAnyValid {
         HashType type = HashKeyUtil.getHashTypeOrThrow(key);
         int offset = type.getPrefix().length();
         String suffix = key.getIRIString().substring(offset);
-        return HashKeyUtil.insertSlashIfNeeded(baseURI, suffix);
+        return HashKeyUtil.insertSlashIfNeeded(remote, suffix);
     }
 
 }
