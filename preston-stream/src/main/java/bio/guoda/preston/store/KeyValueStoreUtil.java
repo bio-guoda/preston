@@ -14,11 +14,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class KeyValueStoreUtil {
+
+    public static final URI REMOTE_ZENODO = URI.create("https://zenodo.org");
+    public static final URI REMOTE_SOFTWARE_HERITAGE = URI.create("https://softwareheritage.org");
+    public static final URI REMOTE_DATA_ONE = URI.create("https://dataone.org");
 
     public static KeyValueStore getKeyValueStore(
             final ValidatingKeyValueStreamFactory validatingKeyValueStreamFactory,
@@ -71,29 +76,42 @@ public class KeyValueStoreUtil {
                                            KeyValueStore keyValueStore,
                                            KeyValueStoreConfig config) {
         KeyValueStore store;
+
+        List<URI> specialRemotes = Arrays.asList(
+                REMOTE_ZENODO,
+                REMOTE_SOFTWARE_HERITAGE,
+                REMOTE_DATA_ONE
+        );
+
         Stream<Pair<URI, KeyToPath>> keyToPathStream =
                 config.getRemotes()
                         .stream()
+                        .filter(remote -> !specialRemotes.contains(remote))
                         .flatMap(remote -> Stream.of(
                                 Pair.of(remote, new KeyToHashURI(remote)),
                                 Pair.of(remote, new KeyTo3LevelPath(remote)),
                                 Pair.of(remote, new KeyTo1LevelPath(remote)),
-                                Pair.of(remote, new KeyTo1LevelSoftwareHeritagePath(remote)),
-                                Pair.of(remote, new KeyTo1LevelSoftwareHeritageAutoDetectPath(remote)),
-                                Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, getDerefStream(remote, config.getProgressListener())))),
-                                Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, getDerefStream(remote, config.getProgressListener())), config.getAnchor())),
-                                Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, getDerefStream(remote, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13))),
-                                Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, getDerefStream(remote, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13), config.getAnchor())),
-                                Pair.of(remote, new KeyTo1LevelDataOnePath(remote, getDerefStream(remote, config.getProgressListener()))),
                                 Pair.of(remote, new KeyTo1LevelOCIPath(remote)),
                                 Pair.of(remote, new KeyTo1LevelWikiMediaCommonsPath(remote, getDerefStream(remote, config.getProgressListener()))),
                                 Pair.of(remote, new KeyTo1LevelDataVersePath(remote, getDerefStream(remote, config.getProgressListener())))
                         ));
 
+
+        Stream<Pair<URI, KeyToPath>> keyToPathStreams =
+                Stream.concat(
+                        Stream.concat(
+                                Stream.concat(
+                                        keyToPathStream,
+                                        addForZenodo(config)
+                                ),
+                                addForSoftwareHeritage(config)),
+                        addForDataOne(config)
+                );
+
         List<KeyValueStoreReadOnly> keyValueStoreRemotes =
                 config.isSupportTarGzDiscovery()
-                        ? includeTarGzSupport(keyToPathStream, keyValueStore, config)
-                        : defaultRemotePathSupport(keyToPathStream, config).collect(Collectors.toList());
+                        ? includeTarGzSupport(keyToPathStreams, keyValueStore, config)
+                        : defaultRemotePathSupport(keyToPathStreams, config).collect(Collectors.toList());
 
 
         if (config.isCacheEnabled()) {
@@ -115,6 +133,38 @@ public class KeyValueStoreUtil {
             );
         }
         return store;
+    }
+
+    private static Stream<Pair<URI, KeyToPath>> addForZenodo(KeyValueStoreConfig config) {
+        return config.getRemotes()
+                .stream()
+                .filter(REMOTE_ZENODO::equals)
+                .flatMap(remote -> Stream.of(
+                        Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, getDerefStream(remote, config.getProgressListener())))),
+                        Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, getDerefStream(remote, config.getProgressListener())), config.getAnchor())),
+                        Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, getDerefStream(remote, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13))),
+                        Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, getDerefStream(remote, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13), config.getAnchor()))
+                ));
+    }
+
+    private static Stream<Pair<URI, KeyToPath>> addForSoftwareHeritage(KeyValueStoreConfig config) {
+        return config.getRemotes()
+                .stream()
+                .filter(REMOTE_SOFTWARE_HERITAGE::equals)
+                .flatMap(remote -> Stream.of(
+                        Pair.of(remote, new KeyTo1LevelSoftwareHeritagePath(remote)),
+                        Pair.of(remote, new KeyTo1LevelSoftwareHeritageAutoDetectPath(remote))
+                ));
+    }
+
+    private static Stream<Pair<URI, KeyToPath>> addForDataOne(KeyValueStoreConfig config) {
+        return config.getRemotes()
+                .stream()
+                .filter(REMOTE_DATA_ONE::equals)
+                .flatMap(remote -> Stream.of(
+                                Pair.of(remote, new KeyTo1LevelDataOnePath(remote, getDerefStream(remote, config.getProgressListener())))
+                        )
+                );
     }
 
     private static Stream<KeyValueStoreReadOnly> defaultRemotePathSupport(
