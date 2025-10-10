@@ -67,6 +67,19 @@ public class ProvUtil {
                                            String contentType,
                                            IRI provenanceAnchor,
                                            boolean includeBlanks) throws IOException, URISyntaxException {
+        String queryString = generateQuery(iri, paramName, contentType, provenanceAnchor, includeBlanks);
+
+        URI query = new URI("https", "example.org", "/query", "query=" + queryString, null);
+
+        URI endpoint = new URI(sparqlEndpoint + "?" + query.getRawQuery());
+
+        IRI dataURI = RefNodeFactory.toIRI(endpoint);
+
+        InputStream inputStream = ResourcesHTTP.asInputStream(dataURI);
+        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+    }
+
+    protected static String generateQuery(IRI iri, String paramName, String contentType, IRI provenanceAnchor, boolean includeBlanks) throws IOException {
         String queryTemplateName = paramName + ".rq";
         InputStream resourceAsStream = RedirectingServlet.class.getResourceAsStream(queryTemplateName);
 
@@ -83,15 +96,7 @@ public class ProvUtil {
         if (includeBlanks) {
             queryString = StringUtils.replace(queryString, "FILTER", "# FILTER");
         }
-
-        URI query = new URI("https", "example.org", "/query", "query=" + queryString, null);
-
-        URI endpoint = new URI(sparqlEndpoint + "?" + query.getRawQuery());
-
-        IRI dataURI = RefNodeFactory.toIRI(endpoint);
-
-        InputStream inputStream = ResourcesHTTP.asInputStream(dataURI);
-        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        return queryString;
     }
 
     private static Map<String, String> extractProvenanceInfo(String response) throws JsonProcessingException {

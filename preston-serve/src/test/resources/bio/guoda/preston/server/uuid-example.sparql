@@ -12,16 +12,16 @@ SELECT DISTINCT
   ?provenanceId
   ?activity
 WHERE  {
-    BIND(?_uuid_iri as ?uuid)
-    BIND(?_type as ?contentType)
-    BIND(?_provenanceId_iri as ?provenanceId)
+    BIND(<urn:uuid:a44859c6-af4f-4a2a-a184-1b2d68c82099> as ?uuid)
+    BIND("application/dwca" as ?contentType)
+    BIND(<hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd> as ?provenanceId)
   {
     SELECT ?contentId ?seenAt ?archiveUrl ?doi ?activity
     WHERE {
       graph ?g1 {
-       ?_uuid_iri <http://www.w3.org/ns/prov#hadMember> ?archiveUrl .
-       OPTIONAL { ?_uuid_iri <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> ?doi . }
-       ?archiveUrl <http://purl.org/dc/elements/1.1/format> ?_type .
+       <urn:uuid:a44859c6-af4f-4a2a-a184-1b2d68c82099> <http://www.w3.org/ns/prov#hadMember> ?archiveUrl .
+       OPTIONAL { <urn:uuid:a44859c6-af4f-4a2a-a184-1b2d68c82099> <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> ?doi . }
+       ?archiveUrl <http://purl.org/dc/elements/1.1/format> "application/dwca" .
       }
       graph ?activity {
         ?activity <http://www.w3.org/ns/prov#used> ?archiveUrl .

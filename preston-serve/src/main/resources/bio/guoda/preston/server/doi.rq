@@ -4,7 +4,7 @@
 
 SELECT DISTINCT
   ?doi
-  ?uuid 
+  ?uuid
   ?contentId
   ?contentType
   ?archiveUrl
