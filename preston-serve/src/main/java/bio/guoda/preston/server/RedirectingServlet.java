@@ -75,7 +75,8 @@ public class RedirectingServlet extends HttpServlet {
                     queryType,
                     requestedIdIRI,
                     redirectOnGetRequest(request),
-                    getContentType(request.getQueryString()));
+                    getContentType(request.getQueryString())
+            );
 
         }
     }

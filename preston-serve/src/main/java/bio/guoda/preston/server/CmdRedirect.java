@@ -55,6 +55,7 @@ public class CmdRedirect extends CmdWithProvenance implements Runnable {
         ServletHandler servletHandler = new ServletHandler();
 
         servletHandler.addServletWithMapping(initServletHolder(new ServletHolder(BadgeServlet.class)), "/badge/*");
+        servletHandler.addServletWithMapping(initServletHolder(new ServletHolder(HistoryServlet.class)), "/history/*");
         servletHandler.addServletWithMapping(initServletHolder(new ServletHolder(RedirectingServlet.class)), "/");
         server.insertHandler(servletHandler);
         try {
