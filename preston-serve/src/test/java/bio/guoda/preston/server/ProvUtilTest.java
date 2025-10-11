@@ -34,7 +34,7 @@ public class ProvUtilTest {
     @Test
     public void generateQueryDOI() throws IOException {
         String queryForDOI = ProvUtil.generateQuery(
-                RefNodeFactory.toIRI("https://doi.org/10.123/345"),
+                RefNodeFactory.toIRI("https://doi.org/10.15468/oirgxw"),
                 "doi",
                 "application/dwca",
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"),
@@ -49,7 +49,7 @@ public class ProvUtilTest {
     @Test
     public void generateQueryUUID() throws IOException {
         String queryForDOI = ProvUtil.generateQuery(
-                RefNodeFactory.toIRI("urn:uuid:a44859c6-af4f-4a2a-a184-1b2d68c82099"),
+                RefNodeFactory.toIRI("urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"),
                 "uuid",
                 "application/dwca",
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"),
