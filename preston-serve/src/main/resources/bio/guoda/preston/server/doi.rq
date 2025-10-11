@@ -34,5 +34,5 @@ WHERE  {
   # exclude blank nodes that represent unavailable or non-content
   FILTER(!CONTAINS(str(?contentId), ".well-known/genid" ) )
 
-} ORDER BY DESC(?seenAt) LIMIT 2
+} ORDER BY DESC(?seenAt) LIMIT ?_limit
 

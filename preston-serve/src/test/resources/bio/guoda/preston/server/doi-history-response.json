@@ -1,0 +1,5828 @@
+{
+  "head": {
+    "vars": [
+      "doi",
+      "uuid",
+      "contentId",
+      "contentType",
+      "archiveUrl",
+      "seenAt",
+      "provenanceId",
+      "activity"
+    ]
+  },
+  "results": {
+    "bindings": [
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/3e776052700d0eebeee73cc9b54fe6defcc857b14b7d4385cab397886c2d2b7e"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-06-01T22:48:51.161Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:0d91888d-3b2d-40f4-8ae2-e716977e58d8"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/3e776052700d0eebeee73cc9b54fe6defcc857b14b7d4385cab397886c2d2b7e"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-06-01T13:58:15.151Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:6918ad59-9068-4645-af69-8fe3571398a6"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/3e776052700d0eebeee73cc9b54fe6defcc857b14b7d4385cab397886c2d2b7e"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-06-01T06:02:35.645Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:1ea3205d-a5d1-4ce9-baf2-72290bda041e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/6a1a20553627e0aa415b99c597ea762d9b09c9ed0c3ae734b994796722088890"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-05-02T04:37:47.683Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:42a18e37-9b93-415f-9c5a-c07b0e324ed1"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/6a1a20553627e0aa415b99c597ea762d9b09c9ed0c3ae734b994796722088890"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-05-01T21:08:15.076Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:e4a8a435-c966-4d21-828c-1eaf5001f7be"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/6a1a20553627e0aa415b99c597ea762d9b09c9ed0c3ae734b994796722088890"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-05-01T13:39:43.43Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:505c669e-9e9d-4d0f-9d9b-2ee51a4c861c"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/65aaaae713ad62d1ddf81468ab8096134afd1a431e645c5d4ea7bea0381202ad"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-04-02T13:59:27.767Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:ec8750fe-e5e1-483a-b5b5-8aac765835dd"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/65aaaae713ad62d1ddf81468ab8096134afd1a431e645c5d4ea7bea0381202ad"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-04-02T06:46:11.298Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:cc8cca90-870b-4d88-85d9-cba764cf90b4"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/65aaaae713ad62d1ddf81468ab8096134afd1a431e645c5d4ea7bea0381202ad"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-04-02T00:42:13.111Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:94cf6c19-99d9-440f-af0b-83ac3747949e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/531f2bb58ed5258614e0a3d9fae0cf710e7805050803355b8a14c12430edbe3c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-03-01T14:37:40.629Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:631c6b1f-6bc5-472e-bc66-53ff8eab784c"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/531f2bb58ed5258614e0a3d9fae0cf710e7805050803355b8a14c12430edbe3c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-03-01T06:15:17.8Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:0cf56ca9-41b1-4a6c-b819-1f501747eb35"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/531f2bb58ed5258614e0a3d9fae0cf710e7805050803355b8a14c12430edbe3c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-02-01T19:59:30.243Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:60957627-a44c-46cc-9687-f2b5cd0689df"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/531f2bb58ed5258614e0a3d9fae0cf710e7805050803355b8a14c12430edbe3c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-02-01T09:34:22.501Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:531a8df6-406c-40c9-9914-3c8b99427c65"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/531f2bb58ed5258614e0a3d9fae0cf710e7805050803355b8a14c12430edbe3c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-01-01T11:21:08.625Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:d597a52b-cf8e-42f7-a7ce-0e8ae98fc65e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/531f2bb58ed5258614e0a3d9fae0cf710e7805050803355b8a14c12430edbe3c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2025-01-01T02:47:29.221Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:0fb5953b-c9d3-4f03-b37e-9c037aeef467"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/605eb7d2ed8734e6f32acd0ade357dafb532e9dafca5264daa2d533ea31067a8"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-12-05T09:47:48.815Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:ec3ccb4a-4fca-4df1-8e43-84b025ad58f3"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/605eb7d2ed8734e6f32acd0ade357dafb532e9dafca5264daa2d533ea31067a8"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-12-02T02:54:06.616Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:c10b4d3e-9fbf-4ab7-9dfa-957dc259168c"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/8563a6d5727357937a8f4b29286c08242d4993979fe168931d35d508acbd67d2"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-11-02T06:55:40.6Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:67d890cb-b484-4a6f-8338-028b115d3f43"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/1e59c79c7131143e0da05bff4ae13eab53381c01e1c6750576f7f95c1037f380"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-10-02T08:11:02.43Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:41a02de0-6308-4959-acbb-d3b754b92490"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/28908aea67e38d15d10dabca1042b878982a5a2b11167a91188865bbe7a28694"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-09-02T16:06:01.915Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:2b11fec9-0ddd-409c-a345-cba7cf679b99"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/52a8cc0c3df181541fa342d1c99ed42814871b3288e6c71294fdf18b98a7f427"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-08-02T02:53:00.012Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:a0a899a3-9f87-4018-8473-8c57e7f8711a"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/52a8cc0c3df181541fa342d1c99ed42814871b3288e6c71294fdf18b98a7f427"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-08-01T16:48:03.738Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:b574556f-f473-4bce-8b7e-76197a6afcb7"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/fb869439abad9c5e824990461733b3bd02f85806e9100e1650219951e53a322b"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-07-03T00:31:10.318Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:48114f52-7729-4b2a-9c57-72679a9263a7"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/fb869439abad9c5e824990461733b3bd02f85806e9100e1650219951e53a322b"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-07-02T15:02:00.02Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:cb53ad62-4f03-4c15-8460-07ed2f5a6a4c"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/f08d035ff0b023ee37c75621e987e077a49bc1d8c412db04318d2e32dcd835f5"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-06-06T16:52:19.182Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:b52f1758-4d55-4816-84fe-478304fd294a"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/f08d035ff0b023ee37c75621e987e077a49bc1d8c412db04318d2e32dcd835f5"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "https://ipt.vertnet.org/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-06-06T04:49:30.684Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:9986e116-c06e-441a-9e57-18d45da368c2"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/0d102cd8069cd39dafa22145e0eb6be1c8b368d91904f73de78282ee9a07b25c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-03-02T19:39:44.008Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:277d1b11-54d0-466d-8eff-b6e362e930e0"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/0d102cd8069cd39dafa22145e0eb6be1c8b368d91904f73de78282ee9a07b25c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-03-02T13:02:43.778Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:32b55c9c-b474-471f-b29c-10c08af9dc25"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/0d102cd8069cd39dafa22145e0eb6be1c8b368d91904f73de78282ee9a07b25c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-03-02T07:07:36.684Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:a13ca8a8-e473-4144-aaab-f485b8230086"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/0d102cd8069cd39dafa22145e0eb6be1c8b368d91904f73de78282ee9a07b25c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-03-01T14:45:06.61Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:ef882047-083e-44e5-a025-bca0881674d6"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/5a5ba095a77b8fd35b04559766e055ae3f3f2be508a70a93c375f5a0353414f9"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-02-02T10:00:06.44Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:be20ce60-aeaf-4e41-bf10-02c23e2bafcd"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/5a5ba095a77b8fd35b04559766e055ae3f3f2be508a70a93c375f5a0353414f9"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-02-02T05:24:35.505Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:cf11695a-12d9-4302-aab2-ab77f5fc5b2c"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/5a5ba095a77b8fd35b04559766e055ae3f3f2be508a70a93c375f5a0353414f9"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-02-01T12:02:09.374Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:c4b9b959-3d86-4015-9cc4-b02dd51dead5"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/282b0a45bfc804022bab2436868b3818c1e3ab9e5d6ec792339b2aa145957ef7"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-01-02T21:49:01.36Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:3142936b-9324-46c5-98bf-2fd55f2c926c"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/282b0a45bfc804022bab2436868b3818c1e3ab9e5d6ec792339b2aa145957ef7"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-01-02T16:28:05.435Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:4977087b-5c50-4903-895b-4b99dcb09ae7"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/282b0a45bfc804022bab2436868b3818c1e3ab9e5d6ec792339b2aa145957ef7"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2024-01-01T22:51:04.511Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:f03ef949-ded0-42ae-83a7-74c0921e2a8f"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/8765a9ebe3aebe1c67be574d5a4d8f2e4466456c20e68929a9f03160dcc8232d"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-12-02T23:19:40.701Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:57bd1f35-64a2-4978-babc-ede0c49c7947"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/8765a9ebe3aebe1c67be574d5a4d8f2e4466456c20e68929a9f03160dcc8232d"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-12-02T14:29:57.537Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:011e9f4c-9035-4efe-9ab1-f50d6b4c60aa"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/8765a9ebe3aebe1c67be574d5a4d8f2e4466456c20e68929a9f03160dcc8232d"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-12-01T14:55:18.866Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:e6481043-7636-4965-9115-3ddeeefcbf4b"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/a4c2cf903f46e1b975faa692fc4c55826d5ca5a2b14d5475e01585d322ee88f7"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-11-02T09:36:29.008Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:762c6bc8-d316-4abb-898a-c90d41693284"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/a4c2cf903f46e1b975faa692fc4c55826d5ca5a2b14d5475e01585d322ee88f7"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-11-02T03:15:03.28Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:3bd56048-5d53-4969-8781-fe30a7ae197b"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/a4c2cf903f46e1b975faa692fc4c55826d5ca5a2b14d5475e01585d322ee88f7"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-11-01T08:47:45.371Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:3419f3df-7ff6-4efd-aeb0-14616fd76ef3"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/04f0895371264fc625d31c3ade1921abfcf4db072a1019505573664b7e0f1c71"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-10-01T21:02:13.349Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:092c0105-4869-434a-991d-6f3cb12f2beb"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/04f0895371264fc625d31c3ade1921abfcf4db072a1019505573664b7e0f1c71"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-10-01T16:08:22.631Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:88fa8161-2797-4737-b96c-5478dad31d0b"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/04f0895371264fc625d31c3ade1921abfcf4db072a1019505573664b7e0f1c71"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-10-01T00:49:32.494Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:af102f7c-1f40-4e58-805b-0b2f88e74de1"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/bf3728e65bf3b14af44bac51d26e2dd477f70b8f96b6a0350a9216f30d9aaa59"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-09-02T17:57:19.075Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:f6fb19bc-adc9-415d-a1c5-9097d4b382cd"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/bf3728e65bf3b14af44bac51d26e2dd477f70b8f96b6a0350a9216f30d9aaa59"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-09-02T10:56:39.362Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:7aa28f85-f49b-4d0d-acdd-84be16442939"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/bf3728e65bf3b14af44bac51d26e2dd477f70b8f96b6a0350a9216f30d9aaa59"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-09-01T17:27:01.728Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:2ca0ba17-64b1-453c-80d3-635f21db8f5a"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/bf3728e65bf3b14af44bac51d26e2dd477f70b8f96b6a0350a9216f30d9aaa59"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-08-02T14:36:27.628Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:17f66d8c-bc82-44ff-82bd-975fd1f7a6b5"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/bf3728e65bf3b14af44bac51d26e2dd477f70b8f96b6a0350a9216f30d9aaa59"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-08-02T09:41:06.121Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:cdbe6b70-a7df-4993-9840-471aacc0866e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/bf3728e65bf3b14af44bac51d26e2dd477f70b8f96b6a0350a9216f30d9aaa59"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-08-01T16:38:53.852Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:b366c34d-eb04-4f18-8170-47fcca5c8742"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/191842740d3f1d5eda4b31707c00a5565b9fafb06d3e5d41dfe90a9912178e05"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-07-03T01:59:16.209Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:a8c316b6-6cb9-40b9-9f16-1f9490d25f98"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/191842740d3f1d5eda4b31707c00a5565b9fafb06d3e5d41dfe90a9912178e05"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-07-02T17:17:53.776Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:97978dc3-e543-4898-8319-b21a786070db"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/191842740d3f1d5eda4b31707c00a5565b9fafb06d3e5d41dfe90a9912178e05"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-07-01T15:21:50.955Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:a17a91ec-84f9-4118-b3b9-3a0dde2901e0"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/7850d2a1c72b1db014a0938535207073db016c26bb55205cb59567d5ce3cfa16"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-06-01T23:27:04.458Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:3ebdbf83-6f7f-4d1b-b263-de8a1b08b907"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/7850d2a1c72b1db014a0938535207073db016c26bb55205cb59567d5ce3cfa16"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-06-01T18:43:08.859Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:8d08fa2b-6a02-4b30-ad78-67e7d4cca50f"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/7850d2a1c72b1db014a0938535207073db016c26bb55205cb59567d5ce3cfa16"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-06-01T04:46:40.309Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:55241b24-e59c-48c5-9603-cf74af68ca31"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/4546084cb126d56f621569933d54385a5c9cade45abc4cd303e9229694cca73f"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-05-02T01:55:58.878Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:f93de59a-114f-4ff5-8726-eb5cc3f5b815"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/4546084cb126d56f621569933d54385a5c9cade45abc4cd303e9229694cca73f"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-05-01T21:59:31.658Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:129ef770-9e41-4da2-8c3d-a14ba23e5295"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/4546084cb126d56f621569933d54385a5c9cade45abc4cd303e9229694cca73f"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-05-01T07:44:13.344Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:77fdd55c-2d4a-4658-b8d7-54c3cc1a747e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/d491dcf2df682b57b5078e927dfd6a0c329277baa921b85618494520bf43faa7"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-04-02T18:10:17.909Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:1fa925fb-2008-401d-90c2-8605b1a5616f"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/d491dcf2df682b57b5078e927dfd6a0c329277baa921b85618494520bf43faa7"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-04-02T13:58:01.775Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:7487b122-b26c-43e8-9b57-c36b4305cb49"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/d491dcf2df682b57b5078e927dfd6a0c329277baa921b85618494520bf43faa7"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-04-01T22:45:31.15Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:be36dc77-f073-43b1-8e5f-5677e0647ea7"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/62873dc33a28d9afb5fa355eff721fb68af6541ec533ecee6846b47ef7213534"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-03-03T10:12:34.679Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:9dc51f20-bcd5-41ad-89ea-e3c3bb9f507e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/62873dc33a28d9afb5fa355eff721fb68af6541ec533ecee6846b47ef7213534"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-03-02T11:36:37.985Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:946f326d-3f2e-492d-a36f-402352029dd5"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/62873dc33a28d9afb5fa355eff721fb68af6541ec533ecee6846b47ef7213534"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-03-01T22:03:19.723Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:8fc70f0b-1c3d-4cec-a629-a0712ef7414c"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/b66fc1fd9848e0bc46997c14338720147ad9ee6284a7499bceee50edfe6a2bb0"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-02-02T07:45:39.62Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:4c87f306-ebda-4e29-86c0-d030f13c12bb"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/b66fc1fd9848e0bc46997c14338720147ad9ee6284a7499bceee50edfe6a2bb0"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-02-01T17:39:43.302Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:7c882608-fabe-40f5-a0d0-dab92fc2a568"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/b66fc1fd9848e0bc46997c14338720147ad9ee6284a7499bceee50edfe6a2bb0"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-02-01T07:53:35.819Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:d63b5fab-91dc-403d-920d-9bc322f76067"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/4b62393ca1f7a247472faa1b5f6e0e5433c234dfbf2428223d988b9ac3f650e7"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-01-02T05:37:28.254Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:7ca687ff-4c52-429b-9875-e2946925dc21"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/4b62393ca1f7a247472faa1b5f6e0e5433c234dfbf2428223d988b9ac3f650e7"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-01-01T13:43:19.65Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:81fefc5e-5c8e-4854-a281-35175b0bd0c8"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/4b62393ca1f7a247472faa1b5f6e0e5433c234dfbf2428223d988b9ac3f650e7"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2023-01-01T03:27:53.995Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:3d228032-ef4a-4195-a941-0808a85c7550"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/ef1b080e7741bc0893fda60334b135ff82eeba1871f4d8d33441be71202c0c63"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-12-02T23:44:40.69Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:f5091828-b82e-4196-833f-77ab9eff975b"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/ef1b080e7741bc0893fda60334b135ff82eeba1871f4d8d33441be71202c0c63"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-12-02T09:47:54.675Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:041679f4-2cba-4087-8de1-27422f8c5136"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/ef1b080e7741bc0893fda60334b135ff82eeba1871f4d8d33441be71202c0c63"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-12-01T23:34:38.658Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:e93d5ded-d02c-46bb-b3f7-456708e09cf9"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/1790b75712095f8a115a78784e4cfd59ea67c7fc957c6df9314b7cea80b85d0a"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-11-02T19:03:15.725Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:b41ea9a3-2153-4e03-9d74-a68d139b307e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/1790b75712095f8a115a78784e4cfd59ea67c7fc957c6df9314b7cea80b85d0a"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-11-02T04:06:56.341Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:26a542a3-f06c-45ea-9c30-5e48120c418b"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/1790b75712095f8a115a78784e4cfd59ea67c7fc957c6df9314b7cea80b85d0a"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-11-01T17:12:31.545Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:cf3dd956-5858-4c77-bbcc-7286a3032eb4"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/4fbb8609d7d55ff70ef73d4d1bfb1418285bf88975ddbe3bbf1550360350cadf"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-10-03T03:17:14.862Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:ccb45f58-3a9a-4a5a-bb41-b6b3df6203c2"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/4fbb8609d7d55ff70ef73d4d1bfb1418285bf88975ddbe3bbf1550360350cadf"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-10-02T09:21:46.28Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:b62c5a42-0972-4d84-abc4-549dd73d4833"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/4fbb8609d7d55ff70ef73d4d1bfb1418285bf88975ddbe3bbf1550360350cadf"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-10-01T21:00:02.544Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:af7f3e16-2075-4ea7-8649-42863163fe0a"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/8d76a737ac9d59b536393a2b1415f731cbfdd46f4f63d4a3b9c5d45bf237271d"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-09-01T20:59:29.749Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:88daef47-615e-4d9b-a1cf-c3776e0ab2ba"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/8d76a737ac9d59b536393a2b1415f731cbfdd46f4f63d4a3b9c5d45bf237271d"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-09-01T08:39:46.34Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:183db5ea-d0a7-45b3-951e-87ce0c0b9016"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/8d76a737ac9d59b536393a2b1415f731cbfdd46f4f63d4a3b9c5d45bf237271d"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-09-01T00:46:46.13Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:cf730957-0bae-4d01-a559-d5f1afeb4828"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/ae1e6f6dbd6f36492fc094c5453e7ef0cab17a145a4c232dab183815b6a0ba4f"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-08-02T04:25:41.534Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:0d57d44a-a568-44b1-aff4-9e6f14eec7dc"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/ae1e6f6dbd6f36492fc094c5453e7ef0cab17a145a4c232dab183815b6a0ba4f"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-08-01T11:49:53.612Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:a8cb9e1e-16e1-4ebf-9665-d784c52b7021"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/7d0df637f953f32bdffa1b63e8cfaedd7399b65053e66c2d7a2738e3705f8395"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-07-02T17:26:33.724Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:267465ca-0b50-4c79-8e52-2e02a0380507"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/7d0df637f953f32bdffa1b63e8cfaedd7399b65053e66c2d7a2738e3705f8395"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-07-02T04:41:32.372Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:fb033e05-09d6-48f5-8d4f-bd517d7dbec0"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/7d0df637f953f32bdffa1b63e8cfaedd7399b65053e66c2d7a2738e3705f8395"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-07-01T19:00:11.347Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:d37065f0-f26a-4202-a945-2c43f9794e6e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/036a98fe9e8f8214918eb00b23e29d9c42a678b7cc7c42b108bf3d9b5305af8a"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-06-02T18:41:10.999Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:6ba6722c-a369-4d33-a800-5768f92034e2"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/036a98fe9e8f8214918eb00b23e29d9c42a678b7cc7c42b108bf3d9b5305af8a"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-06-02T06:22:20.744Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:2d055420-fcf4-4e84-bbf0-8917cde240d5"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/036a98fe9e8f8214918eb00b23e29d9c42a678b7cc7c42b108bf3d9b5305af8a"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-06-01T20:00:27.394Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:8c87940e-4ca6-4845-81d3-8e00c601f961"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/17f0d0d831b222eb4e547a0c47c55dd34d7fe6376873113cc166d4b429993b6b"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-05-21T04:20:19.799Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:e5af38e6-8539-4d16-90a6-6e09137c8738"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/17f0d0d831b222eb4e547a0c47c55dd34d7fe6376873113cc166d4b429993b6b"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-05-20T07:38:22.033Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:67c9e45d-d00c-4b5d-b8dc-1567e082f371"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/17f0d0d831b222eb4e547a0c47c55dd34d7fe6376873113cc166d4b429993b6b"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-05-19T20:56:40.993Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:498bac2d-bc10-4fdd-bc20-8eeeec68e793"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/15bfccbf456466ac79f71047363d434883f6594538a541b0f08f74a228c755b3"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-04-02T20:49:48.423Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:bd3dee76-5a4c-4877-9634-47fa332129d2"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/15bfccbf456466ac79f71047363d434883f6594538a541b0f08f74a228c755b3"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-04-02T06:19:02.165Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:20a5edd4-718b-41f1-862b-a115f8a7134d"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/15bfccbf456466ac79f71047363d434883f6594538a541b0f08f74a228c755b3"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-04-01T19:53:02.834Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:cb016476-905e-4985-8904-ff85d50375c5"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/797c24a1437299fa495c9bab3d0793bdbfc13d9cd41f9e7a7dfbac201cfa7bcd"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-03-02T00:26:06.547Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:8f488535-a9b9-46b8-b7cc-de3df58a3fe8"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/797c24a1437299fa495c9bab3d0793bdbfc13d9cd41f9e7a7dfbac201cfa7bcd"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-03-01T12:33:04.268Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:3114a608-4961-4b6e-a44e-890e9d5883a0"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/797c24a1437299fa495c9bab3d0793bdbfc13d9cd41f9e7a7dfbac201cfa7bcd"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-03-01T04:47:41.034Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:09ffdb26-78a6-4ef5-8d21-fbc58442b129"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/705851e345e2aec1fb60073d6fc9684f671cc2f3002e0a2805ca6cbc26e59170"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-02-02T04:58:55.521Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:c3d71629-3cbf-42b8-aabb-5326b8dbb283"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/705851e345e2aec1fb60073d6fc9684f671cc2f3002e0a2805ca6cbc26e59170"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-02-01T16:41:38.873Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:90271f50-b696-4c2c-a40f-0f1a807d6fca"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/705851e345e2aec1fb60073d6fc9684f671cc2f3002e0a2805ca6cbc26e59170"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-02-01T10:16:33.825Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:3abcb038-5838-4d7a-b63b-cfc28b7627af"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/c1dad26615794027f295aaa9c94621a5a3c076cc5ec0c97f17751553f71b4677"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-01-02T02:39:26.506Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:c03b8551-e42b-4502-a834-4c36aa93977c"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/c1dad26615794027f295aaa9c94621a5a3c076cc5ec0c97f17751553f71b4677"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-01-01T12:23:00.138Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:eb21ff26-f886-4a49-9e69-c2e8d43e2d65"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/c1dad26615794027f295aaa9c94621a5a3c076cc5ec0c97f17751553f71b4677"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2022-01-01T05:34:35.376Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:2548160f-e830-460b-9101-c7419dd9b352"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/f264138cc0e6f26db17fd54b46950ddf18e2d12a37191fcc892ddf48cd118e55"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-12-02T07:13:56.996Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:aa4b2bdf-9239-42ea-967a-20432bb6a9c6"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/f264138cc0e6f26db17fd54b46950ddf18e2d12a37191fcc892ddf48cd118e55"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-12-01T18:30:59.922Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:2ae49f5f-54df-41a1-b2bc-46bdc3994c56"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/f264138cc0e6f26db17fd54b46950ddf18e2d12a37191fcc892ddf48cd118e55"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-12-01T11:06:37.423Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:6e42a338-30eb-4c6e-8895-2edc29a6fb4a"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/8ba38f7587a85f3bfb0a07d82ccc6cff69bc586dabd3c93139c3e9e5752aa1d9"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-11-02T14:17:13.962Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:8756e0f7-1f43-42c1-baed-987ded393c65"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/8ba38f7587a85f3bfb0a07d82ccc6cff69bc586dabd3c93139c3e9e5752aa1d9"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-11-02T03:29:03.635Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:e408bc50-5328-49b5-8633-18400b32a1ae"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/8ba38f7587a85f3bfb0a07d82ccc6cff69bc586dabd3c93139c3e9e5752aa1d9"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-11-01T20:11:07.209Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:9546fd06-62fc-46d0-91f3-e92934c0f5ea"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/d0f27eee87549aa3e90870cc2e1b1e54c3c10c1964330d7844e6e6752a3b0d1c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-10-01T20:53:40.712Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:8d152691-50ea-4231-9bcd-35d5e583772e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/d0f27eee87549aa3e90870cc2e1b1e54c3c10c1964330d7844e6e6752a3b0d1c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-10-01T08:45:47.517Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:0a216b64-3c0d-4a24-bba0-af95b7829f8e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/d0f27eee87549aa3e90870cc2e1b1e54c3c10c1964330d7844e6e6752a3b0d1c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-09-30T23:58:35.567Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:e3237183-8961-42cd-b5cb-59a489907d31"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/3cf9036536595ad0f610eebdbb0e71cdcd5e592ef8fe92a292c3432d8003c91d"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-09-01T22:36:12.026Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:69947b1b-d933-4518-8e64-2e33502eaa23"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/3cf9036536595ad0f610eebdbb0e71cdcd5e592ef8fe92a292c3432d8003c91d"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-09-01T11:10:42.655Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:b1f3c08e-75c7-4119-9ac8-0edac454106e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/3cf9036536595ad0f610eebdbb0e71cdcd5e592ef8fe92a292c3432d8003c91d"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-09-01T05:26:59.458Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:f02fc1bc-9205-469b-9f36-d2566a09088a"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/744e69970ce7abcd36f5dd02acd61a44e37d58e8f7d33397ec9e9904eeea3d2c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-08-02T23:41:05.952Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:19f33d81-0128-4794-bc9c-9bd120fe1e20"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/744e69970ce7abcd36f5dd02acd61a44e37d58e8f7d33397ec9e9904eeea3d2c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-08-02T01:27:59.921Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:5c73e750-4690-4c96-bdee-6bc85b45df88"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/744e69970ce7abcd36f5dd02acd61a44e37d58e8f7d33397ec9e9904eeea3d2c"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-08-01T17:59:37.695Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:d438f804-e739-472c-9331-686bce733cc8"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/75f0fab12bf9692f0088f1ac8877708d0f1f6c52acc688c62462d12f9a3127b2"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-07-02T10:19:49.558Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:9ab318c0-af1a-4cff-9e04-1b1a10fba050"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/75f0fab12bf9692f0088f1ac8877708d0f1f6c52acc688c62462d12f9a3127b2"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-07-01T23:24:49.548Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:8e940e0c-b917-4e9a-a008-41a4f1d89b22"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/75f0fab12bf9692f0088f1ac8877708d0f1f6c52acc688c62462d12f9a3127b2"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-07-01T15:24:46.823Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:ab21a6a6-adad-47d7-ad24-8d99cae8397e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/29840fa2e69b15b9913af921f2a738602f51a457d4cd92a8dee79562a4875d94"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-06-01T08:13:19.681Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:81fc2538-0d34-491e-accd-f013ed10d63a"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/fa078f606a1560cdc348230fda4407aad0a7ecec0fd22ab5b9a34b21f45606b1"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-04-01T23:52:14.068Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:7545e4f1-434f-465d-bc2b-21652b6bfff0"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/fa078f606a1560cdc348230fda4407aad0a7ecec0fd22ab5b9a34b21f45606b1"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-04-01T14:03:26.799Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:1d36032b-c60d-4865-9be4-7016128fe1c3"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/fa078f606a1560cdc348230fda4407aad0a7ecec0fd22ab5b9a34b21f45606b1"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-04-01T05:48:10.115Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:4b8b75c4-2287-4825-86c3-d1af75b259bc"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/1456e549483fd9ac97f028f0231f3c7888a63b72abfcd110446a4296dab25676"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-03-03T00:55:49.458Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:5cedb707-bf78-4956-9873-3676355b2c40"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/1456e549483fd9ac97f028f0231f3c7888a63b72abfcd110446a4296dab25676"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-03-02T04:49:47.824Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:73152840-33c6-4963-a0c9-36844649600c"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/1456e549483fd9ac97f028f0231f3c7888a63b72abfcd110446a4296dab25676"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-03-01T21:09:18.738Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:5ec7faa8-1e53-435e-b655-4d43acea314c"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/ca6cd9c58dbc0e65044b6858b709e47e31e7f203418deafabe178fd282330ed1"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-02-02T08:55:44.861Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:4afb1b29-9915-4a12-8ab5-bb7cfac69a46"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/ca6cd9c58dbc0e65044b6858b709e47e31e7f203418deafabe178fd282330ed1"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-02-01T23:52:48.273Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:6381883d-c41b-4692-8c62-1b7130fcf13c"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/ca6cd9c58dbc0e65044b6858b709e47e31e7f203418deafabe178fd282330ed1"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-02-01T17:28:40.346Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:50d43f86-586c-4bbd-b5b1-e4f8b290d989"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/ac427287688df0ef181abc2725c3c41b7fbb2553335606976693bb44e8b249e2"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-01-02T09:16:24.556Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:e449e344-ed52-4797-b978-1233ad9a1732"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/ac427287688df0ef181abc2725c3c41b7fbb2553335606976693bb44e8b249e2"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-01-02T00:33:40.155Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:424ff7c7-ddaf-48f5-9926-25dd646f5cd7"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/ac427287688df0ef181abc2725c3c41b7fbb2553335606976693bb44e8b249e2"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2021-01-01T16:45:16.081Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:ec5c5f9f-2b8e-4cde-8d59-778bd8bca4cb"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/79c31f05b0e6a9043bc05f67daf9b8ed4f63bb362ff1ba27a219151670d7285b"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-12-02T21:17:35.696Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:3615bc75-db3d-41c3-b6aa-6f4955b06310"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/79c31f05b0e6a9043bc05f67daf9b8ed4f63bb362ff1ba27a219151670d7285b"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-12-01T17:06:23.793Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:621cca92-b72c-4685-bf37-549620a75b46"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/79c31f05b0e6a9043bc05f67daf9b8ed4f63bb362ff1ba27a219151670d7285b"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-12-01T10:19:54.772Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:4d37678b-ff0f-441b-a3cb-ba52757443eb"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/79c31f05b0e6a9043bc05f67daf9b8ed4f63bb362ff1ba27a219151670d7285b"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-11-04T23:22:29.295Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:1bb0985e-770e-4307-9122-9cba580d0de6"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/07bda8d0778f72df990315a7c9efb65c39848d4b164ae205ccca63d5544fc845"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-11-04T05:39:22.148Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:420cf275-1216-4fd7-bb49-73c30db7bf47"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/07bda8d0778f72df990315a7c9efb65c39848d4b164ae205ccca63d5544fc845"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-11-03T23:23:29.119Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:80a8f674-28d7-46ab-8bce-04138ac36ee3"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/07bda8d0778f72df990315a7c9efb65c39848d4b164ae205ccca63d5544fc845"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-11-02T16:17:27.234Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:0980ce13-2f84-46a0-bb42-e13025ecd975"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/07bda8d0778f72df990315a7c9efb65c39848d4b164ae205ccca63d5544fc845"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-11-02T02:32:30.464Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:9a5269df-7a4c-4303-aecf-35f8079e58dc"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/07bda8d0778f72df990315a7c9efb65c39848d4b164ae205ccca63d5544fc845"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-11-01T20:46:22.988Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:7ddcd6e7-a9f0-4dcd-a0ee-670b6317ac1a"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/f6cf77b59bca6776cf8e97059c230e55f8b081f402e1afe3e19518c81bf7b9e8"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-10-02T01:06:57.459Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:0dc6c8b4-2cdd-4a87-a862-5706433bc0d1"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/f6cf77b59bca6776cf8e97059c230e55f8b081f402e1afe3e19518c81bf7b9e8"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-10-01T17:12:24.046Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:1e56dd55-d311-4f4f-b50c-06dd110c096b"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/f6cf77b59bca6776cf8e97059c230e55f8b081f402e1afe3e19518c81bf7b9e8"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-10-01T11:25:58.744Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:5c5dbc05-ee16-49c6-96d3-b1da4777665a"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/a47b53bc6e72e4659fcd9eb03393eeb3ff22c11c1b5847a7a7309e1c0114065a"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-09-01T20:45:39.049Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:cf45bf7a-32be-4b12-9af6-c339afdab719"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/a47b53bc6e72e4659fcd9eb03393eeb3ff22c11c1b5847a7a7309e1c0114065a"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-09-01T12:38:06.316Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:7d0bab64-df5d-4fc2-b72c-39eecbc54052"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/a47b53bc6e72e4659fcd9eb03393eeb3ff22c11c1b5847a7a7309e1c0114065a"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-09-01T07:14:46.801Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:12f55be9-889c-4795-9dae-21496af142a0"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/e7b9e10acc1123d464eea517daea511e9a683377c8d46afb9bb5f843bcf50d3d"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-08-02T19:22:43.769Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:86c8ef22-e01f-4e5d-938d-8dc2f2da2849"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/b63e1851540f0b211d9c4a797331af01f5838fd62705b21a81edb7cda4ab037f"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-08-02T03:51:03.399Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:dd3de4eb-d170-4d6f-b39d-d4d77c2bee4e"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/b63e1851540f0b211d9c4a797331af01f5838fd62705b21a81edb7cda4ab037f"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-08-01T20:40:43.928Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:9510a25b-b589-419e-be6b-30e89c9434c7"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/3746bedd5cc5bbd8f31f187fc149e9d97261f13db60c12e60759e7f26f4e0db6"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-07-02T12:49:13.45Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:2a1b217b-6e0d-4b73-a9ed-e14855d4a586"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/3746bedd5cc5bbd8f31f187fc149e9d97261f13db60c12e60759e7f26f4e0db6"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-07-02T01:58:45.304Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:658fc633-e4d7-4daf-aa6c-3a48876c57e0"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/3746bedd5cc5bbd8f31f187fc149e9d97261f13db60c12e60759e7f26f4e0db6"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-07-01T18:33:33.533Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:da0b46cb-fe8c-4f8a-a94b-077376361ef3"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/0916002be88690db741d051e252a39c3bf0cd419acd214a6cefe1a148b72c739"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-06-02T10:48:07.05Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:22fcc80b-a166-438b-b9c6-1dc1782e450f"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/0916002be88690db741d051e252a39c3bf0cd419acd214a6cefe1a148b72c739"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-06-02T02:23:04.726Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:cd7a4688-babe-476c-8296-02575ced96f5"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/0916002be88690db741d051e252a39c3bf0cd419acd214a6cefe1a148b72c739"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-06-01T18:45:59.542Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:af09ea14-0e5c-4a4b-a462-58ed0c4b0649"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/0916002be88690db741d051e252a39c3bf0cd419acd214a6cefe1a148b72c739"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-05-02T09:34:35.265Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:20b215e2-7f57-4403-b49e-dc2233660564"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/0916002be88690db741d051e252a39c3bf0cd419acd214a6cefe1a148b72c739"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-05-02T00:32:41.517Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:643950f1-f33b-41d0-a984-a0ad8bb319bb"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/0916002be88690db741d051e252a39c3bf0cd419acd214a6cefe1a148b72c739"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-04-02T00:53:15.857Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:c12109f8-b867-42b8-aa06-c8417c3a60d5"
+        }
+      },
+      {
+        "doi": {
+          "type": "uri",
+          "value": "https://doi.org/10.15468/oirgxw"
+        },
+        "uuid": {
+          "type": "uri",
+          "value": "urn:uuid:b15d4952-7d20-46f1-8a3e-556a512b04c5"
+        },
+        "contentId": {
+          "type": "uri",
+          "value": "hash://sha256/0916002be88690db741d051e252a39c3bf0cd419acd214a6cefe1a148b72c739"
+        },
+        "contentType": {
+          "type": "literal",
+          "value": "application/dwca"
+        },
+        "archiveUrl": {
+          "type": "uri",
+          "value": "http://ipt.vertnet.org:8080/ipt/archive.do?r=msb_mamm"
+        },
+        "seenAt": {
+          "type": "literal",
+          "value": "2020-04-01T16:20:50.4Z",
+          "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "provenanceId": {
+          "type": "uri",
+          "value": "hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"
+        },
+        "activity": {
+          "type": "uri",
+          "value": "urn:uuid:e177335e-ed28-4aae-929d-0c89f98466a1"
+        }
+      }
+    ]
+  }
+}

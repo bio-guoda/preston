@@ -6,6 +6,7 @@ import bio.guoda.preston.util.UUIDUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -19,6 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -56,7 +59,7 @@ public class ProvUtil {
                 sparqlEndpoint,
                 contentType,
                 provenanceAnchor,
-                includeBlanks
+                includeBlanks, 2
         );
         return extractProvenanceInfo(response);
     }
@@ -66,8 +69,11 @@ public class ProvUtil {
                                            String sparqlEndpoint,
                                            String contentType,
                                            IRI provenanceAnchor,
-                                           boolean includeBlanks) throws IOException, URISyntaxException {
-        String queryString = generateQuery(iri, paramName, contentType, provenanceAnchor, includeBlanks);
+                                           boolean includeBlanks,
+                                           int maxResults) throws IOException, URISyntaxException {
+        String queryString = generateQuery(
+                iri, paramName, contentType, provenanceAnchor, includeBlanks, maxResults
+        );
 
         URI query = new URI("https", "example.org", "/query", "query=" + queryString, null);
 
@@ -79,7 +85,12 @@ public class ProvUtil {
         return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
     }
 
-    protected static String generateQuery(IRI iri, String paramName, String contentType, IRI provenanceAnchor, boolean includeBlanks) throws IOException {
+    protected static String generateQuery(IRI iri,
+                                          String paramName,
+                                          String contentType,
+                                          IRI provenanceAnchor,
+                                          boolean includeBlanks,
+                                          int maxResults) throws IOException {
         String queryTemplateName = paramName + ".rq";
         InputStream resourceAsStream = RedirectingServlet.class.getResourceAsStream(queryTemplateName);
 
@@ -91,6 +102,7 @@ public class ProvUtil {
         String queryString = StringUtils
                 .replace(queryTemplate, "?_" + paramName + "_iri", iri.toString())
                 .replace("?_type", "\"" + contentType + "\"")
+                .replace("?_limit", Integer.toString(maxResults))
                 .replace("?_provenanceId_iri", provenanceAnchor.toString());
 
         if (includeBlanks) {
@@ -105,18 +117,36 @@ public class ProvUtil {
 
     static Map<String, String> extractProvenanceInfo(JsonNode jsonNode) {
         Map<String, String> attributes = new TreeMap<String, String>();
+        extractProvenanceInfo(jsonNode, new Consumer<JsonNode>() {
+
+            @Override
+            public void accept(JsonNode binding) {
+                binding.fieldNames()
+                        .forEachRemaining(key -> attributes.put(key, binding.get(key).asText()));
+
+            }
+        }, 1);
+        return attributes;
+    }
+
+    static void extractProvenanceInfo(JsonNode jsonNode, Consumer<JsonNode> listener, int maxRecords) {
+        AtomicInteger recordCount = new AtomicInteger(0);
+        
         if (jsonNode.has("results")) {
             JsonNode result = jsonNode.get("results");
             if (result.has("bindings")) {
                 for (JsonNode binding : result.get("bindings")) {
+                    ObjectNode attributes = new ObjectMapper().createObjectNode();
                     binding.fieldNames()
                             .forEachRemaining(key -> attributes.put(key, binding.get(key).has("value") ? binding.get(key).get("value").asText() : ""));
-                    break;
+                    if (recordCount.get() >= maxRecords) {
+                        break;
+                    }
+                    listener.accept(attributes);
+                    recordCount.incrementAndGet();
                 }
             }
-
         }
-        return attributes;
     }
 
     static String queryTypeForRequestedId(String requestURI) {
