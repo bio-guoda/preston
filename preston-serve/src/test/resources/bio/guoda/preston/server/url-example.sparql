@@ -13,7 +13,7 @@ SELECT DISTINCT
   ?activity
 WHERE
 {
-   BIND(<https://example.org> as ?archiveUrl)
+   BIND(<https://ipt.vertnet.org/archive.do?r=msb_mamm> as ?archiveUrl)
    BIND("application/dwca" as ?contentType)
    BIND(<hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd> as ?provenanceId)
 
@@ -21,12 +21,12 @@ WHERE
     SELECT ?contentId ?seenAt ?uuid ?doi ?activity
 WHERE {
   graph ?g1 {
-   ?uuid <http://www.w3.org/ns/prov#hadMember> <https://example.org> .
+   ?uuid <http://www.w3.org/ns/prov#hadMember> <https://ipt.vertnet.org/archive.do?r=msb_mamm> .
    OPTIONAL { ?uuid <http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso> ?doi . }
-   <https://example.org> <http://purl.org/dc/elements/1.1/format> "application/dwca" .
+   <https://ipt.vertnet.org/archive.do?r=msb_mamm> <http://purl.org/dc/elements/1.1/format> "application/dwca" .
   }
   graph ?activity {
-    ?activity <http://www.w3.org/ns/prov#used> <https://example.org> .
+    ?activity <http://www.w3.org/ns/prov#used> <https://ipt.vertnet.org/archive.do?r=msb_mamm> .
     ?activity <http://www.w3.org/ns/prov#generatedAtTime> ?seenAt .
     ?contentId <http://www.w3.org/ns/prov#qualifiedGeneration> ?activity .
   }

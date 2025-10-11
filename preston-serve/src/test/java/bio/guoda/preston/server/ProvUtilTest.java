@@ -64,7 +64,7 @@ public class ProvUtilTest {
     @Test
     public void generateQueryURL() throws IOException {
         String queryForDOI = ProvUtil.generateQuery(
-                RefNodeFactory.toIRI("https://example.org"),
+                RefNodeFactory.toIRI("https://ipt.vertnet.org/archive.do?r=msb_mamm"),
                 "url",
                 "application/dwca",
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"),
