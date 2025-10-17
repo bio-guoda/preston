@@ -32,13 +32,12 @@ public class HistoryServlet extends RedirectingServlet {
                     InputStream is = IOUtils.toInputStream(jsonNode.toString() + "\n", StandardCharsets.UTF_8);
                     try {
                         IOUtils.copy(is, response.getOutputStream());
-                        response.setStatus(HttpServletResponse.SC_OK);
                     } catch (IOException e) {
-                        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                         throw new RuntimeException(e);
                     }
                 }
             }, maxResults);
+            response.setStatus(HttpServletResponse.SC_OK);
         } catch (URISyntaxException e) {
             throw new ServletException("failed to retrieve history for [" + requestedIdIRI.getIRIString() + "]");
         }
