@@ -199,7 +199,9 @@ public class RedirectingServlet extends HttpServlet {
     private String parseRequestedIdOrThrow(String requestURI, String prefix) throws ServletException {
         log("request [" + requestURI + "]");
 
-        return Stream.of(requestURI).filter(req -> StringUtils.startsWith(req, prefix))
+        return Stream
+                .of(requestURI)
+                .filter(req -> StringUtils.startsWith(req, prefix))
                 .map(req -> StringUtils.substring(req, prefix.length()))
                 .findFirst()
                 .orElseThrow(() -> new ServletException("invalid request [" + requestURI + "]"));

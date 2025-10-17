@@ -11,11 +11,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public class HistoryServlet extends RedirectingServlet {
 
+    @Override
     protected void handleRequest(HttpServletResponse response,
                                  String resolverEndpoint,
                                  String sparqlEndpoint,
@@ -32,7 +32,9 @@ public class HistoryServlet extends RedirectingServlet {
                     InputStream is = IOUtils.toInputStream(jsonNode.toString() + "\n", StandardCharsets.UTF_8);
                     try {
                         IOUtils.copy(is, response.getOutputStream());
+                        response.setStatus(HttpServletResponse.SC_OK);
                     } catch (IOException e) {
+                        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                         throw new RuntimeException(e);
                     }
                 }
@@ -43,5 +45,11 @@ public class HistoryServlet extends RedirectingServlet {
 
 
     };
+
+    @Override
+    protected String getPrefix() {
+        return "/history/";
+    }
+
 
 }

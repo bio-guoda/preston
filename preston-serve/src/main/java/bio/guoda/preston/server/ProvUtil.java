@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +28,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class ProvUtil {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ProvUtil.class);
+
     public static final Pattern URN_UUID_REQUEST_PATTERN
             = Pattern.compile("^urn:uuid:" + UUIDUtil.UUID_PATTERN_PART + "$");
     public static final String QUERY_TYPE_UUID = "uuid";
@@ -74,6 +79,8 @@ public class ProvUtil {
         String queryString = generateQuery(
                 iri, paramName, contentType, provenanceAnchor, includeBlanks, maxResults
         );
+
+        LOG.info("attempting to run: [" + queryString + "]");
 
         URI query = new URI("https", "example.org", "/query", "query=" + queryString, null);
 
