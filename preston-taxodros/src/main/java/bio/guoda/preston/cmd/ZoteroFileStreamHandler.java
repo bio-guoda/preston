@@ -172,14 +172,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             ZenodoMetaUtil.setType(objectNode, "application/json");
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, reference.asText());
 
-            List<String> creatorList = new ArrayList<>();
-            if (creators.isArray()) {
-                for (JsonNode creator : creators) {
-                    if (creator.has("firstName") && creator.has("lastName")) {
-                        creatorList.add(creator.get("lastName").asText() + ", " + creator.get("firstName").asText());
-                    }
-                }
-            }
+            List<String> creatorList = parseCreators(creators);
             ZenodoMetaUtil.setCreators(objectNode, creatorList);
 
             JsonNode tags = jsonNode.at("/data/tags");
@@ -257,6 +250,20 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             );
         }
         return isLikelyZoteroRecord;
+    }
+
+    static List<String> parseCreators(JsonNode creators) {
+        List<String> creatorList = new ArrayList<>();
+        if (creators.isArray()) {
+            for (JsonNode creator : creators) {
+                if (creator.has("firstName") && creator.has("lastName")) {
+                    creatorList.add(creator.get("lastName").asText() + ", " + creator.get("firstName").asText());
+                } else if (creator.has("name")) {
+                    creatorList.add(creator.get("name").asText());
+                }
+            }
+        }
+        return creatorList;
     }
 
     static String parseDate(String publicationDate) {

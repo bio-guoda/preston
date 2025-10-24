@@ -1,0 +1,107 @@
+{
+  "key": "RBXA7Z2X",
+  "version": 56426,
+  "library": {
+    "type": "group",
+    "id": 5435545,
+    "name": "Bat Literature Project",
+    "links": {
+      "alternate": {
+        "href": "https://www.zotero.org/groups/bat_literature_project",
+        "type": "text/html"
+      }
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://api.zotero.org/groups/5435545/items/RBXA7Z2X",
+      "type": "application/json"
+    },
+    "alternate": {
+      "href": "https://www.zotero.org/groups/bat_literature_project/items/RBXA7Z2X",
+      "type": "text/html"
+    },
+    "attachment": {
+      "href": "https://api.zotero.org/groups/5435545/items/ZBFR9JT7",
+      "type": "application/json",
+      "attachmentType": "application/pdf",
+      "attachmentSize": 1233336
+    }
+  },
+  "meta": {
+    "createdByUser": {
+      "id": 13229919,
+      "username": "acsherman",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/acsherman",
+          "type": "text/html"
+        }
+      }
+    },
+    "creatorSummary": "Eric Moïse Bakwo Fils et al.",
+    "parsedDate": "2022-05-26",
+    "numChildren": 2
+  },
+  "data": {
+    "key": "RBXA7Z2X",
+    "version": 56426,
+    "itemType": "journalArticle",
+    "title": "New record and update on the geographic distribution of the Egyptian Tomb Bat Taphozous perforatus (E. Geoffroy, 1818) in Cameroon",
+    "creators": [
+      {
+        "creatorType": "author",
+        "name": "Eric Moïse Bakwo Fils"
+      },
+      {
+        "creatorType": "author",
+        "name": "Kingha Zebaze Jasmine Flora"
+      },
+      {
+        "creatorType": "author",
+        "firstName": "Manfothang Dongmo",
+        "lastName": "Ervis"
+      },
+      {
+        "creatorType": "author",
+        "name": "Manga Mongombe Aaron"
+      },
+      {
+        "creatorType": "author",
+        "name": "Jan Decher"
+      }
+    ],
+    "abstractNote": "The Egyptian Tomb Bat Taphozous perforatus is an emballonurid whose presence in Cameroon is least known. While there are previous records in the country from Waza and Yabassi, they are contested. Available publications fail to mention the presence of this species in the country, thus more information is needed to evaluate its presence. Recently, five specimens were captured near a cave entrance in Bocklé, Garoua in the Sahelian zone of northern Cameroon, adding a new locality to the distribution of the species. The discovery of this roost unequivocally confirms the presence of this species in Cameroon and indicates that the species has a wide distribution in the country as a resident species. Detailed geographical distribution of this species in Africa, along with detailed descriptions and photographs of available specimens are provided.",
+    "publicationTitle": "Journal of Threatened Taxa",
+    "volume": "14",
+    "issue": "5",
+    "pages": "21117-21121",
+    "date": "2022-05-26",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "J. Threat. Taxa",
+    "language": "en",
+    "DOI": "10.11609/jott.6708.14.5.21117-21121",
+    "ISSN": "0974-7907, 0974-7893",
+    "shortTitle": "",
+    "url": "https://threatenedtaxa.org/index.php/JoTT/article/view/6708",
+    "accessDate": "2024-06-28T15:15:15Z",
+    "archive": "",
+    "archiveLocation": "",
+    "libraryCatalog": "DOI.org (Crossref)",
+    "callNumber": "",
+    "rights": "https://creativecommons.org/licenses/by/4.0",
+    "extra": "",
+    "tags": [],
+    "collections": [
+      "UAWY6DNP"
+    ],
+    "relations": {
+      "dc:replaces": "http://zotero.org/groups/5435545/items/KPDXD4PP"
+    },
+    "dateAdded": "2024-07-08T02:33:55Z",
+    "dateModified": "2024-09-14T17:12:30Z"
+  }
+}
