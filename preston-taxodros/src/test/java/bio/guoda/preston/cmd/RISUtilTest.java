@@ -395,6 +395,7 @@ public class RISUtilTest {
         assertThat(jsonObjects.size(), is(1));
 
         JsonNode citationRecord = jsonObjects.get(0);
+        assertThat(citationRecord.get("description").textValue(), is("(Uploaded by Plazi from the Biodiversity Heritage Library) Papers from a conference of this title held at green Park, Aston Clinton, and workshops at the Natural History Museum, Tring, 12-15 November 1999."));
         assertThat(citationRecord.get("upload_type").textValue(), is("publication"));
         assertThat(citationRecord.get("publication_type").textValue(), is("book"));
         assertThat(citationRecord.get("imprint_publisher").textValue(), is("British Ornithologists' Club"));

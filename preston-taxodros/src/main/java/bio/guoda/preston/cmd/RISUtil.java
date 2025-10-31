@@ -27,6 +27,21 @@ public class RISUtil {
     private static final Pattern RIS_KEY_VALUE = Pattern.compile("[^A-Z]*(?<key>[A-Z][A-Z2])[ ]+-(?<value>.*)");
     private static final Pattern BHL_PART_URL = Pattern.compile("(?<prefix>https://www.biodiversitylibrary.org/part/)(?<part>[0-9]+)");
     static final String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+    public static final String RIS_TITLE = "TI";
+    public static final String RIS_PUBLICATION_TYPE = "TY";
+    public static final String RIS_JOURNAL_TITLE = "T2";
+    public static final String RIS_JOURNAL_VOLUME = "VL";
+    public static final String RIS_JOURNAL_PAGES = "SP";
+    public static final String JOURNAL_ISSUE = "IS";
+    public static final String RIS_PUBLICATION_DATE = "PY";
+    public static final String RIS_IMPRINT_PUBLISHER = "PB";
+    public static final String RIS_DOI = "DO";
+    public static final String RIS_SERIAL_NUMBER = "SN";
+    public static final String RIS_URL = "UR";
+    public static final String RIS_AUTHOR_NAME = "AU";
+    public static final String RIS_KEYWORD = "KW";
+    public static final String NO_ABSTRACT_PROVIDED = "No abstract provided.";
+    public static final String RIS_ABSTRACT = "AB";
 
 
     public static void parseRIS(InputStream inputStream, Consumer<ObjectNode> listener, String sourceIRIString, ProcessorState state) throws IOException {
@@ -43,7 +58,7 @@ public class RISUtil {
             if (matcher.matches()) {
                 String key = matcher.group("key");
                 String value = trim(matcher.group("value"));
-                if ("TY".equals(key)) {
+                if (RIS_PUBLICATION_TYPE.equals(key)) {
                     record = new ObjectMapper().createObjectNode();
                     record.put(key, value);
                     recordStart = lineNumber;
@@ -77,7 +92,10 @@ public class RISUtil {
     public static ObjectNode translateRISToZenodo(JsonNode jsonNode, List<String> communities, boolean reuseProvidedDOIAsZenodoDOI) {
         ObjectNode metadata = new ObjectMapper().createObjectNode();
         ArrayNode relatedIdentifiers = new ObjectMapper().createArrayNode();
-        metadata.put("description", "(Uploaded by Plazi from the Biodiversity Heritage Library) No abstract provided.");
+        String abstractText = jsonNode.has(RIS_ABSTRACT)
+                ? jsonNode.get(RIS_ABSTRACT).asText()
+                : NO_ABSTRACT_PROVIDED;
+        metadata.put("description", "(Uploaded by Plazi from the Biodiversity Heritage Library)" + " " + abstractText);
 
         ZenodoMetaUtil.setCommunities(metadata, communities.stream());
         if (jsonNode.has(RefNodeConstants.WAS_DERIVED_FROM.getIRIString())) {
@@ -91,15 +109,15 @@ public class RISUtil {
             metadata.put(TYPE, jsonNode.get(TYPE).asText());
         }
 
-        if (jsonNode.has("TI")) {
-            metadata.put("title", jsonNode.get("TI").asText());
+        if (jsonNode.has(RIS_TITLE)) {
+            metadata.put("title", jsonNode.get(RIS_TITLE).asText());
         }
 
-        if (jsonNode.has("TY")) {
-            String value = jsonNode.get("TY").asText();
+        if (jsonNode.has(RIS_PUBLICATION_TYPE)) {
+            String value = jsonNode.get(RIS_PUBLICATION_TYPE).asText();
             if (StringUtils.equals("BOOK", value) || StringUtils.equals("CPAPER", value)) {
                 metadata.put(ZenodoMetaUtil.UPLOAD_TYPE, "publication");
-                if (jsonNode.has("PB") && StringUtils.isNotBlank(jsonNode.get("PB").asText())) {
+                if (jsonNode.has(RIS_IMPRINT_PUBLISHER) && StringUtils.isNotBlank(jsonNode.get(RIS_IMPRINT_PUBLISHER).asText())) {
                     metadata.put(ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_BOOK);
                 } else {
                     metadata.put(ZenodoMetaUtil.PUBLICATION_TYPE, ZenodoMetaUtil.PUBLICATION_TYPE_OTHER);
@@ -114,48 +132,48 @@ public class RISUtil {
             }
 
         }
-        if (jsonNode.has("T2")) {
-            metadata.put("journal_title", jsonNode.get("T2").asText());
+        if (jsonNode.has(RIS_JOURNAL_TITLE)) {
+            metadata.put("journal_title", jsonNode.get(RIS_JOURNAL_TITLE).asText());
         }
 
 
-        if (jsonNode.has(("VL"))) {
-            metadata.put("journal_volume", jsonNode.get("VL").asText());
+        if (jsonNode.has(RIS_JOURNAL_VOLUME)) {
+            metadata.put("journal_volume", jsonNode.get(RIS_JOURNAL_VOLUME).asText());
         }
-        if (jsonNode.has("SP") && jsonNode.has("EP")) {
-            metadata.put("journal_pages", jsonNode.get("SP").asText() + "-" + jsonNode.get("EP").asText());
+        if (jsonNode.has(RIS_JOURNAL_PAGES) && jsonNode.has("EP")) {
+            metadata.put("journal_pages", jsonNode.get(RIS_JOURNAL_PAGES).asText() + "-" + jsonNode.get("EP").asText());
         }
-        if (jsonNode.has("IS")) {
-            metadata.put("journal_issue", jsonNode.get("IS").asText());
+        if (jsonNode.has(JOURNAL_ISSUE)) {
+            metadata.put("journal_issue", jsonNode.get(JOURNAL_ISSUE).asText());
         }
-        if (jsonNode.has("PY")) {
-            String publicationYear = jsonNode.get("PY").asText();
+        if (jsonNode.has(RIS_PUBLICATION_DATE)) {
+            String publicationYear = jsonNode.get(RIS_PUBLICATION_DATE).asText();
             Matcher matcher = DATE_RANGE_PATTERN.matcher(publicationYear);
             if (matcher.matches()) {
                 publicationYear = matcher.group("start") + "/" + matcher.group("end");
             }
             metadata.put("publication_date", publicationYear);
         }
-        if (jsonNode.has("PB")) {
-            metadata.put("imprint_publisher", jsonNode.get("PB").asText());
+        if (jsonNode.has(RIS_IMPRINT_PUBLISHER)) {
+            metadata.put("imprint_publisher", jsonNode.get(RIS_IMPRINT_PUBLISHER).asText());
         }
-        if (jsonNode.has("TY")) {
-            if (StringUtils.equals(jsonNode.get("TY").asText(), "JOUR")) {
+        if (jsonNode.has(RIS_PUBLICATION_TYPE)) {
+            if (StringUtils.equals(jsonNode.get(RIS_PUBLICATION_TYPE).asText(), "JOUR")) {
                 metadata.put("publication_type", "article");
                 metadata.put("upload_type", "publication");
             }
 
         }
-        if (jsonNode.has("DO")) {
-            String doiString = jsonNode.get("DO").asText();
+        if (jsonNode.has(RIS_DOI)) {
+            String doiString = jsonNode.get(RIS_DOI).asText();
             addAlternateIdentifier(relatedIdentifiers, doiString);
             if (reuseProvidedDOIAsZenodoDOI) {
                 metadata.put("doi", doiString);
             }
         }
 
-        if (jsonNode.has("SN")) {
-            String sn = jsonNode.get("SN").asText();
+        if (jsonNode.has(RIS_SERIAL_NUMBER)) {
+            String sn = jsonNode.get(RIS_SERIAL_NUMBER).asText();
             Matcher matcher = Pattern.compile("^[0-9]{4}-[0-9]{3}[0-9X]$").matcher(sn);
             if (matcher.matches()) {
                 addAlternateIdentifier(relatedIdentifiers, sn, "issn");
@@ -167,8 +185,8 @@ public class RISUtil {
             }
         }
 
-        if (jsonNode.has("UR")) {
-            String url = jsonNode.get("UR").asText();
+        if (jsonNode.has(RIS_URL)) {
+            String url = jsonNode.get(RIS_URL).asText();
             metadata.put("referenceId", url);
 
             String filename = getBHLPartPdfFilename(metadata);
@@ -191,7 +209,7 @@ public class RISUtil {
             }
         }
 
-        JsonNode authors = jsonNode.get("AU");
+        JsonNode authors = jsonNode.get(RIS_AUTHOR_NAME);
         if (authors != null) {
             ArrayNode creators = new ObjectMapper().createArrayNode();
             if (authors.isArray()) {
@@ -201,7 +219,7 @@ public class RISUtil {
             }
             metadata.set("creators", creators);
         }
-        JsonNode keywords = jsonNode.get("KW");
+        JsonNode keywords = jsonNode.get(RIS_KEYWORD);
         if (keywords != null) {
             final ArrayNode keywordsList = getKeywordList(metadata);
             if (keywords.isArray()) {
