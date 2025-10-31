@@ -3,11 +3,16 @@ package bio.guoda.preston.cmd;
 import bio.guoda.preston.process.ProcessorState;
 import bio.guoda.preston.process.ProcessorStateAlwaysContinue;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +30,32 @@ public class RISUtilTest {
 
     public static void parseRIS(InputStream inputStream, Consumer<ObjectNode> listener, String sourceIRIString) throws IOException {
         RISUtil.parseRIS(inputStream, listener, sourceIRIString, new ProcessorStateAlwaysContinue());
+    }
+
+    @Test
+    public void writeRIS() throws IOException {
+        ObjectNode objectNode = new ObjectMapper().createObjectNode();
+        objectNode.put("TY", "JOUR");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        writeAsRIS(objectNode, baos);
+
+        String actual = new String(baos.toByteArray(), StandardCharsets.UTF_8);
+
+        assertThat(actual, is(
+                "TY  - JOUR\r\n" +
+                        "ER  - \r\n"
+        ));
+    }
+
+    public static void writeAsRIS(ObjectNode objectNode, ByteArrayOutputStream baos) throws IOException {
+        OutputStreamWriter printWriter = new OutputStreamWriter(baos, StandardCharsets.UTF_8);
+        if (objectNode.has("TY")) {
+            printWriter.write("TY  - " + objectNode.get("TY").asText() + "\r\n");
+        }
+        printWriter.write("ER  - \r\n");
+        printWriter.flush();
     }
 
 
@@ -126,6 +157,7 @@ public class RISUtilTest {
         assertThat(identifiers.get(3).has("resource_type"), is(false));
 
     }
+
     @Test
     public void streamRISToZenodoPatchedDateRange() throws IOException {
         // see https://github.com/bio-guoda/preston/issues/350
