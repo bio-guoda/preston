@@ -12,10 +12,13 @@ import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -24,6 +27,7 @@ import java.util.regex.Pattern;
 public class RISUtil {
 
     public static final Pattern DATE_RANGE_PATTERN = Pattern.compile("(?<start>[0-9]{4})-(?<end>[0-9]{4})");
+    public static final Pattern RIS_TAG_PATTERN = Pattern.compile("^[A-Z0-1]+$");
     private static final Pattern RIS_KEY_VALUE = Pattern.compile("[^A-Z]*(?<key>[A-Z][A-Z2])[ ]+-(?<value>.*)");
     private static final Pattern BHL_PART_URL = Pattern.compile("(?<prefix>https://www.biodiversitylibrary.org/part/)(?<part>[0-9]+)");
     static final String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
@@ -42,6 +46,7 @@ public class RISUtil {
     public static final String RIS_KEYWORD = "KW";
     public static final String NO_ABSTRACT_PROVIDED = "No abstract provided.";
     public static final String RIS_ABSTRACT = "AB";
+    public static final String RIS_END_OF_RECORD = "ER";
 
 
     public static void parseRIS(InputStream inputStream, Consumer<ObjectNode> listener, String sourceIRIString, ProcessorState state) throws IOException {
@@ -332,4 +337,21 @@ public class RISUtil {
         );
     }
 
+    public static void writeAsRIS(ObjectNode objectNode, ByteArrayOutputStream baos) throws IOException {
+        if (objectNode.has(RIS_PUBLICATION_TYPE)) {
+            OutputStreamWriter printWriter = new OutputStreamWriter(baos, StandardCharsets.UTF_8);
+            printWriter.write(RIS_PUBLICATION_TYPE + "  - " + objectNode.get(RIS_PUBLICATION_TYPE).asText() + "\r\n");
+            Iterator<String> fieldNames = objectNode.fieldNames();
+            while (fieldNames.hasNext()) {
+                String fieldName = fieldNames.next();
+                if (!org.apache.commons.codec.binary.StringUtils.equals(RIS_PUBLICATION_TYPE, fieldName)) {
+                    if (RIS_TAG_PATTERN.matcher(fieldName).matches()) {
+                        printWriter.write(fieldName + "  - " + objectNode.get(fieldName).asText() + "\r\n");
+                    }
+                }
+            }
+            printWriter.write(RIS_END_OF_RECORD + "  - \r\n");
+            printWriter.flush();
+        }
+    }
 }

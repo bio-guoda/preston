@@ -10,8 +10,6 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,34 +26,38 @@ import static org.hamcrest.core.Is.is;
 
 public class RISUtilTest {
 
-    public static void parseRIS(InputStream inputStream, Consumer<ObjectNode> listener, String sourceIRIString) throws IOException {
-        RISUtil.parseRIS(inputStream, listener, sourceIRIString, new ProcessorStateAlwaysContinue());
-    }
-
     @Test
     public void writeRIS() throws IOException {
         ObjectNode objectNode = new ObjectMapper().createObjectNode();
         objectNode.put("TY", "JOUR");
+        objectNode.put("TI", "This is a title");
+        objectNode.put("blash", "no RIS tag");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        writeAsRIS(objectNode, baos);
+        RISUtil.writeAsRIS(objectNode, baos);
 
         String actual = new String(baos.toByteArray(), StandardCharsets.UTF_8);
 
         assertThat(actual, is(
                 "TY  - JOUR\r\n" +
+                        "TI  - This is a title\r\n" +
                         "ER  - \r\n"
         ));
     }
 
-    public static void writeAsRIS(ObjectNode objectNode, ByteArrayOutputStream baos) throws IOException {
-        OutputStreamWriter printWriter = new OutputStreamWriter(baos, StandardCharsets.UTF_8);
-        if (objectNode.has("TY")) {
-            printWriter.write("TY  - " + objectNode.get("TY").asText() + "\r\n");
-        }
-        printWriter.write("ER  - \r\n");
-        printWriter.flush();
+    @Test
+    public void nothingToWriteRIS() throws IOException {
+        ObjectNode objectNode = new ObjectMapper().createObjectNode();
+        objectNode.put("TI", "This is a title");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        RISUtil.writeAsRIS(objectNode, baos);
+
+        String actual = new String(baos.toByteArray(), StandardCharsets.UTF_8);
+
+        assertThat(actual, is(""));
     }
 
 
@@ -473,6 +475,10 @@ public class RISUtilTest {
 
 
         assertThat(jsonObjects.size(), is(1));
+    }
+
+    private static void parseRIS(InputStream inputStream, Consumer<ObjectNode> listener, String sourceIRIString) throws IOException {
+        RISUtil.parseRIS(inputStream, listener, sourceIRIString, new ProcessorStateAlwaysContinue());
     }
 
 
