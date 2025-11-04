@@ -13,7 +13,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
 
-public class ZoteroFileStreamHandlerTest {
+public class ZoteroFileStreamHandlerZenodoTest {
 
     @Test
     public void parseDate() {

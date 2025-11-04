@@ -24,108 +24,86 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ZoteroFileStreamHandler implements ContentStreamHandler {
+public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstract {
 
-    private final Logger LOG = LoggerFactory.getLogger(ZoteroFileStreamHandler.class);
-
-
-    private final Persisting persisting;
+    private final Logger LOG = LoggerFactory.getLogger(ZoteroFileStreamHandlerZenodo.class);
     private final Dereferencer<InputStream> timedDereferencer;
-    private final IRI provenanceAnchor;
-    private final ContentStreamHandler contentStreamHandler;
-    private final OutputStream outputStream;
     private final List<String> communities;
+    private final Persisting persisting;
 
-    public ZoteroFileStreamHandler(ContentStreamHandler contentStreamHandler,
-                                   OutputStream os,
-                                   Persisting persisting,
-                                   Dereferencer<InputStream> deref,
-                                   List<String> communities,
-                                   IRI provenanceAnchor) {
-        this.contentStreamHandler = contentStreamHandler;
-        this.outputStream = os;
+    public ZoteroFileStreamHandlerZenodo(ContentStreamHandler contentStreamHandler,
+                                         OutputStream os,
+                                         Persisting persisting,
+                                         Dereferencer<InputStream> deref,
+                                         List<String> communities,
+                                         IRI provenanceAnchor) {
+        super(contentStreamHandler, os, provenanceAnchor);
         this.persisting = persisting;
-        this.timedDereferencer = new Dereferencer<InputStream>() {
-            @Override
-            public InputStream get(IRI uri) throws IOException {
-                StopWatch stopWatch = new StopWatch();
-                stopWatch.start();
-                try {
-                    return deref.get(uri);
-                } finally {
-                    stopWatch.stop();
-                }
+        this.communities = communities;
+        this.timedDereferencer = uri -> {
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+            try {
+                return deref.get(uri);
+            } finally {
+                stopWatch.stop();
             }
         };
-        this.communities = communities;
-        this.provenanceAnchor = provenanceAnchor;
+
     }
 
+
     @Override
-    public boolean handle(IRI version, InputStream is) throws ContentStreamException {
-        AtomicBoolean foundAtLeastOne = new AtomicBoolean(false);
-        String iriString = version.getIRIString();
-        try {
-            JsonNode zoteroRecord = new ObjectMapper().readTree(is);
-            if (zoteroRecord.isObject()) {
-                ObjectNode zenodoRecord = new ObjectMapper().createObjectNode();
+    void handleZoteroRecord(JsonNode zoteroRecord, String iriString, AtomicBoolean foundAtLeastOne) throws ContentStreamException, IOException {
+        ObjectNode zenodoRecord = new ObjectMapper().createObjectNode();
 
-                String zoteroAttachmentDownloadUrl = ZoteroUtil.getAttachmentDownloadUrl(zoteroRecord);
-                String providedContentId = null;
+        String zoteroAttachmentDownloadUrl = ZoteroUtil.getAttachmentDownloadUrl(zoteroRecord);
+        String providedContentId = null;
 
-                if (hasPdfAttachment(zoteroRecord, zoteroAttachmentDownloadUrl)) {
-                    String filename = zoteroRecord.at("/data/filename").asText();
-                    if (StringUtils.isNoneBlank(filename)) {
-                        ZenodoMetaUtil.setFilename(zenodoRecord, filename);
-                    }
-                    String md5 = zoteroRecord.at("/data/md5").asText();
-                    if (StringUtils.isNoneBlank(md5)) {
-                        providedContentId = HashType.md5.getPrefix() + md5;
-                        ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, providedContentId);
-                    }
-                    String zoteroItemUrl = zoteroRecord.at("/links/up/href").asText();
-                    appendAttachmentInfo(
-                            zenodoRecord,
-                            StringUtils.isBlank(providedContentId) ? zoteroAttachmentDownloadUrl : providedContentId,
-                            zoteroItemUrl
-                    );
-
-                    IRI zoteroItemIRI = RefNodeFactory.toIRI(zoteroItemUrl);
-
-                    DerferencerFactory derferencerFactory = () -> timedDereferencer;
-
-                    InputStream itemInputStream = ContentQueryUtil.getContent(
-                            zoteroItemIRI,
-                            derferencerFactory,
-                            LOG
-                    );
-
-                    JsonNode itemData = new ObjectMapper().readTree(itemInputStream);
-                    if (isPrimaryAttachmentOf(zoteroAttachmentDownloadUrl, itemData)) {
-                        boolean isLikelyZoteroRecord = appendJournalArticleMetaData(
-                                iriString,
-                                itemData,
-                                zenodoRecord
-                        );
-
-                        ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_COMPILED_BY, RefNodeConstants.PRESTON_DOI, ZenodoMetaUtil.RESOURCE_TYPE_SOFTWARE);
-
-                        if (isLikelyZoteroRecord) {
-                            foundAtLeastOne.set(true);
-                            writeRecord(foundAtLeastOne, zenodoRecord);
-                        }
-                    }
-
-                }
-
-
+        if (hasPdfAttachment(zoteroRecord, zoteroAttachmentDownloadUrl)) {
+            String filename = zoteroRecord.at("/data/filename").asText();
+            if (StringUtils.isNoneBlank(filename)) {
+                ZenodoMetaUtil.setFilename(zenodoRecord, filename);
             }
-        } catch (IOException e) {
-            // opportunistic parsing, so ignore exceptions
-        } catch (IllegalArgumentException ex) {
-            LOG.warn("possible marformed Zotero records in [" + version + "]", ex);
+            String md5 = zoteroRecord.at("/data/md5").asText();
+            if (StringUtils.isNoneBlank(md5)) {
+                providedContentId = HashType.md5.getPrefix() + md5;
+                ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, providedContentId);
+            }
+            String zoteroItemUrl = zoteroRecord.at("/links/up/href").asText();
+            appendAttachmentInfo(
+                    zenodoRecord,
+                    StringUtils.isBlank(providedContentId) ? zoteroAttachmentDownloadUrl : providedContentId,
+                    zoteroItemUrl
+            );
+
+            IRI zoteroItemIRI = RefNodeFactory.toIRI(zoteroItemUrl);
+
+            DerferencerFactory derferencerFactory = () -> timedDereferencer;
+
+            InputStream itemInputStream = ContentQueryUtil.getContent(
+                    zoteroItemIRI,
+                    derferencerFactory,
+                    LOG
+            );
+
+            JsonNode itemData = new ObjectMapper().readTree(itemInputStream);
+            if (isPrimaryAttachmentOf(zoteroAttachmentDownloadUrl, itemData)) {
+                boolean isLikelyZoteroRecord = appendJournalArticleMetaData(
+                        iriString,
+                        itemData,
+                        zenodoRecord
+                );
+
+                ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_COMPILED_BY, RefNodeConstants.PRESTON_DOI, ZenodoMetaUtil.RESOURCE_TYPE_SOFTWARE);
+
+                if (isLikelyZoteroRecord) {
+                    foundAtLeastOne.set(true);
+                    writeRecord(foundAtLeastOne, zenodoRecord);
+                }
+            }
+
         }
-        return foundAtLeastOne.get();
     }
 
     private boolean isPrimaryAttachmentOf(String zoteroAttachmentDownloadUrl, JsonNode itemData) {
@@ -156,7 +134,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, StreamHandlerUtil.makeActionable(iriString));
             ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, StreamHandlerUtil.makeActionable(iriString));
-            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, provenanceAnchor.getIRIString());
+            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, getProvenanceAnchor().getIRIString());
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
             ZenodoMetaUtil.setType(objectNode, "application/json");
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, reference.asText());
@@ -271,15 +249,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
 
     private void writeRecord(AtomicBoolean foundAtLeastOne, ObjectNode objectNode) throws IOException {
-        OutputStream outputStream = this.outputStream;
-        StreamHandlerUtil.writeRecord(foundAtLeastOne, objectNode, outputStream);
+        StreamHandlerUtil.writeRecord(foundAtLeastOne, objectNode, getOutputStream());
     }
-
-
-    @Override
-    public boolean shouldKeepProcessing() {
-        return contentStreamHandler.shouldKeepProcessing();
-    }
-
 
 }

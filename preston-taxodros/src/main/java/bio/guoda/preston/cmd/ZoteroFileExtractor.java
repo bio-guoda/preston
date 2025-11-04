@@ -56,7 +56,7 @@ public class ZoteroFileExtractor extends ProcessorExtracting {
             this.handler = new ContentStreamHandlerImpl(
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
-                    new ZoteroFileStreamHandler(
+                    new ZoteroFileStreamHandlerZenodo(
                             this,
                             outputStream,
                             processorState,
