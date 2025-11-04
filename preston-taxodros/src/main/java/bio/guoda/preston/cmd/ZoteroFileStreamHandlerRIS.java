@@ -135,38 +135,42 @@ public class ZoteroFileStreamHandlerRIS extends ZoteroFileStreamHandlerAbstract 
             setArray(objectNode, tagValues, RISUtil.RIS_KEYWORD);
 
             String itemType = jsonNode.at("/data/itemType").asText();
-            objectNode.put(RISUtil.RIS_PUBLICATION_TYPE,
-                    ZoteroUtil.ZOTERO_TO_RIS_PUB_TYPE_TRANSLATION_TABLE.getOrDefault(itemType, "other")
-            );
+            setTagValue(objectNode, RISUtil.RIS_PUBLICATION_TYPE, ZoteroUtil.ZOTERO_TO_RIS_PUB_TYPE_TRANSLATION_TABLE.getOrDefault(itemType, "GEN"));
             String dateStringParsed = ZoteroUtil.getPublicationDate(jsonNode);
-            objectNode.put(RISUtil.RIS_PUBLICATION_DATE, dateStringParsed);
-            objectNode.put(RISUtil.RIS_TITLE, ZoteroUtil.getTitle(jsonNode));
+            setTagValue(objectNode, RISUtil.RIS_PUBLICATION_DATE, dateStringParsed);
+            setTagValue(objectNode, RISUtil.RIS_TITLE, ZoteroUtil.getTitle(jsonNode));
 
 
             if (StringUtils.equals(itemType, ZoteroUtil.ZOTERO_JOURNAL_ARTICLE)) {
-                objectNode.put(RISUtil.RIS_JOURNAL_TITLE, ZoteroUtil.getJournalTitle(jsonNode));
-                objectNode.put(RISUtil.RIS_JOURNAL_VOLUME, ZoteroUtil.getJournalVolume(jsonNode));
-                objectNode.put(RISUtil.RIS_JOURNAL_ISSUE, ZoteroUtil.getJournalIssue(jsonNode));
-                objectNode.put(RISUtil.RIS_JOURNAL_PAGES, ZoteroUtil.getJournalPages(jsonNode));
+                setTagValue(objectNode, RISUtil.RIS_JOURNAL_TITLE, ZoteroUtil.getJournalTitle(jsonNode));
+                setTagValue(objectNode, RISUtil.RIS_JOURNAL_VOLUME, ZoteroUtil.getJournalVolume(jsonNode));
+                setTagValue(objectNode, RISUtil.RIS_JOURNAL_ISSUE, ZoteroUtil.getJournalIssue(jsonNode));
+                setTagValue(objectNode, RISUtil.RIS_JOURNAL_PAGES, ZoteroUtil.getJournalPages(jsonNode));
             }
 
             if (Arrays.asList(ZoteroUtil.ZOTERO_BOOK, ZoteroUtil.ZOTERO_BOOK_SECTION).contains(itemType)) {
-                objectNode.put(RISUtil.RIS_IMPRINT_PUBLISHER, ZoteroUtil.getPublisherName(jsonNode));
-                objectNode.put(RISUtil.RIS_TITLE, ZoteroUtil.getBookTitle(jsonNode));
-                objectNode.put(RISUtil.RIS_JOURNAL_PAGES, ZoteroUtil.getJournalVolume(jsonNode));
+                setTagValue(objectNode, RISUtil.RIS_IMPRINT_PUBLISHER, ZoteroUtil.getPublisherName(jsonNode));
+                setTagValue(objectNode, RISUtil.RIS_TITLE, ZoteroUtil.getBookTitle(jsonNode));
+                setTagValue(objectNode, RISUtil.RIS_JOURNAL_PAGES, ZoteroUtil.getJournalVolume(jsonNode));
             }
 
             String doi = ZoteroUtil.getDOI(jsonNode);
             if (StringUtils.isNotBlank(doi)) {
-                objectNode.put(RISUtil.RIS_DOI, doi);
+                setTagValue(objectNode, RISUtil.RIS_DOI, doi);
             }
 
             String abstractNote = ZoteroUtil.getAbstract(jsonNode);
             if (StringUtils.isNotBlank(abstractNote)) {
-                objectNode.put(RISUtil.RIS_ABSTRACT, abstractNote);
+                setTagValue(objectNode, RISUtil.RIS_ABSTRACT, abstractNote);
             }
         }
         return isLikelyZoteroRecord;
+    }
+
+    private static void setTagValue(ObjectNode objectNode, String tagName, String tagValue) {
+        if (StringUtils.isNotBlank(tagValue)) {
+            objectNode.put(tagName, tagValue);
+        }
     }
 
     private static void setArray(ObjectNode objectNode, List<String> tagValues, String risKeyword) {

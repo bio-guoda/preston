@@ -150,7 +150,7 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
 
             ZenodoMetaUtil.setValue(objectNode,
                     ZenodoMetaUtil.PUBLICATION_TYPE,
-                    ZoteroUtil.ZOTERO_TO_ZENODO_PUB_TYPE_TRANSLATION_TABLE.getOrDefault(itemType, "GEN")
+                    ZoteroUtil.ZOTERO_TO_ZENODO_PUB_TYPE_TRANSLATION_TABLE.getOrDefault(itemType, "other")
             );
             String dateStringParsed = ZoteroUtil.getPublicationDate(jsonNode);
             ZenodoMetaUtil.setPublicationDate(objectNode, dateStringParsed);
