@@ -6,8 +6,8 @@ import bio.guoda.preston.process.StatementsEmitterAdapter;
 import bio.guoda.preston.process.StatementsListener;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.stream.ContentHashDereferencer;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
+import bio.guoda.preston.stream.ContentHashDereferencer;
 import org.apache.commons.io.output.NullPrintStream;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
@@ -19,20 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @CommandLine.Command(
-        name = "zotero-stream",
-        description = "Stream Zotero records into line-json with Zenodo metadata"
+        name = "zotero-to-ris-stream",
+        description = "Stream Zotero records into RIS records"
 )
-public class CmdZoteroStream extends LoggingPersisting implements Runnable {
-
-
-    @CommandLine.Option(
-            names = {"--community", "--communities"},
-            split = ",",
-            description = "select which Zenodo communities to submit to. If community is known (e.g., batlit, taxodros), default metadata is included."
-    )
-
-    private List<String> communities = new ArrayList<>();
-
+public class CmdZoteroToRISStream extends LoggingPersisting implements Runnable {
 
     @Override
     public void run() {
@@ -63,11 +53,10 @@ public class CmdZoteroStream extends LoggingPersisting implements Runnable {
                 LogErrorHandlerExitOnError.EXIT_ON_ERROR);
 
 
-        StatementsListener textMatcher = new ZoteroFileExtractorZenodo(
+        StatementsListener textMatcher = new ZoteroFileExtractorRIS(
                 this,
                 blobStoreWithIndexedVersions,
                 getOutputStream(),
-                communities,
                 AnchorUtil.findAnchorOrThrow(this),
                 listener);
 

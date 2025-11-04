@@ -9,6 +9,7 @@ import bio.guoda.preston.stream.ContentStreamException;
 import bio.guoda.preston.stream.ContentStreamHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
@@ -24,22 +25,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstract {
+public class ZoteroFileStreamHandlerRIS extends ZoteroFileStreamHandlerAbstract {
 
-    private final Logger LOG = LoggerFactory.getLogger(ZoteroFileStreamHandlerZenodo.class);
+    private final Logger LOG = LoggerFactory.getLogger(ZoteroFileStreamHandlerRIS.class);
     private final Dereferencer<InputStream> timedDereferencer;
-    private final List<String> communities;
     private final Persisting persisting;
 
-    public ZoteroFileStreamHandlerZenodo(ContentStreamHandler contentStreamHandler,
-                                         OutputStream os,
-                                         Persisting persisting,
-                                         Dereferencer<InputStream> deref,
-                                         List<String> communities,
-                                         IRI provenanceAnchor) {
+    public ZoteroFileStreamHandlerRIS(ContentStreamHandler contentStreamHandler,
+                                      OutputStream os,
+                                      Persisting persisting,
+                                      Dereferencer<InputStream> deref,
+                                      IRI provenanceAnchor) {
         super(contentStreamHandler, os, provenanceAnchor);
         this.persisting = persisting;
-        this.communities = communities;
         this.timedDereferencer = uri -> {
             StopWatch stopWatch = new StopWatch();
             stopWatch.start();
@@ -129,9 +127,6 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                 && !creators.isMissingNode()
                 && StringUtils.contains(reference.asText(), "zotero.org");
         if (isLikelyZoteroRecord) {
-
-            ZenodoMetaUtil.setCommunities(objectNode, communities.stream());
-
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, StreamHandlerUtil.makeActionable(iriString));
             ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, StreamHandlerUtil.makeActionable(iriString));
             ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, getProvenanceAnchor().getIRIString());
@@ -140,71 +135,50 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, reference.asText());
 
             List<String> creatorList = ZoteroUtil.parseCreators(creators);
-            ZenodoMetaUtil.setCreators(objectNode, creatorList);
+            setArray(objectNode, creatorList, RISUtil.RIS_AUTHOR_NAME);
 
             List<String> tagValues = ZoteroUtil.parseKeywords(jsonNode);
-
-            tagValues.forEach(tagValue -> ZenodoMetaUtil.addKeyword(objectNode, tagValue));
+            setArray(objectNode, tagValues, RISUtil.RIS_KEYWORD);
 
             String itemType = jsonNode.at("/data/itemType").asText();
-
-            ZenodoMetaUtil.setValue(objectNode,
-                    ZenodoMetaUtil.PUBLICATION_TYPE,
-                    ZoteroUtil.ZOTERO_TO_RIS_PUB_TYPE_TRANSLATION_TABLE.getOrDefault(itemType, "GEN")
+            objectNode.put(RISUtil.RIS_PUBLICATION_TYPE,
+                    ZoteroUtil.ZOTERO_TO_ZENODO_PUB_TYPE_TRANSLATION_TABLE.getOrDefault(itemType, "other")
             );
             String dateStringParsed = ZoteroUtil.getPublicationDate(jsonNode);
-            ZenodoMetaUtil.setPublicationDate(objectNode, dateStringParsed);
-            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, ZoteroUtil.getTitle(jsonNode));
+            objectNode.put(RISUtil.RIS_PUBLICATION_DATE, dateStringParsed);
+            objectNode.put(RISUtil.RIS_TITLE, ZoteroUtil.getTitle(jsonNode));
 
 
             if (StringUtils.equals(itemType, ZoteroUtil.ZOTERO_JOURNAL_ARTICLE)) {
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_TITLE, ZoteroUtil.getJournalTitle(jsonNode));
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_VOLUME, ZoteroUtil.getJournalVolume(jsonNode));
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_ISSUE, ZoteroUtil.getJournalIssue(jsonNode));
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_PAGES, ZoteroUtil.getJournalPages(jsonNode));
+                objectNode.put(RISUtil.RIS_JOURNAL_TITLE, ZoteroUtil.getJournalTitle(jsonNode));
+                objectNode.put(RISUtil.RIS_JOURNAL_VOLUME, ZoteroUtil.getJournalVolume(jsonNode));
+                objectNode.put(RISUtil.RIS_JOURNAL_ISSUE, ZoteroUtil.getJournalIssue(jsonNode));
+                objectNode.put(RISUtil.RIS_JOURNAL_PAGES, ZoteroUtil.getJournalPages(jsonNode));
             }
 
             if (Arrays.asList(ZoteroUtil.ZOTERO_BOOK, ZoteroUtil.ZOTERO_BOOK_SECTION).contains(itemType)) {
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.IMPRINT_PUBLISHER, ZoteroUtil.getPublisherName(jsonNode));
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.PARTOF_PAGES, ZoteroUtil.getJournalPages(jsonNode));
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.PARTOF_TITLE, ZoteroUtil.getBookTitle(jsonNode));
+                objectNode.put(RISUtil.RIS_IMPRINT_PUBLISHER, ZoteroUtil.getPublisherName(jsonNode));
+                objectNode.put(RISUtil.RIS_TITLE, ZoteroUtil.getBookTitle(jsonNode));
+                objectNode.put(RISUtil.RIS_JOURNAL_PAGES, ZoteroUtil.getJournalVolume(jsonNode));
             }
 
-            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, ZoteroUtil.getDOI(jsonNode));
-
-
-            StringBuilder description = new StringBuilder();
-
-            if (communities.stream().anyMatch(name -> StringUtils.contains(name, "batlit"))) {
-                ZenodoMetaUtil.addKeyword(objectNode, "Biodiversity");
-                ZenodoMetaUtil.addKeyword(objectNode, "Mammalia");
-                ZenodoMetaUtil.addKeyword(objectNode, "Chiroptera");
-                ZenodoMetaUtil.addKeyword(objectNode, "Chordata");
-                ZenodoMetaUtil.addKeyword(objectNode, "Animalia");
-                ZenodoMetaUtil.addKeyword(objectNode, "bats");
-                ZenodoMetaUtil.addKeyword(objectNode, "bat");
-
-                ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_KINGDOM, "Animalia");
-                ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_PHYLUM, "Chordata");
-                ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_CLASS, "Mammalia");
-                ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_ORDER, "Chiroptera");
-
-                description.append("(Uploaded by Plazi for the Bat Literature Project) ");
+            String doi = ZoteroUtil.getDOI(jsonNode);
+            if (StringUtils.isNotBlank(doi)) {
+                objectNode.put(RISUtil.RIS_DOI, doi);
             }
 
             String abstractNote = ZoteroUtil.getAbstract(jsonNode);
-
-            String abstractString = StringUtils.isBlank(abstractNote)
-                    ? "No abstract provided."
-                    : abstractNote;
-            description.append(abstractString);
-
-            String descriptionString = description.toString();
-            objectNode.put("description",
-                    StringUtils.isBlank(descriptionString) ? "No description." : descriptionString
-            );
+            if (StringUtils.isNotBlank(abstractNote)) {
+                objectNode.put(RISUtil.RIS_ABSTRACT, abstractNote);
+            }
         }
         return isLikelyZoteroRecord;
+    }
+
+    private static void setArray(ObjectNode objectNode, List<String> tagValues, String risKeyword) {
+        ArrayNode keywords = new ObjectMapper().createArrayNode();
+        tagValues.forEach(keywords::add);
+        objectNode.set(risKeyword, keywords);
     }
 
 
@@ -249,7 +223,9 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
 
 
     private void writeRecord(AtomicBoolean foundAtLeastOne, ObjectNode objectNode) throws IOException {
-        StreamHandlerUtil.writeRecord(foundAtLeastOne, objectNode, getOutputStream());
+        if (foundAtLeastOne.get()) {
+            RISUtil.writeAsRIS(objectNode, getOutputStream());
+        }
     }
 
 }

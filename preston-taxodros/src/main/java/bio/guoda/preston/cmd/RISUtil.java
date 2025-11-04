@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
@@ -27,7 +28,8 @@ import java.util.regex.Pattern;
 public class RISUtil {
 
     public static final Pattern DATE_RANGE_PATTERN = Pattern.compile("(?<start>[0-9]{4})-(?<end>[0-9]{4})");
-    public static final Pattern RIS_TAG_PATTERN = Pattern.compile("^[A-Z0-1]+$");
+    public static final Pattern RIS_TAG_PATTERN = Pattern.compile("^[A-Z0-9]+$");
+    public static final String RIS_JOURNAL_ISSUE = "IS";
     private static final Pattern RIS_KEY_VALUE = Pattern.compile("[^A-Z]*(?<key>[A-Z][A-Z2])[ ]+-(?<value>.*)");
     private static final Pattern BHL_PART_URL = Pattern.compile("(?<prefix>https://www.biodiversitylibrary.org/part/)(?<part>[0-9]+)");
     static final String TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
@@ -337,21 +339,32 @@ public class RISUtil {
         );
     }
 
-    public static void writeAsRIS(ObjectNode objectNode, ByteArrayOutputStream baos) throws IOException {
+    public static void writeAsRIS(ObjectNode objectNode, OutputStream os) throws IOException {
         if (objectNode.has(RIS_PUBLICATION_TYPE)) {
-            OutputStreamWriter printWriter = new OutputStreamWriter(baos, StandardCharsets.UTF_8);
-            printWriter.write(RIS_PUBLICATION_TYPE + "  - " + objectNode.get(RIS_PUBLICATION_TYPE).asText() + "\r\n");
+            OutputStreamWriter printWriter = new OutputStreamWriter(os, StandardCharsets.UTF_8);
+            writeObject(printWriter, RIS_PUBLICATION_TYPE, objectNode.get(RIS_PUBLICATION_TYPE));
             Iterator<String> fieldNames = objectNode.fieldNames();
             while (fieldNames.hasNext()) {
                 String fieldName = fieldNames.next();
                 if (!org.apache.commons.codec.binary.StringUtils.equals(RIS_PUBLICATION_TYPE, fieldName)) {
                     if (RIS_TAG_PATTERN.matcher(fieldName).matches()) {
-                        printWriter.write(fieldName + "  - " + objectNode.get(fieldName).asText() + "\r\n");
+                        JsonNode jsonNode = objectNode.get(fieldName);
+                        if (jsonNode.isArray()) {
+                            for (JsonNode valueNode : jsonNode) {
+                                writeObject(printWriter, fieldName, valueNode);
+                            }
+                        } else {
+                            writeObject(printWriter, fieldName, jsonNode);
+                        }
                     }
                 }
             }
             printWriter.write(RIS_END_OF_RECORD + "  - \r\n");
             printWriter.flush();
         }
+    }
+
+    private static void writeObject(OutputStreamWriter printWriter, String fieldName, JsonNode jsonNode) throws IOException {
+        printWriter.write(fieldName + "  - " + jsonNode.asText() + "\r\n");
     }
 }

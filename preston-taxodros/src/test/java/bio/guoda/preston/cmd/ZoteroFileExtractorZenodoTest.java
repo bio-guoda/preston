@@ -37,7 +37,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
 
-public class ZoteroFileExtractorTest {
+public class ZoteroFileExtractorZenodoTest {
 
     public static final String CONTENT_OF_MD5_0033 = "a pdf associated with https://api.zotero.org/groups/5435545/items/P4LGETPS/file/view";
 
@@ -230,7 +230,7 @@ public class ZoteroFileExtractorTest {
         File dataDir = new File(resource.getFile()).getParentFile().getParentFile().getParentFile();
         processorState.setDataDir(dataDir.getAbsolutePath());
 
-        StatementsListener extractor = new ZoteroFileExtractor(
+        StatementsListener extractor = new ZoteroFileExtractorZenodo(
                 processorState,
                 blobStore,
                 byteArrayOutputStream,

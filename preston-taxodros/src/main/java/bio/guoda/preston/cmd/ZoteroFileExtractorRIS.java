@@ -12,56 +12,49 @@ import bio.guoda.preston.stream.ContentStreamHandler;
 import bio.guoda.preston.stream.ContentStreamHandlerImpl;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-public class ZoteroFileExtractor extends ProcessorExtracting {
-    private final Logger LOG = LoggerFactory.getLogger(ZoteroFileExtractor.class);
-
+public class ZoteroFileExtractorRIS extends ProcessorExtracting {
     private final Persisting processorState;
     private final OutputStream outputStream;
-    private final List<String> communities;
     private final IRI provenanceAnchor;
 
-    public ZoteroFileExtractor(Persisting processorState,
-                               BlobStoreReadOnly blobStoreReadOnly,
-                               OutputStream out,
-                               List<String> communities,
-                               IRI provenanceAnchor, StatementsListener... listeners) {
+    public ZoteroFileExtractorRIS(Persisting processorState,
+                                  BlobStoreReadOnly blobStoreReadOnly,
+                                  OutputStream out,
+                                  IRI provenanceAnchor,
+                                  StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
         this.provenanceAnchor = provenanceAnchor;
-        this.communities = communities;
     }
 
-
+    @Override
     public ContentStreamHandler getStreamHandler(BatchingEmitter batchingStatementEmitter) {
-        return new ZoteroStreamHandlerImpl(batchingStatementEmitter, this);
+        return new ZoteroStreamHandlerZenodoImpl(batchingStatementEmitter, this);
     }
 
 
-    private class ZoteroStreamHandlerImpl extends ContentStreamHandlerImpl implements StatementsEmitter {
+    private class ZoteroStreamHandlerZenodoImpl extends ContentStreamHandlerImpl implements StatementsEmitter {
 
         private final ContentStreamHandler handler;
         private final StatementEmitter emitter;
 
-        public ZoteroStreamHandlerImpl(StatementEmitter emitter, Dereferencer<InputStream> deref) {
+        public ZoteroStreamHandlerZenodoImpl(StatementEmitter emitter, Dereferencer<InputStream> deref) {
             this.emitter = emitter;
 
             this.handler = new ContentStreamHandlerImpl(
                     new ArchiveStreamHandler(this),
                     new CompressedStreamHandler(this),
-                    new ZoteroFileStreamHandlerZenodo(
+                    new ZoteroFileStreamHandlerRIS(
                             this,
                             outputStream,
                             processorState,
                             deref,
-                            communities,
                             provenanceAnchor
                     )
             );
