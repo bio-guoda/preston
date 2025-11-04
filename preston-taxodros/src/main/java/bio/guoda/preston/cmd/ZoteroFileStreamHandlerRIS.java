@@ -69,12 +69,6 @@ public class ZoteroFileStreamHandlerRIS extends ZoteroFileStreamHandlerAbstract 
                 ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, providedContentId);
             }
             String zoteroItemUrl = zoteroRecord.at("/links/up/href").asText();
-            appendAttachmentInfo(
-                    zenodoRecord,
-                    StringUtils.isBlank(providedContentId) ? zoteroAttachmentDownloadUrl : providedContentId,
-                    zoteroItemUrl
-            );
-
             IRI zoteroItemIRI = RefNodeFactory.toIRI(zoteroItemUrl);
 
             DerferencerFactory derferencerFactory = () -> timedDereferencer;
@@ -142,7 +136,7 @@ public class ZoteroFileStreamHandlerRIS extends ZoteroFileStreamHandlerAbstract 
 
             String itemType = jsonNode.at("/data/itemType").asText();
             objectNode.put(RISUtil.RIS_PUBLICATION_TYPE,
-                    ZoteroUtil.ZOTERO_TO_ZENODO_PUB_TYPE_TRANSLATION_TABLE.getOrDefault(itemType, "other")
+                    ZoteroUtil.ZOTERO_TO_RIS_PUB_TYPE_TRANSLATION_TABLE.getOrDefault(itemType, "other")
             );
             String dateStringParsed = ZoteroUtil.getPublicationDate(jsonNode);
             objectNode.put(RISUtil.RIS_PUBLICATION_DATE, dateStringParsed);

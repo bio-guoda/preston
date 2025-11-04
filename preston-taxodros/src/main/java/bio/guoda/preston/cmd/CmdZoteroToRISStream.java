@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @CommandLine.Command(
-        name = "zotero-to-ris-stream",
+        name = "zotero2ris",
+        aliases = {"zotero-to-ris-stream"},
         description = "Stream Zotero records into RIS records"
 )
 public class CmdZoteroToRISStream extends LoggingPersisting implements Runnable {

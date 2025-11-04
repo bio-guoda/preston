@@ -20,7 +20,7 @@ public class ZoteroUtil {
     public static final String ZOTERO_CONFERENCE_PAPER = "conferencePaper";
 
     public static final Map<String, String> ZOTERO_TO_RIS_PUB_TYPE_TRANSLATION_TABLE = new TreeMap<String, String>() {{
-        put(ZOTERO_JOURNAL_ARTICLE, ZenodoMetaUtil.PUBLICATION_TYPE_ARTICLE);
+        put(ZOTERO_JOURNAL_ARTICLE, "JOUR");
         put(ZOTERO_BOOK, "BOOK");
         put(ZOTERO_BOOK_SECTION, "CHAP");
         put(ZOTERO_REPORT, "RPRT");

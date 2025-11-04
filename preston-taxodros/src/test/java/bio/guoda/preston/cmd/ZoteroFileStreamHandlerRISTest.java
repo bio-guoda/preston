@@ -30,7 +30,7 @@ public class ZoteroFileStreamHandlerRISTest {
                 if (StringUtils.equals(uri.getIRIString(), "https://api.zotero.org/groups/5435545/items/DP629R8S")) {
                     return getClass().getResourceAsStream("zotero/ZoteroArticle.json");
                 } else {
-                    return IOUtils.toInputStream("hello!", StandardCharsets.UTF_8);
+                    throw new IOException("kaboom!");
                 }
             }
         };
@@ -48,7 +48,7 @@ public class ZoteroFileStreamHandlerRISTest {
         zoteroFileStreamHandlerRIS.handleZoteroRecord(jsonNode, "bla", new AtomicBoolean(true));
 
         assertThat(new String(boas.toByteArray(), StandardCharsets.UTF_8), Is.is(
-                "TY  - article\r\n" +
+                "TY  - JOUR\r\n" +
                         "AU  - Lytras, Spyros\r\n" +
                         "AU  - Hughes, Joseph\r\n" +
                         "AU  - Martin, Darren\r\n" +
