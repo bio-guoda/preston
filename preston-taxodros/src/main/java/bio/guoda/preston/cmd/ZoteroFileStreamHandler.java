@@ -20,41 +20,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ZoteroFileStreamHandler implements ContentStreamHandler {
-    public static final String ZOTERO_JOURNAL_ARTICLE = "journalArticle";
-    public static final String ZOTERO_BOOK = "book";
-    public static final String ZOTERO_BOOK_SECTION = "bookSection";
-    public static final String ZOTERO_PREPRINT = "preprint";
-    public static final String ZOTERO_REPORT = "report";
-    public static final String ZOTERO_THESIS = "thesis";
-    public static final String ZOTERO_CONFERENCE_PAPER = "conferencePaper";
 
-    public static final Map<String, String> ZOTERO_TO_ZENODO_PUB_TYPE_TRANSLATION_TABLE = new TreeMap<String, String>() {{
-        put(ZOTERO_JOURNAL_ARTICLE, ZenodoMetaUtil.PUBLICATION_TYPE_ARTICLE);
-        put(ZOTERO_BOOK, ZenodoMetaUtil.PUBLICATION_TYPE_BOOK);
-        put(ZOTERO_BOOK_SECTION, ZenodoMetaUtil.PUBLICATION_TYPE_BOOK_SECTION);
-        put(ZOTERO_PREPRINT, ZenodoMetaUtil.PUBLICATION_TYPE_PREPRINT);
-        put(ZOTERO_REPORT, ZenodoMetaUtil.PUBLICATION_TYPE_REPORT);
-        put(ZOTERO_THESIS, ZenodoMetaUtil.PUBLICATION_TYPE_THESIS);
-        put(ZOTERO_CONFERENCE_PAPER, ZenodoMetaUtil.PUBLICATION_TYPE_CONFERENCE_PAPER);
-    }};
-    public static final Map<String, String> ZOTERO_TO_RIS_PUB_TYPE_TRANSLATION_TABLE = new TreeMap<String, String>() {{
-        put(ZOTERO_JOURNAL_ARTICLE, ZenodoMetaUtil.PUBLICATION_TYPE_ARTICLE);
-        put(ZOTERO_BOOK, "BOOK");
-        put(ZOTERO_BOOK_SECTION, "CHAP");
-        put(ZOTERO_REPORT, "RPRT");
-        put(ZOTERO_THESIS, "THES");
-        put(ZOTERO_CONFERENCE_PAPER, "CPAPER");
-    }};
     private final Logger LOG = LoggerFactory.getLogger(ZoteroFileStreamHandler.class);
 
 
@@ -190,10 +161,10 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             ZenodoMetaUtil.setType(objectNode, "application/json");
             ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, reference.asText());
 
-            List<String> creatorList = parseCreators(creators);
+            List<String> creatorList = ZoteroUtil.parseCreators(creators);
             ZenodoMetaUtil.setCreators(objectNode, creatorList);
 
-            List<String> tagValues = parseKeywords(jsonNode);
+            List<String> tagValues = ZoteroUtil.parseKeywords(jsonNode);
 
             tagValues.forEach(tagValue -> ZenodoMetaUtil.addKeyword(objectNode, tagValue));
 
@@ -201,27 +172,27 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
 
             ZenodoMetaUtil.setValue(objectNode,
                     ZenodoMetaUtil.PUBLICATION_TYPE,
-                    ZOTERO_TO_ZENODO_PUB_TYPE_TRANSLATION_TABLE.getOrDefault(itemType, "other")
+                    ZoteroUtil.ZOTERO_TO_ZENODO_PUB_TYPE_TRANSLATION_TABLE.getOrDefault(itemType, "other")
             );
-            String dateStringParsed = getPublicationDate(jsonNode);
+            String dateStringParsed = ZoteroUtil.getPublicationDate(jsonNode);
             ZenodoMetaUtil.setPublicationDate(objectNode, dateStringParsed);
-            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, getTitle(jsonNode));
+            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.TITLE, ZoteroUtil.getTitle(jsonNode));
 
 
-            if (StringUtils.equals(itemType, ZOTERO_JOURNAL_ARTICLE)) {
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_TITLE, getJournalTitle(jsonNode));
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_VOLUME, getJournalVolume(jsonNode));
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_ISSUE, getJournalIssue(jsonNode));
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_PAGES, getJournalPages(jsonNode));
+            if (StringUtils.equals(itemType, ZoteroUtil.ZOTERO_JOURNAL_ARTICLE)) {
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_TITLE, ZoteroUtil.getJournalTitle(jsonNode));
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_VOLUME, ZoteroUtil.getJournalVolume(jsonNode));
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_ISSUE, ZoteroUtil.getJournalIssue(jsonNode));
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.JOURNAL_PAGES, ZoteroUtil.getJournalPages(jsonNode));
             }
 
-            if (Arrays.asList(ZOTERO_BOOK, ZOTERO_BOOK_SECTION).contains(itemType)) {
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.IMPRINT_PUBLISHER, getPublisherName(jsonNode));
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.PARTOF_PAGES, getJournalPages(jsonNode));
-                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.PARTOF_TITLE, getBookTitle(jsonNode));
+            if (Arrays.asList(ZoteroUtil.ZOTERO_BOOK, ZoteroUtil.ZOTERO_BOOK_SECTION).contains(itemType)) {
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.IMPRINT_PUBLISHER, ZoteroUtil.getPublisherName(jsonNode));
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.PARTOF_PAGES, ZoteroUtil.getJournalPages(jsonNode));
+                ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.PARTOF_TITLE, ZoteroUtil.getBookTitle(jsonNode));
             }
 
-            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, getDOI(jsonNode));
+            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, ZoteroUtil.getDOI(jsonNode));
 
 
             StringBuilder description = new StringBuilder();
@@ -243,7 +214,7 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
                 description.append("(Uploaded by Plazi for the Bat Literature Project) ");
             }
 
-            String abstractNote = getAbstract(jsonNode);
+            String abstractNote = ZoteroUtil.getAbstract(jsonNode);
 
             String abstractString = StringUtils.isBlank(abstractNote)
                     ? "No abstract provided."
@@ -256,88 +227,6 @@ public class ZoteroFileStreamHandler implements ContentStreamHandler {
             );
         }
         return isLikelyZoteroRecord;
-    }
-
-    public static String getDOI(JsonNode jsonNode) {
-        return jsonNode.at("/data/DOI").asText();
-    }
-
-    public static String getBookTitle(JsonNode jsonNode) {
-        return jsonNode.at("/data/bookTitle").asText();
-    }
-
-    public static String getPublisherName(JsonNode jsonNode) {
-        return jsonNode.at("/data/publisher").asText();
-    }
-
-    public static String getJournalPages(JsonNode jsonNode) {
-        return jsonNode.at("/data/pages").asText();
-    }
-
-    public static String getJournalIssue(JsonNode jsonNode) {
-        return jsonNode.at("/data/issue").asText();
-    }
-
-    public static String getJournalVolume(JsonNode jsonNode) {
-        return jsonNode.at("/data/volume").asText();
-    }
-
-    public static String getJournalTitle(JsonNode jsonNode) {
-        return jsonNode.at("/data/publicationTitle").asText();
-    }
-
-    public static String getTitle(JsonNode jsonNode) {
-        return jsonNode.at("/data/title").asText();
-    }
-
-    public static List<String> parseKeywords(JsonNode jsonNode) {
-        JsonNode tags = jsonNode.at("/data/tags");
-        List<String> tagValues = new ArrayList<>();
-        if (!tags.isMissingNode() && tags.isArray()) {
-            tags.forEach(t -> {
-                if (t.has("tag")) {
-                    String tagValue = t.get("tag").asText();
-                    tagValues.add(tagValue);
-                }
-            });
-        }
-        return tagValues;
-    }
-
-    public static String getPublicationDate(JsonNode jsonNode) {
-        String dateString = jsonNode.at("/data/date").asText();
-        return parseDate(dateString);
-    }
-
-    public static String getAbstract(JsonNode jsonNode) {
-        return jsonNode.at("/data/abstractNote").textValue();
-    }
-
-    public static List<String> parseCreators(JsonNode creators) {
-        List<String> creatorList = new ArrayList<>();
-        if (creators.isArray()) {
-            for (JsonNode creator : creators) {
-                if (creator.has("firstName") && creator.has("lastName")) {
-                    creatorList.add(creator.get("lastName").asText() + ", " + creator.get("firstName").asText());
-                } else if (creator.has("name")) {
-                    creatorList.add(creator.get("name").asText());
-                }
-            }
-        }
-        return creatorList;
-    }
-
-    public static String parseDate(String publicationDate) {
-        String publicationDate8601 = null;
-        Pattern iso8601 = Pattern.compile(".*(?<year>[0-9]{4})(?<month>[-][01][0-9]){0,1}(?<day>[-][0123][0-9]){0,1}.*");
-        Matcher matcher = iso8601.matcher(publicationDate);
-        if (matcher.matches()) {
-            publicationDate8601 =
-                    matcher.group("year")
-                            + StringUtils.defaultIfBlank(matcher.group("month"), "")
-                            + StringUtils.defaultIfBlank(matcher.group("day"), "");
-        }
-        return publicationDate8601;
     }
 
 
