@@ -44,6 +44,7 @@ public class ResourcesHTTP {
 
     public static final String ZENODO_AUTH_TOKEN = "ZENODO_TOKEN";
     public static final String ZOTERO_AUTH_TOKEN = "ZOTERO_TOKEN";
+    public static final String GOOGLE_AUTH_TOKEN = "GOOGLE_TOKEN";
     public static final String GITHUB_AUTH_TOKEN = "GITHUB_TOKEN";
 
     private static final List<Integer> REDIRECT_CODES = Arrays.asList(
@@ -100,6 +101,7 @@ public class ResourcesHTTP {
     }
 
     private static void injectAuthorizationIfPossible(IRI dataURI, HttpMessage msg) {
+        Pattern googleUrlPattern = Pattern.compile("https://[a-z]+.google.com/.*");
         if (StringUtils.startsWith(dataURI.getIRIString(), "https://ghcr.io")) {
             msg.addHeader("Authorization", "Bearer QQ==");
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.github.com/") || StringUtils.startsWith(dataURI.getIRIString(), "https://github.com/")) {
@@ -107,6 +109,8 @@ public class ResourcesHTTP {
             appendGitHubAuthTokenIfAvailable(msg);
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.zotero.org/")) {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, ZOTERO_AUTH_TOKEN);
+        } if (googleUrlPattern.matcher(dataURI.getIRIString()).matches()) {
+            appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, GOOGLE_AUTH_TOKEN);
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://zenodo.org/api")
                 || StringUtils.startsWith(dataURI.getIRIString(), "https://sandbox.zenodo.org/api")) {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, ZENODO_AUTH_TOKEN);

@@ -138,6 +138,18 @@ public class ResourcesHTTPIT {
     }
 
     @Test
+    public void googleAuth() throws IOException {
+        //System.setProperty("GOOGLE_TOKEN", "[some access token]");
+        try (InputStream is
+                     = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://docs.google.com/document/u/0/export?id=1hf_rYn6T8QgnyBoiHvMLZphq9h4BNKPBIoWE5uCzz84&tab=t.0&format=md")))) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            IOUtils.copy(is, outputStream);
+            assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is("this is a secret"));
+        }
+
+    }
+
+    @Test
     public void zenodoAuthQueryRestrictedContentByZenodoIndexedContentHash() throws IOException {
         // Zenodo does not support searching restricted content by their Zenodo indexed hash
         try (InputStream is
