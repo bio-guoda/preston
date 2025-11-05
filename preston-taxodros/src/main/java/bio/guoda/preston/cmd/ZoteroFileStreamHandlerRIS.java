@@ -1,7 +1,6 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.HashType;
-import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.process.ZoteroUtil;
 import bio.guoda.preston.store.Dereferencer;
@@ -21,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -56,9 +57,10 @@ public class ZoteroFileStreamHandlerRIS extends ZoteroFileStreamHandlerAbstract 
         ObjectNode zenodoRecord = new ObjectMapper().createObjectNode();
 
         String zoteroAttachmentDownloadUrl = ZoteroUtil.getAttachmentDownloadUrl(zoteroRecord);
-        String providedContentId = null;
+        String providedContentId;
 
         if (hasPdfAttachment(zoteroRecord, zoteroAttachmentDownloadUrl)) {
+            List<String> links = new ArrayList<>();
             String filename = zoteroRecord.at("/data/filename").asText();
             if (StringUtils.isNoneBlank(filename)) {
                 ZenodoMetaUtil.setFilename(zenodoRecord, filename);
@@ -66,12 +68,22 @@ public class ZoteroFileStreamHandlerRIS extends ZoteroFileStreamHandlerAbstract 
             String md5 = zoteroRecord.at("/data/md5").asText();
             if (StringUtils.isNoneBlank(md5)) {
                 providedContentId = HashType.md5.getPrefix() + md5;
-                ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, providedContentId);
+                addZenodoQueryLink(links, providedContentId);
+
+                StreamHandlerUtil.makeActionable(providedContentId);
             }
             String zoteroItemUrl = zoteroRecord.at("/links/up/href").asText();
             IRI zoteroItemIRI = RefNodeFactory.toIRI(zoteroItemUrl);
 
             DerferencerFactory derferencerFactory = () -> timedDereferencer;
+
+
+            String zoteroLSID = getZoteroLSID(zoteroItemUrl);
+
+            addZenodoQueryLink(links, zoteroLSID);
+            links.add(zoteroLSID);
+            links.add(getZoteroSelector(zoteroItemUrl));
+            links.add(getZoteroHtmlPage(zoteroItemUrl));
 
             InputStream itemInputStream = ContentQueryUtil.getContent(
                     zoteroItemIRI,
@@ -81,20 +93,74 @@ public class ZoteroFileStreamHandlerRIS extends ZoteroFileStreamHandlerAbstract 
 
             JsonNode itemData = new ObjectMapper().readTree(itemInputStream);
             if (isPrimaryAttachmentOf(zoteroAttachmentDownloadUrl, itemData)) {
-                boolean isLikelyZoteroRecord = appendJournalArticleMetaData(
-                        iriString,
-                        itemData,
-                        zenodoRecord
+                boolean isLikelyZoteroRecord1 = isIsLikelyZoteroRecord(itemData);
+                if (isLikelyZoteroRecord1) {
+                    List<String> creatorList = ZoteroUtil.parseCreators(getCreators(itemData));
+                    setArray(zenodoRecord, creatorList, RISUtil.RIS_AUTHOR_NAME);
+
+                    List<String> tagValues = ZoteroUtil.parseKeywords(itemData);
+                    setArray(zenodoRecord, tagValues, RISUtil.RIS_KEYWORD);
+
+                    String itemType = itemData.at("/data/itemType").asText();
+                    setTagValue(zenodoRecord, RISUtil.RIS_PUBLICATION_TYPE, ZoteroUtil.ZOTERO_TO_RIS_PUB_TYPE_TRANSLATION_TABLE.getOrDefault(itemType, "GEN"));
+                    String dateStringParsed = ZoteroUtil.getPublicationDate(itemData);
+                    setTagValue(zenodoRecord, RISUtil.RIS_PUBLICATION_DATE, dateStringParsed);
+                    setTagValue(zenodoRecord, RISUtil.RIS_TITLE, ZoteroUtil.getTitle(itemData));
+
+
+                    if (StringUtils.equals(itemType, ZoteroUtil.ZOTERO_JOURNAL_ARTICLE)) {
+                        setTagValue(zenodoRecord, RISUtil.RIS_JOURNAL_TITLE, ZoteroUtil.getJournalTitle(itemData));
+                        setTagValue(zenodoRecord, RISUtil.RIS_JOURNAL_VOLUME, ZoteroUtil.getJournalVolume(itemData));
+                        setTagValue(zenodoRecord, RISUtil.RIS_JOURNAL_ISSUE, ZoteroUtil.getJournalIssue(itemData));
+                        setTagValue(zenodoRecord, RISUtil.RIS_JOURNAL_PAGES, ZoteroUtil.getJournalPages(itemData));
+                    }
+
+                    if (Arrays.asList(ZoteroUtil.ZOTERO_BOOK, ZoteroUtil.ZOTERO_BOOK_SECTION).contains(itemType)) {
+                        setTagValue(zenodoRecord, RISUtil.RIS_IMPRINT_PUBLISHER, ZoteroUtil.getPublisherName(itemData));
+                        setTagValue(zenodoRecord, RISUtil.RIS_TITLE, ZoteroUtil.getBookTitle(itemData));
+                        setTagValue(zenodoRecord, RISUtil.RIS_JOURNAL_PAGES, ZoteroUtil.getJournalVolume(itemData));
+                    }
+
+                    String doi = ZoteroUtil.getDOI(itemData);
+                    if (StringUtils.isNotBlank(doi)) {
+                        setTagValue(zenodoRecord, RISUtil.RIS_DOI, doi);
+                    }
+
+                    String abstractNote = ZoteroUtil.getAbstract(itemData);
+                    if (StringUtils.isNotBlank(abstractNote)) {
+                        setTagValue(zenodoRecord, RISUtil.RIS_ABSTRACT, abstractNote);
+                    }
+                }
+
+                links.add(StreamHandlerUtil.makeActionable(iriString));
+                links.add(StreamHandlerUtil.makeActionable(getProvenanceAnchor().getIRIString()));
+
+                setArray(zenodoRecord,
+                        links,
+                        RISUtil.RIS_URL
                 );
+                ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_DERIVED_FROM, StreamHandlerUtil.makeActionable(iriString));
+                ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_PART_OF, getProvenanceAnchor().getIRIString());
+                ZenodoMetaUtil.setValue(zenodoRecord, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
+                ZenodoMetaUtil.setType(zenodoRecord, "application/json");
+                ZenodoMetaUtil.setValue(zenodoRecord, ZenodoMetaUtil.REFERENCE_ID, getReference(itemData).asText());
 
-                ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_COMPILED_BY, RefNodeConstants.PRESTON_DOI, ZenodoMetaUtil.RESOURCE_TYPE_SOFTWARE);
-
-                if (isLikelyZoteroRecord) {
+                if (isLikelyZoteroRecord1) {
                     foundAtLeastOne.set(true);
                     writeRecord(foundAtLeastOne, zenodoRecord);
                 }
             }
 
+        }
+    }
+
+    private static void addZenodoQueryLink(List<String> links, String query) {
+        URI uri;
+        try {
+            uri = new URI("https", null, "zenodo.org", -1, "/search", "q=\"" + query + "\"", null);
+            links.add(uri.toString());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -114,57 +180,19 @@ public class ZoteroFileStreamHandlerRIS extends ZoteroFileStreamHandlerAbstract 
         return hasPdfAttachment;
     }
 
-    private boolean appendJournalArticleMetaData(String iriString, JsonNode jsonNode, ObjectNode objectNode) {
-        JsonNode reference = jsonNode.at("/links/self/href");
-        JsonNode creators = jsonNode.at("/data/creators");
-        boolean isLikelyZoteroRecord = !reference.isMissingNode()
-                && !creators.isMissingNode()
-                && StringUtils.contains(reference.asText(), "zotero.org");
-        if (isLikelyZoteroRecord) {
-            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.WAS_DERIVED_FROM, StreamHandlerUtil.makeActionable(iriString));
-            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, StreamHandlerUtil.makeActionable(iriString));
-            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_PART_OF, getProvenanceAnchor().getIRIString());
-            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
-            ZenodoMetaUtil.setType(objectNode, "application/json");
-            ZenodoMetaUtil.setValue(objectNode, ZenodoMetaUtil.REFERENCE_ID, reference.asText());
-
-            List<String> creatorList = ZoteroUtil.parseCreators(creators);
-            setArray(objectNode, creatorList, RISUtil.RIS_AUTHOR_NAME);
-
-            List<String> tagValues = ZoteroUtil.parseKeywords(jsonNode);
-            setArray(objectNode, tagValues, RISUtil.RIS_KEYWORD);
-
-            String itemType = jsonNode.at("/data/itemType").asText();
-            setTagValue(objectNode, RISUtil.RIS_PUBLICATION_TYPE, ZoteroUtil.ZOTERO_TO_RIS_PUB_TYPE_TRANSLATION_TABLE.getOrDefault(itemType, "GEN"));
-            String dateStringParsed = ZoteroUtil.getPublicationDate(jsonNode);
-            setTagValue(objectNode, RISUtil.RIS_PUBLICATION_DATE, dateStringParsed);
-            setTagValue(objectNode, RISUtil.RIS_TITLE, ZoteroUtil.getTitle(jsonNode));
-
-
-            if (StringUtils.equals(itemType, ZoteroUtil.ZOTERO_JOURNAL_ARTICLE)) {
-                setTagValue(objectNode, RISUtil.RIS_JOURNAL_TITLE, ZoteroUtil.getJournalTitle(jsonNode));
-                setTagValue(objectNode, RISUtil.RIS_JOURNAL_VOLUME, ZoteroUtil.getJournalVolume(jsonNode));
-                setTagValue(objectNode, RISUtil.RIS_JOURNAL_ISSUE, ZoteroUtil.getJournalIssue(jsonNode));
-                setTagValue(objectNode, RISUtil.RIS_JOURNAL_PAGES, ZoteroUtil.getJournalPages(jsonNode));
-            }
-
-            if (Arrays.asList(ZoteroUtil.ZOTERO_BOOK, ZoteroUtil.ZOTERO_BOOK_SECTION).contains(itemType)) {
-                setTagValue(objectNode, RISUtil.RIS_IMPRINT_PUBLISHER, ZoteroUtil.getPublisherName(jsonNode));
-                setTagValue(objectNode, RISUtil.RIS_TITLE, ZoteroUtil.getBookTitle(jsonNode));
-                setTagValue(objectNode, RISUtil.RIS_JOURNAL_PAGES, ZoteroUtil.getJournalVolume(jsonNode));
-            }
-
-            String doi = ZoteroUtil.getDOI(jsonNode);
-            if (StringUtils.isNotBlank(doi)) {
-                setTagValue(objectNode, RISUtil.RIS_DOI, doi);
-            }
-
-            String abstractNote = ZoteroUtil.getAbstract(jsonNode);
-            if (StringUtils.isNotBlank(abstractNote)) {
-                setTagValue(objectNode, RISUtil.RIS_ABSTRACT, abstractNote);
-            }
-        }
+    private static boolean isIsLikelyZoteroRecord(JsonNode jsonNode) {
+        boolean isLikelyZoteroRecord = !getReference(jsonNode).isMissingNode()
+                && !getCreators(jsonNode).isMissingNode()
+                && StringUtils.contains(getReference(jsonNode).asText(), "zotero.org");
         return isLikelyZoteroRecord;
+    }
+
+    private static JsonNode getCreators(JsonNode jsonNode) {
+        return jsonNode.at("/data/creators");
+    }
+
+    private static JsonNode getReference(JsonNode jsonNode) {
+        return jsonNode.at("/links/self/href");
     }
 
     private static void setTagValue(ObjectNode objectNode, String tagName, String tagValue) {
@@ -179,14 +207,6 @@ public class ZoteroFileStreamHandlerRIS extends ZoteroFileStreamHandlerAbstract 
         objectNode.set(risKeyword, keywords);
     }
 
-
-    private void appendAttachmentInfo(ObjectNode objectNode, String zoteroAttachmentDownloadUrl, String zoteroItemUrl) throws ContentStreamException {
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, getZoteroLSID(zoteroItemUrl));
-        appendContentId(objectNode, zoteroAttachmentDownloadUrl, HashType.md5);
-        appendContentId(objectNode, zoteroAttachmentDownloadUrl, HashType.sha256);
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, getZoteroSelector(zoteroItemUrl));
-        ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_DERIVED_FROM, getZoteroHtmlPage(zoteroItemUrl));
-    }
 
     private void appendContentId(ObjectNode objectNode, String zoteroAttachmentDownloadUrl, HashType hashType) throws ContentStreamException {
 

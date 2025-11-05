@@ -29,6 +29,8 @@ public class ZoteroFileStreamHandlerRISTest {
             public InputStream get(IRI uri) throws IOException {
                 if (StringUtils.equals(uri.getIRIString(), "https://api.zotero.org/groups/5435545/items/DP629R8S")) {
                     return getClass().getResourceAsStream("zotero/ZoteroArticle.json");
+                } else if (StringUtils.equals("hash://md5/00335a95492b82cc0862e6bcc88497c4", uri.getIRIString())) {
+                    return IOUtils.toInputStream("hello", StandardCharsets.UTF_8);
                 } else {
                     throw new IOException("kaboom!");
                 }
@@ -67,6 +69,13 @@ public class ZoteroFileStreamHandlerRISTest {
                         "SP  - 1-14\r\n" +
                         "DO  - 10.1093/gbe/evac018\r\n" +
                         "AB  - Exploring the natural origins of SARS-CoV-2 Spyros Lytras1, Joseph Hughes1, Xiaowei Jiang2, David L Robertson1  1MRC-University of Glasgow Centre for Virus Research (CVR), Glasgow, UK.  2Department of Biological Sciences, Xi’an Jiaotong-Liverpool University (XJTLU), Suzhou, China.  The lack of an identifiable intermediate host species for the proximal animal ancestor of SARS-CoV-2 and the distance (~1500 km) from Wuhan to Yunnan province, where the closest evolutionary related coronaviruses circ...\r\n" +
+                        "UR  - https://zenodo.org/search?q=%22hash://md5/00335a95492b82cc0862e6bcc88497c4%22\r\n" +
+                        "UR  - https://zenodo.org/search?q=%22urn:lsid:zotero.org:groups:5435545:items:DP629R8S%22\r\n" +
+                        "UR  - urn:lsid:zotero.org:groups:5435545:items:DP629R8S\r\n" +
+                        "UR  - zotero://select/groups/5435545/items/DP629R8S\r\n" +
+                        "UR  - https://zotero.org/groups/5435545/items/DP629R8S\r\n" +
+                        "UR  - https://linker.bio/bla\r\n" +
+                        "UR  - https://linker.bio/hash://md5/b1946ac92492d2347c6235b4d2611184\r\n" +
                         "ER  - \r\n"));
 
     }
