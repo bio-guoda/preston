@@ -54,16 +54,6 @@ public class KeyTo1LevelZenodoByAnchor implements KeyToPath {
         return path;
     }
 
-    public static String parseZenodoFilesEndpoint(URI fileURI) {
-        String filesEndpoint = null;
-        String uriString = fileURI.toString();
-        Matcher matcher = Pattern.compile("https://zenodo.org.*(?<filesEndpoint>/records/[0-9]+/files/).*").matcher(uriString);
-        if (matcher.matches()) {
-            filesEndpoint = "https://zenodo.org" + matcher.group("filesEndpoint");
-        }
-        return filesEndpoint;
-    }
-
     @Override
     public boolean supports(IRI key) {
         return HashType.md5.equals(HashKeyUtil.hashTypeFor(key));
