@@ -264,7 +264,7 @@ public class KeyValueStoreUtil {
             KeyToPath keyToPath,
             DerefProgressListener progressListener) {
         return withStoreAt(keyToPath,
-                new DereferencerContentAddressedTarGZ(getDerefStream(remote, progressListener)));
+                new DereferencerContentAddressedInArchive(getDerefStream(remote, progressListener)));
     }
 
     private static KeyValueStoreReadOnly remoteWithTarGzCacheAll(
@@ -273,8 +273,8 @@ public class KeyValueStoreUtil {
             KeyToPath keyToPath,
             DerefProgressListener progressListener,
             HashType hashType) {
-        DereferencerContentAddressedTarGZ dereferencer =
-                new DereferencerContentAddressedTarGZ(
+        DereferencerContentAddressedInArchive dereferencer =
+                new DereferencerContentAddressedInArchive(
                         getDerefStream(remote, progressListener),
                         new BlobStoreAppendOnly(keyValueStore, false, hashType));
 

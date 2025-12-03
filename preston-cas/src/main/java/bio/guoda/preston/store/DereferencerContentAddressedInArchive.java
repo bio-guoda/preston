@@ -15,16 +15,16 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.zip.GZIPInputStream;
 
-public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStream> {
+public class DereferencerContentAddressedInArchive implements Dereferencer<InputStream> {
     private final Dereferencer<InputStream> dereferencer;
 
     private final BlobStore blobStore;
 
-    public DereferencerContentAddressedTarGZ(Dereferencer<InputStream> dereferencer) {
+    public DereferencerContentAddressedInArchive(Dereferencer<InputStream> dereferencer) {
         this(dereferencer, null);
     }
 
-    public DereferencerContentAddressedTarGZ(Dereferencer<InputStream> dereferencer, BlobStore blobStore) {
+    public DereferencerContentAddressedInArchive(Dereferencer<InputStream> dereferencer, BlobStore blobStore) {
         this.dereferencer = dereferencer;
         this.blobStore = blobStore;
     }
@@ -47,47 +47,57 @@ public class DereferencerContentAddressedTarGZ implements Dereferencer<InputStre
                             : dereferencer.get(RefNodeFactory.toIRI(archiveURL));
                     if (data != null) {
                         if (StringUtils.startsWith(iriString, "tgz:")) {
-                            TarArchiveInputStream tarInputStream = new TarArchiveInputStream(new GZIPInputStream(data));
-                            TarArchiveEntry entry;
-                            while ((entry = tarInputStream.getNextEntry()) != null) {
-                                if (entry.isFile()) {
-                                    if (blobStore == null) {
-                                        IRI foundHashIRI = extractHashURI(entry.getName());
-                                        if (foundHashIRI != null && foundHashIRI.equals(expectedHashIRI)) {
-                                            inputStream = tarInputStream;
-                                            break;
-                                        }
-                                    } else {
-                                        blobStore.put(tarInputStream);
-                                    }
-                                }
-                            }
-                            if (blobStore != null) {
-                                inputStream = blobStore.get(expectedHashIRI);
-                            }
+                            inputStream = getInputStreamTarGz(data, expectedHashIRI, inputStream);
                         } else if (StringUtils.startsWith(iriString, "zip:")) {
-                            ZipArchiveInputStream tarInputStream = new ZipArchiveInputStream((data));
-                            ZipArchiveEntry entry;
-                            while ((entry = tarInputStream.getNextEntry()) != null) {
-                                if (!entry.isDirectory()) {
-                                    if (blobStore == null) {
-                                        IRI foundHashIRI = extractHashURI(entry.getName());
-                                        if (foundHashIRI != null && foundHashIRI.equals(expectedHashIRI)) {
-                                            inputStream = tarInputStream;
-                                            break;
-                                        }
-                                    } else {
-                                        blobStore.put(tarInputStream);
-                                    }
-                                }
-                            }
-                            if (blobStore != null) {
-                                inputStream = blobStore.get(expectedHashIRI);
-                            }
+                            inputStream = getInputStreamZip(data, expectedHashIRI, inputStream);
                         }
                     }
                 }
             }
+        }
+        return inputStream;
+    }
+
+    private InputStream getInputStreamZip(InputStream data, IRI expectedHashIRI, InputStream inputStream) throws IOException {
+        ZipArchiveInputStream tarInputStream = new ZipArchiveInputStream(data);
+        ZipArchiveEntry entry;
+        while ((entry = tarInputStream.getNextEntry()) != null) {
+            if (!entry.isDirectory()) {
+                if (blobStore == null) {
+                    IRI foundHashIRI = extractHashURI(entry.getName());
+                    if (foundHashIRI != null && foundHashIRI.equals(expectedHashIRI)) {
+                        inputStream = tarInputStream;
+                        break;
+                    }
+                } else {
+                    blobStore.put(tarInputStream);
+                }
+            }
+        }
+        if (blobStore != null) {
+            inputStream = blobStore.get(expectedHashIRI);
+        }
+        return inputStream;
+    }
+
+    private InputStream getInputStreamTarGz(InputStream data, IRI expectedHashIRI, InputStream inputStream) throws IOException {
+        TarArchiveInputStream tarInputStream = new TarArchiveInputStream(new GZIPInputStream(data));
+        TarArchiveEntry entry;
+        while ((entry = tarInputStream.getNextEntry()) != null) {
+            if (entry.isFile()) {
+                if (blobStore == null) {
+                    IRI foundHashIRI = extractHashURI(entry.getName());
+                    if (foundHashIRI != null && foundHashIRI.equals(expectedHashIRI)) {
+                        inputStream = tarInputStream;
+                        break;
+                    }
+                } else {
+                    blobStore.put(tarInputStream);
+                }
+            }
+        }
+        if (blobStore != null) {
+            inputStream = blobStore.get(expectedHashIRI);
         }
         return inputStream;
     }
