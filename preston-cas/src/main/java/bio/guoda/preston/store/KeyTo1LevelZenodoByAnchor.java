@@ -14,7 +14,6 @@ public class KeyTo1LevelZenodoByAnchor implements KeyToPath {
 
     private final KeyToPath anchoredDepositLookup;
 
-    private final Map<IRI, URI> fileURIForAnchor = new TreeMap<>();
     private final IRI anchor;
 
     public KeyTo1LevelZenodoByAnchor(KeyToPath keyToPath, IRI anchor) {
@@ -40,10 +39,10 @@ public class KeyTo1LevelZenodoByAnchor implements KeyToPath {
                                     matcher.group("contentId"),
                                     keyType.getPrefix().length()
                             );
-                            path = URI.create("zip:" + iri.getIRIString()+ "!/data"
-                                            + "/" + StringUtils.substring(hexString, 0, 2)
-                                            + "/" + StringUtils.substring(hexString, 2, 4)
-                                            + "/" + hexString);
+                            path = URI.create("zip:" + iri.getIRIString() + "!/data"
+                                    + "/" + StringUtils.substring(hexString, 0, 2)
+                                    + "/" + StringUtils.substring(hexString, 2, 4)
+                                    + "/" + hexString);
                             System.out.println("attempting: [" + path + "]");
                         }
                     }
@@ -55,7 +54,8 @@ public class KeyTo1LevelZenodoByAnchor implements KeyToPath {
 
     @Override
     public boolean supports(IRI key) {
-        return HashType.md5.equals(HashKeyUtil.hashTypeFor(anchor))
+        return anchor != null
+                && HashType.md5.equals(HashKeyUtil.hashTypeFor(anchor))
                 && HashKeyUtil.isValidHashKey(key);
     }
 
