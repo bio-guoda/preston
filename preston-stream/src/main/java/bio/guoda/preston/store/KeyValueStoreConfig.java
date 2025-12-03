@@ -18,7 +18,7 @@ public class KeyValueStoreConfig {
     private final List<URI> remotes;
     private final HashType hashType;
     private final DerefProgressListener progressListener;
-    private final boolean supportTarGzDiscovery;
+    private final boolean supportContentInArchives;
     private final IRI anchor;
 
     public KeyValueStoreConfig(File dataDir,
@@ -28,7 +28,7 @@ public class KeyValueStoreConfig {
                                List<URI> remotes,
                                HashType hashType,
                                DerefProgressListener progressListener,
-                               boolean supportTarGzDiscovery) {
+                               boolean supportContentInArchives) {
         this(dataDir,
                 tmpDir,
                 directoryDepth,
@@ -36,7 +36,7 @@ public class KeyValueStoreConfig {
                 remotes,
                 hashType,
                 progressListener,
-                supportTarGzDiscovery,
+                supportContentInArchives,
                 null
         );
     }
@@ -53,7 +53,7 @@ public class KeyValueStoreConfig {
         );
     }
 
-    public KeyValueStoreConfig(File dataDir, File tmpDir, int directoryDepth, boolean cacheEnabled, List<URI> remotes, HashType hashType, DerefProgressListener progressListener, boolean supportTarGzDiscovery, IRI provenanceAnchor) {
+    public KeyValueStoreConfig(File dataDir, File tmpDir, int directoryDepth, boolean cacheEnabled, List<URI> remotes, HashType hashType, DerefProgressListener progressListener, boolean supportContentInArchives, IRI provenanceAnchor) {
         this.dataDir = dataDir;
         this.tmpDir = tmpDir;
         this.directoryDepth = directoryDepth;
@@ -61,7 +61,7 @@ public class KeyValueStoreConfig {
         this.remotes = remotes;
         this.hashType = hashType;
         this.progressListener = progressListener;
-        this.supportTarGzDiscovery = supportTarGzDiscovery;
+        this.supportContentInArchives = supportContentInArchives;
         this.anchor = provenanceAnchor;
     }
 
@@ -93,8 +93,8 @@ public class KeyValueStoreConfig {
         return progressListener;
     }
 
-    public boolean isSupportTarGzDiscovery() {
-        return supportTarGzDiscovery;
+    public boolean isSupportContentInArchives() {
+        return supportContentInArchives;
     }
 
     public IRI getAnchor() {

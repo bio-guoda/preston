@@ -109,9 +109,9 @@ public class KeyValueStoreUtil {
                 );
 
         List<KeyValueStoreReadOnly> keyValueStoreRemotes =
-                config.isSupportTarGzDiscovery()
-                        ? includeTarGzSupport(keyToPathStreams, keyValueStore, config)
-                        : defaultRemotePathSupport(keyToPathStreams, config).collect(Collectors.toList());
+                config.isSupportContentInArchives()
+                        ? includeSupportForContentInArchives(keyToPathStreams, keyValueStore, config)
+                        : remotePathSupportDefault(keyToPathStreams, config).collect(Collectors.toList());
 
 
         if (config.isCacheEnabled()) {
@@ -167,7 +167,7 @@ public class KeyValueStoreUtil {
                 );
     }
 
-    private static Stream<KeyValueStoreReadOnly> defaultRemotePathSupport(
+    private static Stream<KeyValueStoreReadOnly> remotePathSupportDefault(
             Stream<Pair<URI, KeyToPath>> keyToPathStream,
             KeyValueStoreConfig config) {
         return keyToPathStream.map(
@@ -180,24 +180,24 @@ public class KeyValueStoreUtil {
         );
     }
 
-    private static List<KeyValueStoreReadOnly> includeTarGzSupport(
+    private static List<KeyValueStoreReadOnly> includeSupportForContentInArchives(
             Stream<Pair<URI, KeyToPath>> keyToPathStream,
             KeyValueStore keyValueStore,
             KeyValueStoreConfig config
     ) {
         return Stream.concat(
-                defaultRemotePathSupport(
+                remotePathSupportDefault(
                         keyToPathStream,
                         config
                 ),
-                tarGzRemotePathSupport(
+                remotePathSupportForContentInArchives(
                         keyValueStore,
                         config
                 )
         ).collect(Collectors.toList());
     }
 
-    private static Stream<KeyValueStoreReadOnly> tarGzRemotePathSupport(
+    private static Stream<KeyValueStoreReadOnly> remotePathSupportForContentInArchives(
             KeyValueStore keyValueStore,
             KeyValueStoreConfig config) {
         return config.getRemotes().stream().flatMap(remote -> Stream.of(
