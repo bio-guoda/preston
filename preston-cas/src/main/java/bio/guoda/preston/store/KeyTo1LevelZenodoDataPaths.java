@@ -157,41 +157,6 @@ public class KeyTo1LevelZenodoDataPaths implements KeyToPath {
         return uri;
     }
 
-    private static boolean isRestricted(JsonNode hit) {
-        JsonNode metadata = hit.get("metadata");
-        return metadata != null && metadata.has("access_right")
-                && StringUtils.equals("restricted", metadata.get("access_right").asText());
-    }
-
-    private static URI getFirstFileUrl(String suffix, JsonNode hit) {
-        JsonNode files = hit.get("files");
-        for (JsonNode file : files) {
-            if (file.has("checksum")) {
-                String checksum = file.get("checksum").asText();
-                if (StringUtils.equals(suffix, checksum)
-                        || StringUtils.equals("md5:" + suffix, checksum)) {
-                    if (file.has("links")) {
-                        JsonNode links = file.get("links");
-                        if (links.has("download")) {
-                            return URI.create(links.get("download").asText());
-                        } else if (links.has("self")) {
-                            String selfURI = links.get("self").asText();
-                            return getFileURI(selfURI);
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    private static URI getFileURI(String selfURI) {
-        Matcher matcher = URL_PATTERN_SELF.matcher(selfURI);
-        return matcher.matches()
-                ? URI.create(matcher.group("prefix") + JavaScriptAndPythonFriendlyURLEncodingUtil.urlEncode(matcher.group("filename")) + matcher.group("suffix"))
-                : URI.create(selfURI);
-    }
-
     @Override
     public boolean supports(IRI key) {
         return HashType.md5.equals(HashKeyUtil.hashTypeFor(key));
