@@ -27,7 +27,6 @@ public class KeyTo1LevelZenodoDataPaths implements KeyToPath {
     private final Dereferencer<InputStream> deref;
     private final String prefix;
     private final String suffix;
-    private static final Pattern URL_PATTERN_SELF = Pattern.compile("(?<prefix>^http.*([0-9]+)/files/)(?<filename>[^/]+)(?<suffix>/content)");
 
     public KeyTo1LevelZenodoDataPaths(URI remote, Dereferencer<InputStream> deref) {
         this(remote, deref, ZENODO_API_PREFIX, ZENODO_API_SUFFIX);
