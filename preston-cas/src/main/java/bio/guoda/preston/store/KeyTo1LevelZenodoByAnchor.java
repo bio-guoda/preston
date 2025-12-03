@@ -9,7 +9,6 @@ import java.net.URI;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class KeyTo1LevelZenodoByAnchor implements KeyToPath {
 
@@ -56,7 +55,8 @@ public class KeyTo1LevelZenodoByAnchor implements KeyToPath {
 
     @Override
     public boolean supports(IRI key) {
-        return HashType.md5.equals(HashKeyUtil.hashTypeFor(key));
+        return HashType.md5.equals(HashKeyUtil.hashTypeFor(anchor))
+                && HashKeyUtil.isValidHashKey(key);
     }
 
 
