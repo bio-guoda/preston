@@ -37,7 +37,7 @@ public class Persisting extends PersistingLocal {
     )
     private Boolean disableProgress = false;
 
-    private boolean supportContentInArchives = true;
+    private boolean supportDiscoveryOfContentInArchives = true;
 
     public List<URI> getRemotes() {
         return remotes;
@@ -62,7 +62,7 @@ public class Persisting extends PersistingLocal {
                 getRemotes(),
                 getHashType(),
                 getProgressListener(),
-                isSupportContentInArchives(),
+                isSupportDiscoveryOfContentInArchives(),
                 getProvenanceAnchor()
         );
     }
@@ -73,8 +73,8 @@ public class Persisting extends PersistingLocal {
                 : new DerefProgressLogger();
     }
 
-    protected void setSupportContentInArchives(boolean supportContentInArchives) {
-        this.supportContentInArchives = supportContentInArchives;
+    protected void setSupportDiscoveryOfContentInArchives(boolean supportDiscoveryOfContentInArchives) {
+        this.supportDiscoveryOfContentInArchives = supportDiscoveryOfContentInArchives;
     }
 
 
@@ -91,8 +91,8 @@ public class Persisting extends PersistingLocal {
         this.disableProgress = disableProgress;
     }
 
-    public boolean isSupportContentInArchives() {
-        return supportContentInArchives;
+    public boolean isSupportDiscoveryOfContentInArchives() {
+        return supportDiscoveryOfContentInArchives;
     }
 
 }

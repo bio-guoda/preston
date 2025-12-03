@@ -109,7 +109,7 @@ public class KeyValueStoreUtil {
                 );
 
         List<KeyValueStoreReadOnly> keyValueStoreRemotes =
-                config.isSupportContentInArchives()
+                config.isSupportDiscoveryOfContentInArchives()
                         ? includeSupportForContentInArchives(keyToPathStreams, keyValueStore, config)
                         : remotePathSupportDefault(keyToPathStreams, config).collect(Collectors.toList());
 
