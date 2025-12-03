@@ -2,10 +2,7 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.store.DerefProgressLogger;
-import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreConfig;
-import bio.guoda.preston.store.KeyValueStoreFactoryImpl;
-import bio.guoda.preston.store.ValidatingKeyValueStreamFactory;
 import bio.guoda.preston.stream.ContentStreamUtil;
 import picocli.CommandLine;
 
@@ -40,7 +37,7 @@ public class Persisting extends PersistingLocal {
     )
     private Boolean disableProgress = false;
 
-    private boolean supportTarGzDiscovery = true;
+    private boolean supportContentInArchives = true;
 
     public List<URI> getRemotes() {
         return remotes;
@@ -65,7 +62,7 @@ public class Persisting extends PersistingLocal {
                 getRemotes(),
                 getHashType(),
                 getProgressListener(),
-                isSupportTarGzDiscovery(),
+                isSupportContentInArchives(),
                 getProvenanceAnchor()
         );
     }
@@ -76,8 +73,8 @@ public class Persisting extends PersistingLocal {
                 : new DerefProgressLogger();
     }
 
-    protected void setSupportTarGzDiscovery(boolean supportTarGzDiscovery) {
-        this.supportTarGzDiscovery = supportTarGzDiscovery;
+    protected void setSupportContentInArchives(boolean supportContentInArchives) {
+        this.supportContentInArchives = supportContentInArchives;
     }
 
 
@@ -94,8 +91,8 @@ public class Persisting extends PersistingLocal {
         this.disableProgress = disableProgress;
     }
 
-    public boolean isSupportTarGzDiscovery() {
-        return supportTarGzDiscovery;
+    public boolean isSupportContentInArchives() {
+        return supportContentInArchives;
     }
 
 }
