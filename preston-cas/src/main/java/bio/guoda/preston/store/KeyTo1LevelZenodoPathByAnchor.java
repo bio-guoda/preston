@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 
 import java.net.URI;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 
 public class KeyTo1LevelZenodoPathByAnchor implements KeyToPath {
@@ -13,6 +14,7 @@ public class KeyTo1LevelZenodoPathByAnchor implements KeyToPath {
     private final KeyToPath anchoredDepositLookup;
 
     private final IRI anchor;
+    private final AtomicReference<IRI> resolvedArchiveId = new AtomicReference<>();
 
     public KeyTo1LevelZenodoPathByAnchor(KeyToPath keyToPath, IRI anchor) {
         this.anchoredDepositLookup = keyToPath;
@@ -25,9 +27,11 @@ public class KeyTo1LevelZenodoPathByAnchor implements KeyToPath {
         if (anchor != null) {
             HashType anchorType = HashKeyUtil.hashTypeFor(anchor);
             if (HashType.md5.equals(anchorType)) {
-                URI anchoredArchiveContentId = anchoredDepositLookup.toPath(anchor);
-                if (anchoredArchiveContentId != null) {
-                    IRI archiveId = RefNodeFactory.toIRI(anchoredArchiveContentId);
+                if (resolvedArchiveId.get() == null) {
+                    resolvedArchiveId.set(getAnchoredArchiveId(anchor));
+                }
+                IRI archiveId = resolvedArchiveId.get();
+                if (archiveId != null) {
                     if (HashKeyUtil.isValidHashKey(archiveId)) {
                         HashType keyType = HashKeyUtil.hashTypeFor(key);
                         Matcher matcher = keyType.getIRIPattern().matcher(key.getIRIString());
@@ -43,12 +47,23 @@ public class KeyTo1LevelZenodoPathByAnchor implements KeyToPath {
                             // interrupt the content dereferencing chain using a runtime exception
                             // first pass at implementing https://github.com/bio-guoda/preston/issues/356
                             throw new ContentAlternateException(path);
+                        } else {
+                            resolvedArchiveId.set(null);
                         }
                     }
                 }
             }
         }
         return path;
+    }
+
+    private IRI getAnchoredArchiveId(IRI anchor) {
+        IRI archiveId = null;
+        URI anchoredArchiveContentId = anchoredDepositLookup.toPath(anchor);
+        if (anchoredArchiveContentId != null) {
+            archiveId = RefNodeFactory.toIRI(anchoredArchiveContentId);
+        }
+        return archiveId;
     }
 
     @Override
