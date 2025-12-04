@@ -141,9 +141,9 @@ public class KeyValueStoreUtil {
                 .filter(REMOTE_ZENODO::equals)
                 .flatMap(remote -> Stream.of(
                         Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, getDerefStream(remote, config.getProgressListener())))),
-                        Pair.of(remote, new KeyTo1LevelZenodoPathByAnchor(new KeyTo1LevelZenodoDataPaths(remote, getDerefStream(remote, config.getProgressListener())), config.getAnchor())),
+                        Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, getDerefStream(remote, config.getProgressListener())), config.getAnchor())),
                         Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, getDerefStream(remote, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13))),
-                        Pair.of(remote, new KeyTo1LevelZenodoPathByAnchor(new KeyTo1LevelZenodoDataPaths(remote, getDerefStream(remote, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13), config.getAnchor()))
+                        Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, getDerefStream(remote, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13), config.getAnchor()))
                 ));
     }
 
