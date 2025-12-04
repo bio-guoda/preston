@@ -1,8 +1,10 @@
 package bio.guoda.preston.cmd;
 
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.Version;
 import bio.guoda.preston.store.BlobStoreAppendOnly;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.ContentAlternateException;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import bio.guoda.preston.store.VersionUtil;
 import org.apache.commons.rdf.api.IRI;
@@ -66,12 +68,22 @@ public class CmdGet extends Persisting implements Runnable {
             while ((line = reader.readLine()) != null) {
                 Quad quad = VersionUtil.parseAsVersionStatementOrNull(line);
                 if (quad != null) {
-                    ContentQueryUtil.copyMostRecentContent(blobStore, quad, this, new CopyShopImpl(this));
+                    try {
+                        ContentQueryUtil.copyMostRecentContent(blobStore, quad, this, new CopyShopImpl(this));
+                    } catch (ContentAlternateException ex) {
+                        // first pass at implementing https://github.com/bio-guoda/preston/issues/356
+                        ContentQueryUtil.copyContent(blobStore, RefNodeFactory.toIRI(ex.getAlternatePath()), this, new CopyShopImpl(this));
+                    }
                 }
             }
         } else {
             for (IRI contentIdOrAlias : contentIdsOrAliases) {
-                ContentQueryUtil.copyContent(blobStore, contentIdOrAlias, this, new CopyShopImpl(this));
+                try {
+                    ContentQueryUtil.copyContent(blobStore, contentIdOrAlias, this, new CopyShopImpl(this));
+                } catch (ContentAlternateException ex) {
+                    // first pass at implementing https://github.com/bio-guoda/preston/issues/356
+                    ContentQueryUtil.copyContent(blobStore, RefNodeFactory.toIRI(ex.getAlternatePath()), this, new CopyShopImpl(this));
+                }
             }
         }
     }
