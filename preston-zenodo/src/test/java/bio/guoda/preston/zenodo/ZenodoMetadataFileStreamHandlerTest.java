@@ -28,6 +28,7 @@ import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class ZenodoMetadataFileStreamHandlerTest {
@@ -148,6 +149,7 @@ public class ZenodoMetadataFileStreamHandlerTest {
         assertThat(license.asText(), Is.is("cc-by-nc-sa-3.0"));
 
     }
+
     @Test
     public void noLicenseForDeposit() throws IOException {
         String partUrn = "urn:lsid:biodiversitylibrary.org:part:666";
@@ -165,6 +167,21 @@ public class ZenodoMetadataFileStreamHandlerTest {
 
         assertThat(license.isMissingNode(), Is.is(true));
 
+    }
+
+    @Test
+    public void detectingNonZenodoLineJson() throws IOException {
+        InputStream resourceAsStream = getClass().getResourceAsStream("globalamfungi-sample.csv");
+        assertNotNull(resourceAsStream);
+        String line = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+        assertNull(ZenodoMetadataFileStreamHandler.parseZenodoMetadata(line));
+    }
+    @Test
+    public void detectingZenodoLineJson() throws IOException {
+        InputStream resourceAsStream = getClass().getResourceAsStream("zenodo-metadata-globi-review.json");
+        assertNotNull(resourceAsStream);
+        String line = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+        assertNotNull(ZenodoMetadataFileStreamHandler.parseZenodoMetadata(line));
     }
 
     private Dereferencer<InputStream> withDummyTranslatorMap(String partUrn, final IRI licenseMapIRIProvided) throws IOException {
