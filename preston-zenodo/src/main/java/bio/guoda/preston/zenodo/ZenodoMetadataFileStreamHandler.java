@@ -128,6 +128,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                 IRI coordinate = RefNodeFactory.toIRI("line:" + iriString + "!/L" + lineNumber);
                 String line = reader.readLine();
                 if (!handleAsZenodoLineJson(line, coordinate)) {
+                    // skip entire file on encountering non-zenodo metadata
                     break;
                 }
             }
@@ -138,7 +139,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         return foundAtLeastOne.get();
     }
 
-    private boolean handleAsZenodoLineJson(String line, IRI coordinate) {
+    private boolean handleAsZenodoLineJson(String line, IRI coordinate) throws IOException {
         boolean previouslyHandledAsZenodoJson = false;
         if (line != null) {
             JsonNode zenodoMetadata = parseZenodoMetadata(line);
@@ -147,7 +148,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
                     handleAsZenodoJson(coordinate, zenodoMetadata);
                     previouslyHandledAsZenodoJson = true;
                 } catch (IOException ex) {
-                    LOG.warn("failed to handle [" + coordinate + "] as jsonlines", ex);
+                    throw new IOException("failed to handle [" + coordinate + "] as jsonlines", ex);
                 }
             }
         }
@@ -158,7 +159,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         JsonNode possiblyZenodoMetadata = null;
         try {
             JsonNode candidate = getObjectMapper().readTree(line);
-            if (maybeContainsPrestonEnabledZenodoMetadata(candidate)) {
+            if (mayContainPrestonEnabledZenodoMetadata(candidate)) {
                 possiblyZenodoMetadata = candidate;
             }
         } catch (JsonProcessingException ex) {
@@ -176,19 +177,19 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
 
         collectIds(zenodoMetadata, recordIds, contentIds, origins);
         if (recordIds.isEmpty()) {
-            throw new IOException("cannot publish zenodo record: no lsid found in [" + coordinate.getIRIString() + "]");
+            LOG.warn("cannot publish zenodo record: no lsid found in [" + coordinate.getIRIString() + "]");
+        } else {
+            resourceType = updateResourceType(resourceType, zenodoMetadata);
+
+            Dereferencer<InputStream> adHocQueryDereferencer = ResourcesHTTP::asInputStream;
+            Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findRecordsByAlternateIds(
+                    ctx,
+                    recordIds,
+                    resourceType,
+                    adHocQueryDereferencer
+            );
+            createOrUpdateDeposit(coordinate, zenodoMetadata, recordIds, contentIds, origins, foundDeposits);
         }
-
-        resourceType = updateResourceType(resourceType, zenodoMetadata);
-
-        Dereferencer<InputStream> adHocQueryDereferencer = ResourcesHTTP::asInputStream;
-        Collection<Pair<Long, String>> foundDeposits = ZenodoUtils.findRecordsByAlternateIds(
-                ctx,
-                recordIds,
-                resourceType,
-                adHocQueryDereferencer
-        );
-        createOrUpdateDeposit(coordinate, zenodoMetadata, recordIds, contentIds, origins, foundDeposits);
     }
 
     static String updateResourceType(String resourceType, JsonNode zenodoMetadata) {
@@ -539,7 +540,7 @@ public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
         return filename;
     }
 
-    private static boolean maybeContainsPrestonEnabledZenodoMetadata(JsonNode jsonNode) {
+    private static boolean mayContainPrestonEnabledZenodoMetadata(JsonNode jsonNode) {
         return  !jsonNode.at("/metadata/upload_type").isMissingNode()
                 && !jsonNode.at("/metadata/title").isMissingNode()
                 && !jsonNode.at("/metadata/related_identifiers").isMissingNode();
