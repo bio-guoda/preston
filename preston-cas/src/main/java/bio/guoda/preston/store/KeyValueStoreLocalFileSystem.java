@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.UUID;
 
 
 public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemReadOnly implements KeyValueStoreWithRemove {
@@ -31,9 +32,14 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
         try (InputStream is = value) {
             URI filePathBeforeCopy = getPathForKey(key);
             if (!getDataFile(filePathBeforeCopy).exists()) {
-                File tmpDestFile = getDataFile(URI.create(filePathBeforeCopy.toString() + ".tmp"));
+                File parentFile = getDataFile(filePathBeforeCopy).getParentFile();
+                FileUtils.forceMkdir(parentFile);
+                File tmpDestFile = File.createTempFile(
+                        "validating-cache",
+                        ".tmp",
+                        parentFile
+                );
                 tmpDestFile.deleteOnExit();
-                File destFile = null;
                 try {
                     ValidatingKeyValueStream validating = getValidatingKeyValueStreamFactory().forKeyValueStream(key, is);
                     FileUtils.copyToFile(validating.getValueStream(), tmpDestFile);
@@ -45,7 +51,6 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
                     }
                 } catch (IOException ex) {
                     FileUtils.deleteQuietly(tmpDestFile);
-                    FileUtils.deleteQuietly(destFile);
                     throw ex;
                 }
             }

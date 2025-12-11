@@ -40,6 +40,8 @@ public class ContentQueryUtil {
             if (persisting.shouldKeepProcessing()) {
                 throw ex;
             }
+        } catch (IOException ex) {
+            throw new IOException("failed to copy content with id [" + queryIRI + "]", ex);
         }
     }
 

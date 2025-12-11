@@ -2,17 +2,22 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.DerefState;
-import org.apache.commons.lang3.StringUtils;
+import bio.guoda.preston.RefNodeConstants;
+import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.commons.rdf.api.Quad;
 
 import java.io.PrintStream;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class DerefProgressLogger implements DerefProgressListener {
     private final AtomicLong lastRead = new AtomicLong(0L);
     private final PrintStream out;
     private AtomicLong updateStepBytes = new AtomicLong(10 * 4096L);
+    private AtomicReference<IRI> activityId = new AtomicReference<>();
     private StopWatch stopWatch = new StopWatch();
     private String prefix = "";
 
@@ -32,17 +37,23 @@ public class DerefProgressLogger implements DerefProgressListener {
     public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
         if (DerefState.START.equals(derefState)) {
             reset();
+            IRI activityIRI = RefNodeFactory.toIRI(UUID.randomUUID());
+            activityId.set(activityIRI);
+            Quad statement = RefNodeFactory.toStatement(activityIRI, dataURI, RefNodeConstants.ACCESSED_AT, RefNodeFactory.nowDateTimeLiteral());
+            out.println(statement.toString());
             stopWatch.start();
         } else if (DerefState.DONE.equals(derefState)) {
             checkState();
             stopWatch.split();
-            logProgress(dataURI, derefState, read, total);
+            logProgress(derefState, read, total);
+            Quad statement = RefNodeFactory.toStatement(activityId.get(), dataURI, RefNodeConstants.RETRIEVED_ON, RefNodeFactory.nowDateTimeLiteral());
+            out.println(statement.toString());
             stopWatch.stop();
         } else if (DerefState.BUSY.equals(derefState)) {
             checkState();
             stopWatch.split();
             if (read - lastRead.get() > getUpdateStepBytes()) {
-                logProgress(dataURI, derefState, read, total);
+                logProgress(derefState, read, total);
             }
         }
     }
@@ -59,13 +70,10 @@ public class DerefProgressLogger implements DerefProgressListener {
         lastRead.set(0);
     }
 
-    public void logProgress(IRI dataURI, DerefState derefState, long read, long total) {
+    public void logProgress(DerefState derefState, long read, long total) {
         StringBuilder builder = new StringBuilder();
         builder.append("\r");
         builder.append(prefix);
-        builder.append("[");
-        builder.append(StringUtils.abbreviateMiddle(dataURI.getIRIString(), "...", 50));
-        builder.append("] ");
         if (total > 0) {
             builder.append(String.format("%3.1f", 100.0 * read / total));
             builder.append("% of ");
@@ -89,7 +97,7 @@ public class DerefProgressLogger implements DerefProgressListener {
         if (DerefState.DONE.equals(derefState)) {
             builder.append("\n");
         }
-        out.print(builder.toString());
+        out.print(builder);
         lastRead.set(read);
     }
 

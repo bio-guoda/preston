@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -65,6 +66,29 @@ public class KeyValueStoreLocalFileSystemTest {
                 new ValidatingKeyValueStreamContentAddressedFactory());
 
         IRI someValueKey = RefNodeFactory.toIRI("hash://sha256/ab3d07f3169ccbd0ed6c4b45de21519f9f938c72d24124998aab949ce83bb51b");
+        assertNull(filePersistence.get(someValueKey));
+        filePersistence.put(someValueKey, IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
+
+        assertThat(TestUtil.toUTF8(filePersistence.get(someValueKey)), is("some value"));
+    }
+
+    @Test
+    public void writePreExitingTmpFile() throws IOException {
+        IRI someValueKey = RefNodeFactory.toIRI("hash://sha256/ab3d07f3169ccbd0ed6c4b45de21519f9f938c72d24124998aab949ce83bb51b");
+
+        File tmpDir = new File(path.toFile(), "tmp");
+        File dataDir = new File(path.toFile(), "datasets");
+        KeyTo3LevelPath keyToPath = new KeyTo3LevelPath(dataDir.toURI());
+        KeyValueStoreLocalFileSystem filePersistence = new KeyValueStoreLocalFileSystem(
+                tmpDir,
+                keyToPath,
+                new ValidatingKeyValueStreamContentAddressedFactory());
+
+        FileUtils.forceMkdir(new File(dataDir, "ab/3d/"));
+        File file = new File(new File(keyToPath.toPath(someValueKey)).getAbsolutePath() + ".tmp");
+        IOUtils.copy(IOUtils.toInputStream("foo", StandardCharsets.UTF_8),
+                new FileOutputStream(file));
+
         assertNull(filePersistence.get(someValueKey));
         filePersistence.put(someValueKey, IOUtils.toInputStream("some value", StandardCharsets.UTF_8));
 
