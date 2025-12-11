@@ -1,0 +1,233 @@
+<document ID-CLB-Dataset="100954" ID-DOI="10.5281/zenodo.6887260" ID-GBIF-Dataset="a016af63-6437-427b-80b7-22bc9a002e20" ID-ISBN="978-84-16728-04-6" ID-Zenodo-Dep="6887260" IM.illustrations_approvedBy="carolina" IM.materialsCitations_approvedBy="carolina" IM.metadata_approvedBy="carolina" IM.taxonomicNames_approvedBy="felipe" IM.treatments_approvedBy="guilherme" checkinTime="1656696812616" checkinUser="carolina" docAuthor="Don E. Wilson, Russell A. Mittermeier &amp; Thomas E. Lacher, Jr" docDate="2017" docId="1E30E2753439FF88E49228777D6A8F49" docLanguage="en" docName="hbmw_7_Muridae_0536.pdf.imf" docOrigin="Handbook of the Mammals of the World – Volume 7 Rodents II, Barcelona: Lynx Edicions" docTitle="Gerbillus latastei Thomas &amp; Trouessart 1903" docType="treatment" docVersion="16" lastPageNumber="630" masterDocId="E2099A0D3426FF97E1372C0977498313" masterDocTitle="Muridae" masterLastPageNumber="884" masterPageNumber="536" pageNumber="630" updateTime="1732908114066" updateUser="ExternalLinkService">
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:titleInfo>
+<mods:title>Muridae</mods:title>
+</mods:titleInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Don E. Wilson</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Russell A. Mittermeier</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Thomas E. Lacher, Jr</mods:namePart>
+</mods:name>
+<mods:typeOfResource>text</mods:typeOfResource>
+<mods:relatedItem type="host">
+<mods:originInfo>
+<mods:dateIssued>2017</mods:dateIssued>
+<mods:dateOther type="pubDate">2017-11-30</mods:dateOther>
+<mods:publisher>Lynx Edicions</mods:publisher>
+<mods:place>
+<mods:placeTerm>Barcelona</mods:placeTerm>
+</mods:place>
+</mods:originInfo>
+<mods:titleInfo>
+<mods:title>Handbook of the Mammals of the World – Volume 7 Rodents II</mods:title>
+</mods:titleInfo>
+<mods:part>
+<mods:extent unit="page">
+<mods:start>536</mods:start>
+<mods:end>884</mods:end>
+</mods:extent>
+</mods:part>
+</mods:relatedItem>
+<mods:classification>book chapter</mods:classification>
+<mods:identifier type="CLB-Dataset">100954</mods:identifier>
+<mods:identifier type="DOI">10.5281/zenodo.6887260</mods:identifier>
+<mods:identifier type="GBIF-Dataset">a016af63-6437-427b-80b7-22bc9a002e20</mods:identifier>
+<mods:identifier type="ISBN">978-84-16728-04-6</mods:identifier>
+<mods:identifier type="Zenodo-Dep">6887260</mods:identifier>
+</mods:mods>
+<treatment ID-DOI="http://doi.org/10.5281/zenodo.6868177" ID-GBIF-Taxon="197826192" ID-Zenodo-Dep="6868177" LSID="urn:lsid:plazi:treatment:1E30E2753439FF88E49228777D6A8F49" httpUri="http://treatment.plazi.org/id/1E30E2753439FF88E49228777D6A8F49" lastPageNumber="630" pageId="31" pageNumber="630" scope_family="Muridae">
+<subSubSection box="[1445,1503,1150,1192]" pageId="31" pageNumber="630" type="multiple">
+<paragraph blockId="31.[1445,2336,1150,1232]" box="[1445,1503,1150,1192]" pageId="31" pageNumber="630">
+<heading box="[1445,1503,1150,1192]" pageId="31" pageNumber="630">
+<figureCitation box="[1445,1503,1150,1192]" captionStart="Plate 35: Muridae" captionStartId="28.[101,131,3308,3333]" captionTargetBox="[11,2715,14,3648]" captionTargetPageId="27" captionText="86. Ammodile (Ammodillus imbellis), 87. Pleasant Gerbil (Gerbillus amoenus), 88. Anderson’s Gerbil (Gerbillus andersoni), 89. Botta’s Gerbil (Gerbillus bottai), 90. North African Gerbil (Gerbillus campestris), 91. Flower’s Gerbil (Gerbillus floweri), 92. Algerian Gerbil (Gerbillus garamantis), 93. Lesser Egyptian Gerbil (Gerbillus gerbillus), 94. Grobben’s Gerbil (Gerbillus grobbeni), 95. Pygmy Gerbil (Gerbillus henleyi), 96. Moroccan Gerbil (Gerbillus hesperinus), 97. Hoogstraal’s Gerbil (Gerbillus hoogstraali), 98. James's Gerbil (Gerbillus jamesi), 99. Lataste’s Gerbil (Gerbillus latastei), 100. Greater Short-tailed Gerbil (Gerbillus maghrebi), 101. Occidental Gerbil (Gerbillus occiduus), 102. Lesser Short-tailed Gerbil (Gerbillus simoni), 103. Sand Gerbil (Gerbullus syrticus), 104. Tarabul Gerbil (Gerbillus tarabuli), 105. Vivacious Gerbil (Gerbillus vivax), 106. Waters’s Gerbil (Gerbillus watersi), 107. Agag Gerbil (Gerbillus agag), 108. Lowe’s Gerbil (Gerbillus lower), 109. Mauritanian Gerbil (Gerbillus mauritaniae), 110. Darfur Gerbil (Gerbillus muriculus), 111. Sudan Gerbil (Gerbillus nancillus)" figureDoi="http://doi.org/10.5281/zenodo.6887348" httpUri="https://zenodo.org/record/6887348/files/figure.png" pageId="31" pageNumber="630">99.</figureCitation>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection box="[1520,1839,1150,1192]" pageId="31" pageNumber="630" type="vernacular_names">
+<vernacularName ID-CoL="7V4WP" authorityName="Thomas &amp; Trouessart" authorityYear="1903" box="[1520,1839,1150,1192]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" language="eng" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">
+<paragraph blockId="31.[1445,2336,1150,1232]" box="[1520,1695,1150,1192]" pageId="31" pageNumber="630">
+<heading box="[1520,1695,1150,1192]" pageId="31" pageNumber="630">
+<vernacularName ID-CoL="7V4WP" authorityName="Thomas &amp; Trouessart" authorityYear="1903" box="[1520,1695,1150,1192]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" language="eng" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">Lataste’s</vernacularName>
+</heading>
+</paragraph>
+<paragraph blockId="31.[1445,2336,1150,1232]" box="[1710,1839,1150,1192]" pageId="31" pageNumber="630">
+<heading box="[1710,1839,1150,1192]" pageId="31" pageNumber="630">
+<vernacularName ID-CoL="7V4WP" authorityName="Thomas &amp; Trouessart" authorityYear="1903" box="[1710,1839,1150,1192]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" language="eng" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">Gerbil</vernacularName>
+</heading>
+</paragraph>
+</vernacularName>
+</subSubSection>
+<subSubSection box="[1912,2204,1150,1192]" pageId="31" pageNumber="630" type="nomenclature">
+<paragraph blockId="31.[1445,2336,1150,1232]" box="[1912,2204,1150,1192]" pageId="31" pageNumber="630">
+<heading box="[1912,2204,1150,1192]" pageId="31" pageNumber="630">
+<taxonomicName ID-CoL="7V4WP" authorityName="Thomas &amp; Trouessart" authorityYear="1903" box="[1912,2204,1150,1192]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">
+<emphasis box="[1912,2204,1150,1192]" italics="true" pageId="31" pageNumber="630">Gerbillus latastei</emphasis>
+</taxonomicName>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection box="[1445,2336,1211,1232]" pageId="31" pageNumber="630" type="vernacular_names">
+<paragraph blockId="31.[1445,2336,1150,1232]" box="[1445,1516,1211,1232]" pageId="31" pageNumber="630">
+<heading box="[1445,1516,1211,1232]" pageId="31" pageNumber="630">
+<emphasis bold="true" box="[1445,1516,1211,1232]" pageId="31" pageNumber="630">
+<vernacularName ID-CoL="7V4WP" authorityName="Thomas &amp; Trouessart" authorityYear="1903" box="[1445,1516,1211,1232]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" language="eng" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">French</vernacularName>
+</emphasis>
+</heading>
+</paragraph>
+<paragraph blockId="31.[1445,2336,1150,1232]" box="[1516,1520,1211,1232]" pageId="31" pageNumber="630">
+<heading box="[1516,1520,1211,1232]" pageId="31" pageNumber="630">
+<emphasis bold="true" box="[1516,1520,1211,1232]" pageId="31" pageNumber="630">:</emphasis>
+</heading>
+</paragraph>
+<paragraph blockId="31.[1445,2336,1150,1232]" box="[1530,2336,1211,1232]" pageId="31" pageNumber="630">
+<heading box="[1530,2336,1211,1232]" pageId="31" pageNumber="630">
+<vernacularName ID-CoL="7V4WP" authorityName="Thomas &amp; Trouessart" authorityYear="1903" box="[1530,1718,1211,1232]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" language="eng" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">Gerbille de Lataste</vernacularName>
+/ 
+<emphasis bold="true" box="[1738,1829,1211,1232]" pageId="31" pageNumber="630">German:</emphasis>
+<vernacularName ID-CoL="7V4WP" authorityName="Thomas &amp; Trouessart" authorityYear="1903" box="[1839,2025,1211,1232]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" language="deu" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">Lataste-Rennmaus</vernacularName>
+/ 
+<emphasis bold="true" box="[2047,2138,1211,1232]" pageId="31" pageNumber="630">Spanish:</emphasis>
+<vernacularName ID-CoL="7V4WP" authorityName="Thomas &amp; Trouessart" authorityYear="1903" box="[2148,2336,1211,1232]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" language="esp" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">Gerbillo de Lataste</vernacularName>
+</heading>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="31" pageNumber="630" type="reference_group">
+<paragraph blockId="31.[2054,2648,1280,1707]" pageId="31" pageNumber="630">
+<emphasis bold="true" box="[2056,2211,1280,1314]" pageId="31" pageNumber="630">Taxonomy.</emphasis>
+<taxonomicName ID-CoL="7V4WP" authority="Thomas &amp; Trouessart, 1903" authorityName="Thomas &amp; Trouessart" authorityYear="1903" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">Gerbillus latastei Thomas &amp; Trouessart, 1903</taxonomicName>
+,
+</paragraph>
+</subSubSection>
+<subSubSection box="[2305,2511,1327,1352]" pageId="31" pageNumber="630" type="materials_examined">
+<paragraph blockId="31.[2054,2648,1280,1707]" box="[2305,2511,1327,1352]" pageId="31" pageNumber="630">
+<materialsCitation ID-GBIF-Occurrence="3864424545" box="[2305,2511,1327,1352]" pageId="31" pageNumber="630">Kebili, Tunisia.</materialsCitation>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="31" pageNumber="630" type="discussion">
+<paragraph blockId="31.[2054,2648,1280,1707]" lastBlockId="31.[1434,2647,1711,3162]" pageId="31" pageNumber="630">
+Taxonomic status of 
+<taxonomicName authorityName="Thomas &amp; Trouessart" authorityYear="1903" box="[2351,2478,1358,1392]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">G. latastei</taxonomicName>
+, considered a valid species by D. M. Lay in 1983, G. G. Musser and M. D. Carleton in 2005, S. Aulagnier and colleagues in 2009, and D. C. D. Happold in 2013, was discussed in 1975 by F. Petter, who placed it in synonymy with 
+<taxonomicName box="[2058,2238,1599,1628]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="pyramidum">G. pyramidum</taxonomicName>
+, and in 1978 by G. B. Corbet, who followed J. R. Ellerman’s 1941 treatment and classified it within 
+<taxonomicName authorityName="Olivier" authorityYear="1800" box="[2459,2599,1673,1707]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="gerbillus">G. gerbillus</taxonomicName>
+. G. L. Ranck in 1968 and E. L.. Cockrum in 1977 employed name G. aureus, which is considered a synonym of 
+<taxonomicName authorityName="Thomas &amp; Trouessart" authorityYear="1903" box="[1752,1838,1751,1785]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">latastei</taxonomicName>
+. Cytogenetic work by M. Chétoui and colleagues in 2002, and recent mtDNA analyses by A. Abiadh and coworkers in 2010 and A. Ndiaye and colleagues in 2012, confirmed validity of 
+<taxonomicName authorityName="Thomas &amp; Trouessart" authorityYear="1903" box="[1959,2082,1829,1863]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">G. latastei</taxonomicName>
+, and analysis by V. Nicolas and colleagues in 2014 extended its distribution to Algeria. 
+<taxonomicName authorityName="Thomas &amp; Trouessart" authorityYear="1903" box="[2068,2194,1869,1903]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="latastei">G. latastei</taxonomicName>
+is genetically close to clade that includes two Moroccan endemics, namely 
+<taxonomicName authorityName="Lay" authorityYear="1975" box="[2029,2200,1908,1942]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="hoogstraali">G. hoogstraali</taxonomicName>
+and 
+<taxonomicName authorityName="Cabrera" authorityYear="1906" box="[2271,2437,1908,1942]" class="Mammalia" family="Muridae" genus="Gerbillus" kingdom="Animalia" order="Rodentia" pageId="31" pageNumber="630" phylum="Chordata" rank="species" species="hesperinus">G. hesperinus</taxonomicName>
+. Monotypic.
+</paragraph>
+</subSubSection>
+<subSubSection box="[1441,2575,1947,1981]" pageId="31" pageNumber="630" type="distribution">
+<caption ID-DOI="http://doi.org/10.5281/zenodo.6898660" ID-Zenodo-Dep="6898660" box="[1441,2575,1947,1981]" httpUri="https://zenodo.org/record/6898660/files/figure.png" inLine="true" pageId="31" pageNumber="630" startId="31.[1441,1613,1947,1981]" targetBox="[1441,2031,1287,1700]" targetPageId="31">
+<paragraph blockId="31.[1434,2647,1711,3162]" box="[1441,2575,1947,1981]" pageId="31" pageNumber="630">
+<emphasis bold="true" box="[1441,1616,1947,1981]" pageId="31" pageNumber="630">Distribution.</emphasis>
+From Hadjeb El Djmel in NC Algeria E through Tunisia to N Libya.
+</paragraph>
+</caption>
+</subSubSection>
+<subSubSection pageId="31" pageNumber="630" type="description">
+<paragraph blockId="31.[1434,2647,1711,3162]" pageId="31" pageNumber="630">
+<emphasis bold="true" box="[1440,1689,1995,2020]" pageId="31" pageNumber="630">Descriptive notes.</emphasis>
+Head-body 98-120 mm, tail 110-144 mm, ear 13-18 mm, hindfoot 25-32 mm; weight 34-50 g. Sexual dimorphism present. Chromosomal complement of Lataste’s Gerbil is 2n = 74, FNa = 94-102, and this high chromosomal polymorphism seems to be related to geography. This medium-sized gerbil has hairy footsoles, and a long tail (116% of head-body length) not terminating in pencil of long hairs. Dorsal pelage has an orange-yellow color more or less dark (depending on populations) and pure white venter. Cheeks, nose, chin, throat, limbs and feet are white.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="31" pageNumber="630" type="biology_ecology">
+<paragraph blockId="31.[1434,2647,1711,3162]" pageId="31" pageNumber="630">
+<emphasis bold="true" box="[1439,1549,2267,2296]" pageId="31" pageNumber="630">Habitat.</emphasis>
+In Djelfa region (High Plateau, Algeria), Lataste’s Gerbil was trapped in plantations intersected with windbreaks of Aleppo pine (
+<taxonomicName authorityName="Perry" authorityYear="1811" box="[2201,2278,2302,2336]" class="Pinopsida" family="Pinaceae" genus="Pinus" kingdom="Plantae" order="Pinales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="genus">Pinus</taxonomicName>
+halepensis, 
+<taxonomicName box="[2438,2563,2302,2336]" class="Pinopsida" family="Pinaceae" kingdom="Plantae" order="Pinales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="family">Pinaceae</taxonomicName>
+) and Mediterranean Cypress (
+<taxonomicName box="[1802,2108,2345,2374]" class="Pinopsida" family="Cupressaceae" genus="Cupressus" kingdom="Plantae" order="Pinales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="species" species="sempervirens">Cupressus sempervirens</taxonomicName>
+, 
+<taxonomicName box="[2133,2330,2345,2374]" class="Pinopsida" family="Cupressaceae" kingdom="Plantae" order="Pinales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="family">Cupressaceae</taxonomicName>
+). Plantations include those of apple trees (
+<taxonomicName box="[1740,1824,2385,2414]" class="Magnoliopsida" family="Rosaceae" genus="Malus" kingdom="Plantae" order="Rosales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="genus">Malus</taxonomicName>
+domestica), pear trees (
+<taxonomicName box="[2149,2223,2385,2414]" class="Magnoliopsida" family="Rosaceae" genus="Pyrus" kingdom="Plantae" order="Rosales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="genus">Pyrus</taxonomicName>
+communis), common fig trees (
+<taxonomicName box="[1450,1518,2424,2453]" class="Magnoliopsida" family="Moraceae" genus="Ficus" kingdom="Plantae" order="Rosales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="genus">Ficus</taxonomicName>
+carica), olive trees (
+<taxonomicName authorityName="Agersborg" authorityYear="1923" box="[1811,1872,2424,2453]" class="Magnoliopsida" family="Oleaceae" genus="Olea" kingdom="Plantae" order="Lamiales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="genus">Olea</taxonomicName>
+europaea), apricot trees (
+<taxonomicName box="[2236,2485,2424,2453]" class="Magnoliopsida" family="Rosaceae" genus="Prunus" kingdom="Plantae" order="Rosales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="species" species="armeniaca">Prunus armeniaca</taxonomicName>
+), tomatoes (Lycopersicum esculentum), aubergines (
+<taxonomicName box="[1981,2097,2463,2492]" class="Magnoliopsida" family="Solanaceae" genus="Solanum" kingdom="Plantae" order="Solanales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="genus">Solanum</taxonomicName>
+melongena), onions (
+<taxonomicName box="[2393,2484,2463,2492]" class="Liliopsida" family="Amaryllidaceae" genus="Allium" kingdom="Plantae" order="Asparagales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="genus">Allium</taxonomicName>
+cepa), peppers (
+<taxonomicName box="[1518,1646,2503,2532]" class="Magnoliopsida" family="Solanaceae" genus="Capsicum" kingdom="Plantae" order="Solanales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="genus">Capsicum</taxonomicName>
+frutescens), zucchinis (
+<taxonomicName box="[1959,2089,2503,2532]" class="Magnoliopsida" family="Cucurbitaceae" genus="Cucurbita" kingdom="Plantae" order="Cucurbitales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="genus">Cucurbita</taxonomicName>
+pepo, 
+<taxonomicName box="[2170,2379,2503,2532]" class="Magnoliopsida" family="Cucurbitaceae" kingdom="Plantae" order="Cucurbitales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="family">Cucurbitaceae</taxonomicName>
+), and broad beans (
+<taxonomicName box="[1449,1609,2538,2572]" class="Magnoliopsida" family="Fabaceae" genus="Vicia" kingdom="Plantae" order="Fabales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="species" species="sativa">Vicia sativa</taxonomicName>
+, 
+<taxonomicName box="[1633,1768,2538,2572]" class="Magnoliopsida" family="Fabaceae" kingdom="Plantae" order="Fabales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="family">Fabaceae</taxonomicName>
+). According to Aulagnier and colleagues in 2009, Lataste’s Gerbil is found at edge of desert and in subdesertic habitats. It occurs on plateaus, “hamada” (barren, hard, rocky) slopes with sparse vegetation, and small dunes, as well as on sandy dry river beds and margins of small “wadis” (ephemeral riverbeds).
+</paragraph>
+</subSubSection>
+<subSubSection pageId="31" pageNumber="630" type="food_feeding">
+<paragraph blockId="31.[1434,2647,1711,3162]" pageId="31" pageNumber="630">
+<emphasis bold="true" box="[1437,1701,2696,2730]" pageId="31" pageNumber="630">Food and Feeding.</emphasis>
+Lataste’s Gerbil feeds on castor beans (
+<taxonomicName authorityName="de Geer" authorityYear="1778" box="[2269,2369,2696,2730]" class="Magnoliopsida" family="Euphorbiaceae" genus="Ricinus" kingdom="Plantae" order="Malpighiales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="genus">Ricinus</taxonomicName>
+communis, 
+<taxonomicName class="Magnoliopsida" family="Euphorbiaceae" kingdom="Plantae" order="Malpighiales" pageId="31" pageNumber="630" phylum="Tracheophyta" rank="family">Euphorbiaceae</taxonomicName>
+) and probably seeds.
+</paragraph>
+</subSubSection>
+<subSubSection box="[1436,1809,2776,2805]" pageId="31" pageNumber="630" type="breeding">
+<paragraph blockId="31.[1434,2647,1711,3162]" box="[1436,1809,2776,2805]" pageId="31" pageNumber="630">
+<emphasis bold="true" box="[1436,1570,2776,2805]" pageId="31" pageNumber="630">Breeding.</emphasis>
+No information.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="31" pageNumber="630" type="activity">
+<paragraph blockId="31.[1434,2647,1711,3162]" pageId="31" pageNumber="630">
+<emphasis bold="true" box="[1434,1668,2814,2848]" pageId="31" pageNumber="630">Activity patterns.</emphasis>
+Lataste’s Gerbil is nocturnal and terrestrial, digging burrows in which it stores food.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="31" pageNumber="630" type="biology_ecology">
+<paragraph blockId="31.[1434,2647,1711,3162]" pageId="31" pageNumber="630">
+<emphasis bold="true" box="[1436,2144,2892,2926]" pageId="31" pageNumber="630">Movements, Home range and Social organization.</emphasis>
+Lataste’s Gerbil is not captured in abundance.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="31" pageNumber="630" type="conservation">
+<paragraph blockId="31.[1434,2647,1711,3162]" pageId="31" pageNumber="630">
+<emphasis bold="true" box="[1436,1781,2975,3004]" pageId="31" pageNumber="630">Status and Conservation.</emphasis>
+Classified as Least Concern on The IUCN Red List, but ecology and population demography are poorly known.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="31" pageNumber="630" type="bibRefCitation_list">
+<paragraph blockId="31.[1434,2647,1711,3162]" pageId="31" pageNumber="630">
+<emphasis bold="true" box="[1436,1588,3059,3084]" pageId="31" pageNumber="630">Bibliography.</emphasis>
+Abiadh, Chétoui et al. (2010), Abiadh, Colangelo et al. (2010), Aulagnier et al. (2009), Chétoui et al. (2002), Cockrum (1977), Corbet (1978), Ellerman (1941), Happold (2013a), Jordan et al. (1974), Lay (1983), Musser &amp; Carleton (2005), Ndiaye et al. (2012), Nicolas, Souttou et al. (2014), Petter (1975a), Ranck (1968).
+</paragraph>
+</subSubSection>
+</treatment>
+</document>

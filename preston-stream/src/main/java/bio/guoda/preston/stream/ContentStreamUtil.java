@@ -118,7 +118,7 @@ public class ContentStreamUtil {
             String path = matcher.group(5);
             String[] prefixSplit = StringUtils.split(prefix, ":");
             String[] pathSplit = StringUtils.splitByWholeSeparator(path, "!/");
-            if (prefixSplit.length == pathSplit.length) {
+            if (prefixSplit.length > 0 && prefixSplit.length == pathSplit.length) {
                 String gzipPrefix = matcher.group(2);
                 String contentReference = matcher.group(3);
                 url = prefix + gzipPrefix + contentReference + path;

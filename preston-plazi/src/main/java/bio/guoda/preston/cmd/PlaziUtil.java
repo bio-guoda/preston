@@ -1,7 +1,6 @@
 package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.process.XMLUtil;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.RegExUtils;
@@ -214,7 +213,7 @@ public class PlaziUtil {
             Node expectedCommonName = commonNames.item(i);
             String commonNameSegment = replaceTabsNewlinesWithSpaces(expectedCommonName.getParentNode());
             String[] commonNameSplit = StringUtils.split(commonNameSegment, ".");
-            String commonNameTrimmed = commonNameSplit.length > 1 ? commonNameSplit[1] : commonNameSplit[0];
+            String commonNameTrimmed = commonNameSplit.length > 1 ? commonNameSplit[1] : (commonNameSplit.length > 0 ? commonNameSplit[0] : "");
             String[] commonNamesSplit = StringUtils.split(commonNameTrimmed, "I/");
             for (String commonName : commonNamesSplit) {
                 addCommonName(commonNameList, commonName);
@@ -228,8 +227,14 @@ public class PlaziUtil {
     }
 
     private static void addCommonName(List<String> commonNameList, String str) {
-        String language = "en";
         String[] languageAndCommonName = StringUtils.split(str, ":");
+        if (languageAndCommonName.length > 0) {
+            parseCommonName(commonNameList, languageAndCommonName);
+        }
+    }
+
+    private static void parseCommonName(List<String> commonNameList, String[] languageAndCommonName) {
+        String language = "en";
         String commonNamesWithoutLanguage = languageAndCommonName[0];
         if (languageAndCommonName.length > 1) {
             String languageString = languageAndCommonName[0];

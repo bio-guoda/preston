@@ -287,7 +287,10 @@ public class DarkTaxonUtil {
             JsonNode valueNode = multimedia.get(DWC_TERMS_EVENT_DATE);
             if (!valueNode.isNull() && StringUtils.isNotBlank(valueNode.asText())) {
                 String eventDate2 = valueNode.asText();
-                addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_EVENT_DATE, StringUtils.split(eventDate2, "/")[0]);
+                String[] split = StringUtils.split(eventDate2, "/");
+                if (split.length > 0) {
+                    addValueAsCustomFieldIfAvailable(zenodoMetadata, ZenodoMetaUtil.FIELD_CUSTOM_DWC_EVENT_DATE, split[0]);
+                }
             }
         }
     }
