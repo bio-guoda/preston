@@ -28,7 +28,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
- * SAX handler to parseQuads a meta.xml descriptor for Darwin Core Archives. It populates a given archive instance and ignores
+ * SAX handler to parse a meta.xml descriptor for Darwin Core Archives. It populates a given archive instance and ignores
  * namespaces. The parser needs to be namespace aware!
  */
 class MetaXMLSaxHandler2 extends SimpleSaxHandler {

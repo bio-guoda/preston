@@ -17,7 +17,7 @@ public class PlaziTreatmentParser implements TreatmentParser {
         try {
             return parseTreatment(is);
         } catch (ParserConfigurationException | SAXException | XPathExpressionException e) {
-            throw new TreatmentParseException("failed to parseQuads treatment", e);
+            throw new TreatmentParseException("failed to parse treatment", e);
         } catch (IOException e) {
             throw new IOException("error receiving treatment", e);
         }

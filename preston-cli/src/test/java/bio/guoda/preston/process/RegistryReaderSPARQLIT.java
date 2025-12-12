@@ -121,7 +121,7 @@ public class RegistryReaderSPARQLIT {
                     results.add(execute);
                 } catch (URISyntaxException ex) {
                     ex.printStackTrace();
-                    fail("failed to parseQuads: " + queryWithPrefixes);
+                    fail("failed to parse: " + queryWithPrefixes);
 
                 }
             }

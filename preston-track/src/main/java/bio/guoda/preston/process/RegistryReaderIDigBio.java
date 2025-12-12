@@ -386,7 +386,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                 parsePublishers(refNode, emitter, is);
             }
         } catch (IOException e) {
-            LOG.warn("failed to parseQuads publishers [" + refNode.toString() + "]", e);
+            LOG.warn("failed to parse publishers [" + refNode.toString() + "]", e);
         }
     }
 
@@ -397,7 +397,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                 parseRecordSets(refNode, emitter, is);
             }
         } catch (IOException e) {
-            LOG.warn("failed to parseQuads recordsets [" + refNode.toString() + "]", e);
+            LOG.warn("failed to parse recordsets [" + refNode.toString() + "]", e);
         }
     }
 
@@ -409,7 +409,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                 parseRecordSet(refNode, emitter, r);
             }
         } catch (IOException e) {
-            LOG.warn("failed to parseQuads recordsets [" + refNode.toString() + "]", e);
+            LOG.warn("failed to parse recordsets [" + refNode.toString() + "]", e);
         }
     }
 
@@ -420,7 +420,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                 parseRecords(refNode, emitter, is, pageIRI);
             }
         } catch (IOException e) {
-            LOG.warn("failed to parseQuads records [" + refNode.toString() + "]", e);
+            LOG.warn("failed to parse records [" + refNode.toString() + "]", e);
         }
     }
 
@@ -431,7 +431,7 @@ public class RegistryReaderIDigBio extends ProcessorReadOnly {
                 parseMediaRecord(refNode, emitter, is, pageIRI);
             }
         } catch (IOException e) {
-            LOG.warn("failed to parseQuads records [" + refNode.toString() + "]", e);
+            LOG.warn("failed to parse records [" + refNode.toString() + "]", e);
         }
     }
 
