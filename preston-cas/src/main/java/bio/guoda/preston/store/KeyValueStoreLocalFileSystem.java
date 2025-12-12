@@ -90,7 +90,8 @@ public class KeyValueStoreLocalFileSystem extends KeyValueStoreLocalFileSystemRe
         File destFile = getDestFileForKey(key);
         if (!destFile.exists()) {
             FileUtils.forceMkdirParent(destFile);
-            FileUtils.moveFile(tmpDestFile, destFile);
+            FileUtils.copyFile(tmpDestFile, destFile);
+            FileUtils.delete(tmpDestFile);
         }
     }
 
