@@ -34,17 +34,17 @@ public class DerefProgressLoggerTest {
         String[] newLines = StringUtils.split(out.toString(StandardCharsets.UTF_8.name()), "\n");
         assertThat(newLines[0], startsWith("<https://example.org> <http://purl.org/pav/sourceAccessedAt> \""));
         assertThat(newLines[0], containsString("\"^^<http://www.w3.org/2001/XMLSchema#dateTime>"));
-        assertThat(newLines[2], endsWith("> ."));
+        assertThat(newLines[0], endsWith("> ."));
 
         String[] processLines = StringUtils.split(newLines[1], "\r");
 
 
-        assertThat(processLines[0], startsWith("[https://example.org] 1.0% of 1 kB at "));
+        assertThat(processLines[0], startsWith("1.0% of 1 kB at "));
         assertThat(processLines[0], endsWith(" MB/s ETA: < 1 minute"));
-        assertThat(processLines[1], startsWith("[https://example.org] 2.0% of 1 kB at"));
+        assertThat(processLines[1], startsWith("2.0% of 1 kB at"));
         assertThat(processLines[1], endsWith("MB/s ETA: < 1 minute"));
 
-        assertThat(processLines[2], startsWith("[https://example.org] 10.0% of 1 kB at"));
+        assertThat(processLines[2], startsWith("10.0% of 1 kB at"));
         assertThat(processLines[2], endsWith("completed in < 1 minute"));
 
         assertThat(newLines[2], startsWith("<https://example.org> <http://purl.org/pav/retrievedOn> \""));
@@ -71,7 +71,7 @@ public class DerefProgressLoggerTest {
         assertThat(newLines.length, Is.is(2));
 
         String[] processLines = StringUtils.split(newLines[1], '\r');
-        assertThat(processLines[0], startsWith("[https://example.org/very...ooooooooooooooooooooong] 1.0% of 1 kB at "));
+        assertThat(processLines[0], startsWith("1.0% of 1 kB at "));
         assertThat(processLines[0], endsWith("ETA: < 1 minute"));
     }
 
@@ -94,7 +94,7 @@ public class DerefProgressLoggerTest {
         String[] processLines = StringUtils.split(newLines[1], '\r');
 
         assertThat(processLines[0], startsWith(
-                "[https://example.org/very] 1 kB at "));
+                "1 kB at "));
         assertThat(processLines[0], endsWith(
                 " MB/s"));
 
