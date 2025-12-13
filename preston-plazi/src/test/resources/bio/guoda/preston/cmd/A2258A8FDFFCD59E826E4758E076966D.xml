@@ -1,0 +1,299 @@
+<document ID-DOI="http://dx.doi.org/ 10.3897/BDJ.1.e983" ID-Pensoft-Pub="1314-2828-1-983" ModsDocAuthor="" ModsDocDate="2013" ModsDocID="1314-2828-1-e983" ModsDocOrigin="Biodiversity Data Journal 1" ModsDocTitle="First record of the male of the widespread Calliscelioelegans (Perkins) (Hymenoptera, Platygastridae) along with some taxonomic notes on the species" checkinTime="1451253573913" checkinUser="pensoft" docAuthor="Rajmohana, Keloth, Peter, Abhilash &amp; Narendran, TC" docDate="2013" docId="A2258A8FDFFCD59E826E4758E076966D" docLanguage="en" docName="BiodivDatJour 1: e983" docOrigin="Biodiversity Data Journal 1" docSource="http://dx.doi.org/10.3897/BDJ.1.e983" docTitle="Calliscelio elegans Perkins 1910" docType="treatment" docVersion="1" lastPageNumber="983" masterDocId="0C45C92E8E01FFE9FFB6C149465BFFCF" masterDocTitle="First record of the male of the widespread Calliscelioelegans (Perkins) (Hymenoptera, Platygastridae) along with some taxonomic notes on the species" masterLastPageNumber="983" masterPageNumber="983" pageId="0" pageNumber="983" updateTime="1451253573913" updateUser="pensoft" xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:titleInfo>
+<mods:title>First record of the male of the widespread Calliscelioelegans (Perkins) (Hymenoptera, Platygastridae) along with some taxonomic notes on the species</mods:title>
+</mods:titleInfo>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Rajmohana, Keloth</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Peter, Abhilash</mods:namePart>
+</mods:name>
+<mods:name type="personal">
+<mods:role>
+<mods:roleTerm>Author</mods:roleTerm>
+</mods:role>
+<mods:namePart>Narendran, TC</mods:namePart>
+</mods:name>
+<mods:typeOfResource>text</mods:typeOfResource>
+<mods:relatedItem type="host">
+<mods:titleInfo>
+<mods:title>Biodiversity Data Journal</mods:title>
+</mods:titleInfo>
+<mods:part>
+<mods:date>2013</mods:date>
+<mods:detail type="volume">
+<mods:number>1</mods:number>
+</mods:detail>
+<mods:extent unit="page">
+<mods:start>983</mods:start>
+<mods:end>983</mods:end>
+</mods:extent>
+</mods:part>
+</mods:relatedItem>
+<mods:location>
+<mods:url>http://dx.doi.org/10.3897/BDJ.1.e983</mods:url>
+</mods:location>
+<mods:classification>journal article</mods:classification>
+<mods:identifier type="DOI">http://dx.doi.org/10.3897/BDJ.1.e983</mods:identifier>
+<mods:identifier type="Pensoft-Pub">1314-2828-1-983</mods:identifier>
+</mods:mods>
+<treatment LSID="urn:lsid:plazi:treatment:A2258A8FDFFCD59E826E4758E076966D" httpUri="http://treatment.plazi.org/id/A2258A8FDFFCD59E826E4758E076966D" pageId="0" pageNumber="983">
+<subSubSection pageId="0" pageNumber="983" type="multiple">
+<paragraph pageId="0" pageNumber="983">
+Rank: SpeciesType of treatment: Redescription or species observationextantHabitat: terrestrialParasite of: Crickets (
+<taxonomicName lsidName="" order="Orthoptera" pageId="0" pageNumber="983" rank="order">Orthoptera</taxonomicName>
+: 
+<taxonomicName family="Gryllidae" lsidName="" pageId="0" pageNumber="983" rank="family">Gryllidae</taxonomicName>
+)Root classification: 8
+</paragraph>
+</subSubSection>
+<subSubSection pageId="0" pageNumber="983" type="nomenclature">
+<paragraph pageId="0" pageNumber="983">
+<taxonomicName authority="Perkins (1910)" class="Insecta" family="Scelionidae" genus="Calliscelio" higherTaxonomySource="CoL" kingdom="Animalia" lsidName="Calliscelio elegans" order="Hymenoptera" pageId="0" pageNumber="983" phylum="Arthropoda" rank="species" species="elegans">Calliscelio elegans Perkins (1910)</taxonomicName>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="0" pageNumber="983" type="reference_group">
+<paragraph pageId="0" pageNumber="983">
+<taxonomicName authority="Ashmead, 1893" authorityName="Ashmead" authorityYear="1893" class="Insecta" family="Scelionidae" genus="Caloteleia" higherTaxonomySource="GBIF" kingdom="Animalia" lsidName="Caloteleia elegans" order="Hymenoptera" pageId="0" pageNumber="983" phylum="Arthropoda" rank="species" species="elegans">Caloteleia elegans</taxonomicName>
+<bibRefCitation author="Perkins, R. C. L." journalOrPublisher="Fauna Hawaiiensis" pageId="0" pageNumber="983" pagination="600 - 686" title="Supplement to Hymenoptera" volume="2" year="1910">Perkins 1910</bibRefCitation>
+: 624. Original description.
+</paragraph>
+<paragraph pageId="0" pageNumber="983">
+<taxonomicName class="Insecta" family="Scelionidae" genus="Caenoteleia" higherTaxonomySource="CoL" kingdom="Animalia" lsidName="Caenoteleia elegans" order="Hymenoptera" pageId="0" pageNumber="983" phylum="Arthropoda" rank="species" species="elegans">Caenoteleia elegans</taxonomicName>
+<bibRefCitation author="Kieffer, J. J." journalOrPublisher="DasTierreich" pageId="0" pageNumber="983" pagination="1 - 885" title="Scelionidae" volume="48" year="1926">Kieffer 1926</bibRefCitation>
+: 550. Generic transfer, description.
+</paragraph>
+<paragraph pageId="0" pageNumber="983">
+<taxonomicName class="Insecta" family="Scelionidae" genus="Calliscelio" higherTaxonomySource="CoL" kingdom="Animalia" lsidName="Calliscelio elegans" order="Hymenoptera" pageId="0" pageNumber="983" phylum="Arthropoda" rank="species" species="elegans">Calliscelio elegans</taxonomicName>
+Masner, Johnson &amp; Musetti, 2009: 
+<bibRefCitation author="Masner, L" journalOrPublisher="Zootaxa" pageId="0" pageNumber="983" pagination="59 - 66" title="Calliscelioelegans (Perkins), a tramp species, and a review of the status of the genus Caenoteleia Kieffer (Hymenoptera: Platygastridae)" volume="2237" year="2009">Masner et al. 2009</bibRefCitation>
+: 61. Description, diagnosis, generic transfer.
+</paragraph>
+<paragraph pageId="0" pageNumber="983">
+<taxonomicName class="Insecta" family="Scelionidae" genus="Calliscelio" higherTaxonomySource="CoL" kingdom="Animalia" lsidName="Calliscelio elegans" order="Hymenoptera" pageId="0" pageNumber="983" phylum="Arthropoda" rank="species" species="elegans">Calliscelio elegans</taxonomicName>
+<taxonomicName class="Insecta" family="Scelionidae" genus="Calotelea" higherTaxonomySource="CoL" kingdom="Animalia" lsidName="Calotelea tanugatra" order="Hymenoptera" pageId="0" pageNumber="983" phylum="Arthropoda" rank="species" species="tanugatra">Calotelea tanugatra</taxonomicName>
+<bibRefCitation author="Narendran, T. C." journalOrPublisher="Proceedings of the Zoological Society of Calcutta" pageId="0" pageNumber="983" pagination="70 - 74" title="A new species and a key to species of Calotelea Westwood (Hymenoptera: Scelionidae) from India" volume="51" year="1998">Narendran 1998</bibRefCitation>
+: 71. Female, India (ZSIC) Holotype examined, syn. nov.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="0" pageNumber="983" type="materials_examined">
+<paragraph pageId="0" pageNumber="983">Materials</paragraph>
+<paragraph pageId="0" pageNumber="983">
+<materialsCitation collectingDate="2007-4-20/5-20" collectingMethod="Malaise trap" collectorName="Priyadarshan" country="India" location="Biligiriranga Hills" pageId="0" pageNumber="983" specimenCount="1" specimenCount-male="1" typeStatus="Other material">
+Type status: 
+<typeStatus pageId="0" pageNumber="983">Other material</typeStatus>
+Occurrence: recordedBy: 
+<collectorName pageId="0" pageNumber="983">Priyadarshan</collectorName>
+; individualID: ZSI/WGRS/IR.INV.2655; individualCount: 
+<specimenCount pageId="0" pageNumber="983">1</specimenCount>
+; sex: 
+<specimenType pageId="0" pageNumber="983">Male</specimenType>
+; lifeStage: 
+<specimenType pageId="0" pageNumber="983">Adult</specimenType>
+; preparations: Card mount; Taxon: scientificNameID: Calliscelioelegans; kingdom: Animalia; phylum: Arthropoda; class: Insecta; order: Hymenoptera; family: Platygastridae; genus: Calliscelio; specificEpithet: elegans; scientificNameAuthorship: Perkins; Location: continent: Asia; country: 
+<collectingCountry pageId="0" pageNumber="983">India</collectingCountry>
+; stateProvince: Karnataka; locality: 
+<location LSID="urn:lsid:plazi:treatment:A2258A8FDFFCD59E826E4758E076966D:B890A3C205D420BA46513E08F73E6562" country="India" name="Biligiriranga Hills" pageId="0" pageNumber="983">Biligiriranga Hills</location>
+; verbatimLocality: Mariappanappala; decimalLatitude: 
+<geoCoordinate orientation="latitude" pageId="0" pageNumber="983" value="11.785169 N">11.785169 N</geoCoordinate>
+; decimalLongitude: 
+<geoCoordinate orientation="longitude" pageId="0" pageNumber="983" value="77.223671 E">77.223671 E</geoCoordinate>
+; Identification: identifiedBy: Rajmohana K; dateIdentified: 2013-6-1; identificationRemarks: First male of the species ever recorded; Event: samplingProtocol: 
+<collectingMethod pageId="0" pageNumber="983">Malaise trap</collectingMethod>
+; eventDate: 
+<collectingDate pageId="0" pageNumber="983" value="2007-4-20/5-20">2007-4-20/5-20</collectingDate>
+; habitat: Semi-evergreen; eventRemarks: Collected in Malaise trap; Record Level: institutionID: ZSIC
+</materialsCitation>
+</paragraph>
+<paragraph pageId="0" pageNumber="983">
+<materialsCitation collectingDate="2007-4-20/5-20" collectorName="Priyadarshan" country="India" location="Biligiriranga Hills" pageId="0" pageNumber="983" specimenCount="5" specimenCount-female="5" typeStatus="Other material">
+Type status: 
+<typeStatus pageId="0" pageNumber="983">Other material</typeStatus>
+Occurrence: recordedBy: 
+<collectorName pageId="0" pageNumber="983">Priyadarshan</collectorName>
+; individualID: ZSI/WGRS/IR.INV.2700-2705; individualCount: 
+<specimenCount pageId="0" pageNumber="983">5</specimenCount>
+; sex: 
+<specimenType pageId="0" pageNumber="983">Female</specimenType>
+; lifeStage: 
+<specimenType pageId="0" pageNumber="983">Adult</specimenType>
+; preparations: In Alcohol; Taxon: scientificNameID: Calliscelioelegans; kingdom: Animalia; phylum: Arthropoda; class: Insecta; order: Hymenoptera; family: Platygastridae; genus: Calliscelio; specificEpithet: elegans; scientificNameAuthorship: Perkins; Location: continent: Asia; country: 
+<collectingCountry pageId="0" pageNumber="983">India</collectingCountry>
+; stateProvince: Karnataka; locality: 
+<location LSID="urn:lsid:plazi:treatment:A2258A8FDFFCD59E826E4758E076966D:89D9DF5641260A6F63BF42FEF8EBDED8" country="India" name="Biligiriranga Hills" pageId="0" pageNumber="983">Biligiriranga Hills</location>
+; verbatimLocality: Mariappanappala; decimalLatitude: 
+<geoCoordinate orientation="latitude" pageId="0" pageNumber="983" value="11.785169 N">11.785169 N</geoCoordinate>
+; decimalLongitude: 
+<geoCoordinate orientation="longitude" pageId="0" pageNumber="983" value="77.223671 E">77.223671 E</geoCoordinate>
+; Identification: identifiedBy: Rajmohana K; dateIdentified: 2013-6-1; Event: eventDate: 
+<collectingDate pageId="0" pageNumber="983" value="2007-4-20/5-20">2007-4-20/5-20</collectingDate>
+; habitat: Semi-evergreen; eventRemarks: Collected in Malaise trap; Record Level: institutionID: ZSIC
+</materialsCitation>
+</paragraph>
+<paragraph pageId="0" pageNumber="983">
+<materialsCitation collectingDate="2007-11-15/12-15" collectorName="Priyadarshan" country="India" location="Biligiriranga Hills" pageId="0" pageNumber="983" specimenCount="6" specimenCount-female="6" typeStatus="Other material">
+Type status: 
+<typeStatus pageId="0" pageNumber="983">Other material</typeStatus>
+Occurrence: recordedBy: 
+<collectorName pageId="0" pageNumber="983">Priyadarshan</collectorName>
+; individualID: Atree /BR/10-16; individualCount: 
+<specimenCount pageId="0" pageNumber="983">6</specimenCount>
+; sex: 
+<specimenType pageId="0" pageNumber="983">Female</specimenType>
+; lifeStage: 
+<specimenType pageId="0" pageNumber="983">Adult</specimenType>
+; preparations: In Alcohol; Taxon: scientificNameID: Calliscelioelegans; kingdom: Animalia; phylum: Arthropoda; class: Insecta; order: Hymenoptera; family: Platygastridae; genus: Calliscelio; specificEpithet: elegans; scientificNameAuthorship: Perkins; Location: continent: Asia; country: 
+<collectingCountry pageId="0" pageNumber="983">India</collectingCountry>
+; stateProvince: Karnataka; locality: 
+<location LSID="urn:lsid:plazi:treatment:A2258A8FDFFCD59E826E4758E076966D:833C62912E76AC407BFD31059A241F9E" country="India" name="Biligiriranga Hills" pageId="0" pageNumber="983">Biligiriranga Hills</location>
+; verbatimLocality: Mariappanappala; decimalLatitude: 
+<geoCoordinate orientation="latitude" pageId="0" pageNumber="983" value="11.785169 N">11.785169 N</geoCoordinate>
+; decimalLongitude: 
+<geoCoordinate orientation="longitude" pageId="0" pageNumber="983" value="77.223671 E">77.223671 E</geoCoordinate>
+; Identification: identifiedBy: Rajmohana K; dateIdentified: 2013-6-1; Event: eventDate: 
+<collectingDate pageId="0" pageNumber="983" value="2007-11-15/12-15">2007-11-15/12-15</collectingDate>
+; habitat: Semi-evergreen; eventRemarks: Collected in Malaise trap; Record Level: institutionID: ZSIC
+</materialsCitation>
+</paragraph>
+<paragraph pageId="0" pageNumber="983">
+<materialsCitation collectingDate="2012-1-5" collectorName="Abhilash Peter" country="India" location="Trichur" pageId="0" pageNumber="983" specimenCount="1" specimenCount-female="1" typeStatus="Other material">
+Type status: 
+<typeStatus pageId="0" pageNumber="983">Other material</typeStatus>
+Occurrence: recordedBy: 
+<collectorName pageId="0" pageNumber="983">Abhilash Peter</collectorName>
+; individualID: ZSI/WGRS/IR.INV.2485; individualCount: 
+<specimenCount pageId="0" pageNumber="983">1</specimenCount>
+; sex: 
+<specimenType pageId="0" pageNumber="983">Female</specimenType>
+; lifeStage: 
+<specimenType pageId="0" pageNumber="983">Adult</specimenType>
+; preparations: Card mount; Taxon: scientificNameID: Calliscelioelegans; kingdom: Animalia; phylum: Arthropoda; class: Insecta; order: Hymenoptera; family: Platygastridae; genus: Calliscelio; specificEpithet: elegans; scientificNameAuthorship: Perkins; Location: continent: Asia; country: 
+<collectingCountry pageId="0" pageNumber="983">India</collectingCountry>
+; stateProvince: Kerala; locality: 
+<location LSID="urn:lsid:plazi:treatment:A2258A8FDFFCD59E826E4758E076966D:399C2C546E2BE34BE1A9854A77739286" country="India" name="Trichur" pageId="0" pageNumber="983">Trichur</location>
+; verbatimLocality: Chimmony Damsite; decimalLatitude: 
+<geoCoordinate orientation="latitude" pageId="0" pageNumber="983" value="10.523100 N">10.523100 N</geoCoordinate>
+; decimalLongitude: 
+<geoCoordinate orientation="longitude" pageId="0" pageNumber="983" value="76.222221 E">76.222221 E</geoCoordinate>
+; Identification: identifiedBy: Rajmohana K; dateIdentified: 2013-3-6; Event: verbatimEventDate: 
+<collectingDate pageId="0" pageNumber="983" value="2012-1-5">2012-1-5</collectingDate>
+; habitat: Mixed Vegetation; eventRemarks: Collected in Sweep net; Record Level: institutionID: ZSIC
+</materialsCitation>
+</paragraph>
+<paragraph pageId="0" pageNumber="983">
+<materialsCitation collectingDate="2010-9-8" collectorName="Bijoy. C" country="India" location="Calicut" pageId="0" pageNumber="983" specimenCount="1" specimenCount-female="1" typeStatus="Other material">
+Type status: 
+<typeStatus pageId="0" pageNumber="983">Other material</typeStatus>
+Occurrence: recordedBy: 
+<collectorName pageId="0" pageNumber="983">Bijoy. C</collectorName>
+; individualID: ZSI/WGRS/IR.INV.2486; individualCount: 
+<specimenCount pageId="0" pageNumber="983">1</specimenCount>
+; sex: 
+<specimenType pageId="0" pageNumber="983">Female</specimenType>
+; lifeStage: 
+<specimenType pageId="0" pageNumber="983">Adult</specimenType>
+; preparations: Card mount; Taxon: scientificNameID: Calliscelioelegans; kingdom: Animalia; phylum: Arthropoda; class: Insecta; order: Hymenoptera; family: Platygastridae; genus: Calliscelio; specificEpithet: elegans; scientificNameAuthorship: Perkins; Location: continent: Asia; country: 
+<collectingCountry pageId="0" pageNumber="983">India</collectingCountry>
+; stateProvince: Kerala; locality: 
+<location LSID="urn:lsid:plazi:treatment:A2258A8FDFFCD59E826E4758E076966D:FB22785DD48A982435A8D1F1D3386BB8" country="India" name="Calicut" pageId="0" pageNumber="983">Calicut</location>
+; verbatimLocality: Jaferkhan Colony; decimalLatitude: 
+<geoCoordinate orientation="latitude" pageId="0" pageNumber="983" value="11.266666 N">11.266666 N</geoCoordinate>
+; decimalLongitude: 
+<geoCoordinate orientation="longitude" pageId="0" pageNumber="983" value="75.791001 E">75.791001 E</geoCoordinate>
+; Identification: identifiedBy: Rajmohana K; dateIdentified: 2011-5-15; Event: verbatimEventDate: 
+<collectingDate pageId="0" pageNumber="983" value="2010-9-8">2010-9-8</collectingDate>
+; habitat: Mixed Vegetation; eventRemarks: Collected in Sweep net; Record Level: institutionID: ZSIC
+</materialsCitation>
+</paragraph>
+<paragraph pageId="0" pageNumber="983">
+<materialsCitation collectingDate="2005-8-11" collectorName="Rajmohana. K" country="India" location="Calicut" pageId="0" pageNumber="983" specimenCount="1" specimenCount-female="1" typeStatus="Other material">
+Type status: 
+<typeStatus pageId="0" pageNumber="983">Other material</typeStatus>
+Occurrence: recordedBy: 
+<collectorName pageId="0" pageNumber="983">Rajmohana.K</collectorName>
+; individualID: ZSI/WGRS/IR.INV.2637; individualCount: 
+<specimenCount pageId="0" pageNumber="983">1</specimenCount>
+; sex: 
+<specimenType pageId="0" pageNumber="983">Female</specimenType>
+; lifeStage: 
+<specimenType pageId="0" pageNumber="983">Adult</specimenType>
+; preparations: Card mount; Taxon: scientificNameID: Calliscelioelegans; kingdom: Animalia; phylum: Arthropoda; class: Insecta; order: Hymenoptera; family: Platygastridae; genus: Calliscelio; specificEpithet: elegans; scientificNameAuthorship: Perkins; Location: continent: Asia; country: 
+<collectingCountry pageId="0" pageNumber="983">India</collectingCountry>
+; stateProvince: Kerala; locality: 
+<location LSID="urn:lsid:plazi:treatment:A2258A8FDFFCD59E826E4758E076966D:12027D2C9B9B10F64F9642C792C0E257" country="India" name="Calicut" pageId="0" pageNumber="983">Calicut</location>
+; verbatimLocality: Tiruvannur; decimalLatitude: 
+<geoCoordinate orientation="latitude" pageId="0" pageNumber="983" value="11.247655 N">11.247655 N</geoCoordinate>
+; decimalLongitude: 
+<geoCoordinate orientation="longitude" pageId="0" pageNumber="983" value="75.767650 E">75.767650 E</geoCoordinate>
+; Identification: identifiedBy: Rajmohana K; dateIdentified: 2005-12-10; Event: verbatimEventDate: 
+<collectingDate pageId="0" pageNumber="983" value="2005-8-11">2005-8-11</collectingDate>
+; habitat: Mixed Vegetation; eventRemarks: Collected in Sweep net; Record Level: institutionID: ZSIC
+</materialsCitation>
+</paragraph>
+</subSubSection>
+<subSubSection pageId="0" pageNumber="983" type="description">
+<paragraph pageId="0" pageNumber="983">Description</paragraph>
+<paragraph pageId="0" pageNumber="983">New Description of Male. Length: 1.97mm (n=1) (Fig. 1). Head, mesosoma, T1 wholly and anterior one-fourth of T2, legs and A1 deep orange yellow; posterior three-fourth of T2 onwards till T8, A3-A12 ebony black, A2 and ocelli darkened (Fig. 2); frons (Fig. 3) and mesoscutum medially with a pair of dark patches (Fig. 4); apex of mandibles and apex of hind femur slightly darkened; forewing conspicuously banded, with dark bands basally, medially and apically, separated by light bands (Fig. 8), with median band being most prominent as seen in females (Fig. 7).</paragraph>
+<paragraph pageId="0" pageNumber="983">
+Qualitative characters of head and mesosoma being exactly similar to that of female as mentioned in 
+<bibRefCitation author="Masner, L" journalOrPublisher="Zootaxa" pageId="0" pageNumber="983" pagination="59 - 66" title="Calliscelioelegans (Perkins), a tramp species, and a review of the status of the genus Caenoteleia Kieffer (Hymenoptera: Platygastridae)" volume="2237" year="2009">Masner et al. (2009)</bibRefCitation>
+, is not repeated here. However propodeum being flat and elongate, with faint longitudinal striae and irregular rugosities differs from that of the female.
+</paragraph>
+<paragraph pageId="0" pageNumber="983">Metasoma elongate, widest medially, narrowed both anteriorly and posteriorly (Fig. 5); T1 with fine longitudinal striae and irregular rugose sculpture covering entire surface, almost similar to that on propodeum; longitudinal striae on T2 extending to 0.8 its length medially and about 0.5 of its length laterally. T3 distinctly transverse, shorter than T2, with delicate longitudinal aciculate sculpture, effaced medially; T4-T8 transverse, with delicate coriaceous microsculpture and with abundant appressed golden pilosity.</paragraph>
+<paragraph pageId="0" pageNumber="983">General body measurements, length to width proportions of antennal segments, forewing and that of metasomal segments are as follows:</paragraph>
+<paragraph pageId="0" pageNumber="983">Head (dorsal) L:W = 4.05:2.61mm; IOS = 1.14x eye height; POL:LOL:OOL:OD = 1.32:0.75:0.2:0.3.</paragraph>
+<paragraph pageId="0" pageNumber="983">A1 4.2x length of radicle, A2 1.05x longer than radicle; A3 and A4 subequal; A5 emarginate and carinate (Fig. 6), 1.15x longer than A4 and 1.02X length of A6; A6 to A8 subequal, A9 to A12 subequal as long as A3, A12 longest, 1.37x A11. Length to width proportions of antennal segments from A1to A12 being 23:5.4, 5.7:4, 8:4, 8:4, 9.2:4.7, 9:4, 9:4, 9:4, 8:4, 8:4, 8:4, 11:4 (Fig. 6).</paragraph>
+<paragraph pageId="0" pageNumber="983">ML:MW = 4.15: 3.38; Forewing narrow, 5.4x as long as wide, when at rest extending to base of T5; length of veins marginal: stigmal: postmarginal being 6:7:8.</paragraph>
+<paragraph pageId="0" pageNumber="983">MTL:MTW = 2.03:1.19; T2 longest of all tergites, 1.6x T1 and 1.38x T3 tergite; length to width proportions of T1-T4 being 127:85, 204:170, 148:203, 78:169; T3 onwards transverse; rest of tergites visible as strips; T8 distinct.</paragraph>
+</subSubSection>
+<subSubSection pageId="0" pageNumber="983" type="diagnosis">
+<paragraph pageId="0" pageNumber="983">Diagnosis</paragraph>
+<subSection pageId="0" pageNumber="983" type="variation">
+<paragraph pageId="0" pageNumber="983">Variation</paragraph>
+<paragraph pageId="0" pageNumber="983">
+Hardly showing any variation from the description of the female by 
+<bibRefCitation author="Masner, L" journalOrPublisher="Zootaxa" pageId="0" pageNumber="983" pagination="59 - 66" title="Calliscelioelegans (Perkins), a tramp species, and a review of the status of the genus Caenoteleia Kieffer (Hymenoptera: Platygastridae)" volume="2237" year="2009">Masner et al. (2009)</bibRefCitation>
+, except for its smaller size (&lt;2 mm). A pair of dark patches seen on median mesoscutum is not distinct in females. A few of the dense granulations on median frons appear fused as short, coarse irregular strips of striae (Fig. 3), but such a partially striated nature of median frons is seen in all the female specimens of 
+<taxonomicName class="Insecta" family="Scelionidae" genus="Calliscelio" higherTaxonomySource="CoL" kingdom="Animalia" lsidName="Calliscelio elegans" order="Hymenoptera" pageId="0" pageNumber="983" phylum="Arthropoda" rank="species" species="elegans">Calliscelio elegans</taxonomicName>
+included in this study as well.
+</paragraph>
+<paragraph pageId="0" pageNumber="983">The eyes of one of the freshly caught specimen female had a beautiful peacock green metallic lustre (Fig. 7), but turned black within 24 hours of dry preservation.</paragraph>
+</subSection>
+</subSubSection>
+<subSubSection pageId="0" pageNumber="983" type="biology">
+<paragraph pageId="0" pageNumber="983">Biology</paragraph>
+<paragraph pageId="0" pageNumber="983">
+Egg parasitoid of crickets (
+<taxonomicName lsidName="" order="Orthoptera" pageId="0" pageNumber="983" rank="order">Orthoptera</taxonomicName>
+: 
+<taxonomicName family="Gryllidae" lsidName="" pageId="0" pageNumber="983" rank="family">Gryllidae</taxonomicName>
+) as per 
+<bibRefCitation author="Masner, L" journalOrPublisher="Zootaxa" pageId="0" pageNumber="983" pagination="59 - 66" title="Calliscelioelegans (Perkins), a tramp species, and a review of the status of the genus Caenoteleia Kieffer (Hymenoptera: Platygastridae)" volume="2237" year="2009">Masner et al. (2009)</bibRefCitation>
+. The females are seen in low numbers, but the males are extremely rare.
+</paragraph>
+</subSubSection>
+<subSubSection pageId="0" pageNumber="983" type="ecology">
+<paragraph pageId="0" pageNumber="983">Ecology</paragraph>
+<paragraph pageId="0" pageNumber="983">Females are mostly seen close to ground, in search of gryllid eggs for oviposition.</paragraph>
+</subSubSection>
+<subSubSection pageId="0" pageNumber="983" type="distribution">
+<paragraph pageId="0" pageNumber="983">Distribution</paragraph>
+<paragraph pageId="0" pageNumber="983">
+The species is widely distributed (
+<bibRefCitation pageId="0" pageNumber="983">http://osuc.biosci.ohio-state.edu/hymDB/eol_scelionidae.content_page?page_level=3&amp;page_id=taxon_page_data&amp;page_version=245756&amp;page_option1=M</bibRefCitation>
+) but generally seen in low numbers (
+<bibRefCitation author="Masner, L" journalOrPublisher="Zootaxa" pageId="0" pageNumber="983" pagination="59 - 66" title="Calliscelioelegans (Perkins), a tramp species, and a review of the status of the genus Caenoteleia Kieffer (Hymenoptera: Platygastridae)" volume="2237" year="2009">Masner et al. 2009</bibRefCitation>
+). The distribution of 
+<taxonomicName class="Insecta" family="Scelionidae" genus="Calliscelio" higherTaxonomySource="CoL" kingdom="Animalia" lsidName="Calliscelio elegans" order="Hymenoptera" pageId="0" pageNumber="983" phylum="Arthropoda" rank="species" species="elegans">Calliscelio elegans</taxonomicName>
+in India has been mapped (Fig. 12). It is reported only from the southern states of the country.
+</paragraph>
+</subSubSection>
+</treatment>
+</document>
