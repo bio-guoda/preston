@@ -1,18 +1,17 @@
 package bio.guoda.preston.cmd;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpaoth.XPathExpressionException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
 
 public class PlaziUtilTest {
 
@@ -49,7 +48,7 @@ public class PlaziUtilTest {
         PlaziUtil.parseTreatment(getClass().getResourceAsStream("A2258A8FDFFCD59E826E4758E076966D.xml"));
     }
 
-    @Test
+    @Test(expected = SAXParseException.class)
     public void parseInvalid() throws XPathExpressionException, IOException, ParserConfigurationException, SAXException {
         PlaziUtil.parseTreatment(IOUtils.toInputStream("<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> <urn:uuid:d2609bba-0d75-4b55-a792-58c964dfc286> .\n" +
                 "<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> <urn:uuid:d2609bba-0d75-4b55-a792-58c964dfc286> .\n", StandardCharsets.UTF_8));

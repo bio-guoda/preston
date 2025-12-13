@@ -2,9 +2,13 @@ package bio.guoda.preston.process;
 
 import org.apache.commons.io.input.CloseShieldInputStream;
 import org.apache.commons.io.input.ClosedInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
@@ -23,6 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class XMLUtil {
+    private static final ErrorHandlerNOOP ERROR_HANDLER_NOOP = new ErrorHandlerNOOP();
 
     public static void handleXPath(String expression,
                                    XPathHandler handler,
@@ -45,6 +50,7 @@ public class XMLUtil {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
+        builder.setErrorHandler(ERROR_HANDLER_NOOP);
         return builder.parse(CloseShieldInputStream.wrap(resourceAsStream));
     }
 
@@ -89,5 +95,22 @@ public class XMLUtil {
                 throw new UnsupportedOperationException();
             }
         };
+    }
+
+    private static class ErrorHandlerNOOP implements ErrorHandler {
+        @Override
+        public void warning(SAXParseException e) throws SAXException {
+            // ignore - use exception instead
+        }
+
+        @Override
+        public void error(SAXParseException e) throws SAXException {
+            // ignore - use exception instead
+        }
+
+        @Override
+        public void fatalError(SAXParseException e) throws SAXException {
+            // ignore - use exception instead
+        }
     }
 }
