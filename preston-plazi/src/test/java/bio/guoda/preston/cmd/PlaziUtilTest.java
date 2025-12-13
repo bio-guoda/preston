@@ -7,7 +7,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpaoth.XPathExpressionException;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -50,8 +50,13 @@ public class PlaziUtilTest {
 
     @Test(expected = SAXParseException.class)
     public void parseInvalid() throws XPathExpressionException, IOException, ParserConfigurationException, SAXException {
-        PlaziUtil.parseTreatment(IOUtils.toInputStream("<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> <urn:uuid:d2609bba-0d75-4b55-a792-58c964dfc286> .\n" +
-                "<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> <urn:uuid:d2609bba-0d75-4b55-a792-58c964dfc286> .\n", StandardCharsets.UTF_8));
+        try {
+            PlaziUtil.parseTreatment(IOUtils.toInputStream("<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> <urn:uuid:d2609bba-0d75-4b55-a792-58c964dfc286> .\n" +
+                    "<https://preston.guoda.bio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> <urn:uuid:d2609bba-0d75-4b55-a792-58c964dfc286> .\n", StandardCharsets.UTF_8));
+        } catch (SAXParseException ex) {
+            assertThat(ex.getMessage(), Is.is("Element or attribute \"https:\" do not match QName production: QName::=(NCName:)?NCName."));
+            throw ex;
+        }
     }
 
 

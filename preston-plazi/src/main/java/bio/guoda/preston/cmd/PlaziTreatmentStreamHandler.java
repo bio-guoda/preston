@@ -41,11 +41,11 @@ public class PlaziTreatmentStreamHandler implements ContentStreamHandler {
                 handleAssumedPlaziTreatment(is, iriString, outputStream);
                 return true;
             } catch (TreatmentParseException e) {
-                // opportunistic parsing, skip those with parseQuads exceptions
+                // opportunistic parsing, skip those with parse exceptions
+                LOG.info("failed to parse possible Plazi treatment for content <" + iriString + ">, skipping instead", e);
                 return false;
             } catch (IOException ex) {
-                String msg = "failed to handle [" + version.getIRIString() + "]";
-                throw new ContentStreamException(msg, ex);
+                throw new ContentStreamException("failed to handle [" + version.getIRIString() + "]", ex);
             }
         }
         return false;
