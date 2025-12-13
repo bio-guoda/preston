@@ -60,7 +60,7 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
         String zoteroAttachmentDownloadUrl = ZoteroUtil.getAttachmentDownloadUrl(zoteroRecord);
         String providedContentId = null;
 
-        if (hasPdfAttachment(zoteroRecord, zoteroAttachmentDownloadUrl)) {
+        if (hasPdfAttachment(zoteroRecord)) {
             String filename = zoteroRecord.at("/data/filename").asText();
             if (StringUtils.isNoneBlank(filename)) {
                 ZenodoMetaUtil.setFilename(zenodoRecord, filename);
@@ -88,14 +88,19 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
             );
 
             JsonNode itemData = new ObjectMapper().readTree(itemInputStream);
-            if (isPrimaryAttachmentOf(zoteroAttachmentDownloadUrl, itemData)) {
+            if (StringUtils.isBlank(zoteroAttachmentDownloadUrl)
+                    || isPrimaryAttachmentOf(zoteroAttachmentDownloadUrl, itemData)) {
                 boolean isLikelyZoteroRecord = appendJournalArticleMetaData(
                         iriString,
                         itemData,
                         zenodoRecord
                 );
 
-                ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_COMPILED_BY, RefNodeConstants.PRESTON_DOI, ZenodoMetaUtil.RESOURCE_TYPE_SOFTWARE);
+                ZenodoMetaUtil.appendIdentifier(zenodoRecord,
+                        ZenodoMetaUtil.IS_COMPILED_BY,
+                        RefNodeConstants.PRESTON_DOI,
+                        ZenodoMetaUtil.RESOURCE_TYPE_SOFTWARE
+                );
 
                 if (isLikelyZoteroRecord) {
                     foundAtLeastOne.set(true);
@@ -111,11 +116,12 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
         return StringUtils.isNotBlank(primaryAttachment) && StringUtils.startsWith(zoteroAttachmentDownloadUrl, primaryAttachment);
     }
 
-    private boolean hasPdfAttachment(JsonNode zoteroRecord, String zoteroAttachmentDownloadUrl) {
+    private boolean hasPdfAttachment(JsonNode zoteroRecord) {
         boolean hasPdfAttachment = false;
-        if (StringUtils.isNoneBlank(zoteroAttachmentDownloadUrl)) {
+        String itemType = zoteroRecord.at("/data/itemType").asText();
+        if (StringUtils.equals("attachment", itemType)) {
             String contentType = zoteroRecord.at("/data/contentType").asText();
-            if (StringUtils.equals(contentType, "application/pdf")) {
+            if (StringUtils.equals("application/pdf", contentType)) {
                 hasPdfAttachment = true;
             }
         }

@@ -1,0 +1,63 @@
+{
+  "key": "UXU6BLPA",
+  "version": 45840,
+  "library": {
+    "type": "group",
+    "id": 2352922,
+    "name": "IPBES IAS",
+    "links": {
+      "alternate": {
+        "href": "https://www.zotero.org/groups/ipbes_ias",
+        "type": "text/html"
+      }
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://api.zotero.org/groups/2352922/items/UXU6BLPA",
+      "type": "application/json"
+    },
+    "alternate": {
+      "href": "https://www.zotero.org/groups/ipbes_ias/items/UXU6BLPA",
+      "type": "text/html"
+    },
+    "up": {
+      "href": "https://api.zotero.org/groups/2352922/items/D2HF5WXT",
+      "type": "application/json"
+    }
+  },
+  "meta": {
+    "createdByUser": {
+      "id": 5886158,
+      "username": "Ankila_Hiremath",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/ankila_hiremath",
+          "type": "text/html"
+        }
+      }
+    },
+    "numChildren": 0
+  },
+  "data": {
+    "key": "UXU6BLPA",
+    "version": 45840,
+    "parentItem": "D2HF5WXT",
+    "itemType": "attachment",
+    "linkMode": "imported_file",
+    "title": "Obiri - 2011 - Invasive plant species and their disaster-effects .pdf",
+    "accessDate": "",
+    "url": "",
+    "note": "",
+    "contentType": "application/pdf",
+    "charset": "",
+    "filename": "Obiri - 2011 - Invasive plant species and their disaster-effects .pdf",
+    "md5": "26225b23191d5cf93c3fa30aae54f0ac",
+    "mtime": 1635684135000,
+    "tags": [],
+    "relations": {},
+    "dateAdded": "2021-10-31T12:41:44Z",
+    "dateModified": "2021-10-31T12:42:15Z"
+  }
+}

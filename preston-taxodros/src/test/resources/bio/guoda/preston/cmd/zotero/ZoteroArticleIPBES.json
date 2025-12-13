@@ -1,0 +1,98 @@
+{
+  "key": "D2HF5WXT",
+  "version": 84026,
+  "library": {
+    "type": "group",
+    "id": 2352922,
+    "name": "IPBES IAS",
+    "links": {
+      "alternate": {
+        "href": "https://www.zotero.org/groups/ipbes_ias",
+        "type": "text/html"
+      }
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://api.zotero.org/groups/2352922/items/D2HF5WXT",
+      "type": "application/json"
+    },
+    "alternate": {
+      "href": "https://www.zotero.org/groups/ipbes_ias/items/D2HF5WXT",
+      "type": "text/html"
+    }
+  },
+  "meta": {
+    "createdByUser": {
+      "id": 5886158,
+      "username": "Ankila_Hiremath",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/ankila_hiremath",
+          "type": "text/html"
+        }
+      }
+    },
+    "lastModifiedByUser": {
+      "id": 5862169,
+      "username": "TSU IAS",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/tsu_ias",
+          "type": "text/html"
+        }
+      }
+    },
+    "creatorSummary": "Obiri",
+    "parsedDate": "2011-04-25",
+    "numChildren": 1
+  },
+  "data": {
+    "key": "D2HF5WXT",
+    "version": 84026,
+    "itemType": "journalArticle",
+    "title": "Invasive plant species and their disaster-effects in dry tropical forests and rangelands of Kenya and Tanzania",
+    "creators": [
+      {
+        "creatorType": "author",
+        "firstName": "John F.",
+        "lastName": "Obiri"
+      }
+    ],
+    "abstractNote": "Invasive plants are a hazard in the tropical dry forests and rangelands of East Africa. Although often not reported, they have increasingly created disasters that have a ected the environment and socio-economic wellbeing of communities inhabiting these dry regions. is paper reports on the key invasives in the drylands of Kenya and Tanzania and their e ects, and suggests some disaster risk reduction (DRR) strategies. e study was largely based on secondary data analysis and supported by surveys in the a ected drylands. e ndings show ten key invasive plant species that a ect the drylands. eir disaster-e ects vary and include: causing the death of livestock by poisoning and destroying livestock foliage, accelerating biodiversity loss via suppression of native plants, to increasing diseases by o ering a breeding ground for mosquitoes and other insects that carry ailments like nagana and sleeping sickness.",
+    "publicationTitle": "Jàmbá: Journal of Disaster Risk Studies",
+    "volume": "3",
+    "issue": "2",
+    "pages": "417-428",
+    "date": "2011-04-25",
+    "series": "",
+    "seriesTitle": "",
+    "seriesText": "",
+    "journalAbbreviation": "",
+    "language": "en",
+    "DOI": "10.4102/jamba.v3i2.39",
+    "ISSN": "2072-845X, 1996-1421",
+    "shortTitle": "",
+    "url": "http://jamba.org.za/index.php/jamba/article/view/39",
+    "accessDate": "2021-10-31T12:42:15Z",
+    "archive": "",
+    "archiveLocation": "",
+    "libraryCatalog": "DOI.org (Crossref)",
+    "callNumber": "",
+    "rights": "",
+    "extra": "",
+    "tags": [
+      {
+        "tag": "Chapter 4"
+      }
+    ],
+    "collections": [
+      "KEBZMW33"
+    ],
+    "relations": {},
+    "dateAdded": "2021-10-31T12:42:15Z",
+    "dateModified": "2023-12-11T09:33:27Z"
+  }
+}
