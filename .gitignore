@@ -11,5 +11,7 @@ pom.xml.versionsBackup
 *.jar
 *.deb
 *.rpm
+*.zip
+*.tar.gz
 **/*.hidden
 */tmp/*
