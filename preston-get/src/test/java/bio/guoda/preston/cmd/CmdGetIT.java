@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,8 +28,8 @@ public class CmdGetIT {
     public void getDataOneSHA1() {
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
-        cmdGet.setRemotes(Arrays.asList(URI.create("https://dataone.org")));
-        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("hash://sha1/398ab74e3da160d52705bb2477eb0f2f2cde5f15")));
+        cmdGet.setRemotes(Collections.singletonList(URI.create("https://dataone.org")));
+        cmdGet.setContentIdsOrAliases(Collections.singletonList(RefNodeFactory.toIRI("hash://sha1/398ab74e3da160d52705bb2477eb0f2f2cde5f15")));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdGet.setOutputStream(outputStream);
         cmdGet.run();
@@ -41,8 +42,8 @@ public class CmdGetIT {
     public void getZenodoRestricted() {
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
-        cmdGet.setRemotes(Arrays.asList(URI.create("https://zenodo.org")));
-        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("hash://md5/587f269cfa00aa40b7b50243ea8bdab9")));
+        cmdGet.setRemotes(Collections.singletonList(URI.create("https://zenodo.org")));
+        cmdGet.setContentIdsOrAliases(Collections.singletonList(RefNodeFactory.toIRI("hash://md5/587f269cfa00aa40b7b50243ea8bdab9")));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdGet.setOutputStream(outputStream);
         cmdGet.run();
@@ -54,8 +55,8 @@ public class CmdGetIT {
     public void getZenodoOpen() {
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
-        cmdGet.setRemotes(Arrays.asList(URI.create("https://zenodo.org")));
-        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("hash://md5/e124dfa939ce3adfd06401b43c216fed")));
+        cmdGet.setRemotes(Collections.singletonList(URI.create("https://zenodo.org")));
+        cmdGet.setContentIdsOrAliases(Collections.singletonList(RefNodeFactory.toIRI("hash://md5/e124dfa939ce3adfd06401b43c216fed")));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdGet.setOutputStream(outputStream);
         cmdGet.run();
@@ -72,9 +73,9 @@ public class CmdGetIT {
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
         cmdGet.setHashType(HashType.md5);
-        cmdGet.setRemotes(Arrays.asList(URI.create("https://zenodo.org")));
+        cmdGet.setRemotes(Collections.singletonList(URI.create("https://zenodo.org")));
         cmdGet.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/838ede23f4b8c6e8b7d692b61e954a60"));
-        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("hash://md5/2c6cbababdd943985e3ae4e064bb5b37")));
+        cmdGet.setContentIdsOrAliases(Collections.singletonList(RefNodeFactory.toIRI("hash://md5/2c6cbababdd943985e3ae4e064bb5b37")));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdGet.setOutputStream(outputStream);
         cmdGet.run();
@@ -89,9 +90,9 @@ public class CmdGetIT {
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
         cmdGet.setHashType(HashType.md5);
-        cmdGet.setRemotes(Arrays.asList(URI.create("https://zenodo.org")));
+        cmdGet.setRemotes(Collections.singletonList(URI.create("https://zenodo.org")));
         cmdGet.setProvenanceArchor(RefNodeFactory.toIRI("hash://md5/838ede23f4b8c6e8b7d692b61e954a60"));
-        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("zip:hash://md5/c0307712e8ed5afc64c7dbdfc0c04e4b!/data/2c/6c/2c6cbababdd943985e3ae4e064bb5b37")));
+        cmdGet.setContentIdsOrAliases(Collections.singletonList(RefNodeFactory.toIRI("zip:hash://md5/c0307712e8ed5afc64c7dbdfc0c04e4b!/data/2c/6c/2c6cbababdd943985e3ae4e064bb5b37")));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdGet.setOutputStream(outputStream);
         cmdGet.run();
@@ -113,8 +114,8 @@ public class CmdGetIT {
     public void getDataOneSHA1TwoBytes() {
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
-        cmdGet.setRemotes(Arrays.asList(URI.create("https://dataone.org")));
-        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("cut:hash://sha1/398ab74e3da160d52705bb2477eb0f2f2cde5f15!/b1-2")));
+        cmdGet.setRemotes(Collections.singletonList(URI.create("https://dataone.org")));
+        cmdGet.setContentIdsOrAliases(Collections.singletonList(RefNodeFactory.toIRI("cut:hash://sha1/398ab74e3da160d52705bb2477eb0f2f2cde5f15!/b1-2")));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdGet.setOutputStream(outputStream);
         cmdGet.run();
@@ -127,7 +128,7 @@ public class CmdGetIT {
     public void getDataOneSHA1TwoBytesStdin() {
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
-        cmdGet.setRemotes(Arrays.asList(URI.create("https://dataone.org")));
+        cmdGet.setRemotes(Collections.singletonList(URI.create("https://dataone.org")));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdGet.setInputStream(IOUtils.toInputStream("<https://example.org> <http://purl.org/pav/hasVersion> <cut:hash://sha1/398ab74e3da160d52705bb2477eb0f2f2cde5f15!/b1-2> .", StandardCharsets.UTF_8));
         cmdGet.setOutputStream(outputStream);
@@ -141,8 +142,8 @@ public class CmdGetIT {
     public void getGitHubContentRepositoryAsRemote() {
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
-        cmdGet.setRemotes(Arrays.asList(URI.create("https://ghcr.io/cboettig/content-store")));
-        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("hash://sha256/9412325831dab22aeebdd674b6eb53ba6b7bdd04bb99a4dbb21ddff646287e37")));
+        cmdGet.setRemotes(Collections.singletonList(URI.create("https://ghcr.io/cboettig/content-store")));
+        cmdGet.setContentIdsOrAliases(Collections.singletonList(RefNodeFactory.toIRI("hash://sha256/9412325831dab22aeebdd674b6eb53ba6b7bdd04bb99a4dbb21ddff646287e37")));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdGet.setOutputStream(outputStream);
         cmdGet.run();
@@ -154,8 +155,8 @@ public class CmdGetIT {
     public void getDataOneSHA256() {
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
-        cmdGet.setRemotes(Arrays.asList(URI.create("https://dataone.org")));
-        cmdGet.setContentIdsOrAliases(Arrays.asList(RefNodeFactory.toIRI("hash://sha256/bd2f8004d746be0b6e2abe08e7e21474bfd5ccd855734fe971a8631de1e2bf39")));
+        cmdGet.setRemotes(Collections.singletonList(URI.create("https://dataone.org")));
+        cmdGet.setContentIdsOrAliases(Collections.singletonList(RefNodeFactory.toIRI("hash://sha256/bd2f8004d746be0b6e2abe08e7e21474bfd5ccd855734fe971a8631de1e2bf39")));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdGet.setOutputStream(outputStream);
         cmdGet.run();
