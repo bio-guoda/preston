@@ -140,14 +140,9 @@ public class KeyTo1LevelZenodoDataPaths implements KeyToPath {
                     for (JsonNode file : files) {
                         String filename = file.at("/key").asText();
                         if (StringUtils.equals(filename, "data.zip") && file.has("checksum")) {
-                            String checksum = file.get("checksum").asText();
-                            String[] split = StringUtils.split(checksum, ":");
-                            if (split.length > 1) {
-                                String hashIRI = "hash://" + split[0] + "/" + split[1];
-                                if (HashKeyUtil.isValidHashKey(RefNodeFactory.toIRI(hashIRI))) {
-                                    uri = URI.create(hashIRI);
-                                    break;
-                                }
+                            JsonNode downloadLink = file.at("/links/self");
+                            if (downloadLink.isTextual()) {
+                                uri = URI.create(downloadLink.asText());
                             }
                         }
                     }

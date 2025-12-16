@@ -59,18 +59,18 @@ public class DereferencerContentAddressedInArchive implements Dereferencer<Input
     }
 
     private InputStream getInputStreamZip(InputStream data, IRI expectedHashIRI, InputStream inputStream) throws IOException {
-        ZipArchiveInputStream tarInputStream = new ZipArchiveInputStream(data);
+        ZipArchiveInputStream zipInputStream = new ZipArchiveInputStream(data);
         ZipArchiveEntry entry;
-        while ((entry = tarInputStream.getNextEntry()) != null) {
+        while ((entry = zipInputStream.getNextEntry()) != null) {
             if (!entry.isDirectory()) {
                 if (blobStore == null) {
                     IRI foundHashIRI = extractHashURI(entry.getName());
                     if (foundHashIRI != null && foundHashIRI.equals(expectedHashIRI)) {
-                        inputStream = tarInputStream;
+                        inputStream = zipInputStream;
                         break;
                     }
                 } else {
-                    blobStore.put(tarInputStream);
+                    blobStore.put(zipInputStream);
                 }
             }
         }

@@ -17,7 +17,7 @@ public class KeyTo1LevelZenodoByAnchorTest {
         KeyTo1LevelZenodoByAnchor keyTo1LevelZenodoByAnchor = new KeyTo1LevelZenodoByAnchor(new KeyToPath() {
             @Override
             public URI toPath(IRI key) {
-                return URI.create("hash://md5/b871e22f0e8c576305f99cb5aff8cddd");
+                return URI.create("https://example.org/data.zip");
             }
 
             @Override
@@ -27,7 +27,7 @@ public class KeyTo1LevelZenodoByAnchorTest {
         }, anchor);
 
         IRI actual = RefNodeFactory.toIRI(keyTo1LevelZenodoByAnchor.toPath(RefNodeFactory.toIRI("hash://md5/f5de551a5a7354a8a4ced2dd31a2c4db")));
-        IRI expected = RefNodeFactory.toIRI("zip:hash://md5/b871e22f0e8c576305f99cb5aff8cddd!/data/f5/de/f5de551a5a7354a8a4ced2dd31a2c4db");
+        IRI expected = RefNodeFactory.toIRI("zip:https://example.org/data.zip!/data/f5/de/f5de551a5a7354a8a4ced2dd31a2c4db");
         assertThat(
                 actual.getIRIString(),
                 Is.is(expected.getIRIString())
@@ -40,7 +40,7 @@ public class KeyTo1LevelZenodoByAnchorTest {
         KeyTo1LevelZenodoByAnchor keyTo1LevelZenodoByAnchor = new KeyTo1LevelZenodoByAnchor(new KeyToPath() {
             @Override
             public URI toPath(IRI key) {
-                return URI.create("hash://md5/b871e22f0e8c576305f99cb5aff8cddd");
+                return URI.create("https://example.org/data.zip");
             }
 
             @Override
@@ -50,7 +50,7 @@ public class KeyTo1LevelZenodoByAnchorTest {
         }, anchor);
 
         IRI actual = RefNodeFactory.toIRI(keyTo1LevelZenodoByAnchor.toPath(RefNodeFactory.toIRI("hash://md5/f5de551a5a7354a8a4ced2dd31a2c4db")));
-        IRI expected = RefNodeFactory.toIRI("zip:hash://md5/b871e22f0e8c576305f99cb5aff8cddd!/data/f5/de/f5de551a5a7354a8a4ced2dd31a2c4db");
+        IRI expected = RefNodeFactory.toIRI("zip:https://example.org/data.zip!/data/f5/de/f5de551a5a7354a8a4ced2dd31a2c4db");
         assertThat(
                 actual.getIRIString(),
                 Is.is(expected.getIRIString())
@@ -63,7 +63,7 @@ public class KeyTo1LevelZenodoByAnchorTest {
         KeyTo1LevelZenodoByAnchor keyTo1LevelZenodoByAnchor = new KeyTo1LevelZenodoByAnchor(new KeyToPath() {
             @Override
             public URI toPath(IRI key) {
-                return URI.create("hash://md5/b871e22f0e8c576305f99cb5aff8cddd");
+                return URI.create("https://example.org/data.zip");
             }
 
             @Override
@@ -76,7 +76,7 @@ public class KeyTo1LevelZenodoByAnchorTest {
                 RefNodeFactory.toIRI("hash://sha256/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"))
         );
 
-        IRI expected = RefNodeFactory.toIRI("zip:hash://md5/b871e22f0e8c576305f99cb5aff8cddd!/data/58/91/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03");
+        IRI expected = RefNodeFactory.toIRI("zip:https://example.org/data.zip!/data/58/91/5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03");
         assertThat(
                 actual.getIRIString(),
                 Is.is(expected.getIRIString())

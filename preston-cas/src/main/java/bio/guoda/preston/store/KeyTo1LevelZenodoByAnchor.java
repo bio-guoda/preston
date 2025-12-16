@@ -31,23 +31,21 @@ public class KeyTo1LevelZenodoByAnchor implements KeyToPath {
         if (anchor != null) {
             HashType anchorType = HashKeyUtil.hashTypeFor(anchor);
             if (HashType.md5.equals(anchorType)) {
-                URI fileURI = anchoredDepositLookup.toPath(anchor);
-                if (fileURI != null) {
-                    IRI iri = RefNodeFactory.toIRI(fileURI);
-                    if (HashKeyUtil.isValidHashKey(iri)) {
-                        HashType keyType = HashKeyUtil.hashTypeFor(key);
-                        Matcher matcher = keyType.getIRIPattern().matcher(key.getIRIString());
-                        if (matcher.matches()) {
-                            String hexString = StringUtils.substring(
-                                    matcher.group("contentId"),
-                                    keyType.getPrefix().length()
-                            );
-                            alias = URI.create("zip:" + iri.getIRIString() + "!/data"
-                                    + "/" + StringUtils.substring(hexString, 0, 2)
-                                    + "/" + StringUtils.substring(hexString, 2, 4)
-                                    + "/" + hexString);
-                            LOG.info("found possible content alias " + RefNodeFactory.toIRI(alias) + " for " + key);
-                        }
+                URI archiveURI = anchoredDepositLookup.toPath(anchor);
+                if (archiveURI != null) {
+                    IRI archiveIRI = RefNodeFactory.toIRI(archiveURI);
+                    HashType keyType = HashKeyUtil.hashTypeFor(key);
+                    Matcher matcher = keyType.getIRIPattern().matcher(key.getIRIString());
+                    if (matcher.matches()) {
+                        String hexString = StringUtils.substring(
+                                matcher.group("contentId"),
+                                keyType.getPrefix().length()
+                        );
+                        alias = URI.create("zip:" + archiveIRI.getIRIString() + "!/data"
+                                + "/" + StringUtils.substring(hexString, 0, 2)
+                                + "/" + StringUtils.substring(hexString, 2, 4)
+                                + "/" + hexString);
+                        LOG.info("found possible content alias " + RefNodeFactory.toIRI(alias) + " for " + key);
                     }
                 }
             }

@@ -13,6 +13,7 @@ import org.apache.commons.rdf.api.IRI;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
@@ -237,7 +238,18 @@ public class KeyValueStoreUtil {
         } else {
             throw new RuntimeException("dereferencing content through endpoint " + RefNodeFactory.toIRI(remote) + " not yet supported");
         }
-        return dereferencer;
+        return new Dereferencer<InputStream>() {
+            private final DereferencerContentAddressedInArchive dereferencerContentAddressedInArchive
+                    = new DereferencerContentAddressedInArchive(dereferencer);
+
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                InputStream inputStream = dereferencerContentAddressedInArchive.get(uri);
+                return inputStream == null
+                        ? dereferencer.get(uri)
+                        : inputStream;
+            }
+        };
     }
 
     public static Dereferencer<InputStream> getInputStreamDereferencerFile(DerefProgressListener listener) {

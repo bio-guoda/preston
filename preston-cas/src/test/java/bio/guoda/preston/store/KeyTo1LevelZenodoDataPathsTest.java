@@ -19,7 +19,7 @@ public class KeyTo1LevelZenodoDataPathsTest {
                 new ObjectMapper()
                         .readTree(getClass().getResourceAsStream("data-archive-record-result.json"));
         URI uri = KeyTo1LevelZenodoDataPaths.parseResult(   "bla", jsonNode);
-        assertThat(uri.toString(), Is.is("hash://md5/b871e22f0e8c576305f99cb5aff8cddd"));
+        assertThat(uri.toString(), Is.is("https://zenodo.org/api/records/16416531/files/data.zip/content"));
     }
 
     @Test
@@ -29,7 +29,7 @@ public class KeyTo1LevelZenodoDataPathsTest {
                 new ObjectMapper()
                         .readTree(getClass().getResourceAsStream("data-archive-record-result-2023.json"));
         URI uri = KeyTo1LevelZenodoDataPaths.parseResult("bla", jsonNode);
-        assertThat(uri.toString(), Is.is("hash://md5/b871e22f0e8c576305f99cb5aff8cddd"));
+        assertThat(uri.toString(), Is.is("https://zenodo.org/api/records/16416531/files/data.zip/content"));
     }
 
 }
