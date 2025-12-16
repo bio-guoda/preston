@@ -10,12 +10,16 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.greaterThan;
 
 public class CmdGetIT {
@@ -37,7 +41,7 @@ public class CmdGetIT {
     }
 
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void getZenodoRestricted() {
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
@@ -45,7 +49,13 @@ public class CmdGetIT {
         cmdGet.setContentIdsOrAliases(Collections.singletonList(RefNodeFactory.toIRI("hash://md5/587f269cfa00aa40b7b50243ea8bdab9")));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         cmdGet.setOutputStream(outputStream);
-        cmdGet.run();
+        try {
+            cmdGet.run();
+        } catch (RuntimeException ex) {
+            assertThat(ex.getMessage(), containsString("failed to copy content with id [<hash://md5/587f269cfa00aa40b7b50243ea8bdab9>]"));
+            assertThat(ex.getCause(), instanceOf(IOException.class));
+            throw ex;
+        }
 
         assertThat(outputStream.size(), Is.is(3392786));
     }
