@@ -66,6 +66,8 @@ public class CmdGetIT {
     @Test
     public void getZenodoInDataZipByAnchor() {
         // see also
+        // https://github.com/bio-guoda/preston/issues/356
+        // with example content associated with
         // Elton, Nomer, & Preston. (2025). Versioned Archive and Review of Biotic Interactions and Taxon Names Found within globalbioticinteractions/vertnet hash://md5/6c194df8ddb37844f7b4f1258c81d93d. Zenodo. https://doi.org/10.5281/zenodo.16915755
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
