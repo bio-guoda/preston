@@ -2,6 +2,7 @@ package bio.guoda.preston.store;
 
 import bio.guoda.preston.DerefProgressListener;
 import bio.guoda.preston.HashType;
+import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
@@ -226,12 +227,15 @@ public class KeyValueStoreUtil {
         return new KeyValueStoreWithDereferencing(keyToPath, dereferencer);
     }
 
-    private static Dereferencer<InputStream> getDerefStream(URI remote, DerefProgressListener listener) {
+    public static Dereferencer<InputStream> getDerefStream(URI remote, DerefProgressListener listener) {
         Dereferencer<InputStream> dereferencer;
         if (StringUtils.equalsAnyIgnoreCase(remote.getScheme(), "file")) {
             dereferencer = getInputStreamDereferencerFile(listener);
+        } else if (StringUtils.equalsAnyIgnoreCase(remote.getScheme(), "https")
+                || StringUtils.equalsAnyIgnoreCase(remote.getScheme(), "http")){
+            dereferencer = getDerefStreamHttpEndpoint(listener);
         } else {
-            dereferencer = getDerefStreamHTTP(listener);
+            throw new RuntimeException("dereferencing content through endpoint " + RefNodeFactory.toIRI(remote) + " not yet supported");
         }
         return dereferencer;
     }
@@ -241,7 +245,7 @@ public class KeyValueStoreUtil {
             try {
                 File file = new File(URI.create(uri.getIRIString()));
                 return file.exists()
-                        ? getInputStreamForFile(uri, file, listener)
+                        ? getInputStreamForFileEndpoint(uri, file, listener)
                         : null;
             } catch (IllegalArgumentException ex) {
                 // will not dereference malformed or non-file URI
@@ -251,11 +255,11 @@ public class KeyValueStoreUtil {
         };
     }
 
-    private static InputStream getInputStreamForFile(IRI uri, File file, DerefProgressListener listener) throws FileNotFoundException {
+    private static InputStream getInputStreamForFileEndpoint(IRI uri, File file, DerefProgressListener listener) throws FileNotFoundException {
         return ContentStreamUtil.getInputStreamWithProgressLogger(uri, listener, file.length(), IOUtils.buffer(new FileInputStream(file)));
     }
 
-    public static Dereferencer<InputStream> getDerefStreamHTTP(final DerefProgressListener listener) {
+    private static Dereferencer<InputStream> getDerefStreamHttpEndpoint(final DerefProgressListener listener) {
         return uri -> ResourcesHTTP.asInputStreamIgnore40x50x(uri, listener);
     }
 
