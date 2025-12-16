@@ -24,6 +24,12 @@ public class DereferencerContentAddressedInArchiveTest {
     }
 
     @Test
+    public void extractSHA256URIInDataFolder() {
+        IRI iri = DereferencerContentAddressedInArchive.extractHashURI("tgz:https://example.com/preston-a1.tar.gz!/data/1a/57/1a57e55a780b86cff38697cf1b857751ab7b389973d35113564fe5a9a58d6a99");
+        assertThat(iri.getIRIString(), Is.is("hash://sha256/1a57e55a780b86cff38697cf1b857751ab7b389973d35113564fe5a9a58d6a99"));
+    }
+
+    @Test
     public void extractSHA1URI() {
         IRI iri = DereferencerContentAddressedInArchive.extractHashURI("tgz:https://example.com/data.zip!/04/75/047595d0fae972fbed0c51b4a41c7a349e0c47bb");
         assertThat(iri.getIRIString(), Is.is("hash://sha1/047595d0fae972fbed0c51b4a41c7a349e0c47bb"));
@@ -32,6 +38,12 @@ public class DereferencerContentAddressedInArchiveTest {
     @Test
     public void extractMD5URI() {
         IRI iri = DereferencerContentAddressedInArchive.extractHashURI("zip:https://example.com/data.zip!/27/f5/27f552c25bc733d05a5cc67e9ba63850");
+        assertThat(iri.getIRIString(), Is.is("hash://md5/27f552c25bc733d05a5cc67e9ba63850"));
+    }
+
+    @Test
+    public void extractMD5URIDataFolder() {
+        IRI iri = DereferencerContentAddressedInArchive.extractHashURI("zip:https://example.com/data.zip!/data/27/f5/27f552c25bc733d05a5cc67e9ba63850");
         assertThat(iri.getIRIString(), Is.is("hash://md5/27f552c25bc733d05a5cc67e9ba63850"));
     }
 
