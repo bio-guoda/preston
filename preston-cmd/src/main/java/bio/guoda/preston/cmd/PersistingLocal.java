@@ -6,7 +6,6 @@ import bio.guoda.preston.store.HexaStoreImpl;
 import bio.guoda.preston.store.KeyValueStore;
 import bio.guoda.preston.store.KeyValueStoreConfig;
 import bio.guoda.preston.store.KeyValueStoreFactoryImpl;
-import bio.guoda.preston.store.KeyValueStoreUtil;
 import bio.guoda.preston.store.ProvenanceTracer;
 import bio.guoda.preston.store.ProvenanceTracerByIndex;
 import bio.guoda.preston.store.ProvenanceTracerImpl;
