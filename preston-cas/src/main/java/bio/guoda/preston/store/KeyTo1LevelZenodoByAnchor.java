@@ -4,6 +4,8 @@ import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.util.Map;
@@ -11,6 +13,8 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 
 public class KeyTo1LevelZenodoByAnchor implements KeyToPath {
+
+    private final static Logger LOG = LoggerFactory.getLogger(KeyTo1LevelZenodoByAnchor.class);
 
     private final KeyToPath anchoredDepositLookup;
 
@@ -23,13 +27,12 @@ public class KeyTo1LevelZenodoByAnchor implements KeyToPath {
 
     @Override
     public URI toPath(IRI key) {
-        URI path = null;
+        URI alias = null;
         if (anchor != null) {
             HashType anchorType = HashKeyUtil.hashTypeFor(anchor);
             if (HashType.md5.equals(anchorType)) {
                 URI fileURI = anchoredDepositLookup.toPath(anchor);
                 if (fileURI != null) {
-                    System.out.println("found archive hash candidate: [" + fileURI + "]");
                     IRI iri = RefNodeFactory.toIRI(fileURI);
                     if (HashKeyUtil.isValidHashKey(iri)) {
                         HashType keyType = HashKeyUtil.hashTypeFor(key);
@@ -39,17 +42,17 @@ public class KeyTo1LevelZenodoByAnchor implements KeyToPath {
                                     matcher.group("contentId"),
                                     keyType.getPrefix().length()
                             );
-                            path = URI.create("zip:" + iri.getIRIString() + "!/data"
+                            alias = URI.create("zip:" + iri.getIRIString() + "!/data"
                                     + "/" + StringUtils.substring(hexString, 0, 2)
                                     + "/" + StringUtils.substring(hexString, 2, 4)
                                     + "/" + hexString);
-                            System.out.println("attempting: [" + path + "]");
+                            LOG.info("found possible content alias " + RefNodeFactory.toIRI(alias) + " for " + key);
                         }
                     }
                 }
             }
         }
-        return path;
+        return alias;
     }
 
     @Override
