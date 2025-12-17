@@ -64,6 +64,13 @@ public class KeyValueStoreFactoryImplTest {
     }
 
     @Test
+    public void getOneFromLocalTarBall() throws IOException, URISyntaxException {
+        URL resource = getClass().getResource("embedded/data.tar.gz");
+        URI uri = resource.toURI();
+        assertAvailableInRemote(URI.create("tgz:" + uri.toString() + "!/data"));
+    }
+
+    @Test
     public void getOneFromLocalDirWithDataZip() throws IOException, URISyntaxException {
         URL resource = getClass().getResource("embedded/data.zip");
         URI uri = new File(resource.toURI()).getParentFile().toURI();

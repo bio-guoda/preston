@@ -230,10 +230,12 @@ public class KeyValueStoreUtil {
 
     public static Dereferencer<InputStream> getDerefStream(URI remote, DerefProgressListener listener) {
         Dereferencer<InputStream> dereferencer;
-        if (StringUtils.equalsAnyIgnoreCase(remote.getScheme(), "file")) {
+        if (StringUtils.equalsAnyIgnoreCase(remote.getScheme(), "file")
+                || StringUtils.startsWithIgnoreCase(remote.toString(), "zip:file")
+                || StringUtils.startsWithIgnoreCase(remote.toString(), "tgz:file")) {
             dereferencer = getInputStreamDereferencerFile(listener);
         } else if (StringUtils.equalsAnyIgnoreCase(remote.getScheme(), "https")
-                || StringUtils.equalsAnyIgnoreCase(remote.getScheme(), "http")){
+                || StringUtils.equalsAnyIgnoreCase(remote.getScheme(), "http")) {
             dereferencer = getDerefStreamHttpEndpoint(listener);
         } else {
             throw new RuntimeException("dereferencing content through endpoint " + RefNodeFactory.toIRI(remote) + " not yet supported");
