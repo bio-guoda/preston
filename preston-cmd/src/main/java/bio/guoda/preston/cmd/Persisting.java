@@ -15,6 +15,7 @@ public class Persisting extends PersistingLocal {
 
     private static final String DISABLE_LOCAL_CONTENT_CACHE = "Disable local content cache";
     private static final String DISABLE_PROGRESS_MONITOR = "Disable progress monitor";
+    private static final String DISABLE_ARCHIVE_DISCOVERY = "Do not index all remote data archive content; instead, request entire data archive and only retrieve the requested content.";
 
     @CommandLine.Option(
             names = {"--remote", "--remotes", "--include", "--repos", "--repositories"},
@@ -37,7 +38,11 @@ public class Persisting extends PersistingLocal {
     )
     private Boolean disableProgress = false;
 
-    private boolean supportDiscoveryOfContentInArchives = true;
+    @CommandLine.Option(
+            names = {"--disable-archive-discovery"},
+            description = DISABLE_ARCHIVE_DISCOVERY
+    )
+    private Boolean disableArchiveDiscovery = false;
 
     public List<URI> getRemotes() {
         return remotes;
@@ -74,7 +79,7 @@ public class Persisting extends PersistingLocal {
     }
 
     protected void setSupportDiscoveryOfContentInArchives(boolean supportDiscoveryOfContentInArchives) {
-        this.supportDiscoveryOfContentInArchives = supportDiscoveryOfContentInArchives;
+        this.disableArchiveDiscovery = !supportDiscoveryOfContentInArchives;
     }
 
 
@@ -92,7 +97,7 @@ public class Persisting extends PersistingLocal {
     }
 
     public boolean isSupportDiscoveryOfContentInArchives() {
-        return supportDiscoveryOfContentInArchives;
+        return !this.disableArchiveDiscovery;
     }
 
 }
