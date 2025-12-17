@@ -19,11 +19,11 @@ preston-track - track content at resource location(s) or from stdin
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston track* [*--no-cache*] [*--no-progress*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
-              [*--data-dir*=_<dataDir>_] [*-f*=_<filename>_] [*-l*=_<logMode>_]
-              [*-r*=_<provenanceAnchor>_] [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,
-              _<remotes>_...]]... [*-u*=_<seeds>_]... [*-m*=_<description>_...]
-              [_<IRIs>_...]
+*preston track* [*--disable-archive-discovery*] [*--no-cache*] [*--no-progress*]
+              [*-a*=_<hashType>_] [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_]
+              [*-f*=_<filename>_] [*-l*=_<logMode>_] [*-r*=_<provenanceAnchor>_]
+              [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,_<remotes>_...]]...
+              [*-u*=_<seeds>_]... [*-m*=_<description>_...] [_<IRIs>_...]
 
 // end::picocli-generated-man-section-synopsis[]
 
@@ -45,6 +45,9 @@ Track content at some resource location (or url)
 
 *--data-dir*=_<dataDir>_::
   Location of local content cache
+
+*--disable-archive-discovery*::
+  Do not index all remote data archive content; instead, request entire data archive and only retrieve the requested content.
 
 *-f*, *--file*=_<filename>_::
   Read URLs to be tracked from file.

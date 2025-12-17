@@ -1,9 +1,9 @@
 // tag::picocli-generated-full-manpage[]
 // tag::picocli-generated-man-section-header[]
 :doctype: manpage
-:revnumber: 0.10.14@79f830e2d6f22b2384597e8571af9465063d4c38
+:revnumber: 0.11.4-SNAPSHOT@3de4228191dbbf8994918ff32f73af6592e68329
 :manmanual: Preston Manual
-:mansource: 0.10.14@79f830e2d6f22b2384597e8571af9465063d4c38
+:mansource: 0.11.4-SNAPSHOT@3de4228191dbbf8994918ff32f73af6592e68329
 :man-linkstyle: pass:[blue R < >]
 = preston(1)
 
@@ -59,7 +59,7 @@ xref:preston-cp.adoc[*cp*, *copyTo*, *export*]::
 xref:preston-clone.adoc[*clone*, *pull*]::
   Clone biodiversity dataset graph
 
-xref:preston-track.adoc[*track*, *update*]::
+xref:preston-track.adoc[*track*, *update*, *snapshot*]::
   track content at resource location(s) or from stdin
 
 xref:preston-append.adoc[*append*, *handle*, *process*, *add*]::
@@ -103,11 +103,14 @@ xref:preston-excel-stream.adoc[*excel-stream*, *excel2json*, *xlsx-stream*, *xls
 xref:preston-plazi-stream.adoc[*plazi-stream*]::
   transforms plazi treatment xml into json stream 
 
-xref:preston-zenodo.adoc[*zenodo*]::
+xref:preston-zenodo.adoc[*zenodo*, *publish*]::
   create/update associated Zenodo records
 
 xref:preston-zotero-stream.adoc[*zotero-stream*]::
   Stream Zotero records into line-json with Zenodo metadata
+
+xref:preston-zotero2ris.adoc[*zotero2ris*, *zotero-to-ris-stream*]::
+  Stream Zotero records into RIS records
 
 xref:preston-ris-stream.adoc[*ris-stream*]::
   translates bibliographic citations from RIS format into Zenodo metadata in JSON lines format

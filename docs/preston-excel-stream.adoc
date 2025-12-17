@@ -19,11 +19,11 @@ preston-excel-stream - Extract records from Excel files (*.xls, *.xlsx) in line-
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston excel-stream* [*--headerless*] [*--no-cache*] [*--no-progress*]
-                     [*-a*=_<hashType>_] [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_]
-                     [*-l*=_<logMode>_] [*-r*=_<provenanceAnchor>_]
-                     [*--skip-lines*=_<skipLines>_] [*--tmp-dir*=_<tmpDir>_]
-                     [*--repos*=_<remotes>_[,_<remotes>_...]]...
+*preston excel-stream* [*--disable-archive-discovery*] [*--headerless*] [*--no-cache*]
+                     [*--no-progress*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
+                     [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_]
+                     [*-r*=_<provenanceAnchor>_] [*--skip-lines*=_<skipLines>_]
+                     [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,_<remotes>_...]]...
 
 // end::picocli-generated-man-section-synopsis[]
 
@@ -45,6 +45,9 @@ Extract records from Excel files (*.xls, *.xlsx) in line-json
 
 *--data-dir*=_<dataDir>_::
   Location of local content cache
+
+*--disable-archive-discovery*::
+  Do not index all remote data archive content; instead, request entire data archive and only retrieve the requested content.
 
 *--headerless*::
   use column numbers as column names

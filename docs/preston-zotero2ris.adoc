@@ -5,32 +5,31 @@
 :manmanual: Preston Manual
 :mansource: 
 :man-linkstyle: pass:[blue R < >]
-= preston-bash(1)
+= preston-zotero2ris(1)
 
 // end::picocli-generated-man-section-header[]
 
 // tag::picocli-generated-man-section-name[]
 == Name
 
-preston-bash - runs provided bash script and tracks stdout
+preston-zotero2ris - Stream Zotero records into RIS records
 
 // end::picocli-generated-man-section-name[]
 
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston bash* [*--disable-archive-discovery*] [*--no-cache*] [*--no-progress*]
-             [*-a*=_<hashType>_] [*-c*=_<commandsContentId>_] [*-d*=_<depth>_]
-             [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_] [*-r*=_<provenanceAnchor>_]
-             [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,_<remotes>_...]]...
-             [*-m*=_<description>_...]
+*preston zotero2ris* [*--disable-archive-discovery*] [*--no-cache*] [*--no-progress*]
+                   [*-a*=_<hashType>_] [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_]
+                   [*-l*=_<logMode>_] [*-r*=_<provenanceAnchor>_] [*--tmp-dir*=_<tmpDir>_]
+                   [*--repos*=_<remotes>_[,_<remotes>_...]]...
 
 // end::picocli-generated-man-section-synopsis[]
 
 // tag::picocli-generated-man-section-description[]
 == Description
 
-runs provided bash script and tracks stdout
+Stream Zotero records into RIS records
 
 // end::picocli-generated-man-section-description[]
 
@@ -39,9 +38,6 @@ runs provided bash script and tracks stdout
 
 *-a*, *--algo, --hash-algorithm*=_<hashType>_::
   Hash algorithm used to generate primary content identifiers. Supported values: sha256, md5, sha1.
-
-*-c*, _<commandsContentId>_::
-  Content id of script to be executed.
 
 *-d*, *--depth*=_<depth>_::
   folder depth of data dir
@@ -54,9 +50,6 @@ runs provided bash script and tracks stdout
 
 *-l*, *--log*=_<logMode>_::
   Log format. Supported values: tsv, nquads.
-
-*-m*, *--message*=_<description>_...::
-  Custom description of this tracking activity or command. (default: "Executes script and captures stdout")
 
 *--no-cache, --disable-cache*::
   Disable local content cache

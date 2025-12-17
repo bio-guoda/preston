@@ -19,7 +19,8 @@ preston-zotero-stream - Stream Zotero records into line-json with Zenodo metadat
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston zotero-stream* [*--no-cache*] [*--no-progress*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
+*preston zotero-stream* [*--disable-archive-discovery*] [*--no-cache*]
+                      [*--no-progress*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
                       [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_]
                       [*-r*=_<provenanceAnchor>_] [*--tmp-dir*=_<tmpDir>_]
                       [*--community*=_<communities>_[,_<communities>_...]]...
@@ -48,6 +49,9 @@ Stream Zotero records into line-json with Zenodo metadata
 
 *--data-dir*=_<dataDir>_::
   Location of local content cache
+
+*--disable-archive-discovery*::
+  Do not index all remote data archive content; instead, request entire data archive and only retrieve the requested content.
 
 *-l*, *--log*=_<logMode>_::
   Log format. Supported values: tsv, nquads.

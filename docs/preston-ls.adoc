@@ -19,9 +19,10 @@ preston-ls - Show biodiversity dataset provenance logs
 // tag::picocli-generated-man-section-synopsis[]
 == Synopsis
 
-*preston ls* [*--no-cache*] [*--no-progress*] [*-a*=_<hashType>_] [*-d*=_<depth>_]
-           [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_] [*-r*=_<provenanceAnchor>_]
-           [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,_<remotes>_...]]...
+*preston ls* [*--disable-archive-discovery*] [*--no-cache*] [*--no-progress*]
+           [*-a*=_<hashType>_] [*-d*=_<depth>_] [*--data-dir*=_<dataDir>_] [*-l*=_<logMode>_]
+           [*-r*=_<provenanceAnchor>_] [*--tmp-dir*=_<tmpDir>_] [*--repos*=_<remotes>_[,
+           _<remotes>_...]]...
 
 // end::picocli-generated-man-section-synopsis[]
 
@@ -43,6 +44,9 @@ Show biodiversity dataset provenance logs
 
 *--data-dir*=_<dataDir>_::
   Location of local content cache
+
+*--disable-archive-discovery*::
+  Do not index all remote data archive content; instead, request entire data archive and only retrieve the requested content.
 
 *-l*, *--log*=_<logMode>_::
   Log format. Supported values: tsv, nquads.
