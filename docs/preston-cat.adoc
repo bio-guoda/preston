@@ -1,9 +1,9 @@
 // tag::picocli-generated-full-manpage[]
 // tag::picocli-generated-man-section-header[]
 :doctype: manpage
-:revnumber: 0.11.4-SNAPSHOT@3de4228191dbbf8994918ff32f73af6592e68329
+:revnumber: 0.11.4@4e49001ad65af30602be953079627a12f7a0809a
 :manmanual: Preston Manual
-:mansource: 0.11.4-SNAPSHOT@3de4228191dbbf8994918ff32f73af6592e68329
+:mansource: 0.11.4@4e49001ad65af30602be953079627a12f7a0809a
 :man-linkstyle: pass:[blue R < >]
 = preston-cat(1)
 
