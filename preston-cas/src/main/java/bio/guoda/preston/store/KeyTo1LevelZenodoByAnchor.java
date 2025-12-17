@@ -45,7 +45,6 @@ public class KeyTo1LevelZenodoByAnchor implements KeyToPath {
                                 + "/" + StringUtils.substring(hexString, 0, 2)
                                 + "/" + StringUtils.substring(hexString, 2, 4)
                                 + "/" + hexString);
-                        LOG.info("found possible content alias " + RefNodeFactory.toIRI(alias) + " for " + key);
                     }
                 }
             }
