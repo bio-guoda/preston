@@ -1,7 +1,6 @@
 package bio.guoda.preston.store;
 
 import bio.guoda.preston.DerefProgressListener;
-import bio.guoda.preston.HashType;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.stream.ContentStreamUtil;
@@ -94,8 +93,8 @@ public class KeyValueStoreUtil {
                                 Pair.of(remote, new KeyTo3LevelPath(remote)),
                                 Pair.of(remote, new KeyTo1LevelPath(remote)),
                                 Pair.of(remote, new KeyTo1LevelOCIPath(remote)),
-                                Pair.of(remote, new KeyTo1LevelWikiMediaCommonsPath(remote, getDerefStream(remote, config.getProgressListener(), new BlobStoreAppendOnly(keyValueStore, false, config.getHashType())))),
-                                Pair.of(remote, new KeyTo1LevelDataVersePath(remote, getDerefStream(remote, config.getProgressListener(), new BlobStoreAppendOnly(keyValueStore, false, config.getHashType()))))
+                                Pair.of(remote, new KeyTo1LevelWikiMediaCommonsPath(remote, getDerefStream(remote, config.getProgressListener(), getBlobStore(keyValueStore, config)))),
+                                Pair.of(remote, new KeyTo1LevelDataVersePath(remote, getDerefStream(remote, config.getProgressListener(), getBlobStore(keyValueStore, config))))
                         ));
 
 
@@ -137,12 +136,19 @@ public class KeyValueStoreUtil {
         return store;
     }
 
+    private static BlobStore getBlobStore(KeyValueStore keyValueStore, KeyValueStoreConfig config) {
+        BlobStore blobStore = config.isSupportDiscoveryOfContentInArchives()
+                ? new BlobStoreAppendOnly(keyValueStore, false, config.getHashType())
+                : null;
+        return blobStore;
+    }
+
     private static Stream<Pair<URI, KeyToPath>> addForZenodo(KeyValueStoreConfig config, KeyValueStore keyValueStore) {
         return config.getRemotes()
                 .stream()
                 .filter(REMOTE_ZENODO::equals)
                 .flatMap(remote -> {
-                    Dereferencer<InputStream> derefStream = getDerefStream(remote, config.getProgressListener(), new BlobStoreAppendOnly(keyValueStore, false, config.getHashType()));
+                    Dereferencer<InputStream> derefStream = getDerefStream(remote, config.getProgressListener(), getBlobStore(keyValueStore, config));
                     return Stream.of(
                             Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, derefStream))),
                             Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, derefStream), config.getAnchor())),
@@ -167,7 +173,7 @@ public class KeyValueStoreUtil {
                 .stream()
                 .filter(REMOTE_DATA_ONE::equals)
                 .flatMap(remote -> Stream.of(
-                                Pair.of(remote, new KeyTo1LevelDataOnePath(remote, getDerefStream(remote, config.getProgressListener(), new BlobStoreAppendOnly(keyValueStore, false, config.getHashType()))))
+                                Pair.of(remote, new KeyTo1LevelDataOnePath(remote, getDerefStream(remote, config.getProgressListener(), getBlobStore(keyValueStore, config))))
                         )
                 );
     }
@@ -181,7 +187,9 @@ public class KeyValueStoreUtil {
                         withStoreAt(
                                 x.getKey(),
                                 x.getValue(),
-                                config.getProgressListener(), keyValueStore, config.getHashType()
+                                config.getProgressListener(),
+                                keyValueStore,
+                                config
                         )
         );
     }
@@ -207,30 +215,38 @@ public class KeyValueStoreUtil {
             KeyValueStore keyValueStore,
             KeyValueStoreConfig config) {
         return config.getRemotes().stream().flatMap(remote -> Stream.of(
-                getKeyValueStoreReadOnly(remote, new KeyTo3LevelZipPath(remote, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
-                getKeyValueStoreReadOnly(remote, new KeyTo3LevelZipPathImplicit(remote, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
-                getKeyValueStoreReadOnly(remote, new KeyTo3LevelZipPathExplicit(remote, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
-                getKeyValueStoreReadOnly(remote, new KeyTo3LevelTarGzPathShorter(remote, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
-                getKeyValueStoreReadOnly(remote, new KeyTo3LevelTarGzPathShort(remote, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType()),
-                getKeyValueStoreReadOnly(remote, new KeyTo3LevelTarGzPath(remote, config.getHashType()), keyValueStore, config.isCacheEnabled(), config.getProgressListener(), config.getHashType())
+                getKeyValueStoreReadOnly(remote, new KeyTo3LevelZipPath(remote, config.getHashType()), keyValueStore, config),
+                getKeyValueStoreReadOnly(remote, new KeyTo3LevelZipPathImplicit(remote, config.getHashType()), keyValueStore, config),
+                getKeyValueStoreReadOnly(remote, new KeyTo3LevelZipPathExplicit(remote, config.getHashType()), keyValueStore, config),
+                getKeyValueStoreReadOnly(remote, new KeyTo3LevelTarGzPathShorter(remote, config.getHashType()), keyValueStore, config),
+                getKeyValueStoreReadOnly(remote, new KeyTo3LevelTarGzPathShort(remote, config.getHashType()), keyValueStore, config),
+                getKeyValueStoreReadOnly(remote, new KeyTo3LevelTarGzPath(remote, config.getHashType()), keyValueStore, config)
         ));
     }
 
     private static KeyValueStoreReadOnly getKeyValueStoreReadOnly(URI remote,
                                                                   KeyToPath keyToPath,
                                                                   KeyValueStore keyValueStore,
-                                                                  boolean cacheEnabled,
-                                                                  DerefProgressListener progressListener,
-                                                                  HashType hashType) {
-        if (cacheEnabled) {
-            return remoteWithTarGzCacheAll(remote, keyValueStore, keyToPath, progressListener, hashType);
+                                                                  KeyValueStoreConfig config) {
+        Dereferencer<InputStream> derefStream
+                = getDerefStream(remote, config.getProgressListener(), getBlobStore(keyValueStore, config));
+        if (config.isCacheEnabled()) {
+            DereferencerContentAddressedInArchive dereferencer =
+                    new DereferencerContentAddressedInArchive(
+                            derefStream,
+                            getBlobStore(keyValueStore, config)
+                    );
+
+            return withStoreAt(keyToPath, dereferencer);
         } else {
-            return remoteWithTarGz(remote, keyToPath, progressListener, keyValueStore, hashType);
+            return withStoreAt(keyToPath,
+                    new DereferencerContentAddressedInArchive(derefStream));
         }
     }
 
-    private static KeyValueStoreReadOnly withStoreAt(URI remote, KeyToPath keyToPath, DerefProgressListener progressListener, KeyValueStore keyValueStore, HashType type) {
-        return withStoreAt(keyToPath, getDerefStream(remote, progressListener, new BlobStoreAppendOnly(keyValueStore, false, type)));
+
+    private static KeyValueStoreReadOnly withStoreAt(URI remote, KeyToPath keyToPath, DerefProgressListener progressListener, KeyValueStore keyValueStore, KeyValueStoreConfig config) {
+        return withStoreAt(keyToPath, getDerefStream(remote, progressListener, getBlobStore(keyValueStore, config)));
     }
 
     private static KeyValueStoreReadOnly withStoreAt(KeyToPath keyToPath, Dereferencer<InputStream> dereferencer) {
@@ -286,30 +302,6 @@ public class KeyValueStoreUtil {
 
     private static Dereferencer<InputStream> getDerefStreamHttpEndpoint(final DerefProgressListener listener) {
         return uri -> ResourcesHTTP.asInputStreamIgnore40x50x(uri, listener);
-    }
-
-    private static KeyValueStoreReadOnly remoteWithTarGz(
-            URI remote,
-            KeyToPath keyToPath,
-            DerefProgressListener progressListener,
-            KeyValueStore keyValueStore,
-            HashType type) {
-        return withStoreAt(keyToPath,
-                new DereferencerContentAddressedInArchive(getDerefStream(remote, progressListener, new BlobStoreAppendOnly(keyValueStore, false, type))));
-    }
-
-    private static KeyValueStoreReadOnly remoteWithTarGzCacheAll(
-            URI remote,
-            KeyValueStore keyValueStore,
-            KeyToPath keyToPath,
-            DerefProgressListener progressListener,
-            HashType hashType) {
-        DereferencerContentAddressedInArchive dereferencer =
-                new DereferencerContentAddressedInArchive(
-                        getDerefStream(remote, progressListener, new BlobStoreAppendOnly(keyValueStore, false, hashType)),
-                        new BlobStoreAppendOnly(keyValueStore, false, hashType));
-
-        return withStoreAt(keyToPath, dereferencer);
     }
 
 }
