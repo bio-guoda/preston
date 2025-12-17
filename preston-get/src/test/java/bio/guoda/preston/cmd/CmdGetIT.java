@@ -20,6 +20,8 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.fail;
 
 public class CmdGetIT {
 
@@ -51,7 +53,7 @@ public class CmdGetIT {
         try {
             cmdGet.run();
         } catch (RuntimeException ex) {
-            assertThat(ex.getMessage(), containsString("failed to copy content with id [<hash://md5/587f269cfa00aa40b7b50243ea8bdab9>]"));
+            assertThat(ex.getMessage(), containsString("failed to copy content with id <hash://md5/587f269cfa00aa40b7b50243ea8bdab9>"));
             assertThat(ex.getCause(), instanceOf(IOException.class));
             throw ex;
         }
@@ -74,10 +76,19 @@ public class CmdGetIT {
 
     @Test
     public void getZenodoInDataZipByAnchor() {
+        try {
+            getResourceFromVersionedArchive();
+            fail("should have thrown exception");
+        } catch (RuntimeException ex) {
+            assertThat(ex.getMessage(), containsString("failed to copy content with id <hash://md5/0de7aa7a1776a25a281510552b73b14f>"));
+            assertThat(ex.getCause(), instanceOf(IOException.class));
+
+        }
+
         // see also
         // https://github.com/bio-guoda/preston/issues/356
         // with example content associated with
-        // Elton, Nomer, & Preston. (2025). Versioned Archive and Review of Biotic Interactions and Taxon Names Found within globalbioticinteractions/vertnet hash://md5/6c194df8ddb37844f7b4f1258c81d93d. Zenodo. https://doi.org/10.5281/zenodo.16915755
+        // Elton, Nomer, & Preston. (2025). Versioned Archive and Review of Biotic Interactions and Taxon Names Found within aeiche01/MojaveFoodWeb hash://md5/838ede23f4b8c6e8b7d692b61e954a60. Zenodo. https://doi.org/10.5281/zenodo.16415843
         CmdGet cmdGet = new CmdGet();
         cmdGet.setDataDir(folder.getRoot().getAbsolutePath());
         cmdGet.setHashType(HashType.md5);
@@ -89,6 +100,21 @@ public class CmdGetIT {
         cmdGet.run();
 
         assertEdgeList(outputStream);
+
+        ByteArrayOutputStream anotherOutputStream = getResourceFromVersionedArchive();
+
+        assertThat(anotherOutputStream.size(), is(72757));
+    }
+
+    private ByteArrayOutputStream getResourceFromVersionedArchive() {
+        CmdGet anotherGet = new CmdGet();
+        anotherGet.setDataDir(folder.getRoot().getAbsolutePath());
+        anotherGet.setHashType(HashType.md5);
+        anotherGet.setContentIdsOrAliases(Collections.singletonList(RefNodeFactory.toIRI("hash://md5/0de7aa7a1776a25a281510552b73b14f")));
+        ByteArrayOutputStream anotherOutputStream = new ByteArrayOutputStream();
+        anotherGet.setOutputStream(anotherOutputStream);
+        anotherGet.run();
+        return anotherOutputStream;
     }
 
     @Test

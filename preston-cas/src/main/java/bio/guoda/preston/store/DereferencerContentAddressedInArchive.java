@@ -16,6 +16,8 @@ import java.util.Optional;
 import java.util.zip.GZIPInputStream;
 
 public class DereferencerContentAddressedInArchive implements Dereferencer<InputStream> {
+    public static final String PREFIX_TAR_GZ = "tgz:";
+    public static final String PREFIX_ZIP = "zip:";
     private final Dereferencer<InputStream> dereferencer;
 
     private final BlobStore blobStore;
@@ -33,8 +35,8 @@ public class DereferencerContentAddressedInArchive implements Dereferencer<Input
     public InputStream get(IRI uri) throws IOException {
         String iriString = uri == null ? null : uri.getIRIString();
         InputStream inputStream = null;
-        if (StringUtils.startsWith(iriString, "tgz:")
-                || StringUtils.startsWith(iriString, "zip:")) {
+        if (StringUtils.startsWith(iriString, PREFIX_TAR_GZ)
+                || StringUtils.startsWith(iriString, PREFIX_ZIP)) {
             String iriSuffix = StringUtils.substring(iriString, 4);
             String[] tarUrlSplit = iriSuffix == null ? new String[]{} : iriSuffix.split("!/");
             if (tarUrlSplit.length == 2) {
@@ -46,9 +48,9 @@ public class DereferencerContentAddressedInArchive implements Dereferencer<Input
                             ? null
                             : dereferencer.get(RefNodeFactory.toIRI(archiveURL));
                     if (data != null) {
-                        if (StringUtils.startsWith(iriString, "tgz:")) {
+                        if (StringUtils.startsWith(iriString, PREFIX_TAR_GZ)) {
                             inputStream = getInputStreamTarGz(data, expectedHashIRI, inputStream);
-                        } else if (StringUtils.startsWith(iriString, "zip:")) {
+                        } else if (StringUtils.startsWith(iriString, PREFIX_ZIP)) {
                             inputStream = getInputStreamZip(data, expectedHashIRI, inputStream);
                         }
                     }

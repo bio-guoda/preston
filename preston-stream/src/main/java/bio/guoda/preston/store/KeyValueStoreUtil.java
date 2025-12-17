@@ -94,8 +94,8 @@ public class KeyValueStoreUtil {
                                 Pair.of(remote, new KeyTo3LevelPath(remote)),
                                 Pair.of(remote, new KeyTo1LevelPath(remote)),
                                 Pair.of(remote, new KeyTo1LevelOCIPath(remote)),
-                                Pair.of(remote, new KeyTo1LevelWikiMediaCommonsPath(remote, getDerefStream(remote, config.getProgressListener()))),
-                                Pair.of(remote, new KeyTo1LevelDataVersePath(remote, getDerefStream(remote, config.getProgressListener())))
+                                Pair.of(remote, new KeyTo1LevelWikiMediaCommonsPath(remote, getDerefStream(remote, config.getProgressListener(), new BlobStoreAppendOnly(keyValueStore, false, config.getHashType())))),
+                                Pair.of(remote, new KeyTo1LevelDataVersePath(remote, getDerefStream(remote, config.getProgressListener(), new BlobStoreAppendOnly(keyValueStore, false, config.getHashType()))))
                         ));
 
 
@@ -104,16 +104,16 @@ public class KeyValueStoreUtil {
                         Stream.concat(
                                 Stream.concat(
                                         keyToPathStream,
-                                        addForZenodo(config)
+                                        addForZenodo(config, keyValueStore)
                                 ),
                                 addForSoftwareHeritage(config)),
-                        addForDataOne(config)
+                        addForDataOne(config, keyValueStore)
                 );
 
         List<KeyValueStoreReadOnly> keyValueStoreRemotes =
                 config.isSupportDiscoveryOfContentInArchives()
                         ? includeSupportForContentInArchives(keyToPathStreams, keyValueStore, config)
-                        : remotePathSupportDefault(keyToPathStreams, config).collect(Collectors.toList());
+                        : remotePathSupportDefault(keyToPathStreams, config, keyValueStore).collect(Collectors.toList());
 
 
         if (config.isCacheEnabled()) {
@@ -137,16 +137,19 @@ public class KeyValueStoreUtil {
         return store;
     }
 
-    private static Stream<Pair<URI, KeyToPath>> addForZenodo(KeyValueStoreConfig config) {
+    private static Stream<Pair<URI, KeyToPath>> addForZenodo(KeyValueStoreConfig config, KeyValueStore keyValueStore) {
         return config.getRemotes()
                 .stream()
                 .filter(REMOTE_ZENODO::equals)
-                .flatMap(remote -> Stream.of(
-                        Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, getDerefStream(remote, config.getProgressListener())))),
-                        Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, getDerefStream(remote, config.getProgressListener())), config.getAnchor())),
-                        Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, getDerefStream(remote, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13))),
-                        Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, getDerefStream(remote, config.getProgressListener()), KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13), config.getAnchor()))
-                ));
+                .flatMap(remote -> {
+                    Dereferencer<InputStream> derefStream = getDerefStream(remote, config.getProgressListener(), new BlobStoreAppendOnly(keyValueStore, false, config.getHashType()));
+                    return Stream.of(
+                            Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, derefStream))),
+                            Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, derefStream), config.getAnchor())),
+                            Pair.of(remote, new KeyTo1LevelZenodoBucket(new KeyTo1LevelZenodoPath(remote, derefStream, KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13))),
+                            Pair.of(remote, new KeyTo1LevelZenodoByAnchor(new KeyTo1LevelZenodoDataPaths(remote, derefStream, KeyTo1LevelZenodoPath.ZENODO_API_PREFIX_2023_10_13, KeyTo1LevelZenodoPath.ZENODO_API_SUFFIX_2023_10_13), config.getAnchor()))
+                    );
+                });
     }
 
     private static Stream<Pair<URI, KeyToPath>> addForSoftwareHeritage(KeyValueStoreConfig config) {
@@ -159,25 +162,26 @@ public class KeyValueStoreUtil {
                 ));
     }
 
-    private static Stream<Pair<URI, KeyToPath>> addForDataOne(KeyValueStoreConfig config) {
+    private static Stream<Pair<URI, KeyToPath>> addForDataOne(KeyValueStoreConfig config, KeyValueStore keyValueStore) {
         return config.getRemotes()
                 .stream()
                 .filter(REMOTE_DATA_ONE::equals)
                 .flatMap(remote -> Stream.of(
-                                Pair.of(remote, new KeyTo1LevelDataOnePath(remote, getDerefStream(remote, config.getProgressListener())))
+                                Pair.of(remote, new KeyTo1LevelDataOnePath(remote, getDerefStream(remote, config.getProgressListener(), new BlobStoreAppendOnly(keyValueStore, false, config.getHashType()))))
                         )
                 );
     }
 
     private static Stream<KeyValueStoreReadOnly> remotePathSupportDefault(
             Stream<Pair<URI, KeyToPath>> keyToPathStream,
-            KeyValueStoreConfig config) {
+            KeyValueStoreConfig config,
+            KeyValueStore keyValueStore) {
         return keyToPathStream.map(
                 x ->
                         withStoreAt(
                                 x.getKey(),
                                 x.getValue(),
-                                config.getProgressListener()
+                                config.getProgressListener(), keyValueStore, config.getHashType()
                         )
         );
     }
@@ -190,7 +194,7 @@ public class KeyValueStoreUtil {
         return Stream.concat(
                 remotePathSupportDefault(
                         keyToPathStream,
-                        config
+                        config, keyValueStore
                 ),
                 remotePathSupportForContentInArchives(
                         keyValueStore,
@@ -212,23 +216,30 @@ public class KeyValueStoreUtil {
         ));
     }
 
-    private static KeyValueStoreReadOnly getKeyValueStoreReadOnly(URI remote, KeyToPath keyToPath, KeyValueStore keyValueStore, boolean cacheEnabled, DerefProgressListener progressListener, HashType hashType) {
+    private static KeyValueStoreReadOnly getKeyValueStoreReadOnly(URI remote,
+                                                                  KeyToPath keyToPath,
+                                                                  KeyValueStore keyValueStore,
+                                                                  boolean cacheEnabled,
+                                                                  DerefProgressListener progressListener,
+                                                                  HashType hashType) {
         if (cacheEnabled) {
             return remoteWithTarGzCacheAll(remote, keyValueStore, keyToPath, progressListener, hashType);
         } else {
-            return remoteWithTarGz(remote, keyToPath, progressListener);
+            return remoteWithTarGz(remote, keyToPath, progressListener, keyValueStore, hashType);
         }
     }
 
-    private static KeyValueStoreReadOnly withStoreAt(URI remote, KeyToPath keyToPath, DerefProgressListener progressListener) {
-        return withStoreAt(keyToPath, getDerefStream(remote, progressListener));
+    private static KeyValueStoreReadOnly withStoreAt(URI remote, KeyToPath keyToPath, DerefProgressListener progressListener, KeyValueStore keyValueStore, HashType type) {
+        return withStoreAt(keyToPath, getDerefStream(remote, progressListener, new BlobStoreAppendOnly(keyValueStore, false, type)));
     }
 
     private static KeyValueStoreReadOnly withStoreAt(KeyToPath keyToPath, Dereferencer<InputStream> dereferencer) {
         return new KeyValueStoreWithDereferencing(keyToPath, dereferencer);
     }
 
-    public static Dereferencer<InputStream> getDerefStream(URI remote, DerefProgressListener listener) {
+    public static Dereferencer<InputStream> getDerefStream(URI remote,
+                                                           DerefProgressListener listener,
+                                                           final BlobStore blobStore) {
         Dereferencer<InputStream> dereferencer;
         if (StringUtils.equalsAnyIgnoreCase(remote.getScheme(), "file")
                 || StringUtils.startsWithIgnoreCase(remote.toString(), "zip:file")
@@ -242,7 +253,7 @@ public class KeyValueStoreUtil {
         }
         return new Dereferencer<InputStream>() {
             private final DereferencerContentAddressedInArchive dereferencerContentAddressedInArchive
-                    = new DereferencerContentAddressedInArchive(dereferencer);
+                    = new DereferencerContentAddressedInArchive(dereferencer, blobStore);
 
             @Override
             public InputStream get(IRI uri) throws IOException {
@@ -280,9 +291,11 @@ public class KeyValueStoreUtil {
     private static KeyValueStoreReadOnly remoteWithTarGz(
             URI remote,
             KeyToPath keyToPath,
-            DerefProgressListener progressListener) {
+            DerefProgressListener progressListener,
+            KeyValueStore keyValueStore,
+            HashType type) {
         return withStoreAt(keyToPath,
-                new DereferencerContentAddressedInArchive(getDerefStream(remote, progressListener)));
+                new DereferencerContentAddressedInArchive(getDerefStream(remote, progressListener, new BlobStoreAppendOnly(keyValueStore, false, type))));
     }
 
     private static KeyValueStoreReadOnly remoteWithTarGzCacheAll(
@@ -293,7 +306,7 @@ public class KeyValueStoreUtil {
             HashType hashType) {
         DereferencerContentAddressedInArchive dereferencer =
                 new DereferencerContentAddressedInArchive(
-                        getDerefStream(remote, progressListener),
+                        getDerefStream(remote, progressListener, new BlobStoreAppendOnly(keyValueStore, false, hashType)),
                         new BlobStoreAppendOnly(keyValueStore, false, hashType));
 
         return withStoreAt(keyToPath, dereferencer);

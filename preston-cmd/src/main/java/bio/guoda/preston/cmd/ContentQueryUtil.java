@@ -41,7 +41,7 @@ public class ContentQueryUtil {
                 throw ex;
             }
         } catch (IOException ex) {
-            throw new IOException("failed to copy content with id [" + queryIRI + "]", ex);
+            throw new IOException("failed to copy content with id " + queryIRI, ex);
         }
     }
 

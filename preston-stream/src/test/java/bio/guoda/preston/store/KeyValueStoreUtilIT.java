@@ -19,7 +19,7 @@ public class KeyValueStoreUtilIT {
 
         DerefProgressListener listener = (dataURI, derefState, read, total) -> gotUpdate.set(true);
 
-        Dereferencer<InputStream> derefStream = KeyValueStoreUtil.getDerefStream(URI.create("https://example.org"), listener);
+        Dereferencer<InputStream> derefStream = KeyValueStoreUtil.getDerefStream(URI.create("https://example.org"), listener, null);
 
         try (InputStream ignored = derefStream.get(RefNodeFactory.toIRI("https://example.org"))) {
             assertTrue(gotUpdate.get());

@@ -16,7 +16,7 @@ public class KeyValueStoreUtilTest {
             public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
 
             }
-        });
+        }, null);
     }
 
     @Test
@@ -26,7 +26,7 @@ public class KeyValueStoreUtilTest {
             public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
 
             }
-        });
+        }, null);
     }
 
     @Test(expected = RuntimeException.class)
@@ -36,7 +36,7 @@ public class KeyValueStoreUtilTest {
             public void onProgress(IRI dataURI, DerefState derefState, long read, long total) {
 
             }
-        });
+        }, null);
     }
 
 }
