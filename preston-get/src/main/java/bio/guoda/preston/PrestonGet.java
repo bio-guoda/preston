@@ -5,8 +5,6 @@ import bio.guoda.preston.cmd.TypeConverterIRI;
 import org.apache.commons.rdf.api.IRI;
 import picocli.CommandLine;
 
-import java.util.List;
-
 import static java.lang.System.exit;
 
 public class PrestonGet {
