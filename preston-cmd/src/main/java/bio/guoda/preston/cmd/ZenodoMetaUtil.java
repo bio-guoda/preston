@@ -75,6 +75,7 @@ public class ZenodoMetaUtil {
     public static final String FIELD_CUSTOM_DWC_BASIS_OF_RECORD = "dwc:basisOfRecord";
     public static final String FIELD_CUSTOM_DWC_SCIENTIFIC_NAME = "dwc:scientificName";
     public static final String DOCUMENTS = "documents";
+    public static final String CITED_BY = "isCitedBy";
     static final String KEYWORDS = "keywords";
     static final String CUSTOM = "custom";
     public static final Pattern YEAR_PATTERN = Pattern.compile(".*(?<year>[12][0-9]{3}).*");

@@ -8,6 +8,7 @@ import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -43,28 +44,35 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void streamZoteroAttachmentToZenodoLineJson() throws IOException {
-        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticle.json");
+        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticle.json", Arrays.asList("batlit", "biosyslit"));
         assertArticleItem(jsonObjects);
     }
 
 
     @Test
     public void skipZoteroRecordWithSuspiciousDate() throws IOException {
-        String[] jsonObjects = getResource("ZoteroArticleSuspiciousDateAttachment.json", "ZoteroArticleSuspiciousDate.json");
+        String[] jsonObjects = getResource("ZoteroArticleSuspiciousDateAttachment.json", "ZoteroArticleSuspiciousDate.json", Arrays.asList("batlit", "biosyslit"));
         assertThat(jsonObjects.length, is(0));
     }
     @Test
     public void zoteroRecordIPBES() throws IOException {
         String[] jsonObjects = getResource(
                 "ZoteroArticleIPBESAttachment.json",
-                "ZoteroArticleIPBES.json"
+                "ZoteroArticleIPBES.json",
+                Arrays.asList("ipbes-ias", "biosyslit")
         );
         assertThat(jsonObjects.length, is(1));
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+        JsonNode keywords = taxonNode.at("/keywords");
+        List<String> keywordList = new TreeList<>();
+        keywords.forEach(k -> keywordList.add(k.asText()));
+        assertThat(StringUtils.join(keywordList, ";"), is("Chapter 4;biodiversity;environment assessment;IPBES;Alien Invasive Species Assessment AIS;invasive species"));
+
     }
 
     @Test
     public void streamZoteroArticleToZenodoLineJsonWithTags() throws IOException {
-        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleWithTags.json");
+        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleWithTags.json", Arrays.asList("batlit", "biosyslit"));
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
         JsonNode keywords = taxonNode.at("/keywords");
@@ -76,7 +84,7 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void streamZoteroBook() throws IOException {
-        String[] jsonObjects = getResource("ZoteroBookAttachment.json", "ZoteroBook.json");
+        String[] jsonObjects = getResource("ZoteroBookAttachment.json", "ZoteroBook.json", Arrays.asList("batlit", "biosyslit"));
 
         assertThat(jsonObjects.length, is(greaterThan(0)));
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
@@ -91,7 +99,7 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void zoteroNewsArticle() throws IOException {
-        String[] jsonObjects = getResource("ZoteroNewsArticleAttachment.json", "ZoteroNewsArticle.json");
+        String[] jsonObjects = getResource("ZoteroNewsArticleAttachment.json", "ZoteroNewsArticle.json", Arrays.asList("batlit", "biosyslit"));
 
         assertThat(jsonObjects.length, is(greaterThan(0)));
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
@@ -106,7 +114,7 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void streamZoteroArticleListToZenodoLineJson() throws IOException {
-        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleList.json");
+        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleList.json", Arrays.asList("batlit", "biosyslit"));
         assertThat(jsonObjects.length, Is.is(0));
     }
 
@@ -188,7 +196,7 @@ public class ZoteroFileExtractorZenodoTest {
         return rootNode.get("metadata");
     }
 
-    private String[] getResource(String testAttachment, final String testArticle) throws IOException {
+    private String[] getResource(String testAttachment, final String testArticle, List<String> communities) throws IOException {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) {
@@ -246,7 +254,7 @@ public class ZoteroFileExtractorZenodoTest {
                 processorState,
                 blobStore,
                 byteArrayOutputStream,
-                Arrays.asList("batlit", "biosyslit"),
+                communities,
                 RefNodeFactory.toIRI("some:anchor")
         );
 

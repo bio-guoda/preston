@@ -23,6 +23,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstract {
 
@@ -196,6 +197,26 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                 ZenodoMetaUtil.addCustomField(objectNode, ZenodoMetaUtil.FIELD_CUSTOM_DWC_ORDER, "Chiroptera");
 
                 description.append("(Uploaded by Plazi for the Bat Literature Project) ");
+            }
+
+            if (communities.stream().anyMatch(
+                    name -> StringUtils.containsIgnoreCase(name, "ipbes")
+                            && StringUtils.containsIgnoreCase(name, "ias"))) {
+                Stream.of("biodiversity",
+                                "environment assessment",
+                                "IPBES",
+                                "Alien Invasive Species Assessment AIS",
+                                "invasive species")
+                        .forEach(keyword -> ZenodoMetaUtil.addKeyword(objectNode, keyword));
+
+                ZenodoMetaUtil.appendIdentifier(
+                        objectNode,
+                        ZenodoMetaUtil.CITED_BY,
+                        "10.5281/zenodo.10795593",
+                        ZenodoMetaUtil.PUBLICATION_TYPE_REPORT
+                );
+
+                description.append("(Uploaded by Plazi for the IPBES Invasive Alien Species Assessment project) ");
             }
 
             String abstractNote = ZoteroUtil.getAbstract(jsonNode);
