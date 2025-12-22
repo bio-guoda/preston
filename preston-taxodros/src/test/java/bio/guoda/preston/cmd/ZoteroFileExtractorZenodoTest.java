@@ -37,6 +37,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
+import static org.junit.Assert.assertNotNull;
 
 public class ZoteroFileExtractorZenodoTest {
 
@@ -63,6 +64,19 @@ public class ZoteroFileExtractorZenodoTest {
         );
         assertThat(jsonObjects.length, is(1));
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+        JsonNode relatedIdentifiers = taxonNode.at("/related_identifiers");
+        JsonNode citedBy = null;
+        for (JsonNode relatedIdentifier : relatedIdentifiers) {
+            if (relatedIdentifier.has("relation")
+                    && StringUtils.equals(relatedIdentifier.get("relation").asText(), "isCitedBy")) {
+                citedBy = relatedIdentifier;
+            }
+        }
+
+        assertNotNull(citedBy);
+
+        assertThat(citedBy.get("resource_type").asText(), is("publication-report"));
+
         JsonNode keywords = taxonNode.at("/keywords");
         List<String> keywordList = new TreeList<>();
         keywords.forEach(k -> keywordList.add(k.asText()));

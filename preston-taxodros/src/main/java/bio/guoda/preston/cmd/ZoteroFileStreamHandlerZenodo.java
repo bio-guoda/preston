@@ -213,7 +213,7 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                         objectNode,
                         ZenodoMetaUtil.CITED_BY,
                         "10.5281/zenodo.10795593",
-                        ZenodoMetaUtil.PUBLICATION_TYPE_REPORT
+                        "publication-report"
                 );
 
                 description.append("(Uploaded by Plazi for the IPBES Invasive Alien Species Assessment project) ");
