@@ -212,7 +212,7 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                 ZenodoMetaUtil.appendIdentifier(
                         objectNode,
                         ZenodoMetaUtil.CITED_BY,
-                        "10.5281/zenodo.10795593",
+                        "10.5281/zenodo.7430682",
                         "publication-report"
                 );
 

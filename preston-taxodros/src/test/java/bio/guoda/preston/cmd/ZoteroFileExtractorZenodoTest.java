@@ -76,6 +76,7 @@ public class ZoteroFileExtractorZenodoTest {
         assertNotNull(citedBy);
 
         assertThat(citedBy.get("resource_type").asText(), is("publication-report"));
+        assertThat(citedBy.get("identifier").asText(), is("10.5281/zenodo.7430682"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         List<String> keywordList = new TreeList<>();
