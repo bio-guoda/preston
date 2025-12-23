@@ -216,7 +216,7 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                         "publication-report"
                 );
 
-                description.append("(Uploaded by Plazi for the IPBES Invasive Alien Species Assessment project) ");
+                description.append("(Uploaded by Plazi for the IPBES Invasive Alien Species Assessment)\n");
             }
 
             String abstractNote = ZoteroUtil.getAbstract(jsonNode);
