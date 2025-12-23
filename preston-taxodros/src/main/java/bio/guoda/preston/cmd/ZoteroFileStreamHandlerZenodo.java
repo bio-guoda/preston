@@ -40,15 +40,6 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                                          Persisting persisting,
                                          Dereferencer<InputStream> deref,
                                          List<String> communities,
-                                         IRI provenanceAnchor) {
-        this(contentStreamHandler, os, persisting, deref, communities, provenanceAnchor, false);
-    }
-
-    public ZoteroFileStreamHandlerZenodo(ContentStreamHandler contentStreamHandler,
-                                         OutputStream os,
-                                         Persisting persisting,
-                                         Dereferencer<InputStream> deref,
-                                         List<String> communities,
                                          IRI provenanceAnchor,
                                          boolean appendDoiToTitle) {
         super(contentStreamHandler, os, provenanceAnchor);

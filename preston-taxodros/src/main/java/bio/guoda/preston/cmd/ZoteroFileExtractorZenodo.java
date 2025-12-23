@@ -29,22 +29,6 @@ public class ZoteroFileExtractorZenodo extends ProcessorExtracting {
                                      OutputStream out,
                                      List<String> communities,
                                      IRI provenanceAnchor,
-                                     StatementsListener... listeners) {
-        this(processorState,
-                blobStoreReadOnly,
-                out,
-                communities,
-                provenanceAnchor,
-                false,
-                listeners
-        );
-    }
-
-    public ZoteroFileExtractorZenodo(Persisting processorState,
-                                     BlobStoreReadOnly blobStoreReadOnly,
-                                     OutputStream out,
-                                     List<String> communities,
-                                     IRI provenanceAnchor,
                                      boolean appendProvidedDoiToTitle,
                                      StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
