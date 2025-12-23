@@ -45,26 +45,41 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void streamZoteroAttachmentToZenodoLineJson() throws IOException {
-        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticle.json", Arrays.asList("batlit", "biosyslit"));
+        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticle.json", Arrays.asList("batlit", "biosyslit"), false);
         assertArticleItem(jsonObjects);
     }
 
 
     @Test
     public void skipZoteroRecordWithSuspiciousDate() throws IOException {
-        String[] jsonObjects = getResource("ZoteroArticleSuspiciousDateAttachment.json", "ZoteroArticleSuspiciousDate.json", Arrays.asList("batlit", "biosyslit"));
+        String[] jsonObjects = getResource("ZoteroArticleSuspiciousDateAttachment.json", "ZoteroArticleSuspiciousDate.json", Arrays.asList("batlit", "biosyslit"), false);
         assertThat(jsonObjects.length, is(0));
     }
+
     @Test
-    public void zoteroRecordIPBES() throws IOException {
+    public void zoteroRecordIPBESWithDoiInTitle() throws IOException {
+        String expectedTitle = "Invasive plant species and their disaster-effects in dry tropical forests and rangelands of Kenya and Tanzania https://doi.org/10.4102/jamba.v3i2.39";
+        boolean includeProvidedDoiInTitle = true;
+        assertIPBESMetadata(includeProvidedDoiInTitle, expectedTitle);
+    }
+
+    @Test
+    public void zoteroRecordIPBESWithoutDoiInTitle() throws IOException {
+        String expectedTitle = "Invasive plant species and their disaster-effects in dry tropical forests and rangelands of Kenya and Tanzania";
+        boolean includeProvidedDoiInTitle = false;
+        assertIPBESMetadata(includeProvidedDoiInTitle, expectedTitle);
+    }
+
+    private void assertIPBESMetadata(boolean includeProvidedDoiInTitle, String expectedTitle) throws IOException {
         String[] jsonObjects = getResource(
                 "ZoteroArticleIPBESAttachment.json",
                 "ZoteroArticleIPBES.json",
-                Arrays.asList("ipbes-ias", "biosyslit")
+                Arrays.asList("ipbes-ias", "biosyslit"),
+                includeProvidedDoiInTitle
         );
         assertThat(jsonObjects.length, is(1));
-        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
-        JsonNode relatedIdentifiers = taxonNode.at("/related_identifiers");
+        JsonNode metadata = unwrapMetadata(jsonObjects[0]);
+        JsonNode relatedIdentifiers = metadata.at("/related_identifiers");
         JsonNode citedBy = null;
         for (JsonNode relatedIdentifier : relatedIdentifiers) {
             if (relatedIdentifier.has("relation")
@@ -78,16 +93,18 @@ public class ZoteroFileExtractorZenodoTest {
         assertThat(citedBy.get("resource_type").asText(), is("publication-report"));
         assertThat(citedBy.get("identifier").asText(), is("10.5281/zenodo.7430682"));
 
-        JsonNode keywords = taxonNode.at("/keywords");
+        assertThat(metadata.at("/title").asText(),
+                is(expectedTitle));
+
+        JsonNode keywords = metadata.at("/keywords");
         List<String> keywordList = new TreeList<>();
         keywords.forEach(k -> keywordList.add(k.asText()));
         assertThat(StringUtils.join(keywordList, ";"), is("Chapter 4;biodiversity;environment assessment;IPBES;Alien Invasive Species Assessment AIS;invasive species"));
-
     }
 
     @Test
     public void streamZoteroArticleToZenodoLineJsonWithTags() throws IOException {
-        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleWithTags.json", Arrays.asList("batlit", "biosyslit"));
+        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleWithTags.json", Arrays.asList("batlit", "biosyslit"), false);
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
         JsonNode keywords = taxonNode.at("/keywords");
@@ -99,7 +116,7 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void streamZoteroBook() throws IOException {
-        String[] jsonObjects = getResource("ZoteroBookAttachment.json", "ZoteroBook.json", Arrays.asList("batlit", "biosyslit"));
+        String[] jsonObjects = getResource("ZoteroBookAttachment.json", "ZoteroBook.json", Arrays.asList("batlit", "biosyslit"), false);
 
         assertThat(jsonObjects.length, is(greaterThan(0)));
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
@@ -114,7 +131,7 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void zoteroNewsArticle() throws IOException {
-        String[] jsonObjects = getResource("ZoteroNewsArticleAttachment.json", "ZoteroNewsArticle.json", Arrays.asList("batlit", "biosyslit"));
+        String[] jsonObjects = getResource("ZoteroNewsArticleAttachment.json", "ZoteroNewsArticle.json", Arrays.asList("batlit", "biosyslit"), false);
 
         assertThat(jsonObjects.length, is(greaterThan(0)));
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
@@ -129,7 +146,7 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void streamZoteroArticleListToZenodoLineJson() throws IOException {
-        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleList.json", Arrays.asList("batlit", "biosyslit"));
+        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleList.json", Arrays.asList("batlit", "biosyslit"), false);
         assertThat(jsonObjects.length, Is.is(0));
     }
 
@@ -211,7 +228,7 @@ public class ZoteroFileExtractorZenodoTest {
         return rootNode.get("metadata");
     }
 
-    private String[] getResource(String testAttachment, final String testArticle, List<String> communities) throws IOException {
+    private String[] getResource(String testAttachment, final String testArticle, List<String> communities, boolean includeProvidedDoiInTitle) throws IOException {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) {
@@ -270,7 +287,8 @@ public class ZoteroFileExtractorZenodoTest {
                 blobStore,
                 byteArrayOutputStream,
                 communities,
-                RefNodeFactory.toIRI("some:anchor")
+                RefNodeFactory.toIRI("some:anchor"),
+                includeProvidedDoiInTitle
         );
 
         extractor.on(statement);

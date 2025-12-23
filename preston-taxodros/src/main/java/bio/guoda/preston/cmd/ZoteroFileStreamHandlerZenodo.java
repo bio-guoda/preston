@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.commons.rdf.api.IRI;
+import org.globalbioticinteractions.doi.DOI;
+import org.globalbioticinteractions.doi.MalformedDOIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +33,7 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
     private final Dereferencer<InputStream> timedDereferencer;
     private final List<String> communities;
     private final Persisting persisting;
+    private final boolean appendDoiToTitle;
 
     public ZoteroFileStreamHandlerZenodo(ContentStreamHandler contentStreamHandler,
                                          OutputStream os,
@@ -38,6 +41,16 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                                          Dereferencer<InputStream> deref,
                                          List<String> communities,
                                          IRI provenanceAnchor) {
+        this(contentStreamHandler, os, persisting, deref, communities, provenanceAnchor, false);
+    }
+
+    public ZoteroFileStreamHandlerZenodo(ContentStreamHandler contentStreamHandler,
+                                         OutputStream os,
+                                         Persisting persisting,
+                                         Dereferencer<InputStream> deref,
+                                         List<String> communities,
+                                         IRI provenanceAnchor,
+                                         boolean appendDoiToTitle) {
         super(contentStreamHandler, os, provenanceAnchor);
         this.persisting = persisting;
         this.communities = communities;
@@ -50,6 +63,7 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                 stopWatch.stop();
             }
         };
+        this.appendDoiToTitle = appendDoiToTitle;
 
     }
 
@@ -96,6 +110,9 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                         itemData,
                         zenodoRecord
                 );
+                if (appendDoiToTitle) {
+                    appendDoiToTitle(zenodoRecord, itemData);
+                }
 
                 ZenodoMetaUtil.appendIdentifier(zenodoRecord,
                         ZenodoMetaUtil.IS_COMPILED_BY,
@@ -109,6 +126,25 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                 }
             }
 
+        }
+    }
+
+    private void appendDoiToTitle(ObjectNode zenodoRecord, JsonNode itemData) {
+        JsonNode titleNode = zenodoRecord.get(ZenodoMetaUtil.TITLE);
+        if (titleNode != null && titleNode.isTextual()) {
+            String doi = ZoteroUtil.getDOI(itemData);
+            if (StringUtils.isNotBlank(doi)) {
+                try {
+                    URI uri = DOI.create(doi).toURI();
+                    ZenodoMetaUtil.setValue(
+                            zenodoRecord,
+                            ZenodoMetaUtil.TITLE,
+                            StringUtils.joinWith(" ", StringUtils.trim(titleNode.asText()), uri)
+                    );
+                } catch (MalformedDOIException ex) {
+                    LOG.warn("found malformed DOI [" + doi + "]", ex);
+                }
+            }
         }
     }
 
