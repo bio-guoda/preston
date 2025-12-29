@@ -149,7 +149,7 @@ public class RISFileExtractorTest {
         JsonNode identifiers = taxonNode.at("/related_identifiers");
         assertThat(identifiers.size(), is(7));
 
-        assertThat(identifiers.get(6).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(6).get("relation").asText(), is("isVariantFormOf"));
         assertThat(identifiers.get(6).get("identifier").asText(), is(expectedDOI));
 
         JsonNode doiNode = taxonNode.get("doi");

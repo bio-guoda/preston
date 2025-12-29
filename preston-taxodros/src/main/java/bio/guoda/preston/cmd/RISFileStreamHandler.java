@@ -79,8 +79,9 @@ public class RISFileStreamHandler implements ContentStreamHandler {
                                         if (doi != null) {
                                             ZenodoMetaUtil.appendIdentifier(
                                                     zenodoObject,
-                                                    ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER,
-                                                    doi.getIRIString()
+                                                    ZenodoMetaUtil.IS_VARIANT_FORM_OF,
+                                                    doi.getIRIString(),
+                                                    ZenodoMetaUtil.PUBLICATION_TYPE_PUBLICATION
                                             );
                                             if (ifAvailableReuseDOI) {
                                                 if (!zenodoObject.has("doi")) {
