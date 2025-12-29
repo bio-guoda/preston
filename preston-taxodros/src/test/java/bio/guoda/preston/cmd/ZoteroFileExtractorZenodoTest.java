@@ -64,6 +64,37 @@ public class ZoteroFileExtractorZenodoTest {
     }
 
     @Test
+    public void zoteroRecordIPBESWithDoiAsVersionOf() throws IOException {
+        boolean includeProvidedDoiInTitle = true;
+        String[] jsonObjects = getResource(
+                "ZoteroArticleIPBESAttachment.json",
+                "ZoteroArticleIPBES.json",
+                Arrays.asList("ipbes-ias", "biosyslit"),
+                includeProvidedDoiInTitle
+        );
+        assertThat(jsonObjects.length, is(1));
+        JsonNode metadata = unwrapMetadata(jsonObjects[0]);
+        JsonNode relatedIdentifiers = metadata.at("/related_identifiers");
+        JsonNode variantFormOf = null;
+        for (JsonNode relatedIdentifier : relatedIdentifiers) {
+            if (relatedIdentifier.has("relation")
+                    && StringUtils.equals(relatedIdentifier.get("relation").asText(), "isVariantFormOf")) {
+                variantFormOf = relatedIdentifier;
+            }
+        }
+
+        assertNotNull(variantFormOf);
+
+        assertThat(variantFormOf.get("identifier").asText(), is("10.4102/jamba.v3i2.39"));
+        assertThat(variantFormOf.get("resource_type").asText(), is("publication"));
+
+        JsonNode keywords = metadata.at("/keywords");
+        List<String> keywordList = new TreeList<>();
+        keywords.forEach(k -> keywordList.add(k.asText()));
+        assertThat(StringUtils.join(keywordList, ";"), is("Chapter 4;biodiversity;environment assessment;IPBES;Alien Invasive Species Assessment AIS;invasive species"));
+    }
+
+    @Test
     public void zoteroRecordIPBESWithoutDoiInTitle() throws IOException {
         String expectedTitle = "Invasive plant species and their disaster-effects in dry tropical forests and rangelands of Kenya and Tanzania";
         boolean includeProvidedDoiInTitle = false;
@@ -210,7 +241,7 @@ public class ZoteroFileExtractorZenodoTest {
         assertThat(identifiers.get(6).get("identifier").asText(), is("https://linker.bio/hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
         assertThat(identifiers.get(7).get("relation").asText(), is("isPartOf"));
         assertThat(identifiers.get(7).get("identifier").asText(), is("some:anchor"));
-        assertThat(identifiers.get(8).get("relation").asText(), is("isAlternateIdentifier"));
+        assertThat(identifiers.get(8).get("relation").asText(), is("isVariantFormOf"));
         assertThat(identifiers.get(8).get("identifier").asText(), is("10.1093/gbe/evac018"));
         assertThat(identifiers.get(9).get("relation").asText(), is("isCompiledBy"));
         assertThat(identifiers.get(9).get("identifier").asText(), is("10.5281/zenodo.1410543"));

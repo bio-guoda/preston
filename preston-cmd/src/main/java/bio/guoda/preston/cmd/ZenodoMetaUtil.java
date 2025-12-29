@@ -64,6 +64,7 @@ public class ZenodoMetaUtil {
     public static final String PUBLICATION_TYPE_THESIS = "thesis";
     public static final String PUBLICATION_TYPE_CONFERENCE_PAPER = "conferencepaper";
     public static final String PUBLICATION_TYPE_OTHER = "other";
+    public static final String PUBLICATION_TYPE_PUBLICATION = "publication";
     public static final String IMPRINT_PUBLISHER = "imprint_publisher";
     public static final String PARTOF_PAGES = "partof_pages";
     public static final String PARTOF_TITLE = "partof_title";
@@ -76,6 +77,7 @@ public class ZenodoMetaUtil {
     public static final String FIELD_CUSTOM_DWC_SCIENTIFIC_NAME = "dwc:scientificName";
     public static final String DOCUMENTS = "documents";
     public static final String CITED_BY = "isCitedBy";
+    public static final String IS_VARIANT_FORM_OF = "isVariantFormOf";
     static final String KEYWORDS = "keywords";
     static final String CUSTOM = "custom";
     public static final Pattern YEAR_PATTERN = Pattern.compile(".*(?<year>[12][0-9]{3}).*");

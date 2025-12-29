@@ -204,8 +204,7 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                 ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.PARTOF_TITLE, ZoteroUtil.getBookTitle(jsonNode));
             }
 
-            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, ZoteroUtil.getDOI(jsonNode));
-
+            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_VARIANT_FORM_OF, ZoteroUtil.getDOI(jsonNode), ZenodoMetaUtil.PUBLICATION_TYPE_PUBLICATION);
 
             StringBuilder description = new StringBuilder();
 
