@@ -41,8 +41,9 @@
       "relation" : "hasVersion",
       "identifier" : "hash://sha256/2a7542427140b4f75fa2f3ba2f868760cd19b995ed40a37c5aa3aaeac5becb82"
     }, {
-      "relation" : "isAlternateIdentifier",
-      "identifier" : "https://doi.org/10.1590/s2236-89062014000200010"
+      "relation" : "isVariantFormOf",
+      "identifier" : "https://doi.org/10.1590/s2236-89062014000200010",
+      "resource_type" : "publication"
     } ]
   }
 }
