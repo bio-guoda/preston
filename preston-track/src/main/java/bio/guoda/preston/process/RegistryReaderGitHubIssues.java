@@ -273,33 +273,39 @@ public class RegistryReaderGitHubIssues extends ProcessorReadOnly {
         if (node.has("body") && node.has("url")) {
             String url = node.get("url").textValue();
             String body = node.get("body").textValue();
-            Parser parser = Parser.builder().build();
-            Node document = parser.parse(body);
-            document.accept(new AbstractVisitor() {
-                @Override
-                public void visit(Link link) {
-                    String destination = link.getDestination();
-                    if (PATTERN_GITHUB_ASSET_URL.matcher(destination).matches()) {
-                        appendDestination(destination, url, referencesInIssueComment);
-                    }
-                    super.visit(link);
-                }
-
-                private void appendDestination(String dest, String context, List<Pair<URI, URI>> uris) {
-                    try {
-                        uris.add(Pair.of(new URI(dest), new URI(context)));
-                    } catch (URISyntaxException e) {
-                        // ignore invalid urls
-                    }
-                }
-
-                @Override
-                public void visit(Image link) {
-                    appendDestination(link.getDestination(), url, referencesInIssueComment);
-                    super.visit(link);
-                }
-            });
+            if (StringUtils.isNotBlank(body)) {
+                handleReferences(referencesInIssueComment, body, url);
+            }
         }
+    }
+
+    private static void handleReferences(List<Pair<URI, URI>> referencesInIssueComment, String body, String url) {
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(body);
+        document.accept(new AbstractVisitor() {
+            @Override
+            public void visit(Link link) {
+                String destination = link.getDestination();
+                if (PATTERN_GITHUB_ASSET_URL.matcher(destination).matches()) {
+                    appendDestination(destination, url, referencesInIssueComment);
+                }
+                super.visit(link);
+            }
+
+            private void appendDestination(String dest, String context, List<Pair<URI, URI>> uris) {
+                try {
+                    uris.add(Pair.of(new URI(dest), new URI(context)));
+                } catch (URISyntaxException e) {
+                    // ignore invalid urls
+                }
+            }
+
+            @Override
+            public void visit(Image link) {
+                appendDestination(link.getDestination(), url, referencesInIssueComment);
+                super.visit(link);
+            }
+        });
     }
 
     private static boolean isEndOfRecords(JsonNode jsonNode) {
