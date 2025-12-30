@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 
 public class ResourcesHTTPIT {
 
@@ -99,14 +100,26 @@ public class ResourcesHTTPIT {
     }
 
     @Test
-    public void githubAuth() {
+    public void githubAuth() throws IOException {
         //System.setProperty("GITHUB_TOKEN", "[insert token here]");
         try (InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://api.github.com/repos/globalbioticinteractions/elton/issues?per_page=1&state=open")))) {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             IOUtils.copy(is, outputStream);
-            assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is("bla"));
+            assertThat(outputStream.size(), Is.is(greaterThan(0)));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Test
+    public void githubAuthAsset() throws IOException {
+        //System.setProperty("GITHUB_TOKEN", "[insert token here]");
+        try (InputStream is = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://github.com/user-attachments/assets/ceae4319-c7ec-4495-93e0-9ca65a64deb8")))) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            IOUtils.copy(is, outputStream);
+            assertThat(outputStream.size(), Is.is(greaterThan(0)));
+        } catch (IOException e) {
+            throw e;
         }
     }
 

@@ -104,8 +104,7 @@ public class ResourcesHTTP {
         Pattern googleUrlPattern = Pattern.compile("https://[a-z]+.google.com/.*");
         if (StringUtils.startsWith(dataURI.getIRIString(), "https://ghcr.io")) {
             msg.addHeader("Authorization", "Bearer QQ==");
-        } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.github.com/")
-                || StringUtils.startsWith(dataURI.getIRIString(), "https://github.com/")) {
+        } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.github.com/")) {
             msg.addHeader("Accept", MIMETYPE_GITHUB_JSON);
             appendGitHubAuthTokenIfAvailable(msg);
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.zotero.org/")) {
