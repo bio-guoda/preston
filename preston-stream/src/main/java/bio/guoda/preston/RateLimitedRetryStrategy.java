@@ -1,6 +1,8 @@
 package bio.guoda.preston;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.client.ServiceUnavailableRetryStrategy;
 import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
@@ -18,7 +20,14 @@ public class RateLimitedRetryStrategy implements ServiceUnavailableRetryStrategy
 
     @Override
     public boolean retryRequest(HttpResponse response, int executionCount, HttpContext context) {
-        boolean tooManyRequests = response.getStatusLine().getStatusCode() == RateLimitUtils.HTTP_STATUS_CODE_TOO_MANY_REQUESTS;
+        StatusLine statusLine = response.getStatusLine();
+        boolean tooManyRequests = statusLine.getStatusCode() == RateLimitUtils.HTTP_STATUS_CODE_TOO_MANY_REQUESTS;
+
+        if (!tooManyRequests) {
+            tooManyRequests =
+                    statusLine.getStatusCode() == RateLimitUtils.HTTP_STATUS_CODE_UNAUTHORIZED
+                            && StringUtils.contains(statusLine.getReasonPhrase(), "rate limit exceeded");
+        }
 
         boolean shouldRetry = false;
         if (tooManyRequests) {
@@ -26,6 +35,11 @@ public class RateLimitedRetryStrategy implements ServiceUnavailableRetryStrategy
                 Duration duration = RateLimitUtils.retryAfter(response, Duration.ofSeconds(1));
                 retryDurationSeconds.set(duration);
                 LOG.warn("server signalled [429: too many requests]: retrying request for [" + context.getAttribute("http.request") + "] after waiting for [" + duration.getSeconds() + "]s following server provided rate limits [" + RateLimitUtils.parseRateLimits(response) + "]");
+                shouldRetry = true;
+            } else if (RateLimitUtils.hasRateResetHint(response)) {
+                Duration durationUntilReset = RateLimitUtils.durationUntilReset(response);
+                retryDurationSeconds.set(durationUntilReset);
+                LOG.warn("server signalled [403: too many requests]: retrying request for [" + context.getAttribute("http.request") + "] after waiting for [" + durationUntilReset.getSeconds() + "]s following server provided rate limits [" + RateLimitUtils.parseRateLimits(response) + "]");
                 shouldRetry = true;
             } else {
                 retryDurationSeconds.set(Duration.ofSeconds(RETRY_INTERVAL_NO_HINT_SECONDS));

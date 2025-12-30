@@ -5,11 +5,13 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Map;
 
+import static org.hamcrest.CoreMatchers.both;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -71,6 +73,37 @@ public class RateLimitedRetryStrategyIT {
         assertThat(resp.getStatusLine().getStatusCode(), is(not(RateLimitUtils.HTTP_STATUS_CODE_TOO_MANY_REQUESTS)));
     }
 
+    @Test
+    public void withClientSideThrottlingRetryGitHub() throws IOException {
+        CloseableHttpClient client = HttpClientBuilder
+                .create()
+                .setServiceUnavailableRetryStrategy(new RateLimitedRetryStrategy())
+                .build();
+
+        CloseableHttpResponse resp;
+        Map<String, Long> rateLimits = null;
+
+        exhaustRateLimit(
+                client,
+                rateLimits,
+                githubUrl()
+        );
+
+        resp = makeRequest(
+                client,
+                githubUrl()
+        );
+
+        EntityUtils.consume(resp.getEntity());
+        assertThat(resp.getStatusLine().getStatusCode(),
+                is(both(Matchers.lessThan(300))
+                .and(Matchers.greaterThanOrEqualTo(200))));
+    }
+
+    private static String githubUrl() {
+        return "https://api.github.com/repos/globalbioticinteractions/globalbioticinteractions/issues?per_page=1&state=all";
+    }
+
     private String zenodoUrl() {
         return "https://zenodo.org/api/records/?q=_files.checksum:/eb5e8f37583644943b86d1d9ebd4ded5";
     }
@@ -94,7 +127,8 @@ public class RateLimitedRetryStrategyIT {
 
     private void exhaustRateLimit(CloseableHttpClient client, Map<String, Long> rateLimits, String uri) throws IOException {
         CloseableHttpResponse resp;
-        while (rateLimits == null || (rateLimits.containsKey(RateLimitUtils.X_RATE_LIMIT_REMAINING) && rateLimits.get(RateLimitUtils.X_RATE_LIMIT_REMAINING) > 0)) {
+        while (rateLimits == null
+                || hasCapacityLeft(rateLimits)) {
             resp = makeRequest(client, uri);
             EntityUtils.consume(resp.getEntity());
             rateLimits = RateLimitUtils.parseRateLimits(resp);
@@ -102,6 +136,11 @@ public class RateLimitedRetryStrategyIT {
         }
 
         assertThat(rateLimits.get(RateLimitUtils.X_RATE_LIMIT_REMAINING), is(0L));
+    }
+
+    private static boolean hasCapacityLeft(Map<String, Long> rateLimits) {
+        return rateLimits.containsKey(RateLimitUtils.X_RATE_LIMIT_REMAINING)
+                && rateLimits.get(RateLimitUtils.X_RATE_LIMIT_REMAINING) > 0;
     }
 
 
