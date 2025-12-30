@@ -15,6 +15,7 @@ import bio.guoda.preston.store.ValidatingKeyValueStreamHashTypeIRIFactory;
 import bio.guoda.preston.store.ValidatingKeyValueStreamContentAddressedFactory;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
@@ -166,7 +167,7 @@ public abstract class CmdActivity extends LoggingPersisting implements Runnable 
     static List<Quad> findActivityInfo(ActivityContext activity) {
         String version = VersionUtil.getVersionString(null);
         String softwareAgentVersion = version == null ? "" : (" (Version " + VersionUtil.getVersionString() + ")");
-        return ActivityUtil.generateSoftwareAgentProcessDescription(activity, PRESTON, RefNodeConstants.PRESTON_DOI_URL_IRI, "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2018-2024. Preston: a biodiversity dataset tracker" + softwareAgentVersion + " [Software]. Zenodo. " + RefNodeConstants.PRESTON_DOI_URL_IRI.getIRIString(), "Preston is a software program that finds, archives and provides access to biodiversity datasets.");
+        return ActivityUtil.generateSoftwareAgentProcessDescription(activity, PRESTON, RefNodeConstants.PRESTON_DOI_URL_IRI, "Jorrit Poelen, Icaro Alzuru, & Michael Elliott. 2018-" + DateTime.now().getYear() + ". Preston: a biodiversity dataset tracker" + softwareAgentVersion + " [Software]. Zenodo. " + RefNodeConstants.PRESTON_DOI_URL_IRI.getIRIString(), "Preston is a software program that finds, archives and provides access to biodiversity datasets.");
     }
 
     public String getActivityDescription() {
