@@ -104,12 +104,14 @@ public class ResourcesHTTP {
         Pattern googleUrlPattern = Pattern.compile("https://[a-z]+.google.com/.*");
         if (StringUtils.startsWith(dataURI.getIRIString(), "https://ghcr.io")) {
             msg.addHeader("Authorization", "Bearer QQ==");
-        } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.github.com/") || StringUtils.startsWith(dataURI.getIRIString(), "https://github.com/")) {
+        } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.github.com/")
+                || StringUtils.startsWith(dataURI.getIRIString(), "https://github.com/")) {
             msg.addHeader("Accept", MIMETYPE_GITHUB_JSON);
             appendGitHubAuthTokenIfAvailable(msg);
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.zotero.org/")) {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, ZOTERO_AUTH_TOKEN);
-        } if (googleUrlPattern.matcher(dataURI.getIRIString()).matches()) {
+        }
+        if (googleUrlPattern.matcher(dataURI.getIRIString()).matches()) {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, GOOGLE_AUTH_TOKEN);
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://zenodo.org/api")
                 || StringUtils.startsWith(dataURI.getIRIString(), "https://sandbox.zenodo.org/api")) {
