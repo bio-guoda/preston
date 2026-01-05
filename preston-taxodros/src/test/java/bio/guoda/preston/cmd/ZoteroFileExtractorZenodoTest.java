@@ -74,24 +74,35 @@ public class ZoteroFileExtractorZenodoTest {
         );
         assertThat(jsonObjects.length, is(1));
         JsonNode metadata = unwrapMetadata(jsonObjects[0]);
-        JsonNode relatedIdentifiers = metadata.at("/related_identifiers");
-        JsonNode variantFormOf = null;
-        for (JsonNode relatedIdentifier : relatedIdentifiers) {
-            if (relatedIdentifier.has("relation")
-                    && StringUtils.equals(relatedIdentifier.get("relation").asText(), "isVariantFormOf")) {
-                variantFormOf = relatedIdentifier;
-            }
-        }
-
+        JsonNode variantFormOf = getRelation(metadata, "isVariantFormOf");
         assertNotNull(variantFormOf);
 
         assertThat(variantFormOf.get("identifier").asText(), is("10.4102/jamba.v3i2.39"));
         assertThat(variantFormOf.get("resource_type").asText(), is("publication"));
 
+        JsonNode alternateIdentifier = getRelation(metadata, "isAlternateIdentifier");
+        assertNotNull(alternateIdentifier);
+
+        assertThat(alternateIdentifier.get("identifier").asText(), is("10.4102/jamba.v3i2.39"));
+        assertThat(alternateIdentifier.get("resource_type"), is(nullValue()));
+
+
         JsonNode keywords = metadata.at("/keywords");
         List<String> keywordList = new TreeList<>();
         keywords.forEach(k -> keywordList.add(k.asText()));
         assertThat(StringUtils.join(keywordList, ";"), is("Chapter 4;biodiversity;environment assessment;IPBES;Alien Invasive Species Assessment AIS;invasive species"));
+    }
+
+    private static JsonNode getRelation(JsonNode metadata, String relationType) {
+        JsonNode relatedIdentifiers = metadata.at("/related_identifiers");
+        JsonNode identifiers = null;
+        for (JsonNode relatedIdentifier : relatedIdentifiers) {
+            if (relatedIdentifier.has("relation")
+                    && StringUtils.equals(relatedIdentifier.get("relation").asText(), relationType)) {
+                identifiers = relatedIdentifier;
+            }
+        }
+        return identifiers;
     }
 
     @Test
@@ -110,14 +121,7 @@ public class ZoteroFileExtractorZenodoTest {
         );
         assertThat(jsonObjects.length, is(1));
         JsonNode metadata = unwrapMetadata(jsonObjects[0]);
-        JsonNode relatedIdentifiers = metadata.at("/related_identifiers");
-        JsonNode citedBy = null;
-        for (JsonNode relatedIdentifier : relatedIdentifiers) {
-            if (relatedIdentifier.has("relation")
-                    && StringUtils.equals(relatedIdentifier.get("relation").asText(), "isCitedBy")) {
-                citedBy = relatedIdentifier;
-            }
-        }
+        JsonNode citedBy = getRelation(metadata, "isCitedBy");
 
         assertNotNull(citedBy);
 
@@ -218,7 +222,7 @@ public class ZoteroFileExtractorZenodoTest {
 
 
         JsonNode identifiers = taxonNode.at("/related_identifiers");
-        assertThat(identifiers.size(), is(10));
+        assertThat(identifiers.size(), is(11));
         // provided by Zoteros
         assertThat(identifiers.get(0).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(0).get("identifier").asText(), is("hash://md5/00335a95492b82cc0862e6bcc88497c4"));
@@ -241,11 +245,13 @@ public class ZoteroFileExtractorZenodoTest {
         assertThat(identifiers.get(6).get("identifier").asText(), is("https://linker.bio/hash://sha256/856ecd48436bb220a80f0a746f94abd7c4ea47cb61d946286f7e25cf0ec69dc1"));
         assertThat(identifiers.get(7).get("relation").asText(), is("isPartOf"));
         assertThat(identifiers.get(7).get("identifier").asText(), is("some:anchor"));
-        assertThat(identifiers.get(8).get("relation").asText(), is("isVariantFormOf"));
+        assertThat(identifiers.get(8).get("relation").asText(), is("isAlternateIdentifier"));
         assertThat(identifiers.get(8).get("identifier").asText(), is("10.1093/gbe/evac018"));
-        assertThat(identifiers.get(9).get("relation").asText(), is("isCompiledBy"));
-        assertThat(identifiers.get(9).get("identifier").asText(), is("10.5281/zenodo.1410543"));
-        assertThat(identifiers.get(9).get("resource_type").asText(), is("software"));
+        assertThat(identifiers.get(9).get("relation").asText(), is("isVariantFormOf"));
+        assertThat(identifiers.get(9).get("identifier").asText(), is("10.1093/gbe/evac018"));
+        assertThat(identifiers.get(10).get("relation").asText(), is("isCompiledBy"));
+        assertThat(identifiers.get(10).get("identifier").asText(), is("10.5281/zenodo.1410543"));
+        assertThat(identifiers.get(10).get("resource_type").asText(), is("software"));
 
         JsonNode keywords = taxonNode.at("/keywords");
         assertThat(keywords.get(0).asText(), is("Biodiversity"));
