@@ -1,0 +1,59 @@
+{
+  "key": "L2NEE8NA",
+  "version": 77485,
+  "library": {
+    "type": "group",
+    "id": 2352922,
+    "name": "IPBES IAS",
+    "links": {
+      "alternate": {
+        "href": "https://www.zotero.org/groups/ipbes_ias",
+        "type": "text/html"
+      }
+    }
+  },
+  "links": {
+    "self": {
+      "href": "https://api.zotero.org/groups/2352922/items/L2NEE8NA",
+      "type": "application/json"
+    },
+    "alternate": {
+      "href": "https://www.zotero.org/groups/ipbes_ias/items/L2NEE8NA",
+      "type": "text/html"
+    },
+    "up": {
+      "href": "https://api.zotero.org/groups/2352922/items/IRMRIZF3",
+      "type": "application/json"
+    }
+  },
+  "meta": {
+    "createdByUser": {
+      "id": 5862169,
+      "username": "TSU IAS",
+      "name": "",
+      "links": {
+        "alternate": {
+          "href": "https://www.zotero.org/tsu_ias",
+          "type": "text/html"
+        }
+      }
+    }
+  },
+  "data": {
+    "key": "L2NEE8NA",
+    "version": 77485,
+    "parentItem": "IRMRIZF3",
+    "itemType": "attachment",
+    "linkMode": "linked_url",
+    "title": "Full Text PDF",
+    "accessDate": "2021-12-06T18:55:19Z",
+    "url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/j.1472-4642.2011.00816.x",
+    "note": "",
+    "contentType": "application/pdf",
+    "charset": "",
+    "tags": [],
+    "relations": {},
+    "dateAdded": "2021-12-07T05:13:20Z",
+    "dateModified": "2023-10-12T01:00:46Z"
+  }
+}

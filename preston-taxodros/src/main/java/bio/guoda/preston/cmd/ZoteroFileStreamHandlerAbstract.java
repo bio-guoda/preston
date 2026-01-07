@@ -38,8 +38,6 @@ public abstract class ZoteroFileStreamHandlerAbstract implements ContentStreamHa
             JsonNode zoteroRecord = new ObjectMapper().readTree(is);
             if (zoteroRecord.isObject()) {
                 handleZoteroRecord(zoteroRecord, iriString, foundAtLeastOne);
-
-
             }
         } catch (IOException e) {
             // opportunistic parsing, so ignore exceptions

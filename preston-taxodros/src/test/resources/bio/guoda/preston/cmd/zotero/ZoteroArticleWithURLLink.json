@@ -1,0 +1,112 @@
+{
+  "key": "IRMRIZF3",
+  "version": 87366,
+  "itemType": "journalArticle",
+  "title": "Impacts of invasive Australian acacias: implications for management and restoration: Australian acacias: linking impacts and restoration",
+  "creators": [
+    {
+      "creatorType": "author",
+      "firstName": "David C.",
+      "lastName": "Le Maitre"
+    },
+    {
+      "creatorType": "author",
+      "firstName": "Mirijam",
+      "lastName": "Gaertner"
+    },
+    {
+      "creatorType": "author",
+      "firstName": "Elizabete",
+      "lastName": "Marchante"
+    },
+    {
+      "creatorType": "author",
+      "firstName": "Emilie-Jane",
+      "lastName": "Ens"
+    },
+    {
+      "creatorType": "author",
+      "firstName": "Patricia M.",
+      "lastName": "Holmes"
+    },
+    {
+      "creatorType": "author",
+      "firstName": "Aníbal",
+      "lastName": "Pauchard"
+    },
+    {
+      "creatorType": "author",
+      "firstName": "Patrick J.",
+      "lastName": "O’Farrell"
+    },
+    {
+      "creatorType": "author",
+      "firstName": "Andrew M.",
+      "lastName": "Rogers"
+    },
+    {
+      "creatorType": "author",
+      "firstName": "Ryan",
+      "lastName": "Blanchard"
+    },
+    {
+      "creatorType": "author",
+      "firstName": "James",
+      "lastName": "Blignaut"
+    },
+    {
+      "creatorType": "author",
+      "firstName": "David M.",
+      "lastName": "Richardson"
+    }
+  ],
+  "abstractNote": "",
+  "publicationTitle": "Diversity and Distributions",
+  "volume": "17",
+  "issue": "5",
+  "pages": "1015-1029",
+  "date": "09/2011",
+  "series": "",
+  "seriesTitle": "",
+  "seriesText": "",
+  "journalAbbreviation": "",
+  "language": "en",
+  "DOI": "10.1111/j.1472-4642.2011.00816.x",
+  "ISSN": "13669516",
+  "shortTitle": "Impacts of invasive Australian acacias",
+  "url": "https://onlinelibrary.wiley.com/doi/10.1111/j.1472-4642.2011.00816.x",
+  "accessDate": "2023-06-08T06:20:20Z",
+  "archive": "",
+  "archiveLocation": "",
+  "libraryCatalog": "DOI.org (Crossref)",
+  "callNumber": "",
+  "rights": "",
+  "extra": "",
+  "tags": [
+    {
+      "tag": "Chapter 1"
+    },
+    {
+      "tag": "Chapter 3"
+    },
+    {
+      "tag": "Chapter 4"
+    }
+  ],
+  "collections": [
+    "8K3LTAIP",
+    "QF85TQ9U",
+    "KEBZMW33"
+  ],
+  "relations": {
+    "dc:replaces": [
+      "http://zotero.org/groups/2352922/items/2WXHTD5W",
+      "http://zotero.org/groups/2352922/items/4YNTQWG9",
+      "http://zotero.org/groups/2352922/items/HBE9KQW9",
+      "http://zotero.org/groups/2352922/items/PKDPMF7M",
+      "http://zotero.org/groups/2352922/items/X3N8HZ8U"
+    ]
+  },
+  "dateAdded": "2023-06-08T06:20:20Z",
+  "dateModified": "2023-12-11T09:33:27Z"
+}

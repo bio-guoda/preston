@@ -180,6 +180,19 @@ public class ZoteroFileExtractorZenodoTest {
     }
 
     @Test
+    public void zoteroArticleURLLinkAttachment() throws IOException {
+        // related to
+        String[] jsonObjects = getResource(
+                "ZoteroArticleWithURLLinkAttachment.json",
+                "ZoteroArticleWithURLLink.json",
+                Arrays.asList("ipbes-ias", "biosyslit"),
+                false
+        );
+
+        assertThat(jsonObjects.length, is(0));
+    }
+
+    @Test
     public void streamZoteroArticleListToZenodoLineJson() throws IOException {
         String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleList.json", Arrays.asList("batlit", "biosyslit"), false);
         assertThat(jsonObjects.length, Is.is(0));
@@ -301,6 +314,8 @@ public class ZoteroFileExtractorZenodoTest {
                 } else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/DP629R8S", key.getIRIString())) {
                     return getClass().getResourceAsStream("zotero/" + testArticle);
                 } else if (StringUtils.equals("https://api.zotero.org/groups/2352922/items/D2HF5WXT", key.getIRIString())) {
+                    return getClass().getResourceAsStream("zotero/" + testArticle);
+                }else if (StringUtils.equals("https://api.zotero.org/groups/2352922/items/IRMRIZF3", key.getIRIString())) {
                     return getClass().getResourceAsStream("zotero/" + testArticle);
                 }
                 throw new RuntimeException("unresolved [" + key + "]");

@@ -149,7 +149,9 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
         String itemType = zoteroRecord.at("/data/itemType").asText();
         if (StringUtils.equals("attachment", itemType)) {
             String contentType = zoteroRecord.at("/data/contentType").asText();
-            if (StringUtils.equals("application/pdf", contentType)) {
+            String md5 = zoteroRecord.at("/data/md5").asText();
+            if (StringUtils.equals("application/pdf", contentType)
+                    && StringUtils.isNotBlank(md5)) {
                 hasPdfAttachment = true;
             }
         }
