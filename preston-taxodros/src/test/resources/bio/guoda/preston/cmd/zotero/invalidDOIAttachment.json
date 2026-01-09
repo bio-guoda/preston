@@ -1,0 +1,74 @@
+{
+        "key": "D3B8IRBQ",
+        "version": 7607,
+        "library": {
+            "type": "group",
+            "id": 2352922,
+            "name": "IPBES IAS",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/ipbes_ias",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/2352922/items/D3B8IRBQ",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/ipbes_ias/items/D3B8IRBQ",
+                "type": "text/html"
+            },
+            "up": {
+                "href": "https://api.zotero.org/groups/2352922/items/FYJYPZ7I",
+                "type": "application/json"
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 5882151,
+                "username": "asuka_koyama",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/asuka_koyama",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "lastModifiedByUser": {
+                "id": 5862169,
+                "username": "TSU IAS",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/tsu_ias",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "numChildren": 0
+        },
+        "data": {
+            "key": "D3B8IRBQ",
+            "version": 7607,
+            "parentItem": "FYJYPZ7I",
+            "itemType": "attachment",
+            "linkMode": "imported_file",
+            "title": "D'Antonio and Vitousek - Biological Invasions by Exotic Grasses, the Grass.pdf",
+            "accessDate": "",
+            "url": "",
+            "note": "",
+            "contentType": "application/pdf",
+            "charset": "",
+            "filename": "D'Antonio and Vitousek - Biological Invasions by Exotic Grasses, the Grass.pdf",
+            "md5": "9d6d682b60db2e8bca7e7c8a6b7481f2",
+            "mtime": 1569386939950,
+            "tags": [],
+            "relations": {},
+            "dateAdded": "2019-09-25T04:48:57Z",
+            "dateModified": "2019-11-05T06:03:51Z"
+        }
+    }

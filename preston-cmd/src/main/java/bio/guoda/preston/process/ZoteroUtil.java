@@ -3,6 +3,10 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.cmd.ZenodoMetaUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
+import org.globalbioticinteractions.doi.DOI;
+import org.globalbioticinteractions.doi.MalformedDOIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ZoteroUtil {
+    private final static Logger LOG = LoggerFactory.getLogger(ZoteroUtil.class);
 
     public static final String ZOTERO_BOOK_SECTION = "bookSection";
     public static final String ZOTERO_PREPRINT = "preprint";
@@ -58,7 +63,7 @@ public class ZoteroUtil {
 
     }
 
-    public static String getDOI(JsonNode jsonNode) {
+    private static String getDOI(JsonNode jsonNode) {
         return jsonNode.at("/data/DOI").asText();
     }
 
@@ -138,5 +143,22 @@ public class ZoteroUtil {
                             + StringUtils.defaultIfBlank(matcher.group("day"), "");
         }
         return publicationDate8601;
+    }
+
+    public static DOI getValidDOIOrNull(String iriString, JsonNode jsonNode, JsonNode reference) {
+        DOI doi = null;
+        String doiString = getDOI(jsonNode);
+        if (StringUtils.isNoneBlank(doiString)) {
+            try {
+                doi = DOI.create(doiString);
+            } catch (MalformedDOIException e) {
+                LOG.warn("found invalid DOI [" + doi + "] in [" + iriString + "] seen at [" + reference + "]");
+            }
+        }
+        return doi;
+    }
+
+    public static JsonNode getReference(JsonNode jsonNode) {
+        return jsonNode.at("/links/self/href");
     }
 }

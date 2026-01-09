@@ -1,0 +1,116 @@
+{
+        "key": "FYJYPZ7I",
+        "version": 83914,
+        "library": {
+            "type": "group",
+            "id": 2352922,
+            "name": "IPBES IAS",
+            "links": {
+                "alternate": {
+                    "href": "https://www.zotero.org/groups/ipbes_ias",
+                    "type": "text/html"
+                }
+            }
+        },
+        "links": {
+            "self": {
+                "href": "https://api.zotero.org/groups/2352922/items/FYJYPZ7I",
+                "type": "application/json"
+            },
+            "alternate": {
+                "href": "https://www.zotero.org/groups/ipbes_ias/items/FYJYPZ7I",
+                "type": "text/html"
+            }
+        },
+        "meta": {
+            "createdByUser": {
+                "id": 5651267,
+                "username": "Filosxavier",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/filosxavier",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "lastModifiedByUser": {
+                "id": 5862169,
+                "username": "TSU IAS",
+                "name": "",
+                "links": {
+                    "alternate": {
+                        "href": "https://www.zotero.org/tsu_ias",
+                        "type": "text/html"
+                    }
+                }
+            },
+            "creatorSummary": "D'Antonio and Vitousek",
+            "parsedDate": "1992",
+            "numChildren": 2
+        },
+        "data": {
+            "key": "FYJYPZ7I",
+            "version": 83914,
+            "itemType": "journalArticle",
+            "title": "Biological Invasions by Exotic Grasses, the Grass/Fire Cycle, and Global Change",
+            "creators": [
+                {
+                    "creatorType": "author",
+                    "firstName": "Carla M.",
+                    "lastName": "D'Antonio"
+                },
+                {
+                    "creatorType": "author",
+                    "firstName": "Peter M",
+                    "lastName": "Vitousek"
+                }
+            ],
+            "abstractNote": "",
+            "publicationTitle": "Annual Review of Ecology and Systematics",
+            "volume": "23",
+            "issue": "",
+            "pages": "63-87",
+            "date": "1992",
+            "series": "",
+            "seriesTitle": "",
+            "seriesText": "",
+            "journalAbbreviation": "",
+            "language": "en",
+            "DOI": "annurev.es.23.110192.000431",
+            "ISSN": "0066-4162",
+            "shortTitle": "",
+            "url": "https://www.jstor.org/stable/2097282",
+            "accessDate": "",
+            "archive": "JSTOR",
+            "archiveLocation": "",
+            "libraryCatalog": "Zotero",
+            "callNumber": "",
+            "rights": "",
+            "extra": "",
+            "tags": [
+                {
+                    "tag": "Chapter 2"
+                },
+                {
+                    "tag": "Chapter 3"
+                }
+            ],
+            "collections": [
+                "QENSNCJI",
+                "QF85TQ9U"
+            ],
+            "relations": {
+                "dc:replaces": [
+                    "http://zotero.org/groups/2352922/items/ACH3KDK8",
+                    "http://zotero.org/groups/2352922/items/R5KMFK7K",
+                    "http://zotero.org/groups/2352922/items/9AEYQDVI",
+                    "http://zotero.org/groups/2352922/items/SEBQV9Z6",
+                    "http://zotero.org/groups/2352922/items/JRN6ZX8K",
+                    "http://zotero.org/groups/2352922/items/NSYD4AF3"
+                ]
+            },
+            "dateAdded": "2019-09-17T02:22:14Z",
+            "dateModified": "2023-12-11T09:12:31Z"
+        }
+    }

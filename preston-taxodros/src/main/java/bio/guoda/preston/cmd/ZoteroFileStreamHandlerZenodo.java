@@ -14,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.commons.rdf.api.IRI;
 import org.globalbioticinteractions.doi.DOI;
-import org.globalbioticinteractions.doi.MalformedDOIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,10 +100,6 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                         itemData,
                         zenodoRecord
                 );
-                if (appendDoiToTitle) {
-                    appendDoiToTitle(zenodoRecord, itemData);
-                }
-
                 ZenodoMetaUtil.appendIdentifier(zenodoRecord,
                         ZenodoMetaUtil.IS_COMPILED_BY,
                         RefNodeConstants.PRESTON_DOI,
@@ -117,25 +112,6 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                 }
             }
 
-        }
-    }
-
-    private void appendDoiToTitle(ObjectNode zenodoRecord, JsonNode itemData) {
-        JsonNode titleNode = zenodoRecord.get(ZenodoMetaUtil.TITLE);
-        if (titleNode != null && titleNode.isTextual()) {
-            String doi = ZoteroUtil.getDOI(itemData);
-            if (StringUtils.isNotBlank(doi)) {
-                try {
-                    URI uri = DOI.create(doi).toURI();
-                    ZenodoMetaUtil.setValue(
-                            zenodoRecord,
-                            ZenodoMetaUtil.TITLE,
-                            StringUtils.joinWith(" ", StringUtils.trim(titleNode.asText()), uri)
-                    );
-                } catch (MalformedDOIException ex) {
-                    LOG.warn("found malformed DOI [" + doi + "]", ex);
-                }
-            }
         }
     }
 
@@ -159,7 +135,7 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
     }
 
     private boolean appendJournalArticleMetaData(String iriString, JsonNode jsonNode, ObjectNode objectNode) {
-        JsonNode reference = jsonNode.at("/links/self/href");
+        JsonNode reference = ZoteroUtil.getReference(jsonNode);
         JsonNode creators = jsonNode.at("/data/creators");
         boolean isLikelyZoteroRecord = !reference.isMissingNode()
                 && !creators.isMissingNode()
@@ -206,8 +182,11 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                 ZenodoMetaUtil.setValueIfNotBlank(objectNode, ZenodoMetaUtil.PARTOF_TITLE, ZoteroUtil.getBookTitle(jsonNode));
             }
 
-            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, ZoteroUtil.getDOI(jsonNode));
-            ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_VARIANT_FORM_OF, ZoteroUtil.getDOI(jsonNode), ZenodoMetaUtil.PUBLICATION_TYPE_PUBLICATION);
+            DOI doi = ZoteroUtil.getValidDOIOrNull(iriString, jsonNode, reference);
+            if (doi != null) {
+                ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_ALTERNATE_IDENTIFIER, doi.toString());
+                ZenodoMetaUtil.appendIdentifier(objectNode, ZenodoMetaUtil.IS_VARIANT_FORM_OF, doi.toString(), ZenodoMetaUtil.PUBLICATION_TYPE_PUBLICATION);
+            }
 
             StringBuilder description = new StringBuilder();
 

@@ -57,13 +57,6 @@ public class ZoteroFileExtractorZenodoTest {
     }
 
     @Test
-    public void zoteroRecordIPBESWithDoiInTitle() throws IOException {
-        String expectedTitle = "Invasive plant species and their disaster-effects in dry tropical forests and rangelands of Kenya and Tanzania https://doi.org/10.4102/jamba.v3i2.39";
-        boolean includeProvidedDoiInTitle = true;
-        assertIPBESMetadata(includeProvidedDoiInTitle, expectedTitle);
-    }
-
-    @Test
     public void zoteroRecordIPBESWithDoiAsVersionOf() throws IOException {
         boolean includeProvidedDoiInTitle = true;
         String[] jsonObjects = getResource(
@@ -193,6 +186,25 @@ public class ZoteroFileExtractorZenodoTest {
     }
 
     @Test
+    public void zoteroArticleInvalidDOI() throws IOException {
+        // related to
+        String[] jsonObjects = getResource(
+                "invalidDOIAttachment.json",
+                "invalidDOI.json",
+                Arrays.asList("ipbes-ias", "biosyslit"),
+                false
+        );
+
+
+        assertThat(jsonObjects.length, is(1));
+
+        JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
+
+        assertThat(taxonNode.get("doi"), is(nullValue()));
+
+    }
+
+    @Test
     public void streamZoteroArticleListToZenodoLineJson() throws IOException {
         String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleList.json", Arrays.asList("batlit", "biosyslit"), false);
         assertThat(jsonObjects.length, Is.is(0));
@@ -305,6 +317,8 @@ public class ZoteroFileExtractorZenodoTest {
                     return IOUtils.toInputStream("content of some pdf", StandardCharsets.UTF_8);
                 } else if (StringUtils.equals("hash://md5/26225b23191d5cf93c3fa30aae54f0ac", key.getIRIString())) {
                     return IOUtils.toInputStream("content of some pdf", StandardCharsets.UTF_8);
+                } else if (StringUtils.equals("hash://md5/9d6d682b60db2e8bca7e7c8a6b7481f2", key.getIRIString())) {
+                    return IOUtils.toInputStream("content of some pdf", StandardCharsets.UTF_8);
                 } else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/C9PK97YL", key.getIRIString())) {
                     return getClass().getResourceAsStream("zotero/" + testArticle);
                 } else if (StringUtils.equals("https://api.zotero.org/groups/5435545/items/UPBFKSQJ", key.getIRIString())) {
@@ -315,7 +329,9 @@ public class ZoteroFileExtractorZenodoTest {
                     return getClass().getResourceAsStream("zotero/" + testArticle);
                 } else if (StringUtils.equals("https://api.zotero.org/groups/2352922/items/D2HF5WXT", key.getIRIString())) {
                     return getClass().getResourceAsStream("zotero/" + testArticle);
-                }else if (StringUtils.equals("https://api.zotero.org/groups/2352922/items/IRMRIZF3", key.getIRIString())) {
+                } else if (StringUtils.equals("https://api.zotero.org/groups/2352922/items/IRMRIZF3", key.getIRIString())) {
+                    return getClass().getResourceAsStream("zotero/" + testArticle);
+                } else if (StringUtils.equals("https://api.zotero.org/groups/2352922/items/FYJYPZ7I", key.getIRIString())) {
                     return getClass().getResourceAsStream("zotero/" + testArticle);
                 }
                 throw new RuntimeException("unresolved [" + key + "]");

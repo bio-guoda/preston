@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.commons.rdf.api.IRI;
+import org.globalbioticinteractions.doi.DOI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,9 +122,9 @@ public class ZoteroFileStreamHandlerRIS extends ZoteroFileStreamHandlerAbstract 
                         setTagValue(zenodoRecord, RISUtil.RIS_JOURNAL_PAGES, ZoteroUtil.getJournalVolume(itemData));
                     }
 
-                    String doi = ZoteroUtil.getDOI(itemData);
-                    if (StringUtils.isNotBlank(doi)) {
-                        setTagValue(zenodoRecord, RISUtil.RIS_DOI, doi);
+                    DOI doi = ZoteroUtil.getValidDOIOrNull(iriString, itemData, ZoteroUtil.getReference(itemData));
+                    if (doi != null) {
+                        setTagValue(zenodoRecord, RISUtil.RIS_DOI, doi.toString());
                     }
 
                     String abstractNote = ZoteroUtil.getAbstract(itemData);
@@ -143,7 +144,7 @@ public class ZoteroFileStreamHandlerRIS extends ZoteroFileStreamHandlerAbstract 
                 ZenodoMetaUtil.appendIdentifier(zenodoRecord, ZenodoMetaUtil.IS_PART_OF, getProvenanceAnchor().getIRIString());
                 ZenodoMetaUtil.setValue(zenodoRecord, ZenodoMetaUtil.UPLOAD_TYPE, ZenodoMetaUtil.UPLOAD_TYPE_PUBLICATION);
                 ZenodoMetaUtil.setType(zenodoRecord, "application/json");
-                ZenodoMetaUtil.setValue(zenodoRecord, ZenodoMetaUtil.REFERENCE_ID, getReference(itemData).asText());
+                ZenodoMetaUtil.setValue(zenodoRecord, ZenodoMetaUtil.REFERENCE_ID, ZoteroUtil.getReference(itemData).asText());
 
                 if (isLikelyZoteroRecord1) {
                     foundAtLeastOne.set(true);
@@ -181,18 +182,14 @@ public class ZoteroFileStreamHandlerRIS extends ZoteroFileStreamHandlerAbstract 
     }
 
     private static boolean isIsLikelyZoteroRecord(JsonNode jsonNode) {
-        boolean isLikelyZoteroRecord = !getReference(jsonNode).isMissingNode()
+        boolean isLikelyZoteroRecord = !ZoteroUtil.getReference(jsonNode).isMissingNode()
                 && !getCreators(jsonNode).isMissingNode()
-                && StringUtils.contains(getReference(jsonNode).asText(), "zotero.org");
+                && StringUtils.contains(ZoteroUtil.getReference(jsonNode).asText(), "zotero.org");
         return isLikelyZoteroRecord;
     }
 
     private static JsonNode getCreators(JsonNode jsonNode) {
         return jsonNode.at("/data/creators");
-    }
-
-    private static JsonNode getReference(JsonNode jsonNode) {
-        return jsonNode.at("/links/self/href");
     }
 
     private static void setTagValue(ObjectNode objectNode, String tagName, String tagValue) {
