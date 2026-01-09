@@ -22,21 +22,18 @@ public class ZoteroFileExtractorZenodo extends ProcessorExtracting {
     private final OutputStream outputStream;
     private final List<String> communities;
     private final IRI provenanceAnchor;
-    private final boolean appendDoiToTitle;
 
     public ZoteroFileExtractorZenodo(Persisting processorState,
                                      BlobStoreReadOnly blobStoreReadOnly,
                                      OutputStream out,
                                      List<String> communities,
                                      IRI provenanceAnchor,
-                                     boolean appendProvidedDoiToTitle,
                                      StatementsListener... listeners) {
         super(blobStoreReadOnly, processorState, listeners);
         this.processorState = processorState;
         this.outputStream = out;
         this.provenanceAnchor = provenanceAnchor;
         this.communities = communities;
-        this.appendDoiToTitle = appendProvidedDoiToTitle;
     }
 
     @Override
@@ -62,8 +59,7 @@ public class ZoteroFileExtractorZenodo extends ProcessorExtracting {
                             processorState,
                             deref,
                             communities,
-                            provenanceAnchor,
-                            appendDoiToTitle
+                            provenanceAnchor
                     )
             );
         }

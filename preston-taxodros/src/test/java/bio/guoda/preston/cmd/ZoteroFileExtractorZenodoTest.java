@@ -45,14 +45,14 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void streamZoteroAttachmentToZenodoLineJson() throws IOException {
-        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticle.json", Arrays.asList("batlit", "biosyslit"), false);
+        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticle.json", Arrays.asList("batlit", "biosyslit"));
         assertArticleItem(jsonObjects);
     }
 
 
     @Test
     public void skipZoteroRecordWithSuspiciousDate() throws IOException {
-        String[] jsonObjects = getResource("ZoteroArticleSuspiciousDateAttachment.json", "ZoteroArticleSuspiciousDate.json", Arrays.asList("batlit", "biosyslit"), false);
+        String[] jsonObjects = getResource("ZoteroArticleSuspiciousDateAttachment.json", "ZoteroArticleSuspiciousDate.json", Arrays.asList("batlit", "biosyslit"));
         assertThat(jsonObjects.length, is(0));
     }
 
@@ -62,8 +62,7 @@ public class ZoteroFileExtractorZenodoTest {
         String[] jsonObjects = getResource(
                 "ZoteroArticleIPBESAttachment.json",
                 "ZoteroArticleIPBES.json",
-                Arrays.asList("ipbes-ias", "biosyslit"),
-                includeProvidedDoiInTitle
+                Arrays.asList("ipbes-ias", "biosyslit")
         );
         assertThat(jsonObjects.length, is(1));
         JsonNode metadata = unwrapMetadata(jsonObjects[0]);
@@ -109,8 +108,7 @@ public class ZoteroFileExtractorZenodoTest {
         String[] jsonObjects = getResource(
                 "ZoteroArticleIPBESAttachment.json",
                 "ZoteroArticleIPBES.json",
-                Arrays.asList("ipbes-ias", "biosyslit"),
-                includeProvidedDoiInTitle
+                Arrays.asList("ipbes-ias", "biosyslit")
         );
         assertThat(jsonObjects.length, is(1));
         JsonNode metadata = unwrapMetadata(jsonObjects[0]);
@@ -132,7 +130,7 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void streamZoteroArticleToZenodoLineJsonWithTags() throws IOException {
-        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleWithTags.json", Arrays.asList("batlit", "biosyslit"), false);
+        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleWithTags.json", Arrays.asList("batlit", "biosyslit"));
 
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
         JsonNode keywords = taxonNode.at("/keywords");
@@ -144,7 +142,7 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void streamZoteroBook() throws IOException {
-        String[] jsonObjects = getResource("ZoteroBookAttachment.json", "ZoteroBook.json", Arrays.asList("batlit", "biosyslit"), false);
+        String[] jsonObjects = getResource("ZoteroBookAttachment.json", "ZoteroBook.json", Arrays.asList("batlit", "biosyslit"));
 
         assertThat(jsonObjects.length, is(greaterThan(0)));
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
@@ -159,7 +157,7 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void zoteroNewsArticle() throws IOException {
-        String[] jsonObjects = getResource("ZoteroNewsArticleAttachment.json", "ZoteroNewsArticle.json", Arrays.asList("batlit", "biosyslit"), false);
+        String[] jsonObjects = getResource("ZoteroNewsArticleAttachment.json", "ZoteroNewsArticle.json", Arrays.asList("batlit", "biosyslit"));
 
         assertThat(jsonObjects.length, is(greaterThan(0)));
         JsonNode taxonNode = unwrapMetadata(jsonObjects[0]);
@@ -178,8 +176,7 @@ public class ZoteroFileExtractorZenodoTest {
         String[] jsonObjects = getResource(
                 "ZoteroArticleWithURLLinkAttachment.json",
                 "ZoteroArticleWithURLLink.json",
-                Arrays.asList("ipbes-ias", "biosyslit"),
-                false
+                Arrays.asList("ipbes-ias", "biosyslit")
         );
 
         assertThat(jsonObjects.length, is(0));
@@ -191,8 +188,7 @@ public class ZoteroFileExtractorZenodoTest {
         String[] jsonObjects = getResource(
                 "invalidDOIAttachment.json",
                 "invalidDOI.json",
-                Arrays.asList("ipbes-ias", "biosyslit"),
-                false
+                Arrays.asList("ipbes-ias", "biosyslit")
         );
 
 
@@ -206,7 +202,7 @@ public class ZoteroFileExtractorZenodoTest {
 
     @Test
     public void streamZoteroArticleListToZenodoLineJson() throws IOException {
-        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleList.json", Arrays.asList("batlit", "biosyslit"), false);
+        String[] jsonObjects = getResource("ZoteroAttachment.json", "ZoteroArticleList.json", Arrays.asList("batlit", "biosyslit"));
         assertThat(jsonObjects.length, Is.is(0));
     }
 
@@ -290,7 +286,7 @@ public class ZoteroFileExtractorZenodoTest {
         return rootNode.get("metadata");
     }
 
-    private String[] getResource(String testAttachment, final String testArticle, List<String> communities, boolean includeProvidedDoiInTitle) throws IOException {
+    private String[] getResource(String testAttachment, final String testArticle, List<String> communities) throws IOException {
         BlobStoreReadOnly blobStore = new BlobStoreReadOnly() {
             @Override
             public InputStream get(IRI key) {
@@ -355,8 +351,7 @@ public class ZoteroFileExtractorZenodoTest {
                 blobStore,
                 byteArrayOutputStream,
                 communities,
-                RefNodeFactory.toIRI("some:anchor"),
-                includeProvidedDoiInTitle
+                RefNodeFactory.toIRI("some:anchor")
         );
 
         extractor.on(statement);

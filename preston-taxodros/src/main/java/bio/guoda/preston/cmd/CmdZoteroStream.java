@@ -33,13 +33,6 @@ public class CmdZoteroStream extends LoggingPersisting implements Runnable {
 
     private List<String> communities = new ArrayList<>();
 
-    @CommandLine.Option(
-            names = {"--append-doi-to-title"},
-            description = "append provided DOI to the Zenodo deposit record title. This way, the provided DOI appears along with the Zenodo record DOI in the Zenodo generated citation string. E.g., Pestana, L. B., Dias, G. M., & Marques, A. C. (2017). A century of introductions by coastal sessile marine invertebrates in Angola, South East Atlantic Ocean https://doi.org/10.1016/j.marpolbul.2017.09.041. Marine Pollution Bulletin, 125(1-2), 426–432. https://doi.org/10.5072/zenodo.418845"
-    )
-    private boolean appendProvidedDoiToTitle = false;
-
-
     @Override
     public void run() {
         BlobStoreReadOnly blobStoreAppendOnly
@@ -74,7 +67,6 @@ public class CmdZoteroStream extends LoggingPersisting implements Runnable {
                 getOutputStream(),
                 communities,
                 AnchorUtil.findAnchorOrThrow(this),
-                appendProvidedDoiToTitle,
                 listener);
 
         StatementsEmitterAdapter emitter = new StatementsEmitterAdapter() {

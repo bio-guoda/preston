@@ -32,15 +32,13 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
     private final Dereferencer<InputStream> timedDereferencer;
     private final List<String> communities;
     private final Persisting persisting;
-    private final boolean appendDoiToTitle;
 
     public ZoteroFileStreamHandlerZenodo(ContentStreamHandler contentStreamHandler,
                                          OutputStream os,
                                          Persisting persisting,
                                          Dereferencer<InputStream> deref,
                                          List<String> communities,
-                                         IRI provenanceAnchor,
-                                         boolean appendDoiToTitle) {
+                                         IRI provenanceAnchor) {
         super(contentStreamHandler, os, provenanceAnchor);
         this.persisting = persisting;
         this.communities = communities;
@@ -53,8 +51,6 @@ public class ZoteroFileStreamHandlerZenodo extends ZoteroFileStreamHandlerAbstra
                 stopWatch.stop();
             }
         };
-        this.appendDoiToTitle = appendDoiToTitle;
-
     }
 
 
