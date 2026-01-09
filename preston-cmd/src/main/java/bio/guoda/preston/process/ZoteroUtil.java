@@ -152,7 +152,7 @@ public class ZoteroUtil {
             try {
                 doi = DOI.create(doiString);
             } catch (MalformedDOIException e) {
-                LOG.warn("found invalid DOI [" + doi + "] in [" + iriString + "] seen at [" + reference + "]");
+                LOG.warn("found invalid DOI [" + doiString + "] in [" + iriString + "] seen at [" + reference + "]");
             }
         }
         return doi;
