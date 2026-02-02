@@ -69,5 +69,51 @@ public class ZenodoUtilsIT {
         assertThat(foundRecords.size(), is(1));
     }
 
+    @Test
+    @Test
+    public void findExistingByNamespaceInCommunity() throws IOException {
+
+        ZenodoContext ctx = new ZenodoContext(null, "https://zenodo.org", Arrays.asList("globi-review"));
+        Collection<Pair<Long, String>> foundRecords = ZenodoUtils.findRecordsByAlternateIds(
+                ctx,
+                Arrays.asList("urn:lsid:globalbioticinteractions.org:dataset:globalbioticinteractions/template-dataset"),
+                null,
+                ResourcesHTTP::asInputStream
+        );
+
+        assertThat(foundRecords.size(), is(1));
+    }
+
+    @Test
+    public void findExistingByNamespaceInNonExistingCommunity() throws IOException {
+
+        ZenodoContext ctx = new ZenodoContext(null, "https://zenodo.org", Arrays.asList("glozi-review"));
+        Collection<Pair<Long, String>> foundRecords = ZenodoUtils.findRecordsByAlternateIds(
+                ctx,
+                Arrays.asList("urn:lsid:globalbioticinteractions.org:dataset:globalbioticinteractions/template-dataset"),
+                null,
+                ResourcesHTTP::asInputStream
+        );
+
+        assertThat(foundRecords.size(), is(0));
+    }
+
+    @Test
+    public void findExistingByNamespaceInNonExistingCommunities() throws IOException {
+        ZenodoContext ctx = new ZenodoContext(null,
+                "https://zenodo.org",
+                Arrays.asList("glozi-review", "glozi-zeview")
+        );
+
+        Collection<Pair<Long, String>> foundRecords = ZenodoUtils.findRecordsByAlternateIds(
+                ctx,
+                Arrays.asList("urn:lsid:globalbioticinteractions.org:dataset:globalbioticinteractions/template-dataset"),
+                null,
+                ResourcesHTTP::asInputStream
+        );
+
+        assertThat(foundRecords.size(), is(0));
+    }
+
 
 }
