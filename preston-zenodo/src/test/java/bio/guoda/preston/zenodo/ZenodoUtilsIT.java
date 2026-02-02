@@ -70,7 +70,6 @@ public class ZenodoUtilsIT {
     }
 
     @Test
-    @Test
     public void findExistingByNamespaceInCommunity() throws IOException {
 
         ZenodoContext ctx = new ZenodoContext(null, "https://zenodo.org", Arrays.asList("globi-review"));
