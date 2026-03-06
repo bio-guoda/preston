@@ -25,7 +25,7 @@ public class CmdTaxoDrosStream extends LoggingPersisting implements Runnable {
             names = {"--communities"},
             description = "associated Zenodo communities"
     )
-    private List<String> communities = Arrays.asList("taxodros", "biosyslit");
+    private List<String> communities = Arrays.asList("taxodros");
 
     @CommandLine.Option(
             names = {"--pub-doi"},
