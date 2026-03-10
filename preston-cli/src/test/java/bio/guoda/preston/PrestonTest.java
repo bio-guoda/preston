@@ -20,7 +20,7 @@ public class PrestonTest {
         CommandLine commandLine = Preston.getCommandLine();
         CommandLine.ParseResult parseResult = commandLine.parseArgs("history",
                 "--remote",
-                "https://deeplinker.bio/,https://linker.bio/");
+                "https://example.org/,https://linker.bio/");
 
         assertTwoRemotes(parseResult);
     }
@@ -46,7 +46,7 @@ public class PrestonTest {
         CommandLine commandLine = Preston.getCommandLine();
         CommandLine.ParseResult parseResult = commandLine.parseArgs("history",
                 "--remote",
-                "https://deeplinker.bio/",
+                "https://example.org/",
                 "--remote",
                 "https://linker.bio/");
 
@@ -64,7 +64,7 @@ public class PrestonTest {
         List<URI> remotes = cmd.getRemotes();
         assertThat(remotes.size(), is(2));
 
-        assertThat(remotes.get(0).toString(), is("https://deeplinker.bio/"));
+        assertThat(remotes.get(0).toString(), is("https://example.org/"));
         assertThat(remotes.get(1).toString(), is("https://linker.bio/"));
     }
 

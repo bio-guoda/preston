@@ -110,7 +110,7 @@ public class RefNodeFactory {
 
     public static IRI toSkolemizedBlank(BlankNode subj) {
         // see https://www.w3.org/TR/rdf11-concepts/#section-skolemization
-        return toIRI("https://deeplinker.bio/" + SKOLEMIZATION_PATH + subj.uniqueReference());
+        return toIRI("https://linker.bio/" + SKOLEMIZATION_PATH + subj.uniqueReference());
     }
 
     public static boolean hasVersionAvailable(Quad statement) {

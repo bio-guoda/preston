@@ -26,7 +26,7 @@ public class PrestonIT {
         Preston.run(new String[]{
                 "history",
                 "--remote",
-                "https://deeplinker.bio/"
+                "https://linker.bio/"
         });
     }
 

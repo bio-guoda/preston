@@ -105,10 +105,10 @@ public class KeyTo1LevelDataOnePathTest {
     public void nonDataOneNoTrailingSlash() {
 
         URI actualPath
-                = new KeyTo1LevelDataOnePath(URI.create("https://deeplinker.bio"), getExplodingReref())
+                = new KeyTo1LevelDataOnePath(URI.create("https://linker.bio"), getExplodingReref())
                 .toPath(getMD5IRI());
         assertThat(actualPath.toString(),
-                Is.is("https://deeplinker.bio/e27c99a7f701dab97b7d09c467acf468"));
+                Is.is("https://linker.bio/e27c99a7f701dab97b7d09c467acf468"));
     }
 
     private Dereferencer<InputStream> getExplodingReref() {
@@ -123,10 +123,10 @@ public class KeyTo1LevelDataOnePathTest {
     @Test
     public void nonDataOneTrailingSlash() {
 
-        URI actualPath = new KeyTo1LevelDataOnePath(URI.create("https://deeplinker.bio/"), getExplodingReref())
+        URI actualPath = new KeyTo1LevelDataOnePath(URI.create("https://linker.bio/"), getExplodingReref())
                 .toPath(getMD5IRI());
         assertThat(actualPath.toString(),
-                Is.is("https://deeplinker.bio/e27c99a7f701dab97b7d09c467acf468"));
+                Is.is("https://linker.bio/e27c99a7f701dab97b7d09c467acf468"));
     }
 
     private IRI getMD5IRI() {
