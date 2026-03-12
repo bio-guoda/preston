@@ -47,7 +47,7 @@ public class KeyTo1LevelDataVersePath implements KeyToPath {
             int offset = hashType.getPrefix().length();
             String md5HexHash = StringUtils.substring(key.getIRIString(), offset);
 
-            if (StringUtils.equals(remote.getHost(), MAGIC_HOST)) {
+            if (hasDataverseRemote()) {
                 Optional<URI> first = registeredDataVerseHosts
                         .stream()
                         .filter(x -> !failedHosts.contains(x))
@@ -63,9 +63,13 @@ public class KeyTo1LevelDataVersePath implements KeyToPath {
         return path;
     }
 
+    private boolean hasDataverseRemote() {
+        return StringUtils.equals(remote.getHost(), MAGIC_HOST);
+    }
+
     private boolean isSupportedHost() {
         return remote != null
-                && (StringUtils.equals(remote.getHost(), MAGIC_HOST) || registeredDataVerseHosts.contains(remote.getHost()));
+                && (hasDataverseRemote() || registeredDataVerseHosts.contains(remote.getHost()));
     }
 
     private IRI queryForHost(String md5HexHash, URI host) {
