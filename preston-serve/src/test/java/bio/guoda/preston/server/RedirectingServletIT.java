@@ -193,7 +193,7 @@ public class RedirectingServletIT {
                 sparqlEndpoint,
                 MimeTypes.MIME_TYPE_DWCA,
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
-        assertThat(contentId.get(CONTENT_ID), startsWith("https://deeplinker.bio/.well-known/genid"));
+        assertThat(contentId.get(CONTENT_ID), startsWith("https://linker.bio/.well-known/genid"));
         assertThat(contentId.get(CONTENT_TYPE), Is.is("application/dwca"));
         assertThat(contentId.get(DOI), Is.is("https://doi.org/10.15468/mwjnku"));
         assertThat(contentId.get(UUID), Is.is("urn:uuid:926f5a1c-8995-498a-913b-fe0312e1071f"));
@@ -208,7 +208,7 @@ public class RedirectingServletIT {
                 sparqlEndpoint,
                 MimeTypes.MIME_TYPE_DWCA,
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
-        assertThat(contentId.get(CONTENT_ID), startsWith("https://deeplinker.bio/.well-known/genid"));
+        assertThat(contentId.get(CONTENT_ID), startsWith("https://linker.bio/.well-known/genid"));
         assertThat(contentId.get(CONTENT_TYPE), Is.is("application/dwca"));
         assertThat(contentId.get(DOI), Is.is("https://doi.org/10.15468/mwjnku"));
         assertThat(contentId.get(UUID), Is.is("urn:uuid:926f5a1c-8995-498a-913b-fe0312e1071f"));
@@ -223,7 +223,7 @@ public class RedirectingServletIT {
                 sparqlEndpoint,
                 MimeTypes.MIME_TYPE_DWCA,
                 RefNodeFactory.toIRI("hash://sha256/5b7fa37bf8b64e7c935c4ff3389e36f8dd162f0705410dd719fd089e1ea253cd"));
-        assertThat(contentId.get(CONTENT_ID), startsWith("https://deeplinker.bio/.well-known/genid"));
+        assertThat(contentId.get(CONTENT_ID), startsWith("https://linker.bio/.well-known/genid"));
         assertThat(contentId.get(CONTENT_TYPE), Is.is("application/dwca"));
         assertThat(contentId.get(DOI), Is.is("https://doi.org/10.15468/mwjnku"));
         assertThat(contentId.get(UUID), Is.is("urn:uuid:926f5a1c-8995-498a-913b-fe0312e1071f"));

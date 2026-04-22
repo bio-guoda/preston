@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 public class CmdClone extends LoggingPersisting implements Runnable {
 
-    @CommandLine.Parameters(description = "Remote repositories (e.g., https://deeplinker.bio/,https://example.org)")
+    @CommandLine.Parameters(description = "Remote repositories (e.g., https://linker.bio/,https://zenodo.org)")
     private List<URI> remotes;
 
     @Override
