@@ -14,6 +14,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ResourcesHTTPTest {
 
@@ -45,6 +47,14 @@ public class ResourcesHTTPTest {
         ResourcesHTTP.setAuthBearerIfAvailable(httpGet, "4567");
         assertThat(httpGet.getAllHeaders().length, is(1));
         assertThat(httpGet.getFirstHeader("Authorization").toString(), is("Authorization: Bearer 4567"));
+    }
+
+    @Test
+    public void isZenodoUrl() {
+        assertTrue(ResourcesHTTP.isZenodoUrl(RefNodeFactory.toIRI("https://sandbox.zenodo.org/api")));
+        assertTrue(ResourcesHTTP.isZenodoUrl(RefNodeFactory.toIRI("https://zenodo.org/api")));
+        assertFalse(ResourcesHTTP.isZenodoUrl(RefNodeFactory.toIRI("https://aazenodo.org/api")));
+        assertTrue(ResourcesHTTP.isZenodoUrl(RefNodeFactory.toIRI("https://zenodo.org/records/16423149/files/BTA_v5%20(5).xlsx")));
     }
 
     @Test

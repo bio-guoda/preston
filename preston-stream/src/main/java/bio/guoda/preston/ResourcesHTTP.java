@@ -40,6 +40,8 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public class ResourcesHTTP {
+    public static final Pattern GOOGLE_URL_PATTERN = Pattern.compile("https://[a-z]+.google.com/.*");
+    public static final Pattern ZENODO_URL_PATTERN = Pattern.compile("https://(sandbox[.]){0,1}zenodo.org/.*");
     private static final Logger LOG = LoggerFactory.getLogger(ResourcesHTTP.class);
 
     public static final String ZENODO_AUTH_TOKEN = "ZENODO_TOKEN";
@@ -101,7 +103,6 @@ public class ResourcesHTTP {
     }
 
     private static void injectAuthorizationIfPossible(IRI dataURI, HttpMessage msg) {
-        Pattern googleUrlPattern = Pattern.compile("https://[a-z]+.google.com/.*");
         if (StringUtils.startsWith(dataURI.getIRIString(), "https://ghcr.io")) {
             msg.addHeader("Authorization", "Bearer QQ==");
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.github.com/")) {
@@ -110,12 +111,15 @@ public class ResourcesHTTP {
         } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://api.zotero.org/")) {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, ZOTERO_AUTH_TOKEN);
         }
-        if (googleUrlPattern.matcher(dataURI.getIRIString()).matches()) {
+        if (GOOGLE_URL_PATTERN.matcher(dataURI.getIRIString()).matches()) {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, GOOGLE_AUTH_TOKEN);
-        } else if (StringUtils.startsWith(dataURI.getIRIString(), "https://zenodo.org/api")
-                || StringUtils.startsWith(dataURI.getIRIString(), "https://sandbox.zenodo.org/api")) {
+        } else if (isZenodoUrl(dataURI)) {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, ZENODO_AUTH_TOKEN);
         }
+    }
+
+    public static boolean isZenodoUrl(IRI dataURI) {
+        return ZENODO_URL_PATTERN.matcher(dataURI.getIRIString()).matches();
     }
 
     private static void appendGitHubAuthTokenIfAvailable(HttpMessage msg) {
