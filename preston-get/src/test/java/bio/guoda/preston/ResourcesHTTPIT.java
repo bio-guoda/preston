@@ -10,6 +10,7 @@ import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.startsWith;
 
 public class ResourcesHTTPIT {
 
@@ -160,6 +162,48 @@ public class ResourcesHTTPIT {
             assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), Is.is("this is a secret"));
         }
 
+    }
+
+    @Test
+    public void datadryadDataset() throws IOException {
+        setDataDryadToken();
+        try (InputStream is
+                     = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z")))) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            IOUtils.copy(is, outputStream);
+            JsonNode response = new ObjectMapper().readTree(new ByteArrayInputStream(outputStream.toByteArray()));
+            assertThat(response.at("/identifier").asText(), Is.is("doi:10.5061/dryad.6hdr7sr8z"));
+        }
+
+    }
+    @Test
+    public void datadryadFile() throws IOException {
+        setDataDryadToken();
+        try (InputStream is
+                     = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://datadryad.org/api/v2/files/3985010/download")))) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            IOUtils.copy(is, outputStream);
+            String response = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+            assertThat(response, startsWith("# TraitAM, a global spore trait database for arbuscular mycorrhizal fungi\n"));
+        }
+
+    }
+
+    @Test
+    public void datadryadAuthTest() throws IOException {
+        setDataDryadToken();
+        try (InputStream is
+                     = ResourcesHTTP.asInputStream(RefNodeFactory.toIRI(URI.create("https://datadryad.org/api/v2/test")))) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            IOUtils.copy(is, outputStream);
+            assertThat(new String(outputStream.toByteArray(), StandardCharsets.UTF_8), startsWith("{\"message\":\"Welcome application owner"));
+        }
+
+    }
+
+    private static String setDataDryadToken() {
+        //System.setProperty("DATADRYAD_TOKEN", "[some access token]");
+        return System.setProperty("DATADRYAD_TOKEN", "N975wMnIn9qbISqj6CbvQ7dR3K4GXByomn70lCXKUvA");
     }
 
     @Test

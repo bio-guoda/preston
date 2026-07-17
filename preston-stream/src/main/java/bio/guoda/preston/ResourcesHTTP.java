@@ -4,11 +4,17 @@ import bio.guoda.preston.stream.ContentStreamUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpMessage;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestFactory;
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.ProtocolException;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -18,7 +24,9 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -42,12 +50,15 @@ import java.util.regex.Pattern;
 public class ResourcesHTTP {
     public static final Pattern GOOGLE_URL_PATTERN = Pattern.compile("https://[a-z]+.google.com/.*");
     public static final Pattern ZENODO_URL_PATTERN = Pattern.compile("https://(sandbox[.]){0,1}zenodo.org/.*");
+    public static final Pattern DATADRYAD_URL_PATTERN = Pattern.compile("https://(www.){0,1}datadryad.org/.*");
+
     private static final Logger LOG = LoggerFactory.getLogger(ResourcesHTTP.class);
 
     public static final String ZENODO_AUTH_TOKEN = "ZENODO_TOKEN";
     public static final String ZOTERO_AUTH_TOKEN = "ZOTERO_TOKEN";
     public static final String GOOGLE_AUTH_TOKEN = "GOOGLE_TOKEN";
     public static final String GITHUB_AUTH_TOKEN = "GITHUB_TOKEN";
+    public static final String DATADRYAD_AUTH_TOKEN = "DATADRYAD_TOKEN";
 
     private static final List<Integer> REDIRECT_CODES = Arrays.asList(
             HttpStatus.SC_MOVED_PERMANENTLY,
@@ -115,11 +126,17 @@ public class ResourcesHTTP {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, GOOGLE_AUTH_TOKEN);
         } else if (isZenodoUrl(dataURI)) {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, ZENODO_AUTH_TOKEN);
+        }  else if (isDataDryadUrl(dataURI)) {
+            appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, DATADRYAD_AUTH_TOKEN);
         }
     }
 
     public static boolean isZenodoUrl(IRI dataURI) {
         return ZENODO_URL_PATTERN.matcher(dataURI.getIRIString()).matches();
+    }
+
+    public static boolean isDataDryadUrl(IRI dataURI) {
+        return DATADRYAD_URL_PATTERN.matcher(dataURI.getIRIString()).matches();
     }
 
     private static void appendGitHubAuthTokenIfAvailable(HttpMessage msg) {
@@ -230,6 +247,21 @@ public class ResourcesHTTP {
                     .setRetryHandler(new DefaultHttpRequestRetryHandler(3, true))
                     .setUserAgent(getUserAgent(VersionUtil.getVersionString()))
                     .setDefaultRequestConfig(config)
+                    .setRedirectStrategy(new DefaultRedirectStrategy() {
+                        @Override
+                        public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context) throws ProtocolException {
+                            HttpUriRequest redirect = super.getRedirect(request, response, context);
+                            if (StringUtils.contains(redirect.getURI().getQuery(), "X-Amz-Credential")) {
+                                Header[] headers = request.getAllHeaders();
+                                for (Header header : headers) {
+                                    if (!StringUtils.equals(header.getName(), "Authorization")) {
+                                        redirect.addHeader(header);
+                                    }
+                                }
+                            }
+                            return redirect;
+                        }
+                    })
                     // for loading proxy config see https://github.com/globalbioticinteractions/nomer/issues/121
                     .useSystemProperties()
                     .build();
