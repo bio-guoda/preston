@@ -1,0 +1,214 @@
+{
+  "_links": {
+    "self": {
+      "href": "/api/v2/datasets/doi:10.5061%2Fdryad.6hdr7sr8z/versions"
+    },
+    "first": {
+      "href": "/api/v2/datasets/doi:10.5061%2Fdryad.6hdr7sr8z/versions"
+    },
+    "last": {
+      "href": "/api/v2/datasets/doi:10.5061%2Fdryad.6hdr7sr8z/versions?page=1"
+    }
+  },
+  "count": 1,
+  "total": 1,
+  "_embedded": {
+    "stash:versions": [
+      {
+        "_links": {
+          "self": {
+            "href": "/api/v2/versions/355108"
+          },
+          "stash:dataset": {
+            "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z"
+          },
+          "stash:files": {
+            "href": "/api/v2/versions/355108/files"
+          },
+          "stash:download": {
+            "href": "/api/v2/versions/355108/download"
+          },
+          "curies": [
+            {
+              "name": "stash",
+              "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+              "templated": "true"
+            }
+          ]
+        },
+        "title": "TraitAM, a global spore trait database for arbuscular mycorrhizal fungi",
+        "authors": [
+          {
+            "firstName": "Bala",
+            "lastName": "Chaudhary",
+            "email": "bala.chaudhary@dartmouth.edu",
+            "affiliation": "Dartmouth College",
+            "affiliationROR": "https://ror.org/049s0rh22",
+            "affiliations": [
+              {
+                "name": "Dartmouth College",
+                "ror_id": "https://ror.org/049s0rh22"
+              }
+            ],
+            "orcid": "0000-0002-7232-1757",
+            "order": null
+          },
+          {
+            "firstName": "Liam",
+            "lastName": "Nokes",
+            "email": "liamnokes@gmail.com",
+            "affiliation": "Dartmouth College",
+            "affiliationROR": "https://ror.org/049s0rh22",
+            "affiliations": [
+              {
+                "name": "Dartmouth College",
+                "ror_id": "https://ror.org/049s0rh22"
+              }
+            ],
+            "orcid": "0000-0001-6451-5087",
+            "order": 1
+          },
+          {
+            "firstName": "Jennifer",
+            "lastName": "Gonzalez",
+            "email": "jengonzalezvt@gmail.com",
+            "affiliation": "Dartmouth College",
+            "affiliationROR": "https://ror.org/049s0rh22",
+            "affiliations": [
+              {
+                "name": "Dartmouth College",
+                "ror_id": "https://ror.org/049s0rh22"
+              }
+            ],
+            "orcid": null,
+            "order": 2
+          },
+          {
+            "firstName": "Peri",
+            "lastName": "Cooper",
+            "email": "cbrookscooper@cicswrightwood.org",
+            "affiliation": "Cornell University",
+            "affiliationROR": "https://ror.org/05bnh6r87",
+            "affiliations": [
+              {
+                "name": "Cornell University",
+                "ror_id": "https://ror.org/05bnh6r87"
+              }
+            ],
+            "orcid": null,
+            "order": 3
+          },
+          {
+            "firstName": "Anne",
+            "lastName": "Katula",
+            "email": "anne.m.katula.24@dartmouth.edu",
+            "affiliation": "Dartmouth College",
+            "affiliationROR": "https://ror.org/049s0rh22",
+            "affiliations": [
+              {
+                "name": "Dartmouth College",
+                "ror_id": "https://ror.org/049s0rh22"
+              }
+            ],
+            "orcid": null,
+            "order": 4
+          },
+          {
+            "firstName": "Emma",
+            "lastName": "Mares",
+            "email": "emma.mares@gmail.com",
+            "affiliation": "DePaul University",
+            "affiliationROR": "https://ror.org/04xtx5t16",
+            "affiliations": [
+              {
+                "name": "DePaul University",
+                "ror_id": "https://ror.org/04xtx5t16"
+              }
+            ],
+            "orcid": null,
+            "order": 5
+          },
+          {
+            "firstName": "Smriti",
+            "lastName": "Pehim Limbu",
+            "email": "smriti.pehim.limbu@dartmouth.edu",
+            "affiliation": "Dartmouth College",
+            "affiliationROR": "https://ror.org/049s0rh22",
+            "affiliations": [
+              {
+                "name": "Dartmouth College",
+                "ror_id": "https://ror.org/049s0rh22"
+              }
+            ],
+            "orcid": "0000-0001-9086-7895",
+            "order": 6
+          },
+          {
+            "firstName": "Jannetta",
+            "lastName": "Robinson",
+            "email": "Jannetta.Robinson@colorado.edu",
+            "affiliation": "University of Colorado Boulder",
+            "affiliationROR": "https://ror.org/02ttsq026",
+            "affiliations": [
+              {
+                "name": "University of Colorado Boulder",
+                "ror_id": "https://ror.org/02ttsq026"
+              }
+            ],
+            "orcid": null,
+            "order": 7
+          },
+          {
+            "firstName": "Carlost",
+            "lastName": "Aguilar-Trigueros",
+            "email": "calgit@gmail.com",
+            "affiliation": "University of Jyväskylä",
+            "affiliationROR": "https://ror.org/05n3dz165",
+            "affiliations": [
+              {
+                "name": "University of Jyväskylä",
+                "ror_id": "https://ror.org/05n3dz165"
+              }
+            ],
+            "orcid": null,
+            "order": 8
+          }
+        ],
+        "abstract": "\u003cp\u003eKnowledge regarding organismal traits supports a better understanding of the relationship between form and function and can be used to predict the consequences of environmental stressors on ecological and evolutionary processes. Most plants on Earth form symbioses with mycorrhizal fungi, but our ability to make trait-based inferences for these fungi is limited due to a lack of publicly available trait data. Here, we present TraitAM, a comprehensive database of multiple spore traits for all described species of the most common group of mycorrhizal fungi, the arbuscular mycorrhizal (AM) fungi (subphylum Glomeromycotina). Trait data for 344 species were mined from original species descriptions and used to calculate newly developed fungal trait metrics that can be employed to explore both intra- and inter-specific variation in traits. TraitAM also includes an updated phylogenetic tree that can be used to conduct phylogenetically-informed multivariate analyses of AM fungal traits. TraitAM will aid our further understanding of the biology, ecology, and evolution of these globally widespread, symbiotic fungi.\u003c/p\u003e",
+        "funders": [
+          {
+            "organization": "U.S. National Science Foundation",
+            "identifierType": "ror",
+            "identifier": "https://ror.org/021nxhr62",
+            "awardNumber": "2205650",
+            "awardURI": null,
+            "awardDescription": "Division of Environmental Biology (DEB)",
+            "awardTitle": null,
+            "order": 0
+          }
+        ],
+        "keywords": [
+          "Mycorrhiza",
+          "Quantitative traits",
+          "Fungal spores"
+        ],
+        "fieldOfScience": "Earth and related environmental sciences",
+        "relatedWorks": [
+          {
+            "relationship": "primary_article",
+            "identifierType": "DOI",
+            "identifier": "https://doi.org/10.1038/s41597-025-04940-x"
+          }
+        ],
+        "versionNumber": 6,
+        "versionStatus": "submitted",
+        "curationStatus": "Published",
+        "versionChanges": "files_changed",
+        "publicationDate": "2025-03-28",
+        "lastModificationDate": "2025-03-28",
+        "visibility": "public",
+        "sharingLink": "http://datadryad.org/dataset/doi:10.5061/dryad.6hdr7sr8z"
+      }
+    ]
+  }
+}
