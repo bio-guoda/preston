@@ -5,10 +5,13 @@ import bio.guoda.preston.store.TestUtilForProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.globalbioticinteractions.doi.DOI;
+import org.globalbioticinteractions.doi.MalformedDOIException;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -87,6 +90,12 @@ public class RegistryReaderDOITest {
 
         assertThat(new HashSet<>(nodes).size(), is(2));
         assertThat(nodes.get(1).toString(), startsWith("<https://api.gbif.org/v1/occurrence/download/0062961-200221144449610> <http://purl.org/pav/hasVersion> "));
+    }
+
+    @Test
+    public void dataDryad() throws MalformedDOIException {
+        IRI dataDryadQuery = RegistryReaderDOI.toDataDryadVersionsQuery("https://doi.org/10.5061/dryad.6hdr7sr8z");
+        assertThat(dataDryadQuery.getIRIString(), is("https://datadryad.org/api/v2/datasets/doi%3A/10.5061%2Fdryad.6hdr7sr8z/versions"));
     }
 
 
