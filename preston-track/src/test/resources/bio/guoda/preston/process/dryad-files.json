@@ -1,0 +1,307 @@
+{
+  "_links": {
+    "self": {
+      "href": "/api/v2/versions/355108/files"
+    },
+    "first": {
+      "href": "/api/v2/versions/355108/files"
+    },
+    "last": {
+      "href": "/api/v2/versions/355108/files?page=1"
+    }
+  },
+  "count": 9,
+  "total": 9,
+  "_embedded": {
+    "stash:files": [
+      {
+        "_links": {
+          "self": {
+            "href": "/api/v2/files/3985003"
+          },
+          "stash:dataset": {
+            "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z"
+          },
+          "stash:version": {
+            "href": "/api/v2/versions/355108"
+          },
+          "stash:files": {
+            "href": "/api/v2/versions/355108/files"
+          },
+          "stash:download": {
+            "href": "/api/v2/files/3985003/download"
+          },
+          "curies": [
+            {
+              "name": "stash",
+              "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+              "templated": "true"
+            }
+          ]
+        },
+        "path": "DataRecord_1_CalculatedTraitMetrics_18Jun2024.csv",
+        "size": 35689,
+        "mimeType": "application/vnd.ms-excel",
+        "status": "copied",
+        "digest": "dff4a33ec5fe8ade65c2d157048a9a99b537c316dea6329eb4f23775d2e8f79e",
+        "digestType": "sha-256"
+      },
+      {
+        "_links": {
+          "self": {
+            "href": "/api/v2/files/3985013"
+          },
+          "stash:dataset": {
+            "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z"
+          },
+          "stash:version": {
+            "href": "/api/v2/versions/355108"
+          },
+          "stash:files": {
+            "href": "/api/v2/versions/355108/files"
+          },
+          "stash:download": {
+            "href": "/api/v2/files/3985013/download"
+          },
+          "curies": [
+            {
+              "name": "stash",
+              "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+              "templated": "true"
+            }
+          ]
+        },
+        "path": "DataRecord_2_TraitAMraw_18Jun2024.csv.csv",
+        "size": 43484,
+        "mimeType": "text/csv",
+        "status": "created",
+        "digest": "5a4504cfdaa90e60db6ab0032af4198ae84d2f2c1fb82481d61ac786ce5fdfb0",
+        "digestType": "sha-256"
+      },
+      {
+        "_links": {
+          "self": {
+            "href": "/api/v2/files/3985011"
+          },
+          "stash:dataset": {
+            "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z"
+          },
+          "stash:version": {
+            "href": "/api/v2/versions/355108"
+          },
+          "stash:files": {
+            "href": "/api/v2/versions/355108/files"
+          },
+          "stash:download": {
+            "href": "/api/v2/files/3985011/download"
+          },
+          "curies": [
+            {
+              "name": "stash",
+              "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+              "templated": "true"
+            }
+          ]
+        },
+        "path": "DataRecord_3_TraitMetricsCode_18Jun2024.R",
+        "size": 6084,
+        "mimeType": "",
+        "status": "copied",
+        "digest": "163d7d61947cf3d68836ad2af8f3f7cb8d24dff62cd5a7231633da2d6234059c",
+        "digestType": "sha-256"
+      },
+      {
+        "_links": {
+          "self": {
+            "href": "/api/v2/files/3985008"
+          },
+          "stash:dataset": {
+            "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z"
+          },
+          "stash:version": {
+            "href": "/api/v2/versions/355108"
+          },
+          "stash:files": {
+            "href": "/api/v2/versions/355108/files"
+          },
+          "stash:download": {
+            "href": "/api/v2/files/3985008/download"
+          },
+          "curies": [
+            {
+              "name": "stash",
+              "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+              "templated": "true"
+            }
+          ]
+        },
+        "path": "DataRecord_4_SpeciesDescriptions_18Jun2024.csv",
+        "size": 66741,
+        "mimeType": "text/csv",
+        "status": "copied",
+        "digest": "7e4a5b92d12bef0a233afa5b0f877bf93e4f6bdea47f4f11e234b159d35ea7be",
+        "digestType": "sha-256"
+      },
+      {
+        "_links": {
+          "self": {
+            "href": "/api/v2/files/3985009"
+          },
+          "stash:dataset": {
+            "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z"
+          },
+          "stash:version": {
+            "href": "/api/v2/versions/355108"
+          },
+          "stash:files": {
+            "href": "/api/v2/versions/355108/files"
+          },
+          "stash:download": {
+            "href": "/api/v2/files/3985009/download"
+          },
+          "curies": [
+            {
+              "name": "stash",
+              "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+              "templated": "true"
+            }
+          ]
+        },
+        "path": "DataRecord_5_SpeciesListWithAccnNum_Oct2023.csv",
+        "size": 7407,
+        "mimeType": "text/csv",
+        "status": "copied",
+        "digest": "313eaa20cf99ea1dcb5991cd6c3747734a1d68b85cc7f563df452a5cd70d384b",
+        "digestType": "sha-256"
+      },
+      {
+        "_links": {
+          "self": {
+            "href": "/api/v2/files/3985004"
+          },
+          "stash:dataset": {
+            "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z"
+          },
+          "stash:version": {
+            "href": "/api/v2/versions/355108"
+          },
+          "stash:files": {
+            "href": "/api/v2/versions/355108/files"
+          },
+          "stash:download": {
+            "href": "/api/v2/files/3985004/download"
+          },
+          "curies": [
+            {
+              "name": "stash",
+              "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+              "templated": "true"
+            }
+          ]
+        },
+        "path": "DataRecord_6_LSUseqsLROR-FLR2_28Oct2023.fasta",
+        "size": 191075,
+        "mimeType": "",
+        "status": "copied",
+        "digest": "bf83fa7b986b72be199e6ab8d6d4d9ffa21b778aae56a0965b5b2f7424e6acc8",
+        "digestType": "sha-256"
+      },
+      {
+        "_links": {
+          "self": {
+            "href": "/api/v2/files/3985005"
+          },
+          "stash:dataset": {
+            "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z"
+          },
+          "stash:version": {
+            "href": "/api/v2/versions/355108"
+          },
+          "stash:files": {
+            "href": "/api/v2/versions/355108/files"
+          },
+          "stash:download": {
+            "href": "/api/v2/files/3985005/download"
+          },
+          "curies": [
+            {
+              "name": "stash",
+              "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+              "templated": "true"
+            }
+          ]
+        },
+        "path": "DataRecord_7_FinalTree_Oct2023.tre",
+        "size": 81480,
+        "mimeType": "",
+        "status": "copied",
+        "digest": "1221316f6744ac9e00e1374c11a6edfe23032c7e39ab402bd3defca5be3e9013",
+        "digestType": "sha-256"
+      },
+      {
+        "_links": {
+          "self": {
+            "href": "/api/v2/files/3985006"
+          },
+          "stash:dataset": {
+            "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z"
+          },
+          "stash:version": {
+            "href": "/api/v2/versions/355108"
+          },
+          "stash:files": {
+            "href": "/api/v2/versions/355108/files"
+          },
+          "stash:download": {
+            "href": "/api/v2/files/3985006/download"
+          },
+          "curies": [
+            {
+              "name": "stash",
+              "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+              "templated": "true"
+            }
+          ]
+        },
+        "path": "DataRecord_8_PhyloanalysisCode_28Oct2023.txt",
+        "size": 241707,
+        "mimeType": "text/plain",
+        "status": "copied",
+        "digest": "ea7fcc0f54c8026075442e26c105a7c28e5ca08df7e17cd70447df05a2a2f447",
+        "digestType": "sha-256"
+      },
+      {
+        "_links": {
+          "self": {
+            "href": "/api/v2/files/3985010"
+          },
+          "stash:dataset": {
+            "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z"
+          },
+          "stash:version": {
+            "href": "/api/v2/versions/355108"
+          },
+          "stash:files": {
+            "href": "/api/v2/versions/355108/files"
+          },
+          "stash:download": {
+            "href": "/api/v2/files/3985010/download"
+          },
+          "curies": [
+            {
+              "name": "stash",
+              "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+              "templated": "true"
+            }
+          ]
+        },
+        "path": "README.md",
+        "size": 5802,
+        "mimeType": "text/markdown",
+        "status": "copied",
+        "digest": "de75afb0a7222a5591e3e39869befa2c0fb5d7a2e4ade47d49380e1ccb8b39fb",
+        "digestType": "sha-256"
+      }
+    ]
+  }
+}

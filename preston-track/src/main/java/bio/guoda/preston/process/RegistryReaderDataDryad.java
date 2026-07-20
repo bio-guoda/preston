@@ -1,10 +1,8 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
-import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
-import bio.guoda.preston.util.ResultPagerUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -16,11 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
@@ -35,6 +30,8 @@ import static bio.guoda.preston.RefNodeFactory.toStatement;
 public class RegistryReaderDataDryad extends ProcessorReadOnly {
 
     private final static Logger LOG = LoggerFactory.getLogger(RegistryReaderDataDryad.class);
+    public static final Pattern ENDPOINT_PATTERN = Pattern
+            .compile("(?<schema>.*://)(?<host>.*/)(?<path>.*)");
 
 
     public RegistryReaderDataDryad(BlobStoreReadOnly blobStore, StatementsListener listener) {
@@ -48,10 +45,38 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
         }
     }
 
-    private void attemptToParseDatasetVersions(Quad statement, IRI toBeParsed) {
+    private void attemptToParseDatasetVersions(Quad statement, IRI contentId) {
         final BlankNodeOrIRI subject = statement.getSubject();
         if (isVersionsEndpoint(subject)) {
-            parseVersions(toBeParsed, this);
+            parseVersions(contentId, this);
+        } else if (isFilesEndpoint(subject)) {
+            parseFiles(contentId, this, (IRI) subject);
+        }
+    }
+
+    private void parseFiles(IRI contentId, StatementsEmitter emitter, IRI endpoint) {
+        try (InputStream inputStream = get(contentId)) {
+            JsonNode jsonNode = new ObjectMapper().readTree(inputStream);
+            JsonNode files = jsonNode.at("/_embedded").get("stash:files");
+            if (files != null) {
+                for (JsonNode file : files) {
+                    JsonNode downloadUrl = file.at("/_links/stash:download/href");
+                    if (!downloadUrl.isMissingNode()) {
+                        String relativeUrl = downloadUrl.asText();
+                        Matcher matcher = ENDPOINT_PATTERN.
+                                matcher(endpoint.getIRIString());
+                        if (matcher.matches()) {
+                            emitter.emit(RefNodeFactory.toStatement(
+                                    RefNodeFactory.toIRI(matcher.group("schema") + matcher.group("host") + relativeUrl),
+                                    HAS_VERSION,
+                                    RefNodeFactory.toBlank())
+                            );
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            LOG.warn("failed to parse versions [" + contentId + "]", e);
         }
     }
 
@@ -62,10 +87,10 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
             for (JsonNode version : versions) {
                 JsonNode filesEndpoint = version.at("/_links/stash:files/href");
                 if (!filesEndpoint.isMissingNode()) {
-                    IRI refNodeFeed = RefNodeFactory.toIRI("https://datadryad.org/" + filesEndpoint.asText());
-                    emitter.emit(toStatement(parent, HAD_MEMBER, refNodeFeed));
-                    emitter.emit(toStatement(refNodeFeed, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
-                    emitter.emit(toStatement(refNodeFeed, HAS_VERSION, toBlank()));
+                    IRI fileEndpoint = RefNodeFactory.toIRI("https://datadryad.org/" + filesEndpoint.asText());
+                    emitter.emit(toStatement(parent, HAD_MEMBER, fileEndpoint));
+                    emitter.emit(toStatement(fileEndpoint, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
+                    emitter.emit(toStatement(fileEndpoint, HAS_VERSION, toBlank()));
                 }
             }
         }
@@ -87,6 +112,12 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
         String suspectedDataDryadURI = subject.ntriplesString();
         return StringUtils.startsWith(suspectedDataDryadURI, "<https://datadryad.org/api/v2/datasets/")
                 && StringUtils.endsWith(subject.ntriplesString(), "/versions>");
+    }
+
+    public static boolean isFilesEndpoint(BlankNodeOrIRI subject) {
+        String suspectedDataDryadURI = subject.ntriplesString();
+        return StringUtils.startsWith(suspectedDataDryadURI, "<https://datadryad.org/api/v2/versions/")
+                && StringUtils.endsWith(suspectedDataDryadURI, "/files>");
     }
 
 
