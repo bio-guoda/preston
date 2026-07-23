@@ -82,4 +82,5 @@ public class RefNodeConstants {
     public static final IRI ACCESSED_AT = toIRI("http://purl.org/pav/sourceAccessedAt");
     public static final IRI RETRIEVED_ON = toIRI("http://purl.org/pav/retrievedOn");
     public static final IRI HAS_LICENSE = toIRI("http://purl.org/dc/elements/1.1/license");
+    public static final IRI HAS_LABEL = toIRI("http://www.w3.org/2000/01/rdf-schema#label");
 }

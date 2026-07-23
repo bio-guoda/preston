@@ -3,6 +3,7 @@ package bio.guoda.preston.process;
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.HashKeyUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +21,9 @@ import java.util.regex.Pattern;
 
 import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
+import static bio.guoda.preston.RefNodeConstants.HAS_LABEL;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeConstants.LAST_ACCESSED_ON;
 import static bio.guoda.preston.RefNodeFactory.getVersion;
 import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
 import static bio.guoda.preston.RefNodeFactory.toBlank;
@@ -57,9 +60,9 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
                     suffix +
                     "/versions";
             emitter.emit(toStatement(
-                    toIRI(versionsEndpoint),
-                    HAS_VERSION,
-                    toBlank()
+                            toIRI(versionsEndpoint),
+                            HAS_VERSION,
+                            toBlank()
                     )
             );
         }
@@ -93,11 +96,43 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
                         Matcher matcher = ENDPOINT_PATTERN.
                                 matcher(endpoint.getIRIString());
                         if (matcher.matches()) {
+                            IRI downloadIRI = toIRI(matcher.group("schema") + matcher.group("host") + downloadPath);
+                            JsonNode path = file.at("/path");
+                            if (!path.isMissingNode()) {
+                                String filename = path.asText();
+                                emitter.emit(RefNodeFactory.toStatement(
+                                        downloadIRI,
+                                        HAS_LABEL,
+                                        RefNodeFactory.toLiteral(filename))
+                                );
+                            }
+                            JsonNode type = file.at("/mimeType");
+                            if (!type.isMissingNode()) {
+                                emitter.emit(RefNodeFactory.toStatement(
+                                        downloadIRI,
+                                        HAS_FORMAT,
+                                        RefNodeFactory.toLiteral(type.asText()))
+                                );
+                            }
+                            if (file.has("digest")
+                                    && file.has("digestType")
+                                    && StringUtils.equals("sha-256", file.get("digestType").asText())) {
+                                String urlString = "hash://sha256/" + file.get("digest").asText();
+                                IRI hashKey = toIRI(urlString);
+                                if (HashKeyUtil.isValidHashKey(hashKey)) {
+                                    emitter.emit(RefNodeFactory.toStatement(
+                                            downloadIRI,
+                                            HAS_VERSION,
+                                            hashKey)
+                                    );
+                                }
+                            }
                             emitter.emit(RefNodeFactory.toStatement(
-                                    RefNodeFactory.toIRI(matcher.group("schema") + matcher.group("host") + downloadPath),
+                                    downloadIRI,
                                     HAS_VERSION,
                                     RefNodeFactory.toBlank())
                             );
+
                         }
                     }
                 }
