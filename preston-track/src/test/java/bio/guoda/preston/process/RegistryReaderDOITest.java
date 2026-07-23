@@ -71,7 +71,7 @@ public class RegistryReaderDOITest {
         registryReader.on(toStatement(toIRI("https://doi.org/10.5061/dryad.6hdr7sr8z"), HAS_VERSION, toIRI("some://hash")));
 
         assertThat(nodes.size(), is(2));
-        assertThat(nodes.get(1).getSubject().ntriplesString(), is("<https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z>"));
+        assertThat(nodes.get(1).getSubject().ntriplesString(), is("<https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z/versions>"));
 
     }
 
