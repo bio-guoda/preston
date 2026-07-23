@@ -2,6 +2,7 @@ package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.cmd.ProcessorExtracting;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import bio.guoda.preston.store.HashKeyUtil;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,6 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,14 +80,25 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
 
     private void attemptToParseDatasetVersions(Quad statement, IRI contentId) {
         final BlankNodeOrIRI subject = statement.getSubject();
+        List<Quad> statements = new ArrayList<>();
+        StatementEmitter delayedEmitter = new StatementEmitter() {
+
+            @Override
+            public void emit(Quad statement) {
+                statements.add(statement);
+            }
+        };
         if (isVersionsEndpoint(subject)) {
-            parseVersions(contentId, this);
+            parseVersions(contentId, delayedEmitter);
         } else if (isFilesEndpoint(subject)) {
-            parseFiles(contentId, this, (IRI) subject);
+            parseFiles(contentId, delayedEmitter, (IRI) subject);
+        }
+        if (!statements.isEmpty()) {
+            ActivityUtil.emitAsNewActivity(statements.stream(), this, statement.getGraphName());
         }
     }
 
-    private void parseFiles(IRI contentId, StatementsEmitter emitter, IRI endpoint) {
+    private void parseFiles(IRI contentId, StatementEmitter emitter, IRI endpoint) {
         try (InputStream inputStream = get(contentId)) {
             JsonNode jsonNode = new ObjectMapper().readTree(inputStream);
             JsonNode files = jsonNode.at("/_embedded").get("stash:files");
@@ -142,7 +156,7 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
         }
     }
 
-    static void parseVersions(IRI parent, StatementsEmitter emitter, InputStream is) throws IOException {
+    static void parseVersions(IRI parent, StatementEmitter emitter, InputStream is) throws IOException {
         JsonNode r = new ObjectMapper().readTree(is);
         JsonNode versions = r.at("/_embedded/stash:versions");
         if (!versions.isMissingNode() && versions.isArray()) {
@@ -159,7 +173,7 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
     }
 
 
-    private void parseVersions(IRI refNode, StatementsEmitter emitter) {
+    private void parseVersions(IRI refNode, StatementEmitter emitter) {
         try {
             InputStream is = get(refNode);
             if (is != null) {
