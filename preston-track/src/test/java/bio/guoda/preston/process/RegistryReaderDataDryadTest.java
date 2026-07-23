@@ -20,6 +20,22 @@ import static org.junit.Assert.assertTrue;
 public class RegistryReaderDataDryadTest {
 
     @Test
+    public void doiToVersions() {
+        List<Quad> statements = new ArrayList<>();
+        RegistryReaderDataDryad.emitOnDataDryadDoi(
+                new StatementEmitter() {
+                    @Override
+                    public void emit(Quad statement) {
+                        statements.add(statement);
+                    }
+                }, "doi:10.5061/dryad.6hdr7sr8z"
+        );
+        assertThat(statements.size(), is(1));
+        assertThat(statements.get(0).getSubject().ntriplesString(),
+                is("<https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z/versions>"));
+    }
+
+    @Test
     public void fromVersionsToFiles() {
         List<Quad> statements = new ArrayList<>();
         RegistryReaderDataDryad registryReader = new RegistryReaderDataDryad(new BlobStoreReadOnly() {
@@ -43,7 +59,7 @@ public class RegistryReaderDataDryadTest {
         assertThat(statements.size(), is(3));
         assertThat(statements.get(0).getSubject().ntriplesString(), is("<foo:bar>"));
         Quad lastStatement = statements.get(statements.size() - 1);
-        assertThat(lastStatement.getSubject().ntriplesString(), is("<https://datadryad.org//api/v2/versions/355108/files>"));
+        assertThat(lastStatement.getSubject().ntriplesString(), is("<https://datadryad.org/api/v2/versions/355108/files>"));
         assertThat(lastStatement.getPredicate().ntriplesString(), is("<http://purl.org/pav/hasVersion>"));
         assertThat(lastStatement.getObject().ntriplesString(), startsWith("_:"));
     }

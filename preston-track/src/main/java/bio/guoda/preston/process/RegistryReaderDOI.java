@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static bio.guoda.preston.RefNodeFactory.getVersion;
@@ -35,34 +36,36 @@ public class RegistryReaderDOI extends ProcessorReadOnly {
 
     @Override
     public void on(Quad statement) {
-        if (hasVersionAvailable(statement)
-                && getVersionSource(statement).toString().contains(GBIF_DOI_PART)) {
-            IRI currentPage = (IRI) getVersion(statement);
-            InputStream is;
-            try {
-                is = get(currentPage);
-                if (is != null) {
-                    parseGBIFDownloadHtmlPage(statement, is, this);
+        if (hasVersionAvailable(statement)) {
+            String source = getVersionSource(statement).toString();
+            if (source.contains(GBIF_DOI_PART)) {
+                IRI currentPage = (IRI) getVersion(statement);
+                InputStream is;
+                try {
+                    is = get(currentPage);
+                    if (is != null) {
+                        parseGBIFDownloadHtmlPage(statement, is, this);
+                    }
+                } catch (IOException e) {
+                    LOG.warn("failed to handle [" + statement.toString() + "]", e);
                 }
-            } catch (IOException e) {
-                LOG.warn("failed to handle [" + statement.toString() + "]", e);
-            }
-        } else if (getVersionSource(statement).toString().contains("10.5061/dryad.")) {
-            List<Quad> nodes = new ArrayList<>();
-            String iriString = getVersionSource(statement).getIRIString();
-            try {
-                nodes.add(RefNodeFactory.toStatement(
-                        toDataDryadVersionsQuery(iriString),
-                        HAS_VERSION,
-                        RefNodeFactory.toBlank())
-                );
-               ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
-            } catch (MalformedDOIException e) {
-                LOG.warn("cannot parse suspected datadryad doi from  [" + iriString + "]");
+            } else {
+                List<Quad> nodes = new ArrayList<>();
+                StatementEmitter emitter = new StatementEmitter() {
+                    @Override
+                    public void emit(Quad statement) {
+                        nodes.add(statement);
+                    }
+                };
+                RegistryReaderDataDryad.emitOnDataDryadDoi(emitter, source);
+                if (!nodes.isEmpty()) {
+                    ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
+                }
             }
 
         }
     }
+
 
     public static IRI toDataDryadVersionsQuery(String iriString) throws MalformedDOIException {
         DOI doi = DOI.create(iriString);

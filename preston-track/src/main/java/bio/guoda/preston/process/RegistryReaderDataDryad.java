@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.globalbioticinteractions.doi.DOI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,14 +29,40 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
 public class RegistryReaderDataDryad extends ProcessorReadOnly {
-
     private final static Logger LOG = LoggerFactory.getLogger(RegistryReaderDataDryad.class);
+
+    public static final Pattern DATA_DRYAD_DOI_PATTERN
+            = Pattern.compile(".*10[.](?<registrantCode>5061)/(?<suffix>dryad[.][a-z0-9]+).*");
     public static final Pattern ENDPOINT_PATTERN = Pattern
             .compile("(?<schema>.*://)(?<host>.*/)(?<path>.*)");
 
-
     public RegistryReaderDataDryad(BlobStoreReadOnly blobStore, StatementsListener listener) {
         super(blobStore, listener);
+    }
+
+    public static void emitDataDryadEndpoint(DOI doi, StatementEmitter emitter) {
+        String iriCandidate = doi.toString();
+        emitOnDataDryadDoi(emitter, iriCandidate);
+    }
+
+    public static void emitOnDataDryadDoi(StatementEmitter emitter, String candidateIRI) {
+        Matcher matcher = DATA_DRYAD_DOI_PATTERN.matcher(candidateIRI);
+        if (matcher.matches()) {
+            String registrantCode = matcher.group("registrantCode");
+            String suffix = matcher.group("suffix");
+            String versionsEndpoint = "https://datadryad.org/api/v2/datasets/doi%3A" +
+                    "10." +
+                    registrantCode +
+                    "%2F" +
+                    suffix +
+                    "/versions";
+            emitter.emit(toStatement(
+                    toIRI(versionsEndpoint),
+                    HAS_VERSION,
+                    toBlank()
+                    )
+            );
+        }
     }
 
     @Override
@@ -87,7 +114,7 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
             for (JsonNode version : versions) {
                 JsonNode filesEndpoint = version.at("/_links/stash:files/href");
                 if (!filesEndpoint.isMissingNode()) {
-                    IRI fileEndpoint = RefNodeFactory.toIRI("https://datadryad.org/" + filesEndpoint.asText());
+                    IRI fileEndpoint = RefNodeFactory.toIRI("https://datadryad.org" + filesEndpoint.asText());
                     emitter.emit(toStatement(parent, HAD_MEMBER, fileEndpoint));
                     emitter.emit(toStatement(fileEndpoint, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
                     emitter.emit(toStatement(fileEndpoint, HAS_VERSION, toBlank()));

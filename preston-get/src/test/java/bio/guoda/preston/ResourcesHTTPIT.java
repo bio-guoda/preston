@@ -202,7 +202,7 @@ public class ResourcesHTTPIT {
     }
 
     private static void setDataDryadToken() {
-        //System.setProperty("DATADRYAD_TOKEN", "[some access token]");
+        //System.setProperty("DRYAD_TOKEN", "[some access token]");
     }
 
     @Test

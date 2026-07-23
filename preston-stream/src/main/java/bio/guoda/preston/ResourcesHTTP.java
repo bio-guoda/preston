@@ -8,13 +8,11 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpMessage;
 import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.ProtocolException;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpResponseException;
-import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -58,7 +56,7 @@ public class ResourcesHTTP {
     public static final String ZOTERO_AUTH_TOKEN = "ZOTERO_TOKEN";
     public static final String GOOGLE_AUTH_TOKEN = "GOOGLE_TOKEN";
     public static final String GITHUB_AUTH_TOKEN = "GITHUB_TOKEN";
-    public static final String DATADRYAD_AUTH_TOKEN = "DATADRYAD_TOKEN";
+    public static final String DRYAD_AUTH_TOKEN = "DRYAD_TOKEN";
 
     private static final List<Integer> REDIRECT_CODES = Arrays.asList(
             HttpStatus.SC_MOVED_PERMANENTLY,
@@ -127,7 +125,7 @@ public class ResourcesHTTP {
         } else if (isZenodoUrl(dataURI)) {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, ZENODO_AUTH_TOKEN);
         }  else if (isDataDryadUrl(dataURI)) {
-            appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, DATADRYAD_AUTH_TOKEN);
+            appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, DRYAD_AUTH_TOKEN);
         }
     }
 

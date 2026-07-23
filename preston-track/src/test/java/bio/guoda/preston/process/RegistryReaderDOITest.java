@@ -61,6 +61,21 @@ public class RegistryReaderDOITest {
     }
 
     @Test
+    public void onDryadDoi() {
+        ArrayList<Quad> nodes = new ArrayList<>();
+        BlobStoreReadOnly blobStore = key -> {
+            throw new IOException("kaboom!");
+        };
+
+        RegistryReaderDOI registryReader = new RegistryReaderDOI(blobStore, TestUtilForProcessor.testListener(nodes));
+        registryReader.on(toStatement(toIRI("https://doi.org/10.5061/dryad.6hdr7sr8z"), HAS_VERSION, toIRI("some://hash")));
+
+        assertThat(nodes.size(), is(2));
+        assertThat(nodes.get(1).getSubject().ntriplesString(), is("<https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z>"));
+
+    }
+
+    @Test
     public void onGBIFDoiNoPage() {
         ArrayList<Quad> nodes = new ArrayList<>();
         BlobStoreReadOnly blobStore = key -> {
