@@ -89,9 +89,9 @@ public class RegistryReaderDataDryadTest {
         assertTrue(RegistryReaderDataDryad.isFilesEndpoint(RefNodeFactory.toIRI(filesEndpoint)));
 
         assertThat(statements.size(), is(9));
-        assertThat(statements.get(0).getSubject().ntriplesString(), is("<https://datadryad.org/api/v2/versions/355108//api/v2/files/3985003/download>"));
+        assertThat(statements.get(0).getSubject().ntriplesString(), is("<https://datadryad.org/api/v2/versions/355108/api/v2/files/3985003/download>"));
         Quad lastStatement = statements.get(statements.size() - 1);
-        assertThat(lastStatement.getSubject().ntriplesString(), is("<https://datadryad.org/api/v2/versions/355108//api/v2/files/3985010/download>"));
+        assertThat(lastStatement.getSubject().ntriplesString(), is("<https://datadryad.org/api/v2/versions/355108/api/v2/files/3985010/download>"));
         assertThat(lastStatement.getPredicate().ntriplesString(), is("<http://purl.org/pav/hasVersion>"));
         assertThat(lastStatement.getObject().ntriplesString(), startsWith("_:"));
     }

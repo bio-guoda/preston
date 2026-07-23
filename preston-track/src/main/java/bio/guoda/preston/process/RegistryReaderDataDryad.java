@@ -34,7 +34,7 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
     public static final Pattern DATA_DRYAD_DOI_PATTERN
             = Pattern.compile(".*10[.](?<registrantCode>5061)/(?<suffix>dryad[.][a-z0-9]+).*");
     public static final Pattern ENDPOINT_PATTERN = Pattern
-            .compile("(?<schema>.*://)(?<host>.*/)(?<path>.*)");
+            .compile("(?<schema>.*://)(?<host>.*)/(?<path>.*)");
 
     public RegistryReaderDataDryad(BlobStoreReadOnly blobStore, StatementsListener listener) {
         super(blobStore, listener);
@@ -89,12 +89,12 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
                 for (JsonNode file : files) {
                     JsonNode downloadUrl = file.at("/_links/stash:download/href");
                     if (!downloadUrl.isMissingNode()) {
-                        String relativeUrl = downloadUrl.asText();
+                        String downloadPath = downloadUrl.asText();
                         Matcher matcher = ENDPOINT_PATTERN.
                                 matcher(endpoint.getIRIString());
                         if (matcher.matches()) {
                             emitter.emit(RefNodeFactory.toStatement(
-                                    RefNodeFactory.toIRI(matcher.group("schema") + matcher.group("host") + relativeUrl),
+                                    RefNodeFactory.toIRI(matcher.group("schema") + matcher.group("host") + downloadPath),
                                     HAS_VERSION,
                                     RefNodeFactory.toBlank())
                             );
