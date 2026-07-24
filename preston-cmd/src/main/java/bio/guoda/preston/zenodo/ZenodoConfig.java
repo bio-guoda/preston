@@ -1,12 +1,12 @@
 package bio.guoda.preston.zenodo;
 
+import bio.guoda.preston.util.AuthContext;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.IRI;
 
 import java.util.List;
 
-public interface ZenodoConfig {
-    String getAccessToken();
+public interface ZenodoConfig extends AuthContext {
 
     String getEndpoint();
 

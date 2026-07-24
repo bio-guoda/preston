@@ -1,16 +1,24 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.EnvUtil;
 import bio.guoda.preston.MimeTypes;
 import bio.guoda.preston.RefNodeFactory;
-import bio.guoda.preston.cmd.ProcessorExtracting;
+import bio.guoda.preston.ResourcesHTTP;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import bio.guoda.preston.store.DerefProgressLogger;
 import bio.guoda.preston.store.HashKeyUtil;
+import bio.guoda.preston.util.AuthContext;
+import bio.guoda.preston.util.DryadContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.BlankNodeOrIRI;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
+import org.apache.http.HttpHeaders;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
 import org.globalbioticinteractions.doi.DOI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +26,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,21 +36,33 @@ import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_LABEL;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
-import static bio.guoda.preston.RefNodeConstants.LAST_ACCESSED_ON;
 import static bio.guoda.preston.RefNodeFactory.getVersion;
 import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
 import static bio.guoda.preston.RefNodeFactory.toBlank;
 import static bio.guoda.preston.RefNodeFactory.toContentType;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
+import static bio.guoda.preston.ResourcesHTTP.DRYAD_AUTH_TOKEN;
 
 public class RegistryReaderDataDryad extends ProcessorReadOnly {
+    public static final String DRYAD_CLIENT_ID = "DRYAD_CLIENT_ID";
+    public static final String DRYAD_CLIENT_SECRET = "DRYAD_CLIENT_SECRET";
     private final static Logger LOG = LoggerFactory.getLogger(RegistryReaderDataDryad.class);
 
     public static final Pattern DATA_DRYAD_DOI_PATTERN
             = Pattern.compile(".*10[.](?<registrantCode>5061)/(?<suffix>dryad[.][a-z0-9]+).*");
     public static final Pattern ENDPOINT_PATTERN = Pattern
             .compile("(?<schema>.*://)(?<host>.*)/(?<path>.*)");
+
+    private AuthContext getAuthContext() {
+        return authContext;
+    }
+
+    private void setAuthContext(AuthContext authContext) {
+        this.authContext = authContext;
+    }
+
+    private AuthContext authContext;
 
     public RegistryReaderDataDryad(BlobStoreReadOnly blobStore, StatementsListener listener) {
         super(blobStore, listener);
@@ -71,6 +93,55 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
         }
     }
 
+    public static AuthContext getOrRefreshAuthToken(AuthContext context, Properties properties) throws IOException {
+        if (context != null && StringUtils.isNotBlank(context.getAccessToken())) {
+            return context;
+        } else {
+            return getToken(properties);
+        }
+    }
+
+    private static AuthContext getToken(Properties properties) throws IOException {
+        String token = EnvUtil.getEnvironmentVariable(DRYAD_AUTH_TOKEN, properties.getProperty("dryad.token"));
+        if (StringUtils.isNotBlank(token)) {
+            return new DryadContext(token);
+        } else {
+            String url = "https://datadryad.org/oauth/token";
+            HttpPost post = new HttpPost(url);
+            post.setHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
+            String clientId = EnvUtil.getEnvironmentVariable(DRYAD_CLIENT_ID, properties.getProperty("dryad.client.id"));
+            String clientSecret = EnvUtil.getEnvironmentVariable(DRYAD_CLIENT_SECRET, properties.getProperty("dryad.client.secret"));
+
+            if (StringUtils.isBlank(clientId)) {
+                throw new IOException("to authorize with dryad, please set [" + DRYAD_CLIENT_ID + "]");
+            }
+
+            if (StringUtils.isBlank(clientSecret)) {
+                throw new IOException("to authorize with dryad, please set [" + DRYAD_CLIENT_SECRET + "]");
+            }
+
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
+                    Arrays.asList(
+                            new BasicNameValuePair("client_id", clientId),
+                            new BasicNameValuePair("client_secret", clientSecret),
+                            new BasicNameValuePair("grant_type", "client_credentials")
+                    )
+            );
+            post.setEntity(formEntity);
+
+            try (InputStream inputStream = ResourcesHTTP.asInputStream(
+                    toIRI(url),
+                    post,
+                    new DerefProgressLogger(),
+                    httpStatusCode -> false
+            )) {
+                JsonNode tokenConfig = new ObjectMapper().readTree(inputStream);
+                return new DryadContext(tokenConfig.at("/access_token").asText());
+            }
+        }
+
+    }
+
     @Override
     public void on(Quad statement) {
         if (hasVersionAvailable(statement)) {
@@ -94,7 +165,16 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
             parseFiles(contentId, delayedEmitter, (IRI) subject);
         }
         if (!statements.isEmpty()) {
+            initAuth();
             ActivityUtil.emitAsNewActivity(statements.stream(), this, statement.getGraphName());
+        }
+    }
+
+    private void initAuth() {
+        try {
+            setAuthContext(getOrRefreshAuthToken(getAuthContext(), null));
+        } catch (IOException e) {
+            LOG.warn("failed to initialize dryad authentication", e);
         }
     }
 
