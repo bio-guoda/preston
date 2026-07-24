@@ -48,7 +48,7 @@ import java.util.regex.Pattern;
 public class ResourcesHTTP {
     public static final Pattern GOOGLE_URL_PATTERN = Pattern.compile("https://[a-z]+.google.com/.*");
     public static final Pattern ZENODO_URL_PATTERN = Pattern.compile("https://(sandbox[.]){0,1}zenodo.org/.*");
-    public static final Pattern DATADRYAD_URL_PATTERN = Pattern.compile("https://(www.){0,1}datadryad.org/.*");
+    public static final Pattern DRYAD_URL_PATTERN = Pattern.compile("https://(www.){0,1}datadryad.org/.*");
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourcesHTTP.class);
 
@@ -124,7 +124,7 @@ public class ResourcesHTTP {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, GOOGLE_AUTH_TOKEN);
         } else if (isZenodoUrl(dataURI)) {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, ZENODO_AUTH_TOKEN);
-        }  else if (isDataDryadUrl(dataURI)) {
+        }  else if (isDryadUrl(dataURI)) {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, DRYAD_AUTH_TOKEN);
         }
     }
@@ -133,8 +133,8 @@ public class ResourcesHTTP {
         return ZENODO_URL_PATTERN.matcher(dataURI.getIRIString()).matches();
     }
 
-    public static boolean isDataDryadUrl(IRI dataURI) {
-        return DATADRYAD_URL_PATTERN.matcher(dataURI.getIRIString()).matches();
+    public static boolean isDryadUrl(IRI dataURI) {
+        return DRYAD_URL_PATTERN.matcher(dataURI.getIRIString()).matches();
     }
 
     private static void appendGitHubAuthTokenIfAvailable(HttpMessage msg) {
@@ -162,7 +162,6 @@ public class ResourcesHTTP {
                                             Predicate<Integer> shouldIgnore) throws IOException {
         InputStream is = asInputStreamOfflineOnly(dataURI);
         if (is == null) {
-
             CloseableHttpClient client = shouldRedirect(dataURI)
                     ? getRedirectingHttpClient()
                     : getHttpClient();

@@ -1,0 +1,3 @@
+# rename to dryad.properties.hidden for integration testing
+dryad.client.id=
+dryad.client.secret=
