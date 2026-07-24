@@ -102,15 +102,15 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
     }
 
     private static AuthContext getToken(Properties properties) throws IOException {
-        String token = EnvUtil.getEnvironmentVariable(DRYAD_AUTH_TOKEN, properties.getProperty("dryad.token"));
+        String token = EnvUtil.getEnvironmentVariable(DRYAD_AUTH_TOKEN, getValueOrNull(properties, "dryad.token"));
         if (StringUtils.isNotBlank(token)) {
             return new DryadContext(token);
         } else {
             String url = "https://datadryad.org/oauth/token";
             HttpPost post = new HttpPost(url);
             post.setHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=UTF-8");
-            String clientId = EnvUtil.getEnvironmentVariable(DRYAD_CLIENT_ID, properties.getProperty("dryad.client.id"));
-            String clientSecret = EnvUtil.getEnvironmentVariable(DRYAD_CLIENT_SECRET, properties.getProperty("dryad.client.secret"));
+            String clientId = EnvUtil.getEnvironmentVariable(DRYAD_CLIENT_ID, getValueOrNull(properties, "dryad.client.id"));
+            String clientSecret = EnvUtil.getEnvironmentVariable(DRYAD_CLIENT_SECRET, getValueOrNull(properties, "dryad.client.secret"));
 
             if (StringUtils.isBlank(clientId)) {
                 throw new IOException("to authorize with dryad, please set [" + DRYAD_CLIENT_ID + "]");
@@ -140,6 +140,10 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
             }
         }
 
+    }
+
+    private static String getValueOrNull(Properties properties, String key) {
+        return properties == null ? null : properties.getProperty(key);
     }
 
     @Override

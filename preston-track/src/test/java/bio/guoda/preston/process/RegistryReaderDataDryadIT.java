@@ -57,6 +57,16 @@ public class RegistryReaderDataDryadIT {
         verifyAuthToken();
     }
 
+    @Test(expected = IOException.class)
+    public void dryadAuthTokenNullProperties() throws IOException {
+        try {
+            AuthContext s = RegistryReaderDataDryad.getOrRefreshAuthToken(null, null);
+        } catch(IOException ex) {
+            assertThat(ex.getMessage(), is("to authorize with dryad, please set [DRYAD_CLIENT_ID]"));
+            throw ex;
+        }
+    }
+
     private static Properties getProperties() throws IOException {
         Properties properties = new Properties();
         properties.load(RegistryReaderDataDryadIT.class.getResourceAsStream("dryad.properties.hidden"));
