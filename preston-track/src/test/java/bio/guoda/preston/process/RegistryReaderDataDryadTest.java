@@ -1,7 +1,9 @@
 package bio.guoda.preston.process;
 
+import bio.guoda.preston.RefNodeConstants;
 import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.store.BlobStoreReadOnly;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.commons.rdf.api.Quad;
 import org.junit.Test;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -88,8 +91,15 @@ public class RegistryReaderDataDryadTest {
 
         assertTrue(RegistryReaderDataDryad.isFilesEndpoint(RefNodeFactory.toIRI(filesEndpoint)));
 
-        assertThat(statements.size(), is(37));
 
+        Stream<Quad> emptyFormatStatements = statements
+                .stream()
+                .filter(statement -> RefNodeConstants.HAS_FORMAT.equals(statement.getPredicate()))
+                .filter(st -> StringUtils.equals(st.getObject().ntriplesString(), "\"\""));
+
+        assertThat(emptyFormatStatements.count(), is(0L));
+
+        assertThat(statements.size(), is(34));
         assertThat(statements.get(1).getSubject().ntriplesString(), is("<https://datadryad.org/api/v2/files/3985003/download>"));
         assertThat(statements.get(1).getPredicate().ntriplesString(), is("<http://www.w3.org/2000/01/rdf-schema#label>"));
         assertThat(statements.get(1).getObject().ntriplesString(), is("\"DataRecord_1_CalculatedTraitMetrics_18Jun2024.csv\""));

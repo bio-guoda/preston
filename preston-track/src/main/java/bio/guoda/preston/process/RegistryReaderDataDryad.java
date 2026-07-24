@@ -200,7 +200,7 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
                         if (matcher.matches()) {
                             IRI downloadIRI = toIRI(matcher.group("schema") + matcher.group("host") + downloadPath);
                             JsonNode path = file.at("/path");
-                            if (!path.isMissingNode()) {
+                            if (hasNonBlankText(path)) {
                                 String filename = path.asText();
                                 emitter.emit(RefNodeFactory.toStatement(
                                         downloadIRI,
@@ -209,7 +209,7 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
                                 );
                             }
                             JsonNode type = file.at("/mimeType");
-                            if (!type.isMissingNode()) {
+                            if (hasNonBlankText(type)) {
                                 emitter.emit(RefNodeFactory.toStatement(
                                         downloadIRI,
                                         HAS_FORMAT,
@@ -242,6 +242,10 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
         } catch (IOException e) {
             LOG.warn("failed to parse versions [" + contentId + "]", e);
         }
+    }
+
+    private static boolean hasNonBlankText(JsonNode type) {
+        return !type.isMissingNode() && StringUtils.isNotBlank(type.asText());
     }
 
     static void parseVersions(IRI parent, StatementEmitter emitter, InputStream is) throws IOException {
