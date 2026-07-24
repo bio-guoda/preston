@@ -52,7 +52,7 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
     public static final Pattern DATA_DRYAD_DOI_PATTERN
             = Pattern.compile(".*10[.](?<registrantCode>5061)/(?<suffix>dryad[.][a-z0-9]+).*");
     public static final Pattern ENDPOINT_PATTERN = Pattern
-            .compile("(?<schema>.*://)(?<host>.*)/(?<path>.*)");
+            .compile("(?<schema>.*://)(?<host>[^/]+)/(?<path>.*)");
 
     private AuthContext getAuthContext() {
         return authContext;
