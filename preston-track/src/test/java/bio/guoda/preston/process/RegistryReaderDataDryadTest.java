@@ -31,7 +31,7 @@ public class RegistryReaderDataDryadTest {
                     public void emit(Quad statement) {
                         statements.add(statement);
                     }
-                }, "doi:10.5061/dryad.6hdr7sr8z"
+                }, RefNodeFactory.toIRI("doi:10.5061/dryad.6hdr7sr8z")
         );
         assertThat(statements.size(), is(3));
         assertThat(statements.get(0).toString(),

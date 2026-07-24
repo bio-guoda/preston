@@ -71,11 +71,11 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
 
     public static void emitDataDryadEndpoint(DOI doi, StatementEmitter emitter) {
         String iriCandidate = doi.toString();
-        emitOnDataDryadDoi(emitter, iriCandidate);
+        emitOnDataDryadDoi(emitter, RefNodeFactory.toIRI(iriCandidate));
     }
 
-    public static void emitOnDataDryadDoi(StatementEmitter emitter, String candidateIRI) {
-        Matcher matcher = DATA_DRYAD_DOI_PATTERN.matcher(candidateIRI);
+    public static void emitOnDataDryadDoi(StatementEmitter emitter, IRI candidateIRI) {
+        Matcher matcher = DATA_DRYAD_DOI_PATTERN.matcher(candidateIRI.getIRIString());
         if (matcher.matches()) {
             String registrantCode = matcher.group("registrantCode");
             String suffix = matcher.group("suffix");
@@ -86,14 +86,9 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
                     suffix +
                     "/versions";
             IRI iri = toIRI(versionsEndpoint);
-            emitter.emit(toStatement(RefNodeFactory.toIRI(candidateIRI), WAS_INFORMED_BY, iri));
+            emitter.emit(toStatement(candidateIRI, WAS_INFORMED_BY, iri));
             emitter.emit(toStatement(iri, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
-            emitter.emit(toStatement(
-                    iri,
-                            HAS_VERSION,
-                            toBlank()
-                    )
-            );
+            emitter.emit(toStatement(iri, HAS_VERSION, toBlank()));
         }
     }
 

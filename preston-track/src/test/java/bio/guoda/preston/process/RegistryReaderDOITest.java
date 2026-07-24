@@ -68,10 +68,12 @@ public class RegistryReaderDOITest {
         };
 
         RegistryReaderDOI registryReader = new RegistryReaderDOI(blobStore, TestUtilForProcessor.testListener(nodes));
-        registryReader.on(toStatement(toIRI("https://doi.org/10.5061/dryad.6hdr7sr8z"), HAS_VERSION, toIRI("some://hash")));
+        IRI doiIRI = toIRI("https://doi.org/10.5061/dryad.6hdr7sr8z");
+        IRI objectIRI = toIRI("some://hash");
+        registryReader.on(toStatement(doiIRI, HAS_VERSION, objectIRI));
 
-        assertThat(nodes.size(), is(2));
-        assertThat(nodes.get(1).getSubject().ntriplesString(), is("<https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z/versions>"));
+        assertThat(nodes.size(), is(4));
+        assertThat(nodes.get(3).getSubject().ntriplesString(), is("<https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z/versions>"));
 
     }
 

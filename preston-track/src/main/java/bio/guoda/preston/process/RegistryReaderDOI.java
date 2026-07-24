@@ -57,7 +57,7 @@ public class RegistryReaderDOI extends ProcessorReadOnly {
                         nodes.add(statement);
                     }
                 };
-                RegistryReaderDataDryad.emitOnDataDryadDoi(emitter, source);
+                RegistryReaderDataDryad.emitOnDataDryadDoi(emitter, getVersionSource(statement));
                 if (!nodes.isEmpty()) {
                     ActivityUtil.emitAsNewActivity(nodes.stream(), this, statement.getGraphName());
                 }
