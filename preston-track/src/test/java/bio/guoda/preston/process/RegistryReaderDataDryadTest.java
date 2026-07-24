@@ -33,9 +33,13 @@ public class RegistryReaderDataDryadTest {
                     }
                 }, "doi:10.5061/dryad.6hdr7sr8z"
         );
-        assertThat(statements.size(), is(1));
-        assertThat(statements.get(0).getSubject().ntriplesString(),
-                is("<https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z/versions>"));
+        assertThat(statements.size(), is(3));
+        assertThat(statements.get(0).toString(),
+                is("<doi:10.5061/dryad.6hdr7sr8z> <http://www.w3.org/ns/prov#wasInformedBy> <https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z/versions> ."));
+        assertThat(statements.get(1).toString(),
+                is("<https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z/versions> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
+        assertThat(statements.get(2).toString(),
+                startsWith("<https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z/versions> <http://purl.org/pav/hasVersion> _:"));
     }
 
     @Test

@@ -36,6 +36,7 @@ import static bio.guoda.preston.RefNodeConstants.HAD_MEMBER;
 import static bio.guoda.preston.RefNodeConstants.HAS_FORMAT;
 import static bio.guoda.preston.RefNodeConstants.HAS_LABEL;
 import static bio.guoda.preston.RefNodeConstants.HAS_VERSION;
+import static bio.guoda.preston.RefNodeConstants.WAS_INFORMED_BY;
 import static bio.guoda.preston.RefNodeFactory.getVersion;
 import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
 import static bio.guoda.preston.RefNodeFactory.toBlank;
@@ -84,8 +85,11 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
                     "%2F" +
                     suffix +
                     "/versions";
+            IRI iri = toIRI(versionsEndpoint);
+            emitter.emit(toStatement(RefNodeFactory.toIRI(candidateIRI), WAS_INFORMED_BY, iri));
+            emitter.emit(toStatement(iri, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)));
             emitter.emit(toStatement(
-                            toIRI(versionsEndpoint),
+                    iri,
                             HAS_VERSION,
                             toBlank()
                     )
