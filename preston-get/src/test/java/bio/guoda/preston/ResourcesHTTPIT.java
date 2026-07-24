@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -201,8 +202,10 @@ public class ResourcesHTTPIT {
 
     }
 
-    private static void setDataDryadToken() {
-        //System.setProperty("DRYAD_TOKEN", "[some access token]");
+    private static void setDataDryadToken() throws IOException {
+        Properties properties = new Properties();
+        properties.load(ResourcesHTTPIT.class.getResourceAsStream("auth.properties.hidden"));
+        System.setProperties(properties);
     }
 
     @Test

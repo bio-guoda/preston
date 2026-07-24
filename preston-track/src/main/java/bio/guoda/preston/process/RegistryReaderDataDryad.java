@@ -179,7 +179,7 @@ public class RegistryReaderDataDryad extends ProcessorReadOnly {
             AuthContext ctx = getAuthContext();
             if (StringUtils.isBlank(System.getProperty(DRYAD_AUTH_TOKEN))) {
                 setAuthContext(getOrRefreshAuthToken(ctx, null));
-                System.setProperty(DRYAD_AUTH_TOKEN, ctx.getAccessToken());
+                System.setProperty(DRYAD_AUTH_TOKEN, getAuthContext().getAccessToken());
             }
         } catch (IOException e) {
             LOG.warn("failed to initialize dryad authentication", e);

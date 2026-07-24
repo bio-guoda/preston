@@ -2,6 +2,8 @@ package bio.guoda.preston.cmd;
 
 import bio.guoda.preston.RDFUtil;
 import bio.guoda.preston.RefNodeFactory;
+import bio.guoda.preston.process.RegistryReaderDataDryad;
+import bio.guoda.preston.util.AuthContext;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.rdf.api.Quad;
 import org.apache.commons.rdf.api.RDFTerm;
@@ -17,7 +19,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
+import static bio.guoda.preston.ResourcesHTTP.DRYAD_AUTH_TOKEN;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertNotNull;
@@ -38,6 +42,47 @@ public class CmdTrackIT {
     @Test
     public void trackWithCache() throws IOException {
         assertNumberOfDataFiles(3, true);
+
+    }
+
+    @Test
+    public void trackWithAuth() throws IOException {
+
+        Properties properties = new Properties();
+        properties.load(getClass().getResourceAsStream("track.properties.hidden"));
+        AuthContext ctx = RegistryReaderDataDryad.getOrRefreshAuthToken(new AuthContext() {
+            @Override
+            public String getAccessToken() {
+                return null;
+            }
+        }, properties);
+        System.setProperty(DRYAD_AUTH_TOKEN, ctx.getAccessToken());
+
+        CmdTrack cmd = new CmdTrack();
+
+        String localDataDir = dataDir.getRoot().getAbsolutePath() + "/data";
+        cmd.setDataDir(localDataDir);
+        cmd.setIRIs(Collections.singletonList(RefNodeFactory.toIRI("https://datadryad.org/api/v2/files/3985010/download")));
+        cmd.setCacheEnabled(true);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        cmd.setOutputStream(outputStream);
+
+
+        assertThat(new File(localDataDir).exists(), Is.is(false));
+
+        cmd.run();
+
+        String actual = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+        List<Quad> quads = RDFUtil.parseQuads(IOUtils.toInputStream(actual, StandardCharsets.UTF_8));
+
+        Quad quad = quads.get(quads.size() - 1);
+        RDFTerm object = quad.getObject();
+        String contentId = RDFUtil.getValueFor(object);
+        assertThat(contentId, startsWith("hash://sha256/"));
+
+        File file = new File(localDataDir);
+        assertNotNull(file);
+        assertThat(file.list().length, Is.is(3));
 
     }
 
