@@ -29,6 +29,12 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
     private Boolean headerless = false;
 
     @CommandLine.Option(
+            names = {"--ignore-inconsistent-row-values"},
+            description = "when duplicate column names exist, ignore subsequent, possibly inconsistent, values encountered in row"
+    )
+    private Boolean ignoreInconsistentRowValues = false;
+
+    @CommandLine.Option(
             names = {"--skip-lines"},
             description = "skip specified number of lines before processing the xlsx worksheet"
     )
@@ -51,8 +57,8 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
                 if (RefNodeFactory.hasVersionAvailable(statement)) {
                     BlankNodeOrIRI version = RefNodeFactory.getVersion(statement);
                     try {
-                        readXLSX((IRI) version, skipLines, headerless);
-                        readXLS((IRI) version, skipLines, headerless);
+                        readXLSX((IRI) version, skipLines, headerless, ignoreInconsistentRowValues);
+                        readXLS((IRI) version, skipLines, headerless, ignoreInconsistentRowValues);
                     } catch (IOException e) {
                         // ignore
                     }
@@ -60,26 +66,28 @@ public class CmdExcelRecordStream extends LoggingPersisting implements Runnable 
 
             }
 
-            void readXLS(IRI version, Integer skipLines, Boolean headerless) {
+            void readXLS(IRI version, Integer skipLines, Boolean headerless, boolean ignoreInconsistentRowValues1) {
                 try {
                     XLSHandler.asJsonStream(
                             getOutputStream(),
                             version,
                             blobStoreReadOnly,
                             skipLines,
-                            headerless);
+                            headerless,
+                            ignoreInconsistentRowValues1);
                 } catch (IOException e) {
                     // ignore
                 }
             }
 
-            void readXLSX(IRI version, Integer skipLines, Boolean headerless) throws IOException {
+            void readXLSX(IRI version, Integer skipLines, Boolean headerless, boolean ignoreInconsistentRowValues1) throws IOException {
                 XLSXHandler.rowsAsJsonStream(
                         getOutputStream(),
                         version,
                         blobStoreReadOnly,
                         skipLines,
-                        headerless);
+                        headerless,
+                        ignoreInconsistentRowValues1);
 
                 XLSXHandler.picturesAsJsonStream(getHashType(), version, getOutputStream(), blobStoreReadOnly);
 

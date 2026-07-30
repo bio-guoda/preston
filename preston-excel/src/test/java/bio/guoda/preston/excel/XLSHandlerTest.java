@@ -36,7 +36,7 @@ public class XLSHandlerTest {
         };
 
 
-        XLSHandler.asJsonStream(out, resourceIRI, contentStore, 0, false);
+        XLSHandler.asJsonStream(out, resourceIRI, contentStore, 0, false, false);
         String expected = TestUtil.removeCarriageReturn(XLSHandlerTest.class, "msw3-03.xls.json");
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
@@ -62,7 +62,7 @@ public class XLSHandlerTest {
         };
 
 
-        XLSHandler.asJsonStream(out, resourceIRI, contentStore, 0, true);
+        XLSHandler.asJsonStream(out, resourceIRI, contentStore, 0, true, false);
         String expected = TestUtil.removeCarriageReturn(XLSHandlerTest.class, "msw3-03.xls.headerless.json");
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
@@ -92,7 +92,7 @@ public class XLSHandlerTest {
         };
 
 
-        XLSHandler.asJsonStream(out, resourceIRI, contentStore, 1, true);
+        XLSHandler.asJsonStream(out, resourceIRI, contentStore, 1, true, false);
         String expected = TestUtil.removeCarriageReturn(XLSHandlerTest.class, "msw3-03.xls.headerless.skip.json");
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
@@ -121,7 +121,7 @@ public class XLSHandlerTest {
         };
 
 
-        asJsonStream(out, resourceIRI, contentStore, 0, false);
+        asJsonStream(out, resourceIRI, contentStore, 0, false, false);
 
         assertThat(out.size(), Is.is(0));
     }
@@ -140,7 +140,7 @@ public class XLSHandlerTest {
         };
 
 
-        asJsonStream(out, resourceIRI, contentStore, 0, false);
+        asJsonStream(out, resourceIRI, contentStore, 0, false, false);
     }
 
 

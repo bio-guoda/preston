@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.monitorjbl.xlsx.StreamingReader;
 import com.monitorjbl.xlsx.exceptions.ReadException;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.rdf.api.IRI;
 import org.apache.poi.EmptyFileException;
@@ -33,7 +32,12 @@ import java.util.List;
 public class XLSXHandler {
 
 
-    public static void rowsAsJsonStream(OutputStream out, IRI resourceIRI, KeyValueStoreReadOnly contentStore, Integer skipLines, Boolean headerless) throws IOException {
+    public static void rowsAsJsonStream(OutputStream out,
+                                        IRI resourceIRI,
+                                        KeyValueStoreReadOnly contentStore,
+                                        Integer skipLines,
+                                        Boolean headerless,
+                                        boolean ignoreInconsistentRowValues) throws IOException {
         try (Workbook workbook = StreamingReader
                 .builder()
                 .open(contentStore.get(resourceIRI))) {
@@ -43,7 +47,7 @@ public class XLSXHandler {
                     workbook,
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     skipLines,
-                    headerless);
+                    headerless, ignoreInconsistentRowValues);
         } catch (NotOfficeXmlFileException | InvalidOperationException | ReadException | POIXMLException | EmptyFileException ex) {
             // ignore runtime exception to implement opportunistic handling
         }

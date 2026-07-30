@@ -48,7 +48,7 @@ public class XLSXHandlerTest {
             }
         };
 
-        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false);
+        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false, false);
 
         String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "msw3-03.xlsx.json");
 
@@ -66,6 +66,28 @@ public class XLSXHandlerTest {
 
     }
 
+    @Test(expected = IOException.class)
+    public void inconsistentValueForNamedColumn() throws IOException {
+        // use this count to fetch all field information
+        // if required
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IRI resourceIRI = RefNodeFactory.toIRI("some:iri");
+
+        KeyValueStoreReadOnly contentStore = new KeyValueStoreReadOnly() {
+            @Override
+            public InputStream get(IRI uri) throws IOException {
+                return getClass().getResourceAsStream("bta-short.xlsx");
+            }
+        };
+
+        try {
+            XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false, false);
+        } catch( IOException ex) {
+            assertThat(ex.getMessage(), is ("inconsistent value [ ] for (duplicate) column name [name_batnames_2025_1.7]: already set to value [Acerodon celebensis celebensis [synonym of]] in [line:xlsx:some:iri!/Sheet1!/L3]"));
+            throw ex;
+        }
+    }
+
     @Test
     public void dumpTableHeaderless() throws IOException {
         // use this count to fetch all field information
@@ -81,7 +103,7 @@ public class XLSXHandlerTest {
             }
         };
 
-        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, true);
+        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, true, false);
 
         String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "msw3-03.xlsx.headerless.json");
 
@@ -110,7 +132,7 @@ public class XLSXHandlerTest {
             }
         };
 
-        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 1, true);
+        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 1, true, false);
 
         String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "msw3-03.xlsx.headerless.skip.json");
 
@@ -141,7 +163,7 @@ public class XLSXHandlerTest {
 
         assertNotNull(contentStore.get(resourceIRI));
 
-        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false);
+        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false, false);
 
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
@@ -182,7 +204,7 @@ public class XLSXHandlerTest {
 
         assertNotNull(contentStore.get(resourceIRI));
 
-        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false);
+        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false, false);
 
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
@@ -219,7 +241,7 @@ public class XLSXHandlerTest {
             }
         };
 
-        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false);
+        XLSXHandler.rowsAsJsonStream(out, resourceIRI, contentStore, 0, false, false);
 
         String expected = TestUtil.removeCarriageReturn(XLSXHandlerTest.class, "ictv.xlsx.json");
         String actual = new String(out.toByteArray(), StandardCharsets.UTF_8);
@@ -248,7 +270,7 @@ public class XLSXHandlerTest {
             }
         };
 
-        rowsAsJsonStream(out, resourceIRI, contentStore, 0, false);
+        rowsAsJsonStream(out, resourceIRI, contentStore, 0, false, false);
 
         assertThat(out.size(), is(0));
     }
@@ -267,7 +289,7 @@ public class XLSXHandlerTest {
         };
 
 
-        rowsAsJsonStream(out, resourceIRI, contentStore, 0, false);
+        rowsAsJsonStream(out, resourceIRI, contentStore, 0, false, false);
     }
 
     @Test

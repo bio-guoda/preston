@@ -5,7 +5,6 @@ import bio.guoda.preston.store.KeyValueStoreReadOnly;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.rdf.api.IRI;
@@ -22,10 +21,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 public class XLSHandler {
 
@@ -34,15 +30,26 @@ public class XLSHandler {
     public static final String WAS_DERIVED_FROM = "http://www.w3.org/ns/prov#wasDerivedFrom";
     public static final String HAS_FORMAT = "http://purl.org/dc/elements/1.1/format";
 
-    public static void asJsonStream(OutputStream out, IRI resourceIRI, KeyValueStoreReadOnly contentStore, Integer skipLines, Boolean headerless) throws IOException {
+    public static void asJsonStream(OutputStream out,
+                                    IRI resourceIRI,
+                                    KeyValueStoreReadOnly contentStore,
+                                    Integer skipLines,
+                                    Boolean headerless,
+                                    boolean ignoreInconsistentRowValues) throws IOException {
         try (HSSFWorkbook workbook = new HSSFWorkbook(contentStore.get(resourceIRI))) {
-            asJsonStream(out, resourceIRI, workbook, APPLICATION_VND_MS_EXCEL, skipLines, headerless);
+            asJsonStream(out, resourceIRI, workbook, APPLICATION_VND_MS_EXCEL, skipLines, headerless, ignoreInconsistentRowValues);
         } catch (RuntimeException | NotOLE2FileException ex) {
             // ignore runtime exception to implement opportunistic handling
         }
     }
 
-    public static void asJsonStream(OutputStream out, IRI resourceIRI, Workbook workbook, String mimeType, Integer skipLines, Boolean headerless) throws IOException {
+    public static void asJsonStream(OutputStream out,
+                                    IRI resourceIRI,
+                                    Workbook workbook,
+                                    String mimeType,
+                                    Integer skipLines,
+                                    Boolean headerless,
+                                    boolean ignoreInconsistentRowValues) throws IOException {
         final DataFormatter formatter = new DataFormatter();
         for (Sheet sheet : workbook) {
             HashMap<Integer, String> header = new HashMap<>();
@@ -54,14 +61,28 @@ public class XLSHandler {
 
                 if (isDataRowWithoutHeader(skipLines, headerless, rowNumber)
                         || isDataRowWithHeader(skipLines, headerless, rowNumber)) {
-                    handleDataRow(out, resourceIRI, mimeType, formatter, sheet, header, r);
+                    handleDataRow(out,
+                            resourceIRI,
+                            mimeType,
+                            formatter,
+                            sheet,
+                            header,
+                            r,
+                            ignoreInconsistentRowValues);
                 }
                 rowNumber++;
             }
         }
     }
 
-    private static void handleDataRow(OutputStream out, IRI resourceIRI, String mimeType, DataFormatter formatter, Sheet sheet, HashMap<Integer, String> header, Row row) throws IOException {
+    private static void handleDataRow(OutputStream out,
+                                      IRI resourceIRI,
+                                      String mimeType,
+                                      DataFormatter formatter,
+                                      Sheet sheet,
+                                      HashMap<Integer, String> header,
+                                      Row row,
+                                      boolean ignoreInconsistentRowValues) throws IOException {
         ObjectMapper obj = new ObjectMapper();
         ObjectNode objectNode = obj.createObjectNode();
         setMetaData(resourceIRI, mimeType, sheet, row, objectNode);
@@ -74,7 +95,15 @@ public class XLSHandler {
             if (null == cell) {
                 objectNode.set(fieldName, new ObjectMapper().nullNode());
             } else {
-                objectNode.put(fieldName, getCellValue(formatter, cell));
+                String cellValue = getCellValue(formatter, cell);
+                if (objectNode.hasNonNull(fieldName)) {
+                    String text = objectNode.get(fieldName).asText();
+                    if (!ignoreInconsistentRowValues && !StringUtils.equals(text, cellValue)) {
+                        throw new IOException("inconsistent value [" + cellValue + "] for (duplicate) column name [" + fieldName + "]: already set to value [" + text + "] in [" + objectNode.get(WAS_DERIVED_FROM).asText() + "]");
+                    }
+                } else {
+                    objectNode.put(fieldName, cellValue);
+                }
             }
         }
 
