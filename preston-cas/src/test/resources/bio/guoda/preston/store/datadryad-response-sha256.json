@@ -1,0 +1,51 @@
+{
+  "_links": {
+    "self": {
+      "href": "/api/v2/files/digest/de75afb0a7222a5591e3e39869befa2c0fb5d7a2e4ade47d49380e1ccb8b39fb"
+    },
+    "first": {
+      "href": "/api/v2/files/digest/de75afb0a7222a5591e3e39869befa2c0fb5d7a2e4ade47d49380e1ccb8b39fb"
+    },
+    "last": {
+      "href": "/api/v2/files/digest/de75afb0a7222a5591e3e39869befa2c0fb5d7a2e4ade47d49380e1ccb8b39fb?page=1"
+    }
+  },
+  "count": 1,
+  "total": 1,
+  "_embedded": {
+    "stash:files": [
+      {
+        "_links": {
+          "self": {
+            "href": "/api/v2/files/3985010"
+          },
+          "stash:dataset": {
+            "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.6hdr7sr8z"
+          },
+          "stash:version": {
+            "href": "/api/v2/versions/355108"
+          },
+          "stash:files": {
+            "href": "/api/v2/versions/355108/files"
+          },
+          "stash:download": {
+            "href": "/api/v2/files/3985010/download"
+          },
+          "curies": [
+            {
+              "name": "stash",
+              "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+              "templated": "true"
+            }
+          ]
+        },
+        "path": "README.md",
+        "size": 5802,
+        "mimeType": "text/markdown",
+        "status": "copied",
+        "digest": "de75afb0a7222a5591e3e39869befa2c0fb5d7a2e4ade47d49380e1ccb8b39fb",
+        "digestType": "sha-256"
+      }
+    ]
+  }
+}

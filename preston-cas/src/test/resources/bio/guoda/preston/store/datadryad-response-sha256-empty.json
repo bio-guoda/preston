@@ -1,0 +1,18 @@
+{
+  "_links": {
+    "self": {
+      "href": "/api/v2/files/digest/de75afb0a7222a5591e3e39869befa2c0fb5d7a2e4ade47d49380e1ccb8b39fz"
+    },
+    "first": {
+      "href": "/api/v2/files/digest/de75afb0a7222a5591e3e39869befa2c0fb5d7a2e4ade47d49380e1ccb8b39fz"
+    },
+    "last": {
+      "href": "/api/v2/files/digest/de75afb0a7222a5591e3e39869befa2c0fb5d7a2e4ade47d49380e1ccb8b39fz?page=0"
+    }
+  },
+  "count": 0,
+  "total": 0,
+  "_embedded": {
+    "stash:files": []
+  }
+}

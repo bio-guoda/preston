@@ -94,7 +94,8 @@ public class KeyValueStoreUtil {
                                 Pair.of(remote, new KeyTo1LevelPath(remote)),
                                 Pair.of(remote, new KeyTo1LevelOCIPath(remote)),
                                 Pair.of(remote, new KeyTo1LevelWikiMediaCommonsPath(remote, getDerefStream(remote, config.getProgressListener(), getBlobStore(keyValueStore, config)))),
-                                Pair.of(remote, new KeyTo1LevelDataVersePath(remote, getDerefStream(remote, config.getProgressListener(), getBlobStore(keyValueStore, config))))
+                                Pair.of(remote, new KeyTo1LevelDataVersePath(remote, getDerefStream(remote, config.getProgressListener(), getBlobStore(keyValueStore, config)))),
+                                Pair.of(remote, new KeyTo1LevelDataDryadPath(remote, getDerefStream(remote, config.getProgressListener(), getBlobStore(keyValueStore, config))))
                         ));
 
 

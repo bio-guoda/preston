@@ -182,7 +182,12 @@ public class HashKeyUtil {
         String u0 = keyStr.substring(offset + 0, offset + 2);
         String u1 = keyStr.substring(offset + 2, offset + 4);
 
-        String suffix = StringUtils.join(Arrays.asList(u0, u1, keyStr.substring(offset)), "/");
-        return suffix;
+        return StringUtils.join(Arrays.asList(u0, u1, keyStr.substring(offset)), "/");
+    }
+
+    public static String suffixForKey(IRI key, HashType type1) {
+        String keyStr = key.getIRIString();
+        int offset = type1.getPrefix().length();
+        return keyStr.substring(offset);
     }
 }
