@@ -36,7 +36,7 @@ public class RegistryReaderEPPOTest {
         RegistryReaderEPPO registryReader = new RegistryReaderEPPO(TestUtil.getTestBlobStore(HashType.sha256), adapt);
         registryReader.on(toStatement(Seeds.OBIS, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         assertThat(nodes.size(), is(6));
-        assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://api.eppo.int/gd/v2/taxons/list"));
+        assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://api.eppo.int/gd/v2/taxons/list?limit=1000"));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class RegistryReaderEPPOTest {
     }
 
     @Test
-    public void parseTaxons() throws IOException {
+    public void parseTaxonsSinglePage() throws IOException {
 
         final List<Quad> refNodes = new ArrayList<>();
 
@@ -80,9 +80,46 @@ public class RegistryReaderEPPOTest {
         assertThat(refNode.toString(), startsWith("<https://api.eppo.int/gd/v2/taxons/taxon/BEMITA/overview> <http://purl.org/pav/hasVersion> "));
     }
 
+    @Test
+    public void parseTaxonsManyPage() throws IOException {
+
+        final List<Quad> refNodes = new ArrayList<>();
+
+        IRI testNode = createTestNode("eppo-taxons-20260925.json");
+
+        RegistryReaderEPPO.parse(testNode,
+                TestUtilForProcessor.testEmitter(refNodes),
+                getClass().getResourceAsStream("eppo-taxons-20260925.json")
+        );
+
+        assertThat(refNodes.size(), is(690));
+
+        Quad refNode = refNodes.get(0);
+        assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <https://api.eppo.int/gd/v2/taxons/taxon/ABSICO/overview> ."));
+
+        refNode = refNodes.get(1);
+        assertThat(refNode.toString(), is("<https://api.eppo.int/gd/v2/taxons/taxon/ABSICO/overview> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
+
+        refNode = refNodes.get(2);
+        assertThat(refNode.toString(), startsWith("<https://api.eppo.int/gd/v2/taxons/taxon/ABSICO/overview> <http://purl.org/pav/hasVersion> "));
+
+        refNode = refNodes.get(refNodes.size() - 3);
+        assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <https://api.eppo.int/gd/v2/taxons/list?limit=1000&offset=129001> ."));
+
+        refNode = refNodes.get(refNodes.size() - 2);
+        assertThat(refNode.toString(), is("<https://api.eppo.int/gd/v2/taxons/list?limit=1000&offset=129001> <http://purl.org/dc/elements/1.1/format> \"application/json\" ."));
+
+        refNode = refNodes.get(refNodes.size() - 1);
+        assertThat(refNode.toString(), startsWith("<https://api.eppo.int/gd/v2/taxons/list?limit=1000&offset=129001> <http://purl.org/pav/hasVersion> "));
+    }
+
     private IRI createTestNode() {
+        return createTestNode(EPPO_DATASETS_JSON);
+    }
+
+    private IRI createTestNode(String eppoDatasetsJson) {
         try {
-            return toIRI(getClass().getResource(EPPO_DATASETS_JSON).toURI());
+            return toIRI(getClass().getResource(eppoDatasetsJson).toURI());
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
         }

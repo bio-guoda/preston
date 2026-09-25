@@ -1,0 +1,712 @@
+{
+  "pagination" : {
+    "offset" : 0,
+    "limit" : 1000,
+    "total" : 129246,
+    "count" : 1000
+  },
+  "meta" : {
+    "timestamp" : "2026-09-25T23:07:12Z"
+  },
+  "data" : [ {
+    "eppocode" : "ABSICO",
+    "is_active" : true,
+    "datecreate" : "1997-06-26 00:00:00",
+    "dateupdate" : "1997-06-26 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ABSIRA",
+    "is_active" : true,
+    "datecreate" : "1997-06-26 00:00:00",
+    "dateupdate" : "1997-06-26 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ABSIRE",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ABSISP",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACCMMC",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACETAC",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACETSP",
+    "is_active" : true,
+    "datecreate" : "2004-04-09 00:00:00",
+    "dateupdate" : "2004-04-09 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACHLSP",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACHNSP",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACINCA",
+    "is_active" : true,
+    "datecreate" : "1998-01-05 00:00:00",
+    "dateupdate" : "1998-01-05 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACLSV",
+    "is_active" : false,
+    "datecreate" : "2000-11-19 00:00:00",
+    "dateupdate" : "2000-11-19 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACLSVM",
+    "is_active" : false,
+    "datecreate" : "1997-09-09 00:00:00",
+    "dateupdate" : "1997-09-09 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACMV",
+    "is_active" : false,
+    "datecreate" : "2000-11-19 00:00:00",
+    "dateupdate" : "2000-11-19 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACMV.C",
+    "is_active" : false,
+    "datecreate" : "2001-10-18 00:00:00",
+    "dateupdate" : "2001-10-18 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACMV.T",
+    "is_active" : false,
+    "datecreate" : "2001-02-15 00:00:00",
+    "dateupdate" : "2001-02-15 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACPHFU",
+    "is_active" : true,
+    "datecreate" : "1999-07-11 00:00:00",
+    "dateupdate" : "1999-07-11 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACREAC",
+    "is_active" : true,
+    "datecreate" : "1996-10-29 00:00:00",
+    "dateupdate" : "1996-10-29 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACREAP",
+    "is_active" : true,
+    "datecreate" : "1999-07-11 00:00:00",
+    "dateupdate" : "1999-07-11 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACREBU",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACREBY",
+    "is_active" : true,
+    "datecreate" : "1996-10-29 00:00:00",
+    "dateupdate" : "1996-10-29 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACREFU",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACREKI",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACRERE",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACRESP",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACREST",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACRETS",
+    "is_active" : true,
+    "datecreate" : "1996-10-29 00:00:00",
+    "dateupdate" : "1996-10-29 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACREZO",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACRMSP",
+    "is_active" : false,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "2019-09-17 19:01:09.27734",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACROTR",
+    "is_active" : false,
+    "datecreate" : "1998-01-05 00:00:00",
+    "dateupdate" : "1998-01-05 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACRPSP",
+    "is_active" : false,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "2014-01-08 17:50:43.607698",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACTMSP",
+    "is_active" : true,
+    "datecreate" : "2003-05-25 00:00:00",
+    "dateupdate" : "2003-05-25 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACTNSP",
+    "is_active" : true,
+    "datecreate" : "2004-04-09 00:00:00",
+    "dateupdate" : "2004-04-09 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ACVRAC",
+    "is_active" : true,
+    "datecreate" : "1998-01-05 00:00:00",
+    "dateupdate" : "1998-01-05 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ADELSP",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AECIHP",
+    "is_active" : true,
+    "datecreate" : "2001-03-03 00:00:00",
+    "dateupdate" : "2001-03-03 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AECIMO",
+    "is_active" : true,
+    "datecreate" : "2001-03-03 00:00:00",
+    "dateupdate" : "2001-03-03 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AEGIIN",
+    "is_active" : false,
+    "datecreate" : "1997-09-09 00:00:00",
+    "dateupdate" : "1997-09-09 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AERMPU",
+    "is_active" : true,
+    "datecreate" : "1998-01-05 00:00:00",
+    "dateupdate" : "1998-01-05 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AEROSP",
+    "is_active" : true,
+    "datecreate" : "2003-05-25 00:00:00",
+    "dateupdate" : "2003-05-25 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AGARAA",
+    "is_active" : false,
+    "datecreate" : "1998-09-24 00:00:00",
+    "dateupdate" : "2005-03-24 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AGARAR",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AGARBI",
+    "is_active" : true,
+    "datecreate" : "2002-02-06 00:00:00",
+    "dateupdate" : "2002-02-06 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AGARBT",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AGARCA",
+    "is_active" : true,
+    "datecreate" : "2002-08-22 00:00:00",
+    "dateupdate" : "2002-08-22 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AGRBPS",
+    "is_active" : true,
+    "datecreate" : "1998-01-05 00:00:00",
+    "dateupdate" : "1998-01-05 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AGRBRA",
+    "is_active" : false,
+    "datecreate" : "1998-01-05 00:00:00",
+    "dateupdate" : "1998-01-05 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AGRBRH",
+    "is_active" : true,
+    "datecreate" : "2001-02-01 00:00:00",
+    "dateupdate" : "2001-02-01 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AGRBRU",
+    "is_active" : true,
+    "datecreate" : "2001-02-01 00:00:00",
+    "dateupdate" : "2001-02-01 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AGRBSP",
+    "is_active" : true,
+    "datecreate" : "2004-04-09 00:00:00",
+    "dateupdate" : "2004-04-09 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "AGRBTU",
+    "is_active" : true,
+    "datecreate" : "2001-02-01 00:00:00",
+    "dateupdate" : "2001-02-01 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALBUCA",
+    "is_active" : true,
+    "datecreate" : "2002-07-16 00:00:00",
+    "dateupdate" : "2002-07-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALBUIP",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALBUMA",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALBUOC",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALBUSP",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALBUTR",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALCAFA",
+    "is_active" : true,
+    "datecreate" : "1998-01-05 00:00:00",
+    "dateupdate" : "1998-01-05 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALCASP",
+    "is_active" : true,
+    "datecreate" : "2004-04-09 00:00:00",
+    "dateupdate" : "2004-04-09 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALLOMA",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEAL",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEBA",
+    "is_active" : true,
+    "datecreate" : "2002-07-16 00:00:00",
+    "dateupdate" : "2002-07-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEBI",
+    "is_active" : true,
+    "datecreate" : "2001-02-25 00:00:00",
+    "dateupdate" : "2001-02-25 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEBT",
+    "is_active" : true,
+    "datecreate" : "1996-10-29 00:00:00",
+    "dateupdate" : "1996-10-29 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEBU",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTECA",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTECC",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTECH",
+    "is_active" : true,
+    "datecreate" : "2002-02-01 00:00:00",
+    "dateupdate" : "2002-02-01 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTECI",
+    "is_active" : true,
+    "datecreate" : "2002-04-10 00:00:00",
+    "dateupdate" : "2002-04-10 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTECN",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTECR",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTECS",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTECU",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEDA",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEDC",
+    "is_active" : true,
+    "datecreate" : "1996-10-29 00:00:00",
+    "dateupdate" : "1996-10-29 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEDI",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEEH",
+    "is_active" : true,
+    "datecreate" : "1996-10-29 00:00:00",
+    "dateupdate" : "1996-10-29 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEGM",
+    "is_active" : true,
+    "datecreate" : "1996-10-29 00:00:00",
+    "dateupdate" : "1996-10-29 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEGO",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEGP",
+    "is_active" : true,
+    "datecreate" : "1996-10-29 00:00:00",
+    "dateupdate" : "1996-10-29 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEHE",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEHL",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEKI",
+    "is_active" : true,
+    "datecreate" : "2002-11-01 00:00:00",
+    "dateupdate" : "2002-11-01 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTELC",
+    "is_active" : true,
+    "datecreate" : "2001-02-25 00:00:00",
+    "dateupdate" : "2001-02-25 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTELG",
+    "is_active" : true,
+    "datecreate" : "1996-10-16 00:00:00",
+    "dateupdate" : "1996-10-16 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTELI",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTELO",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTELY",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEMA",
+    "is_active" : true,
+    "datecreate" : "2002-11-01 00:00:00",
+    "dateupdate" : "2002-11-01 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEMC",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEPA",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEPD",
+    "is_active" : true,
+    "datecreate" : "2001-02-25 00:00:00",
+    "dateupdate" : "2001-02-25 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEPE",
+    "is_active" : true,
+    "datecreate" : "1996-10-29 00:00:00",
+    "dateupdate" : "1996-10-29 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEPL",
+    "is_active" : true,
+    "datecreate" : "2001-10-12 00:00:00",
+    "dateupdate" : "2001-10-12 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEPN",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTEPO",
+    "is_active" : true,
+    "datecreate" : "2002-04-10 00:00:00",
+    "dateupdate" : "2002-04-10 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTERA",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTERI",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTERP",
+    "is_active" : true,
+    "datecreate" : "2002-04-19 00:00:00",
+    "dateupdate" : "2002-04-19 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTESA",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  }, {
+    "eppocode" : "ALTESE",
+    "is_active" : true,
+    "datecreate" : "2002-02-27 00:00:00",
+    "dateupdate" : "2002-02-27 00:00:00",
+    "replacedby" : null,
+    "datatype" : "GAF"
+  } ]
+}
