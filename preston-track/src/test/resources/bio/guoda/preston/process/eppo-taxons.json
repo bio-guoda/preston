@@ -1,0 +1,21 @@
+{
+  "pagination": {
+    "offset": 0,
+    "limit": 0,
+    "total": 0,
+    "count": 0
+  },
+  "meta": {
+    "timestamp": "2019-08-24T14:15:22Z"
+  },
+  "data": [
+    {
+      "eppocode": "BEMITA",
+      "is_active": true,
+      "datecreate": "2019-08-24T14:15:22Z",
+      "dateupdate": "2019-08-24T14:15:22Z",
+      "replacedby": "BEMITA",
+      "datatype": "string"
+    }
+  ]
+}
