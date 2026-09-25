@@ -49,6 +49,7 @@ public class ResourcesHTTP {
     public static final Pattern GOOGLE_URL_PATTERN = Pattern.compile("https://[a-z]+.google.com/.*");
     public static final Pattern ZENODO_URL_PATTERN = Pattern.compile("https://(sandbox[.]){0,1}zenodo.org/.*");
     public static final Pattern DRYAD_URL_PATTERN = Pattern.compile("https://(www.){0,1}datadryad.org/.*");
+    public static final Pattern EPPO_URL_PATTERN = Pattern.compile("https://api.eppo.int/.*");
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourcesHTTP.class);
 
@@ -57,6 +58,7 @@ public class ResourcesHTTP {
     public static final String GOOGLE_AUTH_TOKEN = "GOOGLE_TOKEN";
     public static final String GITHUB_AUTH_TOKEN = "GITHUB_TOKEN";
     public static final String DRYAD_AUTH_TOKEN = "DRYAD_TOKEN";
+    public static final String EPPO_AUTH_TOKEN = "EPPO_TOKEN";
 
     private static final List<Integer> REDIRECT_CODES = Arrays.asList(
             HttpStatus.SC_MOVED_PERMANENTLY,
@@ -75,6 +77,7 @@ public class ResourcesHTTP {
             return false;
         }
     };
+    public static final String X_API_KEY = "X-Api-Key";
 
     private static CloseableHttpClient httpClient = null;
 
@@ -126,6 +129,9 @@ public class ResourcesHTTP {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, ZENODO_AUTH_TOKEN);
         }  else if (isDryadUrl(dataURI)) {
             appendAuthBearerUsingEnvironmentVariableIfAvailable(msg, DRYAD_AUTH_TOKEN);
+        } else if (isEPPOUrl(dataURI)) {
+            String authToken = EnvUtil.getEnvironmentVariable(EPPO_AUTH_TOKEN);
+            setApiKeyIfAvailable(msg, authToken);
         }
     }
 
@@ -135,6 +141,10 @@ public class ResourcesHTTP {
 
     public static boolean isDryadUrl(IRI dataURI) {
         return DRYAD_URL_PATTERN.matcher(dataURI.getIRIString()).matches();
+    }
+
+    public static boolean isEPPOUrl(IRI dataURI) {
+        return EPPO_URL_PATTERN.matcher(dataURI.getIRIString()).matches();
     }
 
     private static void appendGitHubAuthTokenIfAvailable(HttpMessage msg) {
@@ -153,6 +163,13 @@ public class ResourcesHTTP {
         if (StringUtils.isNotBlank(authToken)) {
             msg.removeHeaders("Authorization");
             msg.addHeader("Authorization", "Bearer " + authToken);
+        }
+    }
+
+    public static void setApiKeyIfAvailable(HttpMessage msg, String authToken) {
+        if (StringUtils.isNotBlank(authToken)) {
+            msg.removeHeaders(X_API_KEY);
+            msg.addHeader(X_API_KEY, authToken);
         }
     }
 
