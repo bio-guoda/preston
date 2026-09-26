@@ -87,41 +87,44 @@ public class RegistryReaderEPPO extends ProcessorReadOnly {
                     parseIndividualTaxon(currentPage, emitter, taxon);
                 }
             }
-            JsonNode pagination = jsonNode.at("/pagination");
-            if (!pagination.isMissingNode()) {
-                JsonNode offset = pagination.at("/offset");
-                JsonNode limit = pagination.at("/limit");
-                JsonNode total = pagination.at("/total");
-                if (offset.isIntegralNumber()
-                        && limit.isIntegralNumber()
-                        && total.isIntegralNumber()) {
-                    if (offset.asLong() == 0) {
-                        long resultsPerPage = limit.asLong();
-                        long remainder = total.asLong() % resultsPerPage;
-                        List<Quad> requests = new ArrayList<>();
-                        long totalPages = (total.asLong() / resultsPerPage) + (remainder == 0 ? 0 : 1);
-                        for (long counter = 1; counter < totalPages * resultsPerPage; counter += resultsPerPage) {
-                            IRI taxonPage = toIRI("https:" + EPPO_API_URL_PART + "/taxons/list?" +
-                                    "limit=" + resultsPerPage +
-                                    "&offset=" + counter);
-                            requests.addAll(Arrays.asList(
-                                    toStatement(currentPage, HAD_MEMBER, taxonPage),
-                                    toStatement(taxonPage, HAS_FORMAT, toLiteral(MimeTypes.MIME_TYPE_JSON)),
-                                    toStatement(taxonPage, HAS_VERSION, toBlank())
-                            ));
-                        }
-                        emitter.emit(requests);
+            requestRemainingIfNeeded(currentPage, emitter, jsonNode);
+        }
+
+    }
+
+    private static void requestRemainingIfNeeded(IRI currentPage, StatementsEmitter emitter, JsonNode jsonNode) {
+        JsonNode pagination = jsonNode.at("/pagination");
+        if (!pagination.isMissingNode()) {
+            JsonNode offset = pagination.at("/offset");
+            JsonNode limit = pagination.at("/limit");
+            JsonNode total = pagination.at("/total");
+            if (offset.isIntegralNumber()
+                    && limit.isIntegralNumber()
+                    && total.isIntegralNumber()) {
+                if (offset.asLong() == 0) {
+                    long resultsPerPage = limit.asLong();
+                    long remainder = total.asLong() % resultsPerPage;
+                    List<Quad> requests = new ArrayList<>();
+                    long totalPages = (total.asLong() / resultsPerPage) + (remainder == 0 ? 0 : 1);
+                    for (long counter = 1; counter < totalPages * resultsPerPage; counter += resultsPerPage) {
+                        IRI taxonPage = toIRI("https:" + EPPO_API_URL_PART + "/taxons/list?" +
+                                "limit=" + resultsPerPage +
+                                "&offset=" + counter);
+                        requests.addAll(Arrays.asList(
+                                toStatement(currentPage, HAD_MEMBER, taxonPage),
+                                toStatement(taxonPage, HAS_FORMAT, toLiteral(MimeTypes.MIME_TYPE_JSON)),
+                                toStatement(taxonPage, HAS_VERSION, toBlank())
+                        ));
                     }
+                    emitter.emit(requests);
                 }
             }
         }
-
     }
 
     private static void parseIndividualTaxon(IRI currentPage, StatementsEmitter emitter, JsonNode result) {
         if (result.has("eppocode")) {
             String taxonId = result.get("eppocode").asText();
-            IRI datasetUUID = toIRI(taxonId);
             IRI taxonIri = toIRI("https:" + EPPO_API_URL_PART + "/taxons/taxon/" + taxonId + "/overview");
             emitter.emit(toStatement(currentPage, HAD_MEMBER, taxonIri));
             emitTaxonPage(emitter, taxonIri);
