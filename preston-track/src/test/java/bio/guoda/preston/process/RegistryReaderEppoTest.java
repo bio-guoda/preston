@@ -27,14 +27,14 @@ import static org.hamcrest.core.StringStartsWith.startsWith;
 
 public class RegistryReaderEppoTest {
 
-    public static final String EPPO_DATASETS_JSON = "eppo-taxons.json";
+    public static final String EPPO_TAXONS_JSON = "eppo-taxons.json";
 
     @Test
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
         StatementsListener adapt = TestUtilForProcessor.testListener(nodes);
         RegistryReaderEppo registryReader = new RegistryReaderEppo(TestUtil.getTestBlobStore(HashType.sha256), adapt);
-        registryReader.on(toStatement(Seeds.OBIS, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
+        registryReader.on(toStatement(Seeds.EPPO, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         assertThat(nodes.size(), is(6));
         assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://api.eppo.int/gd/v2/taxons/list?limit=1000"));
     }
@@ -66,7 +66,7 @@ public class RegistryReaderEppoTest {
 
         IRI testNode = createTestNode();
 
-        RegistryReaderEppo.parse(testNode, TestUtilForProcessor.testEmitter(refNodes), getClass().getResourceAsStream(EPPO_DATASETS_JSON));
+        RegistryReaderEppo.parse(testNode, TestUtilForProcessor.testEmitter(refNodes), getClass().getResourceAsStream(EPPO_TAXONS_JSON));
 
         assertThat(refNodes.size(), is(3));
 
@@ -114,7 +114,7 @@ public class RegistryReaderEppoTest {
     }
 
     private IRI createTestNode() {
-        return createTestNode(EPPO_DATASETS_JSON);
+        return createTestNode(EPPO_TAXONS_JSON);
     }
 
     private IRI createTestNode(String eppoDatasetsJson) {

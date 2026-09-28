@@ -47,7 +47,7 @@ public class RegistryReaderEppo extends ProcessorReadOnly {
 
     @Override
     public void on(Quad statement) {
-        if (Seeds.OBIS.equals(statement.getSubject())
+        if (Seeds.EPPO.equals(statement.getSubject())
                 && WAS_ASSOCIATED_WITH.equals(statement.getPredicate())) {
             Stream<Quad> nodes = Stream.of(
                     toStatement(Seeds.EPPO, IS_A, ORGANIZATION),
