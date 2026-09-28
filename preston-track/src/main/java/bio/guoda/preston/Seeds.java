@@ -19,5 +19,5 @@ public final class Seeds {
     public final static IRI EPPO = RefNodeFactory.toIRI("https://eppo.int");
 
     public final static List<IRI> AVAILABLE
-            = Arrays.asList(GBIF, IDIGBIO, BIOCASE, DATA_ONE, BHL, OBIS, ALA, TAXONWORKS);
+            = Arrays.asList(GBIF, IDIGBIO, BIOCASE, DATA_ONE, BHL, OBIS, ALA, TAXONWORKS, EPPO);
 }

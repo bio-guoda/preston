@@ -130,10 +130,7 @@ public class RegistryReaderEppo extends ProcessorReadOnly {
                             "names",
                             "taxonomy",
                             "pests",
-                            "hosts",
                             "vectors",
-                            "vectorof",
-                            "bcaof",
                             "bca")
                     .forEach(suffix -> emitTaxonDataRequest(currentPage, emitter, prefix, "/" + suffix));
         }

@@ -103,6 +103,12 @@ public class RegistryReaderEppoTest {
         refNode = refNodes.get(2);
         assertThat(refNode.toString(), startsWith("<https://api.eppo.int/gd/v2/taxons/taxon/ABSICO/overview> <http://purl.org/pav/hasVersion> "));
 
+        refNode = refNodes.get(3);
+        assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <https://api.eppo.int/gd/v2/taxons/taxon/ABSICO/names> ."));
+
+        refNode = refNodes.get(6);
+        assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <https://api.eppo.int/gd/v2/taxons/taxon/ABSICO/taxonomy> ."));
+
         refNode = refNodes.get(refNodes.size() - 3);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <https://api.eppo.int/gd/v2/taxons/list?limit=1000&offset=129001> ."));
 
