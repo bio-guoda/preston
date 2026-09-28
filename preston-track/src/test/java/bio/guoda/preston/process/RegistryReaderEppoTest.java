@@ -68,7 +68,7 @@ public class RegistryReaderEppoTest {
 
         RegistryReaderEppo.parse(testNode, TestUtilForProcessor.testEmitter(refNodes), getClass().getResourceAsStream(EPPO_TAXONS_JSON));
 
-        assertThat(refNodes.size(), is(3));
+        assertThat(refNodes.size(), is(27));
 
         Quad refNode = refNodes.get(0);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <https://api.eppo.int/gd/v2/taxons/taxon/BEMITA/overview> ."));
@@ -92,7 +92,7 @@ public class RegistryReaderEppoTest {
                 getClass().getResourceAsStream("eppo-taxons-20260925.json")
         );
 
-        assertThat(refNodes.size(), is(690));
+        assertThat(refNodes.size(), is(3090));
 
         Quad refNode = refNodes.get(0);
         assertThat(refNode.toString(), endsWith("<http://www.w3.org/ns/prov#hadMember> <https://api.eppo.int/gd/v2/taxons/taxon/ABSICO/overview> ."));

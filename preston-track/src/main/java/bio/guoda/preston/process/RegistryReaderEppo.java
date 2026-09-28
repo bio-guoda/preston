@@ -124,10 +124,25 @@ public class RegistryReaderEppo extends ProcessorReadOnly {
     private static void parseIndividualTaxon(IRI currentPage, StatementsEmitter emitter, JsonNode result) {
         if (result.has("eppocode")) {
             String taxonId = result.get("eppocode").asText();
-            IRI taxonIri = toIRI("https:" + EPPO_API_URL_PART + "/taxons/taxon/" + taxonId + "/overview");
-            emitter.emit(toStatement(currentPage, HAD_MEMBER, taxonIri));
-            emitTaxonPage(emitter, taxonIri);
+            String prefix = "https:" + EPPO_API_URL_PART + "/taxons/taxon/" + taxonId;
+            Stream.of(
+                    "overview",
+                            "names",
+                            "taxonomy",
+                            "pests",
+                            "hosts",
+                            "vectors",
+                            "vectorof",
+                            "bcaof",
+                            "bca")
+                    .forEach(suffix -> emitTaxonDataRequest(currentPage, emitter, prefix, "/" + suffix));
         }
+    }
+
+    private static void emitTaxonDataRequest(IRI currentPage, StatementsEmitter emitter, String prefix, String suffix) {
+        IRI taxonIri = toIRI(prefix + suffix);
+        emitter.emit(toStatement(currentPage, HAD_MEMBER, taxonIri));
+        emitTaxonPage(emitter, taxonIri);
     }
 
     private static void emitTaxonPage(StatementsEmitter emitter, IRI taxonInfo) {
