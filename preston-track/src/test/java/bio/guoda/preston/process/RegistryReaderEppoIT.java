@@ -19,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertNotNull;
 
-public class RegistryReaderEPPOIT {
+public class RegistryReaderEppoIT {
     @Test
     public void eppoAuthGetRestrictedContent() throws IOException {
         InputStream resourceAsStream = getClass().getResourceAsStream("eppo-token.hidden");

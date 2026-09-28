@@ -25,7 +25,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 
-public class RegistryReaderEPPOTest {
+public class RegistryReaderEppoTest {
 
     public static final String EPPO_DATASETS_JSON = "eppo-taxons.json";
 
@@ -33,7 +33,7 @@ public class RegistryReaderEPPOTest {
     public void onSeed() {
         ArrayList<Quad> nodes = new ArrayList<>();
         StatementsListener adapt = TestUtilForProcessor.testListener(nodes);
-        RegistryReaderEPPO registryReader = new RegistryReaderEPPO(TestUtil.getTestBlobStore(HashType.sha256), adapt);
+        RegistryReaderEppo registryReader = new RegistryReaderEppo(TestUtil.getTestBlobStore(HashType.sha256), adapt);
         registryReader.on(toStatement(Seeds.OBIS, WAS_ASSOCIATED_WITH, toIRI("http://example.org/someActivity")));
         assertThat(nodes.size(), is(6));
         assertThat(getVersionSource(nodes.get(5)).getIRIString(), is("https://api.eppo.int/gd/v2/taxons/list?limit=1000"));
@@ -66,7 +66,7 @@ public class RegistryReaderEPPOTest {
 
         IRI testNode = createTestNode();
 
-        RegistryReaderEPPO.parse(testNode, TestUtilForProcessor.testEmitter(refNodes), getClass().getResourceAsStream(EPPO_DATASETS_JSON));
+        RegistryReaderEppo.parse(testNode, TestUtilForProcessor.testEmitter(refNodes), getClass().getResourceAsStream(EPPO_DATASETS_JSON));
 
         assertThat(refNodes.size(), is(3));
 
@@ -87,7 +87,7 @@ public class RegistryReaderEPPOTest {
 
         IRI testNode = createTestNode("eppo-taxons-20260925.json");
 
-        RegistryReaderEPPO.parse(testNode,
+        RegistryReaderEppo.parse(testNode,
                 TestUtilForProcessor.testEmitter(refNodes),
                 getClass().getResourceAsStream("eppo-taxons-20260925.json")
         );

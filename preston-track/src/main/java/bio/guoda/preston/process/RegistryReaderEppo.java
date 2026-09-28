@@ -1,7 +1,6 @@
 package bio.guoda.preston.process;
 
 import bio.guoda.preston.MimeTypes;
-import bio.guoda.preston.RefNodeFactory;
 import bio.guoda.preston.Seeds;
 import bio.guoda.preston.store.BlobStoreReadOnly;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -36,13 +35,13 @@ import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toLiteral;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
 
-public class RegistryReaderEPPO extends ProcessorReadOnly {
+public class RegistryReaderEppo extends ProcessorReadOnly {
     private static final String EPPO_API_URL_PART = "//api.eppo.int/gd/v2";
     private static final String EPPO_DATASET_REGISTRY_STRING = "https:" + EPPO_API_URL_PART;
-    private final Logger LOG = LoggerFactory.getLogger(RegistryReaderEPPO.class);
+    private final Logger LOG = LoggerFactory.getLogger(RegistryReaderEppo.class);
     private static final IRI EPPO_REGISTRY = toIRI(EPPO_DATASET_REGISTRY_STRING + "/taxons/list?limit=1000");
 
-    public RegistryReaderEPPO(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
+    public RegistryReaderEppo(BlobStoreReadOnly blobStoreReadOnly, StatementsListener listener) {
         super(blobStoreReadOnly, listener);
     }
 
@@ -53,9 +52,9 @@ public class RegistryReaderEPPO extends ProcessorReadOnly {
             Stream<Quad> nodes = Stream.of(
                     toStatement(Seeds.EPPO, IS_A, ORGANIZATION),
                     toStatement(Seeds.EPPO, DESCRIPTION, toEnglishLiteral("Secretariat of the European and Mediterranean Plant Protection Organization (EPPO).")),
-                    toStatement(RegistryReaderEPPO.EPPO_REGISTRY, CREATED_BY, Seeds.EPPO),
-                    toStatement(RegistryReaderEPPO.EPPO_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
-                    toStatement(RegistryReaderEPPO.EPPO_REGISTRY, HAS_VERSION, toBlank())
+                    toStatement(RegistryReaderEppo.EPPO_REGISTRY, CREATED_BY, Seeds.EPPO),
+                    toStatement(RegistryReaderEppo.EPPO_REGISTRY, HAS_FORMAT, toContentType(MimeTypes.MIME_TYPE_JSON)),
+                    toStatement(RegistryReaderEppo.EPPO_REGISTRY, HAS_VERSION, toBlank())
             );
             ActivityUtil.emitAsNewActivity(nodes, this, statement.getGraphName());
         } else if (hasVersionAvailable(statement)
