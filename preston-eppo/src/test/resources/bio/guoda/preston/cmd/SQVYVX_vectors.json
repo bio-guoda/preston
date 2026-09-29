@@ -1,0 +1,9 @@
+[
+  {
+    "eppocode": "BEMITA",
+    "prefname": "Bemisia tabaci",
+    "bibref": "* EFSA Panel on Plant Health (2013) Scientific opinion on the risks to plant health posed by Bemisia tabaci species complex and viruses it transmits for the EU territory. EFSA journal 11(4), 3162.\n\n* Shrestha D, McAuslane HJ, Adkins ST, Smith HA, Dufault N, Webb SE (2016) Transmission of Squash vein yellowing virus to and From Cucurbit Weeds and Effects on Sweetpotato Whitefly (Hemiptera: Aleyrodidae) Behavior. Environmental Entomology 45(4), 967-973.\n\n* Webb SE, Adkins S, Reitz SR (2012) Semipersistent whitefly transmission of Squash vein yellowing virus , causal agent of viral watermelon vine decline. Plant disease 96, 839-844.",
+    "vectorclass_id": "K",
+    "vectorclass_label": "Known vector"
+  }
+]

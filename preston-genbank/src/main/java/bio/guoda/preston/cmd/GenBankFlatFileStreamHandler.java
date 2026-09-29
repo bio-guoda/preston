@@ -21,7 +21,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GenBankFlatFileStreamHandler implements ContentStreamHandler {
+public class GenBankFlatFileStreamHandler extends ContentStreamHandler {
 
     public static final String PREFIX_ACCESSION = "ACCESSION   ";
     public static final String PREFIX_DEFINITION = "DEFINITION  ";

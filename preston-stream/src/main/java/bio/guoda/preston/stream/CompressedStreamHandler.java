@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 
 import static bio.guoda.preston.stream.ContentStreamHandlerImpl.wrapIRI;
 
-public class CompressedStreamHandler implements ContentStreamHandler {
+public class CompressedStreamHandler extends ContentStreamHandler {
 
     private ContentStreamHandler contentStreamHandler;
 

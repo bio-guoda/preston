@@ -36,7 +36,7 @@ import static bio.guoda.preston.stream.CharBufferByteReader.getBufferPosition;
 import static bio.guoda.preston.stream.CharBufferByteReader.setBufferPosition;
 import static bio.guoda.preston.stream.ContentStreamFactory.URI_PREFIX_CUT;
 
-public class MatchingTextStreamHandler implements ContentStreamHandler {
+public class MatchingTextStreamHandler extends ContentStreamHandler {
     private static final int BUFFER_SIZE = 4096;
     private static final int MAX_MATCH_SIZE_IN_BYTES = 512;
 

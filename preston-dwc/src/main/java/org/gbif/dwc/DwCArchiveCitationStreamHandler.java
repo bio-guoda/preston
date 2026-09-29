@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-public class DwCArchiveCitationStreamHandler implements ContentStreamHandler {
+public class DwCArchiveCitationStreamHandler extends ContentStreamHandler {
     private final static Logger LOG = LoggerFactory.getLogger(DwCArchiveCitationStreamHandler.class);
     private static final SAXParserFactory SAX_FACTORY = SAXParserFactory.newInstance();
 

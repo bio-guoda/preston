@@ -10,7 +10,7 @@ import java.util.List;
 
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 
-public class ContentStreamHandlerImpl implements ContentStreamHandler {
+public class ContentStreamHandlerImpl extends ContentStreamHandler {
 
     private final List<ContentStreamHandler> handlers;
 
@@ -27,6 +27,11 @@ public class ContentStreamHandlerImpl implements ContentStreamHandler {
 
     @Override
     public boolean handle(IRI version, InputStream in) throws ContentStreamException {
+        return handle(version, in, null);
+    }
+
+    @Override
+    public boolean handle(IRI version, InputStream in, IRI source) throws ContentStreamException {
         if (in == null) {
             throw new ContentStreamException("no content for [" + version.getIRIString() + "]");
         }
@@ -35,7 +40,7 @@ public class ContentStreamHandlerImpl implements ContentStreamHandler {
         boolean handled;
 
         for (ContentStreamHandler handler : handlers) {
-            handled = handler.handle(version, markableInputStream);
+            handled = handler.handle(version, markableInputStream, source);
             if (handled) {
                 break;
             }

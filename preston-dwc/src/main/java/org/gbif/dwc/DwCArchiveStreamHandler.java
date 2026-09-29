@@ -33,7 +33,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
 
-public class DwCArchiveStreamHandler implements ContentStreamHandler {
+public class DwCArchiveStreamHandler extends ContentStreamHandler {
 
     public static final String META_XML = "meta.xml";
     private final Dereferencer<InputStream> dereferencer;

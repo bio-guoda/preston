@@ -20,6 +20,7 @@
         <module>preston-plazi</module>
         <module>preston-dbase</module>
         <module>preston-excel</module>
+        <module>preston-eppo</module>
         <module>preston-paradox</module>
         <module>preston-genbank</module>
         <module>preston-zenodo</module>

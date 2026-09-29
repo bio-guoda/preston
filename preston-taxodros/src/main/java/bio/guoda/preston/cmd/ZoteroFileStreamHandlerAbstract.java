@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class ZoteroFileStreamHandlerAbstract implements ContentStreamHandler {
+public abstract class ZoteroFileStreamHandlerAbstract extends ContentStreamHandler {
 
     private final Logger LOG = LoggerFactory.getLogger(ZoteroFileStreamHandlerAbstract.class);
 

@@ -1,12 +1,14 @@
 package bio.guoda.preston.stream;
 
-import bio.guoda.preston.process.ProcessorStateReadOnly;
 import org.apache.commons.rdf.api.IRI;
 
 import java.io.InputStream;
 
-public interface ContentStreamHandler extends ProcessorStateReadOnly {
+public abstract class ContentStreamHandler implements ContentStreamHandlerInterface {
 
-    boolean handle(IRI version, InputStream in) throws ContentStreamException;
+    public boolean handle(IRI version, InputStream in, IRI source) throws ContentStreamException {
+        return handle(version, in);
+    }
+
 
 }

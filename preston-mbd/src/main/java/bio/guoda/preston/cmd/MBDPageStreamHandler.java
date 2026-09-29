@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MBDPageStreamHandler implements ContentStreamHandler {
+public class MBDPageStreamHandler extends ContentStreamHandler {
 
     public static final String NAME_PREFIX = "https://mbd-db.osu.edu/hol/taxon_name/";
     private final Dereferencer<InputStream> dereferencer;

@@ -1,0 +1,44 @@
+[
+  {
+    "eppocode": "1FUNGK",
+    "prefname": "Fungi",
+    "level": 1,
+    "type": "Kingdom"
+  },
+  {
+    "eppocode": "1ZYGOP",
+    "prefname": "Zygomycota",
+    "level": 2,
+    "type": "Phylum"
+  },
+  {
+    "eppocode": "1MUCOC",
+    "prefname": "Mucoromycotina",
+    "level": 3,
+    "type": "Class"
+  },
+  {
+    "eppocode": "1MUCOO",
+    "prefname": "Mucorales",
+    "level": 4,
+    "type": "Order"
+  },
+  {
+    "eppocode": "1CUNNF",
+    "prefname": "Cunninghamellaceae",
+    "level": 5,
+    "type": "Family"
+  },
+  {
+    "eppocode": "1CUNNG",
+    "prefname": "Cunninghamella",
+    "level": 6,
+    "type": "Genus"
+  },
+  {
+    "eppocode": "CUNNSP",
+    "prefname": "Cunninghamella sp.",
+    "level": 7,
+    "type": "Species"
+  }
+]

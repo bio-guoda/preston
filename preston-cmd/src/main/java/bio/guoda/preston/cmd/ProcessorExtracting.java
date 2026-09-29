@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import static bio.guoda.preston.RefNodeConstants.DESCRIPTION;
 import static bio.guoda.preston.RefNodeConstants.USED;
 import static bio.guoda.preston.RefNodeFactory.getVersion;
+import static bio.guoda.preston.RefNodeFactory.getVersionSource;
 import static bio.guoda.preston.RefNodeFactory.hasVersionAvailable;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.RefNodeFactory.toStatement;
@@ -44,13 +45,14 @@ public abstract class ProcessorExtracting extends ProcessorReadOnly {
     public void on(Quad statement) {
         if (hasVersionAvailable(statement)) {
             IRI version = (IRI) getVersion(statement);
+            IRI source = getVersionSource(statement);
             final List<Quad> nodes = new ArrayList<>();
             BatchingEmitter batchingStatementEmitter = new BatchingEmitter(nodes, version, statement, getEmitSelector());
             ContentStreamHandler streamHandler = getStreamHandler(batchingStatementEmitter);
             try (InputStream in = get(version)) {
                 if (in != null) {
                     try {
-                        streamHandler.handle(version, in);
+                        streamHandler.handle(version, in, source);
                     } catch (ContentStreamException ex) {
                         LOG.warn("suspicious resource [" + version.getIRIString() + "] caused errors in processing", ex);
                     }

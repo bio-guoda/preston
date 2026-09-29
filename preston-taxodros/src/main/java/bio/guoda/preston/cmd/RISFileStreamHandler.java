@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public class RISFileStreamHandler implements ContentStreamHandler {
+public class RISFileStreamHandler extends ContentStreamHandler {
     private final Logger LOG = LoggerFactory.getLogger(RISFileStreamHandler.class);
 
 

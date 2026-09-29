@@ -18,7 +18,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
-public class PlaziTreatmentStreamHandler implements ContentStreamHandler {
+public class PlaziTreatmentStreamHandler extends ContentStreamHandler {
     private static final Logger LOG = LoggerFactory.getLogger(PlaziTreatmentStreamHandler.class);
 
     private final Dereferencer<InputStream> dereferencer;

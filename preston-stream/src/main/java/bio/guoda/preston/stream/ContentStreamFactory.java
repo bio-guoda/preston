@@ -92,7 +92,7 @@ public class ContentStreamFactory implements InputStreamFactory {
         return streamRequest.getContentStream();
     }
 
-    private class ContentStreamRequest implements ContentStreamHandler {
+    private class ContentStreamRequest extends ContentStreamHandler {
 
         public static final String GROUPNAME_PAGE_NUMBER = "pageNumber";
         private final ContentStreamHandler handler;

@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
 
 import static bio.guoda.preston.stream.ContentStreamHandlerImpl.wrapIRI;
 
-public class ArchiveStreamHandler implements ContentStreamHandler {
+public class ArchiveStreamHandler extends ContentStreamHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArchiveStreamHandler.class);
 

@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TaxoDrosFileStreamHandler implements ContentStreamHandler {
+public class TaxoDrosFileStreamHandler extends ContentStreamHandler {
 
     public static final Map<String, String> TRANSLATION_MAP = new TreeMap<String, String>() {{
         put(".VN", "acceptedName");

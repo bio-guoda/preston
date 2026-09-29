@@ -50,7 +50,7 @@ import static bio.guoda.preston.store.VersionUtil.VERSION_PATTERN;
 import static bio.guoda.preston.zenodo.ZenodoUtils.delete;
 import static bio.guoda.preston.zenodo.ZenodoUtils.getObjectMapper;
 
-public class ZenodoMetadataFileStreamHandler implements ContentStreamHandler {
+public class ZenodoMetadataFileStreamHandler extends ContentStreamHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ZenodoMetadataFileStreamHandler.class);
 
 

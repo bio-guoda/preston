@@ -23,7 +23,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GitHubJSONStreamHandler implements ContentStreamHandler {
+public class GitHubJSONStreamHandler extends ContentStreamHandler {
 
     private ContentStreamHandler contentStreamHandler;
     private final OutputStream outputStream;

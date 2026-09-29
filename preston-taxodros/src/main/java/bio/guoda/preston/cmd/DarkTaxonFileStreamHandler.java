@@ -33,7 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-public class DarkTaxonFileStreamHandler implements ContentStreamHandler {
+public class DarkTaxonFileStreamHandler extends ContentStreamHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(DarkTaxonFileStreamHandler.class);
 

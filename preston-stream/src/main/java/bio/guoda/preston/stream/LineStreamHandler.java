@@ -14,7 +14,7 @@ import java.nio.charset.Charset;
 import static bio.guoda.preston.RefNodeFactory.toIRI;
 import static bio.guoda.preston.stream.ContentStreamFactory.URI_PREFIX_LINE;
 
-public class LineStreamHandler implements ContentStreamHandler {
+public class LineStreamHandler extends ContentStreamHandler {
 
     private final ContentStreamHandler contentStreamHandler;
 

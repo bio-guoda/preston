@@ -69,6 +69,7 @@ import static java.lang.System.exit;
                 CmdDwcRecordStream.class,
                 CmdDBaseRecordStream.class,
                 CmdExcelRecordStream.class,
+                CmdEppoDatabaseStream.class,
                 CmdParadoxRecordStream.class,
                 CmdPlazi.class,
                 CmdZenodo.class,

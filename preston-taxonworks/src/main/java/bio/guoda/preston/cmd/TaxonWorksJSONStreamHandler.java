@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
-public class TaxonWorksJSONStreamHandler implements ContentStreamHandler {
+public class TaxonWorksJSONStreamHandler extends ContentStreamHandler {
     private final Logger LOG = LoggerFactory.getLogger(TaxonWorksJSONStreamHandler.class);
 
     private static final String TAXON_ID_SUFFIX = "_taxon_id";
