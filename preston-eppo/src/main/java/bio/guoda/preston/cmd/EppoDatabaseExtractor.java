@@ -59,11 +59,6 @@ public class EppoDatabaseExtractor extends ProcessorExtracting {
         }
 
         @Override
-        public boolean handle(IRI version, InputStream in) throws ContentStreamException {
-            return handler.handle(version, in);
-        }
-
-        @Override
         public boolean handle(IRI version, InputStream in, IRI source) throws ContentStreamException {
             return handler.handle(version, in, source);
         }

@@ -61,8 +61,8 @@ public class ZoteroFileExtractorRIS extends ProcessorExtracting {
         }
 
         @Override
-        public boolean handle(IRI version, InputStream in) throws ContentStreamException {
-            return handler.handle(version, in);
+        public boolean handle(IRI version, InputStream in, IRI source) throws ContentStreamException {
+            return handler.handle(version, in, source);
         }
 
         @Override

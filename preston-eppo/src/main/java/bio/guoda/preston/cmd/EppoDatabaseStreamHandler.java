@@ -36,11 +36,6 @@ public class EppoDatabaseStreamHandler extends ContentStreamHandler {
     }
 
     @Override
-    public boolean handle(IRI version, InputStream is) throws ContentStreamException {
-        throw new ContentStreamException("please provide a source for [" + version.getIRIString() + "]");
-    }
-
-    @Override
     public boolean handle(IRI version, InputStream is, IRI source) throws ContentStreamException {
         String iriString = version.getIRIString();
         if (source != null && StringUtils.contains(source.getIRIString(), "eppo.int")) {
