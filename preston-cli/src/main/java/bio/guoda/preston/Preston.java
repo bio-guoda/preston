@@ -12,6 +12,7 @@ import bio.guoda.preston.cmd.CmdClone;
 import bio.guoda.preston.cmd.CmdCopyTo;
 import bio.guoda.preston.cmd.CmdDarkTaxonStream;
 import bio.guoda.preston.cmd.CmdDwcRecordStream;
+import bio.guoda.preston.cmd.CmdEppo;
 import bio.guoda.preston.cmd.CmdGenBankStream;
 import bio.guoda.preston.cmd.CmdGenerateQRCode;
 import bio.guoda.preston.cmd.CmdGet;
@@ -69,7 +70,7 @@ import static java.lang.System.exit;
                 CmdDwcRecordStream.class,
                 CmdDBaseRecordStream.class,
                 CmdExcelRecordStream.class,
-                CmdEppoDatabaseStream.class,
+                CmdEppo.class,
                 CmdParadoxRecordStream.class,
                 CmdPlazi.class,
                 CmdZenodo.class,

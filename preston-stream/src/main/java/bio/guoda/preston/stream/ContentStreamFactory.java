@@ -107,7 +107,7 @@ public class ContentStreamFactory implements InputStreamFactory {
         }
 
         @Override
-        public boolean handle(IRI iri, InputStream in) throws ContentStreamException {
+        public boolean handle(IRI iri, InputStream in, IRI source) throws ContentStreamException {
             if (!shouldKeepProcessing()) {
                 throw new ContentStreamException("request handler cannot be re-used");
             }

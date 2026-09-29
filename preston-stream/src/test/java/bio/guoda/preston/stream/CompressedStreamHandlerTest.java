@@ -22,7 +22,7 @@ public class CompressedStreamHandlerTest {
 
         CompressedStreamHandler compressedStreamHandler = new CompressedStreamHandler(new ContentStreamHandler() {
             @Override
-            public boolean handle(IRI version, InputStream in) throws ContentStreamException {
+            public boolean handle(IRI version, InputStream in, IRI source) throws ContentStreamException {
                 try {
                     IOUtils.copy(in, os);
                 } catch (IOException e) {

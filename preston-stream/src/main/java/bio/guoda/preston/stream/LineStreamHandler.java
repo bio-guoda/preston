@@ -23,7 +23,7 @@ public class LineStreamHandler extends ContentStreamHandler {
     }
 
     @Override
-    public boolean handle(IRI version, InputStream in) throws ContentStreamException {
+    public boolean handle(IRI version, InputStream in, IRI source) throws ContentStreamException {
         if (!version.getIRIString().startsWith(URI_PREFIX_LINE + ":")) {
             Charset charset;
             try {

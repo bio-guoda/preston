@@ -54,7 +54,7 @@ public class LineStreamHandlerTest {
         List<String> lines = new LinkedList<>();
         ContentStreamHandler testHandler = new ContentStreamHandler() {
             @Override
-            public boolean handle(IRI version, InputStream in) {
+            public boolean handle(IRI version, InputStream in, IRI source) {
                 try {
                     lines.add(IOUtils.toString(in, StandardCharsets.UTF_8.name()));
                 } catch (IOException e) {

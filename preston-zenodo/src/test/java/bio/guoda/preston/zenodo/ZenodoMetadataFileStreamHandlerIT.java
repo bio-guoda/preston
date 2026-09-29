@@ -81,7 +81,7 @@ public class ZenodoMetadataFileStreamHandlerIT {
         ZenodoMetadataFileStreamHandler handler = new ZenodoMetadataFileStreamHandler(
                 new ContentStreamHandler() {
                     @Override
-                    public boolean handle(IRI version, InputStream in) throws ContentStreamException {
+                    public boolean handle(IRI version, InputStream in, IRI source) throws ContentStreamException {
                         return false;
                     }
 

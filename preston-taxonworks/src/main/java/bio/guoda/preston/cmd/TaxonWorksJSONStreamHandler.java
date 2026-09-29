@@ -52,7 +52,7 @@ public class TaxonWorksJSONStreamHandler extends ContentStreamHandler {
     }
 
     @Override
-    public boolean handle(IRI version, InputStream is) throws ContentStreamException {
+    public boolean handle(IRI version, InputStream is, IRI source) throws ContentStreamException {
         AtomicBoolean foundAtLeastOne = new AtomicBoolean(false);
         try {
             Charset charset = new UniversalEncodingDetector().detect(is, new Metadata());

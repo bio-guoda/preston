@@ -6,8 +6,8 @@ import java.io.InputStream;
 
 public abstract class ContentStreamHandler implements ContentStreamHandlerInterface {
 
-    public boolean handle(IRI version, InputStream in, IRI source) throws ContentStreamException {
-        return handle(version, in);
+    public boolean handle(IRI version, InputStream in) throws ContentStreamException {
+        return handle(version, in, null);
     }
 
 

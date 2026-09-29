@@ -59,7 +59,7 @@ public class MatchingTextStreamHandler extends ContentStreamHandler {
     }
 
     @Override
-    public boolean handle(IRI version, InputStream is) throws ContentStreamException {
+    public boolean handle(IRI version, InputStream is, IRI source) throws ContentStreamException {
         Charset charset;
         try {
             charset = new UniversalEncodingDetector().detect(is, new Metadata());

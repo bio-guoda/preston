@@ -34,7 +34,7 @@ public class PlaziTreatmentStreamHandler extends ContentStreamHandler {
     }
 
     @Override
-    public boolean handle(IRI version, InputStream is) throws ContentStreamException {
+    public boolean handle(IRI version, InputStream is, IRI source) throws ContentStreamException {
         String iriString = version.getIRIString();
         if (!iriString.endsWith("/")) {
             try {

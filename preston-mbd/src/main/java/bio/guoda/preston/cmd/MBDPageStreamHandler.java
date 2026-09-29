@@ -49,7 +49,7 @@ public class MBDPageStreamHandler extends ContentStreamHandler {
     }
 
     @Override
-    public boolean handle(IRI version, InputStream is) throws ContentStreamException {
+    public boolean handle(IRI version, InputStream is, IRI source) throws ContentStreamException {
         AtomicBoolean foundAtLeastOne = new AtomicBoolean(false);
         String iriString = version.getIRIString();
         try {

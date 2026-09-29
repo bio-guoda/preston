@@ -26,7 +26,7 @@ public class ArchiveStreamHandler extends ContentStreamHandler {
     }
 
     @Override
-    public boolean handle(IRI version, InputStream is) throws ContentStreamException {
+    public boolean handle(IRI version, InputStream is, IRI source) throws ContentStreamException {
         Pair<ArchiveInputStream, String> archiveStreamAndFormat = getArchiveStreamAndFormat(is);
         if (archiveStreamAndFormat != null) {
             if (!ArchiveStreamFactory.CPIO.equals(archiveStreamAndFormat.getRight())) {

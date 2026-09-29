@@ -7,9 +7,6 @@ import java.io.InputStream;
 
 public interface ContentStreamHandlerInterface extends ProcessorStateReadOnly {
 
-    boolean handle(IRI version, InputStream in) throws ContentStreamException;
-
     boolean handle(IRI version, InputStream in, IRI source) throws ContentStreamException;
-
 
 }

@@ -20,7 +20,7 @@ public class CompressedStreamHandler extends ContentStreamHandler {
     }
 
     @Override
-    public boolean handle(IRI version, InputStream in) throws ContentStreamException {
+    public boolean handle(IRI version, InputStream in, IRI source) throws ContentStreamException {
         Pair<CompressorInputStream, String> compressedStreamAndFormat = getCompressedStreamAndFormat(in);
         if (compressedStreamAndFormat != null) {
             parseAsCompressed(version, compressedStreamAndFormat.getLeft(), compressedStreamAndFormat.getRight());

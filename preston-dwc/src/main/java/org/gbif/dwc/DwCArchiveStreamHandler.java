@@ -49,7 +49,7 @@ public class DwCArchiveStreamHandler extends ContentStreamHandler {
     }
 
     @Override
-    public boolean handle(IRI version, InputStream is) throws ContentStreamException {
+    public boolean handle(IRI version, InputStream is, IRI source) throws ContentStreamException {
         String iriString = version.getIRIString();
         if (StringUtils.endsWith(iriString, "/" + META_XML)) {
             try {

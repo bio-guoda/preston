@@ -64,7 +64,7 @@ public class DwCArchiveStreamHandlerTest {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         DwCArchiveStreamHandler handler = new DwCArchiveStreamHandler(new ContentStreamHandler() {
             @Override
-            public boolean handle(IRI version, InputStream in) throws ContentStreamException {
+            public boolean handle(IRI version, InputStream in, IRI source) throws ContentStreamException {
                 return false;
             }
 
@@ -96,7 +96,7 @@ public class DwCArchiveStreamHandlerTest {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         DwCArchiveStreamHandler handler = new DwCArchiveStreamHandler(new ContentStreamHandler() {
             @Override
-            public boolean handle(IRI version, InputStream in) throws ContentStreamException {
+            public boolean handle(IRI version, InputStream in, IRI source) throws ContentStreamException {
                 return false;
             }
 
