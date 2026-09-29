@@ -65,7 +65,10 @@ public class RefNodeFactory {
     public static IRI getVersionSource(Quad statement) {
         IRI versionSource = null;
         if (hasVersionStatement(statement)) {
-            versionSource = (IRI) statement.getSubject();
+            BlankNodeOrIRI subject = statement.getSubject();
+            if (subject instanceof IRI) {
+                versionSource = (IRI) subject;
+            }
         }
         return versionSource;
     }
