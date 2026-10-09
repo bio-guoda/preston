@@ -24,6 +24,7 @@
         <jackson.version>2.11.3</jackson.version>
         <mapdb.version>1.0.8</mapdb.version>
         <picocli.version>4.6.3</picocli.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
     </properties>
 
     <dependencies>
